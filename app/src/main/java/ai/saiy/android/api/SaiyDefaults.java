@@ -17,8 +17,8 @@
 
 package ai.saiy.android.api;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import ai.saiy.android.utils.MyLog;
 

@@ -21,22 +21,28 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Pair;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -49,7 +55,6 @@ import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.permissions.PermissionHelper;
-import ai.saiy.android.personality.PersonalityHelper;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
@@ -292,42 +297,54 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         getParentActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-
-            final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                    .autoDismiss(false)
-                    .title(R.string.menu_blacklist)
-                    .content(R.string.blacklist_intro_text)
-                    .iconRes(R.drawable.ic_traffic_light)
-                    .positiveText(R.string.save)
-                    .neutralText(R.string.clear)
-                    .negativeText(android.R.string.cancel)
-                    .items(appNames)
-
-                        .itemsCallbackMultiChoice(selectedList.toArray(new Integer[0]), new MaterialDialog.ListCallbackMultiChoice() {
+                final CharSequence[] items = appNames.toArray(new String[0]);
+                final boolean[] checkedItems = new boolean[items.length];
+                if (checkedItems.length > 0) {
+                    checkedItems[0] = true;
+                }
+                final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                        .setCancelable(false)
+                        .setTitle(R.string.menu_blacklist)
+                        .setMessage(R.string.blacklist_intro_text)
+                        .setIcon(R.drawable.ic_traffic_light)
+                        .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
-                            public boolean onSelection(final MaterialDialog dialog, final Integer[] which, final CharSequence[] text) {
+                            public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
                                 if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showBlackListSelector: onSelection: " + which.length);
+                                    MyLog.i(CLS_NAME, "showBlackListSelector: onSelection: " + which + ", " + isChecked);
                                 }
-                                return true;
                             }
                         })
-
-                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                        .setNegativeButton(R.string.clear, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-                                dialog.clearSelectedIndices();
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (dialog instanceof AlertDialog) {
+                                    final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
+                                    if (adapter instanceof BaseAdapter) {
+                                        for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                            checkedItems[i] = false;
+                                        }
+                                        ((BaseAdapter) adapter).notifyDataSetChanged();
+                                    } else {
+                                        MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                    }
+                                }
                             }
                         })
-
-                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                            public void onClick(DialogInterface dialog, int which) {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onPositive");
                                 }
 
-                                final Integer[] selected = dialog.getSelectedIndices();
+                                final List<Integer> selectedIndices = new ArrayList<>();
+                                for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                    if (checkedItems[i]) {
+                                        selectedIndices.add(i);
+                                    }
+                                }
+                                final Integer[] selected = selectedIndices.toArray(new Integer[0]);
                                 assert selected != null;
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onPositive: " + selected.length);
@@ -345,7 +362,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onPositive: would save: "
-                                            + userBlackListed.toString());
+                                            + userBlackListed);
                                 }
 
                                 blackListHelper.save(FragmentSuperuserHelper.this.getApplicationContext(), userBlackListed);
@@ -353,18 +370,16 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 dialog.dismiss();
                             }
                         })
-
-                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                             @Override
-                            public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                            public void onClick(DialogInterface dialog, int which) {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onNegative");
                                 }
                                 dialog.dismiss();
                             }
                         })
-
-                        .cancelListener(new DialogInterface.OnCancelListener() {
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
                             @Override
                             public void onCancel(final DialogInterface dialog) {
                                 if (DEBUG) {
@@ -372,7 +387,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 }
                                 dialog.dismiss();
                             }
-                        }).build();
+                        }).create();
 
                 materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                 materialDialog.show();
@@ -388,52 +403,48 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
      */
     @SuppressWarnings("ConstantConditions")
     public void showMemorySlider() {
-
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                .customView(R.layout.memory_dialog_layout, false)
-                .autoDismiss(false)
-                .title(R.string.menu_memory_usage)
-                .iconRes(R.drawable.ic_memory)
-                .positiveText(R.string.save)
-                .neutralText(R.string.text_default)
-                .negativeText(android.R.string.cancel)
-
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.memory_dialog_layout)
+                .setCancelable(false)
+                .setTitle(R.string.menu_memory_usage)
+                .setIcon(R.drawable.ic_memory)
+                .setNegativeButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-                        ((SeekBar) dialog.getCustomView().findViewById(R.id.memorySeekBar))
-                                .setProgress((int) ((SelfAwareConditions.DEFAULT_INACTIVITY_TIMEOUT / 60000L) - 1));
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog instanceof AlertDialog) {
+                            ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.memorySeekBar))
+                                    .setProgress((int) ((SelfAwareConditions.DEFAULT_INACTIVITY_TIMEOUT / 60000L) - 1));
+                        }
                     }
                 })
-
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog instanceof AlertDialog) {
+                            final int position = ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.memorySeekBar)).getProgress();
+                            final long timeout = (position + 1) * 60000L;
 
-                        final int position = ((SeekBar) dialog.getCustomView().findViewById(R.id.memorySeekBar)).getProgress();
-                        final long timeout = (position + 1) * 60000L;
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "showMemorySlider: onPositive: position: " + position);
+                                MyLog.i(CLS_NAME, "showMemorySlider: onPositive: timeout: " + timeout);
+                            }
 
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showMemorySlider: onPositive: position: " + position);
-                            MyLog.i(CLS_NAME, "showMemorySlider: onPositive: timeout: " + timeout);
+                            SPH.setInactivityTimeout(FragmentSuperuserHelper.this.getApplicationContext(), timeout);
                         }
-
-                        SPH.setInactivityTimeout(FragmentSuperuserHelper.this.getApplicationContext(), timeout);
                         dialog.dismiss();
                     }
                 })
 
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showMemorySlider: onNegative");
                         }
                         dialog.dismiss();
                     }
                 })
-
-                .cancelListener(new DialogInterface.OnCancelListener() {
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
                         if (DEBUG) {
@@ -441,10 +452,10 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         }
                         dialog.dismiss();
                     }
-                }).build();
+                }).create();
 
         final int currentTimeout = (int) (SPH.getInactivityTimeout(getApplicationContext()) / 60000L);
-        final TextView seekText = (TextView) materialDialog.getCustomView().findViewById(R.id.memorySeekBarText);
+        final TextView seekText = (TextView) materialDialog.findViewById(R.id.memorySeekBarText);
 
         switch (currentTimeout) {
             case 1:
@@ -457,7 +468,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                 break;
         }
 
-        final SeekBar seekbar = (SeekBar) materialDialog.getCustomView().findViewById(R.id.memorySeekBar);
+        final SeekBar seekbar = (SeekBar) materialDialog.findViewById(R.id.memorySeekBar);
         seekbar.setProgress(currentTimeout - 1);
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -530,73 +541,60 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         FragmentSuperuserHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
-                        final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                                .autoDismiss(false)
-                                .alwaysCallSingleChoiceCallback()
-                                .title(R.string.dialog_id_verification)
-                                .content(R.string.dialog_id_verification_content)
-                                .items((CharSequence[]) accountNames)
-                                .positiveText(R.string.menu_select)
-                                .negativeText(android.R.string.cancel)
-                                .neutralText(StringUtils.capitalize(getParent().getString(R.string.add_new)))
-                                .iconRes(R.drawable.ic_account_key)
-                                .backgroundColorRes(R.color.colorTint)
-
-                                        .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                                final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.dialog_id_verification)
+                                .setMessage(R.string.dialog_id_verification_content)
+                                .setIcon(R.drawable.ic_account_key)
+                                .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
+                                        .setSingleChoiceItems(accountNames, 0, new DialogInterface.OnClickListener() {
                                             @Override
-                                            public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (DEBUG) {
+                                                    MyLog.i(CLS_NAME, "showAccountPicker: onSelection: " + which + ": " + accountNames[which]);
+                                                }
+                                            }
+                                        })
+                                        .setNegativeButton(StringUtils.capitalize(getParent().getString(R.string.add_new)), new DialogInterface.OnClickListener() {
+                                            @Override
+                                            public void onClick(DialogInterface dialog, int which) {
                                                 ExecuteIntent.settingsIntent(FragmentSuperuserHelper.this.getApplicationContext(),
                                                         IntentConstants.SETTINGS_ADD_ACCOUNT);
                                                 dialog.dismiss();
                                             }
                                         })
-
-                                        .itemsCallbackSingleChoice(0,
-                                                new MaterialDialog.ListCallbackSingleChoice() {
-                                                    @Override
-                                                    public boolean onSelection(final MaterialDialog dialog, final View view, final int which, final CharSequence text) {
-                                                        if (DEBUG) {
-                                                            MyLog.i(CLS_NAME, "showAccountPicker: onSelection: " + which + ": " + text);
-                                                        }
-                                                        return true;
-                                                    }
-                                                })
-
-                                        .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                        .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                             @Override
-                                            public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                            public void onClick(DialogInterface dialog, int which) {
+                                                if (dialog instanceof AlertDialog) {
+                                                    final int selected = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
 
-                                                final int selected = dialog.getSelectedIndex();
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "showAccountPicker: onPositive: " + selected + ": " + which);
+                                                    }
 
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showAccountPicker: onPositive: " + selected + ": " + which);
+                                                    final Account account = accounts[selected];
+
+                                                    if (DEBUG) {
+                                                        MyLog.v(CLS_NAME, "account : " + account.toString());
+                                                        MyLog.v(CLS_NAME, "name : " + account.name);
+                                                        MyLog.v(CLS_NAME, "type : " + account.type);
+                                                    }
+                                                    FragmentSuperuserHelper.this.startEnrollment(account.name);
                                                 }
-
-                                                final Account account = accounts[selected];
-
-                                                if (DEBUG) {
-                                                    MyLog.v(CLS_NAME, "account : " + account.toString());
-                                                    MyLog.v(CLS_NAME, "name : " + account.name);
-                                                    MyLog.v(CLS_NAME, "type : " + account.type);
-                                                }
-                                                FragmentSuperuserHelper.this.startEnrollment(account.name);
                                                 dialog.dismiss();
                                             }
                                         })
-
-                                        .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                             @Override
-                                            public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                            public void onClick(DialogInterface dialog, int which) {
                                                 if (DEBUG) {
                                                     MyLog.i(CLS_NAME, "showAccountPicker: onNegative");
                                                 }
                                                 dialog.dismiss();
                                             }
                                         })
-
-                                        .cancelListener(new DialogInterface.OnCancelListener() {
+                                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                             @Override
                                             public void onCancel(final DialogInterface dialog) {
                                                 if (DEBUG) {
@@ -604,7 +602,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                                 }
                                                 dialog.dismiss();
                                             }
-                                        }).build();
+                                        }).create();
 
                                 materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                                 materialDialog.show();
@@ -653,19 +651,16 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                 MyLog.i(CLS_NAME, "startEnrollment: account exists");
             }
 
-            final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                    .autoDismiss(false)
-                    .limitIconToDefaultSize()
-                    .title(R.string.menu_unlink_association)
-                    .content(getParent().getString(R.string.content_unlink_association, accountName))
-                    .positiveText(android.R.string.ok)
-                    .negativeText(android.R.string.cancel)
-                    .iconRes(R.drawable.ic_account_switch)
-                    .backgroundColorRes(R.color.colorTint)
+            final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                    .setCancelable(false)
+                    .setTitle(R.string.menu_unlink_association)
+                    .setMessage(getParent().getString(R.string.content_unlink_association, accountName))
+                    .setIcon(R.drawable.ic_account_switch)
+                    .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
 
-                    .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "startEnrollment: onPositive");
                             }
@@ -678,9 +673,9 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         }
                     })
 
-                    .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
-                        public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                        public void onClick(DialogInterface dialog, int which) {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "startEnrollment: onNegative");
                             }
@@ -688,7 +683,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         }
                     })
 
-                    .cancelListener(new DialogInterface.OnCancelListener() {
+                    .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(final DialogInterface dialog) {
                             if (DEBUG) {
@@ -696,7 +691,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                             }
                             dialog.dismiss();
                         }
-                    }).build();
+                    }).create();
 
             materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
             materialDialog.show();

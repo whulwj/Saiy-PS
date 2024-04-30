@@ -17,7 +17,7 @@
 
 package ai.saiy.android.tts.helper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Helper Class to store speech requests whilst the TTS engine sorts itself out....

@@ -19,13 +19,15 @@ package ai.saiy.android.ui.activity.helper;
 
 import android.app.Activity;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
 import android.text.Html;
-import android.view.View;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -53,18 +55,15 @@ public class ActivityHomeHelper {
     @SuppressWarnings("deprecation, ConstantConditions")
     public void showDisclaimer(@NonNull final Activity act) {
 
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(act)
-                .title(R.string.menu_application_disclaimer)
-                .content(Html.fromHtml(act.getApplicationContext().getString(R.string.content_disclaimer)))
-                .positiveText(R.string.menu_accept)
-                .negativeText(R.string.menu_uninstall)
-                .iconRes(R.drawable.ic_gavel)
-                .autoDismiss(false)
-                .canceledOnTouchOutside(false)
-                .backgroundColorRes(R.color.colorTint)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(act)
+                .setTitle(R.string.menu_application_disclaimer)
+                .setMessage(Html.fromHtml(act.getApplicationContext().getString(R.string.content_disclaimer)))
+                .setIcon(R.drawable.ic_gavel)
+                .setCancelable(false)
+                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
+                .setPositiveButton(R.string.menu_accept, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showDisclaimer: onPositive");
                         }
@@ -74,9 +73,9 @@ public class ActivityHomeHelper {
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 })
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                .setNegativeButton(R.string.menu_uninstall, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showDisclaimer: onNegative");
                         }
@@ -87,7 +86,7 @@ public class ActivityHomeHelper {
                         act.finish();
                     }
                 })
-                .cancelListener(new DialogInterface.OnCancelListener() {
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
                         if (DEBUG) {
@@ -99,7 +98,7 @@ public class ActivityHomeHelper {
                         dialog.dismiss();
                         act.finish();
                     }
-                }).build();
+                }).create();
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
@@ -113,15 +112,14 @@ public class ActivityHomeHelper {
     @SuppressWarnings("ConstantConditions")
     public void showDeveloperNote(@NonNull final Activity act) {
 
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(act)
-                .title(R.string.menu_developer_note)
-                .content(R.string.content_developer_note)
-                .positiveText(R.string.menu_lets_do_it)
-                .iconRes(R.drawable.ic_note_text)
-                .backgroundColorRes(R.color.colorTint)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(act)
+                .setTitle(R.string.menu_developer_note)
+                .setMessage(R.string.content_developer_note)
+                .setIcon(R.drawable.ic_note_text)
+                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
+                .setPositiveButton(R.string.menu_lets_do_it, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showDeveloperNote: onPositive");
                         }
@@ -131,7 +129,7 @@ public class ActivityHomeHelper {
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 })
-                .cancelListener(new DialogInterface.OnCancelListener() {
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
                         if (DEBUG) {
@@ -142,7 +140,7 @@ public class ActivityHomeHelper {
                         dialog.dismiss();
                         ((ActivityHome) act).runStartConfiguration();
                     }
-                }).build();
+                }).create();
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
         materialDialog.show();
@@ -156,15 +154,14 @@ public class ActivityHomeHelper {
     @SuppressWarnings("ConstantConditions")
     public void showWhatsNew(@NonNull final Activity act) {
 
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(act)
-                .title(R.string.menu_whats_new)
-                .content(R.string.content_whats_new)
-                .positiveText(R.string.menu_excited)
-                .iconRes(R.drawable.ic_info)
-                .backgroundColorRes(R.color.colorTint)
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(act)
+                .setTitle(R.string.menu_whats_new)
+                .setMessage(R.string.content_whats_new)
+                .setIcon(R.drawable.ic_info)
+                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
+                .setPositiveButton(R.string.menu_excited, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showWhatsNew: onPositive");
                         }
@@ -174,7 +171,7 @@ public class ActivityHomeHelper {
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 })
-                .cancelListener(new DialogInterface.OnCancelListener() {
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
                         if (DEBUG) {
@@ -185,7 +182,7 @@ public class ActivityHomeHelper {
                         dialog.dismiss();
                         ((ActivityHome) act).runStartConfiguration();
                     }
-                }).build();
+                }).create();
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
@@ -213,36 +210,31 @@ public class ActivityHomeHelper {
                     @Override
                     public void run() {
 
-                        final MaterialDialog materialDialog = new MaterialDialog.Builder(act)
-                                .autoDismiss(false)
-                                .alwaysCallSingleChoiceCallback()
-                                .title(R.string.menu_supported_languages)
-                                .items((CharSequence[]) languages)
-                                .itemsDisabledIndices(1, 2, 3, 4, 5, 6, 7)
-                                .content(R.string.content_supported_languages)
-                                .positiveText(R.string.menu_select)
-                                .iconRes(R.drawable.ic_language)
-                                .backgroundColorRes(R.color.colorTint)
-                                .itemsCallbackSingleChoice(0, new MaterialDialog.ListCallbackSingleChoice() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(act)
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_supported_languages)
+                                .setSingleChoiceItems((CharSequence[]) languages, 0, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public boolean onSelection(final MaterialDialog dialog, final View view, final int which, final CharSequence text) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showLanguageSelector: onSelection: " + which + ": " + text);
+                                            MyLog.i(CLS_NAME, "showLanguageSelector: onSelection: " + which + ": " + languages[which]);
                                         }
-                                        return true;
                                     }
                                 })
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                .setMessage(R.string.content_supported_languages)
+                                .setIcon(R.drawable.ic_language)
+                                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
+                                .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showLanguageSelector: onPositive: " + dialog.getSelectedIndex());
+                                            MyLog.i(CLS_NAME, "showLanguageSelector: " + which);
                                         }
 
                                         dialog.dismiss();
                                     }
                                 })
-                                .cancelListener(new DialogInterface.OnCancelListener() {
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
@@ -251,7 +243,7 @@ public class ActivityHomeHelper {
 
                                         dialog.dismiss();
                                     }
-                                }).build();
+                                }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();

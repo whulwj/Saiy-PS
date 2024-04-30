@@ -31,15 +31,19 @@ import android.os.Process;
 import android.os.RemoteException;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech.OnInitListener;
-import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
 import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
+
+import com.google.gson.GsonBuilder;
+
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import ai.api.model.AIResponse;
 import ai.saiy.android.R;
 import ai.saiy.android.api.DeclinedBinder;
 import ai.saiy.android.api.SaiyDefaults;
@@ -1792,12 +1796,17 @@ public class SelfAware extends Service {
                         @Override
                         public void run() {
 
-                            final Pair<Boolean, String> remoteAPIPair = conditions.getAPIAIRemote(results);
+                            final Pair<Boolean, AIResponse> remoteAPIPair = conditions.getAPIAIRemote(results);
 
                             if (remoteAPIPair.first) {
 
                                 if (servingRemote) {
-                                    results.putString(Request.RESULTS_NLU, remoteAPIPair.second);
+                                    final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(remoteAPIPair.second);
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "gsonString: " + response.toString());
+                                    }
+
+                                    results.putString(Request.RESULTS_NLU, gsonString);
                                     conditions.manageCallback(CallbackType.CB_RESULTS_RECOGNITION, results);
                                 } else {
                                     new ResolveAPIAI(getApplicationContext(),

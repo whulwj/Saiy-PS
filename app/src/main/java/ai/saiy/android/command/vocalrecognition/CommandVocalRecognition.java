@@ -22,15 +22,16 @@ package ai.saiy.android.command.vocalrecognition;
  */
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.R;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
-import ai.saiy.android.processing.Qubit;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.processing.Qubit;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.user.SaiyAccount;
 import ai.saiy.android.user.SaiyAccountHelper;

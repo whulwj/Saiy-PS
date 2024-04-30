@@ -18,7 +18,8 @@
 package ai.saiy.android.cognitive.emotion.provider.beyondverbal.http;
 
 import android.net.ParseException;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileInputStream;

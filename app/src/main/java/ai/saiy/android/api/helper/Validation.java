@@ -17,19 +17,6 @@
 
 package ai.saiy.android.api.helper;
 
-import android.content.Context;
-import android.content.res.Resources;
-import android.net.Uri;
-import android.support.annotation.NonNull;
-
-import ai.saiy.android.R;
-import ai.saiy.android.api.Defaults;
-import ai.saiy.android.api.RequestParcel;
-import ai.saiy.android.configuration.NuanceConfiguration;
-import ai.saiy.android.service.SelfAware;
-import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.utils.UtilsString;
-
 import static ai.saiy.android.api.Defaults.ACTION.SPEAK_LISTEN;
 import static ai.saiy.android.api.Defaults.ACTION.SPEAK_ONLY;
 import static ai.saiy.android.api.Defaults.LanguageModel.API_AI;
@@ -42,6 +29,20 @@ import static ai.saiy.android.api.Defaults.VR.NATIVE;
 import static ai.saiy.android.api.Defaults.VR.NUANCE;
 import static ai.saiy.android.api.Defaults.VR.REMOTE;
 import static ai.saiy.android.api.Defaults.VR.WIT;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.net.Uri;
+
+import androidx.annotation.NonNull;
+
+import ai.saiy.android.api.Defaults;
+import ai.saiy.android.api.R;
+import ai.saiy.android.api.RequestParcel;
+import ai.saiy.android.configuration.NuanceConfiguration;
+import ai.saiy.android.service.SelfAware;
+import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsString;
 
 /**
  * Helper class to OTT check the remote request parameters and make sure they contain nothing
@@ -101,7 +102,7 @@ public final class Validation {
                 }
                 return true;
             } else {
-                MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.R.string.error_requestid_invalid));
+                MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_requestid_invalid));
             }
         } else {
             MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(R.string.error_utterance_invalid));
@@ -150,7 +151,7 @@ public final class Validation {
                 }
                 break;
             default:
-                MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.R.string.error_action_invalid));
+                MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_action_invalid));
                 return false;
         }
 
@@ -184,7 +185,7 @@ public final class Validation {
                 }
                 break;
             default:
-                MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.R.string.error_tts_invalid));
+                MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_tts_invalid));
                 return false;
         }
 
@@ -451,7 +452,7 @@ public final class Validation {
                     }
                     break;
                 } else {
-                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.R.string.error_nuance_config));
+                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_nuance_config));
                     return false;
                 }
 
@@ -466,7 +467,7 @@ public final class Validation {
                     }
                     break;
                 } else {
-                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.R.string.error_microsoft_config));
+                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_microsoft_config));
                     return false;
                 }
             case API_AI:
@@ -480,7 +481,7 @@ public final class Validation {
                     }
                     break;
                 } else {
-                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.R.string.error_api_ai_config));
+                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_api_ai_config));
                     return false;
                 }
             case WIT:
@@ -508,7 +509,7 @@ public final class Validation {
                     }
                     break;
                 } else {
-                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.R.string.error_remote_config));
+                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_remote_config));
                     return false;
                 }
             default:

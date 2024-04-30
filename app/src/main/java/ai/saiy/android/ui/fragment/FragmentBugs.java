@@ -21,9 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +30,10 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
@@ -147,39 +148,33 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
             MyLog.i(CLS_NAME, "onClick: " + view.getTag());
         }
 
-        switch (view.getId()) {
+        if (R.id.ibRun == view.getId()) {
+            testCommand();
+        } else {
+            switch ((int) view.getTag()) {
 
-            case R.id.ibRun:
-                testCommand();
-                break;
-            default:
-
-                switch ((int) view.getTag()) {
-
-                    case 0:
-                        if (!ExecuteIntent.settingsIntent(getApplicationContext(),
-                                IntentConstants.SETTINGS_VOICE_SEARCH)) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "onClick: SETTINGS_VOICE_SEARCH");
-                            }
-                            ExecuteIntent.settingsIntent(getApplicationContext(),
-                                    IntentConstants.SETTINGS_INPUT_METHOD);
+                case 0:
+                    if (!ExecuteIntent.settingsIntent(getApplicationContext(),
+                            IntentConstants.SETTINGS_VOICE_SEARCH)) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onClick: SETTINGS_VOICE_SEARCH");
                         }
-                        break;
-                    case 1:
                         ExecuteIntent.settingsIntent(getApplicationContext(),
-                                IntentConstants.SETTINGS_TEXT_TO_SPEECH);
-                        break;
-                    case 2:
-                        getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
-                                String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS), ActivityHome.ANIMATION_FADE,
-                                ActivityHome.INDEX_FRAGMENT_BUGS);
-                        break;
-                    default:
-                        break;
-                }
-
-                break;
+                                IntentConstants.SETTINGS_INPUT_METHOD);
+                    }
+                    break;
+                case 1:
+                    ExecuteIntent.settingsIntent(getApplicationContext(),
+                            IntentConstants.SETTINGS_TEXT_TO_SPEECH);
+                    break;
+                case 2:
+                    getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
+                            String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS), ActivityHome.ANIMATION_FADE,
+                            ActivityHome.INDEX_FRAGMENT_BUGS);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 

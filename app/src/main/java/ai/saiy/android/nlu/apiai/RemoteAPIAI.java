@@ -18,10 +18,9 @@
 package ai.saiy.android.nlu.apiai;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
 
-import com.google.gson.GsonBuilder;
+import androidx.annotation.NonNull;
 
 import ai.api.AIConfiguration;
 import ai.api.AIDataService;
@@ -45,11 +44,12 @@ public class RemoteAPIAI {
     /**
      * Constructor
      *
-     * @param mContext the application context
+     * @param context the application context
+     * @param utterance the user utterance
      * @param apiKey   the API AI api key
      * @param vrLocale the {@link NLULanguageAPIAI}
      */
-    public RemoteAPIAI(@NonNull final Context mContext,
+    public RemoteAPIAI(@NonNull final Context context,
                        @NonNull final String utterance,
                        @NonNull final String apiKey,
                        @NonNull final NLULanguageAPIAI vrLocale) {
@@ -59,10 +59,10 @@ public class RemoteAPIAI {
                 AIConfiguration.SupportedLanguages.fromLanguageTag(vrLocale.getLocaleString()),
                 AIConfiguration.RecognitionEngine.System);
 
-        aiDataService = new AIDataService(mContext, config);
+        aiDataService = new AIDataService(context, config);
     }
 
-    public Pair<Boolean, String> fetch() {
+    public Pair<Boolean, AIResponse> fetch() {
 
         final AIRequest aiRequest = new AIRequest();
         aiRequest.setQuery(utterance);
@@ -72,14 +72,7 @@ public class RemoteAPIAI {
             final AIResponse response = aiDataService.request(aiRequest);
 
             if (response != null) {
-
-                final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(response);
-
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "gsonString: " + response.toString());
-                }
-
-                return new Pair<>(true, gsonString);
+                return new Pair<>(true, response);
             } else {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "response null");

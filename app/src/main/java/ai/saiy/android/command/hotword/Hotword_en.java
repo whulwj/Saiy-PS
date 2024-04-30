@@ -17,8 +17,9 @@
 
 package ai.saiy.android.command.hotword;
 
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Locale;

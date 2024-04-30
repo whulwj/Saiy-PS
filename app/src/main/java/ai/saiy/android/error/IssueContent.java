@@ -17,7 +17,7 @@
 
 package ai.saiy.android.error;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.io.Serializable;
 

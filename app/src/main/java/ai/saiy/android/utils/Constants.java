@@ -75,4 +75,6 @@ public final class Constants {
     public static final String LICENSE_MATERIAL_DIALOGS = "https://github.com/afollestad/material-dialogs";
     public static final String LICENSE_POCKETSPHINX = "https://github.com/cmusphinx/pocketsphinx-android";
     public static final String LICENSE_SOUND_BIBLE = "http://soundbible.com";
+
+    public static final String PERMISSION_CONTROL_SAIY = "ai.saiy.android.permission.CONTROL_SAIY";
 }

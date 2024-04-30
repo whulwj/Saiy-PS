@@ -18,8 +18,9 @@
 package ai.saiy.android.cognitive.identity.provider.microsoft.http;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -46,8 +47,8 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileList;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem;
+import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileList;
 import ai.saiy.android.utils.MyLog;
 
 /**

@@ -18,7 +18,8 @@
 package ai.saiy.android.utils;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.android.volley.Cache;
 import com.android.volley.toolbox.DiskBasedCache;

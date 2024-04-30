@@ -17,7 +17,7 @@
 
 package ai.saiy.android.nlu.saiy;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 

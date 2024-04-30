@@ -18,7 +18,8 @@
 package ai.saiy.android.localisation;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 /**
  * Utility Class to help manage speech responses for various locales, handling issues mentioned in

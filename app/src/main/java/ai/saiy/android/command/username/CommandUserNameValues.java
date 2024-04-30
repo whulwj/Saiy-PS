@@ -17,7 +17,7 @@
 
 package ai.saiy.android.command.username;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Class for getters and setters of the user name command parameters

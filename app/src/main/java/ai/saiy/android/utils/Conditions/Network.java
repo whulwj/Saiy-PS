@@ -21,9 +21,10 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
 import android.telephony.TelephonyManager;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;

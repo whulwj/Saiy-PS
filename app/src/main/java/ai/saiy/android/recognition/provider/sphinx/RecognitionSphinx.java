@@ -17,9 +17,12 @@
 
 package ai.saiy.android.recognition.provider.sphinx;
 
+import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
+
 import android.content.Context;
-import android.support.annotation.NonNull;
-import android.support.annotation.WorkerThread;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.WorkerThread;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,8 +34,6 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsFile;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
-
-import static edu.cmu.pocketsphinx.SpeechRecognizerSetup.defaultSetup;
 
 /**
  * Created by benrandall76@gmail.com on 04/09/2016.

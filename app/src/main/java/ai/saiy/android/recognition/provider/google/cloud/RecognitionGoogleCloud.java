@@ -21,7 +21,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Process;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
@@ -141,7 +142,7 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
                     .builderForAddress(HOSTNAME, PORT)
                     .nameResolverFactory(new DnsNameResolverProvider())
                     .intercept(new GoogleCredentialsInterceptor(googleCredentials.createScoped(OAUTH2_SCOPES)))
-                    .enableKeepAlive(false)
+                    .keepAliveWithoutCalls(false)
                     .build();
 
             final long then = System.nanoTime();

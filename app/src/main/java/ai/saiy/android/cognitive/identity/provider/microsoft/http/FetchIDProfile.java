@@ -18,8 +18,9 @@
 package ai.saiy.android.cognitive.identity.provider.microsoft.http;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;

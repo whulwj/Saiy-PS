@@ -6,6 +6,7 @@
 -dontwarn com.google.protobuf.**
 -dontwarn io.grpc.**
 -dontwarn okio.**
+-keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
 
 # ads
 -keep public class com.google.android.gms.ads.** {
@@ -54,80 +55,114 @@
     @org.simpleframework.xml.* *;
 }
 
-#support libraries
-# Allow obfuscation of android.support.v7.internal.view.menu.**
-# to avoid problem on Samsung 4.2.2 devices with appcompat v23
-# see https://code.google.com/p/android/issues/detail?id=78377
-# http://stackoverflow.com/questions/24809580/noclassdeffounderror-android-support-v7-internal-view-menu-menubuilder/27254191
--keep class android.support.v7.view.menu.*MenuBuilder*
--keep class android.support.v7.** { *; }
--keep interface android.support.v7.* { *; }
-
--keep public class android.support.v7.widget.** { *; }
--keep public class android.support.v7.internal.widget.** { *; }
--keep public class android.support.v7.internal.view.menu.** { *; }
-
--keep public class * extends android.support.v4.view.ActionProvider {
-    public <init>(android.content.Context);
-}
-
 # Volley
 -keep class com.android.volley.** { *; }
 
-#Guava
--keep class com.google.common.io.Resources {
-    public static <methods>;
+##---------------Begin: proguard configuration for Guava  ----------
+#https://github.com/google/guava/wiki/UsingProGuardWithGuava
+
+-dontwarn javax.lang.model.element.Modifier
+
+# Note: We intentionally don't add the flags we'd need to make Enums work.
+# That's because the Proguard configuration required to make it work on
+# optimized code would preclude lots of optimization, like converting enums
+# into ints.
+
+# FinalizableReferenceQueue calls this reflectively
+# Proguard is intelligent enough to spot the use of reflection onto this, so we
+# only need to keep the names, and allow it to be stripped out if
+# FinalizableReferenceQueue is unused.
+-keepnames class com.google.common.base.internal.Finalizer {
+  *** startFinalizer(...);
 }
--keep class com.google.common.collect.Lists {
-    public static ** reverse(**);
+# However, it cannot "spot" that this method needs to be kept IF the class is.
+-keepclassmembers class com.google.common.base.internal.Finalizer {
+  *** startFinalizer(...);
 }
--keep class com.google.common.base.Charsets {
-    public static <fields>;
+-keepnames class com.google.common.base.FinalizableReference {
+  void finalizeReferent();
 }
+-keepclassmembers class com.google.common.base.FinalizableReference {
+  void finalizeReferent();
+}
+
+# Striped64, LittleEndianByteArray, UnsignedBytes, AbstractFuture
+-dontwarn sun.misc.Unsafe
+
+# Striped64 appears to make some assumptions about object layout that
+# really might not be safe. This should be investigated.
+-keepclassmembers class com.google.common.cache.Striped64 {
+  *** base;
+  *** busy;
+}
+-keepclassmembers class com.google.common.cache.Striped64$Cell {
+  <fields>;
+}
+
+-dontwarn java.lang.SafeVarargs
+
+-keep class java.lang.Throwable {
+  *** addSuppressed(...);
+}
+
+# Futures.getChecked, in both of its variants, is incompatible with proguard.
+
+# Used by AtomicReferenceFieldUpdater and sun.misc.Unsafe
+-keepclassmembers class com.google.common.util.concurrent.AbstractFuture** {
+  *** waiters;
+  *** value;
+  *** listeners;
+  *** thread;
+  *** next;
+}
+-keepclassmembers class com.google.common.util.concurrent.AtomicDouble {
+  *** value;
+}
+-keepclassmembers class com.google.common.util.concurrent.AggregateFutureState {
+  *** remaining;
+  *** seenExceptions;
+}
+
+# Since Unsafe is using the field offsets of these inner classes, we don't want
+# to have class merging or similar tricks applied to these classes and their
+# fields. It's safe to allow obfuscation, since the by-name references are
+# already preserved in the -keep statement above.
+-keep,allowshrinking,allowobfuscation class com.google.common.util.concurrent.AbstractFuture** {
+  <fields>;
+}
+
+# Futures.getChecked (which often won't work with Proguard anyway) uses this. It
+# has a fallback, but again, don't use Futures.getChecked on Android regardless.
+-dontwarn java.lang.ClassValue
+##---------------End: proguard configuration for Guava  ----------
 
 # cardview
 # http://stackoverflow.com/questions/29679177/cardview-shadow-not-appearing-in-lollipop-after-obfuscate-with-proguard/29698051
--keep class android.support.v7.widget.RoundRectDrawable { *; }
-
--keep class com.google.common.base.Joiner {
-    public static com.google.common.base.Joiner on(java.lang.String);
-    public ** join(...);
-}
-
--keep class com.google.common.collect.MapMakerInternalMap$ReferenceEntry
--keep class com.google.common.cache.LocalCache$ReferenceEntry
-
-# http://stackoverflow.com/questions/9120338/proguard-configuration-for-guava-with-obfuscation-and-optimization
--dontwarn javax.annotation.**
--dontwarn javax.inject.**
--dontwarn sun.misc.Unsafe
-
-# Guava 19.0
--dontwarn java.lang.ClassValue
--dontwarn com.google.j2objc.annotations.Weak
--dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
+-keep class androidx.cardview.widget.RoundRectDrawable { *; }
 
 ##---------------Begin: proguard configuration for Gson  ----------
-# Gson uses generic type information stored in a class file when working with fields. Proguard
-# removes such information by default, so configure it to keep all of it.
--keepattributes Signature
-
-# For using GSON @Expose annotation
--keepattributes *Annotation*
-
 # Gson specific classes
--keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.stream.** { *; }
+-dontwarn sun.misc.**
 
-# Application classes that will be serialized/deserialized over Gson
--keep class com.google.gson.examples.android.model.** { *; }
+# GSON TypeAdapters are only referenced in annotations so ProGuard doesn't find their method usage
+-keepclassmembers,allowobfuscation,includedescriptorclasses class * extends com.google.gson.TypeAdapter {
+    public <methods>;
+}
 
 # Prevent proguard from stripping interface information from TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
--keep class * implements com.google.gson.TypeAdapterFactory
--keep class * implements com.google.gson.JsonSerializer
--keep class * implements com.google.gson.JsonDeserializer
+-keep, allowobfuscation, includedescriptorclasses class * implements com.google.gson.TypeAdapterFactory
+-keep, allowobfuscation, includedescriptorclasses class * implements com.google.gson.JsonSerializer
+-keep, allowobfuscation, includedescriptorclasses class * implements com.google.gson.JsonDeserializer
 
+# Ensure that all fields annotated with SerializedName will be kept
+-keepclassmembers class * {
+    @com.google.gson.annotations.SerializedName <fields>;
+}
+# Prevent R8 from leaving Data object members always null ()
+-keepclasseswithmembers, allowobfuscation, includedescriptorclasses class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
 ##---------------End: proguard configuration for Gson  ----------
 
 # Needed by google-api-client to keep generic types and @Key annotations accessed via reflection
@@ -141,7 +176,7 @@
 ## Google Play Services 4.3.23 specific rules ##
 ## https://developer.android.com/google/play-services/setup.html#Proguard ##
 -keep class * extends java.util.ListResourceBundle {
-    protected Object[][] getContents();
+    protected java.lang.Object[][] getContents();
 }
 
 -keep public class com.google.android.gms.common.internal.safeparcel.SafeParcelable {
@@ -163,12 +198,6 @@
 -keep class com.squareup.okhttp.** { *; }
 -keep interface com.squareup.okhttp.** { *; }
 -dontwarn com.squareup.okhttp.**
-
-# support design
--dontwarn android.support.design.**
--keep class android.support.design.** { *; }
--keep interface android.support.design.** { *; }
--keep public class android.support.design.R$* { *; }
 
 # apache commons
 -keep class org.apache.commons.logging.**

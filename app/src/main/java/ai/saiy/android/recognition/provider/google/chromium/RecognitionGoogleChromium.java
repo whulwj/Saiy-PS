@@ -23,8 +23,9 @@ import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Process;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
 
 import org.json.JSONArray;
 import org.json.JSONException;

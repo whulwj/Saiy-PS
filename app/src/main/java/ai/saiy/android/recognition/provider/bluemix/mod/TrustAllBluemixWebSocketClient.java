@@ -18,11 +18,11 @@
 package ai.saiy.android.recognition.provider.bluemix.mod;
 
 import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
 
-import org.java_websocket.client.DefaultSSLWebSocketClientFactory;
+import androidx.annotation.NonNull;
+
 import org.java_websocket.client.WebSocketClient;
-import org.java_websocket.drafts.Draft_17;
+import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
 import org.java_websocket.handshake.ServerHandshake;
 
@@ -43,6 +43,7 @@ import ai.saiy.android.utils.UtilsString;
 
 /**
  * Created by benrandall76@gmail.com on 03/08/2016.
+ * <a href="https://github.com/TooTallNate/Java-WebSocket/issues/1408"/>
  */
 
 public class TrustAllBluemixWebSocketClient extends WebSocketClient {
@@ -56,7 +57,7 @@ public class TrustAllBluemixWebSocketClient extends WebSocketClient {
 
     public TrustAllBluemixWebSocketClient(@NonNull final URI serverURL, @NonNull final Map<String, String> header,
                                           final IWebSocketCallback callback) {
-        super(serverURL, new Draft_17(), header, 10000);
+        super(serverURL, new Draft_6455(), header, 10000);
         this.callback = callback;
     }
 
@@ -78,7 +79,7 @@ public class TrustAllBluemixWebSocketClient extends WebSocketClient {
             }
         }}, new java.security.SecureRandom());
 
-        this.setWebSocketFactory(new DefaultSSLWebSocketClientFactory(sslContext));
+        this.setSocketFactory(sslContext.getSocketFactory());
 
         this.connectBlocking();
     }
@@ -95,11 +96,6 @@ public class TrustAllBluemixWebSocketClient extends WebSocketClient {
             case NOT_YET_CONNECTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "READY_STATE: NOT_YET_CONNECTED");
-                }
-                break;
-            case CONNECTING:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "READY_STATE: CONNECTING");
                 }
                 break;
             case OPEN:

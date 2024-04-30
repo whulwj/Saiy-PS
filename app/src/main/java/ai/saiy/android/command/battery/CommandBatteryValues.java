@@ -18,7 +18,8 @@
 package ai.saiy.android.command.battery;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;

@@ -19,7 +19,8 @@ package ai.saiy.android.files;
 
 import android.content.Context;
 import android.media.MediaMetadataRetriever;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.IOException;

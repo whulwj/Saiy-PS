@@ -22,22 +22,20 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
-import ai.saiy.android.api.language.nlu.NLULanguageAPIAI;
-import ai.saiy.android.configuration.APIAIConfiguration;
 import ai.saiy.android.localisation.SupportedLanguage;
-import ai.saiy.android.nlu.apiai.RemoteAPIAI;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentHomeHelper;

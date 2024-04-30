@@ -18,8 +18,9 @@
 package ai.saiy.android.command.cancel;
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;

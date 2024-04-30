@@ -17,7 +17,7 @@
 
 package ai.saiy.android.command.helper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Class (Command Constants) that lists all possible commands as enum constants. In the scheme of

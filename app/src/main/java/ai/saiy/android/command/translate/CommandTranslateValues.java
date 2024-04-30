@@ -17,7 +17,7 @@
 
 package ai.saiy.android.command.translate;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by benrandall76@gmail.com on 01/06/2016.

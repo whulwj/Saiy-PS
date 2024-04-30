@@ -18,7 +18,8 @@
 package ai.saiy.android.cognitive.motion.provider.google;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.DetectedActivity;
 import com.google.gson.Gson;

@@ -18,7 +18,8 @@
 package ai.saiy.android.defaults;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
 import ai.saiy.android.utils.SPH;

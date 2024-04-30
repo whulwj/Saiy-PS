@@ -18,8 +18,9 @@
 package ai.saiy.android.cognitive.knowledge.provider.wolframalpha;
 
 import android.net.ParseException;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;

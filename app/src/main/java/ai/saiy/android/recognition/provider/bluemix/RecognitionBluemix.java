@@ -20,14 +20,15 @@ package ai.saiy.android.recognition.provider.bluemix;
 import android.os.Bundle;
 import android.os.Process;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
 import org.apache.commons.lang3.ArrayUtils;
-import org.java_websocket.WebSocket;
+import org.java_websocket.enums.ReadyState;
 import org.java_websocket.handshake.ServerHandshake;
 import org.java_websocket.util.Base64;
 import org.json.JSONException;
@@ -382,7 +383,7 @@ public class RecognitionBluemix implements IMic, IWebSocketCallback {
                 listener.onBeginningOfSpeech();
             }
 
-            final WebSocket.READYSTATE readyState = client.getReadyState();
+            final ReadyState readyState = client.getReadyState();
 
             // TODO - missed audio
             switch (readyState) {
@@ -390,11 +391,6 @@ public class RecognitionBluemix implements IMic, IWebSocketCallback {
                 case NOT_YET_CONNECTED:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "READYSTATE: NOT_YET_CONNECTED");
-                    }
-                    break;
-                case CONNECTING:
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "READYSTATE: CONNECTING");
                     }
                     break;
                 case OPEN:

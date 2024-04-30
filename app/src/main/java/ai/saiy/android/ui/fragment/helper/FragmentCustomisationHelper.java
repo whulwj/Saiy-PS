@@ -18,15 +18,22 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.EditText;
 
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -179,21 +186,24 @@ public class FragmentCustomisationHelper {
             hint = getApplicationContext().getString(R.string.custom_intro_hint);
         }
 
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                .title(R.string.menu_custom_intro)
-                .positiveText(R.string.save)
-                .iconRes(R.drawable.ic_crown)
-                .backgroundColorRes(R.color.colorTint)
-                .content(R.string.custom_intro_text)
-                .inputType(InputType.TYPE_CLASS_TEXT)
-                .positiveText(R.string.save)
-                .negativeText(android.R.string.cancel)
-                .checkBoxPromptRes(R.string.custom_intro_checkbox_title,
-                        SPH.getCustomIntroRandom(getApplicationContext()), null)
+        final View customView = LayoutInflater.from(getParentActivity()).inflate(R.layout.md_dialog_input, null, false);
+        final CheckBox checkBox = customView.findViewById(R.id.md_promptCheckbox);
+        checkBox.setText(R.string.custom_intro_checkbox_title);
+        checkBox.setChecked(SPH.getCustomIntroRandom(getApplicationContext()));
+        final EditText editText = customView.findViewById(android.R.id.input);
+        editText.setHint(hint);
+        editText.setText(content);
 
-                .input(hint, content, true, new MaterialDialog.InputCallback() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(customView)
+                .setTitle(R.string.menu_custom_intro)
+                .setIcon(R.drawable.ic_crown)
+                .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
+                .setMessage(R.string.custom_intro_text)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onInput(@NonNull final MaterialDialog dialog, final CharSequence input) {
+                    public void onClick(DialogInterface dialog, int which) {
+                        final CharSequence input = editText.getText();
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showCustomIntroDialog: input: " + input);
                         }
@@ -201,7 +211,7 @@ public class FragmentCustomisationHelper {
                         if (input != null) {
                             if (UtilsString.notNaked(input.toString())) {
                                 SPH.setCustomIntroRandom(FragmentCustomisationHelper.this.getApplicationContext(),
-                                        dialog.isPromptCheckBoxChecked());
+                                        checkBox.isChecked());
                                 SPH.setCustomIntro(FragmentCustomisationHelper.this.getApplicationContext(), input.toString().trim());
                             } else {
                                 SPH.setCustomIntroRandom(FragmentCustomisationHelper.this.getApplicationContext(), false);
@@ -209,7 +219,9 @@ public class FragmentCustomisationHelper {
                             }
                         }
                     }
-                }).build();
+                })
+                .setNegativeButton(android.R.string.cancel, null)
+                .create();
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();

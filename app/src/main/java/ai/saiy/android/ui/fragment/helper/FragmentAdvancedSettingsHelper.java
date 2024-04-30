@@ -19,22 +19,28 @@ package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.ListAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ai.saiy.android.R;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
@@ -230,58 +236,50 @@ public class FragmentAdvancedSettingsHelper {
                 FragmentAdvancedSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        final MaterialDialog materialDialog = new MaterialDialog.Builder(FragmentAdvancedSettingsHelper.this.getParentActivity())
-                                .autoDismiss(false)
-                                .alwaysCallSingleChoiceCallback()
-                                .title(R.string.menu_tts_gender)
-                                .content(R.string.tts_gender_text)
-                                .items((CharSequence[]) gender)
-                                .positiveText(R.string.menu_select)
-                                .negativeText(android.R.string.cancel)
-                                .iconRes(R.drawable.ic_gender_transgender)
-                                .backgroundColorRes(R.color.colorTint)
-
-                                .itemsCallbackSingleChoice(SPH.getDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext()).ordinal(),
-                                        new MaterialDialog.ListCallbackSingleChoice() {
-                                            @Override
-                                            public boolean onSelection(final MaterialDialog dialog, final View view, final int which, final CharSequence text) {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showGenderSelector: onSelection: " + which + ": " + text);
-                                                }
-                                                return true;
-                                            }
-                                        })
-
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentAdvancedSettingsHelper.this.getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_tts_gender)
+                                .setMessage(R.string.tts_gender_text)
+                                .setIcon(R.drawable.ic_gender_transgender)
+                                .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
+                                .setSingleChoiceItems((CharSequence[]) gender, SPH.getDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext()).ordinal(), new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showGenderSelector: onSelection: " + which + ": " + gender[which]);
+                                        }
+                                    }
+                                })
 
-                                        switch (dialog.getSelectedIndex()) {
+                                .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            switch (((AlertDialog) dialog).getListView().getCheckedItemPosition()) {
+                                                case 0:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "showGenderSelector: onPositive: MALE");
+                                                    }
+                                                    SPH.setDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext(), Gender.MALE);
+                                                    SPH.setDefaultTTSVoice(FragmentAdvancedSettingsHelper.this.getApplicationContext(), null);
+                                                    break;
+                                                case 1:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "showGenderSelector: onPositive: FEMALE");
+                                                    }
+                                                    SPH.setDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext(), Gender.FEMALE);
+                                                    SPH.setDefaultTTSVoice(FragmentAdvancedSettingsHelper.this.getApplicationContext(), null);
+                                                    break;
 
-                                            case 0:
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showGenderSelector: onPositive: MALE");
-                                                }
-                                                SPH.setDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext(), Gender.MALE);
-                                                SPH.setDefaultTTSVoice(FragmentAdvancedSettingsHelper.this.getApplicationContext(), null);
-                                                break;
-                                            case 1:
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showGenderSelector: onPositive: FEMALE");
-                                                }
-                                                SPH.setDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext(), Gender.FEMALE);
-                                                SPH.setDefaultTTSVoice(FragmentAdvancedSettingsHelper.this.getApplicationContext(), null);
-                                                break;
-
+                                            }
                                         }
                                         dialog.dismiss();
                                     }
                                 })
 
-                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showGenderSelector: onNegative");
                                         }
@@ -289,7 +287,7 @@ public class FragmentAdvancedSettingsHelper {
                                     }
                                 })
 
-                                .cancelListener(new DialogInterface.OnCancelListener() {
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
@@ -298,7 +296,7 @@ public class FragmentAdvancedSettingsHelper {
 
                                         dialog.dismiss();
                                     }
-                                }).build();
+                                }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
@@ -341,42 +339,55 @@ public class FragmentAdvancedSettingsHelper {
                 FragmentAdvancedSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        final MaterialDialog materialDialog = new MaterialDialog.Builder(FragmentAdvancedSettingsHelper.this.getParentActivity())
-                                .autoDismiss(false)
-                                .title(R.string.menu_hotword_detection)
-                                .content(R.string.hotword_intro_text)
-                                .iconRes(R.drawable.ic_blur)
-                                .positiveText(R.string.save)
-                                .neutralText(R.string.clear)
-                                .negativeText(android.R.string.cancel)
-                                .items((CharSequence[]) hotwordActions)
-
-                                .itemsCallbackMultiChoice(selectedList.toArray(new Integer[0]), new MaterialDialog.ListCallbackMultiChoice() {
+                        boolean[] checkedItems = new boolean[hotwordActions.length];
+                        for (int i = 0; i < selectedList.size(); i++) {
+                            checkedItems[selectedList.get(i)] = true;
+                        }
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentAdvancedSettingsHelper.this.getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_hotword_detection)
+                                .setMessage(R.string.hotword_intro_text)
+                                .setIcon(R.drawable.ic_blur)
+                                .setMultiChoiceItems((CharSequence[]) hotwordActions, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override
-                                    public boolean onSelection(final MaterialDialog dialog, final Integer[] which, final CharSequence[] text) {
+                                    public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
                                         if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showHotwordSelector: onSelection: " + which.length);
+                                            MyLog.i(CLS_NAME, "showHotwordSelector: onSelection: " + which + ", " + isChecked);
                                         }
-                                        return true;
                                     }
                                 })
 
-                                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                                .setNegativeButton(R.string.clear, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-                                        dialog.clearSelectedIndices();
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
+                                            if (adapter instanceof BaseAdapter) {
+                                                for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                                    checkedItems[i] = false;
+                                                }
+                                                ((BaseAdapter) adapter).notifyDataSetChanged();
+                                            } else {
+                                                MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                            }
+                                        }
                                     }
                                 })
 
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showHotwordSelector: onPositive");
                                         }
 
-                                        final Integer[] selected = dialog.getSelectedIndices();
+                                        final List<Integer> selectedIndices = new ArrayList<>();
+                                        for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                            if (checkedItems[i]) {
+                                                selectedIndices.add(i);
+                                            }
+                                        }
+                                        final Integer[] selected = selectedIndices.toArray(new Integer[0]);
 
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showHotwordSelector: onPositive: length: " + selected.length);
@@ -405,9 +416,9 @@ public class FragmentAdvancedSettingsHelper {
                                     }
                                 })
 
-                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showHotwordSelector: onNegative");
                                         }
@@ -415,7 +426,7 @@ public class FragmentAdvancedSettingsHelper {
                                     }
                                 })
 
-                                .cancelListener(new DialogInterface.OnCancelListener() {
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
@@ -423,7 +434,7 @@ public class FragmentAdvancedSettingsHelper {
                                         }
                                         dialog.dismiss();
                                     }
-                                }).build();
+                                }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
@@ -440,41 +451,41 @@ public class FragmentAdvancedSettingsHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showPauseDetectionSlider() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.pause_detection_dialog_layout)
+                .setCancelable(false)
+                .setTitle(R.string.menu_pause)
+                .setIcon(R.drawable.ic_pause_octagon_outline)
 
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                .customView(R.layout.pause_detection_dialog_layout, false)
-                .autoDismiss(false)
-                .title(R.string.menu_pause)
-                .iconRes(R.drawable.ic_pause_octagon_outline)
-                .positiveText(R.string.save)
-                .neutralText(R.string.text_default)
-                .negativeText(android.R.string.cancel)
-
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                .setNegativeButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-                        ((SeekBar) dialog.getCustomView().findViewById(R.id.pauseSeekBar))
-                                .setProgress((int) (RecognitionNative.PAUSE_TIMEOUT / 1000));
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog instanceof AlertDialog) {
+                            ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.pauseSeekBar))
+                                    .setProgress((int) (RecognitionNative.PAUSE_TIMEOUT / 1000));
+                        }
                     }
                 })
 
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showPauseDetectionSlider: onPositive");
                         }
 
-                        SPH.setPauseTimeout(FragmentAdvancedSettingsHelper.this.getApplicationContext(),
-                                (long) ((SeekBar) dialog.getCustomView().findViewById(R.id.pauseSeekBar))
-                                        .getProgress() * 1000);
+                        if (dialog instanceof AlertDialog) {
+                            SPH.setPauseTimeout(FragmentAdvancedSettingsHelper.this.getApplicationContext(),
+                                    (long) ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.pauseSeekBar))
+                                            .getProgress() * 1000);
+                        }
                         dialog.dismiss();
                     }
                 })
 
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showPauseDetectionSlider: onNegative");
                         }
@@ -482,7 +493,7 @@ public class FragmentAdvancedSettingsHelper {
                     }
                 })
 
-                .cancelListener(new DialogInterface.OnCancelListener() {
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
                         if (DEBUG) {
@@ -490,10 +501,10 @@ public class FragmentAdvancedSettingsHelper {
                         }
                         dialog.dismiss();
                     }
-                }).build();
+                }).create();
 
         final int currentTimeout = (int) (SPH.getPauseTimeout(getApplicationContext()) / 1000);
-        final TextView seekText = (TextView) materialDialog.getCustomView().findViewById(R.id.pauseSeekBarText);
+        final TextView seekText = (TextView) materialDialog.findViewById(R.id.pauseSeekBarText);
 
         switch (currentTimeout) {
             case 0:
@@ -510,7 +521,7 @@ public class FragmentAdvancedSettingsHelper {
                 break;
         }
 
-        final SeekBar seekbar = (SeekBar) materialDialog.getCustomView().findViewById(R.id.pauseSeekBar);
+        final SeekBar seekbar = (SeekBar) materialDialog.findViewById(R.id.pauseSeekBar);
         seekbar.setProgress(currentTimeout);
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

@@ -23,8 +23,9 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.service.helper.LocalRequest;

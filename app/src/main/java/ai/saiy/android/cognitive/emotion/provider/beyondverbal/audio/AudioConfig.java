@@ -17,7 +17,7 @@
 
 package ai.saiy.android.cognitive.emotion.provider.beyondverbal.audio;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -17,7 +17,7 @@
 
 package ai.saiy.android.tts.helper;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import org.apache.commons.lang3.ArrayUtils;
 

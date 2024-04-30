@@ -20,7 +20,8 @@ package ai.saiy.android.ui.service;
 import android.content.Intent;
 import android.os.Build;
 import android.service.quicksettings.TileService;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
 
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;

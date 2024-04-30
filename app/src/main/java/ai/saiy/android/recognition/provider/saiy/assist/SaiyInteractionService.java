@@ -32,8 +32,9 @@ import android.service.voice.AlwaysOnHotwordDetector;
 import android.service.voice.AlwaysOnHotwordDetector.Callback;
 import android.service.voice.AlwaysOnHotwordDetector.EventPayload;
 import android.service.voice.VoiceInteractionService;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.List;
 import java.util.Locale;

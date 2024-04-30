@@ -18,17 +18,18 @@
 package ai.saiy.android.command.spell;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
-import ai.saiy.android.processing.Qubit;
-import ai.saiy.android.processing.Position;
 import ai.saiy.android.processing.EntangledPair;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.processing.Position;
+import ai.saiy.android.processing.Qubit;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 

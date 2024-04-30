@@ -17,6 +17,8 @@
 
 package ai.saiy.android.service.helper;
 
+import static ai.saiy.android.applications.Installed.PACKAGE_NAME_GOOGLE;
+
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -36,12 +38,13 @@ import android.speech.RecognitionService;
 import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.auth.oauth2.AccessToken;
 import com.google.common.util.concurrent.RateLimiter;
@@ -52,8 +55,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import ai.saiy.android.R;
+import ai.api.model.AIResponse;
 import ai.saiy.android.api.Defaults;
+import ai.saiy.android.api.R;
 import ai.saiy.android.api.RequestParcel;
 import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.helper.BlackList;
@@ -115,8 +119,6 @@ import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
-
-import static ai.saiy.android.applications.Installed.PACKAGE_NAME_GOOGLE;
 
 /**
  * A utility Class that provides methods to {@link SelfAware} mainly to avoid
@@ -1874,7 +1876,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
      * @return the {@link Pair} with the first parameter denoting success and the second the JSON response
      */
     @SuppressWarnings("ConstantConditions")
-    public Pair<Boolean, String> getAPIAIRemote(@NonNull final Bundle results) {
+    public Pair<Boolean, AIResponse> getAPIAIRemote(@NonNull final Bundle results) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getAPIAIRemote");
         }

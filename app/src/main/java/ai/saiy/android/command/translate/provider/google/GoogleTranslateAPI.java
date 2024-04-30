@@ -18,8 +18,9 @@
 package ai.saiy.android.command.translate.provider.google;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;

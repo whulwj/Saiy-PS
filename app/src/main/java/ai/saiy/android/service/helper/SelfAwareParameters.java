@@ -24,10 +24,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Pair;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 

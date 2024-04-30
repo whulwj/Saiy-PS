@@ -23,12 +23,13 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.content.ContextCompat;
 
-import ai.saiy.android.Manifest;
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+import androidx.core.content.ContextCompat;
+
 import ai.saiy.android.ui.activity.ActivityPermissionDialog;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -56,7 +57,7 @@ public class PermissionHelper {
      */
     public static boolean checkSaiyRemotePermission(@NonNull final Context ctx) {
 
-        switch (ctx.checkCallingPermission(Manifest.permission.CONTROL_SAIY)) {
+        switch (ctx.checkCallingPermission(Constants.PERMISSION_CONTROL_SAIY)) {
 
             case PackageManager.PERMISSION_GRANTED:
                 if (DEBUG) {
@@ -90,7 +91,7 @@ public class PermissionHelper {
 
             if (!packageName.matches(ctx.getPackageName())) {
 
-                switch (ctx.checkCallingPermission(Manifest.permission.CONTROL_SAIY)) {
+                switch (ctx.checkCallingPermission(Constants.PERMISSION_CONTROL_SAIY)) {
 
                     case PackageManager.PERMISSION_GRANTED:
                         if (DEBUG) {
@@ -111,7 +112,7 @@ public class PermissionHelper {
                 return true;
             }
         } else {
-            MyLog.e(CLS_NAME, ctx.getString(ai.saiy.android.R.string.error_package_name_null));
+            MyLog.e(CLS_NAME, ctx.getString(ai.saiy.android.api.R.string.error_package_name_null));
         }
 
         return false;

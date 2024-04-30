@@ -20,8 +20,9 @@ package ai.saiy.android.audio;
 import android.content.Context;
 import android.media.AudioRecord;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.io.File;
 import java.util.concurrent.atomic.AtomicBoolean;

@@ -22,7 +22,8 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.R;
 import ai.saiy.android.utils.MyLog;

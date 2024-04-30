@@ -20,8 +20,9 @@ package ai.saiy.android.sound;
 import android.content.Context;
 import android.media.AudioManager;
 import android.os.Build;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;

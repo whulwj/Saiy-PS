@@ -17,7 +17,7 @@
 
 package ai.saiy.android.cognitive.emotion.provider.beyondverbal.analysis;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 

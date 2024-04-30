@@ -23,16 +23,17 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.BuildConfig;
-import ai.saiy.android.Manifest;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -62,11 +63,11 @@ public class Installed {
     public static final String PACKAGE_TASKER_MARKET = PACKAGE_TASKER_DIRECT + "m";
     public static final String PACKAGE_WOLFRAM_ALPHA = "com.wolfram.android.alpha";
 
-    private static final Pattern pCONTROL_SAIY = Pattern.compile(Manifest.permission.CONTROL_SAIY);
+    private static final Pattern pCONTROL_SAIY = Pattern.compile(Constants.PERMISSION_CONTROL_SAIY);
     private static final Pattern pSAIY_PACKAGE = Pattern.compile(BuildConfig.APPLICATION_ID);
 
     /**
-     * Get a list of all of the installed applications that hold the {@link Manifest.permission#CONTROL_SAIY},
+     * Get a list of all of the installed applications that hold the {@link Constants#PERMISSION_CONTROL_SAIY},
      * regardless of whether or not the permission has been explicitly granted. The results exclude our own
      * package.
      * <p>
@@ -133,7 +134,7 @@ public class Installed {
     }
 
     /**
-     * Get a list of all of the installed applications that hold the {@link Manifest.permission#CONTROL_SAIY},
+     * Get a list of all of the installed applications that hold the {@link Constants#PERMISSION_CONTROL_SAIY},
      * regardless of whether or not the permission has been explicitly granted. The results exclude our own
      * package.
      *

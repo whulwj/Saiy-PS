@@ -14,21 +14,14 @@
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-apply plugin: 'com.android.application'
-apply plugin: 'com.google.protobuf'
+plugins {
+    id 'com.android.application'
+    id 'com.google.protobuf'
+}
 
 android {
-
-    dexOptions {
-        jumboMode true
-        preDexLibraries = false
-        maxProcessCount 4
-        javaMaxHeapSize "6g"
-    }
-
-    compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    namespace 'ai.saiy.android'
+    compileSdk 30
 
     defaultConfig {
         applicationId "ai.saiy.android"
@@ -36,13 +29,16 @@ android {
         targetSdkVersion 27
         versionCode 3
         versionName "1.0.3"
+        // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_7
-        targetCompatibility JavaVersion.VERSION_1_7
+        // Flag to enable support for the new language APIs
+        coreLibraryDesugaringEnabled = true // <- this flag is required
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
         incremental true
     }
 
@@ -113,6 +109,20 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    buildFeatures {
+        buildConfig = true
+    }
+    packagingOptions {
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/license.txt'
+        exclude 'META-INF/NOTICE'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/notice.txt'
+        exclude 'META-INF/ASL2.0'
+        exclude 'META-INF/INDEX.LIST'
+    }
 }
 
 configurations {
@@ -120,95 +130,129 @@ configurations {
 }
 
 dependencies {
-    implementation fileTree(include: ['*.jar', '*.so'], dir: 'libs')
-    implementation 'com.android.support:multidex:1.0.2'
-    implementation 'com.android.support:appcompat-v7:27.1.0'
-    implementation 'com.android.support:design:27.1.0'
-    implementation 'com.android.support:support-annotations:27.1.0'
-    implementation 'com.android.support:cardview-v7:27.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation('com.google.apis:google-api-services-translate:v2-rev45-1.21.0') {
+    implementation fileTree(include: ['*.aar', '*.jar', '*.so'], dir: 'libs')
+    implementation libs.multidex
+    coreLibraryDesugaring libs.desugar.jdk.libs
+
+    implementation libs.material
+    implementation libs.appcompat
+    implementation(libs.activity) {
+        exclude group: 'androidx.activity', module: 'activity-ktx'
+    }
+    implementation libs.annotation
+    implementation libs.browser
+    implementation libs.cardview
+    implementation libs.constraintlayout
+    implementation (libs.core) {
+        exclude group: 'androidx.core', module: 'core-ktx'
+    }
+    implementation libs.documentfile
+    implementation libs.drawerlayout
+    implementation(libs.fragment) {
+        exclude group: 'androidx.fragment', module: 'fragment-ktx'
+    }
+    implementation(libs.lifecycle.runtime) {
+        exclude group: 'androidx.lifecycle', module: 'lifecycle-runtime-ktx'
+    }
+    implementation(libs.lifecycle.livedata) {
+        exclude group: 'androidx.lifecycle', module: 'lifecycle-livedata-core-ktx'
+    }
+    implementation(libs.lifecycle.viewmodel) {
+        exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
+    }
+    implementation libs.lifecycle.viewmodel.savedstate
+    annotationProcessor libs.common.java8
+    implementation libs.recyclerview
+    implementation libs.print
+    implementation libs.transition
+
+    implementation(libs.google.google.api.services.translate) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
-        exclude group: 'com.android.support'
-        exclude module: 'support-annotations'
         exclude group: 'com.google.guava'
     }
-    implementation 'com.google.android.gms:play-services-location:12.0.0'
-    implementation 'com.google.android.gms:play-services-auth:12.0.0'
-    implementation 'com.nuance:speechkit:2.1.3@aar'
-    implementation 'com.google.guava:guava:20.0'
-    implementation 'com.google.code.gson:gson:2.8.0'
-    implementation 'com.google.http-client:google-http-client-gson:1.19.0'
-    implementation 'com.microsoft.projectoxford:speechrecognition:0.6.0'
-    implementation 'org.apache.commons:commons-lang3:3.6'
-    implementation 'commons-codec:commons-codec:20041127.091804'
-    implementation 'com.github.mpkorstanje:simmetrics-core:4.1.0'
-    implementation 'org.apache.commons:commons-collections4:4.1'
-    implementation 'ai.api:sdk:1.9.0@aar'
-    implementation 'commons-io:commons-io:2.4'
-    implementation 'org.java-websocket:Java-WebSocket:1.3.0'
-    implementation 'de.psdev.licensesdialog:licensesdialog:1.8.1'
-    implementation 'com.afollestad.material-dialogs:core:0.9.5.0'
-    implementation('org.simpleframework:simple-xml:2.7.1') {
+    implementation libs.play.services.location
+    implementation libs.play.services.auth
+    implementation libs.speechkit
+    implementation libs.guava
+    implementation libs.gson
+    implementation libs.google.http.client.gson
+    implementation libs.speechrecognition
+    implementation libs.commons.lang3
+    implementation libs.commons.codec
+    implementation libs.simmetrics.core
+    implementation libs.commons.collections4
+    implementation platform(libs.libraries.bom)
+    // https://github.com/dialogflow/dialogflow-android-client
+    // https://github.com/googleapis/google-cloud-java/tree/main/java-dialogflow
+    implementation (libs.cloud.dialogflow) {
+        exclude group: 'io.grpc', module: 'grpc-protobuf'
+        exclude group: 'com.google.protobuf', module: 'protobuf-java-lite'
+//        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+//        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+    }
+    // Add the dependency for the Firebase Authentication library
+    implementation libs.firebase.auth
+    implementation libs.firebase.functions
+    implementation libs.firebase.messaging
+    implementation libs.commons.io
+    // https://github.com/TooTallNate/Java-WebSocket
+    implementation libs.java.web.socket
+    implementation libs.licensesdialog
+    implementation(libs.simple.xml) {
         exclude group: 'xpp3', module: 'xpp3'
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'stax', module: 'stax'
     }
-    implementation('io.grpc:grpc-okhttp:1.0.1') {
+    implementation(libs.grpc.okhttp) {
         exclude module: 'jsr305'
     }
-    implementation('io.grpc:grpc-protobuf:1.0.1') {
+    implementation(libs.grpc.protobuf) {
         exclude module: 'jsr305'
     }
-    implementation('io.grpc:grpc-stub:1.0.1') {
+    implementation(libs.grpc.stub) {
         exclude module: 'jsr305'
     }
-    implementation('io.grpc:grpc-auth:1.0.1') {
+    implementation(libs.grpc.auth) {
         exclude module: 'jsr305'
     }
-    implementation 'com.google.android.gms:play-services-location:12.0.0'
-    implementation('javax.annotation:javax.annotation-api:1.2') {
+    implementation(libs.javax.annotation.api) {
         exclude module: 'annotation'
     }
-    implementation('com.google.auth:google-auth-library-oauth2-http:0.3.0') {
+    implementation(libs.com.google.auth.google.auth.library.oauth2.http3) {
         exclude group: 'org.apache.httpcomponents'
-        exclude group: 'com.android.support'
-        exclude module: 'support-annotations'
         exclude group: 'com.google.guava'
         exclude module: 'jsr305'
         exclude module: 'httpclient'
     }
+    implementation (libs.volley)
+    // https://github.com/cmusphinx/pocketsphinx-android
     implementation project(':pocketsphinx-android-5prealpha-nolib')
-    implementation project(':lapp-debug')
-    testImplementation 'junit:junit:4.12'
+    testImplementation libs.junit
 }
 
+// https://github.com/google/protobuf-gradle-plugin
+// https://github.com/grpc/grpc-java
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.0.2'
+        artifact = 'com.google.protobuf:protoc:3.25.1'
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.0.1'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.63.0'
         }
     }
     generateProtoTasks {
-        all().each {
-            task ->
-                task.builtins {
-                    remove javanano
-                    java {
-                    }
-                }
-
-                task.plugins {
-                    grpc {
-                    }
-                }
+        all().each { task ->
+            task.builtins {
+                java {}
+            }
+            task.plugins {
+                grpc {}
+            }
         }
     }
 }
 
-ant.importBuild 'assets.xml'
+ant.importBuild('assets.xml')
 preBuild.dependsOn(list, checksum)
 clean.dependsOn(clean_assets)

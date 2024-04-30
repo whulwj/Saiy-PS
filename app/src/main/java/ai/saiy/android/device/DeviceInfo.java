@@ -23,7 +23,8 @@ import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognitionService;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.List;
 import java.util.Locale;

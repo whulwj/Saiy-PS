@@ -29,12 +29,13 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -518,10 +519,10 @@ public class SelfAwareHelper {
                 }
                 return action;
             } else {
-                MyLog.w(CLS_NAME, mContext.getString(ai.saiy.android.R.string.error_package_name_null));
+                MyLog.w(CLS_NAME, mContext.getString(ai.saiy.android.api.R.string.error_package_name_null));
             }
         } else {
-            MyLog.w(CLS_NAME, mContext.getString(ai.saiy.android.R.string.error_intent_null));
+            MyLog.w(CLS_NAME, mContext.getString(ai.saiy.android.api.R.string.error_intent_null));
         }
 
         return null;
@@ -552,7 +553,7 @@ public class SelfAwareHelper {
                 return new Pair<>(true, true);
             } else {
                 if (blacklistArray.contains(packageName)) {
-                    MyLog.e(CLS_NAME, mContext.getString(ai.saiy.android.R.string.error_package_blacklisted, packageName));
+                    MyLog.e(CLS_NAME, mContext.getString(ai.saiy.android.api.R.string.error_package_blacklisted, packageName));
                 } else {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "shouldBind: returning remote");
@@ -582,7 +583,7 @@ public class SelfAwareHelper {
 
         if (UtilsString.notNaked(packageName)) {
             if (blacklistArray.contains(packageName)) {
-                MyLog.e(CLS_NAME, mContext.getString(ai.saiy.android.R.string.error_package_blacklisted, packageName));
+                MyLog.e(CLS_NAME, mContext.getString(ai.saiy.android.api.R.string.error_package_blacklisted, packageName));
                 return false;
             } else {
                 return true;
@@ -663,7 +664,7 @@ public class SelfAwareHelper {
             }
             return true;
         } else {
-            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_saiylistener_null));
+            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_saiylistener_null));
         }
 
         return false;
@@ -687,7 +688,7 @@ public class SelfAwareHelper {
             bundle.setClassLoader(RequestParcel.class.getClassLoader());
 
             if (UtilsBundle.isSuspicious(bundle)) {
-                MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_bundle_corrupt));
+                MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_bundle_corrupt));
             } else {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "validateRemoteBundle: bundle valid");
@@ -695,7 +696,7 @@ public class SelfAwareHelper {
                 return true;
             }
         } else {
-            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_bundle_null));
+            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_bundle_null));
         }
 
         rl.onError(Defaults.ERROR.ERROR_DEVELOPER.name(), Validation.ID_UNKNOWN);
@@ -727,7 +728,7 @@ public class SelfAwareHelper {
                 bundle.setClassLoader(RequestParcel.class.getClassLoader());
 
                 if (UtilsBundle.isSuspicious(bundle)) {
-                    MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_bundle_corrupt));
+                    MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_bundle_corrupt));
                 } else {
 
                     final RequestParcel parcel = bundle.getParcelable(RequestParcel.PARCEL_KEY);
@@ -742,20 +743,20 @@ public class SelfAwareHelper {
                             }
                             rl.onError(Defaults.ERROR.ERROR_BUSY.name(), parcel.getRequestId());
                         } else {
-                            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_request_parcel_params_invalid));
+                            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_request_parcel_params_invalid));
                             rl.onError(Defaults.ERROR.ERROR_DEVELOPER.name(), Validation.ID_UNKNOWN);
                         }
                     } else {
-                        MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_request_parcel_invalid));
+                        MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_request_parcel_invalid));
                         rl.onError(Defaults.ERROR.ERROR_DEVELOPER.name(), Validation.ID_UNKNOWN);
                     }
                 }
             } else {
-                MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_bundle_null));
+                MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_bundle_null));
                 rl.onError(Defaults.ERROR.ERROR_DEVELOPER.name(), Validation.ID_UNKNOWN);
             }
         } else {
-            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.R.string.error_saiylistener_null));
+            MyLog.e("Remote Saiy Request", mContext.getString(ai.saiy.android.api.R.string.error_saiylistener_null));
         }
     }
 

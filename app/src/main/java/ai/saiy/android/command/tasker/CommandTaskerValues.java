@@ -17,7 +17,7 @@
 
 package ai.saiy.android.command.tasker;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Class to package the remote NLP request

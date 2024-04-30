@@ -23,23 +23,25 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+
+import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -412,6 +414,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
     @Override
     protected void onNewIntent(final Intent intent) {
+        super.onNewIntent(intent);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onNewIntent");
         }
@@ -504,21 +507,17 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onOptionsItemSelected");
         }
-
-        switch (item.getItemId()) {
-
-            case R.id.action_power:
-                if (SelfAwareHelper.selfAwareRunning(getApplicationContext())) {
-                    SPH.setSelfAwareEnabled(getApplicationContext(), false);
-                    SelfAwareHelper.stopService(getApplicationContext());
-                } else {
-                    SelfAwareHelper.startService(getApplicationContext());
-                    SPH.setSelfAwareEnabled(getApplicationContext(), true);
-                }
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+        if (R.id.action_power == item.getItemId()) {
+            if (SelfAwareHelper.selfAwareRunning(getApplicationContext())) {
+                SPH.setSelfAwareEnabled(getApplicationContext(), false);
+                SelfAwareHelper.stopService(getApplicationContext());
+            } else {
+                SelfAwareHelper.startService(getApplicationContext());
+                SPH.setSelfAwareEnabled(getApplicationContext(), true);
+            }
+            return true;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     public boolean isFragmentLoading(@NonNull final String tag) {
@@ -578,57 +577,42 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
                     String tag = null;
                     Fragment fragment = null;
-
-                    switch (id) {
-
-                        case R.id.nav_home:
-                            fragment = FragmentHome.newInstance(null);
-                            tag = String.valueOf(INDEX_FRAGMENT_HOME);
-                            break;
-                        case R.id.nav_settings:
-                            fragment = FragmentSettings.newInstance(null);
-                            tag = String.valueOf(INDEX_FRAGMENT_SETTINGS);
-                            break;
-                        case R.id.nav_customisation:
-                            fragment = FragmentCustomisation.newInstance(null);
-                            tag = String.valueOf(INDEX_FRAGMENT_CUSTOMISATION);
-                            break;
-                        case R.id.nav_advanced_settings:
-                            fragment = FragmentAdvancedSettings.newInstance(null);
-                            tag = String.valueOf(INDEX_FRAGMENT_ADVANCED_SETTINGS);
-                            break;
-                        case R.id.nav_super_user:
-                            fragment = FragmentSuperUser.newInstance(null);
-                            tag = String.valueOf(INDEX_FRAGMENT_SUPER_USER);
-                            break;
-                        case R.id.nav_about:
-                            fragment = FragmentAbout.newInstance(null);
-                            tag = String.valueOf(INDEX_FRAGMENT_ABOUT);
-                            break;
-                        case R.id.nav_share:
-                            if (!ExecuteIntent.shareIntent(getApplicationContext(),
-                                    Install.getSaiyInstallLink(getApplicationContext()))) {
-                                toast(getString(R.string.error_no_application), Toast.LENGTH_LONG);
-                            }
-                            break;
-                        case R.id.nav_feedback:
-                            if (!ExecuteIntent.sendDeveloperEmail(getApplicationContext())) {
-                                toast(getString(R.string.error_no_application), Toast.LENGTH_LONG);
-                            }
-                            break;
-                        case R.id.nav_twitter:
-                            ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_TWITTER_HANDLE);
-                            break;
-                        case R.id.nav_google_plus:
-                            ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_GOOGLE_PLUS_URL);
-                            break;
-                        case R.id.nav_forum:
-                            ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_XDA_URL);
-                            break;
-                        default:
-                            fragment = FragmentHome.newInstance(null);
-                            tag = String.valueOf(INDEX_FRAGMENT_HOME);
-                            break;
+                    if (R.id.nav_home == id) {
+                        fragment = FragmentHome.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_HOME);
+                    } else if (R.id.nav_settings == id) {
+                        fragment = FragmentSettings.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_SETTINGS);
+                    } else if (R.id.nav_customisation == id) {
+                        fragment = FragmentCustomisation.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_CUSTOMISATION);
+                    } else if (R.id.nav_advanced_settings == id) {
+                        fragment = FragmentAdvancedSettings.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_ADVANCED_SETTINGS);
+                    } else if (R.id.nav_super_user == id) {
+                        fragment = FragmentSuperUser.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_SUPER_USER);
+                    } else if (R.id.nav_about == id) {
+                        fragment = FragmentAbout.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_ABOUT);
+                    } else if (R.id.nav_share == id) {
+                        if (!ExecuteIntent.shareIntent(getApplicationContext(),
+                                Install.getSaiyInstallLink(getApplicationContext()))) {
+                            toast(getString(R.string.error_no_application), Toast.LENGTH_LONG);
+                        }
+                    } else if (R.id.nav_feedback == id) {
+                        if (!ExecuteIntent.sendDeveloperEmail(getApplicationContext())) {
+                            toast(getString(R.string.error_no_application), Toast.LENGTH_LONG);
+                        }
+                    } else if (R.id.nav_twitter == id) {
+                        ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_TWITTER_HANDLE);
+                    } else if (R.id.nav_google_plus == id) {
+                        ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_GOOGLE_PLUS_URL);
+                    } else if (R.id.nav_forum == id) {
+                        ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_XDA_URL);
+                    } else {
+                        fragment = FragmentHome.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_HOME);
                     }
 
                     if (fragment != null) {
@@ -827,27 +811,18 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                         }
 
                     } else {
-
-                        switch (navId) {
-
-                            case R.id.nav_home:
-                                navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(true);
-                                break;
-                            case R.id.nav_settings:
-                                navigationView.getMenu().getItem(MENU_INDEX_SETTINGS).setChecked(true);
-                                break;
-                            case R.id.nav_customisation:
-                                navigationView.getMenu().getItem(MENU_INDEX_CUSTOMISATION).setChecked(true);
-                                break;
-                            case R.id.nav_advanced_settings:
-                                navigationView.getMenu().getItem(MENU_INDEX_ADVANCED_SETTINGS).setChecked(true);
-                                break;
-                            case R.id.nav_super_user:
-                                navigationView.getMenu().getItem(MENU_INDEX_SUPER_USER).setChecked(true);
-                                break;
-                            case R.id.nav_about:
-                                navigationView.getMenu().getItem(MENU_INDEX_ABOUT).setChecked(true);
-                                break;
+                        if (R.id.nav_home == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(true);
+                        } else if (R.id.nav_settings == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_SETTINGS).setChecked(true);
+                        } else if (R.id.nav_customisation == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_CUSTOMISATION).setChecked(true);
+                        } else if (R.id.nav_advanced_settings == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_ADVANCED_SETTINGS).setChecked(true);
+                        } else if (R.id.nav_super_user == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_SUPER_USER).setChecked(true);
+                        } else if (R.id.nav_about == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_ABOUT).setChecked(true);
                         }
 
                         navigationView.setCheckedItem(navId);

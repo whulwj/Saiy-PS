@@ -23,7 +23,8 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Process;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import org.apache.commons.io.FileUtils;
 

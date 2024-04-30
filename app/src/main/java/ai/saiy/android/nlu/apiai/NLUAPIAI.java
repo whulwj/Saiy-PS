@@ -17,7 +17,7 @@
 
 package ai.saiy.android.nlu.apiai;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.JsonElement;
 

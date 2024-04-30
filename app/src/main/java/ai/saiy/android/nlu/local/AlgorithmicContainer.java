@@ -17,7 +17,7 @@
 
 package ai.saiy.android.nlu.local;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.algorithms.Algorithm;
 

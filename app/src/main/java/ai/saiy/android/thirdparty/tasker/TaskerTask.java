@@ -17,7 +17,7 @@
 
 package ai.saiy.android.thirdparty.tasker;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by benrandall76@gmail.com on 10/08/2016.

@@ -21,9 +21,10 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.res.Resources;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;

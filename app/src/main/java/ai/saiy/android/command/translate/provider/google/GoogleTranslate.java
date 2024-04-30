@@ -17,9 +17,12 @@
 
 package ai.saiy.android.command.translate.provider.google;
 
+import static ai.saiy.android.command.translate.CommandTranslate.CLIPBOARD_DELAY;
+
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -42,8 +45,6 @@ import ai.saiy.android.processing.Qubit;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
-
-import static ai.saiy.android.command.translate.CommandTranslate.CLIPBOARD_DELAY;
 
 /**
  * Helper Class to resolve elements of a translation request using Google Translate

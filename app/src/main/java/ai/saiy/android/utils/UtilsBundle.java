@@ -39,7 +39,8 @@ package ai.saiy.android.utils;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 /**
  * Created by benrandall76@gmail.com on 23/04/2016.

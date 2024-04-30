@@ -17,7 +17,7 @@
 
 package ai.saiy.android.cognitive.identity.provider.microsoft.containers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.google.gson.annotations.SerializedName;
 

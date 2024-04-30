@@ -17,14 +17,14 @@
 
 package ai.saiy.android.utils;
 
-import android.app.Application;
+import static ai.saiy.android.applications.Install.Location.PLAYSTORE;
+
 import android.content.Context;
-import android.support.multidex.MultiDex;
-import android.support.multidex.MultiDexApplication;
+
+import androidx.multidex.MultiDex;
+import androidx.multidex.MultiDexApplication;
 
 import ai.saiy.android.applications.Install;
-
-import static ai.saiy.android.applications.Install.Location.PLAYSTORE;
 
 /**
  * Helper Class to deal with application wide variables. Use with caution as the expected persistent

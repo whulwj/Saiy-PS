@@ -21,7 +21,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.service.voice.VoiceInteractionSession;
 import android.service.voice.VoiceInteractionSessionService;
-import android.support.annotation.RequiresApi;
+
+import androidx.annotation.RequiresApi;
 
 /**
  * Created by benrandall76@gmail.com on 22/08/2016.

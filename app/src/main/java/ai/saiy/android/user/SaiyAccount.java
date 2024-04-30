@@ -18,8 +18,9 @@
 package ai.saiy.android.user;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.Locale;
 

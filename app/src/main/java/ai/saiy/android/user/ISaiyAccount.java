@@ -17,7 +17,7 @@
 
 package ai.saiy.android.user;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Created by benrandall76@gmail.com on 10/09/2016.

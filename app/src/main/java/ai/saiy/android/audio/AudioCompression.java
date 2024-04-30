@@ -20,7 +20,8 @@ package ai.saiy.android.audio;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Process;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

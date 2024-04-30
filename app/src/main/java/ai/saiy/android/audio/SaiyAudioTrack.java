@@ -20,8 +20,9 @@ package ai.saiy.android.audio;
 import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingQueue;

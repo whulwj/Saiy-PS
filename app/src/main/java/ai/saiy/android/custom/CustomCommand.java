@@ -17,7 +17,7 @@
 
 package ai.saiy.android.custom;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import java.util.concurrent.Callable;
 

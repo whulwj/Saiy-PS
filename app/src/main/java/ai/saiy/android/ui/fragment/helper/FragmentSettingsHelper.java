@@ -17,23 +17,30 @@
 
 package ai.saiy.android.ui.fragment.helper;
 
+import static android.widget.AdapterView.INVALID_POSITION;
+
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
-import android.support.v4.view.GravityCompat;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.afollestad.materialdialogs.DialogAction;
-import com.afollestad.materialdialogs.MaterialDialog;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
@@ -222,65 +229,56 @@ public class FragmentSettingsHelper {
                 FragmentSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
-                        final MaterialDialog materialDialog = new MaterialDialog.Builder(FragmentSettingsHelper.this.getParentActivity())
-                                .autoDismiss(false)
-                                .alwaysCallSingleChoiceCallback()
-                                .title(R.string.menu_temperature_units)
-                                .items((CharSequence[]) units)
-                                .positiveText(R.string.menu_select)
-                                .negativeText(android.R.string.cancel)
-                                .iconRes(R.drawable.ic_thermometer)
-                                .backgroundColorRes(R.color.colorTint)
-
-                                .itemsCallbackSingleChoice(SPH.getDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext()),
-                                        new MaterialDialog.ListCallbackSingleChoice() {
-                                            @Override
-                                            public boolean onSelection(final MaterialDialog dialog, final View view, final int which, final CharSequence text) {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onSelection: " + which + ": " + text);
-                                                }
-                                                return true;
-                                            }
-                                        })
-
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentSettingsHelper.this.getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_temperature_units)
+                                .setIcon(R.drawable.ic_thermometer)
+                                .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
+                                .setSingleChoiceItems((CharSequence[]) units, SPH.getDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext()), new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onSelection: " + which + ": " + units[which]);
+                                        }
+                                    }
+                                })
 
-                                        switch (dialog.getSelectedIndex()) {
+                                .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            switch (((AlertDialog) dialog).getListView().getCheckedItemPosition()) {
 
-                                            case BatteryInformation.CELSIUS:
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onPositive: CELSIUS");
-                                                }
-                                                SPH.setDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext(),
-                                                        BatteryInformation.CELSIUS);
-                                                break;
-                                            case BatteryInformation.FAHRENHEIT:
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onPositive: FAHRENHEIT");
-                                                }
-                                                SPH.setDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext(),
-                                                        BatteryInformation.FAHRENHEIT);
-                                                break;
+                                                case BatteryInformation.CELSIUS:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onPositive: CELSIUS");
+                                                    }
+                                                    SPH.setDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext(),
+                                                            BatteryInformation.CELSIUS);
+                                                    break;
+                                                case BatteryInformation.FAHRENHEIT:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onPositive: FAHRENHEIT");
+                                                    }
+                                                    SPH.setDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext(),
+                                                            BatteryInformation.FAHRENHEIT);
+                                                    break;
 
+                                            }
                                         }
                                         dialog.dismiss();
                                     }
                                 })
-
-                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onNegative");
                                         }
                                         dialog.dismiss();
                                     }
                                 })
-
-                                .cancelListener(new DialogInterface.OnCancelListener() {
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
@@ -288,7 +286,7 @@ public class FragmentSettingsHelper {
                                         }
                                         dialog.dismiss();
                                     }
-                                }).build();
+                                }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
@@ -344,46 +342,61 @@ public class FragmentSettingsHelper {
                 FragmentSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
+                        final int defaultIndex = SPH.getCommandUnknownAction(FragmentSettingsHelper.this.getApplicationContext());
+                        int checkedItem = INVALID_POSITION;
+                        final List<String> items = new ArrayList<>();
+                        for (int i = 0, j = 0; i < actions.length; i++, j++) {
+                            if (disabledIndicesList.contains(i)) {
+                                continue;
+                            }
+                            items.add(actions[i]);
+                            if (i == defaultIndex) {
+                                checkedItem = j;
+                            }
+                        }
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                        .setCancelable(false)
+                        .setTitle(R.string.menu_unknown_commands)
+                        .setMessage(R.string.content_unknown_command)
+                        .setIcon(R.drawable.ic_not_equal)
+                        .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
+                        .setSingleChoiceItems(items.toArray(new String[0]), checkedItem, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUnknownCommandSelector: onSelection: " + which + ": " + items.get(which));
+                                }
+                            }
+                        })
 
-                final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                        .autoDismiss(false)
-                        .alwaysCallSingleChoiceCallback()
-                        .title(R.string.menu_unknown_commands)
-                        .items((CharSequence[]) actions)
-                        .itemsDisabledIndices(disabledIndicesList.toArray(new Integer[0]))
-                        .content(R.string.content_unknown_command)
-                        .positiveText(R.string.menu_select)
-                        .negativeText(android.R.string.cancel)
-                        .iconRes(R.drawable.ic_not_equal)
-                        .backgroundColorRes(R.color.colorTint)
-
-                                .itemsCallbackSingleChoice(SPH.getCommandUnknownAction(FragmentSettingsHelper.this.getApplicationContext()),
-                                        new MaterialDialog.ListCallbackSingleChoice() {
-                                            @Override
-                                            public boolean onSelection(final MaterialDialog dialog, final View view, final int which, final CharSequence text) {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "showUnknownCommandSelector: onSelection: " + which + ": " + text);
-                                                }
-                                                return true;
-                                            }
-                                        })
-
-                                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                                .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showUnknownCommandSelector: onPositive: " + dialog.getSelectedIndex());
-                                        }
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                            int selectedIndex = INVALID_POSITION;
+                                            if (position != INVALID_POSITION) {
+                                                for (int i = 0; i < actions.length; i++) {
+                                                    if (TextUtils.equals(actions[i], items.get(position))) {
+                                                        selectedIndex = i;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showUnknownCommandSelector: onPositive: " + selectedIndex);
+                                            }
 
-                                        SPH.setCommandUnknownAction(FragmentSettingsHelper.this.getApplicationContext(),
-                                                dialog.getSelectedIndex());
+                                            SPH.setCommandUnknownAction(FragmentSettingsHelper.this.getApplicationContext(),
+                                                    (selectedIndex == INVALID_POSITION) ? Unknown.UNKNOWN_STATE : selectedIndex);
+                                        }
                                         dialog.dismiss();
                                     }
                                 })
 
-                                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
-                                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                                    public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showUnknownCommandSelector: onNegative");
                                         }
@@ -391,7 +404,7 @@ public class FragmentSettingsHelper {
                                     }
                                 })
 
-                                .cancelListener(new DialogInterface.OnCancelListener() {
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
@@ -400,7 +413,7 @@ public class FragmentSettingsHelper {
 
                                         dialog.dismiss();
                                     }
-                                }).build();
+                                }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
@@ -415,44 +428,41 @@ public class FragmentSettingsHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showVolumeSettingsSlider() {
-
-        final MaterialDialog materialDialog = new MaterialDialog.Builder(getParentActivity())
-                .customView(R.layout.tts_volume_dialog_layout, false)
-                .autoDismiss(false)
-                .title(R.string.menu_volume_settings)
-                .iconRes(R.drawable.ic_pause_octagon_outline)
-                .positiveText(R.string.save)
-                .neutralText(R.string.text_default)
-                .negativeText(android.R.string.cancel)
-
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.tts_volume_dialog_layout)
+                .setCancelable(false)
+                .setTitle(R.string.menu_volume_settings)
+                .setIcon(R.drawable.ic_pause_octagon_outline)
+                .setNegativeButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
-                        ((SeekBar) dialog.getCustomView().findViewById(R.id.volumeSeekBar))
-                                .setProgress(4);
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog instanceof AlertDialog) {
+                            ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.volumeSeekBar))
+                                    .setProgress(4);
+                        }
                     }
                 })
 
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog instanceof AlertDialog) {
+                            final int volume = ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.volumeSeekBar))
+                                    .getProgress() * 10 - 40;
 
-                    final int volume = ((SeekBar) dialog.getCustomView().findViewById(R.id.volumeSeekBar))
-                            .getProgress() * 10 - 40;
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "showVolumeSettingsSlider: onPositive: setting: " + volume);
+                            }
 
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "showVolumeSettingsSlider: onPositive: setting: " + volume);
-                    }
-
-                    SPH.setTTSVolume(getApplicationContext(), volume);
-
+                            SPH.setTTSVolume(getApplicationContext(), volume);
+                        }
                         dialog.dismiss();
                     }
                 })
 
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                .setNegativeButton(android.R.string.cancel,new DialogInterface.OnClickListener() {
                     @Override
-                    public void onClick(@NonNull final MaterialDialog dialog, @NonNull final DialogAction which) {
+                    public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showVolumeSettingsSlider: onNegative");
                         }
@@ -460,7 +470,7 @@ public class FragmentSettingsHelper {
                     }
                 })
 
-                .cancelListener(new DialogInterface.OnCancelListener() {
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
                         if (DEBUG) {
@@ -468,11 +478,11 @@ public class FragmentSettingsHelper {
                         }
                         dialog.dismiss();
                     }
-                }).build();
+                }).create();
 
         final int userVolume = SPH.getTTSVolume(getApplicationContext());
-        final TextView seekText = (TextView) materialDialog.getCustomView().findViewById(R.id.volumeSeekBarText);
-        final SeekBar seekbar = (SeekBar) materialDialog.getCustomView().findViewById(R.id.volumeSeekBar);
+        final TextView seekText = (TextView) materialDialog.findViewById(R.id.volumeSeekBarText);
+        final SeekBar seekbar = (SeekBar) materialDialog.findViewById(R.id.volumeSeekBar);
 
         switch (userVolume) {
             case -40:

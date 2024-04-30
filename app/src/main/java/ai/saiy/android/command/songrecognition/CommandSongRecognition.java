@@ -19,7 +19,8 @@ package ai.saiy.android.command.songrecognition;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -30,8 +31,8 @@ import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
-import ai.saiy.android.processing.Qubit;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.processing.Qubit;
 import ai.saiy.android.utils.MyLog;
 
 /**

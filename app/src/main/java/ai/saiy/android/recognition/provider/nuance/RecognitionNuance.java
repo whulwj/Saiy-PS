@@ -21,8 +21,9 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.MainThread;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.MainThread;
+import androidx.annotation.NonNull;
 
 import com.nuance.speechkit.Audio;
 import com.nuance.speechkit.DetectionType;

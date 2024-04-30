@@ -18,7 +18,8 @@
 package ai.saiy.android.nlu.nuance;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.Arrays;
 import java.util.List;

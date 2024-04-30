@@ -18,8 +18,9 @@
 package ai.saiy.android.cognitive.emotion.provider.beyondverbal;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.audio.AudioConfig;

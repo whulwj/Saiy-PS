@@ -18,7 +18,8 @@
 package ai.saiy.android.cognitive.identity.provider.microsoft;
 
 import android.os.Process;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.R;
 import ai.saiy.android.audio.IMic;

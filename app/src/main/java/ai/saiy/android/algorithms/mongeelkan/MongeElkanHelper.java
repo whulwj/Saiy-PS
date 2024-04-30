@@ -17,8 +17,12 @@
 
 package ai.saiy.android.algorithms.mongeelkan;
 
+import static org.simmetrics.builders.StringMetricBuilder.with;
+import static org.simmetrics.tokenizers.Tokenizers.whitespace;
+
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -42,9 +46,6 @@ import ai.saiy.android.nlu.local.AlgorithmicContainer;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
-
-import static org.simmetrics.builders.StringMetricBuilder.with;
-import static org.simmetrics.tokenizers.Tokenizers.whitespace;
 
 /**
  * Class to apply the Monge Elkan algorithm.

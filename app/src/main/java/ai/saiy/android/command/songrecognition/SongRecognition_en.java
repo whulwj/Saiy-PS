@@ -17,7 +17,7 @@
 
 package ai.saiy.android.command.songrecognition;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.util.Pair;
 
 import java.util.ArrayList;

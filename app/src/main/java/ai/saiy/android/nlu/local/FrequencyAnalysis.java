@@ -17,8 +17,9 @@
 
 package ai.saiy.android.nlu.local;
 
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import org.apache.commons.collections4.CollectionUtils;
 

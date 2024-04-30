@@ -20,16 +20,17 @@ package ai.saiy.android.recognition.provider.microsoft;
 import android.content.Context;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.microsoft.bing.speech.SpeechClientStatus;
-import com.microsoft.projectoxford.speechrecognition.Confidence;
-import com.microsoft.projectoxford.speechrecognition.ISpeechRecognitionServerEvents;
-import com.microsoft.projectoxford.speechrecognition.MicrophoneRecognitionClient;
-import com.microsoft.projectoxford.speechrecognition.RecognitionResult;
-import com.microsoft.projectoxford.speechrecognition.SpeechRecognitionMode;
-import com.microsoft.projectoxford.speechrecognition.SpeechRecognitionServiceFactory;
+import com.microsoft.cognitiveservices.speechrecognition.Confidence;
+import com.microsoft.cognitiveservices.speechrecognition.ISpeechRecognitionServerEvents;
+import com.microsoft.cognitiveservices.speechrecognition.MicrophoneRecognitionClient;
+import com.microsoft.cognitiveservices.speechrecognition.RecognitionResult;
+import com.microsoft.cognitiveservices.speechrecognition.SpeechRecognitionMode;
+import com.microsoft.cognitiveservices.speechrecognition.SpeechRecognitionServiceFactory;
 
 import org.json.JSONException;
 import org.json.JSONObject;

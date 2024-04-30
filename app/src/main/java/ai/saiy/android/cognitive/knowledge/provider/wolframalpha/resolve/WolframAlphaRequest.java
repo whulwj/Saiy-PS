@@ -17,7 +17,7 @@
 
 package ai.saiy.android.cognitive.knowledge.provider.wolframalpha.resolve;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Class to package up a Wolfram Alpha request

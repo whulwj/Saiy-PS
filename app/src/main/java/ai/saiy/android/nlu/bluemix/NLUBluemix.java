@@ -17,7 +17,7 @@
 
 package ai.saiy.android.nlu.bluemix;
 
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
 import com.google.gson.annotations.SerializedName;
 

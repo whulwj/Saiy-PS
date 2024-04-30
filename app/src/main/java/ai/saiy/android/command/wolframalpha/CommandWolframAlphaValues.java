@@ -17,7 +17,7 @@
 
 package ai.saiy.android.command.wolframalpha;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Class to package the NLP Intent details for a Wolfram Alpha request

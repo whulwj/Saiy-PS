@@ -17,11 +17,14 @@
 
 package ai.saiy.android.custom;
 
+import static ai.saiy.android.custom.CCC.CUSTOM_INTENT_SERVICE;
+
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -61,8 +64,6 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
-
-import static ai.saiy.android.custom.CCC.CUSTOM_INTENT_SERVICE;
 
 /**
  * Class to extract any custom commands the user has created from {@link DBCustomCommand} and compare

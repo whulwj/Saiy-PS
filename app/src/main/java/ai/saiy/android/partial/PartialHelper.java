@@ -20,8 +20,9 @@ package ai.saiy.android.partial;
 import android.content.Context;
 import android.os.Bundle;
 import android.os.Process;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;

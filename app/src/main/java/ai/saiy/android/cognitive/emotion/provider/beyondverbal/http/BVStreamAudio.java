@@ -20,7 +20,8 @@ package ai.saiy.android.cognitive.emotion.provider.beyondverbal.http;
 import android.net.ParseException;
 import android.os.Process;
 import android.speech.SpeechRecognizer;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.io.IOException;
 import java.io.OutputStream;

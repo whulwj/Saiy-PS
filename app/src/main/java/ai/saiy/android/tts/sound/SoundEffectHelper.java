@@ -17,8 +17,15 @@
 
 package ai.saiy.android.tts.sound;
 
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import static ai.saiy.android.api.request.SaiyRequestParams.SILENCE;
+import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_DELIMITER;
+import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_FIRST;
+import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_INTERIM;
+import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_LAST;
+import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_SINGLE;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.ListIterator;
@@ -29,13 +36,6 @@ import ai.saiy.android.tts.attributes.Gender;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
-
-import static ai.saiy.android.api.request.SaiyRequestParams.SILENCE;
-import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_DELIMITER;
-import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_FIRST;
-import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_INTERIM;
-import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_LAST;
-import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_SINGLE;
 
 /**
  * Created by benrandall76@gmail.com on 12/09/2016.

@@ -18,7 +18,8 @@
 package ai.saiy.android.applications;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.utils.MyLog;

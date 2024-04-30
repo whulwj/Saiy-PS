@@ -7,7 +7,8 @@
 package ai.saiy.android.database.callable;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;

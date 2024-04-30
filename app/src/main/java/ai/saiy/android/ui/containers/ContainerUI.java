@@ -17,7 +17,7 @@
 
 package ai.saiy.android.ui.containers;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 /**
  * Class for the most commonly used UI list elements

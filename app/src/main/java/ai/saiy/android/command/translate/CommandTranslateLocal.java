@@ -17,9 +17,12 @@
 
 package ai.saiy.android.command.translate;
 
+import static ai.saiy.android.command.translate.CommandTranslate.CLIPBOARD_DELAY;
+
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
@@ -40,8 +43,6 @@ import ai.saiy.android.processing.Qubit;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsLocale;
-
-import static ai.saiy.android.command.translate.CommandTranslate.CLIPBOARD_DELAY;
 
 /**
  * Created by benrandall76@gmail.com on 03/05/2016.

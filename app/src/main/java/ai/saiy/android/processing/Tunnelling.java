@@ -19,7 +19,8 @@ package ai.saiy.android.processing;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.Locale;

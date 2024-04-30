@@ -19,8 +19,9 @@ package ai.saiy.android.cognitive.identity.provider.microsoft.http;
 
 import android.net.ParseException;
 import android.os.Process;
-import android.support.annotation.NonNull;
 import android.util.Pair;
+
+import androidx.annotation.NonNull;
 
 import java.io.File;
 import java.io.FileInputStream;
