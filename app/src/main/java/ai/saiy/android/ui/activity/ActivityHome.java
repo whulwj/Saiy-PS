@@ -17,6 +17,7 @@
 
 package ai.saiy.android.ui.activity;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -30,6 +31,8 @@ import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -60,6 +63,7 @@ import ai.saiy.android.ui.fragment.FragmentCustomisation;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
+import ai.saiy.android.utils.AuthUtils;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -268,6 +272,10 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         setupToolbar();
         setupDrawer();
         setupNavigation();
+
+        checkPermissions();
+        AuthUtils.signInAnonymously(this);
+        AuthUtils.getFirebaseInstanceId();
     }
 
     /**
@@ -348,6 +356,16 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void checkPermissions() {
+        String[] permissions = new String[4];
+        permissions[0] = Manifest.permission.INTERNET;
+        permissions[1] = Manifest.permission.RECORD_AUDIO;
+        permissions[2] = Manifest.permission.READ_EXTERNAL_STORAGE;
+        permissions[3] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+
+        mChatPermissionRequest.launch(permissions);
     }
 
     /**
@@ -1082,5 +1100,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
         System.gc();
     }
+
+    private final ActivityResultLauncher<String[]> mChatPermissionRequest = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
+    });
 }
 

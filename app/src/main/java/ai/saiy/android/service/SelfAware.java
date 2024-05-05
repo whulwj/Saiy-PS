@@ -39,11 +39,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
+import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ai.api.model.AIResponse;
 import ai.saiy.android.R;
 import ai.saiy.android.api.DeclinedBinder;
 import ai.saiy.android.api.SaiyDefaults;
@@ -60,6 +60,7 @@ import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.translate.provider.bing.BingCredentials;
 import ai.saiy.android.configuration.MicrosoftConfiguration;
 import ai.saiy.android.intent.ExecuteIntent;
+import ai.saiy.android.nlu.apiai.ApiRequest;
 import ai.saiy.android.nlu.apiai.ResolveAPIAI;
 import ai.saiy.android.nlu.local.InitStrings;
 import ai.saiy.android.partial.PartialHelper;
@@ -1796,14 +1797,14 @@ public class SelfAware extends Service {
                         @Override
                         public void run() {
 
-                            final Pair<Boolean, AIResponse> remoteAPIPair = conditions.getAPIAIRemote(results);
+                            final Pair<Boolean, DetectIntentResponse> remoteAPIPair = conditions.getAPIAIRemote(results);
 
                             if (remoteAPIPair.first) {
 
                                 if (servingRemote) {
                                     final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(remoteAPIPair.second);
                                     if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "gsonString: " + response.toString());
+                                        MyLog.i(CLS_NAME, "gsonString: " + ApiRequest.handleResults(remoteAPIPair.second));
                                     }
 
                                     results.putString(Request.RESULTS_NLU, gsonString);

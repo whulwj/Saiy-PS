@@ -47,6 +47,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.auth.oauth2.AccessToken;
+import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 import com.google.common.util.concurrent.RateLimiter;
 import com.nuance.speechkit.DetectionType;
 
@@ -55,7 +56,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
-import ai.api.model.AIResponse;
 import ai.saiy.android.api.Defaults;
 import ai.saiy.android.api.R;
 import ai.saiy.android.api.RequestParcel;
@@ -1876,7 +1876,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
      * @return the {@link Pair} with the first parameter denoting success and the second the JSON response
      */
     @SuppressWarnings("ConstantConditions")
-    public Pair<Boolean, AIResponse> getAPIAIRemote(@NonNull final Bundle results) {
+    public Pair<Boolean, DetectIntentResponse> getAPIAIRemote(@NonNull final Bundle results) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getAPIAIRemote");
         }

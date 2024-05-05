@@ -16,7 +16,7 @@
   -->
 
 <resources>
-
+    <string name="gcp_project_id" translatable="false">GCP_PROJECT_ID</string>
     <!-- SPEECH STRINGS -->
 
     <!-- PLEASE NOTE -->
@@ -59,7 +59,7 @@
     <string name="sound_bible" translatable="false">Sound Bible</string>
     <string name="license_sound_bible" translatable="false">Credit Mike Koenig @ Soundbible.com</string>
 
-    <!-- App Strings -->7
+    <!-- App Strings -->
 
     <!-- Preserve HTML -->
     <string name="content_disclaimer" translatable="true">here is the application disclaimer.</string>

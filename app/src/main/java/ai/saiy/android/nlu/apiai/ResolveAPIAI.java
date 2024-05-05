@@ -21,10 +21,11 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
+import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
-import ai.api.model.AIResponse;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.nlu.NLUCoerce;
 import ai.saiy.android.utils.MyLog;
@@ -59,13 +60,13 @@ public class ResolveAPIAI {
         this.mContext = mContext;
     }
 
-    public void unpack(@NonNull final AIResponse response) {
+    public void unpack(@NonNull final DetectIntentResponse response) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "unpacking");
         }
 
         nluAPIAI = new NLUAPIAI(confidenceArray, resultsArray,
-                response.getResult().getMetadata().getIntentName(), response.getResult().getParameters());
+                response.getQueryResult().getIntent().getAction(), response.getQueryResult().getParameters().getFieldsMap());
 
         new NLUCoerce(getNLUAPIAI(), getContext(), getSupportedLanguage(), getVRLocale(), getTTSLocale(),
                 getConfidenceArray(), getResultsArray()).coerce();

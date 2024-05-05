@@ -228,6 +228,8 @@ dependencies {
     // https://github.com/cmusphinx/pocketsphinx-android
     implementation project(':pocketsphinx-android-5prealpha-nolib')
     testImplementation libs.junit
+    androidTestImplementation libs.junit
+    androidTestImplementation libs.ext.junit
 }
 
 // https://github.com/google/protobuf-gradle-plugin

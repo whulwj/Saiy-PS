@@ -22,12 +22,10 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import ai.api.AIConfiguration;
-import ai.api.AIDataService;
-import ai.api.AIServiceException;
-import ai.api.model.AIRequest;
-import ai.api.model.AIResponse;
+import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
+
 import ai.saiy.android.api.language.nlu.NLULanguageAPIAI;
+import ai.saiy.android.utils.AuthUtils;
 import ai.saiy.android.utils.MyLog;
 
 /**
@@ -39,7 +37,7 @@ public class RemoteAPIAI {
     private final String CLS_NAME = RemoteAPIAI.class.getSimpleName();
 
     private final String utterance;
-    private final AIDataService aiDataService;
+    private final ApiRequest apiRequest;
 
     /**
      * Constructor
@@ -55,21 +53,20 @@ public class RemoteAPIAI {
                        @NonNull final NLULanguageAPIAI vrLocale) {
         this.utterance = utterance;
 
-        final AIConfiguration config = new AIConfiguration(apiKey,
-                AIConfiguration.SupportedLanguages.fromLanguageTag(vrLocale.getLocaleString()),
-                AIConfiguration.RecognitionEngine.System);
-
-        aiDataService = new AIDataService(context, config);
+        apiRequest = new ApiRequest();
     }
 
-    public Pair<Boolean, AIResponse> fetch() {
-
-        final AIRequest aiRequest = new AIRequest();
-        aiRequest.setQuery(utterance);
-
+    public Pair<Boolean, DetectIntentResponse> fetch() {
         try {
-
-            final AIResponse response = aiDataService.request(aiRequest);
+            DetectIntentResponse response;
+            // check if the token is received and expiry time is received and not expired
+            if (AuthUtils.isTokenValid()) {
+                response = apiRequest.callAPI(AuthUtils.token, AuthUtils.expiryTime, utterance, null, true, true, true);
+            } else {
+                response = null;
+                // get new token if expired or not received
+                AuthUtils.callFirebaseFunction();
+            }
 
             if (response != null) {
                 return new Pair<>(true, response);
@@ -79,10 +76,10 @@ public class RemoteAPIAI {
                 }
             }
 
-        } catch (final AIServiceException e) {
+        } catch (Throwable t) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "AIResponse AIServiceException");
-                e.printStackTrace();
+                t.printStackTrace();
             }
         }
 

@@ -24,9 +24,9 @@ import com.google.auth.Credentials;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.dialogflow.v2beta1.AudioEncoding;
-import com.google.cloud.dialogflow.v2beta1.InputAudioConfig;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentRequest;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
+import com.google.cloud.dialogflow.v2beta1.InputAudioConfig;
 import com.google.cloud.dialogflow.v2beta1.KnowledgeAnswers;
 import com.google.cloud.dialogflow.v2beta1.KnowledgeBasesSettings;
 import com.google.cloud.dialogflow.v2beta1.OutputAudioConfig;
@@ -75,7 +75,7 @@ public class ApiRequest {
      * @param knowledge   :   send message to knowledge base if true
      * @return :   response from the server
      */
-    public String callAPI(String accessToken, Date expiryTime, String msg, byte[] audioBytes, boolean tts,
+    public DetectIntentResponse callAPI(String accessToken, Date expiryTime, String msg, byte[] audioBytes, boolean tts,
                           boolean sentiment, boolean knowledge) {
         this.token = accessToken;
         this.tokenExpiration = expiryTime;
@@ -93,7 +93,7 @@ public class ApiRequest {
      * @param knowledge  :   send message to knowledge base if true
      * @return :   response from the server
      */
-    private String detectIntent(String msg, byte[] audioBytes, boolean tts, boolean sentiment,
+    private DetectIntentResponse detectIntent(String msg, byte[] audioBytes, boolean tts, boolean sentiment,
                                 boolean knowledge) {
         try {
             AccessToken accessToken = new AccessToken(token, tokenExpiration);
@@ -139,17 +139,10 @@ public class ApiRequest {
                 ApiRequest.playAudio(detectIntentResponse.getOutputAudio().toByteArray());
             }
 
-            if (msg != null) {
-                return handleResults(detectIntentResponse);
-            } else {
-                return String.format(
-                        "%s|%s",
-                        handleResults(detectIntentResponse),
-                        detectIntentResponse.getQueryResult().getQueryText());
-            }
+            return detectIntentResponse;
         } catch (Exception ex) {
             ex.printStackTrace();
-            return ex.getMessage();
+            return null;
         }
     }
 
@@ -223,7 +216,7 @@ public class ApiRequest {
      * @param detectIntentResponse :   detectIntentResponse object
      * @return :   String response
      */
-    private String handleResults(DetectIntentResponse detectIntentResponse) {
+     public static String handleResults(DetectIntentResponse detectIntentResponse) {
         QueryResult queryResult = detectIntentResponse.getQueryResult();
         StringBuilder response = new StringBuilder();
 

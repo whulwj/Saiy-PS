@@ -18,11 +18,19 @@
 package ai.saiy.android.nlu.apiai;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import com.google.protobuf.ListValue;
+import com.google.protobuf.Value;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by benrandall76@gmail.com on 03/06/2016.
@@ -35,11 +43,51 @@ public class NLUAPIAI {
     private final HashMap<String, JsonElement> parameters;
 
     public NLUAPIAI(@NonNull final float[] confidence, @NonNull final ArrayList<String> results,
-                    @NonNull final String intent, @NonNull final HashMap<String, JsonElement> parameters) {
+                    @NonNull final String intent, @Nullable final Map<String, Value> parameters) {
         this.confidence = confidence;
         this.results = results;
         this.intent = intent;
-        this.parameters = parameters;
+        if (parameters == null) {
+            this.parameters = new HashMap<>();
+        } else {
+            this.parameters = new HashMap<>(parameters.size());
+            for (Map.Entry<String, Value> entry : parameters.entrySet()) {
+                this.parameters.put(entry.getKey(), convertToJson(entry.getValue()));
+            }
+        }
+    }
+
+    private JsonElement convertToJson(Value value) {
+        if (value.hasNullValue()) {
+            return JsonNull.INSTANCE;
+        } else if (value.hasNumberValue()) {
+            return new JsonPrimitive(value.getNumberValue());
+        } else if (value.hasStringValue()) {
+            return new JsonPrimitive(value.getStringValue());
+        } else if (value.hasBoolValue()) {
+            return new JsonPrimitive(value.getBoolValue());
+        } else if (value.hasStructValue()) {
+            return convertToJson(value.getStructValue().getFieldsMap());
+        } else if (value.hasListValue()) {
+            final ListValue listValue = value.getListValue();
+            final JsonArray jsonArray = new JsonArray(listValue.getValuesCount());
+            for (Value elementValue: listValue.getValuesList()) {
+                jsonArray.add(convertToJson(elementValue));
+            }
+            return jsonArray;
+        }
+        return JsonNull.INSTANCE;
+    }
+
+    private @NonNull JsonElement convertToJson(final Map<String, Value> parameters) {
+        if (parameters == null) {
+            return JsonNull.INSTANCE;
+        }
+        final JsonObject jsonObject = new JsonObject();
+        for (Map.Entry<String, Value> entry: parameters.entrySet()) {
+            jsonObject.add(entry.getKey(), convertToJson(entry.getValue()));
+        }
+        return jsonObject;
     }
 
     public float[] getConfidence() {
