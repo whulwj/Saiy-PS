@@ -30,13 +30,15 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
-import com.google.cloud.speech.v1beta1.RecognitionConfig;
-import com.google.cloud.speech.v1beta1.SpeechGrpc;
-import com.google.cloud.speech.v1beta1.SpeechRecognitionAlternative;
-import com.google.cloud.speech.v1beta1.StreamingRecognitionConfig;
-import com.google.cloud.speech.v1beta1.StreamingRecognitionResult;
-import com.google.cloud.speech.v1beta1.StreamingRecognizeRequest;
-import com.google.cloud.speech.v1beta1.StreamingRecognizeResponse;
+import com.google.cloud.speech.v2.AutoDetectDecodingConfig;
+import com.google.cloud.speech.v2.RecognitionConfig;
+import com.google.cloud.speech.v2.SpeechGrpc;
+import com.google.cloud.speech.v2.SpeechRecognitionAlternative;
+import com.google.cloud.speech.v2.StreamingRecognitionConfig;
+import com.google.cloud.speech.v2.StreamingRecognitionFeatures;
+import com.google.cloud.speech.v2.StreamingRecognitionResult;
+import com.google.cloud.speech.v2.StreamingRecognizeRequest;
+import com.google.cloud.speech.v2.StreamingRecognizeResponse;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.TextFormat;
 
@@ -158,14 +160,14 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
             initial = StreamingRecognizeRequest.newBuilder().setStreamingConfig(
                     StreamingRecognitionConfig.newBuilder()
                             .setConfig(RecognitionConfig.newBuilder()
-                                    .setEncoding(RecognitionConfig.AudioEncoding.LINEAR16)
-                                    .setSampleRate(RecognitionMic.SAMPLE_RATE_HZ_16000)
-                                    .setMaxAlternatives(10)
-                                    .setProfanityFilter(false)
-                                    .setLanguageCode(language.getLocaleString())
+                                    .setAutoDecodingConfig(AutoDetectDecodingConfig.newBuilder().build())
+                                    .addLanguageCodes(language.getLocaleString())
+                                    .setModel("long")
                                     .build())
-                            .setInterimResults(true)
-                            .setSingleUtterance(true)
+                            .setStreamingFeatures(StreamingRecognitionFeatures.newBuilder()
+                                    .setInterimResults(true)
+                                    .setEnableVoiceActivityEvents(true)
+                                    .build())
                             .build()).build();
 
         } catch (final GooglePlayServicesRepairableException e) {
@@ -304,7 +306,7 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
             try {
 
                 requestObserver.onNext(StreamingRecognizeRequest.newBuilder()
-                        .setAudioContent(ByteString.copyFrom(buffer, 0, bufferReadResult))
+                        .setAudio(ByteString.copyFrom(buffer, 0, bufferReadResult))
                         .build());
 
             } catch (final IllegalStateException e) {
@@ -461,40 +463,31 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
             MyLog.i(CLS_NAME, "onNext: " + TextFormat.printToString(value));
         }
 
-        final StreamingRecognizeResponse.EndpointerType endpointerType = value.getEndpointerType();
+        final StreamingRecognizeResponse.SpeechEventType endpointerType = value.getSpeechEventType();
 
         switch (endpointerType) {
 
-            case START_OF_SPEECH:
+            case SPEECH_ACTIVITY_BEGIN:
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onNext: START_OF_SPEECH");
+                    MyLog.i(CLS_NAME, "onNext: SPEECH_ACTIVITY_BEGIN");
                 }
                 if (doBeginning.get()) {
                     doBeginning.set(false);
                     listener.onBeginningOfSpeech();
                 }
                 break;
-            case END_OF_SPEECH:
+            case SPEECH_ACTIVITY_END:
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onNext: END_OF_SPEECH");
+                    MyLog.i(CLS_NAME, "onNext: SPEECH_ACTIVITY_END");
                 }
                 if (doEnd.get()) {
                     doEnd.set(false);
                     stopListening();
                 }
                 break;
-            case END_OF_AUDIO:
+            case END_OF_SINGLE_UTTERANCE:
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onNext: END_OF_AUDIO");
-                }
-                if (doEnd.get()) {
-                    doEnd.set(false);
-                    stopListening();
-                }
-                break;
-            case END_OF_UTTERANCE:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onNext: END_OF_UTTERANCE");
+                    MyLog.i(CLS_NAME, "onNext: END_OF_SINGLE_UTTERANCE");
                 }
                 if (doEnd.get()) {
                     doEnd.set(false);
@@ -506,10 +499,10 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
                     MyLog.i(CLS_NAME, "onNext: UNRECOGNIZED");
                 }
                 break;
-            case ENDPOINTER_EVENT_UNSPECIFIED:
+            case SPEECH_EVENT_TYPE_UNSPECIFIED:
             default:
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onNext: ENDPOINTER_EVENT_UNSPECIFIED");
+                    MyLog.i(CLS_NAME, "onNext: SPEECH_EVENT_TYPE_UNSPECIFIED");
                 }
                 break;
         }

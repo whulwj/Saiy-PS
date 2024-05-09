@@ -315,7 +315,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 }
                             }
                         })
-                        .setNegativeButton(R.string.clear, new DialogInterface.OnClickListener() {
+                        .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 if (dialog instanceof AlertDialog) {
@@ -555,7 +555,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                                 }
                                             }
                                         })
-                                        .setNegativeButton(StringUtils.capitalize(getParent().getString(R.string.add_new)), new DialogInterface.OnClickListener() {
+                                        .setNeutralButton(StringUtils.capitalize(getParent().getString(R.string.add_new)), new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
                                                 ExecuteIntent.settingsIntent(FragmentSuperuserHelper.this.getApplicationContext(),

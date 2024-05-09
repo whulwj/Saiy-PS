@@ -24,6 +24,7 @@ import android.content.Context;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
+import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
 
 /**
@@ -35,6 +36,7 @@ import ai.saiy.android.applications.Install;
 public class Global extends MultiDexApplication {
 
     public static final Install.Location installLocation = PLAYSTORE;
+    public static String PROJECT_ID = "";
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -45,5 +47,7 @@ public class Global extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        // TODO
+        PROJECT_ID = getApplicationContext().getString(R.string.gcp_project_id);
     }
 }

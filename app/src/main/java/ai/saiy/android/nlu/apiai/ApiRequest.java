@@ -50,9 +50,10 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
 
+import ai.saiy.android.utils.Global;
+
 public class ApiRequest {
     public static final String SESSION_ID = "sessionId";
-    public static String PROJECT_ID = "";
 
     private String token = null;
     private Date tokenExpiration = null;
@@ -103,7 +104,7 @@ public class ApiRequest {
             SessionsSettings sessionsSettings = SessionsSettings.newBuilder()
                     .setCredentialsProvider(fixedCredentialsProvider).build();
             SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
-            SessionName sessionName = SessionName.of(PROJECT_ID, SESSION_ID);
+            SessionName sessionName = SessionName.of(Global.PROJECT_ID, SESSION_ID);
 
             QueryInput queryInput;
             if (msg != null) {
@@ -196,7 +197,7 @@ public class ApiRequest {
             KnowledgeBasesSettings knowledgeSessionsSettings = KnowledgeBasesSettings.newBuilder()
                     .setCredentialsProvider(fixedCredentialsProvider).build();
             ArrayList<String> knowledgeBaseNames =
-                    KnowledgeBaseUtils.listKnowledgeBases(PROJECT_ID, knowledgeSessionsSettings);
+                    KnowledgeBaseUtils.listKnowledgeBases(Global.PROJECT_ID, knowledgeSessionsSettings);
 
             if (!knowledgeBaseNames.isEmpty()) {
                 // As an example, we'll only grab the first Knowledge Base

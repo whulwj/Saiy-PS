@@ -357,7 +357,7 @@ public class FragmentAdvancedSettingsHelper {
                                     }
                                 })
 
-                                .setNegativeButton(R.string.clear, new DialogInterface.OnClickListener() {
+                                .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (dialog instanceof AlertDialog) {
@@ -457,7 +457,7 @@ public class FragmentAdvancedSettingsHelper {
                 .setTitle(R.string.menu_pause)
                 .setIcon(R.drawable.ic_pause_octagon_outline)
 
-                .setNegativeButton(R.string.text_default, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (dialog instanceof AlertDialog) {

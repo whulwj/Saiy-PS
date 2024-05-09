@@ -65,6 +65,7 @@ import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
 import ai.saiy.android.utils.AuthUtils;
 import ai.saiy.android.utils.Constants;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
@@ -273,6 +274,12 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         setupDrawer();
         setupNavigation();
 
+        if (Global.PROJECT_ID.equals("GCP_PROJECT_ID")) {
+            Toast.makeText(this, "Please update the GCP_PROJECT_ID in strings.xml",
+                    Toast.LENGTH_LONG).show();
+//            finish();
+            return;
+        }
         checkPermissions();
         AuthUtils.signInAnonymously(this);
         AuthUtils.getFirebaseInstanceId();
