@@ -287,7 +287,8 @@ public class SaiyAccessibilityService extends AccessibilityService {
                     }
 
                     break;
-
+                default:
+                    break;
             }
 
             switch (event.getEventType()) {

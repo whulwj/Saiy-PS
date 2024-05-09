@@ -17,7 +17,7 @@
   -->
 <set xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <objectAnimator xmlns:android="http://schemas.android.com/apk/res/android"
+    <objectAnimator
                     android:duration="@integer/animate_slow"
                     android:interpolator="@android:interpolator/accelerate_quad"
                     android:propertyName="alpha"

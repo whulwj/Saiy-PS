@@ -81,13 +81,13 @@
         Interact with user input parameters.</string>
     <string name="accessibility_enable" translatable="true">Please enable the Say accessibility service to use
         this feature.</string>
+    <string name="accessibility_setting_description">Nothing to see here</string>
     <string name="error" translatable="true">error</string>
     <string name="enabled" translatable="true">Enabled</string>
     <string name="disabled" translatable="true">Disabled</string>
     <string name="success" translatable="true">success</string>
     <string name="failed" translatable="true">failed</string>
     <string name="chooser_share_via" translatable="true">Share via</string>
-    <string name="chooser_email_via" translatable="true">Email via</string>
     <string name="feedback" translatable="true">feedback</string>
     <string name="model" translatable="true">model</string>
     <string name="manufacturer" translatable="true">manufacturer</string>
@@ -142,7 +142,6 @@
     <string name="menu_tap_view" translatable="true">tap to view</string>
     <string name="menu_tap_topics" translatable="true">tap for topics</string>
     <string name="menu_tap_contribute" translatable="true">tap to contribute</string>
-    <string name="menu_tap_create" translatable="true">tap to create</string>
     <string name="menu_tap_options" translatable="true">tap for options</string>
     <string name="menu_tap_toggle" translatable="true">tap to toggle</string>
     <string name="menu_tap_set" translatable="true">tap to set</string>
@@ -235,7 +234,6 @@
     <string name="ac_button_done" translatable="true">Done button</string>
 
     <!-- Permission Strings -->
-    <string name="permission_request" translatable="true">Permission Request</string>
     <string name="permission_notification_ticker" translatable="true">Permission Request</string>
     <string name="permission_notification_text" translatable="true">Permission Request - click for information</string>
     <string name="permission_unknown" translatable="true">Without this permission I cannot function.
@@ -419,16 +417,10 @@
     <string name="speech_enroll_success" translatable="true">"The vocal verification process succeeded. I'll
         now be able to identify you, before providing sensitive information, or on request"</string>
 
-    <!-- Command - Speech enrollment | error -->
-    <string name="error_speech_enrollment_account" translatable="true">"Sorry %1$s, but the remote enrollment
-        process failed. I\'m sure my creator is aware and working on a fix as we speak."</string>
-
     <!-- Command - Google Now | error -->
     <string name="error_google_now_broadcast" translatable="true">"Failed sending to Google Now"</string>
 
     <!-- Command - Wolfram Alpha | error -->
-    <string name="error_wolfram_alpha_install" translatable="true">"You can install the Wolfram Alpha Android application,
-        to view these results more easily."</string>
     <string name="error_wolfram_alpha_broadcast" translatable="true">"Failed sending to Wolfram Alpha"</string>
 
     <!-- Command - Hotword -->
@@ -449,10 +441,6 @@
     <string name="emotion" translatable="true">"emotion"</string>
     <string name="feeling" translatable="true">"feeling"</string>
 
-    <!-- Command - Emotion | error length -->
-    <string name="error_emotion_length" translatable="true">"You need to speak for at least 13 seconds,
-        for a successful analysis."</string>
-
     <!-- Command - Emotion | error BV connection -->
     <string name="error_beyond_verbal_connection" translatable="true">"Sorry %1$s, but I was unable
         to connect to Beyond Verbal's servers."</string>
@@ -460,8 +448,6 @@
     <!-- Command - Emotion | Notification -->
     <string name="emotion_notification_text" translatable="true">"Analysis Complete - click for details"</string>
     <string name="emotion_notification_ticker" translatable="true">"Analysis Complete"</string>
-    <string name="emotion_notify_analyse" translatable="true">"Thank you. I'll notify you shortly when I've
-        completed the emotion analysis"</string>
 
     <!-- Command - Voice Identification -->
     <string name="analyse" translatable="true">"analyse"</string>
@@ -527,7 +513,6 @@
 
     <string name="sound_search" translatable="true">"sound search"</string>
     <string name="google_capital" translatable="false">"Google"</string>
-    <string name="google" translatable="false">"google"</string>
     <string name="sound_hound" translatable="false">"Sound Hound"</string>
     <string name="sound_hound_premium" translatable="false">"Sound Hound Premium"</string>
     <string name="shazam" translatable="false">"Shazam"</string>
@@ -675,7 +660,6 @@
     <string name="ac_charging" translatable="true">"AC charging"</string>
     <string name="usb_charging" translatable="true">"USB charging"</string>
     <string name="discharging" translatable="true">"discharging"</string>
-    <string name="consuming_battery" translatable="true">"consuming battery"</string>
     <string name="fully_charged" translatable="true">"full charged"</string>
     <string name="currently_indeterminable" translatable="true">"currently indeterminable"</string>
 

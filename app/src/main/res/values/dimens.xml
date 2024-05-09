@@ -22,7 +22,6 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
 
     <!-- The desired padding when no title is visible,
      This plus md_content_padding_top should equals md_dialog_frame_margin -->

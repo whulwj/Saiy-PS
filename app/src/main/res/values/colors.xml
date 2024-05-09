@@ -27,7 +27,5 @@
     <color name="colorFade">#78909c</color>
     <color name="colorTint">#ECEFF1</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorAccentLight">#FF80AB</color>
-    <color name="colorAccentDark">#F50057</color>
     <color name="colorSubtitle">#4c4c4c</color>
 </resources>
