@@ -19,13 +19,11 @@ package ai.saiy.android.ui.activity.helper;
 
 import android.app.Activity;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.text.Html;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -60,7 +58,6 @@ public class ActivityHomeHelper {
                 .setMessage(Html.fromHtml(act.getApplicationContext().getString(R.string.content_disclaimer)))
                 .setIcon(R.drawable.ic_gavel)
                 .setCancelable(false)
-                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
                 .setPositiveButton(R.string.menu_accept, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -116,7 +113,6 @@ public class ActivityHomeHelper {
                 .setTitle(R.string.menu_developer_note)
                 .setMessage(R.string.content_developer_note)
                 .setIcon(R.drawable.ic_note_text)
-                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
                 .setPositiveButton(R.string.menu_lets_do_it, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -158,7 +154,6 @@ public class ActivityHomeHelper {
                 .setTitle(R.string.menu_whats_new)
                 .setMessage(R.string.content_whats_new)
                 .setIcon(R.drawable.ic_info)
-                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
                 .setPositiveButton(R.string.menu_excited, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -223,7 +218,6 @@ public class ActivityHomeHelper {
                                 })
                                 .setMessage(R.string.content_supported_languages)
                                 .setIcon(R.drawable.ic_language)
-                                .setBackground(new ColorDrawable(ContextCompat.getColor(act, R.color.colorTint)))
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {

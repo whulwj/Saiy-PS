@@ -19,7 +19,6 @@ package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +27,6 @@ import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -198,7 +196,6 @@ public class FragmentCustomisationHelper {
                 .setView(customView)
                 .setTitle(R.string.menu_custom_intro)
                 .setIcon(R.drawable.ic_crown)
-                .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
                 .setMessage(R.string.custom_intro_text)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override

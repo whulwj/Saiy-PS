@@ -17,8 +17,9 @@
 
 package ai.saiy.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.error.Issue;
 import ai.saiy.android.error.IssueContent;
@@ -27,7 +28,7 @@ import ai.saiy.android.utils.MyLog;
 /**
  * Created by benrandall76@gmail.com on 16/04/2016.
  */
-public class ActivityIssue extends Activity {
+public class ActivityIssue extends AppCompatActivity {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityIssue.class.getSimpleName();

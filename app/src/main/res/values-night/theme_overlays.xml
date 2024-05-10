@@ -1,0 +1,34 @@
+<resources>
+    <style name="ThemeOverlay.AppTheme.MediumContrast" parent="ThemeOverlay.MaterialComponents.Dark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/md_theme_primary_mediumContrast</item>
+        <item name="colorPrimaryVariant">@color/md_theme_primary_mediumContrast</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary_mediumContrast</item>
+        <item name="colorSecondary">@color/md_theme_secondary_mediumContrast</item>
+        <item name="colorSecondaryVariant">@color/md_theme_secondary_mediumContrast</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary_mediumContrast</item>
+        <item name="colorError">@color/md_theme_error_mediumContrast</item>
+        <item name="colorOnError">@color/md_theme_onError_mediumContrast</item>
+        <item name="android:colorBackground">@color/md_theme_background_mediumContrast</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground_mediumContrast</item>
+        <item name="colorSurface">@color/md_theme_surface_mediumContrast</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface_mediumContrast</item>
+    </style>
+    <style name="ThemeOverlay.AppTheme.HighContrast" parent="ThemeOverlay.MaterialComponents.Dark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/md_theme_primary_highContrast</item>
+        <item name="colorPrimaryVariant">@color/md_theme_primary_highContrast</item>
+        <item name="colorOnPrimary">@color/md_theme_onPrimary_highContrast</item>
+        <item name="colorSecondary">@color/md_theme_secondary_highContrast</item>
+        <item name="colorSecondaryVariant">@color/md_theme_secondary_highContrast</item>
+        <item name="colorOnSecondary">@color/md_theme_onSecondary_highContrast</item>
+        <item name="colorError">@color/md_theme_error_highContrast</item>
+        <item name="colorOnError">@color/md_theme_onError_highContrast</item>
+        <item name="android:colorBackground">@color/md_theme_background_highContrast</item>
+        <item name="colorOnBackground">@color/md_theme_onBackground_highContrast</item>
+        <item name="colorSurface">@color/md_theme_surface_highContrast</item>
+        <item name="colorOnSurface">@color/md_theme_onSurface_highContrast</item>
+    </style>
+</resources>

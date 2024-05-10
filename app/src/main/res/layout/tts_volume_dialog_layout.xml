@@ -31,8 +31,7 @@
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/media_stream"
-        android:textColor="@color/colorPrimary"/>
+        android:text="@string/media_stream"/>
 
     <SeekBar
         android:id="@+id/volumeSeekBar"

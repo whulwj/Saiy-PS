@@ -19,7 +19,6 @@ package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.view.View;
 import android.widget.BaseAdapter;
@@ -29,7 +28,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -241,7 +239,6 @@ public class FragmentAdvancedSettingsHelper {
                                 .setTitle(R.string.menu_tts_gender)
                                 .setMessage(R.string.tts_gender_text)
                                 .setIcon(R.drawable.ic_gender_transgender)
-                                .setBackground(new ColorDrawable(ContextCompat.getColor(getApplicationContext(), R.color.colorTint)))
                                 .setSingleChoiceItems((CharSequence[]) gender, SPH.getDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext()).ordinal(), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -456,7 +453,6 @@ public class FragmentAdvancedSettingsHelper {
                 .setCancelable(false)
                 .setTitle(R.string.menu_pause)
                 .setIcon(R.drawable.ic_pause_octagon_outline)
-
                 .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -502,6 +498,8 @@ public class FragmentAdvancedSettingsHelper {
                         dialog.dismiss();
                     }
                 }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
 
         final int currentTimeout = (int) (SPH.getPauseTimeout(getApplicationContext()) / 1000);
         final TextView seekText = (TextView) materialDialog.findViewById(R.id.pauseSeekBarText);
@@ -553,9 +551,6 @@ public class FragmentAdvancedSettingsHelper {
             public void onStopTrackingTouch(final SeekBar seekBar) {
             }
         });
-
-        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
-        materialDialog.show();
     }
 
     private String getString(final int id) {

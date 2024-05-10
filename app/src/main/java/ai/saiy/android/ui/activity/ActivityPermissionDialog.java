@@ -17,11 +17,11 @@
 
 package ai.saiy.android.ui.activity;
 
-import android.app.Activity;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import ai.saiy.android.permissions.PermissionHelper;
@@ -34,7 +34,7 @@ import ai.saiy.android.utils.UtilsBundle;
  * <p>
  * Created by benrandall76@gmail.com on 12/04/2016.
  */
-public class ActivityPermissionDialog extends Activity implements ActivityCompat.OnRequestPermissionsResultCallback {
+public class ActivityPermissionDialog extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityPermissionDialog.class.getSimpleName();

@@ -17,9 +17,10 @@
 
 package ai.saiy.android.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService;
@@ -30,7 +31,7 @@ import ai.saiy.android.utils.SPH;
  * Created by benrandall76@gmail.com on 22/08/2016.
  */
 
-public class ActivityAssistProxy extends Activity {
+public class ActivityAssistProxy extends AppCompatActivity {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityAssistProxy.class.getSimpleName();

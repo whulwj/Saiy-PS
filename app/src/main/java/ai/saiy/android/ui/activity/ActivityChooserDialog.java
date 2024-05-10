@@ -17,20 +17,21 @@
 
 package ai.saiy.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.ArrayList;
 
 import ai.saiy.android.defaults.songrecognition.SongRecognitionChooser;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsBundle;
+import ai.saiy.android.utils.UtilsList;
 
 /**
  * Created by benrandall76@gmail.com on 12/06/2016.
  */
-public class ActivityChooserDialog extends Activity {
+public class ActivityChooserDialog extends AppCompatActivity {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityChooserDialog.class.getSimpleName();

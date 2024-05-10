@@ -17,9 +17,10 @@
 
 package ai.saiy.android.ui.activity;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.service.helper.AssistantIntentService;
 import ai.saiy.android.utils.MyLog;
@@ -27,7 +28,7 @@ import ai.saiy.android.utils.MyLog;
 /**
  * Created by benrandall76@gmail.com on 06/02/2016.
  */
-public class ActivityLauncherShortcut extends Activity {
+public class ActivityLauncherShortcut extends AppCompatActivity {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityLauncherShortcut.class.getSimpleName();

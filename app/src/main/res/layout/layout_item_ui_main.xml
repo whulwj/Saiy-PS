@@ -55,8 +55,7 @@
             android:id="@+id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textColor="@color/colorFade"
+            android:textAppearance="?attr/textAppearanceSubtitle1"
             android:textStyle="bold"
             tools:text="@string/menu_memory_usage"/>
 
@@ -66,9 +65,7 @@
             android:id="@+id/subtitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-light"
-            android:textColor="@color/colorSubtitle"
-            android:textSize="12sp"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
             android:textStyle="italic"
             android:visibility="visible"
             tools:text="@string/menu_tap_configure"/>

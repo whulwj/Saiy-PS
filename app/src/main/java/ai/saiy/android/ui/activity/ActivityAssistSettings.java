@@ -17,8 +17,9 @@
 
 package ai.saiy.android.ui.activity;
 
-import android.app.Activity;
 import android.os.Bundle;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.R;
 
@@ -26,7 +27,7 @@ import ai.saiy.android.R;
  * Created by benrandall76@gmail.com on 22/08/2016.
  */
 
-public class ActivityAssistSettings extends Activity {
+public class ActivityAssistSettings extends AppCompatActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
