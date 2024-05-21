@@ -16,7 +16,7 @@
   -->
 
 <resources>
-    <string name="gcp_project_id" translatable="false">GCP_PROJECT_ID</string>
+    <string name="gcp_project_id" translatable="false">plucky-sound-315505</string>
     <!-- SPEECH STRINGS -->
 
     <!-- PLEASE NOTE -->

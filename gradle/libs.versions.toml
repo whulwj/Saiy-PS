@@ -14,6 +14,7 @@ javaWebsocket = "1.5.6"
 googleHttpClientGson = "1.44.1"
 gson = "2.10.1"
 guava = "32.1.3-android"
+googleServicesVersion = "4.4.1"
 playServicesAuth = "20.4.1"
 playServicesLocation = "21.0.1"
 protobufGradlePlugin = "0.9.4"
@@ -106,3 +107,4 @@ volley = { module = "com.android.volley:volley", version.ref = "volley" }
 
 gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
 protobuf-gradle-plugin = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "protobufGradlePlugin" }
+googleServices = { module = "com.google.gms:google-services", version.ref = "googleServicesVersion" }

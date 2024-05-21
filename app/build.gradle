@@ -17,6 +17,7 @@
 plugins {
     id 'com.android.application'
     id 'com.google.protobuf'
+    id 'com.google.gms.google-services'
 }
 
 android {

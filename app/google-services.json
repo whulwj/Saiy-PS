@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1049797034767",
+    "project_id": "saiy-b755b",
+    "storage_bucket": "saiy-b755b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1049797034767:android:aa40088273c7121b10f47a",
+        "android_client_info": {
+          "package_name": "ai.saiy.android"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAwGevpWznNFKhTEwfz20EoNi6RsMvS1nk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
