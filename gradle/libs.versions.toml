@@ -1,5 +1,5 @@
 [versions]
-gradle = "7.4.2"
+gradlePlugin = "7.4.2"
 comGoogleAuthGoogleAuthLibraryOauth2Http2 = "1.23.0"
 commonsIo = "2.16.1"
 commonsCollections4 = "4.4"
@@ -105,6 +105,6 @@ speechkit = { module = "com.nuance:speechkit", version.ref = "speechkit" }
 speechrecognition = { module = "com.microsoft.projectoxford:speechrecognition", version.ref = "speechrecognition" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
 
-gradle = { module = "com.android.tools.build:gradle", version.ref = "gradle" }
+gradle = { module = "com.android.tools.build:gradle", version.ref = "gradlePlugin" }
 protobuf-gradle-plugin = { module = "com.google.protobuf:protobuf-gradle-plugin", version.ref = "protobufGradlePlugin" }
 googleServices = { module = "com.google.gms:google-services", version.ref = "googleServicesVersion" }
