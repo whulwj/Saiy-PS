@@ -291,9 +291,9 @@ public class FragmentAboutHelper {
                 getString(R.string.license_microsoft_cognitive),
                 new MITLicense()));
 
-        notices.addNotice(new Notice(getString(R.string.api_ai),
-                Constants.LICENSE_URL_API_AI,
-                getString(R.string.license_api_ai),
+        notices.addNotice(new Notice(getString(R.string.dialog_flow),
+                Constants.LICENSE_URL_DIALOG_FLOW,
+                getString(R.string.license_dialog_flow),
                 new ApacheSoftwareLicense20()));
 
         notices.addNotice(new Notice(getString(R.string.simple_xml),
@@ -305,11 +305,6 @@ public class FragmentAboutHelper {
                 Constants.LICENSE_MATERIAL_ICONS,
                 getString(R.string.license_material_icons),
                 new ApacheSoftwareLicense20()));
-
-        notices.addNotice(new Notice(getString(R.string.material_dialogs),
-                Constants.LICENSE_MATERIAL_DIALOGS,
-                getString(R.string.license_material_dialogs),
-                new MITLicense()));
 
         notices.addNotice(new Notice(getString(R.string.pocketsphinx),
                 Constants.LICENSE_POCKETSPHINX,

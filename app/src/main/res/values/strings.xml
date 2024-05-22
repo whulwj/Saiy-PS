@@ -46,14 +46,12 @@
     <string name="license_guava" translatable="false">Copyright © 2011 The Guava Authors</string>
     <string name="microsoft_cognitive" translatable="false">Microsoft Cognitive Services</string>
     <string name="license_microsoft_cognitive" translatable="false">Copyright © Microsoft Corporation</string>
-    <string name="api_ai" translatable="false">API AI</string>
-    <string name="license_api_ai" translatable="false">Copyright © 2014 Speaktoit, Inc.</string>
+    <string name="dialog_flow" translatable="false">Dialogflow</string>
+    <string name="license_dialog_flow" translatable="false">Copyright © Google, Inc.</string>
     <string name="simple_xml" translatable="false">Simple XML</string>
     <string name="license_simple_xml" translatable="false">Copyright © Niall Gallagher</string>
     <string name="material_icons" translatable="false">Material Design Icons</string>
     <string name="license_material_icons" translatable="false">Copyright © 2014, Austin Andrews</string>
-    <string name="material_dialogs" translatable="false">Material Dialogs</string>
-    <string name="license_material_dialogs" translatable="false">Copyright © 2014-2016 Aidan Michael Follestad</string>
     <string name="pocketsphinx" translatable="false">Pocketsphinx</string>
     <string name="license_pocketsphinx" translatable="false">Copyright © 2013-2015, Alpha Cephei Inc. All rights reserved.</string>
     <string name="sound_bible" translatable="false">Sound Bible</string>

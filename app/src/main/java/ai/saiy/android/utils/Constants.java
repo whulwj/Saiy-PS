@@ -69,10 +69,9 @@ public final class Constants {
     public static final String LICENSE_URL_NUANCE_SPEECHKIT = "https://github.com/NuanceDev/speechkit-android";
     public static final String LICENSE_URL_GUAVA = "https://github.com/google/guava";
     public static final String LICENSE_URL_MICROSOFT_COGNITIVE = "https://www.microsoft.com/cognitive-services";
-    public static final String LICENSE_URL_API_AI = "https://github.com/api-ai/api-ai-android-sdk";
+    public static final String LICENSE_URL_DIALOG_FLOW = "https://github.com/googleapis/google-cloud-java/tree/main/java-dialogflow";
     public static final String LICENSE_URL_SIMPLE_XML = "https://github.com/ngallagher/simplexml";
     public static final String LICENSE_MATERIAL_ICONS = "https://github.com/Templarian/MaterialDesign";
-    public static final String LICENSE_MATERIAL_DIALOGS = "https://github.com/afollestad/material-dialogs";
     public static final String LICENSE_POCKETSPHINX = "https://github.com/cmusphinx/pocketsphinx-android";
     public static final String LICENSE_SOUND_BIBLE = "http://soundbible.com";
 
