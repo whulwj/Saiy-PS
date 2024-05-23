@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 
 import java.io.File;
-import java.io.IOException;
 
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.recognition.Recognition;
@@ -128,12 +127,6 @@ public class RecognitionSphinx {
 
                 listener.onHotwordInitialised();
 
-            } catch (final IOException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "setUp IOException");
-                    e.printStackTrace();
-                }
-                onError(SaiyHotwordListener.ERROR_INITIALISE);
             } catch (final NullPointerException e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "setUp NullPointerException");

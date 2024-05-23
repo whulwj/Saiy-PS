@@ -52,7 +52,7 @@ See the Saiy TTS project for further integration examples.
   - PocketSphinx
 
 - Natural Language Processing
-  - API.ai
+  - Dialogflow
   - Wit.ai
   - Nuance mix
   - Microsoft
@@ -93,7 +93,7 @@ To use free embedded and offline voice recognition, install [Google's 'Now'](htt
  - [PocketSphinx](https://github.com/cmusphinx/pocketsphinx-android-demo) - Speech to Text
  - [Google Cloud Speech](https://cloud.google.com/speech/) - Speech to Text
  - [Google Chromium Speech](https://www.chromium.org/developers/how-tos/api-keys) - Speech to Text
- - [API AI](https://api.ai/) - Speech to Text - NLU
+ - [Google Cloud Dialogflow](https://dialogflow.cloud.google.com) - Speech to Text - NLU
  - [Beyond Verbal](http://developers.beyondverbal.com) - Emotion analytics
  - [Wolfram Alpha](https://developer.wolframalpha.com/portal/signin.html) - Knowledge base
 
@@ -155,7 +155,7 @@ The above is for another discussion, but the point to take is that development i
 - Deducing success/error/insufficiency
 - Extract standardisation: _{ location:"Berlin" } { description:"light drizzle" }_
 
-Much of the above will need to be hard-coded. I state this only to manage expectations of how'smart'' we can hope to be...
+Much of the above will need to be hard-coded. I state this only to manage expectations of how 'smart' we can hope to be...
 
 ## What's the plan?
 
