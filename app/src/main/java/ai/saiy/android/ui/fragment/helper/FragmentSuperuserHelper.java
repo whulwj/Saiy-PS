@@ -459,12 +459,12 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
         switch (currentTimeout) {
             case 1:
-                seekText.setText(getParent().getString(R.string.memory_usage_text)
-                        + " " + currentTimeout + " " + getParent().getString(R.string.minute));
+                seekText.setText(getParent().getString(R.string.memory_usage_text,
+                        currentTimeout + " " + getParent().getString(R.string.minute)));
                 break;
             default:
-                seekText.setText(getParent().getString(R.string.memory_usage_text)
-                        + " " + currentTimeout + " " + getParent().getString(R.string.minutes));
+                seekText.setText(getParent().getString(R.string.memory_usage_text,
+                        currentTimeout + " " + getParent().getString(R.string.minutes)));
                 break;
         }
 
@@ -480,12 +480,12 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
                 switch (progress) {
                     case 1:
-                        seekText.setText(getParent().getString(R.string.memory_usage_text)
-                                + " " + progress + " " + getParent().getString(R.string.minute));
+                        seekText.setText(getParent().getString(R.string.memory_usage_text,
+                                progress + " " + getParent().getString(R.string.minute)));
                         break;
                     default:
-                        seekText.setText(getParent().getString(R.string.memory_usage_text)
-                                + " " + progress + " " + getParent().getString(R.string.minutes));
+                        seekText.setText(getParent().getString(R.string.memory_usage_text,
+                                progress + " " + getParent().getString(R.string.minutes)));
                         break;
                 }
             }

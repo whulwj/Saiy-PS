@@ -1,63 +1,5 @@
-<!--
-  ~ Copyright (c) 2016. Saiy Ltd. All Rights Reserved.
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as published
-  ~ by the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-<resources>
-    <string name="gcp_project_id" translatable="false">plucky-sound-315505</string>
-    <!-- SPEECH STRINGS -->
-
-    <!-- PLEASE NOTE -->
-    <!-- Specific errors should only have one entry, so a user can 'quote' them in a bug report.
-    Or at the very least convey the error type so the issue can be easily identified -->
-
-    <!-- License Strings -->
-    <string name="google_play_services" translatable="false">Google Play Services</string>
-    <string name="license_android_open_source" translatable="false">The Android Open Source Project</string>
-    <string name="gson" translatable="false">GSON</string>
-    <string name="license_google_inc" translatable="false">Copyright © Google Inc.</string>
-    <string name="volley" translatable="false">Volley</string>
-    <string name="license_volley" translatable="false">Xiaoke Zhang &amp; The Android Open Source Project</string>
-    <string name="two_forty_four" translatable="false">Two Forty Four a.m.</string>
-    <string name="license_two_forty_four" translatable="false">Copyright © 2012 two forty four a.m. LLC</string>
-    <string name="speechutils" translatable="false">Speechutils</string>
-    <string name="license_kaarel_kaljurand" translatable="false">Copyright © Kaarel Kaljurand</string>
-    <string name="microsoft_translator" translatable="false">Microsoft Translator</string>
-    <string name="license_microsoft_translator" translatable="false">Jonathan Griggs</string>
-    <string name="apache_commons" translatable="false">Apache Commons</string>
-    <string name="license_apache_commons" translatable="false">Copyright © Apache Software Foundation</string>
-    <string name="simmetrics" translatable="false">Simmetrics</string>
-    <string name="license_simmetrics" translatable="false">Copyright © 2014 - 2016 Simmetrics Authors</string>
-    <string name="nuance_speechkit" translatable="false">Nuance Speechkit</string>
-    <string name="license_nuance_speechkit" translatable="false">Copyright © Nuance Inc. 2002 Jean-Marc Valin &amp; Wimba S.A</string>
-    <string name="guava" translatable="false">Guava</string>
-    <string name="license_guava" translatable="false">Copyright © 2011 The Guava Authors</string>
-    <string name="microsoft_cognitive" translatable="false">Microsoft Cognitive Services</string>
-    <string name="license_microsoft_cognitive" translatable="false">Copyright © Microsoft Corporation</string>
-    <string name="dialog_flow" translatable="false">Dialogflow</string>
-    <string name="license_dialog_flow" translatable="false">Copyright © Google, Inc.</string>
-    <string name="simple_xml" translatable="false">Simple XML</string>
-    <string name="license_simple_xml" translatable="false">Copyright © Niall Gallagher</string>
-    <string name="material_icons" translatable="false">Material Design Icons</string>
-    <string name="license_material_icons" translatable="false">Copyright © 2014, Austin Andrews</string>
-    <string name="pocketsphinx" translatable="false">Pocketsphinx</string>
-    <string name="license_pocketsphinx" translatable="false">Copyright © 2013-2015, Alpha Cephei Inc. All rights reserved.</string>
-    <string name="sound_bible" translatable="false">Sound Bible</string>
-    <string name="license_sound_bible" translatable="false">Credit Mike Koenig @ Soundbible.com</string>
-
-    <!-- App Strings -->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- https://translate.google.hk/ -->
 
     <!-- Preserve HTML -->
     <string name="content_disclaimer" translatable="true">here is the application disclaimer.</string>
@@ -67,239 +9,219 @@
     <string name="content_supported_languages" translatable="true">here is the supported languages text</string>
     <string name="content_unknown_command" translatable="true">When a command is not recognised</string>
 
-    <string name="navigation_drawer_open" translatable="true">Open navigation drawer</string>
-    <string name="navigation_drawer_close" translatable="true">Close navigation drawer</string>
+    <string name="navigation_drawer_open" translatable="true">打开导航栏</string>
+    <string name="navigation_drawer_close" translatable="true">关闭导航栏</string>
     <string name="app_name" translatable="false">Saiy</string>
-    <string name="control_saiy_permission_label" translatable="true">Remotely control Saiy features</string>
-    <string name="control_saiy_permission_description" translatable="true">control certain features of Saiy. These features include
-        the recording of audio, passing of this speech data to the remote application and varying the type of voice engine used.</string>
+    <string name="control_saiy_permission_label" translatable="true">Saiy 远程控制功能</string>
+    <string name="control_saiy_permission_description" translatable="true">控制 Saiy 的某些功能。这些功能包括录制音频, 将此语音数据上传到远程应用程序, 更改使用的语音引擎类型。</string>
     <string name="error_missing_permissions" translatable="true">Your application is missing permission.CONTROL_SAIY</string>
-    <string name="tile_label" translatable="true">Saiy Recognition</string>
-    <string name="accessibility_description" translatable="true">Read and announce notification content.
-        Interact with user input parameters.</string>
-    <string name="accessibility_enable" translatable="true">Please enable the Say accessibility service to use
-        this feature.</string>
+    <string name="tile_label" translatable="true">Saiy 识别</string>
+    <string name="accessibility_description" translatable="true">读取并显示通知内容。与用户输入参数进行交互。</string>
+    <string name="accessibility_enable" translatable="true">请启用 "Say 辅助功能服务" 以使用此功能。</string>
     <string name="accessibility_setting_description">Nothing to see here</string>
-    <string name="error" translatable="true">error</string>
-    <string name="enabled" translatable="true">Enabled</string>
-    <string name="disabled" translatable="true">Disabled</string>
-    <string name="success" translatable="true">success</string>
-    <string name="failed" translatable="true">failed</string>
-    <string name="chooser_share_via" translatable="true">Share via</string>
-    <string name="feedback" translatable="true">feedback</string>
-    <string name="model" translatable="true">model</string>
-    <string name="manufacturer" translatable="true">manufacturer</string>
+    <string name="error" translatable="true">错误</string>
+    <string name="enabled" translatable="true">已启用</string>
+    <string name="disabled" translatable="true">未启用</string>
+    <string name="success" translatable="true">成功！</string>
+    <string name="failed" translatable="true">失败</string>
+    <string name="chooser_share_via" translatable="true">通过以下方式分享：</string>
+    <string name="feedback" translatable="true">反馈</string>
+    <string name="model" translatable="true">模型</string>
+    <string name="manufacturer" translatable="true">制造商</string>
     <string name="android" translatable="false">Android</string>
     <string name="locale" translatable="false">locale</string>
-    <string name="save" translatable="true">save</string>
-    <string name="close" translatable="true">close</string>
-    <string name="engine" translatable="true">engine</string>
-    <string name="ask_repeat" translatable="true">Ask you to repeat</string>
-    <string name="state_command_unknown" translatable="true">State command unknown</string>
-    <string name="menu_send_to" translatable="true">Send to</string>
-    <string name="menu_application_disclaimer" translatable="true">Application Disclaimer</string>
-    <string name="menu_developer_note" translatable="true">Developer Note</string>
-    <string name="menu_whats_new" translatable="true">"What's New?"</string>
-    <string name="menu_accept" translatable="true">Accept</string>
-    <string name="menu_uninstall" translatable="true">Uninstall</string>
-    <string name="menu_lets_do_it" translatable="true">"Let's do it!"</string>
-    <string name="menu_excited" translatable="true">"I'm so excited!!"</string>
-    <string name="menu_select" translatable="true">"Select"</string>
-    <string name="menu_supported_languages" translatable="true">Supported Languages</string>
-    <string name="menu_unknown_commands" translatable="true">Unknown Commands</string>
-    <string name="custom_intro_text" translatable="true">How should I address you?</string>
-    <string name="custom_intro_hint" translatable="true">I\'m listening your greatness</string>
-    <string name="custom_intro_checkbox_title" translatable="true">Use randomly</string>
-    <string name="silence" translatable="true">silence</string>
-    <string name="male" translatable="true">male</string>
-    <string name="female" translatable="true">female</string>
-    <string name="clear" translatable="true">clear</string>
-    <string name="seconds" translatable="true">seconds</string>
-    <string name="second" translatable="true">second</string>
-    <string name="minutes" translatable="true">minutes</string>
-    <string name="minute" translatable="true">minute</string>
-    <string name="text_default" translatable="true">default</string>
-    <string name="provider_default" translatable="true">provider default</string>
-    <string name="tts_gender_text" translatable="true">Preferred gender when available</string>
-    <string name="hotword_intro_text" translatable="true">Select hotword configuration</string>
-    <string name="blacklist_intro_text" translatable="true">Select apps to blacklist</string>
-    <string name="blacklist_no_apps" translatable="true">Currently, no installed applications can communicate with Saiy</string>
+    <string name="save" translatable="true">保存</string>
+    <string name="close" translatable="true">关闭</string>
+    <string name="engine" translatable="true">引擎</string>
+    <string name="ask_repeat" translatable="true">请您重复</string>
+    <string name="state_command_unknown" translatable="true">状态命令未知</string>
+    <string name="menu_send_to" translatable="true">发送到</string>
+    <string name="menu_application_disclaimer" translatable="true">应用免责声明</string>
+    <string name="menu_developer_note" translatable="true">开发者备注</string>
+    <string name="menu_whats_new" translatable="true">"更新内容"</string>
+    <string name="menu_accept" translatable="true">同意</string>
+    <string name="menu_uninstall" translatable="true">卸载</string>
+    <string name="menu_lets_do_it" translatable="true">"我们开始吧!"</string>
+    <string name="menu_excited" translatable="true">"我太激动了!"</string>
+    <string name="menu_select" translatable="true">"选择"</string>
+    <string name="menu_supported_languages" translatable="true">支持的语言</string>
+    <string name="menu_unknown_commands" translatable="true">未知命令</string>
+    <string name="custom_intro_text" translatable="true">我该怎样称呼您?</string>
+    <string name="custom_intro_hint" translatable="true">我在等您的回复</string>
+    <string name="custom_intro_checkbox_title" translatable="true">随机使用</string>
+    <string name="silence" translatable="true">沉默</string>
+    <string name="male" translatable="true">男性</string>
+    <string name="female" translatable="true">女性</string>
+    <string name="clear" translatable="true">清空</string>
+    <string name="seconds" translatable="true">秒</string>
+    <string name="second" translatable="true">秒</string>
+    <string name="minutes" translatable="true">分</string>
+    <string name="minute" translatable="true">分</string>
+    <string name="text_default" translatable="true">默认</string>
+    <string name="provider_default" translatable="true">默认服务提供商</string>
+    <string name="tts_gender_text" translatable="true">在可用时首选性别</string>
+    <string name="hotword_intro_text" translatable="true">选择热词配置</string>
+    <string name="blacklist_intro_text" translatable="true">选择要入黑名单的应用程序</string>
+    <string name="blacklist_no_apps" translatable="true">目前，没有已安装的应用程序可以与Saiy沟通</string>
 
     <!-- Notification channels -->
-    <string name="menu_not_channel_permanent" translatable="true">"Permanent"</string>
+    <string name="menu_not_channel_permanent" translatable="true">"永久的"</string>
     <string name="menu_not_channel_permanent_description" translatable="true">"Blar"</string>
-    <string name="menu_not_channel_interaction" translatable="true">"Interaction"</string>
+    <string name="menu_not_channel_interaction" translatable="true">"互动"</string>
     <string name="menu_not_channel_interaction_description" translatable="true">"Blar."</string>
-    <string name="menu_not_channel_information" translatable="true">"Information"</string>
+    <string name="menu_not_channel_information" translatable="true">"信息"</string>
     <string name="menu_not_channel_information_description" translatable="true">"Blar"</string>
-    <string name="menu_not_channel_priority" translatable="true">"Priority"</string>
+    <string name="menu_not_channel_priority" translatable="true">"优先级"</string>
     <string name="menu_not_channel_priority_description" translatable="true">"Blar"</string>
 
     <!-- UI Strings -->
-    <string name="menu_tap_begin" translatable="true">tap to begin</string>
-    <string name="menu_tap_view" translatable="true">tap to view</string>
-    <string name="menu_tap_topics" translatable="true">tap for topics</string>
-    <string name="menu_tap_contribute" translatable="true">tap to contribute</string>
-    <string name="menu_tap_options" translatable="true">tap for options</string>
-    <string name="menu_tap_toggle" translatable="true">tap to toggle</string>
-    <string name="menu_tap_set" translatable="true">tap to set</string>
-    <string name="menu_tap_configure" translatable="true">tap to configure</string>
-    <string name="menu_tap_tweak" translatable="true">tap to tweak</string>
-    <string name="menu_tap_legends" translatable="true">tap for legends</string>
-    <string name="menu_tap_send" translatable="true">tap to send</string>
-    <string name="menu_tap_help" translatable="true">tap for help</string>
+    <string name="menu_tap_begin" translatable="true">点击开始</string>
+    <string name="menu_tap_view" translatable="true">点击查看</string>
+    <string name="menu_tap_topics" translatable="true">点击查看主题</string>
+    <string name="menu_tap_contribute" translatable="true">如何做出贡献</string>
+    <string name="menu_tap_options" translatable="true">点击查看选项</string>
+    <string name="menu_tap_toggle" translatable="true">点击切换</string>
+    <string name="menu_tap_set" translatable="true">点击去设置</string>
+    <string name="menu_tap_configure" translatable="true">点击配置</string>
+    <string name="menu_tap_tweak" translatable="true">点击微调</string>
+    <string name="menu_tap_legends" translatable="true">点击获取图例</string>
+    <string name="menu_tap_send" translatable="true">点击发送</string>
+    <string name="menu_tap_help" translatable="true">点击寻求帮助</string>
 
-    <string name="title_home" translatable="true">Home</string>
-    <string name="title_settings" translatable="true">Settings</string>
-    <string name="title_advanced" translatable="true">Advanced</string>
-    <string name="title_troubleshooting_bugs" translatable="true">Troubleshooting &amp; Bugs</string>
-    <string name="title_troubleshooting" translatable="true">Troubleshooting</string>
-    <string name="title_superuser" translatable="true">Superuser</string>
-    <string name="title_customisation" translatable="true">Customisation</string>
-    <string name="title_about" translatable="true">About</string>
-    <string name="title_feedback" translatable="true">Feedback</string>
-    <string name="title_communicate" translatable="true">Communicate</string>
-    <string name="title_social" translatable="true">Social</string>
-    <string name="title_share" translatable="true">Share</string>
-    <string name="title_twitter" translatable="true">Twitter</string>
-    <string name="title_google_plus" translatable="true">Google+</string>
-    <string name="title_forum" translatable="true">Forum</string>
-    <string name="action_power" translatable="true">Power</string>
-    <string name="menu_voice_tutorial" translatable="true">Voice Tutorial</string>
-    <string name="menu_ping" translatable="true">Ping Test Network</string>
-    <string name="menu_memory_usage" translatable="true">Memory Usage</string>
-    <string name="menu_root" translatable="true">Root Options</string>
-    <string name="menu_intercept_google" translatable="true">Intercept Google Now</string>
-    <string name="menu_start_boot" translatable="true">Start at Boot</string>
-    <string name="menu_start_boot_lower" translatable="true">"Start at boot"</string>
-    <string name="menu_start_driving" translatable="true">"Start when driving"</string>
-    <string name="menu_prevent_sleep" translatable="true">"Prevent device sleeping"</string>
-    <string name="menu_lock_security" translatable="true">"Secure info when locked"</string>
-    <string name="menu_algorithms" translatable="true">Algorithms</string>
-    <string name="menu_language" translatable="true">Language</string>
-    <string name="menu_synthesised_voice" translatable="true">Google Synthesised Voice</string>
-    <string name="menu_user_guide" translatable="true">User Guide</string>
-    <string name="menu_default_apps" translatable="true">Default Applications</string>
-    <string name="menu_toast" translatable="true">Toast Unknown Commands</string>
-    <string name="menu_offline" translatable="true">Use Offline Recognition</string>
-    <string name="menu_hotword_detection" translatable="true">Hotword Detection</string>
-    <string name="menu_tts_gender" translatable="true">Text to Speech Gender</string>
-    <string name="menu_blacklist" translatable="true">Manage Blacklist</string>
-    <string name="menu_vocal_verification" translatable="true">Vocal Verification</string>
-    <string name="dialog_id_verification" translatable="true">Voice account</string>
-    <string name="dialog_id_verification_content" translatable="true">Select account to associate</string>
-    <string name="menu_unlink_association" translatable="true">Unlink Association</string>
-    <string name="content_unlink_association" translatable="true">%1$s already has a vocal
-        association with Saiy. Would you like to unlink the current association and start a new one?</string>
-    <string name="menu_motion" translatable="true">Motion Activity Recognition</string>
-    <string name="menu_pause" translatable="true">Pause Timeout</string>
-    <string name="pause_detection_text" translatable="true">Pause for breath is</string>
-    <string name="media_stream" translatable="true">media stream</string>
-    <string name="above" translatable="true">above</string>
-    <string name="below" translatable="true">below</string>
-    <string name="adhere_to" translatable="true">adhere to</string>
-    <string name="memory_usage_text" translatable="true">Release resources after %1$s</string>
-    <string name="menu_haptic" translatable="true">Use Haptic Feedback</string>
-    <string name="menu_temperature_units" translatable="true">Temperature Units</string>
-    <string name="menu_saiy" translatable="true">Copyright © 2017 Saiy\u00AE Ltd.</string>
-    <string name="menu_legal" translatable="true">License &amp; Legal</string>
-    <string name="menu_release_notes" translatable="true">Release Notes</string>
-    <string name="menu_source_code" translatable="true">Source Code</string>
-    <string name="menu_developer_api" translatable="true">Developer APIs</string>
-    <string name="menu_development" translatable="true">Development</string>
-    <string name="menu_testing" translatable="true">Testing</string>
-    <string name="menu_run" translatable="true">Run</string>
+    <string name="title_home" translatable="true">首页</string>
+    <string name="title_settings" translatable="true">设置</string>
+    <string name="title_advanced" translatable="true">高级选项</string>
+    <string name="title_troubleshooting_bugs" translatable="true">故障排除&amp; 漏洞</string>
+    <string name="title_troubleshooting" translatable="true">故障排除</string>
+    <string name="title_superuser" translatable="true">超级用户</string>
+    <string name="title_customisation" translatable="true">定制化</string>
+    <string name="title_about" translatable="true">关于</string>
+    <string name="title_feedback" translatable="true">用户反馈</string>
+    <string name="title_communicate" translatable="true">沟通</string>
+    <string name="title_social" translatable="true">社交</string>
+    <string name="title_share" translatable="true">分享</string>
+    <string name="title_twitter" translatable="true">推特</string>
+    <string name="title_google_plus" translatable="true">谷歌+</string>
+    <string name="title_forum" translatable="true">论坛</string>
+    <string name="action_power" translatable="true">开关</string>
+    <string name="menu_voice_tutorial" translatable="true">语音教程</string>
+    <string name="menu_ping" translatable="true">测试网络连接</string>
+    <string name="menu_memory_usage" translatable="true">内存用量</string>
+    <string name="menu_root" translatable="true">Root选项</string>
+    <string name="menu_intercept_google" translatable="true">拦截Google Now</string>
+    <string name="menu_start_boot" translatable="true">在开机时启动</string>
+    <string name="menu_start_boot_lower" translatable="true">"在开机时启动"</string>
+    <string name="menu_start_driving" translatable="true">"驾驶时开始"</string>
+    <string name="menu_prevent_sleep" translatable="true">"防止设备休眠"</string>
+    <string name="menu_lock_security" translatable="true">"锁定时确保信息安全"</string>
+    <string name="menu_algorithms" translatable="true">算法</string>
+    <string name="menu_language" translatable="true">语言</string>
+    <string name="menu_synthesised_voice" translatable="true">谷歌合成声音</string>
+    <string name="menu_user_guide" translatable="true">用户指南</string>
+    <string name="menu_default_apps" translatable="true">默认应用程序</string>
+    <string name="menu_toast" translatable="true">Toast（信息提示）未知命令</string>
+    <string name="menu_offline" translatable="true">使用离线识别</string>
+    <string name="menu_hotword_detection" translatable="true">热词检测</string>
+    <string name="menu_tts_gender" translatable="true">文本转语音性别</string>
+    <string name="menu_blacklist" translatable="true">管理黑名单</string>
+    <string name="menu_vocal_verification" translatable="true">语音验证</string>
+    <string name="dialog_id_verification" translatable="true">语音账号</string>
+    <string name="dialog_id_verification_content" translatable="true">选择要关联的账号</string>
+    <string name="menu_unlink_association" translatable="true">解除关联</string>
+    <string name="content_unlink_association" translatable="true">%1$s已有Saiy语音关联。是否要解除当前关联并开始一个新关联？</string>
+    <string name="menu_motion" translatable="true">运动活动识别</string>
+    <string name="menu_pause" translatable="true">暂停超时</string>
+    <string name="pause_detection_text" translatable="true">喘口气:</string>
+    <string name="media_stream" translatable="true">媒体流</string>
+    <string name="above" translatable="true">高于</string>
+    <string name="below" translatable="true">低于</string>
+    <string name="adhere_to" translatable="true">遵守</string>
+    <string name="memory_usage_text" translatable="true">%1$s后释放资源</string>
+    <string name="menu_haptic" translatable="true">使用触觉反馈</string>
+    <string name="menu_temperature_units" translatable="true">温度单位</string>
+    <string name="menu_saiy" translatable="true">版权所有© 2017 Saiy\u00AE Ltd.（有限公司）</string>
+    <string name="menu_legal" translatable="true">许可证&amp;合法</string>
+    <string name="menu_release_notes" translatable="true">发布说明</string>
+    <string name="menu_source_code" translatable="true">源代码</string>
+    <string name="menu_developer_api" translatable="true">开发者 APIs</string>
+    <string name="menu_development" translatable="true">开发</string>
+    <string name="menu_testing" translatable="true">测试中</string>
+    <string name="menu_run" translatable="true">执行</string>
     <string name="menu_daniel_schlapa" translatable="false">Daniel Schlapa</string>
     <string name="menu_hannes_ahremark" translatable="false">Hannes Ahremark</string>
     <string name="submenu_daniel_schlapa" translatable="false">blog.schlapa.net (dtrieb@xda)</string>
-    <string name="menu_commercial_enquiries" translatable="true">Commercial Enquiries</string>
-    <string name="menu_commercial_enquiry" translatable="true">Commercial Enquiry</string>
-    <string name="menu_special_thanks" translatable="true">Special Thanks</string>
-    <string name="menu_app_icon" translatable="true">App Icon</string>
+    <string name="menu_commercial_enquiries" translatable="true">商业查询</string>
+    <string name="menu_commercial_enquiry" translatable="true">商业查询</string>
+    <string name="menu_special_thanks" translatable="true">特别鸣谢</string>
+    <string name="menu_app_icon" translatable="true">应用图标</string>
     <string name="submenu_studio_ahremark" translatable="false">studioahremark.com</string>
-    <string name="menu_custom_intro" translatable="true">Custom Intro</string>
-    <string name="menu_privacy_policy" translatable="true">Privacy Policy</string>
-    <string name="menu_volume_settings" translatable="true">Volume Settings</string>
-    <string name="hint_bugs_command" translatable="true">Enter a command to run…</string>
-    <string name="menu_recogniser_busy_fix" translatable="true">Recognizer Busy Fix</string>
-    <string name="menu_okay_google_fix" translatable="true">Okay Google Fix</string>
+    <string name="menu_custom_intro" translatable="true">自定义简介</string>
+    <string name="menu_privacy_policy" translatable="true">隐私政策</string>
+    <string name="menu_volume_settings" translatable="true">音量设置</string>
+    <string name="hint_bugs_command" translatable="true">输入要运行的命…</string>
+    <string name="menu_recogniser_busy_fix" translatable="true">识别人忙修复</string>
+    <string name="menu_okay_google_fix" translatable="true">好的，谷歌修复</string>
 
-    <string name="an_unknown_application" translatable="true">"an unknown application"</string>
+    <string name="an_unknown_application" translatable="true">"一个未知应用程序"</string>
 
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 
     <!-- Accessibility Content descriptions -->
-    <string name="ac_button_done" translatable="true">Done button</string>
+    <string name="ac_button_done" translatable="true">完成按钮</string>
 
     <!-- Permission Strings -->
-    <string name="permission_notification_ticker" translatable="true">Permission Request</string>
-    <string name="permission_notification_text" translatable="true">Permission Request - click for information</string>
-    <string name="permission_unknown" translatable="true">Without this permission I cannot function.
-        You can grant this by clicking the Permissions button below</string>
-    <string name="permission_audio" translatable="true">I require the, microphone, permission to record your voice and
-        understand what you are saying. Without this permission, I\'m afraid I\'ll be useless\!
-        You can grant this by clicking the Permissions button below</string>
-    <string name="permission_group_contacts" translatable="true">I require the, accounts and contacts, permission
-        to do many things. To associate your voice with a specific account. To assist you with making
-        and receiving calls. To help you send text messages and announce their content. Sending emails, your
-        social media obligations, and much more.</string>
-    <string name="permission_group_contacts_denied" translatable="true">I require the, accounts and contacts,
-        permission to use this feature. You can manually allow this in the Application Settings, under
-        permissions.</string>
+    <string name="permission_notification_ticker" translatable="true">权限请求</string>
+    <string name="permission_notification_text" translatable="true">权限请求 - 点击以获取信息</string>
+    <string name="permission_unknown" translatable="true">没有此权限我无法正常运行。点击下面的权限按钮来进行授权</string>
+    <string name="permission_audio" translatable="true">我需要麦克风权限来记录声音并理解你所说的。没有此权限，我恐怕无法帮助你！点击下面的权限按钮来进行授权</string>
+    <string name="permission_group_contacts" translatable="true">我需要账号和联系人权限来做很多事。把声音和具体的账号联系到一起。协助打和接听电话。发送文本信息并播报他们的内容。发送电子邮件、您的社交媒体义务等等。</string>
+    <string name="permission_group_contacts_denied" translatable="true">我需要账号和联系人权限来使用此功能。您可以手动在应用程序设置中，在权限范围内允许此功能。</string>
 
     <!-- Notification data -->
-    <string name="notification_ticker" translatable="true">"Saiy has become self-aware"</string>
-    <string name="notification_ai_level" translatable="true">"AI level %1$s"</string>
-    <string name="notification_listening" translatable="true">"Listening"</string>
-    <string name="notification_speaking" translatable="true">"Dictating"</string>
-    <string name="notification_fetching" translatable="true">"Fetching"</string>
-    <string name="notification_initialising_tts" translatable="true">"Initialising TTS"</string>
-    <string name="notification_computing" translatable="true">"Computing"</string>
-    <string name="notification_tap_cancel" translatable="true">"tap to cancel"</string>
-    <string name="notification_tap_stop" translatable="true">"tap to stop"</string>
-    <string name="notification_stop_hotword" translatable="true">"Stop hotword detection"</string>
+    <string name="notification_ticker" translatable="true">"Saiy已具有自我意识能力"</string>
+    <string name="notification_ai_level" translatable="true">"AI 级别%1$s"</string>
+    <string name="notification_listening" translatable="true">"聆听"</string>
+    <string name="notification_speaking" translatable="true">"口述"</string>
+    <string name="notification_fetching" translatable="true">"正在获取"</string>
+    <string name="notification_initialising_tts" translatable="true">"正在初始化TTS"</string>
+    <string name="notification_computing" translatable="true">"计算"</string>
+    <string name="notification_tap_cancel" translatable="true">"点击取消"</string>
+    <string name="notification_tap_stop" translatable="true">"点击停止"</string>
+    <string name="notification_stop_hotword" translatable="true">"停止热词检测"</string>
 
     <!-- App - Generic error Strings -->
-    <string name="error_no_application" translatable="true">"No application is installed to handle this request?"</string>
+    <string name="error_no_application" translatable="true">"没有安装处理此请求的应用程序吗？"</string>
 
     <!-- Speech - Specific error Strings -->
-    <string name="error_empty_voice_data" translatable="true">"I didn't receive any voice data from the recognition provider."</string>
-    <string name="error_empty_profanity" translatable="true">"I didn't receive any voice data. This could be due to the profanity
-        filter set by your voice recognition provider."</string>
-    <string name="error_unknown_action" translatable="true">"I don't know what I'm supposed to be doing."</string>
-    <string name="error_network" translatable="true">"No network connection!"</string>
-    <string name="error_hotword" translatable="true">"Hotword engine failed to initialise :("</string>
-    <string name="error_audio" translatable="true">"There was an audio recording error"</string>
+    <string name="error_empty_voice_data" translatable="true">"我没有从识别提供商接收到任何语音数据。"</string>
+    <string name="error_empty_profanity" translatable="true">"我没有接收到任何语音数据。这可能是因为语音识别提供商设置的不雅言语过滤器造成的。"</string>
+    <string name="error_unknown_action" translatable="true">"我不知道我应该做什么。"</string>
+    <string name="error_network" translatable="true">"没有网络连接!"</string>
+    <string name="error_hotword" translatable="true">"热词引擎初始化失败 :("</string>
+    <string name="error_audio" translatable="true">"有个录音错误"</string>
 
     <!-- TTS - Specific error Strings -->
-    <string name="error_tts_initialisation" translatable="true">"There is a problem with your Text to Speech engine."</string>
-    <string name="error_tts_progress" translatable="true">"There was a problem with the Text to Speech playback."</string>
-    <string name="error_tts_voice" translatable="true">"Unable to set TTS language."</string>
-    <string name="error_tts_volume" translatable="true">"The media volume is muted."</string>
+    <string name="error_tts_initialisation" translatable="true">"您的文本到语音引擎有问题。"</string>
+    <string name="error_tts_progress" translatable="true">"文本到语音回放时出现问题。"</string>
+    <string name="error_tts_voice" translatable="true">"无法设置TTS语言。"</string>
+    <string name="error_tts_volume" translatable="true">"媒体播放静音"</string>
 
     <!-- Issue Strings -->
-    <string name="issue_vr_text" translatable="true">"In order for the application to function, you need to have a
-        voice recognition provider installed. Please install the Google Now application from the Play Store."</string>
-    <string name="issue_tts_engine_text" translatable="true">"In order for the application to speak, you need to
-        install a Text to Speech engine. Please select one from the list below and then set it as your default
-        in the Android Text to Speech Settings, which can be found under the Language and Input section"</string>
-    <string name="issue_tts_language_text" translatable="true">"I was unable to speak in the requested language. This
-        could be a simple solution, such as an additional download of the language files, which you can do from
-        the settings within your voice engine. Click on the link below to go there."</string>
-    <string name="issue_vlingo_text" translatable="true">"Unfortunately, Samsung do not allow their Vlingo voice
-        recognition to be used by any other applications, than S Voice. Please change the default provider to Google.
-        Click the button below to go to the Settings."</string>
-    <string name="issue_usage_stats_bug" translatable="true">"Unfortunately, your device is suffering from a known Android bug, where I am unable to open the Usage Statistics Settings in order for you to grant me permission to access them. This will cause a number of problems with commands associated with application usage. Please check for an update to your Android version in your device settings, as your manufacturer may have already pushed a fix to resolve this."</string>
+    <string name="issue_vr_text" translatable="true">"为了让应用程序可以正常作业，需要安装声音识别提供器。请从Play商店安装Google Now应用程序。"</string>
+    <string name="issue_tts_engine_text" translatable="true">"为了让应用程序可以说话，您需要安装文本转语音的引擎。点击安装一个，在语言和输入部分找到Android（安卓）文本转语音设置，然后把它设置为默认。"</string>
+    <string name="issue_tts_language_text" translatable="true">"我无法用要求的语言说话。有个简单的解决方案，比如在语音引擎里的设置里去下载其他的语言文件。点击下面的链接去那里。"</string>
+    <string name="issue_vlingo_text" translatable="true">"可惜的是，除了S Voice（S语音）外，Samsung（三星）不允许他们的Vlingo声音识别被其他的应用程序使用。因此请把默认语音提供程序改为Google（谷歌）。点击下面的按钮转到设置。"</string>
+    <string name="issue_usage_stats_bug" translatable="true">"可惜的是，你的设备正面临一个已知的Android (安卓）错误，我无法打开使用统计设置来让你授权我来进入他们。 这将导致和应用程序使用相关的指令出现一些问题。请在设备设置里查看更新Android（安卓）版本，也许设备生产商已经推出了修复程序来解决此问题。"</string>
 
     <!-- Troubleshooting and bugs Strings -->
 
-    <string name="bug_title_offline_recognition" translatable="true">"Offline recognition fails"</string>
+    <string name="bug_title_offline_recognition" translatable="true">"离线识别失败"</string>
     <string name="bug_content_offline_recognition" translatable="true">This feature is only available if you are
         using Google Voice Recognition.\n\nYou\'ll need to make sure you have correctly downloaded and installed
         the offline recognition files from the Android Voice Search Settings.\n\nIt is often necessary to reboot
         your device once you have done this.\n\nClick to go to the Settings.</string>
 
-    <string name="bug_title_no_speech" translatable="true">"I don't hear any speech?"</string>
+    <string name="bug_title_no_speech" translatable="true">"我没有听到任何发言？"</string>
     <string name="bug_content_no_speech" translatable="true">First thing to check is your media volume. On some
         devices it may not be obvious that this stream alone is set too low or muted.\n\nA more likely problem
         is your voice engine is in error; this happens all too often… In the Android Text to Speech
@@ -311,7 +233,7 @@
         and wonderful problems for no apparent reason at all…\n\nTap for Text to Speech Settings. Tap and hold
         for Volume Settings</string>
 
-    <string name="bug_title_delay_speech" translatable="true">"There's a delay before speech"</string>
+    <string name="bug_title_delay_speech" translatable="true">"说话前有延迟"</string>
     <string name="bug_content_delay_speech" translatable="true">Text to speech engines take up a lot of resource
         and consequently can take a while to initialise and be ready to speak. This is more common on higher
         quality engines, regardless of whether they are downloaded and installed on the device or not.\n\nIn the
@@ -326,77 +248,9 @@
 
     <!-- App announcement strings -->
 
-    <string name="app_speech_usage_stats" translatable="true">So I can automatically toggle the hotword
-        recognition when you open certain applications, that may stream media content, or need access to the
-        microphone, I require the statistics permission here. I\'ll then be able to check which apps you are using,
-        and act accordingly.</string>
-
-    <!-- APP ARRAYS - APP ARRAYS - APP ARRAYS - APP ARRAYS -->
-
-    <integer-array name="array_se" translatable="false">
-        <item>@raw/fart1</item>
-        <item>@raw/fart2</item>
-        <item>@raw/fart3</item>
-        <item>@raw/burp1</item>
-        <item>@raw/burp2</item>
-        <item>@raw/cough1</item>
-        <item>@raw/cough2</item>
-        <item>@raw/cry1</item>
-        <item>@raw/giggle1</item>
-        <item>@raw/giggle2</item>
-        <item>@raw/pee1</item>
-        <item>@raw/puke1</item>
-        <item>@raw/sneeze1</item>
-        <item>@raw/flush1</item>
-    </integer-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_supported_languages" translatable="false">
-        <item>@string/english</item>
-        <item>@string/french</item>
-        <item>@string/german</item>
-        <item>@string/italian</item>
-        <item>@string/spanish</item>
-        <item>@string/portuguese</item>
-        <item>@string/japanese</item>
-        <item>@string/polish</item>
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_temperature_units" translatable="false">
-        <item>@string/celsius</item>
-        <item>@string/fahrenheit</item>
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_unknown_action" translatable="false">
-        <item>@string/state_command_unknown</item>
-        <item>@string/ask_repeat</item>
-        <item>@string/google_capital</item>
-        <item>@string/wolfram_alpha_capital</item>
-        <item>@string/tasker_capital</item>
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_gender" translatable="false">
-        <item>@string/male</item>
-        <item>@string/female</item>
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_hotword" translatable="false">
-        <item>@string/menu_start_boot_lower</item>
-        <item>@string/menu_start_driving</item>
-        <item>@string/menu_prevent_sleep</item>
-        <item>@string/menu_lock_security</item>
-    </string-array>
+    <string name="app_speech_usage_stats" translatable="true">因此我可以管理你的应用程序使用，杀掉程序包或者在你打开某些应用程序的时候自动切换热词识别。这需要读写媒体内容数据，或者使用到麦克风，所以我在这里需要统计许可，然后我才能够核对你在使用哪个应用程序并采取相应行动。</string>
 
     <!-- COMMAND STRINGS - COMMAND STRINGS - COMMAND STRINGS - COMMAND STRINGS -->
-
-    <!-- Command - Wolfram Alpha -->
-    <string name="wolfram_alpha_capital" translatable="false">"Wolfram Alpha"</string>
-    <string name="wolfram_alpha" translatable="false">"wolfram alpha"</string>
-    <string name="alpha" translatable="false">"alpha"</string>
 
     <!-- Speech - Wolfram Alpha | error unknown  -->
     <string-array name="array_error_wolfram_alpha_unknown" translatable="true">
@@ -1037,7 +891,7 @@
     <string name="cancelled" translatable="true">"cancelled"</string>
     <string name="okay" translatable="true">"okay"</string>
     <string name="alright" translatable="true">"alright"</string>
-    <string name="understood" translatable="true">"understood"</string>
+    <string name="understood" translatable="true">"知道了！"</string>
     <string name="right_you_are" translatable="true">"right you are"</string>
     <string name="okey_dokey" translatable="true">"okey dokey"</string>
 
@@ -1139,5 +993,4 @@
     <string name="negative" translatable="true">"negative"</string>
     <string name="neutral" translatable="true">"neutral"</string>
     <string name="positive" translatable="true">"positive"</string>
-
 </resources>

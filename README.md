@@ -181,7 +181,7 @@ I am entirely self-taught in Java, so go easy on me!
   - My own tests were not worthy of publishing. If this is your thing, help!
 
 - Translation
-  - I hope to translate the application into every language available via both a voice recognition and text-to-speech provider. I'm using the [Crowdin Plaform](https://crowdin.com/project/saiy/invite?d=d5b5m4057517e563r44323n463) if you'd like to help.
+  - I hope to translate the application into every language available via both a voice recognition and text-to-speech provider. I'm using the [Crowdin Plaform](https://crowdin.com/project/saiy/) if you'd like to help.
 
 - Visualisation
   - Since API 23 introduced a comprehensive [Assistant Framework](https://developer.android.com/training/articles/assistant.html), visualising data has become an easier prospect. I have no current implementation of this, but it's now on the roadmap.

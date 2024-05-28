@@ -79,7 +79,6 @@ android {
     }
 
     buildTypes {
-
         release {
             ndk {
                 abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
@@ -223,11 +222,11 @@ dependencies {
 // https://github.com/grpc/grpc-java
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.25.1'
+        artifact = 'com.google.protobuf:protoc:3.25.3'
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.63.0'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.64.0'
         }
     }
     generateProtoTasks {
