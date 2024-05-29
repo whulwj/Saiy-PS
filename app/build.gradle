@@ -15,9 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 plugins {
-    id 'com.android.application'
-    id 'com.google.protobuf'
-    id 'com.google.gms.google-services'
+    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.protobuf.gradle.plugin)
+    alias(libs.plugins.googleServices)
 }
 
 android {
