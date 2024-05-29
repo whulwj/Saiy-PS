@@ -353,8 +353,7 @@ public class FragmentSettingsHelper {
                         }
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                         .setCancelable(false)
-                        .setTitle(R.string.menu_unknown_commands)
-                        .setMessage(R.string.content_unknown_command)
+                        .setTitle(R.string.content_unknown_command)
                         .setIcon(R.drawable.ic_not_equal)
                         .setSingleChoiceItems(items.toArray(new String[0]), checkedItem, new DialogInterface.OnClickListener() {
                             @Override

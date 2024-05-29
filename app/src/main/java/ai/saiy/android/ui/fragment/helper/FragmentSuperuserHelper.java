@@ -302,8 +302,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                 }
                 final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                         .setCancelable(false)
-                        .setTitle(R.string.menu_blacklist)
-                        .setMessage(R.string.blacklist_intro_text)
+                        .setTitle(R.string.blacklist_intro_text)
                         .setIcon(R.drawable.ic_traffic_light)
                         .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                             @Override
@@ -541,7 +540,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                                 .setCancelable(false)
                                 .setTitle(R.string.dialog_id_verification)
-                                .setMessage(R.string.dialog_id_verification_content)
                                 .setIcon(R.drawable.ic_account_key)
                                         .setSingleChoiceItems(accountNames, 0, new DialogInterface.OnClickListener() {
                                             @Override

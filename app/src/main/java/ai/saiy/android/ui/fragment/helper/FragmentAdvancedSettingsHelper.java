@@ -236,8 +236,7 @@ public class FragmentAdvancedSettingsHelper {
                     public void run() {
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentAdvancedSettingsHelper.this.getParentActivity())
                                 .setCancelable(false)
-                                .setTitle(R.string.menu_tts_gender)
-                                .setMessage(R.string.tts_gender_text)
+                                .setTitle(R.string.tts_gender_text)
                                 .setIcon(R.drawable.ic_gender_transgender)
                                 .setSingleChoiceItems((CharSequence[]) gender, SPH.getDefaultTTSGender(FragmentAdvancedSettingsHelper.this.getApplicationContext()).ordinal(), new DialogInterface.OnClickListener() {
                                     @Override
@@ -342,8 +341,7 @@ public class FragmentAdvancedSettingsHelper {
                         }
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentAdvancedSettingsHelper.this.getParentActivity())
                                 .setCancelable(false)
-                                .setTitle(R.string.menu_hotword_detection)
-                                .setMessage(R.string.hotword_intro_text)
+                                .setTitle(R.string.hotword_intro_text)
                                 .setIcon(R.drawable.ic_blur)
                                 .setMultiChoiceItems((CharSequence[]) hotwordActions, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override

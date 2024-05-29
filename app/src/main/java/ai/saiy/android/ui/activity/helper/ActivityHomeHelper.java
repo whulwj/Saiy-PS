@@ -201,7 +201,8 @@ public class ActivityHomeHelper {
 
                 final String[] languages = act.getResources().getStringArray(R.array.array_supported_languages);
 
-                for (int i = 0; i < languages.length; i++) {
+                //TODO
+                for (int i = 0; i < Math.min(1, languages.length); i++) {
                     languages[i] = StringUtils.capitalize(languages[i]);
                 }
 
@@ -220,7 +221,6 @@ public class ActivityHomeHelper {
                                         }
                                     }
                                 })
-                                .setMessage(R.string.content_supported_languages)
                                 .setIcon(R.drawable.ic_language)
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override

@@ -6,8 +6,7 @@
 
     <string name="content_developer_note" translatable="true">here is the developer note</string>
     <string name="content_whats_new" translatable="true">here is the what\'s new content</string>
-    <string name="content_supported_languages" translatable="true">here is the supported languages text</string>
-    <string name="content_unknown_command" translatable="true">When a command is not recognised</string>
+    <string name="content_unknown_command" translatable="true">未知命令，即无法识别的命令</string>
 
     <string name="navigation_drawer_open" translatable="true">打开导航栏</string>
     <string name="navigation_drawer_close" translatable="true">关闭导航栏</string>
@@ -59,8 +58,8 @@
     <string name="minute" translatable="true">分</string>
     <string name="text_default" translatable="true">默认</string>
     <string name="provider_default" translatable="true">默认服务提供商</string>
-    <string name="tts_gender_text" translatable="true">在可用时首选性别</string>
-    <string name="hotword_intro_text" translatable="true">选择热词配置</string>
+    <string name="tts_gender_text" translatable="true">文本转语音性别：在可用时首选</string>
+    <string name="hotword_intro_text" translatable="true">选择热词检测配置。</string>
     <string name="blacklist_intro_text" translatable="true">选择要入黑名单的应用程序</string>
     <string name="blacklist_no_apps" translatable="true">目前，没有已安装的应用程序可以与Saiy沟通</string>
 
@@ -125,8 +124,7 @@
     <string name="menu_tts_gender" translatable="true">文本转语音性别</string>
     <string name="menu_blacklist" translatable="true">管理黑名单</string>
     <string name="menu_vocal_verification" translatable="true">语音验证</string>
-    <string name="dialog_id_verification" translatable="true">语音账号</string>
-    <string name="dialog_id_verification_content" translatable="true">选择要关联的账号</string>
+    <string name="dialog_id_verification" translatable="true">选择语音账号: 要关联的账号</string>
     <string name="menu_unlink_association" translatable="true">解除关联</string>
     <string name="content_unlink_association" translatable="true">%1$s已有Saiy语音关联。是否要解除当前关联并开始一个新关联？</string>
     <string name="menu_motion" translatable="true">运动活动识别</string>

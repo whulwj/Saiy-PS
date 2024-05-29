@@ -64,8 +64,7 @@
 
     <string name="content_developer_note" translatable="true">here is the developer note</string>
     <string name="content_whats_new" translatable="true">here is the what\'s new content</string>
-    <string name="content_supported_languages" translatable="true">here is the supported languages text</string>
-    <string name="content_unknown_command" translatable="true">When a command is not recognised</string>
+    <string name="content_unknown_command" translatable="true">Unknown commands, when a command is not recognised</string>
 
     <string name="navigation_drawer_open" translatable="true">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="true">Close navigation drawer</string>
@@ -120,8 +119,8 @@
     <string name="minute" translatable="true">minute</string>
     <string name="text_default" translatable="true">default</string>
     <string name="provider_default" translatable="true">provider default</string>
-    <string name="tts_gender_text" translatable="true">Preferred gender when available</string>
-    <string name="hotword_intro_text" translatable="true">Select hotword configuration</string>
+    <string name="tts_gender_text" translatable="true">Text-to-Speech Gender: preferred gender when available</string>
+    <string name="hotword_intro_text" translatable="true">Select configuration for hotword detection.</string>
     <string name="blacklist_intro_text" translatable="true">Select apps to blacklist</string>
     <string name="blacklist_no_apps" translatable="true">Currently, no installed applications can communicate with Saiy</string>
 
@@ -183,11 +182,10 @@
     <string name="menu_toast" translatable="true">Toast Unknown Commands</string>
     <string name="menu_offline" translatable="true">Use Offline Recognition</string>
     <string name="menu_hotword_detection" translatable="true">Hotword Detection</string>
-    <string name="menu_tts_gender" translatable="true">Text to Speech Gender</string>
+    <string name="menu_tts_gender" translatable="true">Text-to-Speech Gender</string>
     <string name="menu_blacklist" translatable="true">Manage Blacklist</string>
     <string name="menu_vocal_verification" translatable="true">Vocal Verification</string>
-    <string name="dialog_id_verification" translatable="true">Voice account</string>
-    <string name="dialog_id_verification_content" translatable="true">Select account to associate</string>
+    <string name="dialog_id_verification" translatable="true">Select voice account: an account to associate</string>
     <string name="menu_unlink_association" translatable="true">Unlink Association</string>
     <string name="content_unlink_association" translatable="true">%1$s already has a vocal
         association with Saiy. Would you like to unlink the current association and start a new one?</string>
