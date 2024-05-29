@@ -18,12 +18,15 @@
 package ai.saiy.android.ui.activity.helper;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.text.Html;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.IntentCompat;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -44,6 +47,7 @@ public class ActivityHomeHelper {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityHomeHelper.class.getSimpleName();
+    private static final int REQUEST_CODE = 1;
 
     /**
      * Show the applications disclaimer
@@ -245,5 +249,35 @@ public class ActivityHomeHelper {
                 });
             }
         });
+    }
+
+    public void checkAppRestrictionsStatus(Activity context) {
+        final int appRestrictionsStatus = IntentCompat.getUnusedAppRestrictionsStatus(context);
+        switch (appRestrictionsStatus) {
+            // Status could not be fetched. Check logs for details.
+            case IntentCompat.UNUSED_APP_RESTRICTION_STATUS_UNKNOWN:
+                break;
+            // Restrictions do not apply to your app on this device.
+            case IntentCompat.UNUSED_APP_RESTRICTION_FEATURE_NOT_AVAILABLE:
+                // Restrictions have been disabled by the user for your app.
+            case IntentCompat.PERMISSION_REVOCATION_DISABLED:
+                break;
+            // If the user doesn't start your app for months, its permissions
+            // will be revoked and/or it will be hibernated.
+            case IntentCompat.APP_HIBERNATION_ENABLED:
+            default:
+                // If your app works primarily in the background, you can ask the user
+                // to disable these restrictions. Check if you have already asked the
+                // user to disable these restrictions. If not, you can show a message to
+                // the user explaining why permission auto-reset and Hibernation should be
+                // disabled. Tell them that they will now be redirected to a page where
+                // they can disable these features.
+                final Intent intent = IntentCompat.createManageUnusedAppRestrictionsIntent
+                        (context, context.getPackageName());
+                // Must use startActivityForResult(), not startActivity(), even if
+                // you don't use the result code returned in onActivityResult().
+                context.startActivityForResult(intent, REQUEST_CODE);
+                break;
+        }
     }
 }

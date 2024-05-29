@@ -21,6 +21,13 @@
 
     <uses-sdk tools:overrideLibrary="com.google.firebase.auth, com.google.firebase.messaging, com.google.android.gms.cloudmessaging" />
 
+    <queries>
+        <!-- In order to use the TextToSpeech API, if targeting Android 11 -->
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
     <permission
         android:name="ai.saiy.android.permission.CONTROL_SAIY"
         android:description="@string/control_saiy_permission_description"
@@ -31,14 +38,6 @@
     <uses-permission
         android:name="ai.saiy.android.permission.CONTROL_SAIY"
         android:maxSdkVersion="22"/>
-
-    <uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
-
-    <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
 
     <!--suppress DeprecatedClassUsageInspection -->
     <uses-permission
@@ -51,10 +50,14 @@
 
     <!-- Permission Required -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_HOTWORD"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
     <uses-permission android:name="android.permission.READ_CONTACTS"/>
     <uses-permission android:name="android.permission.WRITE_CONTACTS"/>
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE"/>
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
     <!-- Protection Normal -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
@@ -269,6 +272,7 @@
             android:name="ai.saiy.android.service.SelfAware"
             android:enabled="true"
             android:exported="true"
+            android:foregroundServiceType="microphone"
             android:permission="ai.saiy.android.permission.CONTROL_SAIY">
         </service>
 

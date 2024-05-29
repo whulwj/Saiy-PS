@@ -28,7 +28,7 @@ android {
     defaultConfig {
         applicationId "ai.saiy.android"
         minSdkVersion 16
-        targetSdkVersion 27
+        targetSdkVersion 30
         versionCode 3
         versionName "1.0.3"
         // Required when setting minSdkVersion to 20 or lower

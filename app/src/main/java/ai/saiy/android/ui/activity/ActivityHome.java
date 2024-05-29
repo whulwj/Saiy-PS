@@ -283,6 +283,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         checkPermissions();
         AuthUtils.signInAnonymously(this);
         AuthUtils.getFirebaseInstanceId();
+        helper.checkAppRestrictionsStatus(this);
     }
 
     /**
@@ -366,11 +367,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     private void checkPermissions() {
-        String[] permissions = new String[4];
+        String[] permissions = new String[2];
         permissions[0] = Manifest.permission.INTERNET;
         permissions[1] = Manifest.permission.RECORD_AUDIO;
-        permissions[2] = Manifest.permission.READ_EXTERNAL_STORAGE;
-        permissions[3] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
         mChatPermissionRequest.launch(permissions);
     }

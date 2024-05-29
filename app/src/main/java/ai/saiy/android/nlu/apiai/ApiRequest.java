@@ -16,8 +16,10 @@
 
 package ai.saiy.android.nlu.apiai;
 
+import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Environment;
+
+import androidx.annotation.NonNull;
 
 import com.google.api.gax.core.FixedCredentialsProvider;
 import com.google.auth.Credentials;
@@ -55,10 +57,12 @@ import ai.saiy.android.utils.Global;
 public class ApiRequest {
     public static final String SESSION_ID = "sessionId";
 
+    private final Context mContext;
     private String token = null;
     private Date tokenExpiration = null;
 
-    public ApiRequest() {
+    public ApiRequest(@NonNull final Context context) {
+        this.mContext = context;
         // Variables needed to retrieve an auth token
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
                 java.util.Locale.getDefault());
@@ -137,7 +141,7 @@ public class ApiRequest {
             sessionsClient.close();
 
             if (tts) {
-                ApiRequest.playAudio(detectIntentResponse.getOutputAudio().toByteArray());
+                ApiRequest.playAudio(mContext, detectIntentResponse.getOutputAudio().toByteArray());
             }
 
             return detectIntentResponse;
@@ -241,11 +245,11 @@ public class ApiRequest {
         return response.toString();
     }
 
-    public static void playAudio(byte[] byteArray) {
+    public static void playAudio(Context context, byte[] byteArray) {
         MediaPlayer mediaPlayer = new MediaPlayer();
         try {
             File tempFile = File.createTempFile("dialogFlow", null,
-                    Environment.getExternalStorageDirectory());
+                    context.getExternalFilesDir(null));
             tempFile.deleteOnExit();
             FileOutputStream fos = new FileOutputStream(tempFile);
             fos.write(byteArray);

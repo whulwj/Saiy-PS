@@ -53,7 +53,7 @@ public class RemoteAPIAI {
                        @NonNull final NLULanguageAPIAI vrLocale) {
         this.utterance = utterance;
 
-        apiRequest = new ApiRequest();
+        apiRequest = new ApiRequest(context);
     }
 
     public Pair<Boolean, DetectIntentResponse> fetch() {

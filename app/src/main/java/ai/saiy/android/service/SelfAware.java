@@ -21,8 +21,10 @@ import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -1351,7 +1353,11 @@ public class SelfAware extends Service {
         final Notification not = NotificationHelper.getForegroundNotification(SelfAware.this, notificationConstant);
 
         try {
-            startForeground(NotificationService.NOTIFICATION_FOREGROUND, not);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                startForeground(notificationConstant, not, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST);
+            } else {
+                startForeground(NotificationService.NOTIFICATION_FOREGROUND, not);
+            }
         } catch (final Exception e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "beginForeground failure");
