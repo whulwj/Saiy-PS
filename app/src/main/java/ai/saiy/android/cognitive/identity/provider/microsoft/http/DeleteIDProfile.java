@@ -113,7 +113,7 @@ public class DeleteIDProfile {
                 }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 final Map<String, String> params = new HashMap<>();
                 params.put(CHARSET, Constants.ENCODING_UTF8);
                 params.put(OCP_SUBSCRIPTION_KEY_HEADER, apiKey);

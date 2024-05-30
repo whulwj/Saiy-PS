@@ -117,7 +117,7 @@ public class FetchIDOperation {
                 }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 final Map<String, String> params = new HashMap<>();
                 params.put(CHARSET, ENCODING);
                 params.put(JSON_HEADER_ACCEPT, JSON_HEADER_VALUE_ACCEPT);

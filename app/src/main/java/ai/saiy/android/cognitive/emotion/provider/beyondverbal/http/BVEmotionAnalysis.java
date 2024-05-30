@@ -134,7 +134,7 @@ public class BVEmotionAnalysis {
                 }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 final Map<String, String> params = new HashMap<>();
                 params.put(CHARSET, ENCODING);
                 params.put(AUTHORIZATION, BEARER_ + token);

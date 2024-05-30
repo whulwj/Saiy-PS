@@ -251,11 +251,6 @@ public class FragmentAboutHelper {
                 getString(R.string.license_volley),
                 new ApacheSoftwareLicense20()));
 
-        notices.addNotice(new Notice(getString(R.string.two_forty_four),
-                Constants.LICENSE_URL_TWO_FORTY_FOUR,
-                getString(R.string.license_two_forty_four),
-                new ApacheSoftwareLicense20()));
-
         notices.addNotice(new Notice(getString(R.string.speechutils),
                 Constants.LICENSE_URL_KAAREL_KALJURAND,
                 getString(R.string.license_kaarel_kaljurand),

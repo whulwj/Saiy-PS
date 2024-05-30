@@ -60,8 +60,7 @@ public final class Constants {
 
     public static final String LICENSE_URL_GOOGLE_PLAY_SERVICES = "https://developers.google.com/android/guides/overview";
     public static final String LICENSE_URL_GSON = "https://github.com/google/gson";
-    public static final String LICENSE_URL_VOLLEY = "https://github.com/mcxiaoke/android-volley";
-    public static final String LICENSE_URL_TWO_FORTY_FOUR = "https://github.com/twofortyfouram/android-plugin-api-for-locale";
+    public static final String LICENSE_URL_VOLLEY = "https://github.com/google/volley";
     public static final String LICENSE_URL_KAAREL_KALJURAND = "https://github.com/Kaljurand/speechutils";
     public static final String LICENSE_URL_MICROSOFT_TRANSLATOR = "https://github.com/boatmeme/microsoft-translator-java-api";
     public static final String LICENSE_URL_APACHE_COMMONS = "https://commons.apache.org";

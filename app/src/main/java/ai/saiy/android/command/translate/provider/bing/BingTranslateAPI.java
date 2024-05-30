@@ -124,7 +124,7 @@ public class BingTranslateAPI {
                 }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 final Map<String, String> params = new HashMap<>();
                 params.put("Content-Type", HEADER_CONTENT_TYPE);
                 params.put("Accept-Charset", ENCODING);

@@ -6,7 +6,7 @@
 -dontwarn com.google.protobuf.**
 -dontwarn io.grpc.**
 -dontwarn okio.**
--keep class * extends com.google.protobuf.GeneratedMessageLite { *; }
+-keepclassmembers class com.google.cloud.speech.** extends com.google.protobuf.GeneratedMessageV3 { <fields>; }
 
 # ads
 -keep public class com.google.android.gms.ads.** {

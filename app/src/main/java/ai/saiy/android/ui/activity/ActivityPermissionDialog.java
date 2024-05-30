@@ -117,6 +117,7 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
     @Override
     public void onRequestPermissionsResult(final int requestCode, @NonNull final String permissions[],
                                            @NonNull final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onRequestPermissionsResult");
         }

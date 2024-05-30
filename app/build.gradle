@@ -31,6 +31,9 @@ android {
         targetSdkVersion 30
         versionCode 3
         versionName "1.0.3"
+        ndk {
+            abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
+        }
         // Required when setting minSdkVersion to 20 or lower
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
@@ -44,9 +47,8 @@ android {
         incremental true
     }
 
-    flavorDimensions 'tier'
+    flavorDimensions +="tier"
     productFlavors {
-
         x86 {
             ndk {
                 abiFilter "x86"
@@ -67,30 +69,15 @@ android {
                 abiFilters "arm64-v8a"
             }
         }
-
-        dev {
-            dimension 'tier'
-        }
-
-        prod {
-            dimension 'tier'
-            minSdkVersion 16
-        }
     }
 
     buildTypes {
         release {
-            ndk {
-                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-            }
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
         debug {
-            ndk {
-                abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
-            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

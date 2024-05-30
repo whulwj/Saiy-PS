@@ -18,7 +18,6 @@
 package ai.saiy.android.ui.activity.helper;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -202,7 +201,7 @@ public class ActivityHomeHelper {
                 final String[] languages = act.getResources().getStringArray(R.array.array_supported_languages);
 
                 //TODO
-                for (int i = 0; i < Math.min(1, languages.length); i++) {
+                for (int i = 0; i < languages.length; i++) {
                     languages[i] = StringUtils.capitalize(languages[i]);
                 }
 

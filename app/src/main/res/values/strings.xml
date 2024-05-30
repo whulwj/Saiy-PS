@@ -30,8 +30,6 @@
     <string name="license_google_inc" translatable="false">Copyright © Google Inc.</string>
     <string name="volley" translatable="false">Volley</string>
     <string name="license_volley" translatable="false">Xiaoke Zhang &amp; The Android Open Source Project</string>
-    <string name="two_forty_four" translatable="false">Two Forty Four a.m.</string>
-    <string name="license_two_forty_four" translatable="false">Copyright © 2012 two forty four a.m. LLC</string>
     <string name="speechutils" translatable="false">Speechutils</string>
     <string name="license_kaarel_kaljurand" translatable="false">Copyright © Kaarel Kaljurand</string>
     <string name="microsoft_translator" translatable="false">Microsoft Translator</string>
@@ -351,13 +349,13 @@
     <!-- Preserve order -->
     <string-array name="array_supported_languages" translatable="false">
         <item>@string/english</item>
-        <item>@string/french</item>
-        <item>@string/german</item>
-        <item>@string/italian</item>
-        <item>@string/spanish</item>
-        <item>@string/portuguese</item>
-        <item>@string/japanese</item>
-        <item>@string/polish</item>
+<!--        <item>@string/french</item>-->
+<!--        <item>@string/german</item>-->
+<!--        <item>@string/italian</item>-->
+<!--        <item>@string/spanish</item>-->
+<!--        <item>@string/portuguese</item>-->
+<!--        <item>@string/japanese</item>-->
+<!--        <item>@string/polish</item>-->
     </string-array>
 
     <!-- Preserve order -->

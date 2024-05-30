@@ -147,7 +147,7 @@ public class BingOAuth {
         {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 final Map<String, String> params = new HashMap<>();
                 params.put(PARAM_CONTENT_TYPE, HEADER_CONTENT_TYPE);
                 params.put(PARAM_ACCEPT_CHARSET, ENCODING);

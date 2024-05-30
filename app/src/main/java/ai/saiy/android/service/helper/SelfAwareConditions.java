@@ -1068,7 +1068,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
      *
      * @param rl the remote {@link ISaiyListener}
      */
-    private void addCallback(final ISaiyListener rl) throws RemoteException {
+    private void addCallback(final ISaiyListener rl) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "addCallback");
         }

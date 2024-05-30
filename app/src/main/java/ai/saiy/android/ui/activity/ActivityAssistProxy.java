@@ -18,8 +18,10 @@
 package ai.saiy.android.ui.activity;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -38,6 +40,7 @@ public class ActivityAssistProxy extends AppCompatActivity {
 
     long then;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

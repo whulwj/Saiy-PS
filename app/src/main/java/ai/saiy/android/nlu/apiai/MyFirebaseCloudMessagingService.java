@@ -24,6 +24,8 @@ import com.google.firebase.messaging.RemoteMessage;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 public class MyFirebaseCloudMessagingService extends FirebaseMessagingService {
     public static final String TOKEN_RECEIVED = "TOKEN_RECEIVED";
     private static final String TAG = MyFirebaseCloudMessagingService.class.getSimpleName();
@@ -40,6 +42,12 @@ public class MyFirebaseCloudMessagingService extends FirebaseMessagingService {
         }
     }
 
+    @Override
+    public void onNewToken(@NonNull String token) {
+        super.onNewToken(token);
+        handleToken(token);
+    }
+
     /**
      * function to save the token data in the AppController
      *
@@ -48,6 +56,11 @@ public class MyFirebaseCloudMessagingService extends FirebaseMessagingService {
      */
     private void handleNotification(String expiryTime, String token) {
         AuthUtils.setExpiryTime(expiryTime);
+
+        handleToken(token);
+    }
+
+    private void handleToken(String token) {
         AuthUtils.token = token;
 
         Intent intent = new Intent(TOKEN_RECEIVED);

@@ -119,7 +119,7 @@ public class BVAuthRequest {
                 }) {
 
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 final Map<String, String> params = new HashMap<>();
                 params.put(CHARSET, ENCODING);
                 params.put(CONTENT_TYPE, HEADER_CONTENT_TYPE);
@@ -127,7 +127,7 @@ public class BVAuthRequest {
             }
 
             @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
+            protected Map<String, String> getParams() {
                 final Map<String, String> params = new HashMap<>();
                 params.put(CHARSET, ENCODING);
                 params.put(API_KEY, apiKey);

@@ -295,7 +295,7 @@ public class SelfAware extends Service {
     private final ISaiy.Stub remoteBinder = new ISaiy.Stub() {
 
         @Override
-        public boolean isReal() throws RemoteException {
+        public boolean isReal() {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "remoteBinder: isReal");
                 MyLog.v(CLS_NAME, "remoteBinder: calling app: "
