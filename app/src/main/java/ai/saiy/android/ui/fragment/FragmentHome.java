@@ -175,8 +175,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
 
                 break;
             case 1:
-                getParentActivity().vibrate();
-                getParentActivity().toast(getString(R.string.menu_user_guide), Toast.LENGTH_SHORT);
+                helper.showUserGuideDialog();
                 break;
             case 2:
                 getParentActivity().vibrate();

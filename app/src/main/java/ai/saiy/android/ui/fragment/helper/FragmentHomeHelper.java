@@ -18,22 +18,29 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
+import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIMainAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentHome;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 
 /**
@@ -197,6 +204,81 @@ public class FragmentHomeHelper {
                 }
             }
         });
+    }
+
+    public void showUserGuideDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_user_guide)
+                .setIcon(R.drawable.ic_library)
+        .setItems(getParentActivity().getResources().getStringArray(R.array.array_user_guide), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (Global.isInVoiceTutorial()) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "onClick: tutorialActive");
+                            }
+                            getParentActivity().toast(getParent().getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+                            dialog.dismiss();
+                            return;
+                        }
+                        switch (which) {
+                            case 0:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUserGuideDialog: UG_BASIC");
+                                }
+                                ExecuteIntent.webSearch(getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=26804173&postcount=1043");
+                                break;
+                            case 1:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUserGuideDialog: UG_CUSTOM_COMMANDS");
+                                }
+                                ExecuteIntent.webSearch(getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=26883467&postcount=1050");
+                                break;
+                            case 2:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUserGuideDialog: UG_CUSTOM_REPLACEMENTS");
+                                }
+                                ExecuteIntent.webSearch(getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=33882082&postcount=2047");
+                                break;
+                            case 3:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUserGuideDialog: UG_SOUND_EFFECTS");
+                                }
+                                ExecuteIntent.webSearch(getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=33877549&postcount=2042");
+                                break;
+                            case 4:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUserGuideDialog: UG_TASKER");
+                                }
+                                ExecuteIntent.webSearch(getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=34339449&postcount=2155");
+                                break;
+                            case 5:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUserGuideDialog: UG_TROUBLESHOOTING");
+                                }
+                                ExecuteIntent.webSearch(getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=25228934&postcount=659");
+                                break;
+                            case 6:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showUserGuideDialog: UG_COMING_SOON");
+                                }
+                                ExecuteIntent.webSearch(getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=25666528&postcount=755");
+                                break;
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showUnknownCommandSelector: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
     }
 
     /**

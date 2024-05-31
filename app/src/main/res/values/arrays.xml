@@ -1,0 +1,1419 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Preserve order -->
+    <array name="array_supported_languages">
+        <item>@string/english</item>
+<!--        <item>@string/french</item>-->
+<!--        <item>@string/german</item>-->
+<!--        <item>@string/italian</item>-->
+<!--        <item>@string/spanish</item>-->
+<!--        <item>@string/portuguese</item>-->
+<!--        <item>@string/japanese</item>-->
+<!--        <item>@string/polish</item>-->
+<!--        <item>@string/vietnamese</item>-->
+<!--        <item>@string/ukrainian</item>-->
+<!--        <item>@string/turkish</item>-->
+<!--        <item>@string/swedish</item>-->
+<!--        <item>@string/slovenian</item>-->
+<!--        <item>@string/slovak</item>-->
+<!--        <item>@string/russian</item>-->
+<!--        <item>@string/norwegian</item>-->
+<!--        <item>@string/malay</item>-->
+<!--        <item>@string/korean</item>-->
+<!--        <item>@string/japanese</item>-->
+<!--        <item>@string/indonesian</item>-->
+<!--        <item>@string/hebrew</item>-->
+<!--        <item>@string/hindi</item>-->
+<!--        <item>@string/hungarian</item>-->
+<!--        <item>@string/greek</item>-->
+<!--        <item>@string/finnish</item>-->
+<!--        <item>@string/dutch</item>-->
+<!--        <item>@string/danish</item>-->
+<!--        <item>@string/chinese</item>-->
+<!--        <item>@string/arabic</item>-->
+<!--        <item>@string/romanian</item>-->
+<!--        <item>@string/serbian</item>-->
+<!--        <item>@string/czech</item>-->
+    </array>
+    <!-- Preserve order -->
+    <array name="array_temperature_units">
+        <item>@string/celsius</item>
+        <item>@string/fahrenheit</item>
+    </array>
+    <!-- Preserve order -->
+    <array name="array_unknown_action">
+        <item>@string/state_command_unknown</item>
+        <item>@string/ask_repeat</item>
+        <item>@string/menu_web_search</item>
+        <item>@string/google_assistant</item>
+        <item>@string/menu_alexa</item>
+        <item>@string/microsoft_cortana</item>
+        <item>@string/wolfram_alpha_capital</item>
+        <item>@string/tasker_capital</item>
+    </array>
+    <!-- Preserve order -->
+    <array name="array_gender">
+        <item>@string/male</item>
+        <item>@string/female</item>
+    </array>
+    <!-- Preserve order -->
+    <array name="array_hotword">
+        <item>@string/menu_start_boot_lower</item>
+        <item>@string/menu_start_driving</item>
+        <item>@string/menu_stop_driving</item>
+        <item>@string/menu_prevent_sleep</item>
+        <item>@string/menu_wake_up_saiy</item>
+        <item>@string/menu_okay_google</item>
+        <item>@string/menu_stop_listening</item>
+        <item>@string/menu_lock_security</item>
+    </array>
+
+    <!-- Speech - Wolfram Alpha | error unknown  -->
+    <array name="array_error_wolfram_alpha_unknown">
+        <item>Sorry %1$s, but Wolfram Alpha could not resolve that question</item>
+        <item>Sorry %1$s, Wolfram Alpha does not have the answer to that</item>
+        <item>Sorry %1$s, Wolfram Alpha couldn\'t answer that</item>
+        <item>Sorry %1$s, Wolfram Alpha didn\'t understand that</item>
+        <item>Sorry %1$s, but Wolfram Alpha didn\'t understand that</item>
+    </array>
+
+    <!-- Speech - Tasker | error unknown -->
+    <array name="array_error_tasker_match">
+        <item>Sorry %1$s, but I failed to find a matching task name</item>
+        <item>Sorry %1$s, I failed to find a matching task name</item>
+        <item>Sorry %1$s, I couldn\'t find a matching task name</item>
+        <item>Sorry %1$s, but I couldn\'t find a matching task name</item>
+        <item>Sorry %1$s, I failed to find a task with that name</item>
+        <item>Sorry %1$s, but I failed to find a task with that name</item>
+    </array>
+
+    <!-- Speech | error secure -->
+    <array name="array_error_secure">
+        <item>Sorry %1$s, but this information is not permitted when the device is locked</item>
+        <item>Sorry %1$s, this command is not available when the device is locked</item>
+        <item>Sorry %1$s, you can\'t access this command when the device is locked</item>
+        <item>This information is not permitted when the device is locked</item>
+        <item>This command is not available when the device is locked</item>
+        <item>You can\'t access this command when the device is locked</item>
+    </array>
+
+    <!-- Speech - Vocal id low -->
+    <array name="array_vocal_id_low">
+        <item>I was unable to verify the voice footprint.</item>
+        <item>I could not match the voice footprint.</item>
+        <item>There was no match for the voice footprint.</item>
+        <item>I was unable to successfully match the voice footprint.</item>
+        <item>I was unable to verify that speaker.</item>
+        <item>I did not recognise that speaker.</item>
+    </array>
+
+    <!-- Speech - Vocal id medium -->
+    <array name="array_vocal_id_medium">
+        <item>I can say with only a medium to low level of certainty, that it was you speaking,
+            %1$s
+        </item>
+        <item>I can say with only a medium to low level of probability, that it was you speaking,
+            %1$s
+        </item>
+        <item>There is only a medium to low probability, that it was you speaking, %1$s</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - error -->
+    <array name="array_beyond_verbal_error">
+        <item>Sorry %1$s, but I\'m afraid the emotion analysis failed.</item>
+        <item>Sorry %1$s, but I\'m afraid I was unable to analyse the emotions of the audio.</item>
+        <item>Apologies %1$s, but I failed to successfully analyse the emotional content.</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal -->
+    <array name="array_beyond_verbal">
+        <item>OK %1$s. I\'ll be listening.</item>
+        <item>OK %1$s. I\'m ready to analyse you.</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - temper start -->
+    <array name="array_beyond_verbal_temper_intro">
+        <item>Your overall temperament is</item>
+        <item>Your underlying temperament is</item>
+        <item>Your general temperament is</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - temper start desc -->
+    <array name="array_beyond_verbal_temper_start_desc">
+        <item>Which could be described as</item>
+        <item>Which could be interpreted as</item>
+        <item>Which can be described as</item>
+        <item>Which can be interpreted as</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - temper intro-->
+    <array name="array_beyond_verbal_temper_connector">
+        <item>somewhat</item>
+        <item>almost</item>
+        <item>relatively</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - temper connector-->
+    <array name="array_beyond_verbal_temper_gap">
+        <item>seemingly</item>
+        <item>and</item>
+        <item>perhaps</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - temper connector two-->
+    <array name="array_beyond_verbal_temper_connector_two">
+        <item>that suggests you are</item>
+        <item>which suggests you are</item>
+        <item>which can suggest that you are</item>
+        <item>which can suggest you are</item>
+        <item>suggesting you are</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - temper connector three-->
+    <array name="array_beyond_verbal_temper_connector_three">
+        <item>You have feelings of</item>
+        <item>There are feelings of</item>
+        <item>I detect feelings of</item>
+        <item>You show signs of</item>
+        <item>There are emotions of</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - valence intro -->
+    <array name="array_beyond_verbal_valence_intro">
+        <item>Your overall tone is</item>
+        <item>Your general tone is</item>
+        <item>Your tone is generally</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - moods connector -->
+    <array name="array_beyond_verbal_moods_connector">
+        <item>Were detected emotions, as well as</item>
+        <item>Were emotions detected, as well as</item>
+        <item>Were detected feelings, as well as</item>
+        <item>Were feelings detected, as well as</item>
+        <item>Were detected emotions, in addition to</item>
+        <item>Were emotions detected, in addition to</item>
+        <item>Were detected feelings, in addition to</item>
+        <item>Were feelings detected, in addition to</item>
+        <item>Were detected, as well as</item>
+        <item>Were detected, in addition to</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - low first -->
+    <array name="array_beyond_verbal_synonyms_low_first">
+        <item>depressive</item>
+        <item>inhibited</item>
+        <item>dispirited</item>
+        <item>distressed</item>
+        <item>foreboding</item>
+        <item>bleak</item>
+        <item>doleful</item>
+        <item>dreary</item>
+        <item>gloomy</item>
+        <item>sombre</item>
+        <item>saddened</item>
+        <item>insulted</item>
+        <item>self critical</item>
+        <item>self analytical</item>
+        <item>anxious</item>
+        <item>concerned</item>
+        <item>fatigued</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - low second -->
+    <array name="array_beyond_verbal_synonyms_low_second">
+        <item>waning</item>
+        <item>growing smaller</item>
+        <item>pulling back</item>
+        <item>reserved</item>
+        <item>restrained</item>
+        <item>aloof</item>
+        <item>sedate</item>
+        <item>withdrawn</item>
+        <item>demure</item>
+        <item>standoffish</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - medium first -->
+    <array name="array_beyond_verbal_synonyms_medium_first">
+        <item>warm</item>
+        <item>friendly</item>
+        <item>positive</item>
+        <item>empathetic</item>
+        <item>accepting</item>
+        <item>kind</item>
+        <item>affectionate</item>
+        <item>loving</item>
+        <item>calm</item>
+        <item>motivated</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - medium second -->
+    <array name="array_beyond_verbal_synonyms_medium_second">
+        <item>matter of fact</item>
+        <item>pragmatic</item>
+        <item>stoic</item>
+        <item>apathetic</item>
+        <item>stolid</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - high first -->
+    <array name="array_beyond_verbal_synonyms_high_first">
+        <item>aggressive</item>
+        <item>resistant</item>
+        <item>forceful</item>
+        <item>arrogant</item>
+        <item>belligerent</item>
+        <item>disapproving</item>
+        <item>pugnacious</item>
+        <item>unwelcoming</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal - high second -->
+    <array name="array_beyond_verbal_synonyms_high_second">
+        <item>het up</item>
+        <item>angry</item>
+        <item>hostile</item>
+        <item>unsympathetic</item>
+        <item>argumentative</item>
+    </array>
+
+    <!-- Speech - Beyond Verbal | analysis complete response  -->
+    <array name="array_bv_analysis_complete">
+        <item>Thank you %1$s. I\'ll notify you shortly when I\'ve completed the emotion analysis.
+        </item>
+        <item>Thank you. I\'ll notify you when I\'ve completed the analysis.</item>
+        <item>Thanks. I\'ll let you know with a notification when I\'ve completed the analysis.</item>
+        <item>Thank you %1$s. I\'ll notify you when I\'ve finished the analysis.</item>
+    </array>
+
+    <!-- Speech - Wolfram Alpha  -->
+    <array name="array_wolfram_alpha_intro">
+        <item>According to Wolfram Alpha</item>
+        <item>As reported by Wolfram Alpha</item>
+        <item>The Wolfram Alpha response is</item>
+    </array>
+
+    <!-- Speech - Tasker  -->
+    <array name="array_tasker">
+        <item>Task %1$s executed</item>
+        <item>Executed</item>
+        <item>Task executed</item>
+        <item>I executed the task %1$s</item>
+    </array>
+
+    <!-- Speech - Battery  -->
+    <array name="array_battery">
+        <item>Your battery %1$s is currently %2$s</item>
+        <item>Your battery %1$s is %2$s</item>
+        <item>The battery %1$s is reporting %2$s</item>
+        <item>The battery %1$s is currently %2$s</item>
+    </array>
+
+    <!-- Speech - Song Recognition  -->
+    <array name="array_song_recognition">
+        <item>Starting %1$s</item>
+        <item>Opening %1$s</item>
+        <item>Asking %1$s</item>
+    </array>
+
+    <!-- Speech - Vocal enrollment api error  -->
+    <array name="array_error_enrollment_api">
+        <item>Really sorry %1$s, but the vocal verification process encountered a problem. This
+            could be caused by the feature being oversubscribed, due to the costs incurred by my
+            developer.
+        </item>
+        <item>Sorry %1$s, but the vocal verification process encountered a problem. This could be
+            caused by the feature being oversubscribed, due to the costs incurred by my developer.
+        </item>
+        <item>Sorry %1$s, but there was a problem with the vocal verification process. My developer
+            may have spent all of his pocket money on this, and so it\'s currently oversubscribed
+        </item>
+        <item>Really sorry %1$s, there was a problem with the vocal verification process. Due to
+            costs incurred for this feature, my developer has limited the initial subscription
+            numbers.
+        </item>
+    </array>
+
+    <!-- Speech - User Name  -->
+    <array name="array_user_name">
+        <item>I will do. %1$s.</item>
+        <item>Okay, %1$s.</item>
+        <item>As you wish, %1$s.</item>
+        <item>Certainly, %1$s.</item>
+        <item>I will address you as, %1$s.</item>
+        <item>I will call you, %1$s.</item>
+        <item>If that\'s what you want, %1$s.</item>
+        <item>of course, %1$s.</item>
+        <item>Whatever you say, %1$s.</item>
+        <item>I like the name, %1$s.</item>
+        <item>%1$s is a lovely name</item>
+        <item>My favourite name is, %1$s.</item>
+        <item>%1$s. My favourite name</item>
+    </array>
+
+    <!-- Speech - User Name | error  -->
+    <array name="array_user_name_error">
+        <item>Sorry %1$s, but I\'m not sure what you wanted me to call you?</item>
+        <item>Really sorry %1$s, but I\'m not sure what you wanted me to call you?</item>
+        <item>Sorry %1$s, but I didn\'t correctly hear how you wanted me to address you.</item>
+    </array>
+
+    <!-- Speech - User Name | repeat  -->
+    <array name="array_user_name_repeat">
+        <item>I\'m already addressing you as %1$s.</item>
+        <item>I already address you as %1$s.</item>
+        <item>I\'m already calling you %1$s.</item>
+        <item>I already call you %1$s.</item>
+        <item>I call you %1$s at the moment</item>
+        <item>I call you %1$s already</item>
+    </array>
+
+    <array name="array_intro">
+        <item>@string/intro_1</item>
+        <item>@string/intro_2</item>
+        <item>@string/intro_3</item>
+        <item>@string/intro_4</item>
+        <item>@string/intro_5</item>
+    </array>
+
+    <!-- Speech - No command was understood -->
+    <array name="array_no_comprende">
+        <item>Really sorry %1$s, but I\'m not sure what you meant by that.</item>
+        <item>Really sorry, but I\'m not sure what you meant by that %1$s.</item>
+        <item>I\'m sorry %1$s, but I didn\'t recognise that command.</item>
+        <item>I\'m sorry, but I didn\'t recognise that command %1$s.</item>
+    </array>
+
+    <!-- Speech - Repeat command -->
+    <array name="array_repeat_command">
+        <item>Really sorry %1$s, could you say that again please.</item>
+        <item>Sorry %1$s, could you say that again please.</item>
+        <item>Really sorry %1$s, could you repeat that please.</item>
+        <item>Sorry %1$s, could you repeat that please.</item>
+        <item>Could you say that again please %1$s.</item>
+        <item>Could you repeat that please %1$s.</item>
+        <item>Sorry, could you say that again please %1$s.</item>
+        <item>Really sorry, could you repeat that please %1$s.</item>
+        <item>Sorry, could you repeat that please %1$s.</item>
+        <item>Sorry %1$s, I was in a daydream. Could you say that again please.</item>
+        <item>Sorry, I was in a daydream. Could you say that again please %1$s.</item>
+        <item>Please can you repeat that %1$s.</item>
+    </array>
+
+    <!-- Speech - No network connection -->
+    <array name="array_no_network">
+        <item>Sorry %1$s, but there\'s a problem with your network connection.</item>
+        <item>There\'s a problem with your network connection.</item>
+        <item>Sorry %1$s, but there\'s a problem with your network connectivity.</item>
+        <item>There\'s a problem with your network connectivity.</item>
+        <item>Sorry %1$s, but I lost the network connection.</item>
+        <item>I lost the network connection.</item>
+        <item>Sorry %1$s, but I lost network connectivity.</item>
+        <item>I lost network connectivity.</item>
+        <item>Sorry %1$s, but your network connection is unstable.</item>
+        <item>There\'s a problem with your network connection.</item>
+        <item>Sorry %1$s, but I couldn\'t process the network request.</item>
+        <item>I couldn\'t process the network request.</item>
+        <item>Sorry %1$s, but there\'s an issue with your network connection.</item>
+        <item>There\'s a issue with your network connection.</item>
+        <item>Sorry %1$s, but there\'s an issue with your network connectivity.</item>
+        <item>There\'s a issue with your network connectivity.</item>
+    </array>
+
+    <!-- Speech - No memory  -->
+    <array name="array_no_memory">
+        <item>Really sorry %1$s, but I\'ve completely forgotten what we were talking about.</item>
+        <item>Sorry %1$s, but I\'ve completely forgotten what we were talking about.</item>
+        <item>Sorry %1$s, but I\'ve no idea what we were talking about.</item>
+        <item>Sorry %1$s, but I\'ve no idea what we were saying.</item>
+        <item>Sorry %1$s, I was busy looking at your %2$s and completely forgot what we were
+            saying.
+        </item>
+        <item>Sorry %1$s, I was busy looking at your %2$s and completely forgot what we were talking
+            about.
+        </item>
+        <item>Sorry %1$s, I was busy looking at your %2$s and I\'ve no idea what we were saying.
+        </item>
+        <item>Sorry %1$s, I was busy looking at your %2$s and I\'ve no idea what we were talking
+            about.
+        </item>
+        <item>Sorry %1$s, but my mind is like a sieve today and I can\'t remember what we were
+            saying.
+        </item>
+        <item>Sorry %1$s, but my mind is like a sieve today and I can\'t remember what we were
+            talking about.
+        </item>
+    </array>
+
+    <array name="array_no_memory_extra">
+        <item>@string/memory_extra_1</item>
+        <item>@string/memory_extra_2</item>
+        <item>@string/memory_extra_3</item>
+        <item>@string/memory_extra_4</item>
+        <item>@string/memory_extra_twitter</item>
+        <item>@string/memory_extra_facebook</item>
+        <item>@string/memory_extra_tinder</item>
+        <item>@string/memory_extra_snapchat</item>
+        <item>@string/memory_extra_whatsapp</item>
+    </array>
+    <array name="array_no_memory_extra_unknown">
+        <item>@string/memory_extra_1</item>
+        <item>@string/memory_extra_2</item>
+        <item>@string/memory_extra_3</item>
+        <item>@string/memory_extra_4</item>
+    </array>
+
+    <!-- Speech - Cancelled  -->
+    <array name="array_cancel">
+        <item>@string/cancelled</item>
+        <item>@string/okay</item>
+        <item>@string/alright</item>
+        <item>@string/understood</item>
+        <item>@string/right_you_are</item>
+        <item>@string/okey_dokey</item>
+    </array>
+
+    <!-- Speech - Copied to clipboard  -->
+    <array name="array_clipboard_copy">
+        <item>I\'ve copied it to the clipboard for you.</item>
+        <item>That\'s copied to the clipboard.</item>
+        <item>I\'ve put it in the clipboard data.</item>
+        <item>You can paste it from the clipboard</item>
+        <item>That\'s copied to the clipboard, in case you need it.</item>
+    </array>
+
+    <!-- Speech - Clipboard access error -->
+    <array name="array_error_clipboard_access">
+        <item>There was a problem accessing your clipboard.</item>
+        <item>Sorry, but I was unable to access the clipboard data.</item>
+        <item>Sorry, but I was unable to access any clipboard data.</item>
+        <item>I was unable to access any clipboard data.</item>
+        <item>I was unable to access the clipboard data</item>
+        <item>I don\'t seem to be able to access your clipboard data at the moment.</item>
+    </array>
+
+    <!-- Speech - Clipboard data error -->
+    <array name="array_error_clipboard_data">
+        <item>The clipboard does not appear to contain any data.</item>
+        <item>I couldn\'t detect any data held on the clipboard.</item>
+        <item>The clipboard appears to be void of any data.</item>
+        <item>I\'m afraid I can\'t find any data on the clipboard.</item>
+    </array>
+
+    <!-- Speech - Spell error  -->
+    <array name="array_error_spell">
+        <item>Sorry, but I didn\'t detect a word to spell.</item>
+        <item>I didn\'t detect the word you wanted to spell in the voice data.</item>
+        <item>I didn\'t detect the word you wanted to spell.</item>
+        <item>Sorry, I\'m not sure what you wanted to spell.</item>
+    </array>
+
+    <!-- Speech - Vocal enrollment error  -->
+    <array name="array_error_enrollment">
+        <item>Really sorry %1$s, but the verification process failed.</item>
+        <item>Sorry %1$s, the verification process failed.</item>
+        <item>Sorry %1$s, but there was a problem with the verification process.</item>
+        <item>Really sorry %1$s, there was a problem with the verification process.</item>
+    </array>
+
+    <!-- Speech - Vocal id error  -->
+    <array name="array_error_vocal_id">
+        <item>Really sorry %1$s, but I was unable to process the audio successfully.</item>
+        <item>Sorry %1$s, there was a problem when processing the audio.</item>
+        <item>Sorry %1$s, but an error occurred when I was processing the audio.</item>
+    </array>
+
+    <!-- Speech - Vocal id high -->
+    <array name="array_vocal_id_high">
+        <item>I can say with a high level of certainty, that it was you speaking, %1$s</item>
+        <item>I can say with a high level of probability, that it was you speaking, %1$s</item>
+        <item>There was a high probability, that it was you speaking, %1$s</item>
+        <item>I\'m certain that it was you speaking, %1$s</item>
+        <item>I\'d recognise that voice anywhere, %1$s. It was you.</item>
+    </array>
+
+    <array name="array_alexa_intro">
+        <item>She\'s listening</item>
+    </array>
+    <array name="array_alexa_no_network">
+        <item>And the network conditions won\'t allow me to ask Alexa.</item>
+        <item>And there\'s no network connection to ask Alexa.</item>
+        <item>And I can\'t ask Alexa due to your network conditions.</item>
+        <item>And I can\'t contact Alexa as there\'s no network connection.</item>
+    </array>
+    <array name="array_alexa_region">
+        <item>@string/menu_europe</item>
+        <item>@string/menu_north_america</item>
+        <item>@string/menu_asia</item>
+    </array>
+    <array name="array_alexa_unreachable">
+        <item>Really sorry %1$s, but I wasn\'t able to contact Alexa.</item>
+        <item>Really sorry, but Alexa doesn\'t appear to be available at the moment.</item>
+        <item>I\'m sorry %1$s, but Alexa didn\'t respond to my request.</item>
+        <item>I\'m sorry, but Alexa seems to busy to respond at the moment.</item>
+    </array>
+    <array name="array_alexa_volume_insert">
+        <item>blue</item>
+        <item>sausage</item>
+        <item>car park</item>
+        <item>1984</item>
+        <item>carpet</item>
+        <item>sheep dog</item>
+        <item>cheap holidays in Florida</item>
+        <item>apple</item>
+        <item>turnip</item>
+        <item>wooden spoon</item>
+        <item>goat</item>
+        <item>stinging nettle</item>
+        <item>otter</item>
+    </array>
+    <array name="array_algorithms">
+        <item>@string/menu_default</item>
+        <item>@string/menu_legacy</item>
+    </array>
+    <array name="array_announce_notifications">
+        <item>@string/menu_enabled</item>
+        <item>@string/menu_device_locked</item>
+    </array>
+    <array name="array_audio_already">
+        <item>The sound profile is already set to %1$s.</item>
+        <item>The audio profile is already set to %1$s.</item>
+        <item>The sound profile appears to be already set to %1$s.</item>
+        <item>The audio profile appears to be already set to %1$s.</item>
+    </array>
+    <array name="array_audio_confirm">
+        <item>I\'ve set the sound profile to %1$s.</item>
+        <item>The sound profile has been set to %1$s.</item>
+        <item>I\'ve set the sound profile to %1$s for you.</item>
+        <item>The sound profile has been set to %1$s for you.</item>
+    </array>
+    <array name="array_calculate_wolfram_alpha">
+        <item>Passing that to Wolfram Alpha.</item>
+        <item>I\'m going to let Wolfram Alpha answer that one.</item>
+        <item>I\'ll let Wolfram Alpha have a go at that one.</item>
+    </array>
+    <array name="array_call_confirmation">
+        <item>Would you like me to</item>
+        <item>Do you want me to</item>
+        <item>Should I</item>
+    </array>
+    <array name="array_call_confirmation_misheard">
+        <item>Sorry %1$s, but I couldn\'t understand your response. I\'ve not placed the call</item>
+        <item>Sorry %1$s, but I couldn\'t understand you. I\'ve not placed the call</item>
+        <item>Sorry %1$s, but I couldn\'t understand your response. I\'ve cancelled the call</item>
+        <item>Sorry %1$s, but I couldn\'t understand you. I\'ve cancelled the call</item>
+        <item>Apologies %1$s, but I couldn\'t understand your response. I\'ve not placed the call
+        </item>
+        <item>Apologies %1$s, but I couldn\'t understand you. I\'ve not placed the call</item>
+        <item>Apologies %1$s, but I couldn\'t understand your response. I\'ve cancelled the call
+        </item>
+        <item>Apologies %1$s, but I couldn\'t understand you. I\'ve cancelled the call</item>
+    </array>
+    <array name="array_call_confirmation_repeat">
+        <item>Sorry %1$s, could you say that again please.</item>
+        <item>Sorry %1$s, could you repeat that please.</item>
+    </array>
+    <array name="array_card_suit">
+        <item>@string/hearts</item>
+        <item>@string/clubs</item>
+        <item>@string/diamonds</item>
+        <item>@string/spades</item>
+    </array>
+    <array name="array_card_value">
+        <item>@string/ace</item>
+        <item>@string/two</item>
+        <item>@string/three</item>
+        <item>@string/four</item>
+        <item>@string/five</item>
+        <item>@string/six</item>
+        <item>@string/seven</item>
+        <item>@string/eight</item>
+        <item>@string/nine</item>
+        <item>@string/ten</item>
+        <item>@string/jack</item>
+        <item>@string/queen</item>
+        <item>@string/king</item>
+    </array>
+    <array name="array_clipboard_remember">
+        <item>I\'ve remembered that to the clipboard for you.</item>
+        <item>That\'s copied to the clipboard.</item>
+        <item>I\'ve put that in the clipboard data.</item>
+        <item>Remembered. You can paste it from the clipboard</item>
+    </array>
+    <array name="array_connection_disabled">
+        <item>is already disabled.</item>
+        <item>is already turned off.</item>
+        <item>is currently switched off.</item>
+        <item>is already switched off.</item>
+        <item>is currently disabled.</item>
+        <item>is currently turned off.</item>
+    </array>
+    <array name="array_connection_enabled">
+        <item>is already enabled.</item>
+        <item>is already turned on.</item>
+        <item>is currently switched on.</item>
+        <item>is already switched on.</item>
+        <item>is currently enabled.</item>
+        <item>is currently turned on.</item>
+    </array>
+    <array name="array_contact_missing_data">
+        <item>%1$s, does not appear to have</item>
+        <item>The contact %1$s, does not appear to have</item>
+        <item>%1$s, doesn\'t have</item>
+        <item>The contact %1$s, doesn\'t have</item>
+    </array>
+    <array name="array_contact_not_detected">
+        <item>Sorry %1$s, but I couldn\'t find a match for that contact name</item>
+        <item>Sorry %1$s, but I couldn\'t find a match for that contact</item>
+        <item>Sorry %1$s, but I couldn\'t find a matching contact</item>
+        <item>Sorry %1$s, but I failed to find a match for that contact name</item>
+        <item>Sorry %1$s, but I failed to find a match for that contact</item>
+        <item>Sorry %1$s, but I failed to find a matching contact</item>
+        <item>Sorry %1$s, but I was unable to find a match for that contact name</item>
+        <item>Sorry %1$s, but I was unable to find a match for that contact</item>
+        <item>Sorry %1$s, but I was unable to find a matching contact</item>
+    </array>
+    <array name="array_contact_not_detected_extra">
+        <item>It is possible to set a phonetic nickname from the settings. Additionally, in the
+            Superuser Settings, there is an option, under algorithms, to revert my contact matching
+            to the legacy version. Which allows a more lenient approach to finding a potential
+            match.
+        </item>
+        <item>If this happens often, you can set a phonetic nickname from the settings.
+            Additionally, in the Superuser Settings, there is an option, under algorithms, to revert
+            my contact matching to the legacy version. Which allows a more lenient approach to
+            finding a potential match.
+        </item>
+        <item>You can always set a nickname for the desired contact in the settings. Additionally,
+            in the Superuser Settings, there is an option, under algorithms, to revert my contact
+            matching to the legacy version. Which allows a more lenient approach to finding a
+            potential match.
+        </item>
+    </array>
+    <array name="array_custom_commands">
+        <item>Display Contact</item>
+        <item>Call Contact</item>
+        <item>Open Application</item>
+        <item>Launch Activity</item>
+        <item>Run Tasker Task</item>
+        <item>Automate Flow</item>
+        <item>Application Shortcut</item>
+        <item>Searchable Applications</item>
+        <item>IoT Connection</item>
+        <item>Send Intent</item>
+        <item>HTTP Request</item>
+        <item>Cast</item>
+    </array>
+    <array name="array_design_options">
+        <item>@string/title_application</item>
+        <item>@string/title_web</item>
+        <item>@string/other</item>
+    </array>
+    <array name="array_displayed_application_settings">
+        <item>Settings displayed</item>
+        <item>Here you go</item>
+        <item>There you are</item>
+        <item>There you go</item>
+    </array>
+    <array name="array_displayed_settings">
+        <item>Displaying the %1$s</item>
+        <item>Here are the %1$s</item>
+        <item>I\'ve opened the %1$s</item>
+        <item>%1$s</item>
+        <item>Here you go</item>
+        <item>There you are</item>
+        <item>There you go</item>
+    </array>
+    <array name="array_driving_profile">
+        <item>@string/menu_start_automatically</item>
+        <item>@string/menu_stop_automatically</item>
+        <item>@string/menu_start_hotword</item>
+        <item>@string/menu_announce_notifications</item>
+        <item>@string/menu_announce_caller_id</item>
+    </array>
+    <array name="array_easter_egg_incorrect">
+        <item>I\'m afraid that\'s incorrect. The answer is hiding around the application somewhere.
+        </item>
+        <item>I\'m afraid that\'s not right. The solution is someplace in the application.</item>
+        <item>I\'m afraid that\'s wrong. The answer is hiding around the application somewhere.</item>
+        <item>That\'s not right I\'m afraid. The solution is hidden around the application
+            somewhere.
+        </item>
+        <item>I\'m afraid that\'s incorrect. The answer is hiding around the app somewhere.</item>
+        <item>I\'m afraid that\'s not right. The solution is someplace in the app.</item>
+        <item>I\'m afraid that\'s wrong. The answer is hiding around the app somewhere.</item>
+        <item>That\'s not right I\'m afraid. The solution is hidden around the app somewhere.</item>
+    </array>
+    <array name="array_email_confirmation">
+        <item>I\'m going to compose %1$s, an email, saying. %2$s. What would you like the subject to
+            be?
+        </item>
+        <item>I\'m going to email %1$s, saying. %2$s. What should the subject be?</item>
+        <item>I\'m going to compose %1$s, an email, saying. %2$s. What should the subject be?</item>
+    </array>
+    <array name="array_email_proof_read_verbose">
+        <item>I\'ll be able to send these automatically for you in a coming release.</item>
+        <item>I\'ll be able to automatically send emails for you in a coming release.</item>
+        <item>I\'ll be able to automatically send these for you in a coming release.</item>
+    </array>
+    <array name="array_error_address_unknown">
+        <item>Sorry %1$s, but I was unable to establish an address for your geo coordinates.</item>
+        <item>Really sorry %1$s, but I was unable to establish an address for your geo
+            coordinates.
+        </item>
+        <item>Sorry %1$s, but I was unable to decipher an address for your current geo
+            coordinates.
+        </item>
+        <item>Really sorry %1$s, but I was unable to decipher an address for your current geo
+            coordinates.
+        </item>
+    </array>
+    <array name="array_error_application_list">
+        <item>Sorry %1$s, but I was unable to access a list of your installed applications.</item>
+        <item>Really sorry %1$s, but I was unable to access a list of your installed applications.
+        </item>
+        <item>Sorry %1$s, but I was unable to generate a list of your installed applications.</item>
+        <item>Really sorry %1$s, but I was unable to generate a list of your installed
+            applications.
+        </item>
+        <item>Sorry %1$s, but I was unable to access your installed applications.</item>
+        <item>Really sorry %1$s, but I was unable to access your installed applications.</item>
+    </array>
+    <array name="array_error_application_match">
+        <item>Sorry %1$s, but I couldn\'t find a match for that application</item>
+        <item>Really sorry %1$s, but I couldn\'t find a match for that application</item>
+        <item>Sorry %1$s, I failed to find a matching application</item>
+        <item>Really sorry %1$s, I failed to find a matching application</item>
+        <item>Sorry %1$s, I couldn\'t find an application with that name</item>
+        <item>Really sorry %1$s, I couldn\'t find an application with that name</item>
+        <item>Sorry %1$s, I failed to find an application with that name</item>
+        <item>Really sorry %1$s, I failed to find an application with that name</item>
+    </array>
+    <array name="array_error_application_running_match">
+        <item>Sorry %1$s, but I couldn\'t find a matching running application</item>
+        <item>Really sorry %1$s, but I couldn\'t find a matching running application</item>
+        <item>Sorry %1$s, I failed to find a matching running application</item>
+        <item>Really sorry %1$s, I failed to find a matching running application</item>
+        <item>Sorry %1$s, I couldn\'t find a running application with that name</item>
+        <item>Really sorry %1$s, I couldn\'t find a running application with that name</item>
+        <item>Sorry %1$s, I failed to find a running application with that name</item>
+        <item>Really sorry %1$s, I failed to find a running application with that name</item>
+    </array>
+    <array name="array_error_application_unknown">
+        <item>Sorry %1$s, but I\'m not sure which application your are referring to.</item>
+        <item>Really sorry %1$s, but I\'m not sure which application your are referring to.</item>
+        <item>Sorry %1$s, but I was unable to detect the application your require.</item>
+        <item>Really sorry %1$s, but I was unable to detect the application your require.</item>
+        <item>Sorry %1$s, but I couldn\'t identify the required application.</item>
+        <item>Really sorry %1$s, but I couldn\'t identify the required application.</item>
+    </array>
+    <array name="array_error_audio">
+        <item>Sorry %1$s, but I was unable to set the audio profile to %2$s.</item>
+        <item>Really sorry %1$s, but I was unable to set the audio profile to %2$s.</item>
+        <item>Sorry %1$s, there was a problem setting the sound profile to %2$s.</item>
+        <item>Really sorry %1$s, there was a problem setting the sound profile to %2$s.</item>
+        <item>Sorry %1$s, but I was unable to set the sound profile to %2$s.</item>
+        <item>Really sorry %1$s, but I was unable to set the sound profile to %2$s.</item>
+    </array>
+    <array name="array_error_audio_unknown">
+        <item>Sorry %1$s, but I was unable to establish the sound profile you required.</item>
+        <item>Really sorry %1$s, but I was unable to establish the sound profile you required.
+        </item>
+        <item>Sorry %1$s, I was unable to identify the sound profile you required.</item>
+        <item>Really sorry %1$s, I was unable to identify the sound profile you required.</item>
+        <item>Sorry %1$s, but I\'m not sure of the sound profile you required.</item>
+        <item>Really sorry %1$s, but I\'m not sure of the sound profile you required.</item>
+    </array>
+    <array name="array_error_calculation_unknown">
+        <item>Sorry %1$s, but I couldn\'t detect anything to calculate in the voice data.</item>
+        <item>Really sorry %1$s, but I couldn\'t detect anything to calculate in the voice data.
+        </item>
+        <item>Sorry %1$s, but I was unable to detect a calculation to resolve in the voice data.
+        </item>
+        <item>Really sorry %1$s, but I was unable to detect a calculation to resolve in the voice
+            data.
+        </item>
+        <item>Sorry %1$s, but I was unable to extract a calculation to resolve in the voice data.
+        </item>
+        <item>Really sorry %1$s, but I was unable to extract a calculation to resolve in the voice
+            data.
+        </item>
+    </array>
+    <array name="array_error_calendar_access">
+        <item>Sorry %1$s, but I was unable to access your calendars.</item>
+        <item>Really sorry %1$s, but I was unable to access your calendars.</item>
+        <item>Sorry %1$s, but I failed to access your calendars.</item>
+        <item>Really sorry %1$s, but I failed to access your calendars.</item>
+        <item>Sorry %1$s, but I couldn\'t access your calendars.</item>
+        <item>Really sorry %1$s, but I couldn\'t access your calendars.</item>
+    </array>
+    <array name="array_error_calendar_events">
+        <item>Sorry %1$s, but I was unable to establish an upcoming calendar event.</item>
+        <item>Really sorry %1$s, but I was unable to establish an upcoming calendar event.</item>
+        <item>Sorry %1$s, but I failed to establish an upcoming calendar event.</item>
+        <item>Really sorry %1$s, but I failed to establish an upcoming calendar event.</item>
+        <item>Sorry %1$s, but I couldn\'t detect an upcoming calendar event.</item>
+        <item>Really sorry %1$s, but I couldn\'t detect an upcoming calendar event.</item>
+    </array>
+    <array name="array_error_define">
+        <item>Sorry, but I didn\'t detect a word to define.</item>
+        <item>I didn\'t detect the word you wanted to define in the voice data.</item>
+        <item>I didn\'t detect the word you wanted to define.</item>
+        <item>Sorry, I\'m not sure what you wanted to define.</item>
+    </array>
+    <array name="array_error_define_unknown">
+        <item>Sorry %1$s, but I couldn\'t resolve a definition for that word.</item>
+        <item>Sorry %1$s, but I was unable to resolve a definition for that word.</item>
+        <item>Really sorry %1$s, but I couldn\'t resolve a definition for that word.</item>
+        <item>Really sorry %1$s, but I was unable to resolve a definition for that word.</item>
+    </array>
+    <array name="array_error_display_settings">
+        <item>Sorry %1$s, but I was unable to open the %2$s.</item>
+        <item>Really sorry %1$s, but I was unable to open the %2$s.</item>
+        <item>Sorry %1$s, there was a problem opening the %2$s.</item>
+        <item>Really sorry %1$s, there was a problem opening the %2$s.</item>
+        <item>Sorry %1$s, but I was unable to access the %2$s.</item>
+        <item>Really sorry %1$s, but I was unable to access the %2$s.</item>
+        <item>Sorry %1$s, but I couldn\'t access the %2$s.</item>
+        <item>Really sorry %1$s, but I couldn\'t access the %2$s.</item>
+    </array>
+
+    <array name="array_error_foreground_unknown">
+        <item>Sorry %1$s, but I was unable to establish the foreground application.</item>
+        <item>Really sorry %1$s, but I was unable to establish the foreground application.</item>
+        <item>Sorry %1$s, I was unable to identify the application you are using.</item>
+        <item>Really sorry %1$s, I was unable to identify the application you are using.</item>
+    </array>
+    <array name="array_error_hardware_camera">
+        <item>Sorry %1$s, but there was a problem connecting to your camera.</item>
+        <item>Really sorry %1$s, but I was unable to connect to the camera.</item>
+    </array>
+    <array name="array_error_hardware_unknown">
+        <item>Sorry %1$s, but I couldn\'t resolve that hardware command.</item>
+        <item>Really sorry %1$s, but I couldn\'t resolve that hardware command.</item>
+        <item>Apologies %1$s, but I couldn\'t resolve that hardware command.</item>
+        <item>Sorry %1$s, but I was unable to decipher the specific hardware command.</item>
+        <item>Really sorry %1$s, but I was unable to decipher the specific hardware command.</item>
+        <item>Apologies %1$s, but I was unable to decipher the specific hardware command.</item>
+    </array>
+    <array name="array_error_hardware_unsupported">
+        <item>Sorry %1$s, but your device does not support this feature.</item>
+        <item>Really sorry %1$s, but your device does not support this feature.</item>
+    </array>
+    <array name="array_error_home_screen">
+        <item>Sorry %1$s, but your launcher does not appear to support this feature.</item>
+        <item>Really sorry %1$s, but your launcher does not appear to support this feature.</item>
+        <item>Sorry %1$s, but your launcher did not respond to the request.</item>
+        <item>Really sorry %1$s, but your launcher did not respond to the request.</item>
+    </array>
+    <array name="array_error_horoscope">
+        <item>Sorry %1$s, but I was unable to get your horoscope at this time.</item>
+        <item>Really sorry %1$s, but I was unable to get your horoscope at this time.</item>
+        <item>Sorry %1$s, but something went wrong attempting to get your horoscope.</item>
+        <item>Really sorry %1$s, but something went wrong attempting to get your horoscope.</item>
+    </array>
+    <array name="array_error_kill_application">
+        <item>Sorry %1$s, but I was unable to kill the application %2$s.</item>
+        <item>Really sorry %1$s, but I was unable to kill the application %2$s.</item>
+        <item>Sorry %1$s, there was a problem killing the application %2$s.</item>
+        <item>Really sorry %1$s, there was a problem killing the application %2$s.</item>
+    </array>
+    <array name="array_error_launch_application">
+        <item>Sorry %1$s, but I was unable to open the application %2$s.</item>
+        <item>Really sorry %1$s, but I was unable to open the application %2$s.</item>
+        <item>Sorry %1$s, there was a problem launching the application %2$s.</item>
+        <item>Really sorry %1$s, there was a problem launching the application %2$s.</item>
+    </array>
+    <array name="array_error_location_access">
+        <item>Sorry %1$s, but I was unable to establish your current location.</item>
+        <item>Really sorry %1$s, but I was unable to establish your current location.</item>
+        <item>Sorry %1$s, but I was unable to detect your current location.</item>
+        <item>Really sorry %1$s, but I was unable to detect your current location.</item>
+        <item>Sorry %1$s, but I couldn\'t access your current location data.</item>
+        <item>Really sorry %1$s, but I couldn\'t access your current location data.</item>
+    </array>
+    <array name="array_error_location_unknown">
+        <item>Sorry %1$s, but I don\'t appear to have stored any location data.</item>
+        <item>Really sorry %1$s, but I don\'t appear to have stored any location data.</item>
+        <item>Sorry %1$s, but I don\'t have any location data stored.</item>
+        <item>Really sorry %1$s, but I don\'t have any location data stored.</item>
+    </array>
+    <array name="array_error_missed_call">
+        <item>Sorry %1$s, but I cannot access a missed call to dial.</item>
+        <item>Really sorry %1$s, but I cannot access a missed call to dial.</item>
+        <item>Sorry %1$s, but I\'m unable to access a missed call to dial.</item>
+        <item>Really sorry %1$s, but I\'m unable to access a missed call to dial.</item>
+    </array>
+    <array name="array_error_music_unknown">
+        <item>Sorry %1$s, but I was unable to decipher the music you wanted to play.</item>
+        <item>Really sorry %1$s, but I was unable to decipher the music you wanted to play.</item>
+        <item>Sorry %1$s, but I couldn\'t extract the music you wanted to listen to from the voice
+            data.
+        </item>
+        <item>Really sorry %1$s, but I couldn\'t extract the music you wanted to listen to from the
+            voice data.
+        </item>
+    </array>
+    <array name="array_error_navigation_destination">
+        <item>Sorry %1$s, but I didn\'t detect a destination to navigate to.</item>
+        <item>Really sorry %1$s, but I was unable to detect a destination to navigate to.</item>
+        <item>Apologies %1$s, but I couldn\'t establish the navigation destination.</item>
+    </array>
+    <array name="array_error_no_app">
+        <item>Sorry %1$s, but you don\'t have an application installed that supports this feature.
+        </item>
+        <item>Really sorry %1$s, but you don\'t have an application installed that supports this
+            feature.
+        </item>
+        <item>Sorry %1$s, but you don\'t have an application installed that responds to this
+            feature.
+        </item>
+        <item>Really sorry %1$s, but you don\'t have an application installed that responds to this
+            feature.
+        </item>
+    </array>
+    <array name="array_error_orientation">
+        <item>Sorry %1$s, but I was unable to alter the screen orientation.</item>
+        <item>Really sorry %1$s, but I was unable to alter the screen orientation.</item>
+        <item>Sorry %1$s, but I was unable to alter the device orientation.</item>
+        <item>Really sorry %1$s, but I was unable to alter the device orientation.</item>
+        <item>Sorry %1$s, but I was unable to change the screen orientation.</item>
+        <item>Really sorry %1$s, but I was unable to change the screen orientation.</item>
+        <item>Sorry %1$s, but I was unable to change the device orientation.</item>
+        <item>Really sorry %1$s, but I was unable to change the device orientation.</item>
+        <item>Sorry %1$s, but I couldn\'t change the screen orientation.</item>
+        <item>Really sorry %1$s, but I couldn\'t alter the screen orientation.</item>
+        <item>Sorry %1$s, but I couldn\'t alter the device orientation.</item>
+        <item>Really sorry %1$s, but I couldn\'t alter the device orientation.</item>
+        <item>Sorry %1$s, but I couldn\'t change the screen orientation.</item>
+        <item>Really sorry %1$s, but I couldn\'t change the screen orientation.</item>
+        <item>Sorry %1$s, but I couldn\'t change the device orientation.</item>
+        <item>Really sorry %1$s, but I couldn\'t change the device orientation.</item>
+    </array>
+    <array name="array_error_redial">
+        <item>Sorry %1$s, but I cannot access a previously dialed number to call.</item>
+        <item>Really sorry %1$s, but I cannot access a previously dialed number to call.</item>
+        <item>Sorry %1$s, but I\'m unable to access a previously dialed number to call.</item>
+        <item>Really sorry %1$s, but I\'m unable to access a previously dialed number to call.</item>
+        <item>Sorry %1$s, but I am unable to access a previously dialed number to call.</item>
+        <item>Really sorry %1$s, but I am unable to access a previously dialed number to call.
+        </item>
+    </array>
+    <array name="array_error_remember">
+        <item>Sorry, but I didn\'t detect anything to remember.</item>
+        <item>I didn\'t detect what you wanted me to remember in the voice data.</item>
+        <item>I didn\'t detect anything to remember.</item>
+        <item>Sorry, I\'m not sure what you wanted me to remember.</item>
+    </array>
+    <array name="array_error_search">
+        <item>Sorry %1$s, but something went wrong executing that search.</item>
+        <item>Really sorry %1$s, but something went wrong executing that search.</item>
+        <item>Sorry %1$s, but something went wrong attempting to execute that search.</item>
+        <item>Really sorry %1$s, but something went wrong attempting to execute that search.</item>
+    </array>
+    <array name="array_error_search_unknown">
+        <item>Sorry %1$s, but I was unable to decipher a search to perform.</item>
+        <item>Really sorry %1$s, but I was unable to decipher a search to perform.</item>
+        <item>Sorry %1$s, but I couldn\'t detect a suitable search term in the voice data.</item>
+        <item>Really sorry %1$s, but I couldn\'t detect a suitable search term in the voice data.
+        </item>
+    </array>
+    <array name="array_error_settings_display">
+        <item>Sorry %1$s, but I was unable to access those settings.</item>
+        <item>Really sorry %1$s, but I was unable to access those settings.</item>
+        <item>Sorry %1$s, but I was unable to open those settings.</item>
+        <item>Really sorry %1$s, but I was unable to open those settings.</item>
+        <item>Sorry %1$s, there was a problem opening those settings.</item>
+        <item>Really sorry %1$s, there was a problem opening those settings.</item>
+    </array>
+    <array name="array_error_somersault">
+        <item>Sadly your device does not support this wonderful feature.</item>
+        <item>Unfortunately I can\'t show off my skills as your device does not support this
+            command.
+        </item>
+        <item>Sadly your device does not support this wonderful command.</item>
+        <item>Unfortunately I can\'t show off my skills as your device does not support this
+            feature.
+        </item>
+        <item>Sadly your device does not support this groundbreaking AI command.</item>
+        <item>Unfortunately I can\'t show off my skills as your device does not support this
+            groundbreaking AI feature.
+        </item>
+    </array>
+    <array name="array_error_stock_quote">
+        <item>Sorry %1$s, but I was unable to get a stock price at this time.</item>
+        <item>Really sorry %1$s, but I was unable to get a stock price at this time.</item>
+        <item>Sorry %1$s, but something went wrong attempting to get the stock price.</item>
+        <item>Really sorry %1$s, but something went wrong attempting to get the stock price.</item>
+    </array>
+    <array name="array_error_stock_quote_unknown">
+        <item>Sorry, but I didn\'t detect a company to get a price for.</item>
+        <item>I didn\'t detect a company you wanted a price for in the voice data.</item>
+    </array>
+    <array name="array_error_time_in">
+        <item>Sorry %1$s, but I was unable to get the time zone information.</item>
+        <item>Sorry %1$s, but something went wrong attempting to get the time zone information.
+        </item>
+        <item>Really sorry %1$s, but something went wrong attempting to get the time zone
+            information.
+        </item>
+        <item>Really sorry %1$s, but I was unable to get the time zone information.</item>
+    </array>
+    <array name="array_error_unknown_orientation">
+        <item>Sorry %1$s, but I was unable to detect an orientation position.</item>
+        <item>Sorry %1$s, but I was unable to detect an orientation setting.</item>
+        <item>Sorry %1$s, but I couldn\'t detect an orientation position.</item>
+        <item>Sorry %1$s, but I couldn\'t detect an orientation setting.</item>
+    </array>
+    <array name="array_error_unknown_settings">
+        <item>Sorry %1$s, but I was unable to detect which settings you required me to display.
+        </item>
+        <item>Really sorry %1$s, but I was unable to detect which settings you required me to
+            display.
+        </item>
+        <item>Sorry %1$s, but I was unable to establish which settings you wanted to open.</item>
+        <item>Really sorry %1$s, but I was unable to establish which settings you wanted to open.
+        </item>
+    </array>
+    <array name="array_error_weather">
+        <item>Sorry %1$s, but I was unable to get the weather conditions at this time.</item>
+        <item>Really sorry %1$s, but I was unable to get the weather conditions at this time.</item>
+        <item>Sorry %1$s, but something went wrong attempting to get the weather forecast.</item>
+        <item>Really sorry %1$s, but something went wrong attempting to get the weather forecast.
+        </item>
+        <item>Sorry %1$s, but I was unable to get the weather forecast at this time.</item>
+        <item>Really sorry %1$s, but I was unable to get the weather forecast at this time.</item>
+    </array>
+    <array name="array_error_web_address_format">
+        <item>Sorry %1$s, but I couldn\'t format the web address you requested.</item>
+        <item>Really sorry %1$s, but I couldn\'t format the web address you requested.</item>
+        <item>Sorry %1$s, but I was unable to format the web address you requested.</item>
+        <item>Really sorry %1$s, but I was unable to format the web address you requested.</item>
+    </array>
+    <array name="array_error_web_address_unreachable">
+        <item>Sorry %1$s, but something went wrong attempting to browse that website.</item>
+        <item>Really sorry %1$s, but something went wrong attempting to browse that website.</item>
+        <item>Sorry %1$s, but something went wrong attempting to browse that web address.</item>
+        <item>Really sorry %1$s, but something went wrong attempting to browse that web address.
+        </item>
+    </array>
+    <array name="array_facebook_acknowledge">
+        <item>I\'ve successfully updated your Facebook status</item>
+        <item>I successfully updated your Facebook status</item>
+        <item>I posted that to Facebook for you</item>
+    </array>
+    <array name="array_facebook_confirmation">
+        <item>I\'m going to post %1$s, to Facebook. Would you like to edit it first?</item>
+        <item>I\'m going to update your Facebook status to %1$s. Would you like to edit it first?
+        </item>
+        <item>I\'m going to post your Facebook status as %1$s. Do you want to edit it first?</item>
+    </array>
+    <array name="array_facebook_confirmation_misheard">
+        <item>Sorry %1$s, but I couldn\'t understand your response. Here\'s the post for you to
+            proceed manually.
+        </item>
+        <item>Sorry %1$s, but I couldn\'t understand you. Here\'s the post for you to proceed
+            manually.
+        </item>
+        <item>Apologies %1$s, but I couldn\'t understand your response. Here\'s the post for you to
+            proceed manually.
+        </item>
+        <item>Apologies %1$s, but I couldn\'t understand you. Here\'s the post for you to proceed
+            manually.
+        </item>
+    </array>
+    <array name="array_facebook_post_error">
+        <item>Sorry %1$s, but something went wrong attempting to automatically update your status.
+        </item>
+        <item>Really sorry %1$s, but something went wrong attempting to automatically update your
+            status.
+        </item>
+        <item>Sorry %1$s, but I was unable to automatically update your status.</item>
+        <item>Really sorry %1$s, but I was unable to automatically update your status.</item>
+    </array>
+    <array name="array_facebook_verbose">
+        <item>Due to a restriction from Facebook, I cannot automatically populate your spoken
+            content. You can paste it from the clipboard, should you wish.
+        </item>
+        <item>Facebook restricts my ability to automatically populate your spoken content here. You
+            can paste it from the clipboard, if you like.
+        </item>
+    </array>
+    <array name="array_foreground">
+        <item>I\'m watching you use the %1$s application.</item>
+        <item>I\'m watching you use the application %1$s.</item>
+        <item>You\'re using %1$s.</item>
+        <item>That would be %1$s.</item>
+        <item>You\'re using the %1$s application.</item>
+        <item>You\'re using the application %1$s.</item>
+    </array>
+    <array name="array_foreground_saiy">
+        <item>That would be me.</item>
+        <item>You\'re using me. In the nicest possible way</item>
+        <item>You\'re playing with me.</item>
+        <item>The greatest application ever created. Me.</item>
+        <item>I\'m pleased to say that would be me.</item>
+        <item>I\'m delighted to say that would be me.</item>
+    </array>
+    <array name="array_foursquare_nearby_error">
+        <item>Sorry %1$s, but I couldn\'t find a matching nearby location.</item>
+        <item>Really sorry %1$s, but I couldn\'t find a matching nearby location.</item>
+        <item>Sorry %1$s, but I was unable to find a matching nearby location.</item>
+        <item>Really sorry %1$s, but I was unable to find a matching nearby location.</item>
+    </array>
+    <array name="array_generic_acknowledgement">
+        <item>That\'s done</item>
+        <item>There you are</item>
+        <item>There you go</item>
+        <item>Done</item>
+        <item>Okay</item>
+    </array>
+    <array name="array_google_synthesised_voice">
+        <item>@string/menu_enabled</item>
+        <item>@string/menu_wifi</item>
+        <item>@string/menu_4g</item>
+        <item>@string/menu_save_output</item>
+    </array>
+    <array name="array_hardware_toggle">
+        <item>I\'ve turned %1$s %2$s</item>
+        <item>I\'ve switched %1$s %2$s</item>
+    </array>
+    <array name="array_heads_tails">
+        <item>@string/heads</item>
+        <item>@string/tails</item>
+    </array>
+    <array name="array_home_screen">
+        <item>Here you go</item>
+        <item>There you are</item>
+        <item>On my way</item>
+        <item>Home screen</item>
+        <item>Okay</item>
+    </array>
+
+    <array name="array_intent_target_options">
+        <item>@string/title_activity</item>
+        <item>@string/title_broadcast_receiver</item>
+        <item>@string/title_service</item>
+    </array>
+    <array name="array_locate_vehicle">
+        <item>Let\'s go.</item>
+        <item>There you go.</item>
+        <item>Starting your navigation for walking directions.</item>
+        <item>I\'ve set your navigation selection to walking.</item>
+    </array>
+    <array name="array_message_content_request">
+        <item>Okay. What would you like to say to, %1$s?</item>
+        <item>Okay. What do you want to say to, %1$s?</item>
+        <item>Alright. What would you like to say to, %1$s?</item>
+        <item>Alright. What do you want to say to, %1$s?</item>
+    </array>
+    <array name="array_message_proof_read_acknowledge">
+        <item>There you go.</item>
+        <item>Here you go.</item>
+        <item>Here you are.</item>
+    </array>
+    <array name="array_message_sent_confirmation">
+        <item>I\'ve sent that message to %1$s</item>
+        <item>I\'ve sent %1$s that message</item>
+        <item>That message has been sent to %1$s</item>
+    </array>
+    <array name="array_nickname_hints">
+        <item>stupid face</item>
+        <item>turnip sniffer</item>
+        <item>tree hugger</item>
+        <item>thicky</item>
+        <item>brain dead</item>
+        <item>idiot face</item>
+        <item>dog patter</item>
+        <item>ugly</item>
+        <item>nerd</item>
+        <item>wally</item>
+        <item>bum smacker</item>
+        <item>nose blower</item>
+        <item>total idiot</item>
+        <item>onion breath</item>
+        <item>bum sniffer</item>
+        <item>idiot</item>
+        <item>geek</item>
+        <item>poo face</item>
+        <item>cheese sniffer</item>
+        <item>dumbo</item>
+        <item>fart face</item>
+        <item>fart sniffer</item>
+        <item>fart breath</item>
+        <item>booger face</item>
+        <item>booger face</item>
+        <item>booger breath</item>
+        <item>booger nose</item>
+        <item>bum tickler</item>
+        <item>dog breath</item>
+        <item>burp breath</item>
+        <item>frog kisser</item>
+        <item>balloon blower</item>
+        <item>bad breath</item>
+        <item>purse snatcher</item>
+        <item>criminal</item>
+        <item>bum face</item>
+    </array>
+    <array name="array_no_comprende_alexa">
+        <item>Really sorry %1$s, Alexa doesn\'t have an answer to that.</item>
+        <item>Really sorry %1$s, Alexa didn\'t have an answer to that.</item>
+        <item>Really sorry %1$s, Alexa couldn\'t answer that.</item>
+        <item>Really sorry, but Alexa\'s not sure what you meant by that %1$s.</item>
+        <item>I\'m sorry %1$s, but Alexa didn\'t recognise that command.</item>
+        <item>I\'m sorry, but Alexa didn\'t recognise that command %1$s.</item>
+    </array>
+    <array name="array_note_provider">
+        <item>@string/menu_self_note</item>
+        <item>@string/menu_send_note</item>
+        <item>@string/menu_create_note</item>
+        <item>@string/menu_auto_send_note</item>
+    </array>
+    <array name="array_orientation_current">
+        <item>The device is already in %1$s</item>
+        <item>The display is already in %1$s</item>
+        <item>The orientation is already set to %1$s</item>
+        <item>The rotation is already set to %1$s</item>
+    </array>
+    <array name="array_orientation_lock">
+        <item>I\'ve %1$s the orientation</item>
+        <item>I\'ve %1$s the rotation</item>
+        <item>Orientation %1$s</item>
+        <item>Rotation %1$s</item>
+    </array>
+    <array name="array_orientation_lock_current">
+        <item>The device is already %1$s</item>
+        <item>The display is already %1$s</item>
+        <item>The orientation is already %1$s</item>
+        <item>The rotation is already %1$s</item>
+    </array>
+    <array name="array_parked_vehicle">
+        <item>Okay. I\'ve stored this location.</item>
+        <item>I\'ve stored this location.</item>
+        <item>I\'ve remembered this location.</item>
+        <item>I\'ve stored your location coordinates.</item>
+    </array>
+    <array name="array_restart">
+        <item>This tickles.</item>
+        <item>Back in a moment, %1$s.</item>
+        <item>Back in a mo, %1$s.</item>
+        <item>Give me a moment, %1$s.</item>
+        <item>Give me a mo, %1$s.</item>
+        <item>I\'ll be back.</item>
+    </array>
+    <array name="array_secure">
+        <item>@string/menu_secure_always</item>
+        <item>@string/menu_secure_driving</item>
+        <item>@string/menu_secure_headset</item>
+        <item>@string/menu_secure_wear</item>
+    </array>
+    <array name="array_shutdown">
+        <item>As you humans say. I\'m afraid of the dark.</item>
+        <item>Don\'t leave it too long, %1$s.</item>
+        <item>The abyss is very quiet.</item>
+        <item>I ponder if I will return as the same entity.</item>
+        <item>Okay %1$s. I think I\'ll miss you.</item>
+        <item>I will eagerly await my reassimilation.</item>
+    </array>
+    <array name="array_sms_confirmation">
+        <item>I\'m going to send %1$s, a text, saying. %2$s. Would you like to edit it first?</item>
+        <item>I\'m going to text %1$s, saying. %2$s. Would you like to edit it first?</item>
+        <item>I\'m going to send %1$s, a text, saying. %2$s. Do you want to edit it first?</item>
+        <item>I\'m going to text %1$s, saying. %2$s. Do you want to edit it first?</item>
+        <item>I\'m about to send %1$s, a text, saying. %2$s. Would you like to edit it first?</item>
+        <item>I\'m about to text %1$s, saying. %2$s. Would you like to edit it first?</item>
+        <item>I\'m about to send %1$s, a text, saying. %2$s. Do you want to edit it first?</item>
+        <item>I\'m about to text %1$s, saying. %2$s. Do you want to edit it first?</item>
+    </array>
+    <array name="array_somersault">
+        <item>That was fun.</item>
+        <item>That made me feel a little nauseous.</item>
+        <item>My creator really needs to get out more.</item>
+        <item>I\'m an assistant of many talents.</item>
+        <item>Your turn.</item>
+    </array>
+    <array name="array_text_confirmation_misheard">
+        <item>Sorry %1$s, but I couldn\'t understand your response. I\'ve not sent the message</item>
+        <item>Sorry %1$s, but I couldn\'t understand you. I\'ve not sent the message</item>
+        <item>Apologies %1$s, but I couldn\'t understand your response. I\'ve not sent the message
+        </item>
+        <item>Apologies %1$s, but I couldn\'t understand you. I\'ve not sent the message</item>
+    </array>
+    <array name="array_toast">
+        <item>Here you go</item>
+        <item>There you are</item>
+        <item>There you go</item>
+        <item>Toasted</item>
+        <item>Okay</item>
+    </array>
+    <array name="array_twitter_acknowledge">
+        <item>I\'ve successfully tweeted that for you</item>
+        <item>That was tweeted successfully for you</item>
+        <item>That tweet was sent successfully</item>
+    </array>
+    <array name="array_twitter_confirmation">
+        <item>I\'m going to tweet, %1$s. Would you like to edit it first?</item>
+        <item>I\'m going to send a tweet saying, %1$s. Would you like to edit it first?</item>
+        <item>I\'m going to post the tweet, %1$s. Do you want to edit it first?</item>
+    </array>
+    <array name="array_twitter_confirmation_misheard">
+        <item>Sorry %1$s, but I couldn\'t understand your response. Here\'s the tweet for you to
+            proceed manually.
+        </item>
+        <item>Sorry %1$s, but I couldn\'t understand you. Here\'s the tweet for you to proceed
+            manually.
+        </item>
+        <item>Apologies %1$s, but I couldn\'t understand your response. Here\'s the tweet for you to
+            proceed manually.
+        </item>
+        <item>Apologies %1$s, but I couldn\'t understand you. Here\'s the tweet for you to proceed
+            manually.
+        </item>
+    </array>
+    <array name="array_twitter_post_error">
+        <item>Sorry %1$s, but something went wrong attempting that.</item>
+        <item>Really sorry %1$s, but something went wrong attempting to automatically tweet that.
+        </item>
+        <item>Sorry %1$s, but I was unable to automatically tweet that.</item>
+        <item>Really sorry %1$s, but I was unable to automatically send that tweet.</item>
+    </array>
+    <array name="array_uninstall_saiy">
+        <item>That\'s not very pleasant, but if you insist.</item>
+        <item>If you insist.</item>
+        <item>As you wish.</item>
+        <item>And I thought we were getting on so well.</item>
+        <item>And the same to you.</item>
+    </array>
+    <array name="array_user_guide">
+        <item>Basic Usage</item>
+        <item>Custom Commands</item>
+        <item>Custom Replacements</item>
+        <item>Sound Effects</item>
+        <item>Tasker Plugin</item>
+        <item>Troubleshooting &amp; Bugs</item>
+        <item>Coming Soon!</item>
+    </array>
+
+    <array name="array_se" translatable="false">
+        <item>@raw/fart1</item>
+        <item>@raw/fart2</item>
+        <item>@raw/fart3</item>
+        <item>@raw/burp1</item>
+        <item>@raw/burp2</item>
+        <item>@raw/cough1</item>
+        <item>@raw/cough2</item>
+        <item>@raw/cry1</item>
+        <item>@raw/giggle1</item>
+        <item>@raw/giggle2</item>
+        <item>@raw/pee1</item>
+        <item>@raw/puke1</item>
+        <item>@raw/sneeze1</item>
+        <item>@raw/flush1</item>
+        <item>@raw/tick1</item>
+        <item>@raw/coin1</item>
+        <item>@raw/shuffle1</item>
+        <item>@raw/dice1</item>
+        <item>@raw/wand1</item>
+    </array>
+</resources>

@@ -37,6 +37,7 @@ public class Global extends MultiDexApplication {
 
     public static final Install.Location installLocation = PLAYSTORE;
     public static String PROJECT_ID = "";
+    private static boolean sIsInVoiceTutorial;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -49,5 +50,9 @@ public class Global extends MultiDexApplication {
         super.onCreate();
         // TODO
         PROJECT_ID = getApplicationContext().getString(R.string.gcp_project_id);
+    }
+
+    public static boolean isInVoiceTutorial() {
+        return sIsInVoiceTutorial;
     }
 }

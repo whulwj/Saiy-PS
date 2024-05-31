@@ -250,15 +250,6 @@
 
     <!-- COMMAND STRINGS - COMMAND STRINGS - COMMAND STRINGS - COMMAND STRINGS -->
 
-    <!-- Speech - Wolfram Alpha | error unknown  -->
-    <string-array name="array_error_wolfram_alpha_unknown" translatable="true">
-        <item>"Sorry %1$s, but Wolfram Alpha could not resolve that question"</item>
-        <item>"Sorry %1$s, Wolfram Alpha does not have the answer to that"</item>
-        <item>"Sorry %1$s, Wolfram Alpha couldn't answer that"</item>
-        <item>"Sorry %1$s, Wolfram Alpha didn't understand that"</item>
-        <item>"Sorry %1$s, but Wolfram Alpha didn't understand that"</item>
-    </string-array>
-
     <!-- Command - Speech enrollment -->
     <string name="speech_enroll_instructions_first" translatable="true">"I need to capture approximately fifteen
         seconds of audio, so please count quickly up to forty. That should be sufficient."</string>
@@ -333,26 +324,6 @@
         This is a known Android bug where the Tasker permissions are not detected, if you installed Tasker after me.
         You'll need to reinstall me, so the permissions are correctly applied. Click on the re-assimilate button"</string>
     <string name="error_tasker_broadcast" translatable="true">"Failed sending to Tasker"</string>
-
-    <!-- Speech - Tasker | error unknown -->
-    <string-array name="array_error_tasker_match" translatable="true">
-        <item>"Sorry %1$s, but I failed to find a matching task name"</item>
-        <item>"Sorry %1$s, I failed to find a matching task name"</item>
-        <item>"Sorry %1$s, I couldn't find a matching task name"</item>
-        <item>"Sorry %1$s, but I couldn't find a matching task name"</item>
-        <item>"Sorry %1$s, I failed to find a task with that name"</item>
-        <item>"Sorry %1$s, but I failed to find a task with that name"</item>
-    </string-array>
-
-    <!-- Speech | error secure -->
-    <string-array name="array_error_secure" translatable="true">
-        <item>"Sorry %1$s, but this information is not permitted when the device is locked"</item>
-        <item>"Sorry %1$s, this command is not available when the device is locked"</item>
-        <item>"Sorry %1$s, you can't access this command when the device is locked"</item>
-        <item>"This information is not permitted when the device is locked"</item>
-        <item>"This command is not available when the device is locked"</item>
-        <item>"You can't access this command when the device is locked"</item>
-    </string-array>
 
     <!-- Command - Clipboard -->
     <string name="clipboard" translatable="true">"clipboard"</string>
@@ -533,168 +504,8 @@
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
 
-    <!-- Speech - Beyond Verbal - error -->
-    <string-array name="array_beyond_verbal_error" translatable="true">
-        <item>"Sorry %1$s, but I'm afraid the emotion analysis failed."</item>
-        <item>"Sorry %1$s, but I'm afraid I was unable to analyse the emotions of the audio."</item>
-        <item>"Apologies %1$s, but I failed to successfully analyse the emotional content."</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal -->
-    <string-array name="array_beyond_verbal" translatable="true">
-        <item>"OK %1$s. I'll be listening."</item>
-        <item>"OK %1$s. I'm ready to analyse you."</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper start -->
-    <string-array name="array_beyond_verbal_temper_intro" translatable="true">
-        <item>"Your overall temperament is"</item>
-        <item>"Your underlying temperament is"</item>
-        <item>"Your general temperament is"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper start desc -->
-    <string-array name="array_beyond_verbal_temper_start_desc" translatable="true">
-        <item>"Which could be described as"</item>
-        <item>"Which could be interpreted as"</item>
-        <item>"Which can be described as"</item>
-        <item>"Which can be interpreted as"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper intro-->
-    <string-array name="array_beyond_verbal_temper_connector" translatable="true">
-        <item>"somewhat"</item>
-        <item>"almost"</item>
-        <item>"relatively"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper connector-->
-    <string-array name="array_beyond_verbal_temper_gap" translatable="true">
-        <item>"seemingly"</item>
-        <item>"and"</item>
-        <item>"perhaps"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper connector two-->
-    <string-array name="array_beyond_verbal_temper_connector_two" translatable="true">
-        <item>"that suggests you are"</item>
-        <item>"which suggests you are"</item>
-        <item>"which can suggest that you are"</item>
-        <item>"which can suggest you are"</item>
-        <item>"suggesting you are"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper connector three-->
-    <string-array name="array_beyond_verbal_temper_connector_three" translatable="true">
-        <item>"You have feelings of"</item>
-        <item>"There are feelings of"</item>
-        <item>"I detect feelings of"</item>
-        <item>"You show signs of"</item>
-        <item>"There are emotions of"</item>
-    </string-array>
-
     <!-- Speech - Beyond Verbal - arousal intro -->
     <string name="beyond_verbal_arousal_intro" translatable="true">"Your emotional energy level is"</string>
-
-    <!-- Speech - Beyond Verbal - valence intro -->
-    <string-array name="array_beyond_verbal_valence_intro" translatable="true">
-        <item>"Your overall tone is"</item>
-        <item>"Your general tone is"</item>
-        <item>"Your tone is generally"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - moods connector -->
-    <string-array name="array_beyond_verbal_moods_connector" translatable="true">
-        <item>"Were detected emotions, as well as"</item>
-        <item>"Were emotions detected, as well as"</item>
-        <item>"Were detected feelings, as well as"</item>
-        <item>"Were feelings detected, as well as"</item>
-        <item>"Were detected emotions, in addition to"</item>
-        <item>"Were emotions detected, in addition to"</item>
-        <item>"Were detected feelings, in addition to"</item>
-        <item>"Were feelings detected, in addition to"</item>
-        <item>"Were detected, as well as"</item>
-        <item>"Were detected, in addition to"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - low first -->
-    <string-array name="array_beyond_verbal_synonyms_low_first" translatable="true">
-        <item>"depressive"</item>
-        <item>"inhibited"</item>
-        <item>"dispirited"</item>
-        <item>"distressed"</item>
-        <item>"foreboding"</item>
-        <item>"bleak"</item>
-        <item>"doleful"</item>
-        <item>"dreary"</item>
-        <item>"gloomy"</item>
-        <item>"sombre"</item>
-        <item>"saddened"</item>
-        <item>"insulted"</item>
-        <item>"self critical"</item>
-        <item>"self analytical"</item>
-        <item>"anxious"</item>
-        <item>"concerned"</item>
-        <item>"fatigued"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - low second -->
-    <string-array name="array_beyond_verbal_synonyms_low_second" translatable="true">
-        <item>"waning"</item>
-        <item>"growing smaller"</item>
-        <item>"pulling back"</item>
-        <item>"reserved"</item>
-        <item>"restrained"</item>
-        <item>"aloof"</item>
-        <item>"sedate"</item>
-        <item>"withdrawn"</item>
-        <item>"demure"</item>
-        <item>"standoffish"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - medium first -->
-    <string-array name="array_beyond_verbal_synonyms_medium_first" translatable="true">
-        <item>"warm"</item>
-        <item>"friendly"</item>
-        <item>"positive"</item>
-        <item>"empathetic"</item>
-        <item>"accepting"</item>
-        <item>"kind"</item>
-        <item>"affectionate"</item>
-        <item>"loving"</item>
-        <item>"calm"</item>
-        <item>"motivated"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - medium second -->
-    <string-array name="array_beyond_verbal_synonyms_medium_second" translatable="true">
-        <item>"matter of fact"</item>
-        <item>"pragmatic"</item>
-        <item>"stoic"</item>
-        <item>"apathetic"</item>
-        <item>"stolid"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - high first -->
-    <string-array name="array_beyond_verbal_synonyms_high_first" translatable="true">
-        <item>"aggressive"</item>
-        <item>"resistant"</item>
-        <item>"forceful"</item>
-        <item>"arrogant"</item>
-        <item>"belligerent"</item>
-        <item>"disapproving"</item>
-        <item>"pugnacious"</item>
-        <item>"unwelcoming"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - high second -->
-    <string-array name="array_beyond_verbal_synonyms_high_second" translatable="true">
-        <item>"het up"</item>
-        <item>"angry"</item>
-        <item>"hostile"</item>
-        <item>"unsympathetic"</item>
-        <item>"argumentative"</item>
-    </string-array>
 
     <string name="beyond_verbal_verbose" translatable="true">"OK %1$s. Don't forget you need to speak
         for at least thirteen seconds."</string>
@@ -706,155 +517,12 @@
         up to fifteen, whilst your mind wanders. I'll let you know with a notification when the
         analysis is complete."</string>
 
-    <!-- Speech - Beyond Verbal | analysis complete response  -->
-    <string-array name="array_bv_analysis_complete" translatable="true">
-        <item>"Thank you %1$s. I'll notify you shortly when I've completed the emotion analysis."</item>
-        <item>"Thank you. I'll notify you when I've completed the analysis."</item>
-        <item>"Thanks. I'll let you know with a notification when I've completed the analysis."</item>
-        <item>"Thank you %1$s. I'll notify you when I've finished the analysis."</item>
-    </string-array>
-
-    <!-- Speech - Wolfram Alpha  -->
-    <string-array name="array_wolfram_alpha_intro" translatable="true">
-        <item>"According to Wolfram Alpha"</item>
-        <item>"As reported by Wolfram Alpha"</item>
-        <item>"The Wolfram Alpha response is"</item>
-    </string-array>
-
-    <!-- Speech - Tasker  -->
-    <string-array name="array_tasker" translatable="true">
-        <item>"Task %1$s executed"</item>
-        <item>"Executed"</item>
-        <item>"Task executed"</item>
-        <item>"I executed the task %1$s"</item>
-    </string-array>
-
-    <!-- Speech - Battery  -->
-    <string-array name="array_battery" translatable="true">
-        <item>"Your battery %1$s is currently %2$s"</item>
-        <item>"Your battery %1$s is %2$s"</item>
-        <item>"The battery %1$s is reporting %2$s"</item>
-        <item>"The battery %1$s is currently %2$s"</item>
-    </string-array>
-
-    <!-- Speech - Song Recognition  -->
-    <string-array name="array_song_recognition" translatable="true">
-        <item>"Starting %1$s"</item>
-        <item>"Opening %1$s"</item>
-        <item>"Asking %1$s"</item>
-    </string-array>
-
-    <!-- Speech - Vocal enrollment api error  -->
-    <string-array name="array_error_enrollment_api" translatable="true">
-        <item>"Really sorry %1$s, but the vocal verification process encountered a problem."</item>
-        <item>"Sorry %1$s, but the vocal verification process encountered a problem."</item>
-    </string-array>
-
-    <!-- Speech - User Name  -->
-    <string-array name="array_user_name" translatable="true">
-        <item>"I will do. %1$s."</item>
-        <item>"Okay, %1$s."</item>
-        <item>"As you wish, %1$s."</item>
-        <item>"Certainly, %1$s."</item>
-        <item>"I will address you as, %1$s."</item>
-        <item>"I will call you, %1$s."</item>
-        <item>"If that's what you want, %1$s."</item>
-        <item>"of course, %1$s."</item>
-        <item>"Whatever you say, %1$s."</item>
-        <item>"I like the name, %1$s."</item>
-        <item>"%1$s is a lovely name"</item>
-        <item>"My favourite name is, %1$s."</item>
-        <item>"%1$s. My favourite name"</item>
-    </string-array>
-
-    <!-- Speech - User Name | error  -->
-    <string-array name="array_user_name_error" translatable="true">
-        <item>"Sorry %1$s, but I'm not sure what you wanted me to call you?"</item>
-        <item>"Really sorry %1$s, but I'm not sure what you wanted me to call you?"</item>
-        <item>"Sorry %1$s, but I didn't correctly hear how you wanted me to address you."</item>
-    </string-array>
-
-    <!-- Speech - User Name | repeat  -->
-    <string-array name="array_user_name_repeat" translatable="true">
-        <item>"I'm already addressing you as %1$s."</item>
-        <item>"I already address you as %1$s."</item>
-        <item>"I'm already calling you %1$s."</item>
-        <item>"I already call you %1$s."</item>
-        <item>"I call you %1$s at the moment"</item>
-        <item>"I call you %1$s already"</item>
-    </string-array>
-
     <!-- Speech - Intro  -->
     <string name="intro_1" translatable="true">"How can I help you %1$s?"</string>
     <string name="intro_2" translatable="true">"I'm listening %1$s."</string>
     <string name="intro_3" translatable="true">"What can I do for you %1$s?"</string>
     <string name="intro_4" translatable="true">"Yes %1$s?"</string>
     <string name="intro_5" translatable="true">"Hello %1$s?"</string>
-
-    <string-array name="array_intro" translatable="true">
-        <item>@string/intro_1</item>
-        <item>@string/intro_2</item>
-        <item>@string/intro_3</item>
-        <item>@string/intro_4</item>
-        <item>@string/intro_5</item>
-    </string-array>
-
-    <!-- Speech - No command was understood -->
-    <string-array name="array_no_comprende" translatable="true">
-        <item>"Really sorry %1$s, but I'm not sure what you meant by that."</item>
-        <item>"Really sorry, but I'm not sure what you meant by that %1$s."</item>
-        <item>"I'm sorry %1$s, but I didn't recognise that command."</item>
-        <item>"I'm sorry, but I didn't recognise that command %1$s."</item>
-    </string-array>
-
-    <!-- Speech - Repeat command -->
-    <string-array name="array_repeat_command" translatable="true">
-        <item>"Really sorry %1$s, could you say that again please."</item>
-        <item>"Sorry %1$s, could you say that again please."</item>
-        <item>"Really sorry %1$s, could you repeat that please."</item>
-        <item>"Sorry %1$s, could you repeat that please."</item>
-        <item>"Could you say that again please %1$s."</item>
-        <item>"Sorry, could you say that again please %1$s."</item>
-        <item>"Really sorry, could you repeat that please %1$s."</item>
-        <item>"Sorry, could you repeat that please %1$s."</item>
-        <item>"Sorry %1$s, I was in a daydream. Could you say that again please."</item>
-        <item>"Sorry, I was in a daydream. Could you say that again please %1$s."</item>
-        <item>"Please can you repeat that %1$s."</item>
-    </string-array>
-
-    <!-- Speech - No network connection -->
-    <string-array name="array_no_network" translatable="true">
-        <item>"Sorry %1$s, but there's a problem with your network connection."</item>
-        <item>"There's a problem with your network connection."</item>
-        <item>"Sorry %1$s, but there's a problem with your network connectivity."</item>
-        <item>"There's a problem with your network connectivity."</item>
-        <item>"Sorry %1$s, but I lost the network connection."</item>
-        <item>"I lost the network connection."</item>
-        <item>"Sorry %1$s, but I lost network connectivity."</item>
-        <item>"I lost network connectivity."</item>
-        <item>"Sorry %1$s, but your network connection is unstable."</item>
-        <item>"There's a problem with your network connection."</item>
-        <item>"Sorry %1$s, but I couldn't process the network request."</item>
-        <item>"I couldn't process the network request."</item>
-        <item>"Sorry %1$s, but there's an issue with your network connection."</item>
-        <item>"There's a issue with your network connection."</item>
-        <item>"Sorry %1$s, but there's an issue with your network connectivity."</item>
-        <item>"There's a issue with your network connectivity."</item>
-    </string-array>
-
-    <!-- Speech - No memory  -->
-    <string-array name="array_no_memory" translatable="true">
-        <item>"Really sorry %1$s, but I've completely forgotten what we were talking about."</item>
-        <item>"Sorry %1$s, but I've completely forgotten what we were talking about."</item>
-        <item>"Sorry %1$s, but I've no idea what we were talking about."</item>
-        <item>"Sorry %1$s, but I've no idea what we were saying."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and completely forgot what we were saying."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and completely forgot what we were talking about."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and I've no idea what we were saying."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and I've no idea what we were talking about."</item>
-        <item>"Sorry %1$s, but my mind is like a sieve today and I can't remember what we were saying."</item>
-        <item>"Sorry %1$s, but my mind is like a sieve today and I can't remember what we were talking about."</item>
-    </string-array>
 
     <!-- Speech - No memory  -->
     <string name="memory_extra_twitter" translatable="true">"Twitter feed"</string>
@@ -867,117 +535,12 @@
     <string name="memory_extra_3" translatable="true">"text messages"</string>
     <string name="memory_extra_4" translatable="true">"emails"</string>
 
-    <string-array name="array_no_memory_extra" translatable="true">
-        <item>@string/memory_extra_1</item>
-        <item>@string/memory_extra_2</item>
-        <item>@string/memory_extra_3</item>
-        <item>@string/memory_extra_4</item>
-        <item>@string/memory_extra_twitter</item>
-        <item>@string/memory_extra_facebook</item>
-        <item>@string/memory_extra_tinder</item>
-        <item>@string/memory_extra_snapchat</item>
-        <item>@string/memory_extra_whatsapp</item>
-    </string-array>
-
-    <string-array name="array_no_memory_extra_unknown" translatable="true">
-        <item>@string/memory_extra_1</item>
-        <item>@string/memory_extra_2</item>
-        <item>@string/memory_extra_3</item>
-        <item>@string/memory_extra_4</item>
-    </string-array>
-
     <string name="cancelled" translatable="true">"cancelled"</string>
     <string name="okay" translatable="true">"okay"</string>
     <string name="alright" translatable="true">"alright"</string>
     <string name="understood" translatable="true">"知道了！"</string>
     <string name="right_you_are" translatable="true">"right you are"</string>
     <string name="okey_dokey" translatable="true">"okey dokey"</string>
-
-    <!-- Speech - Cancelled  -->
-    <string-array name="array_cancel" translatable="true">
-        <item>@string/cancelled</item>
-        <item>@string/okay</item>
-        <item>@string/alright</item>
-        <item>@string/understood</item>
-        <item>@string/right_you_are</item>
-        <item>@string/okey_dokey</item>
-    </string-array>
-
-    <!-- Speech - Copied to clipboard  -->
-    <string-array name="array_clipboard_copy" translatable="true">
-        <item>"I've copied it to the clipboard for you."</item>
-        <item>"That's copied to the clipboard."</item>
-        <item>"I've put it in the clipboard data."</item>
-        <item>"You can paste it from the clipboard"</item>
-        <item>"That's copied to the clipboard, in case you need it."</item>
-    </string-array>
-
-    <!-- Speech - Clipboard access error -->
-    <string-array name="array_error_clipboard_access" translatable="true">
-        <item>"There was a problem accessing your clipboard."</item>
-        <item>"Sorry, but I was unable to access the clipboard data."</item>
-        <item>"Sorry, but I was unable to access any clipboard data."</item>
-        <item>"I was unable to access any clipboard data."</item>
-        <item>"I was unable to access the clipboard data"</item>
-        <item>"I don't seem to be able to access your clipboard data at the moment."</item>
-    </string-array>
-
-    <!-- Speech - Clipboard data error -->
-    <string-array name="array_error_clipboard_data" translatable="true">
-        <item>"The clipboard does not appear to contain any data."</item>
-        <item>"I couldn't detect any data held on the clipboard."</item>
-        <item>"The clipboard appears to be void of any data."</item>
-        <item>"I'm afraid I can't find any data on the clipboard."</item>
-    </string-array>
-
-    <!-- Speech - Spell error  -->
-    <string-array name="array_error_spell" translatable="true">
-        <item>"Sorry, but I didn't detect a word to spell."</item>
-        <item>"I didn't detect the word you wanted to spell in the voice data."</item>
-        <item>"I didn't detect the word you wanted to spell."</item>
-        <item>"Sorry, I'm not sure what you wanted to spell."</item>
-    </string-array>
-
-    <!-- Speech - Vocal enrollment error  -->
-    <string-array name="array_error_enrollment" translatable="true">
-        <item>"Really sorry %1$s, but the verification process failed."</item>
-        <item>"Sorry %1$s, the verification process failed."</item>
-        <item>"Sorry %1$s, but there was a problem with the verification process."</item>
-        <item>"Really sorry %1$s, there was a problem with the verification process."</item>
-    </string-array>
-
-    <!-- Speech - Vocal id error  -->
-    <string-array name="array_error_vocal_id" translatable="true">
-        <item>"Really sorry %1$s, but I was unable to process the audio successfully."</item>
-        <item>"Sorry %1$s, there was a problem when processing the audio."</item>
-        <item>"Sorry %1$s, but an error occurred when I was processing the audio."</item>
-    </string-array>
-
-    <!-- Speech - Vocal id high -->
-    <string-array name="array_vocal_id_high" translatable="true">
-        <item>"I can say with a high level of certainty, that it was you speaking, %1$s"</item>
-        <item>"I can say with a high level of probability, that it was you speaking, %1$s"</item>
-        <item>"There was a high probability, that it was you speaking, %1$s"</item>
-        <item>"I'm certain that it was you speaking, %1$s"</item>
-        <item>"I'd recognise that voice anywhere, %1$s. It was you."</item>
-    </string-array>
-
-    <!-- Speech - Vocal id medium -->
-    <string-array name="array_vocal_id_medium" translatable="true">
-        <item>"I can say with only a medium to low level of certainty, that it was you speaking, %1$s"</item>
-        <item>"I can say with only a medium to low level of probability, that it was you speaking, %1$s"</item>
-        <item>"There is only a medium to low probability, that it was you speaking, %1$s"</item>
-    </string-array>
-
-    <!-- Speech - Vocal id low -->
-    <string-array name="array_vocal_id_low" translatable="true">
-        <item>"I was unable to verify the voice footprint."</item>
-        <item>"I could not match the voice footprint."</item>
-        <item>"There was no match for the voice footprint."</item>
-        <item>"I was unable to successfully match the voice footprint."</item>
-        <item>"I was unable to verify that speaker."</item>
-        <item>"I did not recognise that speaker."</item>
-    </string-array>
 
     <!-- Introduction - name -->
     <string name="master" translatable="true">"Master"</string>

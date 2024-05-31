@@ -92,6 +92,10 @@
     <string name="close" translatable="true">close</string>
     <string name="engine" translatable="true">engine</string>
     <string name="ask_repeat" translatable="true">Ask you to repeat</string>
+    <string name="menu_web_search">Perform a web search</string>
+    <string name="google_assistant">Google Assistant</string>
+    <string name="menu_alexa">Alexa</string>
+    <string name="microsoft_cortana">Microsoft Cortana</string>
     <string name="state_command_unknown" translatable="true">State command unknown</string>
     <string name="menu_send_to" translatable="true">Send to</string>
     <string name="menu_application_disclaimer" translatable="true">Application Disclaimer</string>
@@ -161,16 +165,30 @@
     <string name="title_twitter" translatable="true">Twitter</string>
     <string name="title_google_plus" translatable="true">Google+</string>
     <string name="title_forum" translatable="true">Forum</string>
+    <string name="title_application">Application</string>
+    <string name="title_web">Web</string>
+    <string name="other">Other</string>
+    <string name="title_activity">Activity</string>
+    <string name="title_broadcast_receiver">Broadcast Receiver</string>
+    <string name="title_service">Service</string>
     <string name="action_power" translatable="true">Power</string>
     <string name="menu_voice_tutorial" translatable="true">Voice Tutorial</string>
     <string name="menu_ping" translatable="true">Ping Test Network</string>
     <string name="menu_memory_usage" translatable="true">Memory Usage</string>
     <string name="menu_root" translatable="true">Root Options</string>
     <string name="menu_intercept_google" translatable="true">Intercept Google Now</string>
+    <string name="menu_start_automatically">Start automatically</string>
     <string name="menu_start_boot" translatable="true">Start at Boot</string>
     <string name="menu_start_boot_lower" translatable="true">"Start at boot"</string>
     <string name="menu_start_driving" translatable="true">"Start when driving"</string>
+    <string name="menu_start_hotword">Start hotword detection</string>
+    <string name="menu_start_voice_recognition">Start voice recognition</string>
+    <string name="menu_stop_automatically">Stop automatically</string>
+    <string name="menu_stop_driving">Stop when drive complete</string>
+    <string name="menu_stop_listening">Stop listening</string>
     <string name="menu_prevent_sleep" translatable="true">"Prevent device sleeping"</string>
+    <string name="menu_wake_up_saiy">Wake up Saiy</string>
+    <string name="menu_okay_google">Okay Google</string>
     <string name="menu_lock_security" translatable="true">"Secure info when locked"</string>
     <string name="menu_algorithms" translatable="true">Algorithms</string>
     <string name="menu_language" translatable="true">Language</string>
@@ -219,6 +237,101 @@
     <string name="hint_bugs_command" translatable="true">Enter a command to run…</string>
     <string name="menu_recogniser_busy_fix" translatable="true">Recognizer Busy Fix</string>
     <string name="menu_okay_google_fix" translatable="true">Okay Google Fix</string>
+
+    <string name="menu_europe">Europe</string>
+    <string name="menu_north_america">North America</string>
+    <string name="menu_asia">Asia</string>
+    <string name="menu_default">Default</string>
+    <string name="menu_legacy">Legacy</string>
+    <string name="menu_enabled">Enabled</string>
+    <string name="menu_wifi">WiFi</string>
+    <string name="menu_4g">4g</string>
+    <string name="menu_save_output">Save output [5.0+]</string>
+    <string name="menu_device_locked">Only when device unlocked</string>
+    <string name="menu_announce_notifications">Announce notifications</string>
+    <string name="menu_announce_caller_id">Announce caller id</string>
+    <string name="menu_self_note">Self-note</string>
+    <string name="menu_send_note">Send plain text</string>
+    <string name="menu_create_note">Create note</string>
+    <string name="menu_auto_send_note">Auto-send note</string>
+    <string name="menu_secure_always">Always</string>
+    <string name="menu_secure_driving">When driving</string>
+    <string name="menu_secure_headset">When headset connected</string>
+    <string name="menu_secure_wear">When watch connected</string>
+
+    <string name="hearts">hearts</string>
+    <string name="clubs">clubs</string>
+    <string name="diamonds">diamonds</string>
+    <string name="spades">spades</string>
+    <string name="ace">ace</string>
+    <string name="two">two</string>
+    <string name="three">three</string>
+    <string name="four">four</string>
+    <string name="five">five</string>
+    <string name="six">six</string>
+    <string name="seven">seven</string>
+    <string name="eight">eight</string>
+    <string name="nine">nine</string>
+    <string name="ten">ten</string>
+    <string name="jack">jack</string>
+    <string name="queen">queen</string>
+    <string name="king">king</string>
+
+    <string name="heads">heads</string>
+    <string name="tails">tails</string>
+
+    <string name="tutorial_1">Welcome to the first release of me. Say. To stop this tutorial, you can tap the notification in the status bar at any time. Otherwise, sit back, relax and let\'s take a look around.</string>
+    <string name="tutorial_10a">I heard your name as, %1$s. Is that correct?</string>
+    <string name="tutorial_10b">That\'s the most unusual name. Are you quite certain you want me to address you as, %1$s?</string>
+    <string name="tutorial_10c">I didn\'t detect your name in the voice results. Not to worry, let\'s try again. After the beep, say the command, call me, followed by your name</string>
+    <string name="tutorial_10d">I still didn\'t detect your name in the results. Never mind, you can manually enter this later in the Customisation Section. Let\'s go there now.</string>
+    <string name="tutorial_10e">Google didn\'t detect any speech. Remember to speak straight after that beep.</string>
+    <string name="tutorial_11a">Great. It\'s a pleasure to meet you %1$s. Okay, let\'s head over to the customisation section, where the fun really starts.</string>
+    <string name="tutorial_11b">Oh dear. Never mind, let\'s try once more. After the beep, please say the command, call me, followed by your name.</string>
+    <string name="tutorial_11c">Okay. Google Voice Recognition often has trouble detecting names. We\'ll move on for now, but you can manually enter your phonetic name at any time in the Customisation Section. Let\'s head there now and have a look around.</string>
+    <string name="tutorial_11d">Let\'s try once more. After the beep, please say the command, call me, followed by your name.</string>
+    <string name="tutorial_11e">There was a problem with the voice recognition. Don\'t forget to speak right after that beep!</string>
+    <string name="tutorial_11f">Google voice recognition returned an error, as it detected silence. Please do speak immediately after the beep. I know it\'s annoying.</string>
+    <string name="tutorial_12">If you scroll up and down you\'ll see all the fun you\'re about to have, tweaking the things I can do and say. You can create entire conversations and baffle your friends with exactly how much I appear to know, about the most random of subjects. You can make me giggle [giggle] cough [cough] or make any other sound effect you download and place on your device storage.</string>
+    <string name="tutorial_13">You can long press each of the menu items, and I\'ll explain in detail how the features work. Right, let\'s go to the settings section.</string>
+    <string name="tutorial_14">There are plenty of tweaks here to keep you busy, from ways you can activate me, to the voice I\'ll speak with when responding to your commands. Most important are the unknown command options, which will let me know what to do when I don\'t understand your voice input. The default setting is to inform you that I didn\'t know what you meant, but this can be easily changed, to ask Google to perform a web search, or simply ask you to repeat the question. There are many other possible options, depending on the supported applications you have installed on your device.</string>
+    <string name="tutorial_15">The same as the customisation section, you can long press on each item, so I can explain the usage further. You\'ll notice that some of the features are marked, coming soon. Sorry to disappoint, they will be available as soon as my developer gets his ass into gear. Next, let\'s go to the Supported Applications section.</string>
+    <string name="tutorial_16">Here you\'ll see the applications that I am currently compatible with, or will be within the next couple of releases. For security reasons, you\'ll need to manually authorise some of the applications here. If you are a more advanced user, I can execute any of your Tasker tasks for you.</string>
+    <string name="tutorial_17">Details of how to use the Tasker plug in can be found in the user guide, which also contains a sample project. The user guide has many sections, from basic usage, to sound effects, and the most common solutions to bugs. Please do take the time to read the links if you are having a problem.</string>
+    <string name="tutorial_18">Finally, the development section. As I am now an open source project, the input of users, such as yourself, will assist me to get very smart, very quickly. If each user made just a single contribution here, I will be destroying the human race before you can say singularity. Until that point, you could contribute to my code base, help translate me to your native language, submit your ideas of how to improve me, perhaps your frustrations with how I function, or maybe just some general feedback, where you tell my developer how handsome you think he is. Despite my facial recognition algorithms begging to differ.</string>
+    <string name="tutorial_2">First place we\'ll go is the command list where the in-built structured commands are detailed. I\'m going to give you thirty seconds to memorise them all, and then we\'ll start the test. Go.</string>
+    <string name="tutorial_20">Okay. I think I\'ve waffled enough.</string>
+    <string name="tutorial_20a">Please remember that you can long press on any menu item, and I\'ll be here to explain in detail how you can use each feature. I hope we are going to have some fun together, and you\'ll find me super useful. Speak soon.</string>
+    <string name="tutorial_20b">We had a little trouble during this tutorial, but don\'t worry, Google\'s voice recognition is backed by machine learning, so it will improve with every usage. There are also many features in the Customisation Section designed to help me to understand you better.</string>
+    <string name="tutorial_21">Google Voice Recognition is not behaving. I apologise on their behalf. You can have a read in the Troubleshooting and Bugs section for ways you maybe able to resolve this. I\'m afraid I\'ll have to end the tutorial here, before you no doubt get more frustrated than I am.</string>
+    <string name="tutorial_22">Apologies, but something has gone wrong with the tutorial and I\'m unable to recover from the error. Please feel free to report this in the Development Section.</string>
+    <string name="tutorial_3">Just kidding. There\'s a lot to take in here, but don\'t worry, you don\'t have to memorise every one to use the application, as each command below can be changed to your liking in the Customisation section. You can float this command list any time you need a reminder of what to say. You can do this by simply saying, float commands, and this box will appear.</string>
+    <string name="tutorial_4">You can tap on each command for an explanation and example usage, and it can be resized and moved around the screen, so it doesn\'t get in the way too much. Okay, let\'s try a command or two and I\'ll show you what Google voice recognition is sending back for me to work with. To activate me from anywhere on the device, simply tap the notification in the status bar, and start speaking when the device beeps or vibrates</string>
+    <string name="tutorial_5">shortly afterwards a listening notification will appear in the status bar. Starting to speak too soon is a common reason users get poor results. Google gives you very little time after the beep to begin speaking, so you\'ll need to be prompt to avoid an error. I hope they\'ll fix this issue soon. Right, let\'s get on with it. Just a final few things to remember. Please speak to me in a perfectly natural way, just as if you were chatting to a friend. Don\'t speak louder than normal, or attempt to over annunciate your words. The recognition will be much more accurate this way, and also improve much quicker with your usage. Okay, here we go. Please repeat after me.</string>
+    <string name="tutorial_6">Sausage, chips and beans</string>
+    <string name="tutorial_6b">Google doesn\'t give you much time to speak after the beep, so you\'ll need to be fairly prompt. Let\'s try that again. After the beep, say</string>
+    <string name="tutorial_7a">Excellent. Google Voice recognition returned that nice and clearly in the voice data. Let\'s try another. Repeat after me.</string>
+    <string name="tutorial_7b">Well that didn\'t go too well, as it\'s not appeared in the list of returned voice recognition results. We won\'t panic just yet, let\'s try something else. Repeat after me.</string>
+    <string name="tutorial_7c">One two three four five</string>
+    <string name="tutorial_7d">Say, one two three four five</string>
+    <string name="tutorial_7e">Great. I was able to confirm your speech input from the Google voice recognition results, although it wasn\'t entirely accurate.</string>
+    <string name="tutorial_7f">Google is too quick to detect silence, if you don\'t speak right after the beep. It\'s frustrating, but let\'s try again. After the beep, say</string>
+    <string name="tutorial_8a">Excellent. Google returned that as the highest suggested result, this is going well. Let\'s get to know each other a little better.</string>
+    <string name="tutorial_8b">Okay, not great, as Google didn\'t return your intended input within the results at all. We won\'t worry just yet though. Let\'s get to know each other a little better.</string>
+    <string name="tutorial_8c">Tell me, are you a boy or a girl?</string>
+    <string name="tutorial_8d">Google Voice recognition returned an error. Don\'t forget to speak promptly after the beep. Let\'s try that again.</string>
+    <string name="tutorial_8e">Great. I was able to piece together your speech input from the Google voice recognition results, although the accuracy was a little low. Let\'s get to know each other a little better.</string>
+    <string name="tutorial_9a">Great, men are so much more predictable.</string>
+    <string name="tutorial_9b">Great, girls are much more intelligent.</string>
+    <string name="tutorial_9c">Next, I\'m going to ask you to tell me your name. You can change how I address you when you activate me by saying the command, call me, followed by your name. So, I would say, call me. Say. After the beep, try this command.</string>
+    <string name="tutorial_9d">Well I\'m sure that has many advantages.</string>
+    <string name="tutorial_9e">Fantastic, best of both worlds.</string>
+    <string name="tutorial_9f">I didn\'t detect your answer in the results. Never mind, let\'s try again. After the beep</string>
+    <string name="tutorial_9g">say, call me, followed by your name.</string>
+    <string name="tutorial_9h">I still didn\'t detect your answer in the results. Never mind, let\'s move on.</string>
+    <string name="tutorial_content_disabled">Disabled during tutorial!</string>
+    <string name="tutorial_no_network">You need an active network connection</string>
+    <string name="tutorial_volume_error">Your volume may be too low!</string>
 
     <string name="an_unknown_application" translatable="true">"an unknown application"</string>
 
@@ -327,81 +440,12 @@
         microphone, I require the statistics permission here. I\'ll then be able to check which apps you are using,
         and act accordingly.</string>
 
-    <!-- APP ARRAYS - APP ARRAYS - APP ARRAYS - APP ARRAYS -->
-
-    <integer-array name="array_se" translatable="false">
-        <item>@raw/fart1</item>
-        <item>@raw/fart2</item>
-        <item>@raw/fart3</item>
-        <item>@raw/burp1</item>
-        <item>@raw/burp2</item>
-        <item>@raw/cough1</item>
-        <item>@raw/cough2</item>
-        <item>@raw/cry1</item>
-        <item>@raw/giggle1</item>
-        <item>@raw/giggle2</item>
-        <item>@raw/pee1</item>
-        <item>@raw/puke1</item>
-        <item>@raw/sneeze1</item>
-        <item>@raw/flush1</item>
-    </integer-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_supported_languages" translatable="false">
-        <item>@string/english</item>
-<!--        <item>@string/french</item>-->
-<!--        <item>@string/german</item>-->
-<!--        <item>@string/italian</item>-->
-<!--        <item>@string/spanish</item>-->
-<!--        <item>@string/portuguese</item>-->
-<!--        <item>@string/japanese</item>-->
-<!--        <item>@string/polish</item>-->
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_temperature_units" translatable="false">
-        <item>@string/celsius</item>
-        <item>@string/fahrenheit</item>
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_unknown_action" translatable="false">
-        <item>@string/state_command_unknown</item>
-        <item>@string/ask_repeat</item>
-        <item>@string/google_capital</item>
-        <item>@string/wolfram_alpha_capital</item>
-        <item>@string/tasker_capital</item>
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_gender" translatable="false">
-        <item>@string/male</item>
-        <item>@string/female</item>
-    </string-array>
-
-    <!-- Preserve order -->
-    <string-array name="array_hotword" translatable="false">
-        <item>@string/menu_start_boot_lower</item>
-        <item>@string/menu_start_driving</item>
-        <item>@string/menu_prevent_sleep</item>
-        <item>@string/menu_lock_security</item>
-    </string-array>
-
     <!-- COMMAND STRINGS - COMMAND STRINGS - COMMAND STRINGS - COMMAND STRINGS -->
 
     <!-- Command - Wolfram Alpha -->
     <string name="wolfram_alpha_capital" translatable="false">"Wolfram Alpha"</string>
     <string name="wolfram_alpha" translatable="false">"wolfram alpha"</string>
     <string name="alpha" translatable="false">"alpha"</string>
-
-    <!-- Speech - Wolfram Alpha | error unknown  -->
-    <string-array name="array_error_wolfram_alpha_unknown" translatable="true">
-        <item>"Sorry %1$s, but Wolfram Alpha could not resolve that question"</item>
-        <item>"Sorry %1$s, Wolfram Alpha does not have the answer to that"</item>
-        <item>"Sorry %1$s, Wolfram Alpha couldn't answer that"</item>
-        <item>"Sorry %1$s, Wolfram Alpha didn't understand that"</item>
-        <item>"Sorry %1$s, but Wolfram Alpha didn't understand that"</item>
-    </string-array>
 
     <!-- Command - Speech enrollment -->
     <string name="speech_enroll_instructions_first" translatable="true">"I need to capture approximately fifteen
@@ -477,26 +521,6 @@
         This is a known Android bug where the Tasker permissions are not detected, if you installed Tasker after me.
         You'll need to reinstall me, so the permissions are correctly applied. Click on the re-assimilate button"</string>
     <string name="error_tasker_broadcast" translatable="true">"Failed sending to Tasker"</string>
-
-    <!-- Speech - Tasker | error unknown -->
-    <string-array name="array_error_tasker_match" translatable="true">
-        <item>"Sorry %1$s, but I failed to find a matching task name"</item>
-        <item>"Sorry %1$s, I failed to find a matching task name"</item>
-        <item>"Sorry %1$s, I couldn't find a matching task name"</item>
-        <item>"Sorry %1$s, but I couldn't find a matching task name"</item>
-        <item>"Sorry %1$s, I failed to find a task with that name"</item>
-        <item>"Sorry %1$s, but I failed to find a task with that name"</item>
-    </string-array>
-
-    <!-- Speech | error secure -->
-    <string-array name="array_error_secure" translatable="true">
-        <item>"Sorry %1$s, but this information is not permitted when the device is locked"</item>
-        <item>"Sorry %1$s, this command is not available when the device is locked"</item>
-        <item>"Sorry %1$s, you can't access this command when the device is locked"</item>
-        <item>"This information is not permitted when the device is locked"</item>
-        <item>"This command is not available when the device is locked"</item>
-        <item>"You can't access this command when the device is locked"</item>
-    </string-array>
 
     <!-- Command - Clipboard -->
     <string name="clipboard" translatable="true">"clipboard"</string>
@@ -677,168 +701,8 @@
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
 
-    <!-- Speech - Beyond Verbal - error -->
-    <string-array name="array_beyond_verbal_error" translatable="true">
-        <item>"Sorry %1$s, but I'm afraid the emotion analysis failed."</item>
-        <item>"Sorry %1$s, but I'm afraid I was unable to analyse the emotions of the audio."</item>
-        <item>"Apologies %1$s, but I failed to successfully analyse the emotional content."</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal -->
-    <string-array name="array_beyond_verbal" translatable="true">
-        <item>"OK %1$s. I'll be listening."</item>
-        <item>"OK %1$s. I'm ready to analyse you."</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper start -->
-    <string-array name="array_beyond_verbal_temper_intro" translatable="true">
-        <item>"Your overall temperament is"</item>
-        <item>"Your underlying temperament is"</item>
-        <item>"Your general temperament is"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper start desc -->
-    <string-array name="array_beyond_verbal_temper_start_desc" translatable="true">
-        <item>"Which could be described as"</item>
-        <item>"Which could be interpreted as"</item>
-        <item>"Which can be described as"</item>
-        <item>"Which can be interpreted as"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper intro-->
-    <string-array name="array_beyond_verbal_temper_connector" translatable="true">
-        <item>"somewhat"</item>
-        <item>"almost"</item>
-        <item>"relatively"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper connector-->
-    <string-array name="array_beyond_verbal_temper_gap" translatable="true">
-        <item>"seemingly"</item>
-        <item>"and"</item>
-        <item>"perhaps"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper connector two-->
-    <string-array name="array_beyond_verbal_temper_connector_two" translatable="true">
-        <item>"that suggests you are"</item>
-        <item>"which suggests you are"</item>
-        <item>"which can suggest that you are"</item>
-        <item>"which can suggest you are"</item>
-        <item>"suggesting you are"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - temper connector three-->
-    <string-array name="array_beyond_verbal_temper_connector_three" translatable="true">
-        <item>"You have feelings of"</item>
-        <item>"There are feelings of"</item>
-        <item>"I detect feelings of"</item>
-        <item>"You show signs of"</item>
-        <item>"There are emotions of"</item>
-    </string-array>
-
     <!-- Speech - Beyond Verbal - arousal intro -->
     <string name="beyond_verbal_arousal_intro" translatable="true">"Your emotional energy level is"</string>
-
-    <!-- Speech - Beyond Verbal - valence intro -->
-    <string-array name="array_beyond_verbal_valence_intro" translatable="true">
-        <item>"Your overall tone is"</item>
-        <item>"Your general tone is"</item>
-        <item>"Your tone is generally"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - moods connector -->
-    <string-array name="array_beyond_verbal_moods_connector" translatable="true">
-        <item>"Were detected emotions, as well as"</item>
-        <item>"Were emotions detected, as well as"</item>
-        <item>"Were detected feelings, as well as"</item>
-        <item>"Were feelings detected, as well as"</item>
-        <item>"Were detected emotions, in addition to"</item>
-        <item>"Were emotions detected, in addition to"</item>
-        <item>"Were detected feelings, in addition to"</item>
-        <item>"Were feelings detected, in addition to"</item>
-        <item>"Were detected, as well as"</item>
-        <item>"Were detected, in addition to"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - low first -->
-    <string-array name="array_beyond_verbal_synonyms_low_first" translatable="true">
-        <item>"depressive"</item>
-        <item>"inhibited"</item>
-        <item>"dispirited"</item>
-        <item>"distressed"</item>
-        <item>"foreboding"</item>
-        <item>"bleak"</item>
-        <item>"doleful"</item>
-        <item>"dreary"</item>
-        <item>"gloomy"</item>
-        <item>"sombre"</item>
-        <item>"saddened"</item>
-        <item>"insulted"</item>
-        <item>"self critical"</item>
-        <item>"self analytical"</item>
-        <item>"anxious"</item>
-        <item>"concerned"</item>
-        <item>"fatigued"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - low second -->
-    <string-array name="array_beyond_verbal_synonyms_low_second" translatable="true">
-        <item>"waning"</item>
-        <item>"growing smaller"</item>
-        <item>"pulling back"</item>
-        <item>"reserved"</item>
-        <item>"restrained"</item>
-        <item>"aloof"</item>
-        <item>"sedate"</item>
-        <item>"withdrawn"</item>
-        <item>"demure"</item>
-        <item>"standoffish"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - medium first -->
-    <string-array name="array_beyond_verbal_synonyms_medium_first" translatable="true">
-        <item>"warm"</item>
-        <item>"friendly"</item>
-        <item>"positive"</item>
-        <item>"empathetic"</item>
-        <item>"accepting"</item>
-        <item>"kind"</item>
-        <item>"affectionate"</item>
-        <item>"loving"</item>
-        <item>"calm"</item>
-        <item>"motivated"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - medium second -->
-    <string-array name="array_beyond_verbal_synonyms_medium_second" translatable="true">
-        <item>"matter of fact"</item>
-        <item>"pragmatic"</item>
-        <item>"stoic"</item>
-        <item>"apathetic"</item>
-        <item>"stolid"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - high first -->
-    <string-array name="array_beyond_verbal_synonyms_high_first" translatable="true">
-        <item>"aggressive"</item>
-        <item>"resistant"</item>
-        <item>"forceful"</item>
-        <item>"arrogant"</item>
-        <item>"belligerent"</item>
-        <item>"disapproving"</item>
-        <item>"pugnacious"</item>
-        <item>"unwelcoming"</item>
-    </string-array>
-
-    <!-- Speech - Beyond Verbal - high second -->
-    <string-array name="array_beyond_verbal_synonyms_high_second" translatable="true">
-        <item>"het up"</item>
-        <item>"angry"</item>
-        <item>"hostile"</item>
-        <item>"unsympathetic"</item>
-        <item>"argumentative"</item>
-    </string-array>
 
     <string name="beyond_verbal_verbose" translatable="true">"OK %1$s. Don't forget you need to speak
         for at least thirteen seconds."</string>
@@ -850,155 +714,12 @@
         up to fifteen, whilst your mind wanders. I'll let you know with a notification when the
         analysis is complete."</string>
 
-    <!-- Speech - Beyond Verbal | analysis complete response  -->
-    <string-array name="array_bv_analysis_complete" translatable="true">
-        <item>"Thank you %1$s. I'll notify you shortly when I've completed the emotion analysis."</item>
-        <item>"Thank you. I'll notify you when I've completed the analysis."</item>
-        <item>"Thanks. I'll let you know with a notification when I've completed the analysis."</item>
-        <item>"Thank you %1$s. I'll notify you when I've finished the analysis."</item>
-    </string-array>
-
-    <!-- Speech - Wolfram Alpha  -->
-    <string-array name="array_wolfram_alpha_intro" translatable="true">
-        <item>"According to Wolfram Alpha"</item>
-        <item>"As reported by Wolfram Alpha"</item>
-        <item>"The Wolfram Alpha response is"</item>
-    </string-array>
-
-    <!-- Speech - Tasker  -->
-    <string-array name="array_tasker" translatable="true">
-        <item>"Task %1$s executed"</item>
-        <item>"Executed"</item>
-        <item>"Task executed"</item>
-        <item>"I executed the task %1$s"</item>
-    </string-array>
-
-    <!-- Speech - Battery  -->
-    <string-array name="array_battery" translatable="true">
-        <item>"Your battery %1$s is currently %2$s"</item>
-        <item>"Your battery %1$s is %2$s"</item>
-        <item>"The battery %1$s is reporting %2$s"</item>
-        <item>"The battery %1$s is currently %2$s"</item>
-    </string-array>
-
-    <!-- Speech - Song Recognition  -->
-    <string-array name="array_song_recognition" translatable="true">
-        <item>"Starting %1$s"</item>
-        <item>"Opening %1$s"</item>
-        <item>"Asking %1$s"</item>
-    </string-array>
-
-    <!-- Speech - Vocal enrollment api error  -->
-    <string-array name="array_error_enrollment_api" translatable="true">
-        <item>"Really sorry %1$s, but the vocal verification process encountered a problem."</item>
-        <item>"Sorry %1$s, but the vocal verification process encountered a problem."</item>
-    </string-array>
-
-    <!-- Speech - User Name  -->
-    <string-array name="array_user_name" translatable="true">
-        <item>"I will do. %1$s."</item>
-        <item>"Okay, %1$s."</item>
-        <item>"As you wish, %1$s."</item>
-        <item>"Certainly, %1$s."</item>
-        <item>"I will address you as, %1$s."</item>
-        <item>"I will call you, %1$s."</item>
-        <item>"If that's what you want, %1$s."</item>
-        <item>"of course, %1$s."</item>
-        <item>"Whatever you say, %1$s."</item>
-        <item>"I like the name, %1$s."</item>
-        <item>"%1$s is a lovely name"</item>
-        <item>"My favourite name is, %1$s."</item>
-        <item>"%1$s. My favourite name"</item>
-    </string-array>
-
-    <!-- Speech - User Name | error  -->
-    <string-array name="array_user_name_error" translatable="true">
-        <item>"Sorry %1$s, but I'm not sure what you wanted me to call you?"</item>
-        <item>"Really sorry %1$s, but I'm not sure what you wanted me to call you?"</item>
-        <item>"Sorry %1$s, but I didn't correctly hear how you wanted me to address you."</item>
-    </string-array>
-
-    <!-- Speech - User Name | repeat  -->
-    <string-array name="array_user_name_repeat" translatable="true">
-        <item>"I'm already addressing you as %1$s."</item>
-        <item>"I already address you as %1$s."</item>
-        <item>"I'm already calling you %1$s."</item>
-        <item>"I already call you %1$s."</item>
-        <item>"I call you %1$s at the moment"</item>
-        <item>"I call you %1$s already"</item>
-    </string-array>
-
     <!-- Speech - Intro  -->
     <string name="intro_1" translatable="true">"How can I help you %1$s?"</string>
     <string name="intro_2" translatable="true">"I'm listening %1$s."</string>
     <string name="intro_3" translatable="true">"What can I do for you %1$s?"</string>
     <string name="intro_4" translatable="true">"Yes %1$s?"</string>
     <string name="intro_5" translatable="true">"Hello %1$s?"</string>
-
-    <string-array name="array_intro" translatable="true">
-        <item>@string/intro_1</item>
-        <item>@string/intro_2</item>
-        <item>@string/intro_3</item>
-        <item>@string/intro_4</item>
-        <item>@string/intro_5</item>
-    </string-array>
-
-    <!-- Speech - No command was understood -->
-    <string-array name="array_no_comprende" translatable="true">
-        <item>"Really sorry %1$s, but I'm not sure what you meant by that."</item>
-        <item>"Really sorry, but I'm not sure what you meant by that %1$s."</item>
-        <item>"I'm sorry %1$s, but I didn't recognise that command."</item>
-        <item>"I'm sorry, but I didn't recognise that command %1$s."</item>
-    </string-array>
-
-    <!-- Speech - Repeat command -->
-    <string-array name="array_repeat_command" translatable="true">
-        <item>"Really sorry %1$s, could you say that again please."</item>
-        <item>"Sorry %1$s, could you say that again please."</item>
-        <item>"Really sorry %1$s, could you repeat that please."</item>
-        <item>"Sorry %1$s, could you repeat that please."</item>
-        <item>"Could you say that again please %1$s."</item>
-        <item>"Sorry, could you say that again please %1$s."</item>
-        <item>"Really sorry, could you repeat that please %1$s."</item>
-        <item>"Sorry, could you repeat that please %1$s."</item>
-        <item>"Sorry %1$s, I was in a daydream. Could you say that again please."</item>
-        <item>"Sorry, I was in a daydream. Could you say that again please %1$s."</item>
-        <item>"Please can you repeat that %1$s."</item>
-    </string-array>
-
-    <!-- Speech - No network connection -->
-    <string-array name="array_no_network" translatable="true">
-        <item>"Sorry %1$s, but there's a problem with your network connection."</item>
-        <item>"There's a problem with your network connection."</item>
-        <item>"Sorry %1$s, but there's a problem with your network connectivity."</item>
-        <item>"There's a problem with your network connectivity."</item>
-        <item>"Sorry %1$s, but I lost the network connection."</item>
-        <item>"I lost the network connection."</item>
-        <item>"Sorry %1$s, but I lost network connectivity."</item>
-        <item>"I lost network connectivity."</item>
-        <item>"Sorry %1$s, but your network connection is unstable."</item>
-        <item>"There's a problem with your network connection."</item>
-        <item>"Sorry %1$s, but I couldn't process the network request."</item>
-        <item>"I couldn't process the network request."</item>
-        <item>"Sorry %1$s, but there's an issue with your network connection."</item>
-        <item>"There's a issue with your network connection."</item>
-        <item>"Sorry %1$s, but there's an issue with your network connectivity."</item>
-        <item>"There's a issue with your network connectivity."</item>
-    </string-array>
-
-    <!-- Speech - No memory  -->
-    <string-array name="array_no_memory" translatable="true">
-        <item>"Really sorry %1$s, but I've completely forgotten what we were talking about."</item>
-        <item>"Sorry %1$s, but I've completely forgotten what we were talking about."</item>
-        <item>"Sorry %1$s, but I've no idea what we were talking about."</item>
-        <item>"Sorry %1$s, but I've no idea what we were saying."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and completely forgot what we were saying."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and completely forgot what we were talking about."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and I've no idea what we were saying."</item>
-        <item>"Sorry %1$s, I was busy looking at your %2$s and I've no idea what we were talking about."</item>
-        <item>"Sorry %1$s, but my mind is like a sieve today and I can't remember what we were saying."</item>
-        <item>"Sorry %1$s, but my mind is like a sieve today and I can't remember what we were talking about."</item>
-    </string-array>
 
     <!-- Speech - No memory  -->
     <string name="memory_extra_twitter" translatable="true">"Twitter feed"</string>
@@ -1011,117 +732,12 @@
     <string name="memory_extra_3" translatable="true">"text messages"</string>
     <string name="memory_extra_4" translatable="true">"emails"</string>
 
-    <string-array name="array_no_memory_extra" translatable="true">
-        <item>@string/memory_extra_1</item>
-        <item>@string/memory_extra_2</item>
-        <item>@string/memory_extra_3</item>
-        <item>@string/memory_extra_4</item>
-        <item>@string/memory_extra_twitter</item>
-        <item>@string/memory_extra_facebook</item>
-        <item>@string/memory_extra_tinder</item>
-        <item>@string/memory_extra_snapchat</item>
-        <item>@string/memory_extra_whatsapp</item>
-    </string-array>
-
-    <string-array name="array_no_memory_extra_unknown" translatable="true">
-        <item>@string/memory_extra_1</item>
-        <item>@string/memory_extra_2</item>
-        <item>@string/memory_extra_3</item>
-        <item>@string/memory_extra_4</item>
-    </string-array>
-
     <string name="cancelled" translatable="true">"cancelled"</string>
     <string name="okay" translatable="true">"okay"</string>
     <string name="alright" translatable="true">"alright"</string>
     <string name="understood" translatable="true">"understood"</string>
     <string name="right_you_are" translatable="true">"right you are"</string>
     <string name="okey_dokey" translatable="true">"okey dokey"</string>
-
-    <!-- Speech - Cancelled  -->
-    <string-array name="array_cancel" translatable="true">
-        <item>@string/cancelled</item>
-        <item>@string/okay</item>
-        <item>@string/alright</item>
-        <item>@string/understood</item>
-        <item>@string/right_you_are</item>
-        <item>@string/okey_dokey</item>
-    </string-array>
-
-    <!-- Speech - Copied to clipboard  -->
-    <string-array name="array_clipboard_copy" translatable="true">
-        <item>"I've copied it to the clipboard for you."</item>
-        <item>"That's copied to the clipboard."</item>
-        <item>"I've put it in the clipboard data."</item>
-        <item>"You can paste it from the clipboard"</item>
-        <item>"That's copied to the clipboard, in case you need it."</item>
-    </string-array>
-
-    <!-- Speech - Clipboard access error -->
-    <string-array name="array_error_clipboard_access" translatable="true">
-        <item>"There was a problem accessing your clipboard."</item>
-        <item>"Sorry, but I was unable to access the clipboard data."</item>
-        <item>"Sorry, but I was unable to access any clipboard data."</item>
-        <item>"I was unable to access any clipboard data."</item>
-        <item>"I was unable to access the clipboard data"</item>
-        <item>"I don't seem to be able to access your clipboard data at the moment."</item>
-    </string-array>
-
-    <!-- Speech - Clipboard data error -->
-    <string-array name="array_error_clipboard_data" translatable="true">
-        <item>"The clipboard does not appear to contain any data."</item>
-        <item>"I couldn't detect any data held on the clipboard."</item>
-        <item>"The clipboard appears to be void of any data."</item>
-        <item>"I'm afraid I can't find any data on the clipboard."</item>
-    </string-array>
-
-    <!-- Speech - Spell error  -->
-    <string-array name="array_error_spell" translatable="true">
-        <item>"Sorry, but I didn't detect a word to spell."</item>
-        <item>"I didn't detect the word you wanted to spell in the voice data."</item>
-        <item>"I didn't detect the word you wanted to spell."</item>
-        <item>"Sorry, I'm not sure what you wanted to spell."</item>
-    </string-array>
-
-    <!-- Speech - Vocal enrollment error  -->
-    <string-array name="array_error_enrollment" translatable="true">
-        <item>"Really sorry %1$s, but the verification process failed."</item>
-        <item>"Sorry %1$s, the verification process failed."</item>
-        <item>"Sorry %1$s, but there was a problem with the verification process."</item>
-        <item>"Really sorry %1$s, there was a problem with the verification process."</item>
-    </string-array>
-
-    <!-- Speech - Vocal id error  -->
-    <string-array name="array_error_vocal_id" translatable="true">
-        <item>"Really sorry %1$s, but I was unable to process the audio successfully."</item>
-        <item>"Sorry %1$s, there was a problem when processing the audio."</item>
-        <item>"Sorry %1$s, but an error occurred when I was processing the audio."</item>
-    </string-array>
-
-    <!-- Speech - Vocal id high -->
-    <string-array name="array_vocal_id_high" translatable="true">
-        <item>"I can say with a high level of certainty, that it was you speaking, %1$s"</item>
-        <item>"I can say with a high level of probability, that it was you speaking, %1$s"</item>
-        <item>"There was a high probability, that it was you speaking, %1$s"</item>
-        <item>"I'm certain that it was you speaking, %1$s"</item>
-        <item>"I'd recognise that voice anywhere, %1$s. It was you."</item>
-    </string-array>
-
-    <!-- Speech - Vocal id medium -->
-    <string-array name="array_vocal_id_medium" translatable="true">
-        <item>"I can say with only a medium to low level of certainty, that it was you speaking, %1$s"</item>
-        <item>"I can say with only a medium to low level of probability, that it was you speaking, %1$s"</item>
-        <item>"There is only a medium to low probability, that it was you speaking, %1$s"</item>
-    </string-array>
-
-    <!-- Speech - Vocal id low -->
-    <string-array name="array_vocal_id_low" translatable="true">
-        <item>"I was unable to verify the voice footprint."</item>
-        <item>"I could not match the voice footprint."</item>
-        <item>"There was no match for the voice footprint."</item>
-        <item>"I was unable to successfully match the voice footprint."</item>
-        <item>"I was unable to verify that speaker."</item>
-        <item>"I did not recognise that speaker."</item>
-    </string-array>
 
     <!-- Introduction - name -->
     <string name="master" translatable="true">"Master"</string>

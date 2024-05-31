@@ -80,7 +80,7 @@ public class SelfAwareHelper {
     private static final String FULL_STOP_SPACE = ". ";
     private static final String QUESTION_MARK_SPACE = "? ";
     private static final String EXCLAMATION_MARK_SPACE = "! ";
-    private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+    private static final String LINE_SEPARATOR = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ?System.lineSeparator():System.getProperty("line.separator");;
     private static final String COMMA_SPACE = ", ";
     private static final String JUST_A_SPACE = " ";
 

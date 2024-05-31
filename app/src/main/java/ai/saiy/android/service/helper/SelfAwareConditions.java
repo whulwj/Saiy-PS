@@ -324,18 +324,6 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
     }
 
     /**
-     * Check to see if we have the write files permission
-     *
-     * @return true if the permission has been granted
-     */
-    public boolean checkFilePermission() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "checkFilePermission");
-        }
-        return PermissionHelper.checkFilePermissions(mContext);
-    }
-
-    /**
      * Check if the user deliberately requested to stop the speech or recognition. This handles errors
      * of Text to Speech engines incorrectly throwing {@link android.speech.tts.UtteranceProgressListener#onError(String)}
      * instead of {@link android.speech.tts.UtteranceProgressListener#onStop(String, boolean)}
