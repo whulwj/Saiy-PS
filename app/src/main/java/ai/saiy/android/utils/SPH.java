@@ -65,6 +65,7 @@ public class SPH {
 
     private static final int ZERO = 0;
     private static final int ONE = 1;
+    public static final int TRESS = 3;
 
     private static final String DEFAULT_RECOGNITION = "default_recognition";
     private static final String DEFAULT_LANGUAGE_MODEL = "default_language_model";
@@ -92,6 +93,8 @@ public class SPH {
     private static final String PING_TIMEOUT = "ping_timeout";
     private static final String CONNECTION_MINIMUM = "connection_minimum";
     private static final String USER_NAME = "user_name";
+    private static final String USER_GENDER = "user_gender";
+    private static final String USER_ACCOUNT = "user_account";
     private static final String HOTWORD = "hotword";
     private static final String HOTWORD_BOOT = "hotword_boot";
     private static final String HOTWORD_DRIVING = "hotword_driving";
@@ -133,6 +136,7 @@ public class SPH {
     private static final String ANNOUNCE_NOTIFICATIONS = "announce_notifications";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
+    private static final String MIC_FIRST = "mic_first";
 
     /**
      * Prevent instantiation
@@ -1817,6 +1821,27 @@ public class SPH {
         edit.commit();
     }
 
+    public static Gender getUserGender(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        return Gender.getGender(pref.getString(USER_GENDER, Gender.FEMALE.name()));
+    }
+
+    public static void setUserGender(@NonNull final Context ctx, @NonNull final Gender gender) {
+        final SharedPreferences pref = getPref(ctx);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putString(USER_GENDER, gender.name());
+        edit.apply();
+    }
+
+    public static void setUserAccount(@NonNull final Context ctx, @NonNull final String account) {
+        final SharedPreferences pref = getPref(ctx);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putString(USER_ACCOUNT, account);
+        edit.apply();
+    }
+
     /**
      * Set whether the recogniser should use a workaround
      *
@@ -1865,5 +1890,18 @@ public class SPH {
     public static boolean getOkayGoogleFix(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
         return pref.getBoolean(OKAY_GOOGLE_FIX, Installed.isGoogleNowLauncherDefault(ctx));
+    }
+
+    public static boolean isFirstForMicroPhone(Context context) {
+        final SharedPreferences pref = getPref(context);
+        return pref.getBoolean(MIC_FIRST, true);
+    }
+
+    public static void markMicroPhoneAccession(Context context) {
+        final SharedPreferences pref = getPref(context);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putBoolean(MIC_FIRST, false);
+        edit.apply();
     }
 }

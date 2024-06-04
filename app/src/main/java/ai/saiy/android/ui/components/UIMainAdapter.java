@@ -63,7 +63,7 @@ public class UIMainAdapter extends RecyclerView.Adapter<UIMainAdapter.ViewHolder
      * Set the contents of the view holder
      */
     @SuppressWarnings("WeakerAccess")
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final LinearLayout itemContainer;
         private final TextView title;

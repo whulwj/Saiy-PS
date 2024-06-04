@@ -30,6 +30,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -44,6 +45,7 @@ import ai.saiy.android.recognition.TestRecognitionAction;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentBugsHelper;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -62,7 +64,7 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
     private EditText editText;
     private ImageButton imageButton;
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentBugsHelper helper;
 
@@ -144,6 +146,13 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
 
     @Override
     public void onClick(final View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return;
+        }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: " + view.getTag());
         }
@@ -180,6 +189,13 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
 
     @Override
     public boolean onLongClick(final View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onLongClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return true;
+        }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
         }

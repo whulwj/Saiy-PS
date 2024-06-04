@@ -200,6 +200,8 @@ dependencies {
     implementation (libs.volley)
     // https://github.com/cmusphinx/pocketsphinx-android
     implementation project(':pocketsphinx-android-5prealpha-nolib')
+    implementation project(':ToastCompat')
+    implementation project(':StandOut')
     testImplementation libs.junit
     androidTestImplementation libs.junit
     androidTestImplementation libs.ext.junit

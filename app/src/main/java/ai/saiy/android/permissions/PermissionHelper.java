@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -71,6 +73,40 @@ public class PermissionHelper {
             default:
                 return false;
         }
+    }
+
+    private static int hasSelfPermission(Context context, String permission) {
+        try {
+            return ContextCompat.checkSelfPermission(context, permission);
+        } catch (RuntimeException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "hasSelfPermission: RuntimeException");
+                e.printStackTrace();
+            }
+            return PackageManager.PERMISSION_DENIED;
+        }
+    }
+
+    public static Pair<Boolean, Boolean> checkTutorialPermissions(Context context) {
+        boolean hasAudioPermission;
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkTutorialPermissions");
+        }
+        switch (hasSelfPermission(context, android.Manifest.permission.RECORD_AUDIO)) {
+            case 0:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "checkTutorialPermissions: PERMISSION_GRANTED");
+                }
+                hasAudioPermission = true;
+                break;
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "checkTutorialPermissions: PERMISSION_DENIED");
+                }
+                hasAudioPermission = false;
+                break;
+        }
+        return new Pair<>(hasAudioPermission, Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context));
     }
 
     /**

@@ -28,6 +28,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.RemoteException;
+import android.provider.Settings;
 import android.speech.SpeechRecognizer;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
@@ -58,13 +59,17 @@ import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.ISaiyListener;
 import ai.saiy.android.service.SelfAware;
 import ai.saiy.android.tts.SaiyTextToSpeech;
+import ai.saiy.android.tutorial.Tutorial;
 import ai.saiy.android.ui.activity.ActivityIssue;
 import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.ui.service.FloatingCommandsService;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
+
+import wei.mark.standout.StandOutWindow;
 
 /**
  * A utility Class that provides methods to {@link SelfAwareConditions} mainly to avoid
@@ -375,6 +380,24 @@ public class SelfAwareHelper {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_USER_CUSTOM");
                 }
                 // TODO
+                break;
+            case Condition.CONDITION_TUTORIAL:
+                showToast("Google Recognizer: silence detected?", Toast.LENGTH_SHORT);
+                if (Global.isInVoiceTutorial()) {
+                    if (bundle.getBoolean(LocalRequest.EXTRA_VR_RETRY, false)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL: already retried. Finishing");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, false);
+                        bundle.putInt(LocalRequest.EXTRA_TUTORIAL_STAGE, Tutorial.STAGE_RESET_FOR_ERROR);
+                    } else {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL: retrying");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, true);
+                    }
+                    new ai.saiy.android.tutorial.Tutorial(mContext, vrLocale, ttsLocale, sl, bundle).execute();
+                }
                 break;
             case Condition.CONDITION_NONE:
             default:
@@ -1042,6 +1065,38 @@ public class SelfAwareHelper {
      */
     public long getElapsed(final Long then) {
         return TimeUnit.MILLISECONDS.convert((System.nanoTime() - then), TimeUnit.NANOSECONDS);
+    }
+
+    public static void stopFloatingService(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "stopFloatingService");
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context)) {
+            StandOutWindow.closeAll(context, FloatingCommandsService.class);
+        }
+    }
+
+    public static void startFloatingService(Context context, int id) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "startFloatingService");
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(context)) {
+            StandOutWindow.show(context, FloatingCommandsService.class, id);
+        }
+    }
+
+    public static void startServiceWithIntent(Context context, Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "startServiceWithIntent");
+        }
+        Intent intent = new Intent(context, (Class<?>) SelfAware.class);
+        intent.putExtras(bundle);
+        intent.setAction(context.getApplicationContext().getPackageName());
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.getApplicationContext().startForegroundService(intent);
+        } else {
+            context.getApplicationContext().startService(intent);
+        }
     }
 
     /**

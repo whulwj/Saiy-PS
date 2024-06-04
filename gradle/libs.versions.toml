@@ -107,5 +107,6 @@ volley = { module = "com.android.volley:volley", version.ref = "volley" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradlePlugin" }
+androidLibrary = { id = "com.android.library", version.ref = "gradlePlugin" }
 protobuf-gradle-plugin = { id = "com.google.protobuf", version.ref = "protobufGradlePlugin" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServicesVersion" }

@@ -407,6 +407,18 @@ public class VolumeHelper {
      * Check if the device can currently output sound, by checking the media profile. This is unfortunately
      * not foolproof, due to the various ways different ROM and device manufacturers link the stream types.
      *
+     * @param context the application context
+     * @return true if the device will output sounds, false otherwise
+     */
+    public static boolean volumeProfileEnabled(@NonNull final Context context) {
+        final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        return volumeProfileEnabled(audioManager);
+    }
+
+    /**
+     * Check if the device can currently output sound, by checking the media profile. This is unfortunately
+     * not foolproof, due to the various ways different ROM and device manufacturers link the stream types.
+     *
      * @param audioManager object
      * @return true if the device will output sounds, false otherwise
      */
@@ -462,6 +474,11 @@ public class VolumeHelper {
         }
 
         return resolvedValue;
+    }
+
+    public static int getMediaVolumePercentage(@NonNull final Context context) {
+        final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        return getMediaVolumePercentage(audioManager);
     }
 
     /**

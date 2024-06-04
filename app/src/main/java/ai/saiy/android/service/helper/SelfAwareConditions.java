@@ -113,6 +113,7 @@ import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Conditions.Network;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
@@ -2385,6 +2386,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         NotificationHelper.cancelInitialisingNotification(mContext);
         NotificationHelper.cancelFetchingNotification(mContext);
         NotificationHelper.cancelSpeakingNotification(mContext);
+        Global.setVoiceTutorialState(mContext, false);
     }
 
     @Override

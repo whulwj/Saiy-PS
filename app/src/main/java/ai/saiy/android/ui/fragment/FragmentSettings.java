@@ -36,6 +36,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentSettingsHelper;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
@@ -120,6 +121,13 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
 
     @Override
     public void onClick(final View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return;
+        }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: " + view.getTag());
         }
@@ -157,6 +165,13 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
 
     @Override
     public boolean onLongClick(final View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onLongClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return true;
+        }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
         }

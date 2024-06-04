@@ -20,12 +20,15 @@ package ai.saiy.android.utils;
 import static ai.saiy.android.applications.Install.Location.PLAYSTORE;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
+import ai.saiy.android.processing.Condition;
+import ai.saiy.android.service.helper.LocalRequest;
 
 /**
  * Helper Class to deal with application wide variables. Use with caution as the expected persistent
@@ -54,5 +57,14 @@ public class Global extends MultiDexApplication {
 
     public static boolean isInVoiceTutorial() {
         return sIsInVoiceTutorial;
+    }
+
+    public static void setVoiceTutorialState(Context context, boolean isInVoiceTutorial) {
+        if (sIsInVoiceTutorial && !isInVoiceTutorial) {
+            Bundle bundle = new Bundle();
+            bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_SELF_AWARE);
+            ai.saiy.android.service.helper.SelfAwareHelper.startServiceWithIntent(context, bundle);
+        }
+        sIsInVoiceTutorial = isInVoiceTutorial;
     }
 }

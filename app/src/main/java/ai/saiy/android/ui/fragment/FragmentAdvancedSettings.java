@@ -40,6 +40,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentAdvancedSettingsHelper;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
@@ -124,6 +125,13 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
 
     @Override
     public void onClick(final View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return;
+        }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: " + view.getTag());
         }
@@ -157,8 +165,11 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                 //noinspection NewApi
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
                         && !PermissionHelper.checkUsageStatsPermission(getApplicationContext())) {
-                    getParentActivity().speak(R.string.app_speech_usage_stats, LocalRequest.ACTION_SPEAK_ONLY);
-                    ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_USAGE_STATS);
+                    if (ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_USAGE_STATS)) {
+                        getParentActivity().speak(R.string.app_speech_usage_stats, LocalRequest.ACTION_SPEAK_ONLY);
+                    } else {
+                        getParentActivity().speak(R.string.issue_usage_stats_bug, LocalRequest.ACTION_SPEAK_ONLY);
+                    }
                 } else {
                     helper.showHotwordSelector();
                 }
@@ -183,6 +194,13 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
 
     @Override
     public boolean onLongClick(final View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onLongClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return true;
+        }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
         }

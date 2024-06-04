@@ -38,4 +38,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Saiy-PS"
 include ':pocketsphinx-android-5prealpha-nolib'
+include ':StandOut'
+include ':ToastCompat'
 include ':app'

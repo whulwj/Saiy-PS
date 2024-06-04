@@ -92,6 +92,7 @@ import ai.saiy.android.tts.TTS;
 import ai.saiy.android.tts.engine.EngineNuance;
 import ai.saiy.android.tts.helper.PendingTTS;
 import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
@@ -218,7 +219,12 @@ public class SelfAware extends Service {
             new InitStrings(getApplicationContext()).init();
 
             switch (conditions.checkNotificationInstruction(intent)) {
-
+                case Condition.CONDITION_TUTORIAL:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onStartCommand: CONDITION_TUTORIAL");
+                    }
+                    startForeground(NotificationHelper.NOTIFICATION_TUTORIAL);
+                    break;
                 case Condition.CONDITION_SELF_AWARE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onStartCommand: CONDITION_SELF_AWARE");
@@ -2163,6 +2169,7 @@ public class SelfAware extends Service {
 
         stopListening(false);
         stopSpeech(true);
+        Global.setVoiceTutorialState(getApplicationContext(), false);
     }
 
 

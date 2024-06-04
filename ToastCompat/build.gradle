@@ -1,0 +1,26 @@
+plugins {
+    alias(libs.plugins.androidLibrary)
+}
+
+android {
+    namespace 'me.drakeet.support.toast'
+    compileSdk 27
+
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 27
+        versionCode 5
+        versionName "1.1.0"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            consumerProguardFiles 'proguard-rules-library.pro'
+        }
+    }
+}
+
+dependencies {
+    implementation libs.annotation
+}

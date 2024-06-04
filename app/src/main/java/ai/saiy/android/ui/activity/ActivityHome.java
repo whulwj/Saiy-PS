@@ -56,6 +56,7 @@ import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareHelper;
+import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.ui.activity.helper.ActivityHomeHelper;
 import ai.saiy.android.ui.fragment.FragmentAbout;
 import ai.saiy.android.ui.fragment.FragmentAdvancedSettings;
@@ -105,7 +106,10 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     public static final int MENU_INDEX_SUPER_USER = 4;
     public static final int MENU_INDEX_ABOUT = 5;
 
+    public static final int INDEX_DIALOG_USER_GUIDE = 1;
+
     public static final String FRAGMENT_INDEX = "fragment_index";
+    public static final String DIALOG_INDEX = "dialog_index";
 
     private DrawerLayout drawer;
     private Toolbar toolbar;
@@ -449,6 +453,14 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             final Pair<Fragment, String> fragmentPair = getFragmentAndTag(intentPair.second);
             doFragmentReplaceTransaction(fragmentPair.first, fragmentPair.second, ANIMATION_NONE);
         }
+        if (intent.hasExtra(ActivityHome.DIALOG_INDEX)) {
+            if (intent.getIntExtra(ActivityHome.DIALOG_INDEX, 0) == INDEX_DIALOG_USER_GUIDE) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onNewIntent: INDEX_DIALOG_USER_GUIDE");
+                }
+                helper.showUserGuideDialog(this);
+            }
+        }
     }
 
 
@@ -527,18 +539,77 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onPrepareOptionsMenu");
+        }
+        if ((SPH.getSelfAwareEnabled(getApplicationContext()))) {
+            menu.findItem(R.id.action_power).setIcon(R.drawable.ic_power);
+        } else {
+            menu.findItem(R.id.action_power).setIcon(R.drawable.ic_power_rt);
+        }
+
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContent);
+        if (!(fragment instanceof FragmentHome)) {
+            menu.findItem(R.id.action_power).setVisible(false);
+            menu.findItem(R.id.action_mic).setVisible(false);
+        } else {
+            menu.findItem(R.id.action_power).setVisible(true);
+            menu.findItem(R.id.action_mic).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
+    }
+
+    @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onOptionsItemSelected");
         }
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onOptionsItemSelected: tutorialActive");
+            }
+            toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return super.onOptionsItemSelected(item);
+        }
         if (R.id.action_power == item.getItemId()) {
             if (SelfAwareHelper.selfAwareRunning(getApplicationContext())) {
                 SPH.setSelfAwareEnabled(getApplicationContext(), false);
-                SelfAwareHelper.stopService(getApplicationContext());
+                SelfAwareHelper.stopService(getApplicationContext()); //todo: remove?
+                toast(getString(R.string.will_shutdown_on_exit), Toast.LENGTH_SHORT);
+                item.setIcon(R.drawable.ic_power_rt);
             } else {
-                SelfAwareHelper.startService(getApplicationContext());
+                toast(getString(R.string.menu_enabled), Toast.LENGTH_SHORT);
+                SelfAwareHelper.startService(getApplicationContext()); //todo: remove?
+                vibrate();
                 SPH.setSelfAwareEnabled(getApplicationContext(), true);
+                item.setIcon(R.drawable.ic_power);
             }
+            return true;
+        } else if (R.id.action_mic == item.getItemId()) {
+            if (SPH.isFirstForMicroPhone(getApplicationContext())) {
+                SPH.markMicroPhoneAccession(getApplicationContext());
+                if (SPH.getUsedIncrement(getApplicationContext()) >= SPH.TRESS) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onOptionsItemSelected: run tutorial: false: but usage ok");
+                    }
+                    final LocalRequest localRequest = new LocalRequest(getApplicationContext());
+                    localRequest.prepareIntro();
+                    localRequest.execute();
+                    return true;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onOptionsItemSelected: suggesting tutorial");
+                }
+                helper.showStartTutorialDialog(this);
+                return true;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onOptionsItemSelected: run tutorial");
+            }
+            final LocalRequest localRequest = new LocalRequest(getApplicationContext());
+            localRequest.prepareIntro();
+            localRequest.execute();
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -723,6 +794,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
                         if (menu != null) {
                             menu.findItem(R.id.action_power).setVisible(Integer.parseInt(tag) == INDEX_FRAGMENT_HOME);
+                            menu.findItem(R.id.action_mic).setVisible(Integer.parseInt(tag) == INDEX_FRAGMENT_HOME);
                         }
 
                         switch (fade) {
@@ -771,6 +843,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
                         if (menu != null) {
                             menu.findItem(R.id.action_power).setVisible(Integer.parseInt(tag) == INDEX_FRAGMENT_HOME);
+                            menu.findItem(R.id.action_mic).setVisible(Integer.parseInt(tag) == INDEX_FRAGMENT_HOME);
                         }
 
                         switch (fade) {
@@ -890,6 +963,19 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      */
     public DrawerLayout getDrawer() {
         return this.drawer;
+    }
+
+    public void startTutorial() {
+        final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContent);
+        if (fragment instanceof FragmentHome && isActive()) {
+            runOnUiThread(new Runnable() {
+                public void run() {
+                    ((FragmentHome) fragment).onClick(null);
+                }
+            });
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "startTutorial: fragment detached");
+        }
     }
 
     /**
@@ -1090,12 +1176,31 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onRequestPermissionsResult");
+        }
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContent);
+        if ((fragment instanceof FragmentHome) && isActive()) {
+            fragment.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onDestroy");
         }
 
+        if (Global.isInVoiceTutorial()) {
+            Global.setVoiceTutorialState(getApplicationContext(), false);
+            Bundle bundle = new Bundle();
+            bundle.putInt(LocalRequest.EXTRA_SPEECH_PRIORITY, SpeechPriority.PRIORITY_TUTORIAL);
+            bundle.putBoolean(LocalRequest.EXTRA_PREVENT_RECOGNITION, true);
+            new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+        }
         if (!SPH.getSelfAwareEnabled(getApplicationContext()) &&
                 SelfAwareHelper.selfAwareRunning(getApplicationContext())) {
             if (DEBUG) {

@@ -17,17 +17,27 @@
 
 package ai.saiy.android.ui.fragment;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.provider.Settings;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,10 +45,19 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
+import ai.saiy.android.command.settings.SettingsIntent;
+import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.processing.Condition;
+import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.sound.VolumeHelper;
+import ai.saiy.android.tutorial.Tutorial;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentHomeHelper;
+import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.utils.Conditions.Network;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
@@ -64,7 +83,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     public static final int CHEVRON = R.drawable.chevron;
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentHomeHelper helper;
 
@@ -143,33 +162,34 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
 
     @Override
     public void onClick(final View view) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: " + view.getTag());
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return;
         }
-
-
-        switch ((int) view.getTag()) {
-
+        final int position = (view == null) ? 0 : (int) view.getTag();
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClick: " + position);
+        }
+        switch (position) {
             case 0:
-                getParentActivity().vibrate();
-                getParentActivity().toast(getString(R.string.menu_voice_tutorial), Toast.LENGTH_SHORT);
-
                 AsyncTask.execute(new Runnable() {
                     @Override
                     public void run() {
-
-                        final Locale vrLocale = SPH.getVRLocale(getApplicationContext());
-
-                        final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(vrLocale);
-                        final Locale ttsLocale = SPH.getTTSLocale(getApplicationContext());
-
-                        final float[] floatsArray = new float[1];
-                        floatsArray[0] = 1F;
-
-                        final ArrayList<String> resultsArray = new ArrayList<>();
-                        resultsArray.add("What is my battery temperature");
-
-
+                        ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(FragmentHome.this.getApplicationContext());
+                        localRequest.prepareDefault(LocalRequest.ACTION_STOP_HOTWORD, null);
+                        localRequest.setShutdownHotword();
+                        localRequest.execute();
+                        Pair<Boolean, Boolean> permissions = ai.saiy.android.permissions.PermissionHelper.checkTutorialPermissions(getApplicationContext());
+                        if (permissions.first && permissions.second) {
+                            startTutorial();
+                        } else if (permissions.first) {
+                            FragmentHome.this.n();
+                        } else {
+                            FragmentHome.this.o();
+                        }
                     }
                 });
 
@@ -204,6 +224,13 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
 
     @Override
     public boolean onLongClick(final View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME,  "onLongClick: tutorialActive");
+            }
+            getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+            return true;
+        }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
         }
@@ -218,6 +245,243 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         }
 
         return true;
+    }
+
+    private void createPermissionsNotification(int permissionId) {
+        NotificationHelper.createPermissionsNotification(getApplicationContext(), permissionId);
+    }
+
+    private boolean arePermissionsGranted(int[] grantResults) {
+        for (int i : grantResults) {
+            if (i != PackageManager.PERMISSION_GRANTED) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public void startTutorial() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "startTutorial");
+        }
+        Pair<Boolean, Boolean> l2 = getVolumeStatus();
+        if (l2.first) {
+            if (isActive()) {
+                getParentActivity().toast(getString(R.string.tutorial_volume_error), Toast.LENGTH_LONG);
+                if (l2.second) {
+                    SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.SOUND);
+                }
+            } else if (DEBUG) {
+                MyLog.i(CLS_NAME, "startTutorial: no longer active");
+                return;
+            } else {
+                return;
+            }
+        }
+        if (!tutorialNetworkProceed()) {
+            if (isActive()) {
+                getParentActivity().toast(getString(R.string.tutorial_no_network), Toast.LENGTH_SHORT);
+            } else if (DEBUG) {
+                MyLog.i(CLS_NAME, "startTutorial: no longer active");
+            }
+        } else if (isActive()) {
+            Global.setVoiceTutorialState(getApplicationContext(), true);
+            getParentActivity().runOnUiThread(new Runnable() {
+                public void run() {
+                    FragmentHome.this.getParentActivity().getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+                }
+            });
+            Bundle bundle = new Bundle();
+            bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+            ai.saiy.android.service.helper.SelfAwareHelper.startServiceWithIntent(getApplicationContext(), bundle);
+            Locale ag = SPH.getVRLocale(getApplicationContext());
+            SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(ag);
+            Bundle bundle2 = new Bundle();
+            bundle2.putInt(LocalRequest.EXTRA_TUTORIAL_STAGE, Tutorial.STAGE_INTRO);
+            new Tutorial(getApplicationContext(), ag, SPH.getTTSLocale(getApplicationContext()), supportedLanguage, bundle2).execute();
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "startTutorial: no longer active");
+        }
+    }
+
+    private boolean tutorialNetworkProceed() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "tutorialNetworkProceed: " + Network.isNetworkAvailable(getApplicationContext()));
+        }
+        return Network.isNetworkAvailable(getApplicationContext());
+    }
+
+    private Pair<Boolean, Boolean> getVolumeStatus() {
+        boolean isInaudible = true;
+        boolean isMediaVocal = VolumeHelper.getMediaVolumePercentage(getApplicationContext()) > 25;
+        boolean volumeProfileEnabled = VolumeHelper.volumeProfileEnabled(getApplicationContext());
+        Boolean isMute = !isMediaVocal || !volumeProfileEnabled;
+        if (isMediaVocal || volumeProfileEnabled) {
+            isInaudible = false;
+        }
+        return new Pair<>(isMute, isInaudible);
+    }
+
+    @TargetApi(23)
+    private void n() {
+        boolean z;
+        Intent intent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:ai.saiy.android"));
+        if (!isActive()) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "requestSystemAlertPermissions: no longer active");
+                return;
+            }
+            return;
+        }
+        try {
+            startActivityForResult(intent, 132);
+            z = true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "requestSystemAlertPermissions: ActivityNotFoundException");
+                e.printStackTrace();
+            }
+            z = false;
+        } catch (Exception e2) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "requestSystemAlertPermissions: Exception");
+                e2.printStackTrace();
+            }
+            z = false;
+        }
+        if (z) {
+            return;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "requestSystemAlertPermissions: settings location unknown");
+        }
+        ExecuteIntent.openApplicationSpecificSettings(getApplicationContext(), getApplicationContext().getPackageName());
+        getParentActivity().speak(getString(R.string.settings_missing, getString(R.string.content_system_overlays)), LocalRequest.ACTION_SPEAK_ONLY);
+    }
+
+    private void o() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "requestAudioPermissions");
+        }
+        final String[] strArr = {android.Manifest.permission.RECORD_AUDIO};
+        if (ActivityCompat.shouldShowRequestPermissionRationale(getParentActivity(), android.Manifest.permission.RECORD_AUDIO)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "requestAudioPermissions: showing rational");
+            }
+            getParentActivity().snack(this.getView(), getString(R.string.permission_audio_snack), -2, getString(R.string.ok), new View.OnClickListener() {
+                @Override // android.view.View.OnClickListener
+                public void onClick(View view) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "requestAudioPermissions: on snack click");
+                    }
+                    ActivityCompat.requestPermissions(getParentActivity(), strArr, 1);
+                }
+            });
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "requestAudioPermissions: requesting");
+            }
+            ActivityCompat.requestPermissions(getParentActivity(), strArr, 1);
+        }
+    }
+
+    private void q() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showSystemAlertRational");
+        }
+        if (isActive()) {
+            getParentActivity().snack(this.getView(), getString(R.string.permission_system_alert_snack), -2, getString(R.string.ok), new View.OnClickListener() {
+                @Override // android.view.View.OnClickListener
+                public void onClick(View view) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "requestAudioPermissions: on snack click");
+                    }
+                    FragmentHome.this.n();
+                }
+            });
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "requestSystemAlertPermissions: no longer active");
+        }
+    }
+
+    @Override
+    public void onActivityResult(int i, int i2, Intent intent) {
+        switch (i) {
+            case 132:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onActivityResult: SYSTEM_OVERLAY_REQUEST_CODE");
+                }
+                if (isActive()) {
+                    showProgress(true);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override // java.lang.Runnable
+                        public void run() {
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || !Settings.canDrawOverlays(getApplicationContext())) {
+                                FragmentHome.this.q();
+                            } else {
+                                FragmentHome.this.startTutorial();
+                            }
+                            if (isActive()) {
+                                showProgress(false);
+                            } else if (DEBUG) {
+                                MyLog.i(CLS_NAME, "onActivityResult: SYSTEM_OVERLAY_REQUEST_CODE: fragment detached");
+                            }
+                        }
+                    }, 2000L);
+                    return;
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onActivityResult: SYSTEM_OVERLAY_REQUEST_CODE: fragment detached");
+                    }
+                    return;
+                }
+            case 1287:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onActivityResult: RC_REQUEST");
+                    return;
+                }
+                return;
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onActivityResult: DEFAULT");
+                }
+        }
+    }
+
+    @Override // android.support.v4.app.Fragment
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onRequestPermissionsResult");
+        }
+        switch (requestCode) {
+            case 1:
+                if (!arePermissionsGranted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_AUDIO: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_AUDIO: PERMISSION_GRANTED");
+                }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(getApplicationContext())) {
+                    startTutorial();
+                } else {
+                    n();
+                }
+                return;
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onRequestPermissionsResult: Unknown request?");
+                }
+        }
+    }
+
+    private void showProgress(boolean visible) {
+        if (isActive()) {
+            getParentActivity().showProgress(visible);
+        }
     }
 
     public boolean isActive() {

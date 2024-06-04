@@ -37,9 +37,13 @@ import ai.saiy.android.personality.PersonalityHelper;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.tts.helper.SpeechPriority;
+import ai.saiy.android.ui.service.FloatingCommandsService;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
+import wei.mark.standout.StandOutWindow;
 
 /**
  * Class to handle notification clicks, either from the foreground {@link SelfAware} service or other
@@ -56,6 +60,7 @@ public class NotificationService extends IntentService {
 
     public static final String CLICK_ACTION = "click_action";
     public static final String INTENT_CLICK = "ai.saiy.android.INTENT_CLICK";
+    public static final String EXTRA_FLOATING_WINDOW_ID = "floating_window_id";
 
     public static final int NOTIFICATION_FOREGROUND = 77;
     public static final int NOTIFICATION_LISTENING = 21;
@@ -67,6 +72,8 @@ public class NotificationService extends IntentService {
     public static final int NOTIFICATION_HOTWORD = 27;
     public static final int NOTIFICATION_INITIALISING = 28;
     public static final int NOTIFICATION_IDENTIFICATION = 29;
+    public static final int NOTIFICATION_TUTORIAL = 30;
+    public static final int NOTIFICATION_FLOATING_WINDOW = 31;
 
     /**
      * Constructor
@@ -118,6 +125,14 @@ public class NotificationService extends IntentService {
                             case NOTIFICATION_FOREGROUND:
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_FOREGROUND");
+                                }
+                                if (Global.isInVoiceTutorial()) {
+                                    Global.setVoiceTutorialState(getApplicationContext(), false);
+                                    bundle.putInt(LocalRequest.EXTRA_SPEECH_PRIORITY, SpeechPriority.PRIORITY_TUTORIAL);
+                                    bundle.putBoolean(LocalRequest.EXTRA_PREVENT_RECOGNITION, true);
+                                    bundle.putString(LocalRequest.EXTRA_UTTERANCE, "silence");
+                                    new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                                    return;
                                 }
 
                                 bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_LISTEN);
@@ -333,6 +348,22 @@ public class NotificationService extends IntentService {
 
                                 new LocalRequest(getApplicationContext(), bundle).execute();
 
+                                break;
+                            case NOTIFICATION_TUTORIAL:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_TUTORIAL");
+                                }
+                                Global.setVoiceTutorialState(getApplicationContext(), false);
+                                bundle.putInt(LocalRequest.EXTRA_SPEECH_PRIORITY, SpeechPriority.PRIORITY_TUTORIAL);
+                                bundle.putBoolean(LocalRequest.EXTRA_PREVENT_RECOGNITION, true);
+                                bundle.putString(LocalRequest.EXTRA_UTTERANCE, "silence");
+                                new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                                break;
+                            case NOTIFICATION_FLOATING_WINDOW:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_FLOATING_WINDOW");
+                                }
+                                StandOutWindow.closeAll(getApplicationContext(), (Class<? extends StandOutWindow>) FloatingCommandsService.class);
                                 break;
                             default:
                                 if (DEBUG) {

@@ -74,6 +74,9 @@ public class LocalRequest {
     public static final String EXTRA_PROFILE_ID = "extra_profile_id";
     public static final String EXTRA_SPEECH_PRIORITY = "extra_speech_priority";
     public static final String EXTRA_PREVENT_RECOGNITION = "extra_prevent_recognition";
+    public static final String EXTRA_TUTORIAL_STAGE = "extra_tutorial_stage";
+    public static final String EXTRA_CONDITION_RETRY = "extra_condition_retry";
+    public static final String EXTRA_VR_RETRY = "extra_vr_retry";
 
     private final ServiceConnector sc;
     private final WeakReference<Context> weakContext;
@@ -185,6 +188,18 @@ public class LocalRequest {
         bundle.putString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE, vrLocale.toString());
         bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, ttsLocale.toString());
         bundle.putSerializable(LocalRequest.EXTRA_SUPPORTED_LANGUAGE, sl);
+    }
+
+    public void setConditionRetry(boolean retry) {
+        this.bundle.putBoolean(LocalRequest.EXTRA_CONDITION_RETRY, retry);
+    }
+
+    public void setVrRetry(boolean retry) {
+        this.bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, retry);
+    }
+
+    public void setTutorialStage(int tutorialStage) {
+        this.bundle.putInt(LocalRequest.EXTRA_TUTORIAL_STAGE, tutorialStage);
     }
 
     /**

@@ -30,6 +30,7 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 
 import ai.saiy.android.R;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
@@ -38,6 +39,7 @@ import ai.saiy.android.personality.AI;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.NotificationService;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -227,6 +229,19 @@ public final class NotificationHelper {
                 }
 
                 break;
+            case NOTIFICATION_TUTORIAL:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getForegroundNotification: NOTIFICATION_TUTORIAL");
+                }
+                actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_TUTORIAL);
+                builder.addAction(ai.saiy.android.R.drawable.ic_text_to_speech, ctx.getString(ai.saiy.android.R.string.notification_stop_tutorial), PendingIntent.getService(ctx, NotificationService.NOTIFICATION_TUTORIAL, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    builder.setColorized(true);
+                    builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorFade));
+                } else {
+                    builder.setPriority(Notification.PRIORITY_MAX);
+                }
+                break;
 
             case NOTIFICATION_SELF_AWARE:
             default:
@@ -317,45 +332,42 @@ public final class NotificationHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "createSpeakingNotification");
         }
-
-        if (length > MIN_NOTIFICATION_SPEECH_LENGTH) {
-
-            try {
-
-                final Intent actionIntent = new Intent(NotificationService.INTENT_CLICK);
-                actionIntent.setPackage(ctx.getPackageName());
-                actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_SPEAKING);
-
-                final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_SPEAKING,
-                        actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-                final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-
-                builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_media_pause)
-                        .setTicker(ctx.getString(ai.saiy.android.R.string.notification_speaking)).setWhen(System.currentTimeMillis())
-                        .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
-                        .setContentText(ctx.getString(ai.saiy.android.R.string.notification_speaking) + "... "
-                                + ctx.getString(ai.saiy.android.R.string.notification_tap_stop))
-                        .setAutoCancel(true);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    builder.setColorized(false);
-                    builder.setColor(Color.RED);
-                }
-
-                final Notification not = builder.build();
-                final NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
-                notificationManager.notify(NotificationService.NOTIFICATION_SPEAKING, not);
-
-            } catch (final Exception e) {
-                if (DEBUG) {
-                    MyLog.e(CLS_NAME, "createSpeakingNotification failure");
-                    e.printStackTrace();
-                }
-            }
-        } else {
+        if (Global.isInVoiceTutorial() || length <= MIN_NOTIFICATION_SPEECH_LENGTH) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "createSpeakingNotification: length " + length + " too short ignoring");
+            }
+            return;
+        }
+
+        try {
+            final Intent actionIntent = new Intent(NotificationService.INTENT_CLICK);
+            actionIntent.setPackage(ctx.getPackageName());
+            actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_SPEAKING);
+
+            final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_SPEAKING,
+                    actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
+
+            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_media_pause)
+                    .setTicker(ctx.getString(R.string.notification_speaking)).setWhen(System.currentTimeMillis())
+                    .setContentTitle(ctx.getString(R.string.app_name))
+                    .setContentText(ctx.getString(R.string.notification_speaking) + "... "
+                            + ctx.getString(R.string.notification_tap_stop))
+                    .setAutoCancel(true);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder.setColorized(false);
+                builder.setColor(Color.RED);
+            }
+
+            final Notification not = builder.build();
+            final NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(NotificationService.NOTIFICATION_SPEAKING, not);
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createSpeakingNotification failure");
+                e.printStackTrace();
             }
         }
     }

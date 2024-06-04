@@ -63,7 +63,7 @@ public class UIBugsAdapter extends RecyclerView.Adapter<UIBugsAdapter.ViewHolder
      * Set the contents of the view holder
      */
     @SuppressWarnings("WeakerAccess")
-    protected class ViewHolder extends RecyclerView.ViewHolder {
+    protected static class ViewHolder extends RecyclerView.ViewHolder {
 
         private CardView itemContainer;
         private TextView title;
