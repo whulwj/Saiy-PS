@@ -45,13 +45,38 @@ public class Installed {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = Installed.class.getSimpleName();
 
+    public static final String PACKAGE_ALEXA = "com.amazon.dee.app";
+    public static final String PACKAGE_AMAZON = "com.amazon.mShop.android.shopping";
+    public static final String PACKAGE_AMAZON_WINDOW_SHOP = "com.amazon.windowshop";
+    public static final String PACKAGE_AMAZON_MUSIC = "com.amazon.mp3";
+    public static final String PACKAGE_AUTOMATE = "com.llamalab.automate";
+    public static final String PACKAGE_BOX = "com.box.android";
+    public static final String PACKAGE_DEEZER = "deezer.android.app";
+    public static final String PACKAGE_DROPBOX = "com.dropbox.android";
+    public static final String PACKAGE_EBAY = "com.ebay.mobile";
+    public static final String PACKAGE_EVERNOTE = "com.evernote";
     public static final String PACKAGE_FACEBOOK = "com.facebook.katana";
+    public static final String PACKAGE_FOUR_SQUARED = "com.joelapenna.foursquared";
+    public static final String PACKAGE_GOOGLE_DOCS = "com.google.android.apps.docs";
+    public static final String PACKAGE_GOOGLE_EARTH = "com.google.earth";
+    public static final String PACKAGE_GOOGLE_MAPS = "com.google.android.apps.maps";
+    public static final String PACKAGE_GOOGLE_MUSIC = "com.google.android.music";
+    public static final String PACKAGE_GOOGLE_KEEP = "com.google.android.keep";
+    public static final String PACKAGE_GOOGLE_SKY = "com.google.android.stardroid";
+    public static final String PACKAGE_GOOGLE_STORE = "com.android.vending";
+    public static final String PACKAGE_GOOGLE_TRANSLATE = "com.google.android.apps.translate";
+    public static final String PACKAGE_GOOGLE_YOUTUBE = "com.google.android.youtube";
+    public static final String PACKAGE_IMDB = "com.imdb.mobile";
+    public static final String PACKAGE_LINKED_IN = "com.linkedin.android";
+    public static final String PACKAGE_NETFLIX = "com.netflix.mediaclient";
     public static final String PACKAGE_TWITTER = "com.twitter.android";
     public static final String PACKAGE_SNAPCHAT = "com.snapchat.android";
     public static final String PACKAGE_WHATSAPP = "com.whatsapp";
     public static final String PACKAGE_TINDER = "com.tinder";
+    public static final String PACKAGE_ASPIRO_TINDER = "com.aspiro.tidal";
     public static final String PACKAGE_SHAZAM = "com.shazam.android";
     public static final String PACKAGE_SHAZAM_ENCORE = "com.shazam.encore.android";
+    public static final String PACKAGE_SPOTIFY_MUSIC = "com.spotify.music";
     public static final String PACKAGE_SOUND_HOUND = "com.melodis.midomiMusicIdentifier.freemium";
     public static final String PACKAGE_SOUND_HOUND_PREMIUM = "com.melodis.midomiMusicIdentifier";
     public static final String PACKAGE_TRACK_ID = "com.sonyericsson.trackid";
@@ -61,7 +86,9 @@ public class Installed {
     public static final String PACKAGE_NAME_GOOGLE_NOW_LAUNCHER = "com.google.android.googlequicksearchbox";
     public static final String PACKAGE_TASKER_DIRECT = "net.dinglisch.android.tasker";
     public static final String PACKAGE_TASKER_MARKET = PACKAGE_TASKER_DIRECT + "m";
+    public static final String PACKAGE_UBER = "com.ubercab";
     public static final String PACKAGE_WOLFRAM_ALPHA = "com.wolfram.android.alpha";
+    public static final String PACKAGE_YELP = "com.yelp.android";
 
     private static final Pattern pCONTROL_SAIY = Pattern.compile(Constants.PERMISSION_CONTROL_SAIY);
     private static final Pattern pSAIY_PACKAGE = Pattern.compile(BuildConfig.APPLICATION_ID);
@@ -248,6 +275,26 @@ public class Installed {
                 ctx.getApplicationContext().getPackageManager().getApplicationInfo(PACKAGE_SOUND_HOUND_PREMIUM, 0);
                 return true;
             } catch (final PackageManager.NameNotFoundException ee) {
+                return false;
+            }
+        }
+    }
+
+    /**
+     * Check if the user has either of the Sound Hound applications installed
+     *
+     * @param ctx the application context
+     * @return true if the package is installed
+     */
+    public static boolean amazonInstalled(@NonNull final Context ctx) {
+        try {
+            ctx.getApplicationContext().getPackageManager().getApplicationInfo(PACKAGE_AMAZON, 0);
+            return true;
+        } catch (final PackageManager.NameNotFoundException e) {
+            try {
+                ctx.getApplicationContext().getPackageManager().getApplicationInfo(PACKAGE_AMAZON_WINDOW_SHOP, 0);
+                return true;
+            } catch (final PackageManager.NameNotFoundException ignored) {
                 return false;
             }
         }

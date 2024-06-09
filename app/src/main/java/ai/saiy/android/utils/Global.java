@@ -28,6 +28,7 @@ import androidx.multidex.MultiDexApplication;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.processing.Condition;
+import ai.saiy.android.recognition.provider.wit.RecognitionWitHybrid;
 import ai.saiy.android.service.helper.LocalRequest;
 
 /**
@@ -38,9 +39,13 @@ import ai.saiy.android.service.helper.LocalRequest;
  */
 public class Global extends MultiDexApplication {
 
+    private final boolean DEBUG = MyLog.DEBUG;
+    private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
     public static final Install.Location installLocation = PLAYSTORE;
     public static String PROJECT_ID = "";
     private static boolean sIsInVoiceTutorial;
+    private static String sGlobalAmazonID;
+    private static volatile Bundle alexDirectiveBundle;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -53,6 +58,7 @@ public class Global extends MultiDexApplication {
         super.onCreate();
         // TODO
         PROJECT_ID = getApplicationContext().getString(R.string.gcp_project_id);
+        setGlobalId();
     }
 
     public static boolean isInVoiceTutorial() {
@@ -66,5 +72,48 @@ public class Global extends MultiDexApplication {
             ai.saiy.android.service.helper.SelfAwareHelper.startServiceWithIntent(context, bundle);
         }
         sIsInVoiceTutorial = isInVoiceTutorial;
+    }
+
+    public static String getGlobalID() {
+        return sGlobalAmazonID;
+    }
+
+    public static void setAlexDirectiveBundle(Bundle bundle) {
+        alexDirectiveBundle = bundle;
+    }
+
+    public static Bundle getAlexDirectiveBundle() {
+        return alexDirectiveBundle != null ? alexDirectiveBundle : new Bundle();
+    }
+
+    private void setGlobalId() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (UtilsString.notNaked(Global.getGlobalID())) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "setGlobalId: already set");
+                        return;
+                    }
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setGlobalId: setting");
+                }
+                try {
+                    Global.sGlobalAmazonID = ai.saiy.android.user.SaiyAccount.getUniqueId(Global.this.getApplicationContext());
+                } catch (RuntimeException e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "setGlobalId: RuntimeException");
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "setGlobalId: Exception");
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
     }
 }

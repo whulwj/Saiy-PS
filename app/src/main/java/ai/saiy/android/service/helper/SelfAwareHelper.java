@@ -176,6 +176,12 @@ public class SelfAwareHelper {
                 }
                 // TODO
                 break;
+            case Condition.CONDITION_TUTORIAL:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL");
+                }
+                showToast("The tutorial has shutdown", Toast.LENGTH_SHORT);
+                break;
             case Condition.CONDITION_NONE:
             default:
                 if (DEBUG) {
@@ -262,6 +268,11 @@ public class SelfAwareHelper {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_USER_CUSTOM");
                 }
                 // TODO
+                break;
+            case Condition.CONDITION_TUTORIAL:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL");
+                }
                 break;
             case Condition.CONDITION_NONE:
             default:

@@ -22,7 +22,13 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.ads.identifier.AdvertisingIdClient;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+
+import java.io.IOException;
 import java.util.Locale;
+import java.util.UUID;
 
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.EnrollmentID;
@@ -30,6 +36,7 @@ import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileI
 import ai.saiy.android.cognitive.identity.provider.microsoft.http.CreateIDProfile;
 import ai.saiy.android.configuration.MicrosoftConfiguration;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsString;
 
 /**
  * Created by benrandall76@gmail.com on 08/09/2016.
@@ -37,8 +44,8 @@ import ai.saiy.android.utils.MyLog;
 
 public class SaiyAccount {
 
-    private transient final boolean DEBUG = MyLog.DEBUG;
-    private transient final String CLS_NAME = SaiyAccount.class.getSimpleName();
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = SaiyAccount.class.getSimpleName();
 
     private String accountName;
     private volatile String accountId;
@@ -62,6 +69,67 @@ public class SaiyAccount {
         this.accountName = accountName;
     }
 
+    public static String getUniqueId(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getUniqueId");
+        }
+        String uniqueId = ai.saiy.android.utils.SPH.getUniqueID(context);
+        if (!UtilsString.notNaked(uniqueId)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "getUniqueId: storedUniqueId naked");
+            }
+            uniqueId = getAdvertisingId(context);
+            if (UtilsString.notNaked(uniqueId)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getUniqueId: advertisingId: " + uniqueId);
+                }
+                ai.saiy.android.utils.SPH.setUniqueID(context, uniqueId);
+            } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getUniqueId: advertisingId naked");
+                }
+                uniqueId = UUID.randomUUID().toString();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getUniqueId: createdUniqueId: " + uniqueId);
+                }
+                ai.saiy.android.utils.SPH.setUniqueID(context, uniqueId);
+            }
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "getUniqueId: storedUniqueId: " + uniqueId);
+        }
+        return uniqueId;
+    }
+
+    private static String getAdvertisingId(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAdvertisingId");
+        }
+        try {
+            AdvertisingIdClient.Info advertisingIdInfo = AdvertisingIdClient.getAdvertisingIdInfo(context);
+            if (advertisingIdInfo != null) {
+                String id = advertisingIdInfo.getId();
+                if (UtilsString.notNaked(id)) {
+                    return id;
+                }
+            }
+        } catch (GooglePlayServicesNotAvailableException e) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "getAdvertisingId: GooglePlayServicesNotAvailableException");
+                e.printStackTrace();
+            }
+        } catch (GooglePlayServicesRepairableException e) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "getAdvertisingId: GooglePlayServicesRepairableException");
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "getAdvertisingId: IOException");
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
 
     /**
      * Asynchronously set the account id associated with the email address and create a

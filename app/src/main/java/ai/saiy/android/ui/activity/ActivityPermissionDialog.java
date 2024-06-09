@@ -28,6 +28,7 @@ import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsBundle;
+import ai.saiy.android.utils.UtilsFile;
 
 /**
  * Short-lived Activity class to handle the permission requests from the user.
@@ -143,6 +144,12 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_FILE: PERMISSION_GRANTED");
                     }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            UtilsFile.createDirs(ActivityPermissionDialog.this.getApplicationContext());
+                        }
+                    }).start();
                 } else {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_FILE: PERMISSION_DENIED");

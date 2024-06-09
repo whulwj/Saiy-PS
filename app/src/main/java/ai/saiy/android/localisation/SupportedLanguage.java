@@ -19,10 +19,13 @@ package ai.saiy.android.localisation;
 
 import androidx.annotation.NonNull;
 
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -307,5 +310,79 @@ public enum SupportedLanguage {
         }
 
         return ENGLISH;
+    }
+
+    public static String getGoogleNativeVRSupportedLanguageString() {
+        Locale locale = UtilsLocale.DEFAULT_LOCALE;
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: " + locale);
+        }
+        for (SupportedLanguage supportedLanguage : getLanguages()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: comparing: " + supportedLanguage.getLocale().toString() + " ~ " + locale);
+            }
+            if (supportedLanguage.getLocale().equals(locale)) {
+                return supportedLanguage.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+            }
+        }
+        ArrayList<SupportedLanguage> arrayList = new ArrayList<>();
+        String language = locale.getLanguage();
+        String country = locale.getCountry();
+        if (UtilsString.notNaked(language)) {
+            for (SupportedLanguage supportedLanguage : getLanguages()) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: comparing: " + language + " ~ " + supportedLanguage.getLanguage());
+                }
+                if (language.equalsIgnoreCase(supportedLanguage.getLanguage())) {
+                    arrayList.add(supportedLanguage);
+                }
+            }
+            if (!arrayList.isEmpty()) {
+                for (SupportedLanguage supportedLanguage : arrayList) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: comparing: " + country + " ~ " + supportedLanguage.getCountry());
+                    }
+                    if (country.equalsIgnoreCase(supportedLanguage.getCountry())) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: full match: " + supportedLanguage.getLanguageCountry());
+                        }
+                        return supportedLanguage.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                    }
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: no country match returning first: " + ((SupportedLanguage) arrayList.get(0)).getLocale().toString());
+                }
+                return arrayList.get(0).hasParent() ? arrayList.get(0).getParent().getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN) : ((SupportedLanguage) arrayList.get(0)).getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+            }
+
+            for (SupportedLanguage supportedLanguage : getLanguages()) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: comparing: " + language + " ~ " + supportedLanguage.getLanguageISO());
+                }
+                if (language.equalsIgnoreCase(supportedLanguage.getLanguageISO())) {
+                    arrayList.add(supportedLanguage);
+                }
+            }
+            if (!arrayList.isEmpty()) {
+                for (SupportedLanguage supportedLanguage : arrayList) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: comparing: " + country + " ~ " + supportedLanguage.getCountryISO());
+                    }
+                    if (country.equalsIgnoreCase(supportedLanguage.getCountryISO())) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: full match: " + supportedLanguage.getLanguageCountryISO());
+                        }
+                        return supportedLanguage.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                    }
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: no countryISO match returning first: " + ((SupportedLanguage) arrayList.get(0)).getLocale().toString());
+                }
+                return arrayList.get(0).hasParent() ? arrayList.get(0).getParent().getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN) : ((SupportedLanguage) arrayList.get(0)).getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+            }
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: language naked" + locale.toString());
+        }
+        return ENGLISH_US.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
     }
 }

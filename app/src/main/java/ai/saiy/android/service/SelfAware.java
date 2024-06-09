@@ -47,6 +47,7 @@ import com.google.gson.GsonBuilder;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ai.saiy.android.R;
+import ai.saiy.android.amazon.TokenHelper;
 import ai.saiy.android.api.DeclinedBinder;
 import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.helper.CallbackType;
@@ -80,6 +81,7 @@ import ai.saiy.android.recognition.provider.nuance.RecognitionNuance;
 import ai.saiy.android.recognition.provider.remote.RecognitionRemote;
 import ai.saiy.android.recognition.provider.sphinx.RecognitionSphinx;
 import ai.saiy.android.recognition.provider.wit.RecognitionWit;
+import ai.saiy.android.recognition.provider.wit.RecognitionWitHybrid;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareCache;
 import ai.saiy.android.service.helper.SelfAwareConditions;
@@ -91,6 +93,7 @@ import ai.saiy.android.tts.SaiyTextToSpeech;
 import ai.saiy.android.tts.TTS;
 import ai.saiy.android.tts.engine.EngineNuance;
 import ai.saiy.android.tts.helper.PendingTTS;
+import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -147,6 +150,7 @@ public class SelfAware extends Service {
     private volatile RecognitionGoogleChromium recogGoogleChromium;
     private volatile RecognitionMicrosoft recogOxford;
     private volatile RecognitionWit recogWit;
+    private volatile RecognitionWitHybrid recogWitHybrid;
     private volatile RecognitionBluemix recogIBM;
     private volatile RecognitionRemote recogRemote;
     private volatile RecognitionSphinx recogSphinx;
@@ -196,6 +200,7 @@ public class SelfAware extends Service {
             motionRecognition.prepare(getApplicationContext());
             motionRecognition.connect();
         }
+        this.conditions.handleReinstallation();
     }
 
     /**
@@ -452,7 +457,7 @@ public class SelfAware extends Service {
         NotificationHelper.cancelComputingNotification(getApplicationContext());
 
         if (conditions.checkSaiyPermission(Binder.getCallingUid())) {
-
+            conditions.checkReinstallation(bundle);
             if (conditions.isHotwordActive(recogSphinx)) {
                 stopListening(false);
             }
@@ -528,6 +533,24 @@ public class SelfAware extends Service {
                                             break;
                                     }
                                     break;
+                                case WIT_HYBRID:
+                                    switch (Recognition.getState()) {
+                                        case IDLE:
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "WIT_HYBRID: IDLE");
+                                            }
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "speakListen: WIT_HYBRID: warming up");
+                                                    }
+                                                    SelfAware.this.recogWitHybrid = SelfAware.this.conditions.getWitHybridRecognition(SelfAware.this.recognitionListener);
+                                                }
+                                            }.start();
+                                            break;
+                                    }
                                 case MICROSOFT:
                                     switch (Recognition.getState()) {
                                         case IDLE:
@@ -651,7 +674,7 @@ public class SelfAware extends Service {
     protected void stopListening(final boolean shutdown) {
         conditions.setHotwordShutdown(recogSphinx, shutdown);
         conditions.stopListening(recogNuance, recogGoogleCloud, recogGoogleChromium, recogOxford,
-                recogWit, recogIBM, recogRemote, recogMic, recogNative, recogSphinx);
+                recogWit, recogIBM, recogRemote, recogMic, recogNative, recogSphinx, recogWitHybrid);
     }
 
     /**
@@ -948,6 +971,35 @@ public class SelfAware extends Service {
                                     break;
                             }
 
+                            break;
+                        case WIT_HYBRID:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "WIT_HYBRID");
+                            }
+                            switch (Recognition.getState()) {
+                                case IDLE:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "WIT_HYBRID: IDLE");
+                                    }
+                                    SelfAware.this.conditions.setFetchingCountdown();
+                                    SelfAware.this.recognitionListener.resetBugVariables();
+                                    SelfAware.this.recogWitHybrid.startListening(tts.getInitialisedEngine().matches(TTSDefaults.TTS_PKG_NAME_GOOGLE));
+                                    break;
+                                case PROCESSING:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "WIT_HYBRID: PROCESSING");
+                                    }
+                                    SelfAware.this.recogWitHybrid.stopListening();
+                                    SelfAware.this.conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
+                                    break;
+                                case LISTENING:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "WIT_HYBRID: LISTENING");
+                                    }
+                                    SelfAware.this.recogWitHybrid.stopListening();
+                                    SelfAware.this.conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
+                                    break;
+                            }
                             break;
                         case IBM:
                             if (DEBUG) {
@@ -1735,6 +1787,7 @@ public class SelfAware extends Service {
 
                     partialHelper.isPartial(partialResults);
                 }
+
             }
         }
 
@@ -1773,6 +1826,14 @@ public class SelfAware extends Service {
         }
 
         @Override
+        public void onAlexaDetected() {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onAlexaDetected");
+            }
+            TokenHelper.refreshTokenIfRequired(getApplicationContext());
+        }
+
+        @Override
         public void onResults(final Bundle results) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "recognitionListener: onResults");
@@ -1790,6 +1851,9 @@ public class SelfAware extends Service {
                 case IBM:
                     recogIBM = null;
                     recogMic = null;
+                    break;
+                case WIT_HYBRID:
+                    recogWitHybrid = null;
                     break;
                 case MICROSOFT:
                     recogOxford = null;

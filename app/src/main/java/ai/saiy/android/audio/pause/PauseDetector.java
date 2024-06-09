@@ -113,7 +113,11 @@ public class PauseDetector {
                         mRecordedLength += buffer.length;
 
                         if (mRecordedLength <= maxSize) {
-                            System.arraycopy(buffer, 0, mRecording, mRecordedLength, bufferReadResult);
+                            try {
+                                System.arraycopy(buffer, 0, mRecording, mRecordedLength, bufferReadResult);
+                            } catch (IndexOutOfBoundsException e) {
+                                MyLog.e(CLS_NAME, "addLength: IndexOutOfBoundsException");
+                            }
                         } else {
                             hasDetected = true;
                         }

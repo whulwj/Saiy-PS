@@ -145,6 +145,7 @@ dependencies {
     }
     implementation libs.play.services.location
     implementation libs.play.services.auth
+    implementation libs.play.services.ads.identifier
     implementation libs.speechkit
     implementation libs.guava
     implementation libs.gson
@@ -152,8 +153,10 @@ dependencies {
     implementation libs.speechrecognition
     implementation libs.commons.lang3
     implementation libs.commons.codec
-    implementation libs.simmetrics.core
     implementation libs.commons.collections4
+    implementation libs.commons.io
+    implementation libs.commons.fileupload
+    implementation libs.simmetrics.core
     implementation platform(libs.libraries.bom)
     // https://github.com/dialogflow/dialogflow-android-client
     // https://github.com/googleapis/google-cloud-java/tree/main/java-dialogflow
@@ -167,7 +170,6 @@ dependencies {
     implementation libs.firebase.auth
     implementation libs.firebase.functions
     implementation libs.firebase.messaging
-    implementation libs.commons.io
     // https://github.com/TooTallNate/Java-WebSocket
     implementation libs.java.web.socket
     implementation libs.licensesdialog

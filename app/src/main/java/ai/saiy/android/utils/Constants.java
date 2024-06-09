@@ -74,5 +74,13 @@ public final class Constants {
     public static final String LICENSE_POCKETSPHINX = "https://github.com/cmusphinx/pocketsphinx-android";
     public static final String LICENSE_SOUND_BIBLE = "http://soundbible.com";
 
+    public static final String USER_GUIDE_BASIC = "http://forum.xda-developers.com/showpost.php?p=26804173&postcount=1043";
+    public static final String USER_CUSTOM_COMMANDS = "http://forum.xda-developers.com/showpost.php?p=26883467&postcount=1050";
+    public static final String USER_CUSTOM_REPLACEMENTS = "http://forum.xda-developers.com/showpost.php?p=33882082&postcount=2047";
+    public static final String USER_SOUND_EFFECTS = "http://forum.xda-developers.com/showpost.php?p=33877549&postcount=2042";
+    public static final String USER_TASKER = "http://forum.xda-developers.com/showpost.php?p=34339449&postcount=2155";
+    public static final String USER_TROUBLESHOOTING = "http://forum.xda-developers.com/showpost.php?p=25228934&postcount=659";
+    public static final String USER_COMING_SOON = "http://forum.xda-developers.com/showpost.php?p=25666528&postcount=755";
+
     public static final String PERMISSION_CONTROL_SAIY = "ai.saiy.android.permission.CONTROL_SAIY";
 }

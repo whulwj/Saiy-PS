@@ -23,6 +23,8 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
+import android.provider.Settings;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -346,6 +348,34 @@ public class TaskerHelper {
 
         return false;
     }
+
+    /**
+     * Determines whether installing Android apks from unknown sources is allowed.
+     *
+     * @param ctx
+     * @return true can install from an unknown source
+     */
+    public static boolean isUnknownSourceInstallAllowed(@NonNull final Context ctx) {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                try {
+                    return ctx.getPackageManager().canRequestPackageInstalls();
+                } catch (Exception e) {
+                    MyLog.w(CLS_NAME, "canRequestPackageInstalls:" + e.getMessage() + ", " + e.getClass().getSimpleName());
+                }
+            }
+            // This setting moved from Secure to Global in JELLY_BEAN_MR1 and then moved it back to Global in LOLLIPOP.
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                return Settings.Secure.getInt(ctx.getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS, 0) == 1;
+            } else {
+                return Settings.Global.getInt(ctx.getContentResolver(), Settings.Global.INSTALL_NON_MARKET_APPS, 0) == 1;
+            }
+        } catch (Exception e) {
+            MyLog.w(CLS_NAME, "installFromUnknownSources:" + e.getMessage() + ", " + e.getClass().getSimpleName());
+        }
+        return false;
+    }
+
 
     /**
      * Send an Intent to Tasker containing an array list of detected voice data

@@ -41,6 +41,10 @@
             android:icon="@drawable/ic_linux"
             android:title="@string/title_superuser"/>
         <item
+            android:id="@+id/nav_supported_apps"
+            android:icon="@drawable/ic_apps"
+            android:title="@string/title_applications"/>
+        <item
             android:id="@+id/nav_about"
             android:icon="@drawable/ic_info"
             android:title="@string/title_about"/>

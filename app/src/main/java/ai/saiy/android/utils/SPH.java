@@ -20,6 +20,7 @@ package ai.saiy.android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,7 @@ import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
+import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.memory.Memory;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
 import ai.saiy.android.service.SelfAware;
@@ -136,6 +138,15 @@ public class SPH {
     private static final String ANNOUNCE_NOTIFICATIONS = "announce_notifications";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
+    private static final String ALEXA_CODE_VERIFIER = "alexa_code_verifier";
+    private static final String ALEXA_ACCESS_TOKEN = "alexa_access_token";
+    private static final String ALEXA_REFRESH_TOKEN = "alexa_refresh_token";
+    private static final String ALEXA_ACCESS_TOKEN_EXPIRY = "alexa_access_token_expiry";
+    private static final String ALEXA_REGION = "alexa_region";
+    private static final String UNIQUE_ID = "unique_id";
+    private static final String ALEXA_NOTIFICATION_BUTTON = "alexa_notification_button";
+    private static final String REINSTALLATION_PROCESS = "reinstallation_process";
+    private static final String UNKNOWN_SOURCES = "unknown_sources";
     private static final String MIC_FIRST = "mic_first";
 
     /**
@@ -1295,7 +1306,13 @@ public class SPH {
      */
     public static Locale getVRLocale(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return UtilsLocale.stringToLocale(pref.getString(VR_LOCALE, UtilsLocale.DEFAULT_LOCALE_STRING));
+        String localeString = pref.getString(VR_LOCALE, UtilsLocale.DEFAULT_LOCALE_STRING);
+        if (UtilsString.notNaked(localeString)) {
+            return UtilsLocale.stringToLocale(localeString);
+        }
+        Locale locale = UtilsLocale.stringToLocale(SupportedLanguage.getGoogleNativeVRSupportedLanguageString());
+        setVRLocale(ctx, locale);
+        return locale;
     }
 
     /**
@@ -1320,7 +1337,13 @@ public class SPH {
      */
     public static Locale getTTSLocale(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return UtilsLocale.stringToLocale(pref.getString(TTS_LOCALE, UtilsLocale.DEFAULT_LOCALE_STRING));
+        String localeString = pref.getString(TTS_LOCALE, UtilsLocale.DEFAULT_LOCALE_STRING);
+        if (UtilsString.notNaked(localeString)) {
+            return UtilsLocale.stringToLocale(localeString);
+        }
+        Locale locale = UtilsLocale.stringToLocale(SupportedLanguage.getGoogleNativeVRSupportedLanguageString());
+        setTTSLocale(ctx, locale);
+        return locale;
     }
 
     /**
@@ -1895,6 +1918,96 @@ public class SPH {
     public static boolean isFirstForMicroPhone(Context context) {
         final SharedPreferences pref = getPref(context);
         return pref.getBoolean(MIC_FIRST, true);
+    }
+
+    public static String setCodeVerifier(Context context) {
+        return getPref(context).getString(ALEXA_CODE_VERIFIER, null);
+    }
+
+    public static void getCodeVerifier(Context context, String codeVerifier) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(ALEXA_CODE_VERIFIER, codeVerifier);
+        edit.apply();
+    }
+
+    public static String getAlexaAccessToken(Context context) {
+        return getPref(context).getString(ALEXA_ACCESS_TOKEN, null);
+    }
+
+    public static void setAlexaAccessToken(Context context, String accessToken) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(ALEXA_ACCESS_TOKEN, accessToken);
+        edit.apply();
+    }
+
+    public static String getAlexaRefreshToken(Context context) {
+        return getPref(context).getString(ALEXA_REFRESH_TOKEN, null);
+    }
+
+    public static void setAlexaRefreshToken(Context context, String refreshToken) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(ALEXA_REFRESH_TOKEN, refreshToken);
+        edit.apply();
+    }
+
+    public static long getAlexaAccessTokenExpiry(Context context) {
+        return getPref(context).getLong(ALEXA_ACCESS_TOKEN_EXPIRY, 0L);
+    }
+
+    public static void setAlexaAccessTokenExpiry(Context context, long expiryTime) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(ALEXA_ACCESS_TOKEN_EXPIRY, expiryTime);
+        edit.commit();
+    }
+
+    public static int getAlexaRegion(Context context, int defaultValue) {
+        return getPref(context).getInt(ALEXA_REGION, defaultValue);
+    }
+
+    public static void setAlexaRegion(Context context, int i) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(ALEXA_REGION, i);
+        edit.apply();
+    }
+
+    public static String getUniqueID(Context context) {
+        return getPref(context).getString(UNIQUE_ID, null);
+    }
+
+    public static void setUniqueID(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(UNIQUE_ID, str);
+        edit.apply();
+    }
+
+    public static boolean showAlexaNotification(Context context) {
+        return getPref(context).getBoolean(ALEXA_NOTIFICATION_BUTTON, Build.VERSION.SDK_INT >= Build.VERSION_CODES.M);
+    }
+
+    public static void setAlexaNotification(Context context, boolean showNotification) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ALEXA_NOTIFICATION_BUTTON, showNotification);
+        edit.apply();
+    }
+
+    public static boolean isCheckReinstallationNeeded(Context context) {
+        return getPref(context).getBoolean(REINSTALLATION_PROCESS, false);
+    }
+
+    public static void setCheckReinstallationNeeded(Context context, boolean isNeeded) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(REINSTALLATION_PROCESS, isNeeded);
+        edit.apply();
+    }
+
+    public static boolean isCheckUnknownSourcesSettingNeeded(Context context) {
+        return getPref(context).getBoolean(UNKNOWN_SOURCES, false);
+    }
+
+    public static void setCheckUnknownSourcesSettingNeeded(Context context, boolean isNeeded) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(UNKNOWN_SOURCES, isNeeded);
+        edit.apply();
     }
 
     public static void markMicroPhoneAccession(Context context) {

@@ -25,4 +25,6 @@ public interface IPartial {
     void onCancelDetected();
 
     void onTranslateDetected();
+
+    void onAlexaDetected();
 }

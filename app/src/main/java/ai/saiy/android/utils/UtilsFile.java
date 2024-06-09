@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Environment;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -31,6 +32,8 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
+
+import ai.saiy.android.tts.helper.TTSDefaults;
 
 /**
  * Utility class of handy file method. Static for ease of access
@@ -45,6 +48,16 @@ public class UtilsFile {
 
     private static final String FILE_PROVIDER = "ai.saiy.android.fileprovider";
     private static final String SOUND_EFFECT_DIR = "/se/";
+    private static final String TTS_GOOGLE_DIRECTORY = "/Android/data/" + TTSDefaults.TTS_PKG_NAME_GOOGLE + "/files/";
+    private static final String SAIY_DIRECTORY = "/Saiy";
+    private static final String SOUND_DIRECTORY = "/Sounds";
+    private static final String RELATIVE_SOUND_DIRECTORY = SAIY_DIRECTORY + SOUND_DIRECTORY;
+    private static final String IMPORT_DIRECTORY = "/Import";
+    private static final String RELATIVE_IMPORT_DIRECTORY = SAIY_DIRECTORY + IMPORT_DIRECTORY;
+    private static final String EXPORT_DIRECTORY = "/Export";
+    private static final String RELATIVE_EXPORT_DIRECTORY = SAIY_DIRECTORY + EXPORT_DIRECTORY;
+    private static final String QUICK_LAUNCH_FILE = "/saiy_ql.apk";
+    private static final String NO_MEDIA_FILE = "/.nomedia";
 
     /**
      * Prevent instantiation
@@ -123,6 +136,21 @@ public class UtilsFile {
         }
 
         return null;
+    }
+
+    public static File copyFileToGoogleTTSDir(File file) {
+        File targetFile = new File(Environment.getExternalStorageDirectory() + TTS_GOOGLE_DIRECTORY + file.getName());
+        try {
+            org.apache.commons.io.FileUtils.copyFile(file, new File(Environment.getExternalStorageDirectory() + TTS_GOOGLE_DIRECTORY + file.getName()));
+            return targetFile;
+        } catch (IOException e) {
+            if (!DEBUG) {
+                return file;
+            }
+            MyLog.w(CLS_NAME, "copyFileToGoogleTTSDir IOException");
+            e.printStackTrace();
+            return file;
+        }
     }
 
     /**
@@ -348,5 +376,224 @@ public class UtilsFile {
         }
 
         return null;
+    }
+
+    private static boolean createNewFile(String str) {
+        File file = new File(str);
+        if (!file.exists()) {
+            try {
+                boolean createNewFile = file.createNewFile();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "createNoMediaFile: success: " + createNewFile);
+                }
+            } catch (IOException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createNoMediaFile: IOException");
+                    e.printStackTrace();
+                }
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static File quickLaunchFile() {
+        return new File(saiyDirectory() + QUICK_LAUNCH_FILE);
+    }
+
+    public static boolean isExternalStorageWritable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageDirectory().canWrite();
+    }
+
+    public static boolean isSaiyDirectoryExists() {
+        File file = new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY);
+        return file.exists() && file.isDirectory();
+    }
+
+    public static boolean createSaiyDirectory() {
+        return new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY).mkdir();
+    }
+
+    public static File saiyDirectory() {
+        return new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY);
+    }
+
+    public static boolean isSoundDirectoryExists() {
+        File file = new File(Environment.getExternalStorageDirectory() + RELATIVE_SOUND_DIRECTORY);
+        return file.exists() && file.isDirectory();
+    }
+
+    public static boolean createSoundDirectory() {
+        if (isSaiyDirectoryExists()) {
+            return new File(Environment.getExternalStorageDirectory() + RELATIVE_SOUND_DIRECTORY).mkdir();
+        }
+        boolean result = createSaiyDirectory() && new File(new StringBuilder().append(Environment.getExternalStorageDirectory()).append(SAIY_DIRECTORY).append(SOUND_DIRECTORY).toString()).mkdir();
+        if (result) {
+            createNewFile(soundDirectory() + NO_MEDIA_FILE);
+        }
+        return true;
+    }
+
+    public static File soundDirectory() {
+        return new File(Environment.getExternalStorageDirectory() + RELATIVE_SOUND_DIRECTORY);
+    }
+
+    private static boolean createQuickLaunchFile(Context context) {
+        File file = resourceToFile(context, ai.saiy.android.R.raw.saiy_ql, quickLaunchFile());
+        return file != null && file.exists();
+    }
+
+    public static boolean isImportDirectoryExists() {
+        File file = new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY);
+        return file.exists() && file.isDirectory();
+    }
+
+    public static boolean createImportDirectory() {
+        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(new StringBuilder().append(Environment.getExternalStorageDirectory()).append(SAIY_DIRECTORY).append(IMPORT_DIRECTORY).toString()).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY).mkdir();
+    }
+
+    public static boolean isExportDirectoryExists() {
+        File file = new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY);
+        return file.exists() && file.isDirectory();
+    }
+
+    public static boolean createExportDirectory() {
+        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(new StringBuilder().append(Environment.getExternalStorageDirectory()).append(SAIY_DIRECTORY).append(EXPORT_DIRECTORY).toString()).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY).mkdir();
+    }
+
+    private static boolean isQuickLaunchFileExists() {
+        return new File(saiyDirectory() + QUICK_LAUNCH_FILE).exists();
+    }
+
+    private static boolean isNoMediaFileExists() {
+        return new File(soundDirectory() + NO_MEDIA_FILE).exists();
+    }
+
+    public static boolean createDirs(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "createDirs");
+        }
+        if (!ai.saiy.android.permissions.PermissionHelper.checkFilePermissionsNR(context)) {
+            if (!DEBUG) {
+                return false;
+            }
+            MyLog.w(CLS_NAME, "createDirs: permission denied");
+            return false;
+        }
+        if (isSaiyDirectoryExists() && isImportDirectoryExists() && isExportDirectoryExists() && isSoundDirectoryExists() && isNoMediaFileExists() && isQuickLaunchFileExists()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: all dirs exist: true");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "createDirs: dirs missing: false");
+        }
+        if (!isExternalStorageWritable()) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "createDirs: isExternalStorageWritable: false");
+            }
+            return false;
+        }
+        if (isSaiyDirectoryExists()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: saiyDirExists: true");
+            }
+            if (!isQuickLaunchFileExists()) {
+                if (createQuickLaunchFile(context)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "createDirs: createQL: success");
+                    }
+                } else if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createQL: failed");
+                }
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "createDirs: saiyDirExists: false");
+            }
+            if (!createSaiyDirectory()) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createSaiyDir: failed");
+                }
+                return false;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: createSaiyDir: success");
+            }
+            if (!isQuickLaunchFileExists()) {
+                if (createQuickLaunchFile(context)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "createDirs: createQL: success");
+                    }
+                } else if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createQL: failed");
+                }
+            }
+        }
+        if (isSoundDirectoryExists()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: soundDirExists: true");
+            }
+            if (!isNoMediaFileExists()) {
+                if (createNewFile(soundDirectory() + NO_MEDIA_FILE)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "createDirs: createNoMediaFile: success");
+                    }
+                } else if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createNoMediaFile: failed");
+                }
+            }
+        } else {
+            if (!createSoundDirectory()) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createSoundDir: failed");
+                }
+                return false;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: createSoundDir: success");
+            }
+            if (!isNoMediaFileExists()) {
+                if (createNewFile(soundDirectory() + NO_MEDIA_FILE)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "createDirs: createNoMediaFile: success");
+                    }
+                } else if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createNoMediaFile: failed");
+                }
+            }
+        }
+        if (isImportDirectoryExists()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: importDirExists: true");
+            }
+        } else {
+            if (!createImportDirectory()) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createImportDir: failed");
+                }
+                return false;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: createImportDir: success");
+            }
+        }
+        if (isExportDirectoryExists()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: exportDirExists: true");
+            }
+        } else {
+            if (!createExportDirectory()) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "createDirs: createExportDir: failed");
+                }
+                return false;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: createExportDir: success");
+            }
+        }
+        return true;
     }
 }

@@ -26,4 +26,5 @@ public class Partial {
 
     public static final int CANCEL = 1;
     public static final int TRANSLATE = 2;
+    public static final int ALEXA = 3;
 }

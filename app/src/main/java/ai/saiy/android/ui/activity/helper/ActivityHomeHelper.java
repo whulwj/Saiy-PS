@@ -36,6 +36,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -108,43 +109,43 @@ public class ActivityHomeHelper {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showUserGuideDialog: UG_BASIC");
                                 }
-                                ExecuteIntent.webSearch(activity.getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=26804173&postcount=1043");
+                                ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_GUIDE_BASIC);
                                 break;
                             case 1:
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showUserGuideDialog: UG_CUSTOM_COMMANDS");
                                 }
-                                ExecuteIntent.webSearch(activity.getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=26883467&postcount=1050");
+                                ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_CUSTOM_COMMANDS);
                                 break;
                             case 2:
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showUserGuideDialog: UG_CUSTOM_REPLACEMENTS");
                                 }
-                                ExecuteIntent.webSearch(activity.getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=33882082&postcount=2047");
+                                ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_CUSTOM_REPLACEMENTS);
                                 break;
                             case 3:
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showUserGuideDialog: UG_SOUND_EFFECTS");
                                 }
-                                ExecuteIntent.webSearch(activity.getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=33877549&postcount=2042");
+                                ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_SOUND_EFFECTS);
                                 break;
                             case 4:
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showUserGuideDialog: UG_TASKER");
                                 }
-                                ExecuteIntent.webSearch(activity.getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=34339449&postcount=2155");
+                                ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_TASKER);
                                 break;
                             case 5:
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showUserGuideDialog: UG_TROUBLESHOOTING");
                                 }
-                                ExecuteIntent.webSearch(activity.getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=25228934&postcount=659");
+                                ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_TROUBLESHOOTING);
                                 break;
                             case 6:
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showUserGuideDialog: UG_COMING_SOON");
                                 }
-                                ExecuteIntent.webSearch(activity.getApplicationContext(), "http://forum.xda-developers.com/showpost.php?p=25666528&postcount=755");
+                                ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_COMING_SOON);
                                 break;
                         }
                         dialog.dismiss();

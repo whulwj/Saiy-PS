@@ -49,6 +49,7 @@ import androidx.annotation.Nullable;
 import com.google.auth.oauth2.AccessToken;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 import com.google.common.util.concurrent.RateLimiter;
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 import com.nuance.speechkit.DetectionType;
 
 import java.util.ArrayList;
@@ -77,6 +78,7 @@ import ai.saiy.android.audio.AudioParameters;
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.audio.SaiySoundPool;
 import ai.saiy.android.command.helper.CC;
+import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.configuration.BluemixConfiguration;
 import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.configuration.MicrosoftConfiguration;
@@ -92,6 +94,7 @@ import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyHotwordListener;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.recognition.helper.RecognitionDefaults;
+import ai.saiy.android.recognition.provider.Amazon.VRLanguageAmazon;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
 import ai.saiy.android.recognition.provider.bluemix.RecognitionBluemix;
 import ai.saiy.android.recognition.provider.google.chromium.RecognitionGoogleChromium;
@@ -101,6 +104,7 @@ import ai.saiy.android.recognition.provider.nuance.RecognitionNuance;
 import ai.saiy.android.recognition.provider.remote.RecognitionRemote;
 import ai.saiy.android.recognition.provider.sphinx.RecognitionSphinx;
 import ai.saiy.android.recognition.provider.wit.RecognitionWit;
+import ai.saiy.android.recognition.provider.wit.RecognitionWitHybrid;
 import ai.saiy.android.service.ISaiyListener;
 import ai.saiy.android.service.SelfAware;
 import ai.saiy.android.sound.VolumeHelper;
@@ -687,7 +691,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                               final RecognitionMicrosoft recogOxford, final RecognitionWit recogWit,
                               final RecognitionBluemix recogIBM, final RecognitionRemote recogRemote,
                               final RecognitionMic recogMic, final SpeechRecognizer recogNative,
-                              final RecognitionSphinx recogSphinx) {
+                              final RecognitionSphinx recogSphinx, final RecognitionWitHybrid recogWitHybrid) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "stopListening");
         }
@@ -847,6 +851,33 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "stopListening null");
                         }
+                    }
+                    break;
+                case WIT_HYBRID:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "stopListening: " + SaiyDefaults.VR.WIT_HYBRID.name());
+                    }
+                    if (recogWitHybrid == null) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "stopListening null");
+                        }
+                        return;
+                    }
+                    switch (Recognition.getState()) {
+                        case PROCESSING:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "stopListening: PROCESSING");
+                            }
+                            recogWitHybrid.stopListening();
+                            break;
+                        case LISTENING:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "stopListening: SPEAKING");
+                            }
+                            recogWitHybrid.stopListening();
+                            break;
+                        default:
+                            break;
                     }
                     break;
                 case IBM:
@@ -1903,6 +1934,14 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
     }
 
+    public RecognitionWitHybrid getWitHybridRecognition(ai.saiy.android.recognition.SaiyRecognitionListener recognitionListener) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getWitHybridRecognition");
+        }
+        return new RecognitionWitHybrid(mContext, recognitionListener,
+                getDefaultLanguageModel(), getTTSLocale(), VRLanguageAmazon.ENGLISH_UK, VRLanguageWit.ENGLISH, getSupportedLanguage(false), saiySoundPool, true, "");
+    }
+
     /**
      * Utility method to construct the {@link RecognitionBluemix} instance
      *
@@ -2448,6 +2487,55 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         NotificationHelper.cancelFetchingNotification(mContext);
         NotificationHelper.cancelListeningNotification(mContext);
         vibrate(VIBRATE_MIN);
+    }
+
+    public void checkReinstallation(Bundle bundle) {
+        if (bundle == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkReinstallation: bundle null");
+            }
+        } else if (bundle.getInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_NONE) == Condition.CONDITION_CHECK_REINSTALLATION) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkReinstallation: attempting a reinstallation process");
+            }
+        } else if (!SPH.isCheckReinstallationNeeded(mContext)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkReinstallation: not condition reinstall");
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkReinstallation: user ignored reinstallation request");
+            }
+            SPH.setCheckReinstallationNeeded(mContext, false);
+            SPH.setCheckUnknownSourcesSettingNeeded(mContext, false);
+        }
+    }
+
+    public void handleReinstallation() {
+        if (!SPH.isCheckReinstallationNeeded(mContext)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "handleReinstallation false");
+            }
+            return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "handleReinstallation true");
+        }
+        String str;
+        SPH.setCheckReinstallationNeeded(mContext, false);
+        ai.saiy.android.localisation.SaiyResources aVar = new ai.saiy.android.localisation.SaiyResources(mContext, getSupportedLanguage(false));
+        if (SPH.isCheckUnknownSourcesSettingNeeded(mContext)) {
+            SPH.setCheckUnknownSourcesSettingNeeded(mContext, false);
+            str = aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_5) + XMLResultsHandler.SEP_SPACE + aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_6);
+            SettingsIntent.settingsIntent(mContext, SettingsIntent.Type.SECURITY);
+        } else {
+            str = aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_5);
+        }
+        aVar.reset();
+        LocalRequest aVar2 = new LocalRequest(mContext);
+        aVar2.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, getSupportedLanguage(false), getVRLocale(), getTTSLocale(), str);
+        aVar2.setCondition(Condition.CONDITION_NONE);
+        aVar2.execute();
     }
 
     /**

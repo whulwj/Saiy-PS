@@ -5,6 +5,7 @@ commonsIo = "2.16.1"
 commonsCollections4 = "4.4"
 commonsCodec = "1.17.0"
 commonsLang3 = "3.13.0"
+commonsFileUpload = "1.5"
 googleGoogleApiServicesTranslate = "v2-rev45-1.21.0"
 grpcAuth = "1.63.0"
 grpcJava = "1.63.0"
@@ -17,6 +18,7 @@ guava = "32.1.3-android"
 googleServicesVersion = "4.4.1"
 playServicesAuth = "20.5.0"
 playServicesLocation = "21.0.1"
+playServicesAdsIdentifier = "18.0.1"
 protobufGradlePlugin = "0.9.4"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -56,6 +58,7 @@ commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
 commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3" }
+commons-fileupload = { module = "commons-fileupload:commons-fileupload", version.ref = "commonsFileUpload" }
 google-google-api-services-translate = { module = "com.google.apis:google-api-services-translate", version.ref = "googleGoogleApiServicesTranslate" }
 grpc-auth = { module = "io.grpc:grpc-auth", version.ref = "grpcAuth" }
 grpc-okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "grpcJava" }
@@ -71,6 +74,7 @@ ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitV
 licensesdialog = { module = "de.psdev.licensesdialog:licensesdialog", version.ref = "licensesdialog" }
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+play-services-ads-identifier = { group = "com.google.android.gms", name = "play-services-ads-identifier", version.ref = "playServicesAdsIdentifier" }
 
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

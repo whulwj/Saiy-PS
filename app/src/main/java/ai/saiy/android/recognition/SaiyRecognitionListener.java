@@ -207,4 +207,8 @@ public class SaiyRecognitionListener implements RecognitionListener, IPartial {
     @Override
     public void onTranslateDetected() {
     }
+
+    @Override
+    public void onAlexaDetected() {
+    }
 }

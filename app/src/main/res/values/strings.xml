@@ -81,6 +81,7 @@
     <string name="enabled" translatable="true">Enabled</string>
     <string name="disabled" translatable="true">Disabled</string>
     <string name="success" translatable="true">success</string>
+    <string name="success_">Success!</string>
     <string name="failed" translatable="true">failed</string>
     <string name="chooser_share_via" translatable="true">Share via</string>
     <string name="feedback" translatable="true">feedback</string>
@@ -95,6 +96,7 @@
     <string name="menu_web_search">Perform a web search</string>
     <string name="google_assistant">Google Assistant</string>
     <string name="menu_alexa">Alexa</string>
+    <string name="menu_alexa_closest_region">Select closest region for Alexa</string>
     <string name="microsoft_cortana">Microsoft Cortana</string>
     <string name="state_command_unknown" translatable="true">State command unknown</string>
     <string name="menu_send_to" translatable="true">Send to</string>
@@ -156,7 +158,9 @@
     <string name="title_troubleshooting_bugs" translatable="true">Troubleshooting &amp; Bugs</string>
     <string name="title_troubleshooting" translatable="true">Troubleshooting</string>
     <string name="title_superuser" translatable="true">Superuser</string>
+    <string name="title_supported_apps">Supported Apps</string>
     <string name="title_customisation" translatable="true">Customisation</string>
+    <string name="title_applications">Applications</string>
     <string name="title_about" translatable="true">About</string>
     <string name="title_feedback" translatable="true">Feedback</string>
     <string name="title_communicate" translatable="true">Communicate</string>
@@ -689,6 +693,73 @@
     <string name="command_wifi">WiFi</string>
     <string name="command_wifi_content_1">• Toggle/enable/disable WiFi</string>
     <string name="an_unknown_application" translatable="true">"an unknown application"</string>
+
+    <string name="acs_ui_main_switch">An on off icon</string>
+    <string name="menu_logged_out">Logged out</string>
+    <string name="menu_login_amazon">Login with Amazon</string>
+    <string name="menu_amazon">Amazon</string>
+    <string name="menu_amazon_music">Amazon Music</string>
+    <string name="menu_automate">Automate</string>
+    <string name="menu_box">Box</string>
+    <string name="menu_deezer">Deezer</string>
+    <string name="menu_drive">Drive</string>
+    <string name="menu_dropbox">Dropbox</string>
+    <string name="menu_ebay">eBay</string>
+    <string name="menu_evernote">Evernote</string>
+    <string name="menu_google_earth">Google Earth</string>
+    <string name="menu_google_maps">Google Maps</string>
+    <string name="menu_google_play_store">Google Play Store</string>
+    <string name="menu_google_sky_map">Sky Map</string>
+    <string name="menu_google_sound_search">Google Sound Search</string>
+    <string name="menu_google_translate">Google Translate</string>
+    <string name="menu_facebook">Facebook</string>
+    <string name="menu_foursquare">Foursquare</string>
+    <string name="menu_imdb">IMDb</string>
+    <string name="menu_keep">Keep</string>
+    <string name="menu_netflix">Netflix</string>
+    <string name="menu_play_music">Play Music</string>
+    <string name="menu_spotify">Spotify</string>
+    <string name="menu_shazam">Shazam</string>
+    <string name="menu_soundhound">SoundHound</string>
+    <string name="menu_twitter">Twitter</string>
+    <string name="menu_tidal">TIDAL</string>
+    <string name="menu_tasker">Tasker</string>
+    <string name="menu_trackid">TrackID</string>
+    <string name="menu_uber">Uber</string>
+    <string name="menu_wolfram_alpha">Wolfram Alpha</string>
+    <string name="menu_yelp">Yelp</string>
+    <string name="menu_youtube">YouTube</string>
+    <string name="menu_link_alexa">Link Alexa</string>
+    <string name="menu_link_facebook">Link Facebook</string>
+    <string name="menu_link_foursquare">Link Foursquare</string>
+    <string name="menu_link_linkedin">Link LinkedIn</string>
+    <string name="menu_link_tasker">Link Tasker</string>
+    <string name="menu_link_twitter">Link Twitter</string>
+    <string name="menu_linkedin">LinkedIn</string>
+    <string name="content_amazon_login">Amazon automatically creates an \'Alexa Profile\' associated with your account, even if you don\'t yet own any hardware.\n\nIf you do, then great! Saiy will connect with your existing Alexa service, including any linked smart home devices you have and allow you to control their features. Otherwise, as a new user, your commands will be a little more restricted.\n\nPlease do consider installing the Alexa Companion App if it is available in your region, to enhance your experience and manage your \'skills\'.\n\nFor now, here are some example usages:\n\n• What\'s the longest river in the world?\n• How old is Tom Hanks?\n• How\'s the weather looking?\n• Give me a recipe for chicken pot pie\n• Are you better than Saiy?\n• Reorder coffee\n• Turn on the bedroom lights\n\nHave fun!</string>
+    <string name="acd_amazon_button">Button for authorization through Login with Amazon</string>
+    <string name="menu_tap_authorise">tap to authorise</string>
+    <string name="menu_tap_deauthorise">tap to deauthorise</string>
+    <string name="menu_tap_install">tap to install</string>
+    <string name="title_install">Install</string>
+    <string name="title_installed">Installed</string>
+    <string name="title_error_alexa_android_5">Requires Android 5.0+ :(</string>
+    <string name="content_coming_soon_exclamation">Coming soon!</string>
+    <string name="lp_link_facebook">To enable me to post your dictated content to Facebook, you can authorise my access here.</string>
+    <string name="lp_install_link">Tap here to install %1$s from the Play Store</string>
+    <string name="lp_twitter">So I can automatically tweet your dictated content, you can authorise my access to your Twitter feed here.</string>
+    <string name="lp_auth_alexa">To enable me to connect to Alexa, you\'ll need to manually authorise access via your Amazon account. Please note. This does not grant me any other permissions for your account itself.</string>
+    <string name="lp_tasker">To automatically run your Tasker tasks for you, tap here to make sure our applications can communicate correctly.</string>
+    <string name="lp_linkedin">In a future release, you\'ll be able to dictate content you\'d like me to automatically post to Linked In.</string>
+    <string name="lp_foursquare">To access nearby places that you may wish to check in to, using Foursquare, I\'ll need your authorisation here.</string>
+    <string name="content_tasker_connection_success">Connected to Tasker successfully!</string>
+    <string name="content_tasker_reinstall_1">Due to an annoying Android bug, Tasker hasn\'t detected that I hold the permission to remotely run tasks for you. In order to fix this issue, I need to reinstall myself, so the Android system correctly detects the permission.</string>
+    <string name="content_tasker_reinstall_2">To do this, you need to briefly enable the option to allow installations from Unknown Sources. This setting prevents installation from anywhere other than the Play Store, which is a good idea, but it also prevents me from reinstalling myself from the current version already stored on your device. If you tick the box to allow Unknown Sources and return to the application, I\'ll guide you further from there.</string>
+    <string name="content_tasker_reinstall_3">Great. Please tap the button to reinstall me and I\'ll be back shortly.</string>
+    <string name="content_tasker_reinstall_4">That felt very strange. I wonder I remain the same entity as I was before? Regardless, </string>
+    <string name="content_tasker_reinstall_5">Tasker should be correctly configured now</string>
+    <string name="content_tasker_reinstall_6">Don\'t forget to change the setting back to block external installations. It\'ll keep your device safe.</string>
+    <string name="content_tasker_reinstall_7">Tap on the install button and I\'ll be back shortly.</string>
 
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 

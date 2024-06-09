@@ -148,6 +148,9 @@ public class PartialHelper {
                             case Partial.TRANSLATE:
                                 iPartial.onTranslateDetected();
                                 break;
+                            case Partial.ALEXA:
+                                iPartial.onAlexaDetected();
+                                break;
                         }
                     }
                 }

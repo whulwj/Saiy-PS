@@ -125,6 +125,7 @@ public class SaiyDefaults {
         NUANCE(Defaults.VR.NUANCE),
         MICROSOFT(Defaults.VR.MICROSOFT),
         WIT(Defaults.VR.WIT),
+        WIT_HYBRID(null),
         IBM(Defaults.VR.IBM),
         REMOTE(Defaults.VR.REMOTE),
         MIC(null);

@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -75,14 +76,14 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         this.mContext = context.getApplicationContext();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(final Activity activity) {
+    public void onAttach(@NonNull final Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.mContext = activity.getApplicationContext();
@@ -105,7 +106,7 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }
@@ -135,7 +136,6 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
         final int position = (int) view.getTag();
 
         switch (position) {
-
             case 0:
                 getParentActivity().showLanguageSelector();
                 break;
@@ -157,6 +157,18 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
                 break;
             case 5:
                 getParentActivity().toast(getString(R.string.menu_default_apps), Toast.LENGTH_SHORT);
+                break;
+            case 6:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    if (isActive()) {
+                        getParentActivity().toast(getString(R.string.title_error_alexa_android_5), Toast.LENGTH_SHORT);
+                    }
+                    break;
+                }
+                SPH.setAlexaNotification(getApplicationContext(), !SPH.showAlexaNotification(getApplicationContext()));
+                this.getObjects().get(position).setIconExtra(SPH.showAlexaNotification(getApplicationContext()) ? R.drawable.ic_toggle_switch_on : R.drawable.ic_toggle_switch_off);
+                this.getAdapter().notifyItemChanged(position);
+                ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
                 break;
             default:
                 break;

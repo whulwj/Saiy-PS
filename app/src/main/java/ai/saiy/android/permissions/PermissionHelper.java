@@ -193,6 +193,65 @@ public class PermissionHelper {
         }
     }
 
+
+    /**
+     * Check if the user has granted write files permissions
+     *
+     * @param ctx the application context
+     * @return true if the permissions have been granted. False if they have been denied or are
+     * required to be requested.
+     */
+    public static boolean checkFilePermissions(@NonNull final Context ctx) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkFilePermissions");
+        }
+
+        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            case PackageManager.PERMISSION_GRANTED:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "checkFilePermissions: PERMISSION_GRANTED");
+                }
+                return true;
+            case PackageManager.PERMISSION_DENIED:
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "checkFilePermissions: PERMISSION_DENIED");
+                }
+
+                final Intent intent = new Intent(ctx, ActivityPermissionDialog.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                final Bundle bundle = new Bundle();
+                bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE});
+                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_FILE);
+
+                intent.putExtras(bundle);
+
+                ctx.startActivity(intent);
+                return false;
+        }
+    }
+
+    public static boolean checkFilePermissionsNR(@NonNull final Context ctx) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkFilePermissionsNR");
+        }
+
+        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            case PackageManager.PERMISSION_GRANTED:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "checkFilePermissionsNR: PERMISSION_GRANTED");
+                }
+                return true;
+            case PackageManager.PERMISSION_DENIED:
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "checkFilePermissionsNR: PERMISSION_DENIED");
+                }
+                return false;
+        }
+    }
+
     /**
      * Check if the user has granted the contacts group permission
      *

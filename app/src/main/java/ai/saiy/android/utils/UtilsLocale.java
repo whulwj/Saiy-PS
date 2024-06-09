@@ -18,6 +18,7 @@
 package ai.saiy.android.utils;
 
 import android.content.res.Resources;
+import android.os.Build;
 
 import androidx.annotation.Nullable;
 
@@ -45,8 +46,8 @@ public class UtilsLocale {
     public static final String LOCALE_DELIMITER_1 = "-";
     public static final String LOCALE_DELIMITER_2 = "_";
 
-    public static final Locale DEFAULT_LOCALE = Locale.getDefault();
-    public static final String DEFAULT_LOCALE_STRING = Locale.getDefault().toString();
+    public static final Locale DEFAULT_LOCALE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? Locale.getDefault(Locale.Category.DISPLAY) : Locale.getDefault();
+    public static final String DEFAULT_LOCALE_STRING = DEFAULT_LOCALE.toString();
 
     /**
      * Utility method to convert a string to a {@link Locale}. If this process fails, the best

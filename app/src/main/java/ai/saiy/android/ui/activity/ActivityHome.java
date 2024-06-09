@@ -60,6 +60,7 @@ import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.ui.activity.helper.ActivityHomeHelper;
 import ai.saiy.android.ui.fragment.FragmentAbout;
 import ai.saiy.android.ui.fragment.FragmentAdvancedSettings;
+import ai.saiy.android.ui.fragment.FragmentApplications;
 import ai.saiy.android.ui.fragment.FragmentCustomisation;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
@@ -71,6 +72,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
+import me.drakeet.support.toast.ToastCompat;
 
 /**
  * Main activity class that handles the fragment management
@@ -98,13 +100,18 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     public static final int INDEX_FRAGMENT_SUPER_USER = 4;
     public static final int INDEX_FRAGMENT_ABOUT = 5;
     public static final int INDEX_FRAGMENT_BUGS = 6;
+    public static final int INDEX_FRAGMENT_DEVELOPMENT = 7;
+    public static final int INDEX_FRAGMENT_SUPPORTED_APPS = 8;
+    public static final int INDEX_FRAGMENT_ACCESSIBILITY = 9;
+    public static final int INDEX_FRAGMENT_COMMANDS = 10;
 
     public static final int MENU_INDEX_HOME = 0;
     public static final int MENU_INDEX_SETTINGS = 1;
     public static final int MENU_INDEX_CUSTOMISATION = 2;
     public static final int MENU_INDEX_ADVANCED_SETTINGS = 3;
     public static final int MENU_INDEX_SUPER_USER = 4;
-    public static final int MENU_INDEX_ABOUT = 5;
+    public static final int MENU_INDEX_SUPPORTED_APPS = 5;
+    public static final int MENU_INDEX_ABOUT = 6;
 
     public static final int INDEX_DIALOG_USER_GUIDE = 1;
 
@@ -371,9 +378,11 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     private void checkPermissions() {
-        String[] permissions = new String[2];
+        String[] permissions = new String[4];
         permissions[0] = Manifest.permission.INTERNET;
         permissions[1] = Manifest.permission.RECORD_AUDIO;
+        permissions[2] = Manifest.permission.READ_EXTERNAL_STORAGE;
+        permissions[3] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
         mChatPermissionRequest.launch(permissions);
     }
@@ -409,6 +418,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             case INDEX_FRAGMENT_ABOUT:
                 return new Pair<>((Fragment) FragmentAbout.newInstance(null),
                         String.valueOf(INDEX_FRAGMENT_ABOUT));
+            case INDEX_FRAGMENT_SUPPORTED_APPS:
+                return new Pair<>(FragmentApplications.newInstance(null),
+                        String.valueOf(INDEX_FRAGMENT_SUPPORTED_APPS));
             default:
                 return new Pair<>((Fragment) FragmentHome.newInstance(null),
                         String.valueOf(INDEX_FRAGMENT_HOME));
@@ -659,6 +671,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     case INDEX_FRAGMENT_BUGS:
                         proceed = true;
                         break;
+                    case INDEX_FRAGMENT_SUPPORTED_APPS:
+                        proceed = (id != R.id.nav_supported_apps);
+                        break;
                     default:
                         proceed = false;
                         break;
@@ -690,6 +705,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     } else if (R.id.nav_about == id) {
                         fragment = FragmentAbout.newInstance(null);
                         tag = String.valueOf(INDEX_FRAGMENT_ABOUT);
+                    } else if (R.id.nav_supported_apps == id) {
+                        fragment = FragmentApplications.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_SUPPORTED_APPS);
                     } else if (R.id.nav_share == id) {
                         if (!ExecuteIntent.shareIntent(getApplicationContext(),
                                 Install.getSaiyInstallLink(getApplicationContext()))) {
@@ -902,6 +920,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                             case INDEX_FRAGMENT_SUPER_USER:
                                 navigationView.getMenu().getItem(MENU_INDEX_SUPER_USER).setChecked(false);
                                 break;
+                            case INDEX_FRAGMENT_SUPPORTED_APPS:
+                                navigationView.getMenu().getItem(MENU_INDEX_SUPPORTED_APPS).setChecked(false);
+                                break;
                             case INDEX_FRAGMENT_ABOUT:
                                 navigationView.getMenu().getItem(MENU_INDEX_ABOUT).setChecked(false);
                                 break;
@@ -918,6 +939,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                             navigationView.getMenu().getItem(MENU_INDEX_ADVANCED_SETTINGS).setChecked(true);
                         } else if (R.id.nav_super_user == navId) {
                             navigationView.getMenu().getItem(MENU_INDEX_SUPER_USER).setChecked(true);
+                        } else if (R.id.nav_supported_apps == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_SUPPORTED_APPS).setChecked(true);
                         } else if (R.id.nav_about == navId) {
                             navigationView.getMenu().getItem(MENU_INDEX_ABOUT).setChecked(true);
                         }
@@ -951,6 +974,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 return R.id.nav_super_user;
             case INDEX_FRAGMENT_ABOUT:
                 return R.id.nav_about;
+            case INDEX_FRAGMENT_SUPPORTED_APPS:
+                return R.id.nav_supported_apps;
             default:
                 return 0;
         }
@@ -1031,9 +1056,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * Utility method to toast making sure it's on the main thread
      *
      * @param text   to toast
-     * @param length one of {@link Toast#LENGTH_SHORT} {@link Toast#LENGTH_LONG}
+     * @param duration one of {@link Toast#LENGTH_SHORT} {@link Toast#LENGTH_LONG}
      */
-    public void toast(@Nullable final String text, final int length) {
+    public void toast(@Nullable final String text, final int duration) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "makeToast: " + text);
         }
@@ -1042,7 +1067,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(ActivityHome.this.getApplicationContext(), text, length).show();
+                    ToastCompat.makeText(ActivityHome.this.getApplicationContext(), text, duration).show();
                 }
             });
         }
@@ -1140,6 +1165,11 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 case INDEX_FRAGMENT_BUGS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onBackStackChanged: INDEX_FRAGMENT_BUGS");
+                    }
+                    break;
+                case INDEX_FRAGMENT_SUPPORTED_APPS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onBackStackChanged: INDEX_FRAGMENT_SUPPORTED_APPS");
                     }
                     break;
                 default:

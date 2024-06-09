@@ -25,6 +25,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsFile;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -77,6 +78,7 @@ public class BRBoot extends BroadcastReceiver {
                 MyLog.i(CLS_NAME, "onReceive: start at boot disabled by user");
             }
         }
+        UtilsFile.createDirs(context);
     }
 
     /**

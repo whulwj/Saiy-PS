@@ -54,6 +54,16 @@ public class SoundEffect {
     private static final String PUKE_1 = "puke1";
     public static final String FLUSH = "flush";
     private static final String FLUSH_1 = "flush1";
+    public static final String TICK = "tick";
+    private static final String TICK1 = "tick1";
+    public static final String COIN = "coin";
+    private static final String COIN1 = "coin1";
+    public static final String DICE = "dice";
+    private static final String DICE1 = "dice1";
+    public static final String SHUFFLE = "shuffle";
+    private static final String SHUFFLE1 = "shuffle1";
+    public static final String WAND = "wand";
+    private static final String WAND1 = "wand1";
 
     private static final String[] fartArrayMale = new String[]{FART_1, FART_2, FART_3};
     private static final String[] fartArrayFemale = new String[]{FART_1, FART_2, FART_3};
@@ -104,134 +114,81 @@ public class SoundEffect {
                 return getPuke(gender);
             case FLUSH:
                 return getFlush(gender);
+            case TICK:
+                return TICK1;
+            case COIN:
+                return COIN1;
+            case DICE:
+                return DICE1;
+            case SHUFFLE:
+                return SHUFFLE1;
+            case WAND:
+                return WAND1;
             default:
                 return name;
         }
     }
 
     public static String getFart(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return fartArrayMale[new Random().nextInt(fartArrayMale.length)];
-            case FEMALE:
-                return fartArrayFemale[new Random().nextInt(fartArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return fartArrayFemale[new Random().nextInt(fartArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return fartArrayMale[new Random().nextInt(fartArrayMale.length)];
         }
+        return fartArrayFemale[new Random().nextInt(fartArrayFemale.length)];
     }
 
     public static String getBurp(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return burpArrayMale[new Random().nextInt(burpArrayMale.length)];
-            case FEMALE:
-                return burpArrayFemale[new Random().nextInt(burpArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return burpArrayFemale[new Random().nextInt(burpArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return burpArrayMale[new Random().nextInt(burpArrayMale.length)];
         }
+        return burpArrayFemale[new Random().nextInt(burpArrayFemale.length)];
     }
 
     public static String getCough(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return coughArrayMale[new Random().nextInt(coughArrayMale.length)];
-            case FEMALE:
-                return coughArrayFemale[new Random().nextInt(coughArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return coughArrayFemale[new Random().nextInt(coughArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return coughArrayMale[0];
         }
+        return coughArrayFemale[0];
     }
 
     public static String getGiggle(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return giggleArrayMale[new Random().nextInt(giggleArrayMale.length)];
-            case FEMALE:
-                return giggleArrayFemale[new Random().nextInt(giggleArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return giggleArrayFemale[new Random().nextInt(giggleArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return giggleArrayMale[0];
         }
+        return giggleArrayFemale[0];
     }
 
     public static String getCry(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return cryArrayMale[new Random().nextInt(cryArrayMale.length)];
-            case FEMALE:
-                return cryArrayFemale[new Random().nextInt(cryArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return cryArrayFemale[new Random().nextInt(cryArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return cryArrayMale[0];
         }
+        return cryArrayFemale[0];
     }
 
     public static String getPee(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return peeArrayMale[new Random().nextInt(peeArrayMale.length)];
-            case FEMALE:
-                return peeArrayFemale[new Random().nextInt(peeArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return peeArrayFemale[new Random().nextInt(peeArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return peeArrayMale[0];
         }
+        return peeArrayFemale[0];
     }
 
     public static String getSneeze(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return sneezeArrayMale[new Random().nextInt(sneezeArrayMale.length)];
-            case FEMALE:
-                return sneezeArrayFemale[new Random().nextInt(sneezeArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return sneezeArrayFemale[new Random().nextInt(sneezeArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return sneezeArrayMale[0];
         }
+        return sneezeArrayFemale[0];
     }
 
     public static String getPuke(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return pukeArrayMale[new Random().nextInt(pukeArrayMale.length)];
-            case FEMALE:
-                return pukeArrayFemale[new Random().nextInt(pukeArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return pukeArrayFemale[new Random().nextInt(pukeArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return pukeArrayMale[0];
         }
+        return pukeArrayFemale[0];
     }
 
     public static String getFlush(@NonNull final Gender gender) {
-
-        switch (gender) {
-
-            case MALE:
-                return flushArrayMale[new Random().nextInt(flushArrayMale.length)];
-            case FEMALE:
-                return flushArrayFemale[new Random().nextInt(flushArrayFemale.length)];
-            case UNDEFINED:
-            default:
-                return flushArrayFemale[new Random().nextInt(flushArrayFemale.length)];
+        if (gender == Gender.MALE) {
+            return flushArrayMale[0];
         }
+        return flushArrayFemale[0];
     }
 }
