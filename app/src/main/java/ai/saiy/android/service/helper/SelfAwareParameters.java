@@ -156,9 +156,10 @@ public class SelfAwareParameters extends HashMap<String, String> {
      *
      * @param isSpeakListen whether the speech should start a recognition request on completion
      * @param conditions    the {@link SelfAwareConditions}
+     * @param bundle        of instructions
      */
     @SuppressWarnings("deprecation")
-    public void setParams(final boolean isSpeakListen, @NonNull final SelfAwareConditions conditions) {
+    public void setParams(final boolean isSpeakListen, @NonNull final SelfAwareConditions conditions, Bundle bundle) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "setParams: isSpeakListen: " + isSpeakListen);
         }
@@ -172,6 +173,17 @@ public class SelfAwareParameters extends HashMap<String, String> {
         putObject(TextToSpeech.Engine.KEY_PARAM_VOLUME, getVolume());
         putObject(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
         putObject(TextToSpeech.Engine.KEY_PARAM_PAN, getPan());
+        if (bundle.containsKey(LocalRequest.EXTRA_ALEXA_FILE_PATH)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "setParams: has EXTRA_ALEXA_FILE_PATH");
+            }
+            putObject(LocalRequest.EXTRA_ALEXA_FILE_PATH, bundle.getString(LocalRequest.EXTRA_ALEXA_FILE_PATH));
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "setParams: missing EXTRA_ALEXA_FILE_PATH");
+            }
+            remove(LocalRequest.EXTRA_ALEXA_FILE_PATH);
+        }
 
         switch (conditions.getDefaultTTS()) {
 

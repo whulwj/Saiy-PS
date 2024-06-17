@@ -39,6 +39,9 @@ public class SaiyRecognitionListener implements RecognitionListener, IPartial {
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyRecognitionListener.class.getSimpleName();
 
+    public static final String ALEXA_DIRECTIVE = "alex_directive";
+    public static final String ALEX_FILE = "alex_file";
+
     private boolean doError;
     private boolean doEndOfSpeech;
     private boolean doBeginningOfSpeech;

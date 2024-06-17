@@ -221,15 +221,21 @@ public class SelfAwareHelper {
                 }
                 // TODO
                 break;
-            case Condition.CONDITION_EMOTION:
+            case Condition.CONDITION_TRANSLATION:
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_EMOTION");
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_TRANSLATION");
                 }
                 // TODO
                 break;
-            case Condition.CONDITION_GOOGLE_NOW:
+            case Condition.CONDITION_USER_CUSTOM:
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_GOOGLE_NOW");
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_USER_CUSTOM");
+                }
+                // TODO
+                break;
+            case Condition.CONDITION_EMOTION:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_EMOTION");
                 }
                 // TODO
                 break;
@@ -245,9 +251,9 @@ public class SelfAwareHelper {
                 }
                 announceVRError(sl, vrLocale, ttsLocale);
                 break;
-            case Condition.CONDITION_IGNORE:
+            case Condition.CONDITION_GOOGLE_NOW:
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_IGNORE");
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_GOOGLE_NOW");
                 }
                 // TODO
                 break;
@@ -257,22 +263,16 @@ public class SelfAwareHelper {
                 }
                 // TODO
                 break;
-            case Condition.CONDITION_TRANSLATION:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_TRANSLATION");
-                }
-                // TODO
-                break;
-            case Condition.CONDITION_USER_CUSTOM:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_USER_CUSTOM");
-                }
-                // TODO
-                break;
             case Condition.CONDITION_TUTORIAL:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL");
                 }
+                break;
+            case Condition.CONDITION_IGNORE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_IGNORE");
+                }
+                // TODO
                 break;
             case Condition.CONDITION_NONE:
             default:
@@ -350,36 +350,6 @@ public class SelfAwareHelper {
                 }
                 // TODO
                 break;
-            case Condition.CONDITION_EMOTION:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_EMOTION");
-                }
-                // TODO
-                break;
-            case Condition.CONDITION_GOOGLE_NOW:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_GOOGLE_NOW");
-                }
-                // TODO
-                break;
-            case Condition.CONDITION_IDENTITY:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_IDENTITY");
-                }
-                // TODO
-                break;
-            case Condition.CONDITION_IGNORE:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_IGNORE");
-                }
-                // TODO
-                break;
-            case Condition.CONDITION_SECURE:
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "Condition.CONDITION_SECURE");
-                }
-                // TODO
-                break;
             case Condition.CONDITION_TRANSLATION:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_TRANSLATION");
@@ -389,6 +359,36 @@ public class SelfAwareHelper {
             case Condition.CONDITION_USER_CUSTOM:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_USER_CUSTOM");
+                }
+                // TODO
+                break;
+            case Condition.CONDITION_EMOTION:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_EMOTION");
+                }
+                // TODO
+                break;
+            case Condition.CONDITION_IDENTITY:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_IDENTITY");
+                }
+                // TODO
+                break;
+            case Condition.CONDITION_GOOGLE_NOW:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_GOOGLE_NOW");
+                }
+                // TODO
+                break;
+            case Condition.CONDITION_SECURE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_SECURE");
+                }
+                // TODO
+                break;
+            case Condition.CONDITION_ANNOUNCE_CALLER:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_ANNOUNCE_CALLER");
                 }
                 // TODO
                 break;
@@ -409,6 +409,12 @@ public class SelfAwareHelper {
                     }
                     new ai.saiy.android.tutorial.Tutorial(mContext, vrLocale, ttsLocale, sl, bundle).execute();
                 }
+                break;
+            case Condition.CONDITION_IGNORE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_IGNORE");
+                }
+                // TODO
                 break;
             case Condition.CONDITION_NONE:
             default:

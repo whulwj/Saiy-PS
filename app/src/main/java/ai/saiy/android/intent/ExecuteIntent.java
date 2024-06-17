@@ -614,6 +614,13 @@ public class ExecuteIntent {
                 intent.setAction(Settings.ACTION_ADD_ACCOUNT);
                 intent.putExtra(Settings.EXTRA_ACCOUNT_TYPES, new String[]{Install.getAccountType()});
                 break;
+            case IntentConstants.NOTIFICATION_POLICY_ACCESS_SETTINGS:
+                intent.setAction(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                break;
+            case IntentConstants.MANAGE_WRITE_SETTINGS:
+                intent.setAction(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+                intent.setData(Uri.parse("package:" + ctx.getPackageName()));
+                break;
             default:
                 break;
         }

@@ -20,11 +20,13 @@ package ai.saiy.android.ui.fragment.helper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -133,10 +135,31 @@ public class FragmentAdvancedSettingsHelper {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_driving_profile));
+        containerUI.setSubtitle(getString(R.string.menu_tap_configure));
+        containerUI.setIconMain(R.drawable.ic_car);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_quiet_time));
+        containerUI.setSubtitle(getString(R.string.menu_tap_set));
+        containerUI.setIconMain(R.drawable.ic_sleep);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_pause));
         containerUI.setSubtitle(getString(R.string.menu_tap_set));
         containerUI.setIconMain(R.drawable.ic_pause_octagon_outline);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_announce_caller));
+        containerUI.setSubtitle(getString(R.string.menu_tap_toggle));
+        containerUI.setIconMain(R.drawable.ic_phone_in_talk);
+        containerUI.setIconExtra(SPH.announceCallerStats(getApplicationContext())? FragmentHome.CHECKED: FragmentHome.UNCHECKED);
         mObjects.add(containerUI);
 
         return mObjects;
@@ -440,6 +463,61 @@ public class FragmentAdvancedSettingsHelper {
         });
     }
 
+    public void showQuietTimesDialog() {
+        final ai.saiy.android.quiet.QuietTime quietTime = ai.saiy.android.quiet.QuietTimeHelper.getQuietTimes(getApplicationContext());
+        final View view = LayoutInflater.from(getParent().getContext()).inflate(R.layout.quiet_times_dialog_layout, null);
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_quiet_time)
+                .setIcon(R.drawable.ic_sleep)
+                .setView(view)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showQuietTimesDialog: onPositive");
+                        }
+                        TimePicker startTimePicker = view.findViewById(R.id.tpQuietTimeStart);
+                        TimePicker endTimePicker = view.findViewById(R.id.tpQuietTimeEnd);
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "Start: " + startTimePicker.getCurrentHour() + " : " + startTimePicker.getCurrentMinute());
+                            MyLog.d(CLS_NAME, "End: " + endTimePicker.getCurrentHour() + " : " + endTimePicker.getCurrentMinute());
+                        }
+                        quietTime.setStartHour(startTimePicker.getCurrentHour());
+                        quietTime.setStartMinute(startTimePicker.getCurrentMinute());
+                        quietTime.setEndHour(endTimePicker.getCurrentHour());
+                        quietTime.setEndMinute(endTimePicker.getCurrentMinute());
+                        ai.saiy.android.quiet.QuietTimeHelper.save(getApplicationContext(), quietTime);
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showQuietTimesDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showQuietTimesDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+        TimePicker startTimePicker = view.findViewById(R.id.tpQuietTimeStart);
+        startTimePicker.setCurrentHour(quietTime.getStartHour());
+        startTimePicker.setCurrentMinute(quietTime.getStartMinute());
+        TimePicker endTimePicker = view.findViewById(R.id.tpQuietTimeEnd);
+        endTimePicker.setCurrentHour(quietTime.getEndHour());
+        endTimePicker.setCurrentMinute(quietTime.getEndMinute());
+    }
 
     /**
      * Show the pause detection slider

@@ -185,7 +185,31 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                 mAdapter.notifyItemChanged(position);
                 break;
             case 6:
+                getParentActivity().vibrate();
+                break;
+            case 7:
+                helper.showQuietTimesDialog();
+                break;
+            case 8:
                 helper.showPauseDetectionSlider();
+                break;
+            case 9:
+                if (SPH.announceCallerStats(getApplicationContext())) {
+                    SPH.setAnnounceCaller(getApplicationContext(), false);
+                    this.mObjects.get(position).setIconExtra(FragmentHome.UNCHECKED);
+                    this.mAdapter.notifyItemChanged(position);
+                    return;
+                } else if (!PermissionHelper.checkNotificationPolicyPermission(getApplicationContext())) {
+                    ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                    getParentActivity().speak(R.string.app_speech_notification_policy, LocalRequest.ACTION_SPEAK_ONLY);
+                    break;
+                } else {
+                    if (PermissionHelper.checkReadCallerPermissions(getApplicationContext())) {
+                        SPH.setAnnounceCaller(getApplicationContext(), true);
+                        this.mObjects.get(position).setIconExtra(FragmentHome.CHECKED);
+                        this.mAdapter.notifyItemChanged(position);
+                    }
+                }
                 break;
             default:
                 break;
@@ -210,6 +234,15 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
         final int position = (int) view.getTag();
 
         switch (position) {
+            case 6:
+                getParentActivity().speak(R.string.lp_driving_profile, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 7:
+                getParentActivity().speak(R.string.lp_quiet_times, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 9:
+                getParentActivity().speak(R.string.lp_announce_caller, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
             default:
                 break;
         }

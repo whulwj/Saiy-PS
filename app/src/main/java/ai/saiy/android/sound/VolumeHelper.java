@@ -102,6 +102,9 @@ public class VolumeHelper {
         final AudioManager am = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
 
         if (DEBUG) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                MyLog.v(CLS_NAME, "isVolumeFixed: " + am.isVolumeFixed());
+            }
             switch (SPH.getDefaultRinger(ctx)) {
 
                 case AudioManager.RINGER_MODE_NORMAL:
@@ -161,7 +164,11 @@ public class VolumeHelper {
             SPH.setDefaultRinger(ctx, am.getRingerMode());
 
             try {
-                am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    am.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_MUTE, 0);
+                } else {
+                    am.setRingerMode(AudioManager.RINGER_MODE_SILENT);
+                }
             } catch (final Exception e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "Ringer Muting Exception");
@@ -175,7 +182,11 @@ public class VolumeHelper {
             }
 
             try {
-                am.setRingerMode(SPH.getDefaultRinger(ctx));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    am.adjustStreamVolume(AudioManager.STREAM_RING, AudioManager.ADJUST_UNMUTE, 0);
+                } else {
+                    am.setRingerMode(SPH.getDefaultRinger(ctx));
+                }
             } catch (final Exception e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "Ringer Restore Exception");

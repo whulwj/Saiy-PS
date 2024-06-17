@@ -378,11 +378,14 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     private void checkPermissions() {
-        String[] permissions = new String[4];
+        String[] permissions = new String[(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q)? 5:4];
         permissions[0] = Manifest.permission.INTERNET;
         permissions[1] = Manifest.permission.RECORD_AUDIO;
         permissions[2] = Manifest.permission.READ_EXTERNAL_STORAGE;
         permissions[3] = Manifest.permission.WRITE_EXTERNAL_STORAGE;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            permissions[4] = Manifest.permission.ACTIVITY_RECOGNITION;
+        }
 
         mChatPermissionRequest.launch(permissions);
     }

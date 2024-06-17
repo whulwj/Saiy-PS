@@ -17,13 +17,16 @@
 
 package ai.saiy.android.cognitive.motion.provider.google;
 
+import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -137,8 +140,12 @@ public class MotionRecognition implements GoogleApiClient.ConnectionCallbacks, G
         }
 
         if (activityClient != null && pendingIntent != null) {
-            ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(activityClient,
-                    MotionIntentService.UPDATE_INTERVAL, pendingIntent).setResultCallback(this);
+            if (ContextCompat.checkSelfPermission(activityClient.getContext(), Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
+                ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(activityClient,
+                        MotionIntentService.UPDATE_INTERVAL, pendingIntent).setResultCallback(this);
+            } else if (DEBUG) {
+                MyLog.i(CLS_NAME, "onConnected: no permission");
+            }
         }
     }
 

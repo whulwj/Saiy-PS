@@ -216,6 +216,7 @@
     <string name="menu_motion" translatable="true">Motion Activity Recognition</string>
     <string name="menu_pause" translatable="true">Pause Timeout</string>
     <string name="pause_detection_text" translatable="true">Pause for breath is</string>
+    <string name="menu_announce_caller">Announce Caller ID</string>
     <string name="media_stream" translatable="true">media stream</string>
     <string name="above" translatable="true">above</string>
     <string name="below" translatable="true">below</string>
@@ -744,6 +745,7 @@
     <string name="title_install">Install</string>
     <string name="title_installed">Installed</string>
     <string name="title_error_alexa_android_5">Requires Android 5.0+ :(</string>
+    <string name="title_error_alexa_cereproc">See Troubleshooting Alexa &amp; CereProc</string>
     <string name="content_coming_soon_exclamation">Coming soon!</string>
     <string name="lp_link_facebook">To enable me to post your dictated content to Facebook, you can authorise my access here.</string>
     <string name="lp_install_link">Tap here to install %1$s from the Play Store</string>
@@ -794,6 +796,19 @@
     <string name="notification_tap_stop" translatable="true">"tap to stop"</string>
     <string name="notification_stop_hotword" translatable="true">"Stop hotword detection"</string>
     <string name="notification_stop_tutorial">Stop tutorial</string>
+    <string name="notification_access">notification access</string>
+    <string name="notifications_enable">You\'ll need to manually grant me notification access permissions to use this feature.</string>
+    <string name="menu_quiet_time">Quiet Times</string>
+    <string name="title_quiet_time_active">Quiet time active!</string>
+    <string name="lp_quiet_times">Use this feature to set a global quiet time, so I can identify if it is too early or too late to make you aware of content I would normally announce. I wouldn\'t want to disturb your beauty sleep now, would I.</string>
+    <string name="quiet_time_end">Quiet time end</string>
+    <string name="quiet_time_start">Quiet time start</string>
+    <string name="app_speech_notification_policy">So I am able to reduce your ringtone volume, when you receive an incoming call, I require the, do not disturb, permission here.</string>
+    <string name="lp_announce_caller">If you\'d like me to announce incoming calls and give you the option to answer or decline them, then this is the option for you. Do be aware, some Android versions don\'t play well with this function, especially when you request I answer the call on loudspeaker. I\'m sure my developer will solve this problem soon.</string>
+    <string name="amazon_notification_auth_request">You need to manually authorise my access to your Amazon account to use this feature. You\'re not required to own any Alexa hardware, as I can connect remotely to the default Alexa service associated with your account. Otherwise, if you\'d like to remove the button from the notification, you can do so in the settings.</string>
+    <string name="an_unknown_caller">an unknown caller</string>
+    <string name="incoming_call_from">Incoming call from</string>
+    <string name="would_you_like_to_answer_it">would you like to answer it?</string>
 
     <!-- App - Generic error Strings -->
     <string name="error_no_application" translatable="true">"No application is installed to handle this request?"</string>
@@ -1179,4 +1194,10 @@
     <string name="neutral" translatable="true">"neutral"</string>
     <string name="positive" translatable="true">"positive"</string>
 
+    <string name="alexa_media_response">Alexa\'s media requests make little sense I\'m afraid.</string>
+    <string name="alexa_volume_response">Alexa just asked me to set the volume to, %1$s. I\'m not sure how to go about doing that.</string>
+
+    <string name="menu_driving_profile">Driving Profile</string>
+    <string name="driving_profile_missing_permissions">Your current driving profile configuration requires some additional permissions. Click on the option below, and once you\'ve made your selection, press save. And I will guide you from there.</string>
+    <string name="lp_driving_profile">This feature allows you to configure my behaviour when I detect that you are driving. Under these conditions, you may wish that I behave in a more verbose manner than normal. Such as announcing the identity of incoming callers, or automatically reading your message content. Many more options will be added to the driving profile in future releases. In the mean time, please do stay safe, and don\'t use your device whilst driving.</string>
 </resources>

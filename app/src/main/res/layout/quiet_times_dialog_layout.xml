@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <TextView
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/tvQuietTimeStart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:text="@string/quiet_time_start"/>
+    <TimePicker
+        android:theme="@style/AppTheme"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/tpQuietTimeStart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:textColor="@color/colorPrimary"
+        android:layout_gravity="center_vertical"
+        android:id="@+id/tvQuietTimeEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/quiet_time_end"/>
+    <TimePicker
+        android:layout_gravity="center_vertical"
+        android:id="@+id/tpQuietTimeEnd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>

@@ -20,12 +20,16 @@ package ai.saiy.android.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import java.util.Set;
 
 import ai.saiy.android.R;
+import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.AnalysisResultHelper;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.command.helper.CC;
@@ -38,6 +42,7 @@ import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.tts.helper.SpeechPriority;
+import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.service.FloatingCommandsService;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -74,6 +79,7 @@ public class NotificationService extends IntentService {
     public static final int NOTIFICATION_IDENTIFICATION = 29;
     public static final int NOTIFICATION_TUTORIAL = 30;
     public static final int NOTIFICATION_FLOATING_WINDOW = 31;
+    public static final int NOTIFICATION_ALEXA = 36;
 
     /**
      * Constructor
@@ -363,7 +369,42 @@ public class NotificationService extends IntentService {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_FLOATING_WINDOW");
                                 }
-                                StandOutWindow.closeAll(getApplicationContext(), (Class<? extends StandOutWindow>) FloatingCommandsService.class);
+                                StandOutWindow.closeAll(getApplicationContext(), FloatingCommandsService.class);
+                                break;
+                            case NOTIFICATION_ALEXA:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_ALEXA");
+                                }
+                                if (!ai.saiy.android.amazon.TokenHelper.hasToken(getApplicationContext())) {
+                                    bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                                    bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
+                                    bundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.amazon_notification_auth_request));
+                                    bundle.putString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE, SPH.getVRLocale(getApplicationContext()).toString());
+                                    bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, SPH.getTTSLocale(getApplicationContext()).toString());
+                                    new LocalRequest(getApplicationContext(), bundle).execute();
+                                    ExecuteIntent.saiyActivity(getApplicationContext(), ActivityHome.class, bundle, true);
+                                    sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+                                    break;
+                                }
+                                if (!ai.saiy.android.utils.Conditions.Network.isConnected(getApplicationContext())) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "onHandleIntent: NOTIFICATION_ALEXA: no network");
+                                    }
+                                    new Handler(Looper.getMainLooper()).post(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            ai.saiy.android.utils.UtilsToast.showToast(NotificationService.this.getApplicationContext(), R.string.error_network, Toast.LENGTH_SHORT);
+                                        }
+                                    });
+                                    break;
+                                }
+                                bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_LISTEN);
+                                bundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
+                                bundle.putString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE, SPH.getVRLocale(getApplicationContext()).toString());
+                                bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, SPH.getTTSLocale(getApplicationContext()).toString());
+                                bundle.putSerializable(LocalRequest.EXTRA_RECOGNITION_PROVIDER, SaiyDefaults.VR.ALEXA);
+                                new LocalRequest(getApplicationContext(), bundle).execute();
+                                sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
                                 break;
                             default:
                                 if (DEBUG) {

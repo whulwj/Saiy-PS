@@ -65,6 +65,7 @@ import ai.saiy.android.audio.SaiyAudioTrack;
 import ai.saiy.android.cache.speech.SpeechCacheResult;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.processing.Condition;
+import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareCache;
 import ai.saiy.android.service.helper.SelfAwareConditions;
 import ai.saiy.android.service.helper.SelfAwareHelper;
@@ -103,6 +104,8 @@ public class SaiyTextToSpeech extends TextToSpeech {
     public static final String ARRAY_LAST = "array_last";
     public static final String ARRAY_SINGLE = "array_single";
     public static final String ARRAY_DELIMITER = "~~";
+
+    public static final String ALEXA_EAR_CON = "alex_temp";
 
     private volatile SaiyAudioTrack audioTrack;
 
@@ -197,6 +200,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                      @NonNull final SelfAwareParameters params, @NonNull final String utteranceId) {
 
         if (SoundEffectHelper.pSOUND_EFFECT.matcher(text).matches()) {
+            //TODO tasker
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "speak: have sound effect");
             }
@@ -278,8 +282,14 @@ public class SaiyTextToSpeech extends TextToSpeech {
         } else {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (params.containsKey(LocalRequest.EXTRA_ALEXA_FILE_PATH)) {
+                    return playEarcon(ALEXA_EAR_CON, TextToSpeech.QUEUE_FLUSH, params.getBundle(), params.getUtteranceId());
+                }
                 return speak21(text, queueMode, params, utteranceId);
             } else {
+                if (params.containsKey(LocalRequest.EXTRA_ALEXA_FILE_PATH)) {
+                    return playEarcon(ALEXA_EAR_CON, TextToSpeech.QUEUE_FLUSH, params);
+                }
                 return speak(text.toString(), queueMode, params);
             }
         }

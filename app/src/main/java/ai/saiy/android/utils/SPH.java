@@ -102,6 +102,7 @@ public class SPH {
     private static final String HOTWORD_DRIVING = "hotword_driving";
     private static final String HOTWORD_WAKELOCK = "hotword_wakelock";
     private static final String HOTWORD_SECURE = "hotword_secure";
+    private static final String HOTWORD_USAGE_STATS = "hotword_usage_stats";
     private static final String BOOT_START = "boot_start";
     private static final String SELF_AWARE_ENABLED = "self_aware_enabled";
     private static final String ENROLLMENT_VERBOSE = "enrollment_verbose";
@@ -147,6 +148,8 @@ public class SPH {
     private static final String ALEXA_NOTIFICATION_BUTTON = "alexa_notification_button";
     private static final String REINSTALLATION_PROCESS = "reinstallation_process";
     private static final String UNKNOWN_SOURCES = "unknown_sources";
+    private static final String ANNOUNCE_CALLER = "announce_caller";
+    private static final String QUIET_TIMES = "quiet_times";
     private static final String MIC_FIRST = "mic_first";
 
     /**
@@ -1644,6 +1647,18 @@ public class SPH {
         return pref.getBoolean(HOTWORD_BOOT, false);
     }
 
+    public static boolean getHotwordStats(Context context) {
+        return getPref(context).getBoolean(HOTWORD_USAGE_STATS, false);
+    }
+
+    public static void markHotwordStats(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putBoolean(HOTWORD_USAGE_STATS, true);
+        edit.apply();
+    }
+
     /**
      * Set the user's preference for offline voice recognition.
      *
@@ -2007,6 +2022,26 @@ public class SPH {
     public static void setCheckUnknownSourcesSettingNeeded(Context context, boolean isNeeded) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(UNKNOWN_SOURCES, isNeeded);
+        edit.apply();
+    }
+
+    public static boolean announceCallerStats(Context context) {
+        return getPref(context).getBoolean(ANNOUNCE_CALLER, false);
+    }
+
+    public static void setAnnounceCaller(Context context, boolean enable) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ANNOUNCE_CALLER, enable);
+        edit.apply();
+    }
+
+    public static String getQuietTimes(Context context) {
+        return getPref(context).getString(QUIET_TIMES, null);
+    }
+
+    public static void setQuietTimes(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(QUIET_TIMES, str);
         edit.apply();
     }
 

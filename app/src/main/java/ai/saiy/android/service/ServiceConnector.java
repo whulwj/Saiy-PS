@@ -148,6 +148,11 @@ public class ServiceConnector {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "ACTION_START_HOTWORD: already running");
                     }
+                } else if (request.getAction() == LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "ACTION_TOGGLE_DRIVING_PROFILE");
+                    }
+                    //TODO
                 } else if (isListening) {
                     selfAwareService.stopListening(request.getShutdownHotword());
                 } else if (isSpeakingPair.first) {
@@ -223,6 +228,12 @@ public class ServiceConnector {
                     MyLog.i(CLS_NAME, "onServiceConnected: ACTION_STOP_HOTWORD");
                 }
                 selfAwareService.stopListening(true);
+                break;
+            case LocalRequest.ACTION_ALEXA_TTS:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onServiceConnected: ACTION_ALEXA_TTS");
+                }
+                this.selfAwareService.alexaTTS(this.request.getBundle());
                 break;
             case LocalRequest.ACTION_UNKNOWN:
             default:

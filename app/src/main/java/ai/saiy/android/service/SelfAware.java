@@ -43,11 +43,16 @@ import androidx.annotation.WorkerThread;
 
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 import com.google.gson.GsonBuilder;
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
+import java.io.File;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ai.saiy.android.R;
 import ai.saiy.android.amazon.TokenHelper;
+import ai.saiy.android.amazon.directives.DirectiveType;
 import ai.saiy.android.api.DeclinedBinder;
 import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.helper.CallbackType;
@@ -73,6 +78,8 @@ import ai.saiy.android.recognition.RecognitionAction;
 import ai.saiy.android.recognition.SaiyHotwordListener;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.recognition.helper.GoogleNowMonitor;
+import ai.saiy.android.recognition.provider.Amazon.AlexaTTS;
+import ai.saiy.android.recognition.provider.Amazon.RecognitionAmazon;
 import ai.saiy.android.recognition.provider.bluemix.RecognitionBluemix;
 import ai.saiy.android.recognition.provider.google.chromium.RecognitionGoogleChromium;
 import ai.saiy.android.recognition.provider.google.cloud.RecognitionGoogleCloud;
@@ -93,12 +100,14 @@ import ai.saiy.android.tts.SaiyTextToSpeech;
 import ai.saiy.android.tts.TTS;
 import ai.saiy.android.tts.engine.EngineNuance;
 import ai.saiy.android.tts.helper.PendingTTS;
+import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
+import ai.saiy.android.utils.UtilsString;
 
 /**
  * This foreground service class will remain running unless the user deactivates it
@@ -154,6 +163,7 @@ public class SelfAware extends Service {
     private volatile RecognitionBluemix recogIBM;
     private volatile RecognitionRemote recogRemote;
     private volatile RecognitionSphinx recogSphinx;
+    private volatile RecognitionAmazon recogAmazon;
     private volatile RecognitionMic recogMic;
     private volatile SpeechRecognizer recogNative;
 
@@ -164,6 +174,7 @@ public class SelfAware extends Service {
     private volatile PartialHelper partialHelper;
     private volatile PendingTTS pendingTTS;
     private volatile int initCount;
+    private volatile TimerTask timerTask;
 
     private final MotionRecognition motionRecognition = new MotionRecognition();
 
@@ -486,6 +497,17 @@ public class SelfAware extends Service {
                                 conditions.setFetchingCountdown();
                                 break;
                         }
+                        if (bundle.containsKey(LocalRequest.EXTRA_RECOGNITION_PROVIDER)) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "speak: EXTRA_RECOGNITION_PROVIDER: true");
+                            }
+                            SPH.setDefaultRecognition(getApplicationContext(), SaiyDefaults.VR.ALEXA);
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "speak: EXTRA_RECOGNITION_PROVIDER: NATIVE");
+                            }
+                            SPH.setDefaultRecognition(getApplicationContext(), SaiyDefaults.VR.NATIVE);
+                        }
 
                         if (isSpeakListen) {
                             switch (conditions.getDefaultRecognition()) {
@@ -533,6 +555,25 @@ public class SelfAware extends Service {
                                             break;
                                     }
                                     break;
+                                case ALEXA:
+                                    switch (Recognition.getState()) {
+                                        case IDLE:
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "AMAZON: IDLE");
+                                            }
+                                            new Thread() {
+                                                @Override
+                                                public void run() {
+                                                    Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "speakListen: AMAZON: warming up");
+                                                    }
+                                                    SelfAware.this.recogAmazon = SelfAware.this.conditions.getAmazonRecognition(SelfAware.this.recognitionListener);
+                                                }
+                                            }.start();
+                                            break;
+                                    }
+                                    break;
                                 case WIT_HYBRID:
                                     switch (Recognition.getState()) {
                                         case IDLE:
@@ -573,7 +614,7 @@ public class SelfAware extends Service {
                         }
 
                         restartEngineMonitor();
-                        params.setParams(isSpeakListen, conditions);
+                        params.setParams(isSpeakListen, conditions, bundle);
 
                         /*
                          * Bundle is replace here
@@ -657,6 +698,18 @@ public class SelfAware extends Service {
         }
     }
 
+    protected void alexaTTS(Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "alexaTTS");
+            MyLog.v(CLS_NAME, "alexaTTS: calling app: " + getPackageManager().getNameForUid(Binder.getCallingUid()));
+            MyLog.i(CLS_NAME, "alexaTTS: isMain thread: " + (Looper.myLooper() == Looper.getMainLooper()));
+            MyLog.i(CLS_NAME, "alexaTTS: threadTid: " + Process.getThreadPriority(Process.myTid()));
+        }
+        new AlexaTTS(getApplicationContext(), recognitionListener, conditions.getTTSLocale(false), bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0), tts.getInitialisedEngine(), tts.getEngines());
+        bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_ALEXA_TTS);
+        new RecognitionAction(getApplicationContext(), conditions.getVRLocale(false), conditions.getTTSLocale(false), conditions.getSupportedLanguage(false), bundle);
+    }
+
     /**
      * Called to stop speech
      */
@@ -674,7 +727,7 @@ public class SelfAware extends Service {
     protected void stopListening(final boolean shutdown) {
         conditions.setHotwordShutdown(recogSphinx, shutdown);
         conditions.stopListening(recogNuance, recogGoogleCloud, recogGoogleChromium, recogOxford,
-                recogWit, recogIBM, recogRemote, recogMic, recogNative, recogSphinx, recogWitHybrid);
+                recogWit, recogIBM, recogRemote, recogMic, recogNative, recogSphinx, recogAmazon, recogWitHybrid);
     }
 
     /**
@@ -970,7 +1023,46 @@ public class SelfAware extends Service {
                                     conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
                                     break;
                             }
-
+                            break;
+                        case ALEXA:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "AMAZON");
+                            }
+                            switch (Recognition.getState()) {
+                                case IDLE:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "AMAZON: IDLE");
+                                    }
+                                    conditions.setFetchingCountdown();
+                                    recognitionListener.resetBugVariables();
+                                    AsyncTask.execute(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            if (!SelfAware.this.waitAlexa()) {
+                                                if (DEBUG) {
+                                                    MyLog.w(CLS_NAME, "AMAZON: IDLE: failed warm up loop");
+                                                }
+                                                recogAmazon = conditions.getAmazonRecognition(recognitionListener);
+                                            }
+                                            recogAmazon.startListening(tts.getInitialisedEngine().matches(TTSDefaults.TTS_PKG_NAME_GOOGLE));
+                                        }
+                                    });
+                                    break;
+                                case PROCESSING:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "AMAZON: PROCESSING");
+                                    }
+                                    recogAmazon.stopListening();
+                                    conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
+                                    break;
+                                case LISTENING:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "AMAZON: LISTENING");
+                                    }
+                                    recogAmazon.stopListening();
+                                    conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
+                                    break;
+                            }
                             break;
                         case WIT_HYBRID:
                             if (DEBUG) {
@@ -1852,6 +1944,71 @@ public class SelfAware extends Service {
                     recogIBM = null;
                     recogMic = null;
                     break;
+                case ALEXA:
+                    recogAmazon = null;
+                    if (results.containsKey(SaiyRecognitionListener.ALEXA_DIRECTIVE)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onResults: containsKey: ALEXA_DIRECTIVE");
+                        }
+                        LocalRequest localRequest = new LocalRequest(getApplicationContext());
+                        DirectiveType directiveType = (DirectiveType) results.getSerializable(SaiyRecognitionListener.ALEXA_DIRECTIVE);
+                        if (directiveType != null) {
+                            switch (directiveType) {
+                                case DIRECTIVE_MEDIA:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "onResults: DIRECTIVE_MEDIA");
+                                    }
+                                    localRequest.prepareDefault(results.getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY), conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(getApplicationContext(), conditions.getSupportedLanguage(false), R.string.alexa_media_response));
+                                    localRequest.execute();
+                                    return;
+                                case DIRECTIVE_VOLUME:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "onResults: DIRECTIVE_VOLUME");
+                                    }
+                                    localRequest.prepareDefault(results.getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY), conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), ai.saiy.android.personality.PersonalityResponse.getAlexaVolumeResponse(getApplicationContext(), conditions.getSupportedLanguage(false)));
+                                    localRequest.execute();
+                                    return;
+                                case DIRECTIVE_CANCEL:
+                                    localRequest.prepareCancelled(conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false));
+                                    localRequest.execute();
+                                    return;
+                                default:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "onResults: DIRECTIVE_NONE");
+                                        break;
+                                    }
+                                    break;
+                            }
+                        } else if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onResults: DirectiveType null");
+                        }
+                    }
+                    String string = results.getString(SaiyRecognitionListener.ALEX_FILE);
+                    if (!UtilsString.notNaked(string)) {
+                        LocalRequest localRequest = new LocalRequest(SelfAware.this.getApplicationContext());
+                        localRequest.prepareDefault(results.getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY), conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), ai.saiy.android.personality.PersonalityResponse.getAlexaUnreachable(SelfAware.this.getApplicationContext(), conditions.getSupportedLanguage(false)));
+                        localRequest.execute();
+                        return;
+                    }
+                    final int addEarCon = Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? tts.addEarcon(SaiyTextToSpeech.ALEXA_EAR_CON, new File(string)) : tts.addEarcon(SaiyTextToSpeech.ALEXA_EAR_CON, string);
+                    LocalRequest localRequest = new LocalRequest(SelfAware.this.getApplicationContext());
+                    switch (addEarCon) {
+                        case android.speech.tts.TextToSpeech.ERROR:
+                            localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), ai.saiy.android.personality.PersonalityResponse.getAlexaUnreachable(SelfAware.this.getApplicationContext(), conditions.getSupportedLanguage(false)));
+                            localRequest.execute();
+                            return;
+                        case android.speech.tts.TextToSpeech.SUCCESS:
+                            int i = results.getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                            if (i == LocalRequest.ACTION_SPEAK_LISTEN) {
+                                localRequest.setRecognitionProvider(SaiyDefaults.VR.ALEXA);
+                            }
+                            localRequest.prepareDefault(i, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), "alex_speech");
+                            localRequest.setAlexaFilePath(string);
+                            localRequest.execute();
+                            return;
+                        default:
+                            return;
+                    }
                 case WIT_HYBRID:
                     recogWitHybrid = null;
                     break;
@@ -2103,6 +2260,63 @@ public class SelfAware extends Service {
                         MyLog.i(CLS_NAME, "PhoneStateListener: TelephonyManager.CALL_STATE_RINGING: " + incomingNumber);
                     }
                     interrupt();
+                    if (!SPH.announceCallerStats(getApplicationContext()) || !ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext())) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "PhoneStateListener: not announcing calls or within quiet times");
+                        }
+                        return;
+                    } else if (!UtilsString.notNaked(incomingNumber) || !ai.saiy.android.permissions.PermissionHelper.checkAnnounceCallerPermissionsNR(SelfAware.this.getApplicationContext())) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "PhoneStateListener: incoming number null or permission denied");
+                        }
+                        return;
+                    } else {
+                        if (timerTask == null) {
+                            timerTask = new TimerTask() {
+                                @Override
+                                public void run() {
+                                    if (getTelephonyManager().getCallState() != TelephonyManager.CALL_STATE_RINGING) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "PhoneStateListener: no longer ringing");
+                                        }
+                                        return;
+                                    }
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "PhoneStateListener: still ringing");
+                                    }
+                                    //TODO get contact's name
+                                    String userName = "";
+                                    if (!UtilsString.notNaked(userName)) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "PhoneStateListener: unable to resolve caller name");
+                                        }
+                                        userName = SelfAware.this.getString(R.string.an_unknown_caller);
+                                    } else if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "PhoneStateListener: have caller name: " + userName);
+                                    }
+                                    VolumeHelper.muteRinger(getApplicationContext(), true);
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            VolumeHelper.muteRinger(SelfAware.this.getApplicationContext(), false);
+                                        }
+                                    }, 5000L);
+                                    LocalRequest localRequest = new LocalRequest(SelfAware.this.getApplicationContext());
+                                    localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), getString(R.string.incoming_call_from) + XMLResultsHandler.SEP_SPACE + userName + ", " + getString(R.string.would_you_like_to_answer_it));
+                                    localRequest.setCondition(Condition.CONDITION_ANNOUNCE_CALLER);
+                                    localRequest.setSpeechPriority(SpeechPriority.PRIORITY_MAX);
+                                    localRequest.execute();
+                                    new Timer().schedule(new TimerTask() {
+                                        @Override
+                                        public void run() {
+                                            timerTask = null;
+                                        }
+                                    }, 14000L);
+                                }
+                            };
+                            new Timer().schedule(SelfAware.this.timerTask, 5000L);
+                        }
+                    }
                     break;
                 case TelephonyManager.CALL_STATE_IDLE:
                     if (DEBUG) {
@@ -2186,6 +2400,31 @@ public class SelfAware extends Service {
         }
 
         return recogMic == null && recogIBM != null;
+    }
+
+    private boolean waitAlexa() {
+        if (DEBUG) {
+            MyLog.v(CLS_NAME, "waitAlexa");
+        }
+        if (recogAmazon == null) {
+            for (int i = 0; i < 4; i++) {
+                try {
+                    Thread.sleep(500L);
+                } catch (InterruptedException e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "InterruptedException");
+                        e.printStackTrace();
+                    }
+                }
+                if (recogAmazon != null) {
+                    break;
+                }
+                if (DEBUG) {
+                    MyLog.v(CLS_NAME, "recogAmazon null: " + i);
+                }
+            }
+        }
+        return recogAmazon != null;
     }
 
     @WorkerThread

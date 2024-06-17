@@ -761,4 +761,15 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
+
+    public static String getAlexaUnreachable(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_alexa_unreachable);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getAlexaVolumeResponse(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_alexa_volume_insert);
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.alexa_volume_response), stringArray[new Random().nextInt(stringArray.length)]);
+    }
 }

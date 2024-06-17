@@ -1,43 +1,26 @@
-package ai.saiy.android.recognition.provider.wit;
+package ai.saiy.android.recognition.provider.Amazon;
 
 import android.content.Context;
 import android.media.AudioRecord;
-import android.net.ParseException;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.Process;
+import android.speech.SpeechRecognizer;
 
 import androidx.annotation.NonNull;
-
-import com.google.gson.GsonBuilder;
 
 import org.json.JSONException;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import ai.saiy.android.amazon.AmazonCredentials;
 import ai.saiy.android.amazon.UtilsNetwork;
-import ai.saiy.android.amazon.SpeechRecognizer;
-import ai.saiy.android.amazon.TokenHelper;
-import ai.saiy.android.amazon.listener.StreamListener;
+import ai.saiy.android.amazon.listener.IAlexaToken;
 import ai.saiy.android.amazon.resolve.DirectiveList;
 import ai.saiy.android.amazon.resolve.ResolveAmazon;
-import ai.saiy.android.amazon.listener.IAlexaToken;
 import ai.saiy.android.api.SaiyDefaults;
-import ai.saiy.android.api.language.vr.VRLanguageWit;
-import ai.saiy.android.api.remote.Request;
-import ai.saiy.android.audio.AudioParameters;
 import ai.saiy.android.audio.SaiyRecorder;
 import ai.saiy.android.audio.SaiySoundPool;
 import ai.saiy.android.audio.pause.PauseDetector;
@@ -46,32 +29,19 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
-import ai.saiy.android.recognition.provider.Amazon.VRLanguageAmazon;
 import ai.saiy.android.service.helper.LocalRequest;
-import ai.saiy.android.utils.Constants;
-import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
-import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okio.BufferedSink;
 
-public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
-    private static final String AUTHORIZATION = "Authorization";
-    private static final String BEARER_ = "Bearer ";
-    private static final String JSON_HEADER_ACCEPT = "accept";
-    private static final String HEADER_CONTENT_TYPE = "audio/raw;encoding=signed-integer;bits=16;rate=16000;endian=little";
-    private static final String N_HEADER = "n";
-    private static final String TRANSFER_ENCODING = "Transfer-Encoding";
-    private static final String CHUNKED = "chunked";
-
+public class RecognitionAmazon implements IAlexaToken, PauseListener {
     private final SaiyRecognitionListener listener;
     private final SaiyDefaults.LanguageModel languageModel;
     private final Locale ttsLocale;
     private final VRLanguageAmazon vRLanguageAmazon;
-    private final VRLanguageWit vrLocale;
     private final SupportedLanguage sl;
     private String alexaAccessToken;
     private volatile boolean alreadyThrownError;
@@ -80,13 +50,9 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
     private final boolean servingRemote;
     private volatile SaiyRecorder saiyRecorder;
     private final Context mContext;
-    private HttpsURLConnection urlConnection;
-    private OutputStream outputStream;
-    private InputStream inputStream;
-    private final String apiKey;
 
     private final boolean DEBUG = MyLog.DEBUG;
-    private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
+    private final String CLS_NAME = RecognitionAmazon.class.getSimpleName();
 
     private final AtomicBoolean isRecording = new AtomicBoolean();
     private final Object lock = new Object();
@@ -99,28 +65,24 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
         }
 
         @Override
-        public void writeTo(@NonNull BufferedSink sink) {
+        public void writeTo(@NonNull BufferedSink sink) throws IOException {
             try {
                 int bufferSize = saiyRecorder.getBufferSize();
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "writeTo: bufferSize: " + bufferSize);
                 }
-                urlConnection = (HttpsURLConnection) new URL("https://api.wit.ai/speech?v=20160526").openConnection();
-                urlConnection.setAllowUserInteraction(false);
-                urlConnection.setInstanceFollowRedirects(true);
-                urlConnection.setRequestMethod(Constants.HTTP_POST);
-                urlConnection.setRequestProperty(UtilsNetwork.CONTENT_TYPE, HEADER_CONTENT_TYPE);
-                urlConnection.setRequestProperty(AUTHORIZATION, BEARER_ + apiKey);
-                urlConnection.setRequestProperty(JSON_HEADER_ACCEPT, "application/vnd.wit.20160526");
-                urlConnection.setRequestProperty(N_HEADER, "5");
-                urlConnection.setUseCaches(false);
-                urlConnection.setDoOutput(true);
-                urlConnection.setRequestProperty(TRANSFER_ENCODING, CHUNKED);
-                urlConnection.setChunkedStreamingMode(0);
-                urlConnection.connect();
-                outputStream = urlConnection.getOutputStream();
                 byte[] bytes = new byte[bufferSize];
+                boolean isRecordingStarted = false;
                 while (isRecording.get() && saiyRecorder != null && saiyRecorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
+                    if (!isRecordingStarted) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "Recording Started");
+                        }
+                        ssp.play(ssp.getBeepStart());
+                        Recognition.setState(Recognition.State.LISTENING);
+                        listener.onReadyForSpeech(null);
+                        isRecordingStarted = true;
+                    }
                     if (saiyRecorder != null) {
                         int count = saiyRecorder.read(bytes);
                         listener.onBufferReceived(bytes);
@@ -129,55 +91,9 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                             pauseDetector.monitor();
                         }
                         sink.write(bytes);
-                        for (int i = 0; i < count; i++) {
-                            outputStream.write(bytes[i]);
-                        }
                     }
                 }
-                long nanoTime = System.nanoTime();
                 audioShutdown();
-                int responseCode = urlConnection.getResponseCode();
-                if (DEBUG) {
-                    MyLog.d(CLS_NAME, "responseCode: " + responseCode);
-                    MyLog.d(CLS_NAME, "WitResponseTime", nanoTime);
-                }
-                if (responseCode != HttpURLConnection.HTTP_OK) {
-                    if (DEBUG) {
-                        MyLog.e(CLS_NAME, "audioThread ErrorStream: " + UtilsString.streamToString(urlConnection.getErrorStream()));
-                    }
-                    listener.onError(android.speech.SpeechRecognizer.ERROR_NETWORK);
-                } else {
-                    inputStream = urlConnection.getInputStream();
-                    ai.saiy.android.nlu.wit.NLUWit nluWit = new GsonBuilder().disableHtmlEscaping().create().fromJson(UtilsString.streamToString(inputStream), ai.saiy.android.nlu.wit.NLUWit.class);
-                    ArrayList<String> arrayList = new ArrayList<>(1);
-                    arrayList.add(nluWit.getText());
-                    float[] confidenceArray = {nluWit.getConfidence()};
-                    Bundle bundle = new Bundle();
-                    bundle.putStringArrayList(Request.RESULTS_RECOGNITION, arrayList);
-                    bundle.putFloatArray(Request.CONFIDENCE_SCORES, confidenceArray);
-                    listener.onResults(bundle);
-                }
-            } catch (NullPointerException e) {
-                if (DEBUG) {
-                    MyLog.e(CLS_NAME, "audioThread NullPointerException");
-                    e.printStackTrace();
-                }
-                audioShutdown();
-                handleError(android.speech.SpeechRecognizer.ERROR_NETWORK_TIMEOUT);
-            } catch (MalformedURLException e) {
-                if (DEBUG) {
-                    MyLog.e(CLS_NAME, "MalformedURLException");
-                    e.printStackTrace();
-                }
-                audioShutdown();
-                handleError(android.speech.SpeechRecognizer.ERROR_NETWORK_TIMEOUT);
-            } catch (UnknownHostException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "UnknownHostException");
-                    e.printStackTrace();
-                }
-                audioShutdown();
-                handleError(android.speech.SpeechRecognizer.ERROR_NETWORK_TIMEOUT);
             } catch (IOException e) {
                 if (DEBUG) {
                     MyLog.e(CLS_NAME, "audioThread IOException");
@@ -192,9 +108,9 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                 }
                 audioShutdown();
                 handleError(android.speech.SpeechRecognizer.ERROR_NETWORK_TIMEOUT);
-            } catch (ParseException e) {
+            } catch (NullPointerException e) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "ParseException");
+                    MyLog.e(CLS_NAME, "audioThread NullPointerException");
                     e.printStackTrace();
                 }
                 audioShutdown();
@@ -206,53 +122,46 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                 }
                 audioShutdown();
                 handleError(android.speech.SpeechRecognizer.ERROR_NETWORK_TIMEOUT);
-            } finally {
-                dispose();
             }
-            audioShutdown();
         }
     };
 
-    public RecognitionWitHybrid(final Context context, SaiyRecognitionListener listener, SaiyDefaults.LanguageModel languageModel, Locale locale, VRLanguageAmazon vRLanguageAmazon, VRLanguageWit vRLanguageWit, SupportedLanguage supportedLanguage, SaiySoundPool ssp, boolean servingRemote, String apiKey) {
+    public RecognitionAmazon(final Context context, SaiyRecognitionListener listener, SaiyDefaults.LanguageModel languageModel, Locale locale, VRLanguageAmazon vRLanguageAmazon, SupportedLanguage supportedLanguage, SaiySoundPool ssp, boolean servingRemote) {
         this.mContext = context;
         this.listener = listener;
         this.languageModel = languageModel;
         this.ttsLocale = locale;
         this.vRLanguageAmazon = vRLanguageAmazon;
-        this.vrLocale = vRLanguageWit;
         this.sl = supportedLanguage;
         this.servingRemote = servingRemote;
         this.ssp = ssp;
-        this.apiKey = apiKey;
-        Global.setAlexDirectiveBundle(null);
-        AudioParameters audioParameters = AudioParameters.getDefault();
+        ai.saiy.android.audio.AudioParameters audioParameters = ai.saiy.android.audio.AudioParameters.getDefault();
         if (this.servingRemote) {
             this.pauseDetector = new PauseDetector(this, audioParameters.getSampleRateInHz(), audioParameters.getnChannels(), 3250L);
         }
-        this.saiyRecorder = new SaiyRecorder(audioParameters.getAudioSource(),
-                audioParameters.getSampleRateInHz(), audioParameters.getChannelConfig(),
-                audioParameters.getAudioFormat(), true);
         new Thread(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
-                TokenHelper.getAccessToken(context, RecognitionWitHybrid.this);
+                ai.saiy.android.amazon.TokenHelper.getAccessToken(context, RecognitionAmazon.this);
             }
         }).start();
+        this.saiyRecorder = new SaiyRecorder(audioParameters.getAudioSource(),
+                audioParameters.getSampleRateInHz(), audioParameters.getChannelConfig(),
+                audioParameters.getAudioFormat(), true);
     }
 
     private void handleError(int error) {
         if (DEBUG) {
-            MyLog.v(CLS_NAME, "in handleError");
+           MyLog.v(CLS_NAME, "in handleError");
         }
         synchronized (this.errorLock) {
             if (!this.alreadyThrownError) {
-                Global.setAlexDirectiveBundle(null);
                 Recognition.setState(Recognition.State.IDLE);
                 this.alreadyThrownError = true;
                 this.listener.onError(error);
             } else if (DEBUG) {
-                MyLog.v(CLS_NAME, "handleError: thrown already: " + this.alreadyThrownError);
+               MyLog.v(CLS_NAME, "handleError: thrown already: " + this.alreadyThrownError);
             }
         }
     }
@@ -262,7 +171,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "sendResults: error: " + directiveList.getErrorCode());
             }
-            Global.setAlexDirectiveBundle(null);
+            handleError(directiveList.getErrorCode());
             return;
         }
         Bundle bundle = new Bundle();
@@ -278,7 +187,9 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
             MyLog.i(CLS_NAME, "sendResults: hasDirectiveType: false");
         }
         bundle.putInt(LocalRequest.EXTRA_ACTION, directiveList.getAction());
-        Global.setAlexDirectiveBundle(bundle);
+        bundle.putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, new ArrayList<>());
+        bundle.putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, new float[1]);
+        this.listener.onResults(bundle);
     }
 
     private void startRecording() {
@@ -287,16 +198,13 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
         if (this.servingRemote) {
             this.pauseDetector.begin();
         }
-        this.ssp.play(this.ssp.getBeepStart());
-        Recognition.setState(Recognition.State.LISTENING);
-        this.listener.onReadyForSpeech(null);
         switch (this.saiyRecorder.initialise()) {
             case AudioRecord.STATE_UNINITIALIZED:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "AudioRecord.STATE_UNINITIALIZED");
                 }
                 handleError(android.speech.SpeechRecognizer.ERROR_AUDIO);
-                return;
+                break;
             case AudioRecord.STATE_INITIALIZED:
                 switch (this.saiyRecorder.startRecording()) {
                     case AudioRecord.ERROR:
@@ -304,15 +212,15 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                             MyLog.w(CLS_NAME, "startRecording: != AudioRecord.RECORDSTATE_RECORDING");
                         }
                         handleError(android.speech.SpeechRecognizer.ERROR_AUDIO);
-                        return;
+                        break;
                     case AudioRecord.RECORDSTATE_RECORDING:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "startRecording: AudioRecord.RECORDSTATE_RECORDING");
                         }
                         sendAudio();
-                        return;
+                        break;
                     default:
-                        return;
+                        break;
                 }
             default:
                 break;
@@ -324,7 +232,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
             @Override
             public void run() {
                 try {
-                    new SpeechRecognizer(requestBody).stream(UtilsNetwork.getUrl(mContext), alexaAccessToken, new StreamListener() {
+                    new ai.saiy.android.amazon.SpeechRecognizer(requestBody).stream(UtilsNetwork.getUrl(mContext), alexaAccessToken, new ai.saiy.android.amazon.listener.StreamListener() {
                         @Override
                         public void onError(Exception e) {
                             if (DEBUG) {
@@ -335,7 +243,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                         }
 
                         @Override
-                        public void onSuccess(Call call) {
+                        public void onSuccess(okhttp3.Call call) {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "onSuccess");
                             }
@@ -349,14 +257,9 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                                     handleError(android.speech.SpeechRecognizer.ERROR_NO_MATCH);
                                     return;
                                 }
-                                final DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse(isGoogleTTS);
+                                DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse(isGoogleTTS);
                                 response.body().close();
-                                new Thread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        sendResults(directiveList);
-                                    }
-                                }).start();
+                                sendResults(directiveList);
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "onSuccess: end");
                                 }
@@ -386,9 +289,9 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
         }).start();
     }
 
-    public void audioShutdown() {
+    private void audioShutdown() {
         if (DEBUG) {
-            MyLog.v(CLS_NAME, "in audioShutdown");
+           MyLog.v(CLS_NAME, "in audioShutdown");
         }
         synchronized (this.lock) {
             if (this.saiyRecorder != null) {
@@ -401,40 +304,10 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                 }
                 this.saiyRecorder = null;
             } else if (DEBUG) {
-                MyLog.v(CLS_NAME, "audioShutdown: NULL");
+               MyLog.v(CLS_NAME, "audioShutdown: NULL");
             }
             if (DEBUG) {
-                MyLog.v(CLS_NAME, "audioShutdown: finished synchronisation");
-            }
-        }
-    }
-
-    public void dispose() {
-        if (this.outputStream != null) {
-            try {
-                this.outputStream.close();
-            } catch (Exception e) {
-                if (DEBUG) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        if (this.inputStream != null) {
-            try {
-                this.inputStream.close();
-            } catch (Exception e) {
-                if (DEBUG) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        if (this.urlConnection != null) {
-            try {
-                this.urlConnection.disconnect();
-            } catch (Exception e) {
-                if (DEBUG) {
-                    e.printStackTrace();
-                }
+               MyLog.v(CLS_NAME, "audioShutdown: finished synchronisation");
             }
         }
     }
@@ -448,7 +321,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
     }
 
     @Override
-    public void onSuccess(AmazonCredentials credentials) {
+    public void onSuccess(ai.saiy.android.amazon.AmazonCredentials credentials) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "IAlexaToken: onSuccess");
         }
@@ -456,10 +329,10 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
     }
 
     @Override
-    public void onFailure(Exception exc) {
+    public void onFailure(Exception e) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "IAlexaToken: onFailure");
-            exc.printStackTrace();
+            MyLog.i(CLS_NAME, "IAlexaToken: onError");
+            e.printStackTrace();
         }
         handleError(android.speech.SpeechRecognizer.ERROR_NETWORK);
     }
@@ -469,30 +342,38 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
             MyLog.i(CLS_NAME, "startListening");
         }
         this.isGoogleTTS = isGoogleTTS && PermissionHelper.checkFilePermissions(this.mContext);
-        if (this.alexaAccessToken == null) {
+        if (UtilsString.notNaked(this.alexaAccessToken)) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "startListening: alexaAccessToken null");
+                MyLog.i(CLS_NAME, "startListening: have accessToken");
             }
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (alexaAccessToken == null) {
-                        if (DEBUG) {
-                            MyLog.e(CLS_NAME, "startListening: retry alexaAccessToken null");
-                        }
-                        handleError(android.speech.SpeechRecognizer.ERROR_NETWORK);
-                    } else {
-                        if (DEBUG) {
-                            MyLog.e(CLS_NAME, "startListening: retry have alexaAccessToken");
-                        }
-                        Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
-                        startRecording();
-                    }
+            Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
+            startRecording();
+            return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "startListening: accessToken naked");
+        }
+        for (int i = 1; !UtilsString.notNaked(this.alexaAccessToken) && i < 7; i++) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "startListening: sleeping: " + i);
+            }
+            try {
+                Thread.sleep(500L);
+            } catch (InterruptedException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "startListening: sleeping : InterruptedException");
+                    e.printStackTrace();
                 }
-            }, 3000L);
+            }
+        }
+        if (!UtilsString.notNaked(this.alexaAccessToken)) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "startListening: retry accessToken null");
+            }
+            handleError(android.speech.SpeechRecognizer.ERROR_NETWORK);
         } else {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "startListening: have alexaAccessToken");
+                MyLog.w(CLS_NAME, "startListening: retry have accessToken");
             }
             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
             startRecording();

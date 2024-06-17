@@ -40,9 +40,11 @@ public final class Condition {
     public static final int CONDITION_IDENTIFY = 7;
     public static final int CONDITION_GOOGLE_NOW = 8;
     public static final int CONDITION_SECURE = 9;
+    public static final int CONDITION_ANNOUNCE_CALLER = 12;
     public static final int CONDITION_CHECK_REINSTALLATION = 15;
     public static final int CONDITION_TUTORIAL = 16;
     public static final int CONDITION_SELF_AWARE = 17;
+    public static final int CONDITION_ALEXA_TTS = 19;
     public static final int CONDITION_IGNORE = 99;
 
 }

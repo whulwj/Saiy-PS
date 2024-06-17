@@ -17,7 +17,9 @@
 
 package ai.saiy.android.permissions;
 
+import android.Manifest;
 import android.app.AppOpsManager;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,6 +35,7 @@ import androidx.core.content.ContextCompat;
 import ai.saiy.android.ui.activity.ActivityPermissionDialog;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -50,6 +53,8 @@ public class PermissionHelper {
     public static final int REQUEST_AUDIO = 1;
     public static final int REQUEST_FILE = 2;
     public static final int REQUEST_GROUP_CONTACTS = 3;
+    public static final int REQUEST_READ_SMS = 8;
+    public static final int REQUEST_PHONE_STATE = 10;
 
     /**
      * Check if the calling application has the correct permission to control Saiy.
@@ -93,7 +98,7 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkTutorialPermissions");
         }
         switch (hasSelfPermission(context, android.Manifest.permission.RECORD_AUDIO)) {
-            case 0:
+            case PackageManager.PERMISSION_GRANTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkTutorialPermissions: PERMISSION_GRANTED");
                 }
@@ -193,6 +198,110 @@ public class PermissionHelper {
         }
     }
 
+    public static boolean checkPhoneStatePermissionsNR(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkPhoneStatePermissionsNR");
+        }
+        if (hasSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkPhoneStatePermissionsNR: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkPhoneStatePermissionsNR: PERMISSION_DENIED");
+        }
+        return false;
+    }
+
+    public static boolean checkAnswerCallsPermissionsNR(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkAnswerCallsPermissionsNR");
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            return true;
+        }
+        if (hasSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkAnswerCallsPermissionsNR: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkAnswerCallsPermissionsNR: PERMISSION_DENIED");
+        }
+        return false;
+    }
+
+    public static boolean checkPhoneStatePermissions(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkPhoneStatePermissions");
+        }
+        if (checkPhoneStatePermissionsNR(context) && checkAnswerCallsPermissionsNR(context)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkPhoneStatePermissions: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkPhoneStatePermissions: PERMISSION_DENIED");
+        }
+        Intent intent = new Intent(context, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        Bundle bundle = new Bundle();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.ANSWER_PHONE_CALLS});
+        } else {
+            bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.READ_PHONE_STATE});
+        }
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_PHONE_STATE);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+        return false;
+    }
+
+    public static boolean checkSMSReadPermissions(Context context, Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkSMSReadPermissions");
+        }
+        switch (hasSelfPermission(context, android.Manifest.permission.READ_SMS)) {
+            case PackageManager.PERMISSION_GRANTED:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "checkSMSReadPermissions: PERMISSION_GRANTED");
+                }
+                return true;
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "checkSMSReadPermissions: PERMISSION_DENIED");
+                }
+                Intent intent = new Intent(context, ActivityPermissionDialog.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (!UtilsBundle.notNaked(bundle)) {
+                    bundle = new Bundle();
+                }
+                bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.READ_SMS});
+                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_READ_SMS);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+                return false;
+        }
+    }
+
+    public static boolean checkAnnounceCallerPermissionsNR(Context context) {
+        return checkPhoneStatePermissionsNR(context) && checkAnswerCallsPermissionsNR(context) && checkNotificationPolicyPermission(context) && checkContactGroupPermissionsNR(context);
+    }
+
+    public static boolean checkReadCallerPermissions(Context context) {
+        if (!checkPhoneStatePermissionsNR(context)) {
+            checkPhoneStatePermissions(context);
+            return false;
+        }
+        if (checkContactGroupPermissionsNR(context)) {
+            return true;
+        }
+        checkContactGroupPermissions(context, null);
+        return false;
+    }
 
     /**
      * Check if the user has granted write files permissions
@@ -252,6 +361,85 @@ public class PermissionHelper {
         }
     }
 
+    public static boolean checkContactGroupPermissionsNR(@NonNull final Context ctx) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkContactGroupPermissionsNR");
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.GET_ACCOUNTS)) {
+                case PackageManager.PERMISSION_GRANTED:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "checkContactGroupPermissionsNR: PERMISSION_GRANTED");
+                    }
+                    return true;
+                case PackageManager.PERMISSION_DENIED:
+                default:
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "checkContactGroupPermissionsNR: PERMISSION_DENIED");
+                    }
+                    return false;
+            }
+        }
+        if (!checkReadContactPermissionNR(ctx) || !checkAccountsPermissionNR(ctx) || !checkWriteContactsPermissionNR(ctx)) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "checkContactGroupPermissionsNR: PERMISSION_DENIED");
+            }
+            return false;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkContactGroupPermissionsNR: PERMISSION_GRANTED");
+        }
+        return true;
+    }
+
+    public static boolean checkReadContactPermissionNR(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkReadContactPermissionNR");
+        }
+        if (hasSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkReadContactPermissionNR: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkReadContactPermissionNR: PERMISSION_DENIED");
+        }
+        return false;
+    }
+
+    public static boolean checkAccountsPermissionNR(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkAccountsPermissionNR");
+        }
+        if (hasSelfPermission(context, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkAccountsPermissionNR: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkAccountsPermissionNR: PERMISSION_DENIED");
+        }
+        return false;
+    }
+
+    public static boolean checkWriteContactsPermissionNR(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkWriteContactsPermissionNR");
+        }
+        if (hasSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkWriteContactsPermissionNR: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkWriteContactsPermissionNR: PERMISSION_DENIED");
+        }
+        return false;
+    }
+
     /**
      * Check if the user has granted the contacts group permission
      *
@@ -259,36 +447,48 @@ public class PermissionHelper {
      * @return true if the permissions have been granted. False if they have been denied or are
      * required to be requested.
      */
-    public static boolean checkContactGroupPermissions(@NonNull final Context ctx) {
+    public static boolean checkContactGroupPermissions(@NonNull final Context ctx, Bundle bundle) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkContactGroupPermissions");
         }
 
-        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.GET_ACCOUNTS)) {
-
-            case PackageManager.PERMISSION_GRANTED:
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+            switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.GET_ACCOUNTS)) {
+                case PackageManager.PERMISSION_GRANTED:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "checkContactGroupPermissions: PERMISSION_GRANTED");
+                    }
+                    return true;
+                case PackageManager.PERMISSION_DENIED:
+                default:
+                    break;
+            }
+        } else {
+            if (checkReadContactPermissionNR(ctx) && checkAccountsPermissionNR(ctx) && checkWriteContactsPermissionNR(ctx)) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkContactGroupPermissions: PERMISSION_GRANTED");
                 }
                 return true;
-            case PackageManager.PERMISSION_DENIED:
-            default:
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "checkContactGroupPermissions: PERMISSION_DENIED");
-                }
-
-                final Intent intent = new Intent(ctx, ActivityPermissionDialog.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                final Bundle bundle = new Bundle();
-                bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.GET_ACCOUNTS});
-                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_GROUP_CONTACTS);
-
-                intent.putExtras(bundle);
-
-                ctx.startActivity(intent);
-                return false;
+            }
         }
+
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkContactGroupPermissions: PERMISSION_DENIED");
+        }
+
+        final Intent intent = new Intent(ctx, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+        if (!UtilsBundle.notNaked(bundle)) {
+            bundle = new Bundle();
+        }
+        bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.GET_ACCOUNTS});
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_GROUP_CONTACTS);
+
+        intent.putExtras(bundle);
+
+        ctx.startActivity(intent);
+        return false;
     }
 
     /**
@@ -308,5 +508,12 @@ public class PermissionHelper {
 
         return appOps.checkOpNoThrow(AppOpsManager.OPSTR_GET_USAGE_STATS,
                 android.os.Process.myUid(), ctx.getPackageName()) == AppOpsManager.MODE_ALLOWED;
+    }
+
+    public static boolean checkNotificationPolicyPermission(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkNotificationPolicyPermission");
+        }
+        return Build.VERSION.SDK_INT < Build.VERSION_CODES.N || ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).isNotificationPolicyAccessGranted();
     }
 }

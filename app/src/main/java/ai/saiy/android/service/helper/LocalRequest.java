@@ -30,6 +30,7 @@ import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -61,12 +62,15 @@ public class LocalRequest {
     public static final int ACTION_START_HOTWORD = 3;
     public static final int ACTION_STOP_HOTWORD = 4;
     public static final int ACTION_TOGGLE_HOTWORD = 5;
+    public static final int ACTION_TOGGLE_DRIVING_PROFILE = 6;
+    public static final int ACTION_ALEXA_TTS = 7;
 
     public static final String EXTRA_RECOGNITION_LANGUAGE = "extra_recognition_language";
     public static final String EXTRA_TTS_LANGUAGE = "extra_tts_language";
     public static final String EXTRA_UTTERANCE = "extra_utterance";
     public static final String EXTRA_UTTERANCE_ARRAY = "extra_utterance_array";
     public static final String EXTRA_ACTION = "extra_action";
+    public static final String EXTRA_RECOGNITION_PROVIDER = "extra_recognition_provider";
     public static final String EXTRA_COMMAND = "extra_command";
     public static final String EXTRA_CONDITION = "extra_condition";
     public static final String EXTRA_SUPPORTED_LANGUAGE = "extra_supported_language";
@@ -76,6 +80,7 @@ public class LocalRequest {
     public static final String EXTRA_PREVENT_RECOGNITION = "extra_prevent_recognition";
     public static final String EXTRA_TUTORIAL_STAGE = "extra_tutorial_stage";
     public static final String EXTRA_CONDITION_RETRY = "extra_condition_retry";
+    public static final String EXTRA_ALEXA_FILE_PATH = "extra_alexa_file_path";
     public static final String EXTRA_VR_RETRY = "extra_vr_retry";
 
     private final ServiceConnector sc;
@@ -192,6 +197,10 @@ public class LocalRequest {
 
     public void setConditionRetry(boolean retry) {
         this.bundle.putBoolean(LocalRequest.EXTRA_CONDITION_RETRY, retry);
+    }
+
+    public void setAlexaFilePath(String pathOfFile) {
+        this.bundle.putString(EXTRA_ALEXA_FILE_PATH, pathOfFile);
     }
 
     public void setVrRetry(boolean retry) {
@@ -316,6 +325,10 @@ public class LocalRequest {
         }
 
         return Condition.CONDITION_NONE;
+    }
+
+    public void setRecognitionProvider(SaiyDefaults.VR provider) {
+        this.bundle.putSerializable(EXTRA_RECOGNITION_PROVIDER, provider);
     }
 
     /**

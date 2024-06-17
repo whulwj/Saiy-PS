@@ -162,12 +162,24 @@ public class RecognitionAction {
 
                     quantum.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cr);
                     break;
+                case Condition.CONDITION_ANNOUNCE_CALLER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Condition.CONDITION_ANNOUNCE_CALLER");
+                    }
+                    //TODO AnswerCallConfirm
+                    break;
                 case Condition.CONDITION_TUTORIAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL");
                     }
                     this.bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, false);
                     new ai.saiy.android.tutorial.Tutorial(this.mContext, this.vrLocale, this.ttsLocale, this.sl, this.bundle).execute();
+                    break;
+                case Condition.CONDITION_ALEXA_TTS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Condition.CONDITION_ALEXA_TTS");
+                    }
+                    quantum.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cr);
                     break;
                 case Condition.CONDITION_IGNORE:
                     if (DEBUG) {

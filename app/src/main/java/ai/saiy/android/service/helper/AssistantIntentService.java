@@ -19,16 +19,29 @@ package ai.saiy.android.service.helper;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 
+import java.util.ArrayList;
 import java.util.Set;
 
+import ai.saiy.android.R;
+import ai.saiy.android.api.SaiyDefaults;
+import ai.saiy.android.command.settings.SettingsIntent;
+import ai.saiy.android.intent.IntentConstants;
+import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityHelper;
 import ai.saiy.android.processing.Condition;
+import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsLocale;
@@ -51,7 +64,16 @@ public class AssistantIntentService extends IntentService {
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = AssistantIntentService.class.getSimpleName();
 
-    private final String EXTRA_ASSIST_CONTEXT = "android.intent.extra.ASSIST_CONTEXT";
+    private static final String EXTRA_ASSIST_CONTEXT = "android.intent.extra.ASSIST_CONTEXT";
+    private static final String EXTRA_QUERY = "query";
+    private static final String ACTION_ASSIST_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
+    private static final String ACTION_WIDGET_ASSIST = "ai.saiy.android.action.WIDGET_ASSIST";
+    private static final String ACTION_QL_ASSIST = "ai.saiy.android.action.QL_ASSIST";
+    private static final String EXTRA_RESOLVED = "extra_resolved";
+    private static final String ACTION_ALEXA = "ai.saiy.android.action.ALEXA";
+    private static final String ACTION_HOTWORD = "ai.saiy.android.HOTWORD";
+    private static final String ACTION_DRIVING ="ai.saiy.android.DRIVING";
+    private static final String ACTION_NOTIFICATIONS = "ai.saiy.android.NOTIFICATIONS";
 
     private long then;
 
@@ -69,6 +91,19 @@ public class AssistantIntentService extends IntentService {
         super.onCreate();
     }
 
+    public void showToast(final String text, final int duration) {
+        if (UtilsString.notNaked(text)) {
+            new Handler(Looper.getMainLooper()).post(new Runnable() {
+                @Override
+                public void run() {
+                    ai.saiy.android.utils.UtilsToast.showToast(AssistantIntentService.this.getApplicationContext(), text, duration);
+                }
+            });
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "showToast: naked String: ignoring");
+        }
+    }
+
     @Override
     protected void onHandleIntent(final Intent intent) {
         if (DEBUG) {
@@ -82,26 +117,6 @@ public class AssistantIntentService extends IntentService {
         if (intent != null) {
             final Bundle bundle = intent.getExtras();
             if (bundle != null) {
-
-                final String action = intent.getAction();
-
-                if (UtilsString.notNaked(action)) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onHandleIntent: action: " + action);
-                    }
-
-                    if (intent.getAction().equals(Intent.ACTION_ASSIST)) {
-                        if (DEBUG) {
-                            if (bundle.containsKey(EXTRA_ASSIST_CONTEXT)) {
-                                final Bundle assistBundle = bundle.getBundle(EXTRA_ASSIST_CONTEXT);
-
-                                MyLog.i(CLS_NAME, "onHandleIntent checking assistBundle");
-                                examineBundle(assistBundle);
-                            }
-                        }
-                    }
-                }
-
                 if (bundle.containsKey(LocalRequest.EXTRA_RECOGNITION_LANGUAGE)) {
 
                     final String vrLocale = bundle.getString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE);
@@ -200,6 +215,146 @@ public class AssistantIntentService extends IntentService {
             } else {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onHandleIntent: bundle null ignoring");
+                }
+            }
+
+            final String action = intent.getAction();
+            if (UtilsString.notNaked(action)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onHandleIntent: action: " + action);
+                }
+                if (!actionBundle.containsKey(LocalRequest.EXTRA_RECOGNITION_LANGUAGE)) {
+                    actionBundle.putString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE, SPH.getVRLocale(getApplicationContext()).toString());
+                }
+                final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(
+                        UtilsLocale.stringToLocale(actionBundle.getString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE)));
+                actionBundle.putSerializable(LocalRequest.EXTRA_SUPPORTED_LANGUAGE, sl);
+                if (action.equals(Intent.ACTION_ASSIST) || action.equals(Intent.ACTION_MAIN) || action.equals(Intent.ACTION_VOICE_COMMAND)
+                        || action.equals(RecognizerIntent.ACTION_WEB_SEARCH) || action.equals(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE)
+                        || action.equals(ACTION_WIDGET_ASSIST) || action.equals(ACTION_QL_ASSIST)) {
+                    if (DEBUG) {
+                        if (bundle.containsKey(EXTRA_ASSIST_CONTEXT)) {
+                            final Bundle assistBundle = bundle.getBundle(EXTRA_ASSIST_CONTEXT);
+
+                            MyLog.i(CLS_NAME, "onHandleIntent checking assistBundle");
+                            examineBundle(assistBundle);
+                        }
+                    }
+                    actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
+                } else if (action.equals(ACTION_ASSIST_SEARCH)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: action: EXTRA_ASSIST_SEARCH");
+                    }
+                    if (intent.hasExtra(EXTRA_QUERY)) {
+                        String stringExtra = intent.getStringExtra(EXTRA_QUERY);
+                        if (!UtilsString.notNaked(stringExtra) || stringExtra.trim().matches("intro")) {
+                            actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
+                        } else {
+                            ArrayList<String> arrayList = new ArrayList<>(1);
+                            arrayList.add(stringExtra);
+                            actionBundle.putBoolean(EXTRA_RESOLVED, true);
+                            actionBundle.putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, arrayList);
+                            actionBundle.putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, new float[]{0.9f});
+                        }
+                    } else {
+                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
+                    }
+                } else if (intent.getAction().equals(ACTION_ALEXA)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_ALEXA");
+                    }
+                    if (!ai.saiy.android.amazon.TokenHelper.hasToken(getApplicationContext())) {
+                        actionBundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                        actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
+                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.amazon_notification_auth_request));
+                        ai.saiy.android.intent.ExecuteIntent.saiyActivity(getApplicationContext(), ActivityHome.class, bundle, true);
+                    } else if (!ai.saiy.android.utils.Conditions.Network.isConnected(getApplicationContext())) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onHandleIntent: ACTION_ALEXA: no network");
+                        }
+                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+                            @Override
+                            public void run() {
+                                ai.saiy.android.utils.UtilsToast.showToast(getApplicationContext(), R.string.error_network, Toast.LENGTH_SHORT);
+                            }
+                        });
+                        return;
+                    } else {
+                        actionBundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_LISTEN);
+                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
+                        actionBundle.putSerializable(LocalRequest.EXTRA_RECOGNITION_PROVIDER, SaiyDefaults.VR.ALEXA);
+                    }
+                } else if (intent.getAction().equals(ACTION_HOTWORD)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_HOTWORD");
+                    }
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || ai.saiy.android.permissions.PermissionHelper.checkUsageStatsPermission(getApplicationContext()) || SPH.getHotwordStats(getApplicationContext())) {
+                        actionBundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_TOGGLE_HOTWORD);
+                    } else {
+                        SPH.markHotwordStats(getApplicationContext());
+                        actionBundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                        if (ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_USAGE_STATS)) {
+                            actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.app_speech_usage_stats));
+                        } else {
+                            actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.issue_usage_stats_bug));
+                        }
+                    }
+                } else if (intent.getAction().equals(ACTION_DRIVING)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_DRIVING");
+                    }
+                    //TODO
+                } else if (intent.getAction().equals(ACTION_NOTIFICATIONS)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_NOTIFICATIONS");
+                    }
+                    actionBundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                    if (SPH.getAnnounceNotifications(getApplicationContext())) {
+                        SPH.setAnnounceNotifications(getApplicationContext(), false);
+                        showToast(getString(R.string.disabled), Toast.LENGTH_SHORT);
+                        return;
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        boolean notificationEnabled = false;
+                        for (String s : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
+                            if (s.equals(getApplicationContext().getPackageName())) {
+                                notificationEnabled = true;
+                                break;
+                            }
+                        }
+                        if (notificationEnabled) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "notification listener service running");
+                            }
+                            SPH.setAnnounceNotifications(getApplicationContext(), true);
+                            if (ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext())) {
+                                showToast(getString(R.string.enabled), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "notification listener service running: quiet times active");
+                            }
+                            showToast(getString(R.string.enabled) + " - " + getString(R.string.title_quiet_time_active), Toast.LENGTH_SHORT);
+                            return;
+                        }
+                        if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
+                            actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.notifications_enable));
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "notification listener: settings location unknown");
+                            }
+                            actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, String.format(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.settings_missing), ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.notification_access)));
+                        }
+                    } else if (SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
+                        SelfAwareHelper.startAccessibilityService(getApplicationContext());
+                        showToast(getString(R.string.enabled), Toast.LENGTH_SHORT);
+                        return;
+                    } else {
+                        ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
+                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.accessibility_enable));
+                    }
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onHandleIntent: action naked");
                 }
             }
         } else {

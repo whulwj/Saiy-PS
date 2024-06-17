@@ -62,11 +62,11 @@ public class ResolveAmazon {
     }
 
     private String getMultipartContentId(String str) {
-        String a2 = StringUtils.substringBetween(str, "Content-ID: <", ">");
+        String contentId = StringUtils.substringBetween(str, "Content-ID: <", ">");
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "getMultipartContentId: " + a2);
+            MyLog.i(CLS_NAME, "getMultipartContentId: " + contentId);
         }
-        return UtilsString.notNaked(a2) ? a2 : "";
+        return UtilsString.notNaked(contentId) ? contentId : "";
     }
 
     private String readHeaders(MultipartStream multipartStream) {
@@ -78,10 +78,10 @@ public class ResolveAmazon {
                 e.printStackTrace();
             }
             return null;
-        } catch (MultipartStream.MalformedStreamException e2) {
+        } catch (MultipartStream.MalformedStreamException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "readHeaders: MalformedStreamException");
-                e2.printStackTrace();
+                e.printStackTrace();
             }
             return null;
         }

@@ -128,6 +128,7 @@ public class SaiyDefaults {
         WIT_HYBRID(null),
         IBM(Defaults.VR.IBM),
         REMOTE(Defaults.VR.REMOTE),
+        ALEXA(null),
         MIC(null);
 
         private final Defaults.VR vr;

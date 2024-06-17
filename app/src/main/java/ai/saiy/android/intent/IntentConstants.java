@@ -29,6 +29,8 @@ public class IntentConstants {
     public static final int SETTINGS_VOLUME = 5;
     public static final int SETTINGS_TEXT_TO_SPEECH = 6;
     public static final int SETTINGS_ADD_ACCOUNT = 7;
+    public static final int NOTIFICATION_POLICY_ACCESS_SETTINGS = 8;
+    public static final int MANAGE_WRITE_SETTINGS = 9;
 
     public static final String COMPONENT_VOICE_SEARCH_PREFERENCES = "com.google.android.voicesearch.VoiceSearchPreferences";
     public static final String COMPONENT_VOICE_SEARCH_PREFERENCES_VELVET = "com.google.android.apps.gsa.velvet.ui.settings.VoiceSearchPreferences";

@@ -508,7 +508,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
             MyLog.i(CLS_NAME, "showAccountPicker");
         }
 
-        if (PermissionHelper.checkContactGroupPermissions(getApplicationContext())) {
+        if (PermissionHelper.checkContactGroupPermissions(getApplicationContext(), null)) {
 
             AsyncTask.execute(new Runnable() {
                 @Override

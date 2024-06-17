@@ -94,6 +94,7 @@ import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyHotwordListener;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.recognition.helper.RecognitionDefaults;
+import ai.saiy.android.recognition.provider.Amazon.RecognitionAmazon;
 import ai.saiy.android.recognition.provider.Amazon.VRLanguageAmazon;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
 import ai.saiy.android.recognition.provider.bluemix.RecognitionBluemix;
@@ -691,7 +692,8 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                               final RecognitionMicrosoft recogOxford, final RecognitionWit recogWit,
                               final RecognitionBluemix recogIBM, final RecognitionRemote recogRemote,
                               final RecognitionMic recogMic, final SpeechRecognizer recogNative,
-                              final RecognitionSphinx recogSphinx, final RecognitionWitHybrid recogWitHybrid) {
+                              final RecognitionSphinx recogSphinx, final RecognitionAmazon recogAmazon,
+                              final RecognitionWitHybrid recogWitHybrid) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "stopListening");
         }
@@ -851,6 +853,33 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "stopListening null");
                         }
+                    }
+                    break;
+                case ALEXA:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "stopListening: " + SaiyDefaults.VR.ALEXA.name());
+                    }
+                    if (recogAmazon == null) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "stopListening null");
+                        }
+                        return;
+                    }
+                    switch (Recognition.getState()) {
+                        case PROCESSING:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "stopListening: PROCESSING");
+                            }
+                            recogAmazon.stopListening();
+                            break;
+                        case LISTENING:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "stopListening: SPEAKING");
+                            }
+                            recogAmazon.stopListening();
+                            break;
+                        default:
+                            break;
                     }
                     break;
                 case WIT_HYBRID:
@@ -1934,6 +1963,13 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
     }
 
+    public RecognitionAmazon getAmazonRecognition(SaiyRecognitionListener recognitionListener) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAmazonRecognition");
+        }
+        return new RecognitionAmazon(mContext, recognitionListener, getDefaultLanguageModel(), getTTSLocale(), VRLanguageAmazon.ENGLISH_UK, getSupportedLanguage(false), saiySoundPool, true);
+    }
+
     public RecognitionWitHybrid getWitHybridRecognition(ai.saiy.android.recognition.SaiyRecognitionListener recognitionListener) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getWitHybridRecognition");
@@ -2357,7 +2393,17 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         removeRunnableCallback(initialisingNotification);
         NotificationHelper.cancelFetchingNotification(mContext);
         NotificationHelper.cancelInitialisingNotification(mContext);
-        NotificationHelper.createSpeakingNotification(mContext, getSpeechLength(getUtterance()));
+        if (getBundle().containsKey(LocalRequest.EXTRA_ALEXA_FILE_PATH)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onTTSStarted: Alexa");
+            }
+            NotificationHelper.createSpeakingNotification(mContext, NotificationHelper.MIN_NOTIFICATION_SPEECH_LENGTH + 1);
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onTTSStarted: not Alexa");
+            }
+            NotificationHelper.createSpeakingNotification(mContext, getSpeechLength(getUtterance()));
+        }
     }
 
     @Override

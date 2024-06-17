@@ -79,6 +79,7 @@ public class Installed {
     public static final String PACKAGE_SPOTIFY_MUSIC = "com.spotify.music";
     public static final String PACKAGE_SOUND_HOUND = "com.melodis.midomiMusicIdentifier.freemium";
     public static final String PACKAGE_SOUND_HOUND_PREMIUM = "com.melodis.midomiMusicIdentifier";
+    @Deprecated
     public static final String PACKAGE_TRACK_ID = "com.sonyericsson.trackid";
     public static final String PACKAGE_GOOGLE_SOUND_SEARCH = "com.google.android.ears";
     public static final String PACKAGE_NAME_GOOGLE = "com.google.android";
