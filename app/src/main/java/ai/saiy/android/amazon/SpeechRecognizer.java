@@ -57,8 +57,8 @@ public class SpeechRecognizer {
     }
 
     public void stream(String url, String alexaAccessToken, StreamListener listener) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "stream");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "stream");
         }
         long nanoTime = System.nanoTime();
         try {
@@ -68,13 +68,13 @@ public class SpeechRecognizer {
             if (listener != null) {
                 listener.onSuccess(call);
             }
-            if (this.DEBUG) {
-                MyLog.i(this.CLS_NAME, "stream: Audio sent");
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "stream: Audio sent");
                 MyLog.d("stream", nanoTime);
             }
         } catch (Exception e) {
-            if (this.DEBUG) {
-                MyLog.e(this.CLS_NAME, "stream: Exception");
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "stream: Exception");
                 e.printStackTrace();
             }
             if (listener != null) {

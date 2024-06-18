@@ -46,7 +46,7 @@ public class FragmentApplicationsHelper {
     }
 
     private ArrayList<ContainerUI> getUIComponents() {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "getUIComponents");
         }
         ArrayList<ContainerUI> arrayList = new ArrayList<>();
@@ -371,14 +371,14 @@ public class FragmentApplicationsHelper {
     }
 
     public UIApplicationsAdapter getAdapter(ArrayList<ContainerUI> arrayList) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "getAdapter");
         }
         return new UIApplicationsAdapter(arrayList, getParent(), getParent());
     }
 
     public RecyclerView getRecyclerView(View view) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "getRecyclerView");
         }
         RecyclerView recyclerView = view.findViewById(R.id.layout_common_fragment_recycler_view);
@@ -398,13 +398,13 @@ public class FragmentApplicationsHelper {
                         try {
                             Thread.sleep(200L);
                         } catch (InterruptedException e) {
-                            if (FragmentApplicationsHelper.this.DEBUG) {
+                            if (DEBUG) {
                                 MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
                                 e.printStackTrace();
                             }
                         }
                     }
-                } else if (FragmentApplicationsHelper.this.DEBUG) {
+                } else if (DEBUG) {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
                 if (FragmentApplicationsHelper.this.getParent().isActive()) {
@@ -415,7 +415,7 @@ public class FragmentApplicationsHelper {
                             FragmentApplicationsHelper.this.getParent().getAdapter().notifyItemRangeInserted(0, FragmentApplicationsHelper.this.getParent().getObjects().size());
                         }
                     });
-                } else if (FragmentApplicationsHelper.this.DEBUG) {
+                } else if (DEBUG) {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
             }
@@ -423,12 +423,12 @@ public class FragmentApplicationsHelper {
     }
 
     public void toast(String text, int duration) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "makeToast: " + text);
         }
         if (getParent().isActive()) {
             getParentActivity().toast(text, duration);
-        } else if (this.DEBUG) {
+        } else if (DEBUG) {
             MyLog.w(CLS_NAME, "toast Fragment detached");
         }
     }
@@ -440,19 +440,19 @@ public class FragmentApplicationsHelper {
                 ai.saiy.android.thirdparty.tasker.TaskerHelper taskerHelper = new ai.saiy.android.thirdparty.tasker.TaskerHelper();
                 Pair<Boolean, String> taskerPair = taskerHelper.isTaskerInstalled(FragmentApplicationsHelper.this.getApplicationContext());
                 if (!taskerPair.first) {
-                    if (FragmentApplicationsHelper.this.DEBUG) {
+                    if (DEBUG) {
                         MyLog.i(CLS_NAME, "tasker not installed");
                     }
                     Install.showInstallLink(FragmentApplicationsHelper.this.getApplicationContext(), Installed.PACKAGE_TASKER_MARKET);
                     return;
                 }
                 String packageName = taskerPair.second;
-                if (FragmentApplicationsHelper.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.i(CLS_NAME, "tasker installed: " + packageName);
                 }
                 Pair<Boolean, Boolean> taskerStatusPair = taskerHelper.canInteract(FragmentApplicationsHelper.this.getApplicationContext());
                 if (!taskerStatusPair.first) {
-                    if (FragmentApplicationsHelper.this.DEBUG) {
+                    if (DEBUG) {
                         MyLog.w(CLS_NAME, "tasker disabled");
                     }
                     ai.saiy.android.applications.UtilsApplication.launchAppFromPackageName(FragmentApplicationsHelper.this.getApplicationContext(), packageName);
@@ -460,7 +460,7 @@ public class FragmentApplicationsHelper {
                     return;
                 }
                 if (!taskerStatusPair.second) {
-                    if (FragmentApplicationsHelper.this.DEBUG) {
+                    if (DEBUG) {
                         MyLog.w(CLS_NAME, "tasker external access required");
                     }
                     taskerHelper.showTaskerExternalAccess(FragmentApplicationsHelper.this.getApplicationContext());
@@ -471,7 +471,7 @@ public class FragmentApplicationsHelper {
                     FragmentApplicationsHelper.this.toast(FragmentApplicationsHelper.this.getString(R.string.content_tasker_connection_success), Toast.LENGTH_SHORT);
                     return;
                 }
-                if (FragmentApplicationsHelper.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.w(CLS_NAME, "tasker no receiver");
                     MyLog.i(CLS_NAME, "tasker no receiver: install from unknown: " + ai.saiy.android.thirdparty.tasker.TaskerHelper.isUnknownSourceInstallAllowed(FragmentApplicationsHelper.this.getApplicationContext()));
                 }

@@ -183,6 +183,12 @@ public class SaiyAccessibilityService extends AccessibilityService {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onAccessibilityEvent");
         }
+        if (!SPH.getSelfAwareEnabled(getApplicationContext())) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onAccessibilityEvent: self aware disabled by user");
+            }
+            return;
+        }
 
         updateServiceInfo(SPH.getInterceptGoogle(getApplicationContext()),
                 SPH.getAnnounceNotifications(getApplicationContext()));

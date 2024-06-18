@@ -588,14 +588,12 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             return super.onOptionsItemSelected(item);
         }
         if (R.id.action_power == item.getItemId()) {
-            if (SelfAwareHelper.selfAwareRunning(getApplicationContext())) {
+            if (SPH.getSelfAwareEnabled(getApplicationContext())) {
                 SPH.setSelfAwareEnabled(getApplicationContext(), false);
-                SelfAwareHelper.stopService(getApplicationContext()); //todo: remove?
                 toast(getString(R.string.will_shutdown_on_exit), Toast.LENGTH_SHORT);
                 item.setIcon(R.drawable.ic_power_rt);
             } else {
                 toast(getString(R.string.menu_enabled), Toast.LENGTH_SHORT);
-                SelfAwareHelper.startService(getApplicationContext()); //todo: remove?
                 vibrate();
                 SPH.setSelfAwareEnabled(getApplicationContext(), true);
                 item.setIcon(R.drawable.ic_power);

@@ -53,12 +53,12 @@ public class TutorialHelper {
         this.resultsRecognition = arrayList;
         this.locale = supportedLanguage.getLocale();
         if (sausage != null) {
-            if (this.DEBUG) {
-                MyLog.i(this.CLS_NAME, "strings initialised");
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "strings initialised");
             }
         } else {
-            if (this.DEBUG) {
-                MyLog.i(this.CLS_NAME, "initialising strings");
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "initialising strings");
             }
             ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
             initStrings(sr);
@@ -99,8 +99,8 @@ public class TutorialHelper {
     }
 
     public Pair<Boolean, Boolean> getAnswerOneResult() {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getAnswerOneResult");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAnswerOneResult");
         }
         if (UtilsList.notNaked(this.resultsRecognition)) {
             for (String s : this.resultsRecognition) {
@@ -109,15 +109,15 @@ public class TutorialHelper {
                     return (lowerCase.contains(sausage) && (lowerCase.contains(bean_sic) || lowerCase.contains(bean)) && lowerCase.contains(chip)) ? new Pair<>(true, true) : new Pair<>(true, false);
                 }
             }
-        } else if (this.DEBUG) {
-            MyLog.w(this.CLS_NAME, "voice data naked");
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "voice data naked");
         }
         return new Pair<>(false, false);
     }
 
     public Pair<Boolean, Boolean> getAnswerTwoResult() {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getAnswerTwoResult");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAnswerTwoResult");
         }
         if (UtilsList.notNaked(this.resultsRecognition)) {
             String trim = numeric_1_2_3_4_5.replaceAll("\\s", "").trim();
@@ -127,15 +127,15 @@ public class TutorialHelper {
                     return ((lowerCase.contains(one) && lowerCase.contains(two) && lowerCase.contains(three) && lowerCase.contains(four) && lowerCase.contains(five)) || lowerCase.contains(numeric_1_2_3_4_5) || lowerCase.contains(trim)) ? new Pair<>(true, true) : new Pair<>(true, false);
                 }
             }
-        } else if (this.DEBUG) {
-            MyLog.w(this.CLS_NAME, "voice data naked");
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "voice data naked");
         }
         return new Pair<>(false, false);
     }
 
     public Pair<Gender, Boolean> getAnswerThreeResult() {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getAnswerThreeResult");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAnswerThreeResult");
         }
         if (UtilsList.notNaked(this.resultsRecognition)) {
             for (String s : this.resultsRecognition) {
@@ -150,8 +150,8 @@ public class TutorialHelper {
                     return new Pair<>(Gender.MALE, false);
                 }
             }
-        } else if (this.DEBUG) {
-            MyLog.w(this.CLS_NAME, "voice data naked");
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "voice data naked");
         }
         return new Pair<>(Gender.UNDEFINED, false);
     }

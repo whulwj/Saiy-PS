@@ -40,8 +40,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.google.gson.GsonBuilder;
-
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -80,6 +78,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
+import ai.saiy.android.utils.UtilsParcelable;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -893,8 +892,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
 
         if (UtilsString.notNaked(userDefaultSaiyVoiceString)) {
 
-            final SaiyVoice userDefaultSaiyVoice = new GsonBuilder().disableHtmlEscaping().create().fromJson(
-                    userDefaultSaiyVoiceString, SaiyVoice.class);
+            final SaiyVoice userDefaultSaiyVoice = UtilsParcelable.unmarshall(userDefaultSaiyVoiceString, SaiyVoice.CREATOR);
 
             if (userDefaultSaiyVoice != null) {
                 return userDefaultSaiyVoice;
@@ -1207,13 +1205,13 @@ public class SaiyTextToSpeech extends TextToSpeech {
             saiyVoice.setEngine(getInitialisedEngine());
             saiyVoice.setGender(saiyVoice.getName());
 
-            final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(saiyVoice);
+            final String base64String = UtilsParcelable.parcelable2String(saiyVoice);
 
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "setDefaultVoice: gsonString: " + gsonString);
+                MyLog.i(CLS_NAME, "setDefaultVoice base64String: " + base64String);
             }
 
-            SPH.setDefaultTTSVoice(mContext, gsonString);
+            SPH.setDefaultTTSVoice(mContext, base64String);
 
         } else {
             if (DEBUG) {

@@ -24,9 +24,9 @@ import android.speech.tts.Voice;
 
 import androidx.annotation.NonNull;
 
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.regex.Pattern;
 
@@ -84,6 +84,33 @@ public class SaiyVoice extends Voice {
         return saiyVoiceSet;
     }
 
+    public static final Creator<SaiyVoice> CREATOR = new Creator<SaiyVoice>() {
+        @Override
+        public SaiyVoice createFromParcel(Parcel parcel) {
+            final Voice voice = Voice.CREATOR.createFromParcel(parcel);
+            final SaiyVoice saiyVoice = new SaiyVoice(voice);
+            saiyVoice.engine = parcel.readString();
+            final ai.saiy.android.api.attributes.Gender gender = ai.saiy.android.api.attributes.Gender.getGender(parcel.readInt());
+            switch (gender) {
+                case FEMALE:
+                    saiyVoice.gender = Gender.FEMALE;
+                    break;
+                case MALE:
+                    saiyVoice.gender = Gender.MALE;
+                    break;
+                default:
+                    saiyVoice.gender = Gender.UNDEFINED;
+                    break;
+            }
+            return saiyVoice;
+        }
+
+        @Override
+        public SaiyVoice[] newArray(int size) {
+            return new SaiyVoice[size];
+        }
+    };
+
     public Gender getGender() {
         return gender;
     }
@@ -130,7 +157,7 @@ public class SaiyVoice extends Voice {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         final StringBuilder builder = new StringBuilder();
         return builder.append("SaiyVoice[Name: ").append(getName())
                 .append(", locale: ").append(getLocale())
@@ -145,13 +172,22 @@ public class SaiyVoice extends Voice {
 
     @Override
     public void writeToParcel(final Parcel dest, final int flags) {
-        dest.writeString(getName());
-        dest.writeSerializable(getLocale());
-        dest.writeInt(getQuality());
-        dest.writeInt(getLatency());
-        dest.writeByte((byte) (isNetworkConnectionRequired() ? 1 : 0));
-        dest.writeStringList(new ArrayList<>(getFeatures()));
+        super.writeToParcel(dest, flags);
         dest.writeString(engine);
-        dest.writeSerializable(gender);
+        dest.writeInt(gender.getRemoteGender().ordinal());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        SaiyVoice saiyVoice = (SaiyVoice) o;
+        return Objects.equals(engine, saiyVoice.engine) && gender == saiyVoice.gender;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), engine, gender);
     }
 }

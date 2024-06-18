@@ -83,8 +83,8 @@ public class Tutorial {
     }
 
     private void executeRequest(int action, int tutorialStage, String utterance, boolean conditionRetry) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "executeRequest nextStage: " + tutorialStage);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "executeRequest nextStage: " + tutorialStage);
         }
         ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(this.context);
         localRequest.prepareDefault(action, this.supportedLanguage, this.vrLocale, this.ttsLocale, utterance);
@@ -100,15 +100,15 @@ public class Tutorial {
 
     public void execute() {
         if (!Global.isInVoiceTutorial()) {
-            if (this.DEBUG) {
-                MyLog.i(this.CLS_NAME, "tutorialActive: false. Must have been shutdown");
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "tutorialActive: false. Must have been shutdown");
             }
             return;
         }
 
         this.vrRetry = this.bundle.getBoolean(LocalRequest.EXTRA_VR_RETRY, false);
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "vrRetry: " + this.vrRetry);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "vrRetry: " + this.vrRetry);
         }
         int tutorialStage = this.bundle.getInt(LocalRequest.EXTRA_TUTORIAL_STAGE, STAGE_INTRO);
         if (this.vrRetry && tutorialStage > STAGE_INTRO) {
@@ -122,15 +122,15 @@ public class Tutorial {
         Bundle bundle = new Bundle();
         switch (tutorialStage) {
             case STAGE_INTRO:
-                if (this.DEBUG) {
-                    MyLog.i(this.CLS_NAME, "action: STAGE_INTRO");
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "action: STAGE_INTRO");
                 }
                 sErrorCount = 0;
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_INTRO_2, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_1), false);
                 break;
             case STAGE_INTRO_2:
-                if (this.DEBUG) {
-                    MyLog.i(this.CLS_NAME, "action: STAGE_INTRO_2");
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "action: STAGE_INTRO_2");
                 }
                 bundle.putInt(ActivityHome.FRAGMENT_INDEX, 10); //todo
                 bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);

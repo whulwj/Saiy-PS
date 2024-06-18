@@ -205,7 +205,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(DEFAULT_RECOGNITION, provider.name());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -231,7 +231,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(DEFAULT_LANGUAGE_MODEL, model.name());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -255,7 +255,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(EMOTION_COMMAND_VERBOSE, (getEmotionCommandVerbose(ctx) + 1));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -269,7 +269,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(ANNOUNCE_TASKER, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -305,7 +305,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(TTS_VOLUME, level);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -330,7 +330,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(DEFAULT_RINGER, ringerDefault);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -358,7 +358,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(DEFAULT_TEMPERATURE_UNITS, units);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -385,7 +385,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(DEFAULT_SONG_RECOGNITION, provider.ordinal());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -411,7 +411,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putLong(MAX_SPEECH_CACHE_SIZE, maxSize);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -422,7 +422,7 @@ public class SPH {
      */
     public static long getLastUsed(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return pref.getLong(LAST_USED, (long) ONE);
+        return pref.getLong(LAST_USED, ONE);
     }
 
     /**
@@ -435,7 +435,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putLong(LAST_USED, System.currentTimeMillis());
-        edit.commit();
+        edit.apply();
 
         SPH.incrementUsed(ctx);
     }
@@ -462,7 +462,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putLong(USED_INCREMENT, (getUsedIncrement(ctx) + 1));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -486,7 +486,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(REMOTE_COMMAND_VERBOSE, (getRemoteCommandVerbose(ctx) + 1));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -511,7 +511,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(ALGORITHMS, serialised);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -537,7 +537,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(SOUNDEX_UPPER_THRESHOLD, String.valueOf(limit));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -562,7 +562,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(NW_UPPER_THRESHOLD, String.valueOf(limit));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -588,7 +588,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(FUZZY_MULTIPLIER, String.valueOf(limit));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -614,7 +614,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(ME_UPPER_THRESHOLD, String.valueOf(limit));
-        edit.commit();
+        edit.apply();
     }
 
 
@@ -641,7 +641,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(LEV_UPPER_THRESHOLD, String.valueOf(limit));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -680,7 +680,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(JWD_UPPER_THRESHOLD, String.valueOf(limit));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -694,7 +694,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(JWD_LOWER_THRESHOLD, String.valueOf(limit));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -719,7 +719,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(ALGORITHM, algorithm.name());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -746,7 +746,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(BLACKLIST, blacklist);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -775,7 +775,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(MOTION, motion);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -804,7 +804,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(EMOTION, emotion);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -831,7 +831,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(SAIY_ACCOUNTS, accountList);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -858,7 +858,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(MEMORY, memory);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -885,7 +885,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(DEFAULT_TTS_VOICE, voice);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -910,7 +910,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(TRANSLATION_PROVIDER, provider);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -923,7 +923,7 @@ public class SPH {
         final SharedPreferences pref = getPref(ctx);
         final SharedPreferences.Editor edit = getEditor(pref);
         edit.putLong(BING_OAUTH_UPDATE, time);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -959,7 +959,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(BING_TOKEN, token);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -988,7 +988,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(BEYOND_VERBAL_AUTH_RESPONSE, credentials);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1013,7 +1013,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putLong(PAUSE_TIMEOUT, timeout);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1026,7 +1026,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(WHATS_NEW, true);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1050,7 +1050,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(ENROLLMENT_VERBOSE, true);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1074,7 +1074,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(DEVELOPER_NOTE, true);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1098,7 +1098,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(DISCLAIMER, true);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1123,7 +1123,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(TOAST_UNKNOWN, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1148,7 +1148,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(MOTION_ENABLED, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1173,7 +1173,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(SELF_AWARE_ENABLED, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1198,7 +1198,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(BOOT_START, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1234,7 +1234,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(DEFAULT_TTS, provider.name());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1259,7 +1259,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(DEFAULT_TTS_GENDER, gender.name());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1273,7 +1273,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(EMOTION_PERMISSION, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1298,7 +1298,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(VR_LOCALE, nativeLocale.toString());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1329,7 +1329,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(TTS_LOCALE, nativeLocale.toString());
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1371,7 +1371,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putLong(INACTIVITY_TIMEOUT, timeout);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1395,7 +1395,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(SPELL_COMMAND_VERBOSE, (getSpellCommandVerbose(ctx) + 1));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1419,7 +1419,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(TRANSLATE_COMMAND_VERBOSE, (getTranslateCommandVerbose(ctx) + 1));
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1433,7 +1433,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(VIBRATE, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1458,7 +1458,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(PING_TIMEOUT, timeout);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1483,7 +1483,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(INTERCEPT_GOOGLE_NOW, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1508,7 +1508,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(ANNOUNCE_NOTIFICATIONS, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1533,7 +1533,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(PING_CHECK, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1558,7 +1558,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(HOTWORD_WAKELOCK, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1583,7 +1583,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(HOTWORD_DRIVING, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1608,7 +1608,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(HOTWORD_SECURE, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1633,7 +1633,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(HOTWORD_BOOT, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1670,7 +1670,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(USE_OFFLINE, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1695,7 +1695,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(NETWORK_SYNTHESIS, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1731,7 +1731,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(COMMAND_UNKNOWN_ACTION, action);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1756,7 +1756,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(CONNECTION_MINIMUM, connection);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1781,7 +1781,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(HOTWORD, hotword);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1806,7 +1806,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(CUSTOM_INTRO, intro);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1820,7 +1820,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(CUSTOM_INTRO_RANDOM, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1856,7 +1856,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(USER_NAME, userName);
-        edit.commit();
+        edit.apply();
     }
 
     public static Gender getUserGender(@NonNull final Context ctx) {
@@ -1891,7 +1891,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(RECOGNISER_BUSY_FIX, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1916,7 +1916,7 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(OKAY_GOOGLE_FIX, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -1972,7 +1972,7 @@ public class SPH {
     public static void setAlexaAccessTokenExpiry(Context context, long expiryTime) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(ALEXA_ACCESS_TOKEN_EXPIRY, expiryTime);
-        edit.commit();
+        edit.apply();
     }
 
     public static int getAlexaRegion(Context context, int defaultValue) {

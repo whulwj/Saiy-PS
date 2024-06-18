@@ -1504,7 +1504,7 @@ public class SelfAware extends Service {
 
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(notificationConstant, not, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST);
+                startForeground(NotificationService.NOTIFICATION_FOREGROUND, not, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST);
             } else {
                 startForeground(NotificationService.NOTIFICATION_FOREGROUND, not);
             }

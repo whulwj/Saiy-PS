@@ -35,8 +35,8 @@ public class FloatingCommandsHelper {
     }
 
     private ArrayList<SimpleContainerUI> getUIComponents() {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getUIComponents");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getUIComponents");
         }
         ArrayList<SimpleContainerUI> arrayList = new ArrayList<>();
         SimpleContainerUI simpleContainerUI = new SimpleContainerUI();
@@ -346,15 +346,15 @@ public class FloatingCommandsHelper {
     }
 
     public UIFloatingCommandsAdapter getAdapter(ArrayList<SimpleContainerUI> arrayList) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getAdapter");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAdapter");
         }
         return new UIFloatingCommandsAdapter(arrayList, getService());
     }
 
     public RecyclerView getRecyclerView(View view) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getRecyclerView");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getRecyclerView");
         }
         RecyclerView recyclerView = view.findViewById(R.id.layout_floating_recycler_view);
         recyclerView.setHasFixedSize(true);

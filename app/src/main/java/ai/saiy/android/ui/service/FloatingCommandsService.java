@@ -51,18 +51,18 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
     @Override
     public StandOutWindow.StandOutLayoutParams getParams(int id, Window window) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "StandOutLayoutParams");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "StandOutLayoutParams");
         }
         return new StandOutWindow.StandOutLayoutParams(id, 450, 600);
     }
 
     @Override
     public void createAndAttachView(int id, FrameLayout frameLayout) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "createAndAttachView id: " + id);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "createAndAttachView id: " + id);
         }
-        this.mRecyclerView = this.helper.getRecyclerView(((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_floating_commands, (ViewGroup) frameLayout, true));
+        this.mRecyclerView = this.helper.getRecyclerView(((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_floating_commands, frameLayout, true));
         this.mObjects = new ArrayList<>();
         this.mAdapter = this.helper.getAdapter(this.mObjects);
         this.mRecyclerView.setAdapter(this.mAdapter);
@@ -81,8 +81,8 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
                     UtilsToast.showToast(FloatingCommandsService.this.getApplicationContext(), str, Toast.LENGTH_SHORT);
                 }
             });
-        } else if (this.DEBUG) {
-            MyLog.w(this.CLS_NAME, "showToast: naked String: ignoring");
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "showToast: naked String: ignoring");
         }
     }
 
@@ -103,8 +103,8 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
     @Override
     public boolean onClose(int id, Window window) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "onClose id: " + id);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClose id: " + id);
         }
         return super.onClose(id, window);
     }
@@ -125,8 +125,8 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
     @Override
     public String getAppName() {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getAppName");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAppName");
         }
         return getString(R.string.app_name);
     }
@@ -138,10 +138,10 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
     @Override
     public int getAppIcon() {
-        if (!this.DEBUG) {
+        if (!DEBUG) {
             return R.drawable.ic_saiy_not;
         }
-        MyLog.i(this.CLS_NAME, "getAppIcon");
+        MyLog.i(CLS_NAME, "getAppIcon");
         return R.drawable.ic_saiy_not;
     }
 
@@ -152,32 +152,32 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
     @Override
     public int getFlags(int id) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getFlags");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getFlags");
         }
         return StandOutFlags.FLAG_BODY_MOVE_ENABLE | StandOutFlags.FLAG_DECORATION_SYSTEM | StandOutFlags.FLAG_WINDOW_BRING_TO_FRONT_ON_TOUCH;
     }
 
     @Override
     public Animation getShowAnimation(int id) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getShowAnimation");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getShowAnimation");
         }
         return isExistingId(id) ? super.getShowAnimation(id) : AnimationUtils.loadAnimation(this, android.R.anim.fade_in);
     }
 
     @Override
     public Animation getHideAnimation(int id) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getHideAnimation");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getHideAnimation");
         }
         return AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
     }
 
     @Override
     public Animation getCloseAnimation(int id) {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "getCloseAnimation");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getCloseAnimation");
         }
         return AnimationUtils.loadAnimation(this, android.R.anim.fade_out);
     }
@@ -192,12 +192,12 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
             }
         }
 
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "onClick: " + position);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClick: " + position);
         }
         if (Global.isInVoiceTutorial()) {
-            if (this.DEBUG) {
-                MyLog.i(this.CLS_NAME, "onClick: tutorialActive");
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onClick: tutorialActive");
             }
             showToast(getString(R.string.tutorial_content_disabled));
             return;
@@ -391,16 +391,16 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
     @Override
     public void onCreate() {
         super.onCreate();
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "onCreate");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onCreate");
         }
         this.helper = new FloatingCommandsHelper(this);
     }
 
     @Override
     public void onDestroy() {
-        if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "onDestroy");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onDestroy");
         }
         super.onDestroy();
     }

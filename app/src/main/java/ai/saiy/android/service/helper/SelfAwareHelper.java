@@ -1106,7 +1106,7 @@ public class SelfAwareHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startServiceWithIntent");
         }
-        Intent intent = new Intent(context, (Class<?>) SelfAware.class);
+        Intent intent = new Intent(context, SelfAware.class);
         intent.putExtras(bundle);
         intent.setAction(context.getApplicationContext().getPackageName());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

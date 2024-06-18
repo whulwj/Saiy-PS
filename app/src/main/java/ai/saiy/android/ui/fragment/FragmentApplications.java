@@ -76,12 +76,12 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     }
 
     public void toast(String text, int duration) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "makeToast: " + text);
         }
         if (isActive()) {
             getParentActivity().toast(text, duration);
-        } else if (this.DEBUG) {
+        } else if (DEBUG) {
             MyLog.w(CLS_NAME, "toast Fragment detached");
         }
     }
@@ -97,7 +97,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     public void showAlexaRegionDialog() {
         int checkedItem;
         int alexaRegion = ai.saiy.android.utils.SPH.getAlexaRegion(getApplicationContext(), UtilsNetwork.ALEXA_NORTH_AMERICA);
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "showAlexaRegionDialog: " + alexaRegion);
         }
         switch (alexaRegion) {
@@ -136,7 +136,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     public void onClick(DialogInterface dialog, int which) {
                         if (dialog instanceof AlertDialog) {
                             final int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                            if (FragmentApplications.this.DEBUG) {
+                            if (DEBUG) {
                                 MyLog.i(CLS_NAME, "showAlexaRegionDialog: onPositive: " + position);
                             }
                             ai.saiy.android.utils.SPH.setAlexaRegion(FragmentApplications.this.getApplicationContext(), position);
@@ -175,7 +175,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     }
 
     public void showAlexaOverviewDialog() {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "showAlexaOverviewDialog");
         }
         final View view = LayoutInflater.from(getContext()).inflate(R.layout.login_amazon_dialog_layout, null);
@@ -207,7 +207,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         view.findViewById(R.id.ibLoginWithAmazon).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (FragmentApplications.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.i(CLS_NAME, "ibLoginWithAmazon: onClick");
                 }
                 materialDialog.dismiss();
@@ -217,14 +217,14 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     }
 
     public void authoriseAlexa() {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "authoriseAlexa");
         }
         showProgress(true);
         new AuthorizationWrapper(getApplicationContext()).authoriseUser(new AuthorizationListener() {
             @Override
             public void onSuccess() {
-                if (FragmentApplications.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.i(CLS_NAME, "onSuccess");
                 }
                 FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.success_), Toast.LENGTH_SHORT);
@@ -233,7 +233,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
 
             @Override
             public void onError(Exception e) {
-                if (FragmentApplications.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.e(CLS_NAME, "onError");
                     e.printStackTrace();
                 }
@@ -243,7 +243,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
 
             @Override
             public void onCancel() {
-                if (FragmentApplications.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.i(CLS_NAME, "onCancel");
                 }
                 FragmentApplications.this.showProgress(false);
@@ -252,7 +252,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     }
 
     public void deauthoriseAlexa() {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "deauthoriseAlexa");
         }
         showProgress(true);
@@ -264,7 +264,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         com.amazon.identity.auth.device.api.authorization.AuthorizationManager.signOut(getApplicationContext(), new com.amazon.identity.auth.device.api.Listener<Void, AuthError>() {
             @Override
             public void onError(AuthError authError) {
-                if (FragmentApplications.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.i(CLS_NAME, "signOut: onError");
                 }
                 FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.menu_logged_out), Toast.LENGTH_SHORT);
@@ -273,7 +273,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
 
             @Override
             public void onSuccess(Void v) {
-                if (FragmentApplications.this.DEBUG) {
+                if (DEBUG) {
                     MyLog.i(CLS_NAME, "signOut: onSuccess");
                 }
                 FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.menu_logged_out), Toast.LENGTH_SHORT);
@@ -288,7 +288,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     }
 
     public void linkFoursquare() {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "ActivityFoursquareOAuth");
         }
     }
@@ -329,11 +329,11 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onClick: " + view.getTag());
         }
         if (Global.isInVoiceTutorial()) {
-            if (this.DEBUG) {
+            if (DEBUG) {
                 MyLog.d(CLS_NAME, "onClick: tutorialActive");
             }
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
@@ -375,7 +375,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                         new Thread(new Runnable() {
                             @Override
                             public void run() {
-                                if (FragmentApplications.this.DEBUG) {
+                                if (DEBUG) {
                                     MyLog.i(CLS_NAME, "authAlexa: checking encryption provider");
                                 }
                                 try {
@@ -386,7 +386,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                                 FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        if (FragmentApplications.this.DEBUG) {
+                                                        if (DEBUG) {
                                                             MyLog.i(CLS_NAME, "authAlexa: proceeding");
                                                         }
                                                         FragmentApplications.this.showAlexaRegionDialog();
@@ -394,7 +394,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                                 });
                                             }
                                         } catch (GooglePlayServicesNotAvailableException e) {
-                                            if (FragmentApplications.this.DEBUG) {
+                                            if (DEBUG) {
                                                 MyLog.e(CLS_NAME, "authAlexa: GooglePlayServicesNotAvailableException");
                                                 e.printStackTrace();
                                             }
@@ -402,7 +402,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                                 FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
                                                     @Override
                                                     public void run() {
-                                                        if (FragmentApplications.this.DEBUG) {
+                                                        if (DEBUG) {
                                                             MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
                                                         }
                                                         com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
@@ -412,7 +412,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                             }
                                         }
                                     } catch (GooglePlayServicesRepairableException e2) {
-                                        if (FragmentApplications.this.DEBUG) {
+                                        if (DEBUG) {
                                             MyLog.e(CLS_NAME, "authAlexa: GooglePlayServicesRepairableException");
                                             e2.printStackTrace();
                                         }
@@ -420,7 +420,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                             FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    if (FragmentApplications.this.DEBUG) {
+                                                    if (DEBUG) {
                                                         MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
                                                     }
                                                     com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
@@ -434,15 +434,16 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                         FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if (FragmentApplications.this.DEBUG) {
+                                                if (DEBUG) {
                                                     MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
                                                 }
                                                 com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
                                                 googleApiAvailability.showErrorNotification(FragmentApplications.this.getApplicationContext(), googleApiAvailability.isGooglePlayServicesAvailable(FragmentApplications.this.getApplicationContext()));
                                             }
                                         });
+                                    } else if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "authAlexa: showing play services:" + th);
                                     }
-                                    throw th;
                                 }
                             }
                         }).start();
@@ -571,7 +572,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onCreate");
         }
         this.helper = new FragmentApplicationsHelper(this);
@@ -579,7 +580,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
 
     @Override
     public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onCreateView");
         }
         View inflate = layoutInflater.inflate(R.layout.layout_common_fragment_parent, viewGroup, false);
@@ -593,7 +594,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onDestroy");
         }
     }
@@ -601,14 +602,14 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     @Override
     public boolean onLongClick(View view) {
         if (Global.isInVoiceTutorial()) {
-            if (this.DEBUG) {
+            if (DEBUG) {
                 MyLog.d(CLS_NAME, "onClick: tutorialActive");
             }
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return true;
         }
 
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onLongClick: " + view.getTag());
         }
         int position = (Integer) view.getTag();
@@ -646,7 +647,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     @Override
     public void onPause() {
         super.onPause();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onPause");
         }
     }
@@ -654,25 +655,25 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onResume: attemptingReinstallation: " + isAttemptingReinstallation());
         }
         new Thread(new Runnable() {
             @Override
             public void run() {
                 if (FragmentApplications.this.isAttemptingReinstallation()) {
-                    if (FragmentApplications.this.DEBUG) {
+                    if (DEBUG) {
                         MyLog.i(CLS_NAME, "onResume: coming from unknown sources");
                     }
                     FragmentApplications.this.isAttemptingReinstallation = false;
                     if (!ai.saiy.android.thirdparty.tasker.TaskerHelper.isUnknownSourceInstallAllowed(FragmentApplications.this.getApplicationContext())) {
-                        if (FragmentApplications.this.DEBUG) {
+                        if (DEBUG) {
                             MyLog.i(CLS_NAME, "onResume: coming from unknown sources: user did not change");
                         }
                         ai.saiy.android.utils.SPH.setCheckUnknownSourcesSettingNeeded(FragmentApplications.this.getApplicationContext(), false);
                         return;
                     }
-                    if (FragmentApplications.this.DEBUG) {
+                    if (DEBUG) {
                         MyLog.i(CLS_NAME, "onResume: coming from unknown sources: user changed");
                     }
                     ai.saiy.android.utils.SPH.setCheckReinstallationNeeded(FragmentApplications.this.getApplicationContext(), true);
@@ -693,7 +694,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.d(CLS_NAME, "onStart");
         }
         synchronized (lock) {
