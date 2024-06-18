@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -13,18 +14,20 @@ import java.util.ArrayList;
 import ai.saiy.android.R;
 import ai.saiy.android.ui.containers.SimpleContainerUI;
 
-public class UIFloatingCommandsAdapter extends RecyclerView.Adapter<UIFloatingCommandsAdapter.ViewHolder> {
+public class UICommandsAdapter extends RecyclerView.Adapter<UICommandsAdapter.ViewHolder> {
     private final ArrayList<SimpleContainerUI> mObjects;
 
     private final View.OnClickListener onClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        private final CardView cardView;
         private final TextView tvTitle;
         private final TextView tvContent;
         private int boundPosition = RecyclerView.NO_POSITION;
 
         private ViewHolder(View view) {
             super(view);
+            this.cardView = view.findViewById(R.id.cardView);
             this.tvTitle = view.findViewById(R.id.tvCommandTitle);
             this.tvContent = view.findViewById(R.id.tvCommandContent);
         }
@@ -38,14 +41,14 @@ public class UIFloatingCommandsAdapter extends RecyclerView.Adapter<UIFloatingCo
         }
     }
 
-    public UIFloatingCommandsAdapter(ArrayList<SimpleContainerUI> arrayList, View.OnClickListener onClickListener) {
+    public UICommandsAdapter(ArrayList<SimpleContainerUI> arrayList, View.OnClickListener onClickListener) {
         this.mObjects = arrayList;
         this.onClickListener = onClickListener;
     }
 
     @Override
-    public @NonNull ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
-        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.layout_item_floating_command, viewGroup, false));
+    public @NonNull UICommandsAdapter.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int position) {
+        return new ViewHolder(LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.cardview_commands_item, viewGroup, false));
     }
 
     @Override
@@ -53,7 +56,7 @@ public class UIFloatingCommandsAdapter extends RecyclerView.Adapter<UIFloatingCo
         viewHolder.tvTitle.setText(this.mObjects.get(position).getTitle());
         viewHolder.tvContent.setText(this.mObjects.get(position).getContent());
         viewHolder.setBoundPosition(position);
-        viewHolder.itemView.setOnClickListener(this.onClickListener);
+        viewHolder.cardView.setOnClickListener(this.onClickListener);
     }
 
     @Override

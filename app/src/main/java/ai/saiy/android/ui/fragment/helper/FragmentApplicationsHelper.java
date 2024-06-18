@@ -6,6 +6,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.StringRes;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,11 +38,11 @@ public class FragmentApplicationsHelper {
 
     private final FragmentApplications parentFragment;
 
-    public FragmentApplicationsHelper(FragmentApplications pVar) {
-        this.parentFragment = pVar;
+    public FragmentApplicationsHelper(FragmentApplications fragment) {
+        this.parentFragment = fragment;
     }
 
-    private String getString(int resId) {
+    private String getString(@StringRes int resId) {
         return getApplicationContext().getString(resId);
     }
 

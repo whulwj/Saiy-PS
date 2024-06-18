@@ -238,7 +238,7 @@ public class CommandTasker {
                         }
 
                         final Bundle bundle = new Bundle();
-                        bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_BUGS);
+                        bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
                         ExecuteIntent.saiyActivity(ctx, ActivityHome.class, bundle, true);
 
                         outcome.setUtterance(PersonalityResponse.getTaskerInstallOrderResponse(ctx, sl));

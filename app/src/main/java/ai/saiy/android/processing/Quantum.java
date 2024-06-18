@@ -407,6 +407,24 @@ public class Quantum extends Tunnelling {
                     }
 
                     break;
+                case COMMAND_HELP:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HELP.name());
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
+                    ExecuteIntent.saiyActivity(mContext, ActivityHome.class, bundle, true);
+                    break;
+                case COMMAND_FLOAT_COMMANDS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_FLOAT_COMMANDS.name());
+                    }
+                    break;
+                case COMMAND_ALEXA:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name());
+                    }
+                    break;
                 case COMMAND_UNKNOWN:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_UNKNOWN.name());
