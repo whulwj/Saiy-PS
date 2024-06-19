@@ -41,10 +41,6 @@
             android:icon="@drawable/ic_linux"
             android:title="@string/title_superuser"/>
         <item
-            android:icon="@drawable/ic_wheelchair_accessibility"
-            android:id="@+id/nav_accessibility"
-            android:title="@string/menu_accessibility"/>
-        <item
             android:icon="@drawable/ic_ai"
             android:id="@+id/nav_development"
             android:title="@string/menu_development"/>

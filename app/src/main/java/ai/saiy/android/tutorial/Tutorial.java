@@ -482,7 +482,7 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_DEVELOPMENT");
                 }
-                bundle.putInt(ActivityHome.FRAGMENT_INDEX, 7); //todo
+                bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_DEVELOPMENT);
                 bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
                 ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_FINAL, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_18), false);

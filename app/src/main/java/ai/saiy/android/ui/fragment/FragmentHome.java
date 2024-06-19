@@ -250,6 +250,27 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
 
         final int position = (int) view.getTag();
         switch (position) {
+            case 0:
+                getParentActivity().speak(R.string.lp_tutorial, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 1:
+                getParentActivity().speak(R.string.lp_user_guide, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 2:
+                getParentActivity().speak(R.string.lp_development, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 3:
+                getParentActivity().speak(R.string.lp_settings, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 4:
+                getParentActivity().speak(R.string.lp_customisation, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 5:
+                getParentActivity().speak(R.string.lp_advanced, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 6:
+                getParentActivity().speak(R.string.lp_bugs, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
             default:
                 break;
         }
@@ -431,13 +452,12 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                             }
                         }
                     }, 2000L);
-                    return;
                 } else {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onActivityResult: SYSTEM_OVERLAY_REQUEST_CODE: fragment detached");
                     }
-                    return;
                 }
+                break;
             case RC_REQUEST:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onActivityResult: RC_REQUEST");

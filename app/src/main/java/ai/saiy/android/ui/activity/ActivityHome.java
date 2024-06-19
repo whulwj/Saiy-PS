@@ -106,18 +106,16 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     public static final int INDEX_FRAGMENT_BUGS = 6;
     public static final int INDEX_FRAGMENT_DEVELOPMENT = 7;
     public static final int INDEX_FRAGMENT_SUPPORTED_APPS = 8;
-    public static final int INDEX_FRAGMENT_ACCESSIBILITY = 9;
-    public static final int INDEX_FRAGMENT_COMMANDS = 10;
+    public static final int INDEX_FRAGMENT_COMMANDS = 9;
 
     public static final int MENU_INDEX_HOME = 0;
     public static final int MENU_INDEX_SETTINGS = 1;
     public static final int MENU_INDEX_CUSTOMISATION = 2;
     public static final int MENU_INDEX_ADVANCED_SETTINGS = 3;
     public static final int MENU_INDEX_SUPER_USER = 4;
-    public static final int MENU_INDEX_ACCESSIBILITY = 5;
-    public static final int MENU_INDEX_DEVELOPMENT = 6;
-    public static final int MENU_INDEX_SUPPORTED_APPS = 7;
-    public static final int MENU_INDEX_ABOUT = 8;
+    public static final int MENU_INDEX_DEVELOPMENT = 5;
+    public static final int MENU_INDEX_SUPPORTED_APPS = 6;
+    public static final int MENU_INDEX_ABOUT = 7;
 
     public static final int INDEX_DIALOG_USER_GUIDE = 1;
 
@@ -938,10 +936,13 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-
-                    if (navId == 0) {
-
-                        switch (Integer.valueOf(ActivityHome.this.getSupportFragmentManager().findFragmentById(R.id.fragmentContent).getTag())) {
+                    final Fragment fragment = ActivityHome.this.getSupportFragmentManager().findFragmentById(R.id.fragmentContent);
+                    if (navId == MENU_INDEX_HOME) {
+                        if (fragment == null) {
+                            navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(false);
+                            return;
+                        }
+                        switch (Integer.valueOf(fragment.getTag())) {
 
                             case INDEX_FRAGMENT_HOME:
                                 navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(false);
@@ -980,6 +981,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                             navigationView.getMenu().getItem(MENU_INDEX_ADVANCED_SETTINGS).setChecked(true);
                         } else if (R.id.nav_super_user == navId) {
                             navigationView.getMenu().getItem(MENU_INDEX_SUPER_USER).setChecked(true);
+                        } else if (R.id.nav_development == navId) {
+                            navigationView.getMenu().getItem(MENU_INDEX_DEVELOPMENT).setChecked(true);
                         } else if (R.id.nav_supported_apps == navId) {
                             navigationView.getMenu().getItem(MENU_INDEX_SUPPORTED_APPS).setChecked(true);
                         } else if (R.id.nav_about == navId) {

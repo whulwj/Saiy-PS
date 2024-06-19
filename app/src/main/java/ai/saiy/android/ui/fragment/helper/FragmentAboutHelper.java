@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import ai.saiy.android.BuildConfig;
 import ai.saiy.android.R;
+import ai.saiy.android.amazon.AmazonSoftwareLicense;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIMainAdapter;
@@ -310,6 +311,20 @@ public class FragmentAboutHelper {
                 Constants.LICENSE_SOUND_BIBLE,
                 getString(R.string.license_sound_bible),
                 new CreativeCommonsAttributionShareAlike30Unported()));
+
+        notices.addNotice(new Notice(getString(R.string.freesound_org),
+                "http://freesound.org",
+                getString(R.string.license_freesound),
+                new CreativeCommonsAttributionShareAlike30Unported()));
+
+        notices.addNotice(new Notice(getString(R.string.standout),
+                "https://github.com/pingpongboss/StandOut",
+                getString(R.string.license_standout), new MITLicense()));
+
+        notices.addNotice(new Notice(getString(R.string.amazon_avs),
+                "https://gitlab.com/alexahome/alexa/alexa-avs-sample-appre",
+                getString(R.string.license_amazon_avs),
+                new AmazonSoftwareLicense()));
 
         return notices;
     }

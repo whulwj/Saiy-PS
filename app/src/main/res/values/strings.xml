@@ -54,6 +54,12 @@
     <string name="license_pocketsphinx" translatable="false">Copyright © 2013-2015, Alpha Cephei Inc. All rights reserved.</string>
     <string name="sound_bible" translatable="false">Sound Bible</string>
     <string name="license_sound_bible" translatable="false">Credit Mike Koenig @ Soundbible.com</string>
+    <string name="freesound_org">freesound.org</string>
+    <string name="license_freesound">Credit bone666138 &amp; deathpie @ freesound.org</string>
+    <string name="standout">StandOut</string>
+    <string name="license_standout">Copyright (c) Mark Wei github@pingpongboss - credits github@jasonconnery &amp; github@sherpya</string>
+    <string name="amazon_avs">Amazon AVS</string>
+    <string name="license_amazon_avs">Copyright © 2016 Amazon.com, Inc. or its affiliates</string>
 
     <!-- App Strings -->
 
@@ -94,9 +100,6 @@
     <string name="engine" translatable="true">engine</string>
     <string name="ask_repeat" translatable="true">Ask you to repeat</string>
     <string name="menu_tts">Text to Speech</string>
-    <string name="menu_accessibility">Accessibility</string>
-    <string name="menu_accessibility_disable">Disable Accessibility</string>
-    <string name="menu_accessibility_settings">Accessibility Settings</string>
     <string name="menu_web_search">Perform a web search</string>
     <string name="google_assistant">Google Assistant</string>
     <string name="menu_alexa">Alexa</string>
@@ -158,12 +161,16 @@
 
     <string name="title_home" translatable="true">Home</string>
     <string name="title_settings" translatable="true">Settings</string>
+    <string name="lp_settings">A link to the settings section, full of tweaks and application defaults.</string>
     <string name="title_advanced" translatable="true">Advanced</string>
+    <string name="lp_advanced">A link to the advanced settings section, full of more technical tweaks and application defaults.</string>
     <string name="title_troubleshooting_bugs" translatable="true">Troubleshooting &amp; Bugs</string>
+    <string name="lp_bugs">A link to the troubleshooting and bugs section, where you can look for solutions to any problems you might be having.</string>
     <string name="title_troubleshooting" translatable="true">Troubleshooting</string>
     <string name="title_superuser" translatable="true">Superuser</string>
     <string name="title_supported_apps">Supported Apps</string>
     <string name="title_customisation" translatable="true">Customisation</string>
+    <string name="lp_customisation">A link to the customisation section, full of fun ways you can make me your own.</string>
     <string name="title_applications">Applications</string>
     <string name="title_about" translatable="true">About</string>
     <string name="title_feedback" translatable="true">Feedback</string>
@@ -206,6 +213,7 @@
     <string name="menu_language" translatable="true">Language</string>
     <string name="menu_synthesised_voice" translatable="true">Google Synthesised Voice</string>
     <string name="menu_user_guide" translatable="true">User Guide</string>
+    <string name="lp_user_guide">A user guide, that will teach you in more detail how elements of the application work.</string>
     <string name="menu_default_apps" translatable="true">Default Applications</string>
     <string name="menu_toast" translatable="true">Toast Unknown Commands</string>
     <string name="menu_offline" translatable="true">Use Offline Recognition</string>
@@ -234,6 +242,7 @@
     <string name="menu_source_code" translatable="true">Source Code</string>
     <string name="menu_developer_api" translatable="true">Developer APIs</string>
     <string name="menu_development" translatable="true">Development</string>
+    <string name="lp_development">A link to the development section, where you can get involved with making me even smarter.</string>
     <string name="menu_testing" translatable="true">Testing</string>
     <string name="menu_run" translatable="true">Run</string>
     <string name="menu_daniel_schlapa" translatable="false">Daniel Schlapa</string>
@@ -331,6 +340,7 @@
     <string name="permission_system_alert">So I can float the command window anywhere on the device, including over the top of other applications, I need the permission for system overlays.</string>
     <string name="permission_system_alert_snack">To \'float\' the command list anywhere on the device, I require this permission.</string>
     <string name="title_commands">Commands</string>
+    <string name="lp_tutorial">A voice tutorial that will guide you through the basics of the application.</string>
     <string name="tutorial_1">Welcome to the first release of me. Say. To stop this tutorial, you can tap the notification in the status bar at any time. Otherwise, sit back, relax and let\'s take a look around.</string>
     <string name="tutorial_10a">I heard your name as, %1$s. Is that correct?</string>
     <string name="tutorial_10b">That\'s the most unusual name. Are you quite certain you want me to address you as, %1$s?</string>
