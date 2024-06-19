@@ -36,10 +36,13 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -81,6 +84,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     public static final int CHECKED = R.drawable.ic_toggle_switch_on;
     public static final int UNCHECKED = R.drawable.ic_toggle_switch_off;
     public static final int CHEVRON = R.drawable.chevron;
+    private static final int SYSTEM_OVERLAY_REQUEST_CODE = 132;
+    private static final int RC_REQUEST = 1287;
+    private static final int REQUEST_AUDIO = 1;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<?> mAdapter;
@@ -108,14 +114,14 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     }
 
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         this.mContext = context.getApplicationContext();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(final Activity activity) {
+    public void onAttach(@NonNull final Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.mContext = activity.getApplicationContext();
@@ -146,7 +152,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }
@@ -186,9 +192,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                         if (permissions.first && permissions.second) {
                             startTutorial();
                         } else if (permissions.first) {
-                            FragmentHome.this.n();
+                            FragmentHome.this.requestSystemAlertPermissions();
                         } else {
-                            FragmentHome.this.o();
+                            FragmentHome.this.requestAudioPermissions();
                         }
                     }
                 });
@@ -198,8 +204,13 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 helper.showUserGuideDialog();
                 break;
             case 2:
-                getParentActivity().vibrate();
-                getParentActivity().toast(getString(R.string.menu_development), Toast.LENGTH_SHORT);
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT))) {
+                    getParentActivity().doFragmentReplaceTransaction(FragmentDevelopment.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT), ActivityHome.ANIMATION_FADE);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_DEVELOPMENT being added");
+                    }
+                }
                 break;
             case 3:
                 getParentActivity().doFragmentReplaceTransaction(FragmentSettings.newInstance(null),
@@ -238,7 +249,6 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         getParentActivity().toast("long press!", Toast.LENGTH_SHORT);
 
         final int position = (int) view.getTag();
-
         switch (position) {
             default:
                 break;
@@ -264,17 +274,17 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startTutorial");
         }
-        Pair<Boolean, Boolean> l2 = getVolumeStatus();
-        if (l2.first) {
+        Pair<Boolean, Boolean> volumeStatus = getVolumeStatus();
+        if (volumeStatus.first) {
             if (isActive()) {
                 getParentActivity().toast(getString(R.string.tutorial_volume_error), Toast.LENGTH_LONG);
-                if (l2.second) {
+                if (volumeStatus.second) {
                     SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.SOUND);
                 }
-            } else if (DEBUG) {
-                MyLog.i(CLS_NAME, "startTutorial: no longer active");
-                return;
             } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "startTutorial: no longer active");
+                }
                 return;
             }
         }
@@ -294,11 +304,11 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             Bundle bundle = new Bundle();
             bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
             ai.saiy.android.service.helper.SelfAwareHelper.startServiceWithIntent(getApplicationContext(), bundle);
-            Locale ag = SPH.getVRLocale(getApplicationContext());
-            SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(ag);
-            Bundle bundle2 = new Bundle();
-            bundle2.putInt(LocalRequest.EXTRA_TUTORIAL_STAGE, Tutorial.STAGE_INTRO);
-            new Tutorial(getApplicationContext(), ag, SPH.getTTSLocale(getApplicationContext()), supportedLanguage, bundle2).execute();
+            Locale vrLocale = SPH.getVRLocale(getApplicationContext());
+            SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(vrLocale);
+            bundle = new Bundle();
+            bundle.putInt(LocalRequest.EXTRA_TUTORIAL_STAGE, Tutorial.STAGE_INTRO);
+            new Tutorial(getApplicationContext(), vrLocale, SPH.getTTSLocale(getApplicationContext()), supportedLanguage, bundle).execute();
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "startTutorial: no longer active");
         }
@@ -322,35 +332,28 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         return new Pair<>(isMute, isInaudible);
     }
 
-    @TargetApi(23)
-    private void n() {
-        boolean z;
-        Intent intent = new Intent("android.settings.action.MANAGE_OVERLAY_PERMISSION", Uri.parse("package:ai.saiy.android"));
+    @TargetApi(Build.VERSION_CODES.M)
+    private void requestSystemAlertPermissions() {
+        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getApplicationContext().getPackageName()));
         if (!isActive()) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "requestSystemAlertPermissions: no longer active");
-                return;
             }
             return;
         }
         try {
-            startActivityForResult(intent, 132);
-            z = true;
+            startActivityForResult(intent, SYSTEM_OVERLAY_REQUEST_CODE);
+            return;
         } catch (ActivityNotFoundException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "requestSystemAlertPermissions: ActivityNotFoundException");
                 e.printStackTrace();
             }
-            z = false;
-        } catch (Exception e2) {
+        } catch (Exception e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "requestSystemAlertPermissions: Exception");
-                e2.printStackTrace();
+                e.printStackTrace();
             }
-            z = false;
-        }
-        if (z) {
-            return;
         }
         if (DEBUG) {
             MyLog.w(CLS_NAME, "requestSystemAlertPermissions: settings location unknown");
@@ -359,7 +362,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         getParentActivity().speak(getString(R.string.settings_missing, getString(R.string.content_system_overlays)), LocalRequest.ACTION_SPEAK_ONLY);
     }
 
-    private void o() {
+    private void requestAudioPermissions() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "requestAudioPermissions");
         }
@@ -368,35 +371,35 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "requestAudioPermissions: showing rational");
             }
-            getParentActivity().snack(this.getView(), getString(R.string.permission_audio_snack), -2, getString(R.string.ok), new View.OnClickListener() {
-                @Override // android.view.View.OnClickListener
+            getParentActivity().snack(this.getView(), getString(R.string.permission_audio_snack), Snackbar.LENGTH_INDEFINITE, getString(R.string.ok), new View.OnClickListener() {
+                @Override
                 public void onClick(View view) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "requestAudioPermissions: on snack click");
                     }
-                    ActivityCompat.requestPermissions(getParentActivity(), strArr, 1);
+                    ActivityCompat.requestPermissions(getParentActivity(), strArr, REQUEST_AUDIO);
                 }
             });
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "requestAudioPermissions: requesting");
             }
-            ActivityCompat.requestPermissions(getParentActivity(), strArr, 1);
+            ActivityCompat.requestPermissions(getParentActivity(), strArr, REQUEST_AUDIO);
         }
     }
 
-    private void q() {
+    private void showSystemAlertRational() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showSystemAlertRational");
         }
         if (isActive()) {
             getParentActivity().snack(this.getView(), getString(R.string.permission_system_alert_snack), -2, getString(R.string.ok), new View.OnClickListener() {
-                @Override // android.view.View.OnClickListener
+                @Override
                 public void onClick(View view) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "requestAudioPermissions: on snack click");
                     }
-                    FragmentHome.this.n();
+                    FragmentHome.this.requestSystemAlertPermissions();
                 }
             });
         } else if (DEBUG) {
@@ -405,19 +408,19 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     }
 
     @Override
-    public void onActivityResult(int i, int i2, Intent intent) {
-        switch (i) {
-            case 132:
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        switch (requestCode) {
+            case SYSTEM_OVERLAY_REQUEST_CODE:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onActivityResult: SYSTEM_OVERLAY_REQUEST_CODE");
                 }
                 if (isActive()) {
                     showProgress(true);
                     new Handler().postDelayed(new Runnable() {
-                        @Override // java.lang.Runnable
+                        @Override
                         public void run() {
                             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || !Settings.canDrawOverlays(getApplicationContext())) {
-                                FragmentHome.this.q();
+                                FragmentHome.this.showSystemAlertRational();
                             } else {
                                 FragmentHome.this.startTutorial();
                             }
@@ -435,10 +438,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                     }
                     return;
                 }
-            case 1287:
+            case RC_REQUEST:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onActivityResult: RC_REQUEST");
-                    return;
                 }
                 return;
             default:
@@ -448,13 +450,13 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         }
     }
 
-    @Override // android.support.v4.app.Fragment
+    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onRequestPermissionsResult");
         }
         switch (requestCode) {
-            case 1:
+            case REQUEST_AUDIO:
                 if (!arePermissionsGranted(grantResults)) {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_AUDIO: PERMISSION_DENIED");
@@ -468,7 +470,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M || Settings.canDrawOverlays(getApplicationContext())) {
                     startTutorial();
                 } else {
-                    n();
+                    requestSystemAlertPermissions();
                 }
                 return;
             default:
@@ -512,7 +514,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
      *
      * @return the current adapter
      */
-    public RecyclerView.Adapter getAdapter() {
+    public RecyclerView.Adapter<?> getAdapter() {
         return mAdapter;
     }
 

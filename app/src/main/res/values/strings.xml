@@ -93,6 +93,10 @@
     <string name="close" translatable="true">close</string>
     <string name="engine" translatable="true">engine</string>
     <string name="ask_repeat" translatable="true">Ask you to repeat</string>
+    <string name="menu_tts">Text to Speech</string>
+    <string name="menu_accessibility">Accessibility</string>
+    <string name="menu_accessibility_disable">Disable Accessibility</string>
+    <string name="menu_accessibility_settings">Accessibility Settings</string>
     <string name="menu_web_search">Perform a web search</string>
     <string name="google_assistant">Google Assistant</string>
     <string name="menu_alexa">Alexa</string>
@@ -762,6 +766,24 @@
     <string name="content_tasker_reinstall_5">Tasker should be correctly configured now</string>
     <string name="content_tasker_reinstall_6">Don\'t forget to change the setting back to block external installations. It\'ll keep your device safe.</string>
     <string name="content_tasker_reinstall_7">Tap on the install button and I\'ll be back shortly.</string>
+
+    <string name="menu_translation">Translation</string>
+    <string name="content_translate_overview">Saiy will be translated into every language that is supported by a voice recognition provider, but as you can imagine, this is going to be a mammoth task!\n\nI\'ll need the help of our community of users to achieve this and we\'re going to attempt it using the Crowdin Platform.\n\nIf you want to get involved and translate the odd word or sentence every now and then over a coffee (no pressure!) click the sign up link below to create an account! It\'s free and easy!\n\nThanks in advance!</string>
+    <string name="lp_translation">If you\'d like to help translate me into your native language, this is the place to get started.</string>
+    <string name="menu_report_bug">Report a Bug</string>
+    <string name="content_report_bug">Please describe the problem you are experiencing and how to replicate it, if possible.\n\nClicking on email below, will prepopulate some of your device data into the body of the message. Hopefully this will make the bug easier to resolve!</string>
+    <string name="lp_bug_report">If you\'ve found I\'m suffering from a bug, you can submit it to my developer here.</string>
+    <string name="menu_to_do_list">To-Do List</string>
+    <string name="content_to_do_list">In no particular order:\n\n• Customisable hotword\n• Wired headsets\n• Bluetooth headsets\n• Car kits\n• Wear compatibility\n• Multiple intro support\n• Google Assistant vs browser choice\n• Hotword screen off\n• Full application back-up\n• Location aware profiles\n• User sound effects\n• Save emotion analysis\n• Regex in commands\n• MicroG support\n\nCommands:\n\n• Heart rate\n• Steps\n• Stopwatch\n• Run\n• Workout\n• Bike ride\n• ICE\n• Music search\n• Agenda timespans\n• Delete alarms\n• 24 hour time\n• etc…!</string>
+    <string name="lp_to_do">View a list of what my developer is working on in the very near future. Once he has completed this list, he has my permission to get a life.</string>
+    <string name="lp_source_code">Should you like to see how I\'ve been created in Java, tap here to view my source code.</string>
+    <string name="lp_developer_api">If you are the developer of another application and would like to know how your app can take advantage of communicating with me, click here.</string>
+    <string name="title_copy_link">Copy link</string>
+    <string name="title_clipboard_copied">Copied to clipboard</string>
+    <string name="title_sign_up">Sign up</string>
+    <string name="title_email">Email</string>
+    <string name="title_bug_report">Bug Report</string>
+    <string name="title_good_luck">Good luck!</string>
 
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 

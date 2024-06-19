@@ -33,8 +33,10 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.apache.commons.lang3.StringUtils;
 
 import ai.saiy.android.R;
+import ai.saiy.android.applications.Install;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.service.helper.SelfAwareHelper;
+import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
@@ -365,6 +367,46 @@ public class ActivityHomeHelper {
                 });
             }
         });
+    }
+
+    public void showNoTTSDialog(final Activity activity) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showNoTTSDialog");
+        }
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(activity)
+                .setTitle(R.string.menu_tts)
+                .setMessage(R.string.issue_tts_engine_text)
+                .setIcon(R.drawable.ic_text_to_speech)
+                .setPositiveButton(R.string.title_install, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoTTSDialog: onPositive");
+                        }
+                        dialog.dismiss();
+                        Install.showInstallLink(activity.getApplicationContext(), TTSDefaults.TTS_PKG_NAME_GOOGLE);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoTTSDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoTTSDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
     }
 
     public void checkAppRestrictionsStatus(Activity context) {

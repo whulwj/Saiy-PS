@@ -36,16 +36,16 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     private FragmentCommandsHelper helper;
     private Context mContext;
 
-    public static FragmentCommands newInstance(Bundle bundle) {
+    public static FragmentCommands newInstance(Bundle args) {
         return new FragmentCommands();
     }
 
-    public void toast(String str, int i) {
+    public void toast(String text, int duration) {
         if (this.DEBUG) {
-            MyLog.i(this.CLS_NAME, "makeToast: " + str);
+            MyLog.i(this.CLS_NAME, "makeToast: " + text);
         }
         if (isActive()) {
-            getParentActivity().toast(str, i);
+            getParentActivity().toast(text, duration);
         } else if (this.DEBUG) {
             MyLog.w(this.CLS_NAME, "toast Fragment detached");
         }

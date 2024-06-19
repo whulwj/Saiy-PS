@@ -19,10 +19,12 @@ package ai.saiy.android.device;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognitionService;
+import android.speech.tts.TextToSpeech;
 
 import androidx.annotation.NonNull;
 
@@ -79,7 +81,7 @@ public class DeviceInfo {
                 "\n" +
                 ctx.getString(R.string.locale) +
                 ": " +
-                Locale.getDefault().toString() +
+                Locale.getDefault() +
                 "\n" +
                 "VR " + ctx.getString(R.string.locale) +
                 ": " +
@@ -109,7 +111,7 @@ public class DeviceInfo {
     public static String getDefaultTTSProvider(@NonNull final Context ctx) {
         final String engine = Settings.Secure.getString(ctx.getContentResolver(),
                 Settings.Secure.TTS_DEFAULT_SYNTH);
-        return UtilsString.notNaked(engine) ? engine : "";
+        return UtilsString.notNaked(engine) ? engine : getDefaultTTSProviderIntent(ctx);
     }
 
     /**
@@ -122,5 +124,26 @@ public class DeviceInfo {
         final List<ResolveInfo> services = ctx.getPackageManager().queryIntentServices(
                 new Intent(RecognitionService.SERVICE_INTERFACE), 0);
         return UtilsList.notNaked(services) ? services.get(0).serviceInfo.packageName : "";
+    }
+
+    private static String getDefaultTTSProviderIntent(Context context) {
+        Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        List<ResolveInfo> queryIntentActivities = context.getPackageManager().queryIntentActivities(intent, PackageManager.GET_META_DATA);
+        if (UtilsList.notNaked(queryIntentActivities)) {
+            try {
+                return queryIntentActivities.get(0).activityInfo.applicationInfo.packageName;
+            } catch (NullPointerException e) {
+                if (DEBUG) {
+                    MyLog.e(CLS_NAME, "getDefaultTTSProviderIntent: NullPointerException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.e(CLS_NAME, "getDefaultTTSProviderIntent: Exception");
+                    e.printStackTrace();
+                }
+            }
+        }
+        return "No Engine installed";
     }
 }

@@ -20,10 +20,12 @@ package ai.saiy.android.ui.activity;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -63,6 +65,7 @@ import ai.saiy.android.ui.fragment.FragmentAdvancedSettings;
 import ai.saiy.android.ui.fragment.FragmentApplications;
 import ai.saiy.android.ui.fragment.FragmentCommands;
 import ai.saiy.android.ui.fragment.FragmentCustomisation;
+import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
@@ -111,8 +114,10 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     public static final int MENU_INDEX_CUSTOMISATION = 2;
     public static final int MENU_INDEX_ADVANCED_SETTINGS = 3;
     public static final int MENU_INDEX_SUPER_USER = 4;
-    public static final int MENU_INDEX_SUPPORTED_APPS = 5;
-    public static final int MENU_INDEX_ABOUT = 6;
+    public static final int MENU_INDEX_ACCESSIBILITY = 5;
+    public static final int MENU_INDEX_DEVELOPMENT = 6;
+    public static final int MENU_INDEX_SUPPORTED_APPS = 7;
+    public static final int MENU_INDEX_ABOUT = 8;
 
     public static final int INDEX_DIALOG_USER_GUIDE = 1;
 
@@ -210,8 +215,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                             MyLog.i(CLS_NAME, "seenWhatsNew: all done");
                         }
 
-                        SelfAwareHelper.startSelfAwareIfRequired(getApplicationContext());
-
+                        checkTTSInstallation();
                     } else {
                         showWhatsNew();
                     }
@@ -272,6 +276,24 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             MyLog.i(CLS_NAME, "acceptedDisclaimer");
         }
         return SPH.getAcceptedDisclaimer(getApplicationContext());
+    }
+
+    private void checkTTSInstallation() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkTTSInstallation");
+        }
+        Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        if (ai.saiy.android.utils.UtilsList.notNaked(getPackageManager().queryIntentActivities(intent, PackageManager.GET_META_DATA))) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkTTSInstallation: all ok");
+            }
+            SelfAwareHelper.startSelfAwareIfRequired(getApplicationContext());
+        } else {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "checkTTSInstallation: no engine");
+            }
+            helper.showNoTTSDialog(this);
+        }
     }
 
     /**
@@ -422,6 +444,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             case INDEX_FRAGMENT_ABOUT:
                 return new Pair<>((Fragment) FragmentAbout.newInstance(null),
                         String.valueOf(INDEX_FRAGMENT_ABOUT));
+            case INDEX_FRAGMENT_DEVELOPMENT:
+                return new Pair<>(FragmentDevelopment.newInstance(null),
+                        String.valueOf(INDEX_FRAGMENT_DEVELOPMENT));
             case INDEX_FRAGMENT_SUPPORTED_APPS:
                 return new Pair<>(FragmentApplications.newInstance(null),
                         String.valueOf(INDEX_FRAGMENT_SUPPORTED_APPS));
@@ -675,6 +700,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     case INDEX_FRAGMENT_BUGS:
                         proceed = true;
                         break;
+                    case INDEX_FRAGMENT_DEVELOPMENT:
+                        proceed = (id != R.id.nav_development);
+                        break;
                     case INDEX_FRAGMENT_SUPPORTED_APPS:
                         proceed = (id != R.id.nav_supported_apps);
                         break;
@@ -709,12 +737,15 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     } else if (R.id.nav_super_user == id) {
                         fragment = FragmentSuperUser.newInstance(null);
                         tag = String.valueOf(INDEX_FRAGMENT_SUPER_USER);
-                    } else if (R.id.nav_about == id) {
-                        fragment = FragmentAbout.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_ABOUT);
+                    } else if (R.id.nav_development == id) {
+                        fragment = FragmentDevelopment.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_DEVELOPMENT);
                     } else if (R.id.nav_supported_apps == id) {
                         fragment = FragmentApplications.newInstance(null);
                         tag = String.valueOf(INDEX_FRAGMENT_SUPPORTED_APPS);
+                    } else if (R.id.nav_about == id) {
+                        fragment = FragmentAbout.newInstance(null);
+                        tag = String.valueOf(INDEX_FRAGMENT_ABOUT);
                     } else if (R.id.nav_share == id) {
                         if (!ExecuteIntent.shareIntent(getApplicationContext(),
                                 Install.getSaiyInstallLink(getApplicationContext()))) {
@@ -930,6 +961,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                             case INDEX_FRAGMENT_ABOUT:
                                 navigationView.getMenu().getItem(MENU_INDEX_ABOUT).setChecked(false);
                                 break;
+                            case INDEX_FRAGMENT_DEVELOPMENT:
+                                navigationView.getMenu().getItem(MENU_INDEX_DEVELOPMENT).setChecked(false);
+                                break;
                             case INDEX_FRAGMENT_SUPPORTED_APPS:
                                 navigationView.getMenu().getItem(MENU_INDEX_SUPPORTED_APPS).setChecked(false);
                                 break;
@@ -981,6 +1015,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 return R.id.nav_super_user;
             case INDEX_FRAGMENT_ABOUT:
                 return R.id.nav_about;
+           case INDEX_FRAGMENT_DEVELOPMENT:
+                return R.id.nav_development;
             case INDEX_FRAGMENT_SUPPORTED_APPS:
                 return R.id.nav_supported_apps;
             default:
@@ -1172,6 +1208,11 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 case INDEX_FRAGMENT_BUGS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onBackStackChanged: INDEX_FRAGMENT_BUGS");
+                    }
+                    break;
+                case INDEX_FRAGMENT_DEVELOPMENT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onBackStackChanged: INDEX_FRAGMENT_DEVELOPMENT");
                     }
                     break;
                 case INDEX_FRAGMENT_SUPPORTED_APPS:
