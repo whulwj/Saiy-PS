@@ -99,6 +99,8 @@
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions"/>
 
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
+
     <!-- Permission Required -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
     <uses-permission android:name="android.permission.CAPTURE_AUDIO_HOTWORD"/>
@@ -205,6 +207,7 @@
             android:name="ai.saiy.android.ui.activity.ActivityHome"
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
             android:launchMode="singleTop"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -232,6 +235,7 @@
             android:name=".ui.activity.ActivityAssistSettings"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="false"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -264,6 +268,7 @@
             android:name="ai.saiy.android.ui.activity.ActivityPermissionDialog"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:theme="@style/AppTheme.ActivityDialogTheme">
         </activity>
 
@@ -271,6 +276,7 @@
             android:name="ai.saiy.android.ui.activity.ActivityChooserDialog"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
+            android:exported="false"
             android:theme="@style/AppTheme.ActivityDialogTheme">
         </activity>
 
@@ -278,6 +284,7 @@
             android:name="ai.saiy.android.ui.activity.ActivityIssue"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="false"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
@@ -285,6 +292,7 @@
             android:name=".ui.activity.ActivityTilePreferences"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="false"
+            android:exported="true"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES"/>
@@ -296,6 +304,7 @@
             android:clearTaskOnLaunch="true"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"
+            android:exported="true"
             android:launchMode="singleInstance"
             android:noHistory="true"
             android:theme="@style/AppTheme.Translucent.NoActionBar.Fullscreen">
@@ -354,6 +363,7 @@
 
         <service
             android:name="ai.saiy.android.ui.service.SaiyTileService"
+            android:exported="true"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/tile_label"
             android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
@@ -368,6 +378,7 @@
         <service
             android:name="ai.saiy.android.accessibility.SaiyAccessibilityService"
             android:enabled="true"
+            android:exported="true"
             android:label="@string/app_name"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
@@ -389,7 +400,8 @@
 
         <receiver
             android:name="ai.saiy.android.broadcast.BRBoot"
-            android:enabled="true">
+            android:enabled="true"
+            android:exported="true">
             <intent-filter android:priority="999">
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
                 <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED"/>
@@ -401,10 +413,21 @@
         <receiver
             android:name="ai.saiy.android.broadcast.BRRemote"
             android:enabled="true"
+            android:exported="true"
             android:permission="ai.saiy.android.permission.CONTROL_SAIY">
             <intent-filter android:priority="999">
                 <action android:name="ai.saiy.android.SAIY_REQUEST_RECEIVER"/>
             </intent-filter>
+        </receiver>
+        <receiver
+            android:name="ai.saiy.android.ui.widgets.WidgetProvider"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE"/>
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_config"/>
         </receiver>
     </application>
 

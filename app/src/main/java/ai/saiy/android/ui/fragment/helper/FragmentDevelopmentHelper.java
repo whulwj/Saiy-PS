@@ -21,6 +21,7 @@ import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
+import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.utils.Constants;
@@ -86,11 +87,11 @@ public class FragmentDevelopmentHelper {
         return this.parentFragment.getApplicationContext();
     }
 
-    public ai.saiy.android.ui.components.UIApplicationsAdapter getAdapter(ArrayList<ContainerUI> arrayList) {
+    public UIApplicationsAdapter getAdapter(ArrayList<ContainerUI> arrayList) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getAdapter");
         }
-        return new ai.saiy.android.ui.components.UIApplicationsAdapter(arrayList, getParent(), getParent());
+        return new UIApplicationsAdapter(arrayList, getParent(), getParent());
     }
 
     public RecyclerView getRecyclerView(View view) {

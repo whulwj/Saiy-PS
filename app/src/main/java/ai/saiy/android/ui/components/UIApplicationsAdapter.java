@@ -21,21 +21,28 @@ public class UIApplicationsAdapter extends RecyclerView.Adapter<UIApplicationsAd
     private final View.OnLongClickListener onLongClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-
         private final LinearLayout itemContainer;
-
         private final TextView title;
         private final TextView subtitle;
         private final ImageView iconMain;
         private final ImageView iconExtra;
+        private int boundPosition = RecyclerView.NO_POSITION;
 
         private ViewHolder(View view) {
             super(view);
-            this.itemContainer = (LinearLayout) view.findViewById(R.id.itemContainer);
-            this.title = (TextView) view.findViewById(R.id.title);
-            this.subtitle = (TextView) view.findViewById(R.id.subtitle);
-            this.iconMain = (ImageView) view.findViewById(R.id.iconMain);
-            this.iconExtra = (ImageView) view.findViewById(R.id.iconExtra);
+            this.itemContainer = view.findViewById(R.id.itemContainer);
+            this.title = view.findViewById(R.id.title);
+            this.subtitle = view.findViewById(R.id.subtitle);
+            this.iconMain = view.findViewById(R.id.iconMain);
+            this.iconExtra = view.findViewById(R.id.iconExtra);
+        }
+
+        public int getBoundPosition() {
+            return boundPosition;
+        }
+
+        protected void setBoundPosition(int position) {
+            boundPosition = position;
         }
     }
 
@@ -51,18 +58,18 @@ public class UIApplicationsAdapter extends RecyclerView.Adapter<UIApplicationsAd
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder aVar, int position) {
-        aVar.title.setText(this.mObjects.get(position).getTitle());
-        aVar.subtitle.setText(this.mObjects.get(position).getSubtitle());
-        aVar.iconMain.setImageResource(this.mObjects.get(position).getIconMain());
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        viewHolder.title.setText(this.mObjects.get(position).getTitle());
+        viewHolder.subtitle.setText(this.mObjects.get(position).getSubtitle());
+        viewHolder.iconMain.setImageResource(this.mObjects.get(position).getIconMain());
         int iconExtra = this.mObjects.get(position).getIconExtra();
-        aVar.iconExtra.setImageResource(iconExtra);
+        viewHolder.iconExtra.setImageResource(iconExtra);
         if (iconExtra != R.drawable.chevron) {
-            aVar.iconExtra.setContentDescription(aVar.itemView.getContext().getString(R.string.acs_ui_main_switch));
+            viewHolder.iconExtra.setContentDescription(viewHolder.itemView.getContext().getString(R.string.acs_ui_main_switch));
         }
-        aVar.itemContainer.setOnClickListener(this.onClickListener);
-        aVar.itemContainer.setOnLongClickListener(this.onLongClickListener);
-        aVar.itemContainer.setTag(position);
+        viewHolder.setBoundPosition(position);
+        viewHolder.itemContainer.setOnClickListener(this.onClickListener);
+        viewHolder.itemContainer.setOnLongClickListener(this.onLongClickListener);
     }
 
     @Override

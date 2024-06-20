@@ -25,7 +25,6 @@ import ai.saiy.android.amazon.UtilsNetwork;
 import ai.saiy.android.amazon.listener.IAlexaToken;
 import ai.saiy.android.amazon.resolve.DirectiveList;
 import ai.saiy.android.amazon.resolve.ResolveAmazon;
-import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.tts.SaiyTextToSpeech;
@@ -202,8 +201,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
                                         return;
                                     }
                                     ResolveAmazon resolveAmazon = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(AlexaTTS.this.mContext));
-                                    final boolean isGoogleTTS = AlexaTTS.this.initEngine.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE) && PermissionHelper.checkFilePermissions(AlexaTTS.this.mContext);
-                                    DirectiveList directiveList = resolveAmazon.parse(isGoogleTTS);
+                                    DirectiveList directiveList = resolveAmazon.parse();
                                     response.body().close();
                                     AlexaTTS.this.isWorking = false;
                                     AlexaTTS.this.saveResults(directiveList);

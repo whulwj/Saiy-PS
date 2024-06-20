@@ -75,7 +75,7 @@ public class MotionRecognition implements GoogleApiClient.ConnectionCallbacks, G
 
                 pendingIntent = PendingIntent.getService(ctx, MotionIntentService.REQUEST_CODE,
                         new Intent(ctx, MotionIntentService.class),
-                        PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                 try {
 

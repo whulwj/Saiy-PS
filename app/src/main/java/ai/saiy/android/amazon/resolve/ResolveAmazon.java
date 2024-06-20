@@ -47,9 +47,9 @@ public class ResolveAmazon {
     private final String CLS_NAME = ResolveAmazon.class.getSimpleName();
     private final String boundaryIdentifier = getBoundaryIdentifier();
 
-    public ResolveAmazon(InputStream inputStream, Response zVar, File file) {
+    public ResolveAmazon(InputStream inputStream, Response response, File file) {
         this.inputStream = inputStream;
-        this.response = zVar;
+        this.response = response;
         this.file = file;
     }
 
@@ -87,7 +87,7 @@ public class ResolveAmazon {
         }
     }
 
-    public DirectiveList parse(boolean isGoogleTTS) throws IOException, JSONException {
+    public DirectiveList parse() throws IOException, JSONException {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "parse");
         }
@@ -218,11 +218,7 @@ public class ResolveAmazon {
                 bufferedOutputStream.write(multiPartList.get(0).second);
                 bufferedOutputStream.flush();
                 bufferedOutputStream.close();
-                if (isGoogleTTS) {
-                    directiveList.setFile(UtilsFile.copyFileToGoogleTTSDir(this.file));
-                } else {
-                    directiveList.setFile(this.file);
-                }
+                directiveList.setFile(this.file);
                 directiveList.setAction(directiveAction);
             } else {
                 directiveList.setAction(directiveAction);

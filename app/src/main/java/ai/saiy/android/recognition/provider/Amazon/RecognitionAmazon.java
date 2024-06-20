@@ -26,7 +26,6 @@ import ai.saiy.android.audio.SaiySoundPool;
 import ai.saiy.android.audio.pause.PauseDetector;
 import ai.saiy.android.audio.pause.PauseListener;
 import ai.saiy.android.localisation.SupportedLanguage;
-import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.service.helper.LocalRequest;
@@ -57,7 +56,6 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
     private final AtomicBoolean isRecording = new AtomicBoolean();
     private final Object lock = new Object();
     private final Object errorLock = new Object();
-    private boolean isGoogleTTS = false;
     private RequestBody requestBody = new RequestBody() {
         @Override
         public MediaType contentType() {
@@ -257,7 +255,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
                                     handleError(android.speech.SpeechRecognizer.ERROR_NO_MATCH);
                                     return;
                                 }
-                                DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse(isGoogleTTS);
+                                DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse();
                                 response.body().close();
                                 sendResults(directiveList);
                                 if (DEBUG) {
@@ -337,11 +335,10 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         handleError(android.speech.SpeechRecognizer.ERROR_NETWORK);
     }
 
-    public void startListening(boolean isGoogleTTS) {
+    public void startListening() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startListening");
         }
-        this.isGoogleTTS = isGoogleTTS && PermissionHelper.checkFilePermissions(this.mContext);
         if (UtilsString.notNaked(this.alexaAccessToken)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startListening: have accessToken");

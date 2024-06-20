@@ -40,6 +40,7 @@ import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentApplicationsHelper;
 import ai.saiy.android.utils.Global;
@@ -327,6 +328,17 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         this.mContext = context.getApplicationContext();
     }
 
+    private int getPosition(View view) {
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIApplicationsAdapter.ViewHolder) {
+                position = ((UIApplicationsAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
+        }
+        return position;
+    }
+
     @Override
     public void onClick(View view) {
         if (DEBUG) {
@@ -339,13 +351,13 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
-        switch (((Integer) view.getTag()).intValue()) {
+        switch (getPosition(view)) {
             case 0:
                 Install.showInstallLink(getApplicationContext(), Installed.PACKAGE_FACEBOOK);
                 return;
             case 1:
                 getParentActivity().vibrate();
-                //todo?
+                //todo twitter?
             case 2:
                 Install.showInstallLink(getApplicationContext(), Installed.PACKAGE_TWITTER);
                 return;
@@ -603,7 +615,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     public boolean onLongClick(View view) {
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
-                MyLog.d(CLS_NAME, "onClick: tutorialActive");
+                MyLog.d(CLS_NAME, "onLongClick: tutorialActive");
             }
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return true;
@@ -612,7 +624,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         if (DEBUG) {
             MyLog.d(CLS_NAME, "onLongClick: " + view.getTag());
         }
-        int position = (Integer) view.getTag();
+        final int position = getPosition(view);
         switch (position) {
             case 1:
                 getParentActivity().speak(R.string.lp_link_facebook, LocalRequest.ACTION_SPEAK_ONLY);

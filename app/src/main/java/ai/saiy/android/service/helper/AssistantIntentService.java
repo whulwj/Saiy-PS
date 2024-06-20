@@ -67,7 +67,7 @@ public class AssistantIntentService extends IntentService {
     private static final String EXTRA_ASSIST_CONTEXT = "android.intent.extra.ASSIST_CONTEXT";
     private static final String EXTRA_QUERY = "query";
     private static final String ACTION_ASSIST_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
-    private static final String ACTION_WIDGET_ASSIST = "ai.saiy.android.action.WIDGET_ASSIST";
+    public static final String ACTION_WIDGET_ASSIST = "ai.saiy.android.action.WIDGET_ASSIST";
     private static final String ACTION_QL_ASSIST = "ai.saiy.android.action.QL_ASSIST";
     private static final String EXTRA_RESOLVED = "extra_resolved";
     private static final String ACTION_ALEXA = "ai.saiy.android.action.ALEXA";

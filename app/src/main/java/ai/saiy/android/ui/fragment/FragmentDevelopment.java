@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import ai.saiy.android.R;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentDevelopmentHelper;
 import ai.saiy.android.utils.Global;
@@ -85,6 +86,17 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
         this.mContext = context.getApplicationContext();
     }
 
+    private int getPosition(View view) {
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIApplicationsAdapter.ViewHolder) {
+                position = ((UIApplicationsAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
+        }
+        return position;
+    }
+
     @Override
     public void onClick(View view) {
         if (DEBUG) {
@@ -97,7 +109,7 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
-        switch (((Integer) view.getTag()).intValue()) {
+        switch (getPosition(view)) {
             case 0:
                 this.helper.showTranslationDialog();
                 break;
@@ -155,13 +167,13 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
         }
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "onClick: tutorialActive");
+                MyLog.i(CLS_NAME, "onLongClick: tutorialActive");
             }
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return true;
         }
 
-        switch (((Integer) view.getTag()).intValue()) {
+        switch (getPosition(view)) {
             case 0:
                 getParentActivity().speak(R.string.lp_translation, LocalRequest.ACTION_SPEAK_ONLY);
                 break;

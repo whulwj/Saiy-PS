@@ -27,13 +27,13 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import javax.net.ssl.HttpsURLConnection;
 
 import ai.saiy.android.amazon.AmazonCredentials;
-import ai.saiy.android.amazon.UtilsNetwork;
 import ai.saiy.android.amazon.SpeechRecognizer;
 import ai.saiy.android.amazon.TokenHelper;
+import ai.saiy.android.amazon.UtilsNetwork;
+import ai.saiy.android.amazon.listener.IAlexaToken;
 import ai.saiy.android.amazon.listener.StreamListener;
 import ai.saiy.android.amazon.resolve.DirectiveList;
 import ai.saiy.android.amazon.resolve.ResolveAmazon;
-import ai.saiy.android.amazon.listener.IAlexaToken;
 import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.language.vr.VRLanguageWit;
 import ai.saiy.android.api.remote.Request;
@@ -43,7 +43,6 @@ import ai.saiy.android.audio.SaiySoundPool;
 import ai.saiy.android.audio.pause.PauseDetector;
 import ai.saiy.android.audio.pause.PauseListener;
 import ai.saiy.android.localisation.SupportedLanguage;
-import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.recognition.provider.Amazon.VRLanguageAmazon;
@@ -91,7 +90,6 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
     private final AtomicBoolean isRecording = new AtomicBoolean();
     private final Object lock = new Object();
     private final Object errorLock = new Object();
-    private boolean isGoogleTTS = false;
     private RequestBody requestBody = new RequestBody() {
         @Override
         public MediaType contentType() {
@@ -349,7 +347,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                                     handleError(android.speech.SpeechRecognizer.ERROR_NO_MATCH);
                                     return;
                                 }
-                                final DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse(isGoogleTTS);
+                                final DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse();
                                 response.body().close();
                                 new Thread(new Runnable() {
                                     @Override
@@ -464,11 +462,10 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
         handleError(android.speech.SpeechRecognizer.ERROR_NETWORK);
     }
 
-    public void startListening(boolean isGoogleTTS) {
+    public void startListening() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startListening");
         }
-        this.isGoogleTTS = isGoogleTTS && PermissionHelper.checkFilePermissions(this.mContext);
         if (this.alexaAccessToken == null) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startListening: alexaAccessToken null");

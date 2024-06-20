@@ -148,10 +148,10 @@ public final class NotificationHelper {
 
         if (Build.VERSION.SDK_INT == Build.VERSION_CODES.KITKAT) {
             pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_FOREGROUND,
-                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         } else {
             pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_FOREGROUND,
-                    actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
         }
 
         String channel;
@@ -216,7 +216,7 @@ public final class NotificationHelper {
                 actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_HOTWORD);
 
                 actionPendingIntent = PendingIntent.getService(ctx,
-                        NotificationService.NOTIFICATION_HOTWORD, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        NotificationService.NOTIFICATION_HOTWORD, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
                 builder.addAction(R.drawable.ic_blur, ctx.getString(R.string.notification_stop_hotword),
                         actionPendingIntent);
@@ -234,7 +234,7 @@ public final class NotificationHelper {
                     MyLog.i(CLS_NAME, "getForegroundNotification: NOTIFICATION_TUTORIAL");
                 }
                 actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_TUTORIAL);
-                builder.addAction(ai.saiy.android.R.drawable.ic_text_to_speech, ctx.getString(ai.saiy.android.R.string.notification_stop_tutorial), PendingIntent.getService(ctx, NotificationService.NOTIFICATION_TUTORIAL, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+                builder.addAction(ai.saiy.android.R.drawable.ic_text_to_speech, ctx.getString(ai.saiy.android.R.string.notification_stop_tutorial), PendingIntent.getService(ctx, NotificationService.NOTIFICATION_TUTORIAL, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                     builder.setColorized(true);
                     builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorFade));
@@ -280,7 +280,7 @@ public final class NotificationHelper {
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_LISTENING);
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_LISTENING,
-                    actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
 
@@ -345,7 +345,7 @@ public final class NotificationHelper {
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_SPEAKING);
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_SPEAKING,
-                    actionIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
 
@@ -403,7 +403,7 @@ public final class NotificationHelper {
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_FETCHING);
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_FETCHING,
-                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
 
@@ -462,7 +462,7 @@ public final class NotificationHelper {
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_INITIALISING);
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_INITIALISING,
-                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
 
@@ -522,7 +522,7 @@ public final class NotificationHelper {
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_COMPUTING);
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_COMPUTING,
-                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
 
@@ -583,7 +583,7 @@ public final class NotificationHelper {
             actionIntent.putExtra(PermissionHelper.REQUESTED_PERMISSION, permissionId);
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_PERMISSIONS,
-                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
 
@@ -627,7 +627,7 @@ public final class NotificationHelper {
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_EMOTION);
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_EMOTION,
-                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
 
@@ -685,7 +685,7 @@ public final class NotificationHelper {
 
             final PendingIntent pendingIntent = PendingIntent.getService(ctx,
                     NotificationService.NOTIFICATION_IDENTIFICATION,
-                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT);
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
 

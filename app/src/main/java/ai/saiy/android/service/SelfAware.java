@@ -101,7 +101,6 @@ import ai.saiy.android.tts.TTS;
 import ai.saiy.android.tts.engine.EngineNuance;
 import ai.saiy.android.tts.helper.PendingTTS;
 import ai.saiy.android.tts.helper.SpeechPriority;
-import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -1044,7 +1043,7 @@ public class SelfAware extends Service {
                                                 }
                                                 recogAmazon = conditions.getAmazonRecognition(recognitionListener);
                                             }
-                                            recogAmazon.startListening(tts.getInitialisedEngine().matches(TTSDefaults.TTS_PKG_NAME_GOOGLE));
+                                            recogAmazon.startListening();
                                         }
                                     });
                                     break;
@@ -1073,23 +1072,23 @@ public class SelfAware extends Service {
                                     if (DEBUG) {
                                         MyLog.i(CLS_NAME, "WIT_HYBRID: IDLE");
                                     }
-                                    SelfAware.this.conditions.setFetchingCountdown();
-                                    SelfAware.this.recognitionListener.resetBugVariables();
-                                    SelfAware.this.recogWitHybrid.startListening(tts.getInitialisedEngine().matches(TTSDefaults.TTS_PKG_NAME_GOOGLE));
+                                    conditions.setFetchingCountdown();
+                                    recognitionListener.resetBugVariables();
+                                    recogWitHybrid.startListening();
                                     break;
                                 case PROCESSING:
                                     if (DEBUG) {
                                         MyLog.i(CLS_NAME, "WIT_HYBRID: PROCESSING");
                                     }
-                                    SelfAware.this.recogWitHybrid.stopListening();
-                                    SelfAware.this.conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
+                                    recogWitHybrid.stopListening();
+                                    conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
                                     break;
                                 case LISTENING:
                                     if (DEBUG) {
                                         MyLog.i(CLS_NAME, "WIT_HYBRID: LISTENING");
                                     }
-                                    SelfAware.this.recogWitHybrid.stopListening();
-                                    SelfAware.this.conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
+                                    recogWitHybrid.stopListening();
+                                    conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
                                     break;
                             }
                             break;

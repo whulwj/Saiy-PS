@@ -48,7 +48,7 @@ public class UtilsFile {
 
     private static final String FILE_PROVIDER = "ai.saiy.android.fileprovider";
     private static final String SOUND_EFFECT_DIR = "/se/";
-    private static final String TTS_GOOGLE_DIRECTORY = "/Android/data/" + TTSDefaults.TTS_PKG_NAME_GOOGLE + "/files/";
+    @Deprecated private static final String TTS_GOOGLE_DIRECTORY = "/Android/data/" + TTSDefaults.TTS_PKG_NAME_GOOGLE + "/files/";
     private static final String SAIY_DIRECTORY = "/Saiy";
     private static final String SOUND_DIRECTORY = "/Sounds";
     private static final String RELATIVE_SOUND_DIRECTORY = SAIY_DIRECTORY + SOUND_DIRECTORY;
@@ -138,7 +138,8 @@ public class UtilsFile {
         return null;
     }
 
-    public static File copyFileToGoogleTTSDir(File file) {
+    @Deprecated
+    private static File copyFileToGoogleTTSDir(File file) {
         File targetFile = new File(Environment.getExternalStorageDirectory() + TTS_GOOGLE_DIRECTORY + file.getName());
         try {
             org.apache.commons.io.FileUtils.copyFile(file, new File(Environment.getExternalStorageDirectory() + TTS_GOOGLE_DIRECTORY + file.getName()));

@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.text.Html;
 import android.widget.Toast;
 
@@ -52,6 +53,8 @@ public class ActivityHomeHelper {
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityHomeHelper.class.getSimpleName();
     private static final int REQUEST_CODE = 1;
+
+    private boolean mIsNotificationPermissionRequested;
 
     public void showStartTutorialDialog(final Activity activity) {
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(activity)
@@ -437,5 +440,18 @@ public class ActivityHomeHelper {
                 context.startActivityForResult(intent, REQUEST_CODE);
                 break;
         }
+    }
+
+    /**
+     * Check for notification permission before starting the service so that the notification is visible
+     */
+    public boolean isAcceptableToRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= 33/*Build.VERSION_CODES.TIRAMISU*/) {
+            if (!mIsNotificationPermissionRequested) {
+                mIsNotificationPermissionRequested = true;
+                return true;
+            }
+        }
+        return false;
     }
 }

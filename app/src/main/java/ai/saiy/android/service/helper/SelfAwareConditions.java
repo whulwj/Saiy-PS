@@ -2569,19 +2569,19 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
         String str;
         SPH.setCheckReinstallationNeeded(mContext, false);
-        ai.saiy.android.localisation.SaiyResources aVar = new ai.saiy.android.localisation.SaiyResources(mContext, getSupportedLanguage(false));
+        ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(mContext, getSupportedLanguage(false));
         if (SPH.isCheckUnknownSourcesSettingNeeded(mContext)) {
             SPH.setCheckUnknownSourcesSettingNeeded(mContext, false);
-            str = aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_5) + XMLResultsHandler.SEP_SPACE + aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_6);
+            str = sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_5) + XMLResultsHandler.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_6);
             SettingsIntent.settingsIntent(mContext, SettingsIntent.Type.SECURITY);
         } else {
-            str = aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + aVar.getString(ai.saiy.android.R.string.content_tasker_reinstall_5);
+            str = sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_5);
         }
-        aVar.reset();
-        LocalRequest aVar2 = new LocalRequest(mContext);
-        aVar2.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, getSupportedLanguage(false), getVRLocale(), getTTSLocale(), str);
-        aVar2.setCondition(Condition.CONDITION_NONE);
-        aVar2.execute();
+        sr.reset();
+        LocalRequest localRequest = new LocalRequest(mContext);
+        localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, getSupportedLanguage(false), getVRLocale(), getTTSLocale(), str);
+        localRequest.setCondition(Condition.CONDITION_NONE);
+        localRequest.execute();
     }
 
     /**

@@ -414,7 +414,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             MyLog.i(CLS_NAME, "showSystemAlertRational");
         }
         if (isActive()) {
-            getParentActivity().snack(this.getView(), getString(R.string.permission_system_alert_snack), -2, getString(R.string.ok), new View.OnClickListener() {
+            getParentActivity().snack(this.getView(), getString(R.string.permission_system_alert_snack), Snackbar.LENGTH_INDEFINITE, getString(R.string.ok), new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     if (DEBUG) {

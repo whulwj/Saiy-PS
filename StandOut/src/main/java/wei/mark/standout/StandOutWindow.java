@@ -184,7 +184,7 @@ public abstract class StandOutWindow extends Service {
 	 * other.
 	 * 
 	 * <p>
-	 * Send {@link Parceleable} data in a {@link Bundle} to a new or existing
+	 * Send {@link android.os.Parcelable} data in a {@link Bundle} to a new or existing
 	 * windows. The implementation of the recipient window can handle what to do
 	 * with the data. To receive a result, provide the class and id of the
 	 * sender.
@@ -659,7 +659,7 @@ public abstract class StandOutWindow extends Service {
 			contentIntent = PendingIntent.getService(this, 0,
 					notificationIntent,
 					// flag updates existing persistent notification
-					PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		}
 
 		return new NotificationCompat.Builder(c, "not_channel_permanent")
@@ -706,7 +706,7 @@ public abstract class StandOutWindow extends Service {
 			contentIntent = PendingIntent.getService(this, 0,
 					notificationIntent,
 					// flag updates existing persistent notification
-					PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		}
 
 		return new NotificationCompat.Builder(c)
@@ -1824,7 +1824,7 @@ public abstract class StandOutWindow extends Service {
 		 *            The id of the window.
 		 */
 		public StandOutLayoutParams(int id) {
-			super(200, 200, TYPE_PHONE,
+			super(200, 200, (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)? TYPE_APPLICATION_OVERLAY:TYPE_PHONE,
 					StandOutLayoutParams.FLAG_NOT_TOUCH_MODAL
 							| StandOutLayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
 					PixelFormat.TRANSLUCENT);
