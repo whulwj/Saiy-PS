@@ -423,24 +423,11 @@ public class SelfAwareHelper {
                 }
 
                 switch (error) {
-
-                    case SpeechRecognizer.ERROR_AUDIO:
+                    case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_AUDIO");
+                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_NETWORK_TIMEOUT");
                         }
-                        showToast("SpeechRecognizer.ERROR_AUDIO", Toast.LENGTH_SHORT);
-                        break;
-                    case SpeechRecognizer.ERROR_CLIENT:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_CLIENT");
-                        }
-                        showToast("SpeechRecognizer.ERROR_CLIENT", Toast.LENGTH_SHORT);
-                        break;
-                    case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_INSUFFICIENT_PERMISSIONS");
-                        }
-                        showToast("SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS", Toast.LENGTH_SHORT);
+                        showToast("SpeechRecognizer.ERROR_SPEECH_TIMEOUT", Toast.LENGTH_SHORT);
                         break;
                     case SpeechRecognizer.ERROR_NETWORK:
                         if (DEBUG) {
@@ -448,23 +435,11 @@ public class SelfAwareHelper {
                         }
                         showToast("SpeechRecognizer.ERROR_NETWORK", Toast.LENGTH_SHORT);
                         break;
-                    case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                    case SpeechRecognizer.ERROR_AUDIO:
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_NETWORK_TIMEOUT");
+                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_AUDIO");
                         }
-                        showToast("SpeechRecognizer.ERROR_NETWORK_TIMEOUT", Toast.LENGTH_SHORT);
-                        break;
-                    case SpeechRecognizer.ERROR_NO_MATCH:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_NO_MATCH");
-                        }
-                        showToast("SpeechRecognizer.ERROR_NO_MATCH", Toast.LENGTH_SHORT);
-                        break;
-                    case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_RECOGNIZER_BUSY");
-                        }
-                        showToast("SpeechRecognizer.ERROR_RECOGNIZER_BUSY", Toast.LENGTH_SHORT);
+                        showToast("SpeechRecognizer.ERROR_AUDIO", Toast.LENGTH_SHORT);
                         break;
                     case SpeechRecognizer.ERROR_SERVER:
                         if (DEBUG) {
@@ -472,11 +447,43 @@ public class SelfAwareHelper {
                         }
                         showToast("SpeechRecognizer.ERROR_SERVER", Toast.LENGTH_SHORT);
                         break;
+                    case SpeechRecognizer.ERROR_CLIENT:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_CLIENT");
+                        }
+                        showToast("SpeechRecognizer.ERROR_CLIENT", Toast.LENGTH_SHORT);
+                        break;
                     case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_SPEECH_TIMEOUT");
                         }
-                        showToast("SpeechRecognizer.ERROR_SPEECH_TIMEOUT", Toast.LENGTH_SHORT);
+                        if (defaultRecognizer == SaiyDefaults.VR.NATIVE) {
+                            showToast("Google Recognizer: silence timeout?", Toast.LENGTH_SHORT);
+                        } else {
+                            showToast("SpeechRecognizer.ERROR_SPEECH_TIMEOUT", Toast.LENGTH_SHORT);
+                        }
+                        break;
+                    case SpeechRecognizer.ERROR_NO_MATCH:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_NO_MATCH");
+                        }
+                        if (defaultRecognizer == SaiyDefaults.VR.NATIVE) {
+                            showToast("Google Recognizer: silence detected?", Toast.LENGTH_SHORT);
+                        } else {
+                            showToast("SpeechRecognizer.ERROR_NO_MATCH", Toast.LENGTH_SHORT);
+                        }
+                        break;
+                    case SpeechRecognizer.ERROR_RECOGNIZER_BUSY:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_RECOGNIZER_BUSY");
+                        }
+                        showToast("SpeechRecognizer.ERROR_RECOGNIZER_BUSY", Toast.LENGTH_SHORT);
+                        break;
+                    case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "handleRecognitionError: ERROR_INSUFFICIENT_PERMISSIONS");
+                        }
+                        showToast("SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS", Toast.LENGTH_SHORT);
                         break;
                     case SelfAware.JB_TIMEOUT_ERROR:
                         if (DEBUG) {

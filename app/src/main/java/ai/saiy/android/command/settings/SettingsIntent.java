@@ -10,6 +10,8 @@ import android.provider.Settings;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import ai.saiy.android.applications.Installed;
+import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.utils.MyLog;
 
 public class SettingsIntent {
@@ -19,7 +21,6 @@ public class SettingsIntent {
     private Type mType;
     private String mCommand;
 
-    /* loaded from: classes.dex */
     public enum Type {
         UNKNOWN,
         NFC,
@@ -166,12 +167,12 @@ public class SettingsIntent {
             MyLog.e(CLS_NAME, "settingsIntent: ActivityNotFoundException");
             e.printStackTrace();
             return false;
-        } catch (Exception e2) {
+        } catch (Exception e) {
             if (!DEBUG) {
                 return false;
             }
             MyLog.e(CLS_NAME, "settingsIntent: Exception");
-            e2.printStackTrace();
+            e.printStackTrace();
             return false;
         }
     }
@@ -183,9 +184,9 @@ public class SettingsIntent {
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ArrayList arrayList = new ArrayList();
-        arrayList.add(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.apps.gsa.velvet.ui.settings.VoiceSearchPreferences"));
-        arrayList.add(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.voicesearch.VoiceSearchPreferences"));
-        arrayList.add(new ComponentName("com.google.android.googlequicksearchbox", "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences"));
+        arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, IntentConstants.COMPONENT_VOICE_SEARCH_PREFERENCES_VELVET));
+        arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, IntentConstants.COMPONENT_VOICE_SEARCH_PREFERENCES));
+        arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences"));
         Iterator it = arrayList.iterator();
         while (it.hasNext()) {
             try {
@@ -197,10 +198,10 @@ public class SettingsIntent {
                     MyLog.e(CLS_NAME, "voiceSearchSettings: ActivityNotFoundException");
                     e.printStackTrace();
                 }
-            } catch (Exception e2) {
+            } catch (Exception e) {
                 if (DEBUG) {
                     MyLog.e(CLS_NAME, "voiceSearchSettings: Exception");
-                    e2.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }

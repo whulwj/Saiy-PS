@@ -215,6 +215,13 @@ public class FragmentSuperUser extends Fragment implements View.OnClickListener,
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
+            case 10:
+                getParentActivity().vibrate();
+                SPH.setDoubleBeepFix(getApplicationContext(), !SPH.getDoubleBeepFix(getApplicationContext()));
+                mObjects.get(position).setIconExtra(SPH.getDoubleBeepFix(getApplicationContext()) ?
+                        FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                mAdapter.notifyItemChanged(position);
+                break;
             default:
                 break;
         }

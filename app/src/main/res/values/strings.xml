@@ -260,6 +260,7 @@
     <string name="hint_bugs_command" translatable="true">Enter a command to run…</string>
     <string name="menu_recogniser_busy_fix" translatable="true">Recognizer Busy Fix</string>
     <string name="menu_okay_google_fix" translatable="true">Okay Google Fix</string>
+    <string name="menu_double_beep_fix">Double Beep Fix</string>
 
     <string name="menu_europe">Europe</string>
     <string name="menu_north_america">North America</string>
@@ -854,6 +855,8 @@
     <string name="error_network" translatable="true">"No network connection!"</string>
     <string name="error_hotword" translatable="true">"Hotword engine failed to initialise :("</string>
     <string name="error_audio" translatable="true">"There was an audio recording error"</string>
+    <string name="error_offline">Do you need to install offline language files?</string>
+    <string name="error_recogniser_busy">You may be suffering from a bug associated with Google\'s voice recognition service, where their assistant is not playing nicely and won\'t share the microphone with me. I hope they\'ll fix this issue soon, but in the mean time, you\'ll need to force stop the application to get things working again.</string>
 
     <!-- TTS - Specific error Strings -->
     <string name="error_tts_initialisation" translatable="true">"There is a problem with your Text to Speech engine."</string>

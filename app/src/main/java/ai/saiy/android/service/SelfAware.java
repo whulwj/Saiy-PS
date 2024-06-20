@@ -58,6 +58,7 @@ import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.helper.CallbackType;
 import ai.saiy.android.api.remote.Request;
 import ai.saiy.android.api.request.SaiyRequestParams;
+import ai.saiy.android.applications.Installed;
 import ai.saiy.android.audio.AudioParameters;
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.BeyondVerbal;
@@ -764,6 +765,12 @@ public class SelfAware extends Service {
                             startHotwordDetection(conditions.getBundle());
                         }
                     }
+                    break;
+                case Condition.CONDITION_TUTORIAL:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "soRun: Condition.CONDITION_TUTORIAL");
+                    }
+                    new ai.saiy.android.tutorial.Tutorial(getApplicationContext(), conditions.getVRLocale(false), conditions.getTTSLocale(false), conditions.getSupportedLanguage(false), conditions.getBundle()).execute();
                     break;
                 case Condition.CONDITION_NONE:
                 default:
@@ -1705,6 +1712,7 @@ public class SelfAware extends Service {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "recognitionListener: onBeginningOfRecognition");
             }
+            SPH.resetRecognizerBusyIncrement(getApplicationContext());
         }
 
         @Override
@@ -1772,24 +1780,11 @@ public class SelfAware extends Service {
                 }
 
                 switch (error) {
-
-                    case SpeechRecognizer.ERROR_AUDIO:
+                    case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
                         if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_AUDIO");
+                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_NETWORK_TIMEOUT");
                         }
-                        conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
-                        break;
-                    case SpeechRecognizer.ERROR_CLIENT:
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_CLIENT");
-                        }
-                        conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
-                        break;
-                    case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_INSUFFICIENT_PERMISSIONS");
-                        }
-                        conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
+                        conditions.manageCallback(CallbackType.CB_ERROR_NETWORK, null);
                         break;
                     case SpeechRecognizer.ERROR_NETWORK:
                         if (DEBUG) {
@@ -1797,11 +1792,33 @@ public class SelfAware extends Service {
                         }
                         conditions.manageCallback(CallbackType.CB_ERROR_NETWORK, null);
                         break;
-                    case SpeechRecognizer.ERROR_NETWORK_TIMEOUT:
+                    case SpeechRecognizer.ERROR_AUDIO:
                         if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_NETWORK_TIMEOUT");
+                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_AUDIO");
+                        }
+                        conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
+                        break;
+                    case SpeechRecognizer.ERROR_SERVER:
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_SERVER");
+                        }
+                        if (!SPH.isOfflineInstallationShown(getApplicationContext())) {
+                            ExecuteIntent.showInstallOfflineVoiceFiles(getApplicationContext());
+                            conditions.showToast(getApplicationContext().getString(R.string.error_offline), Toast.LENGTH_LONG);
                         }
                         conditions.manageCallback(CallbackType.CB_ERROR_NETWORK, null);
+                        break;
+                    case SpeechRecognizer.ERROR_CLIENT:
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_CLIENT");
+                        }
+                        conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
+                        break;
+                    case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_SPEECH_TIMEOUT");
+                        }
+                        conditions.manageCallback(CallbackType.CB_ERROR_NO_MATCH, null);
                         break;
                     case SpeechRecognizer.ERROR_NO_MATCH:
                         if (DEBUG) {
@@ -1814,21 +1831,29 @@ public class SelfAware extends Service {
                             MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_RECOGNIZER_BUSY");
                         }
                         conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
-                        break;
-                    case SpeechRecognizer.ERROR_SERVER:
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_SERVER");
+                        if (SaiyDefaults.VR.NATIVE == conditions.getDefaultRecognition()) {
+                            SPH.recognizerBusyAutoIncrease(getApplicationContext());
+                            long count = SPH.getRecognizerBusyIncrement(getApplicationContext());
+                            if (count < 3) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "recognitionListener: ERROR_RECOGNIZER_BUSY count: " + count);
+                                }
+                            } else {
+                                ExecuteIntent.openApplicationSpecificSettings(getApplicationContext(), Installed.PACKAGE_NAME_GOOGLE_NOW);
+                                final boolean servingRemote = conditions.servingRemote();
+                                LocalRequest localRequest = new LocalRequest(getApplicationContext());
+                                localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, conditions.getSupportedLanguage(servingRemote), conditions.getVRLocale(servingRemote), conditions.getTTSLocale(servingRemote), getString(R.string.error_recogniser_busy));
+                                localRequest.setSpeechPriority(SpeechPriority.PRIORITY_MAX);
+                                localRequest.execute();
+                                SPH.setRecogniserBusyFix(getApplicationContext(), true);
+                            }
                         }
-
-                        // TODO - Google install offline files
-
-                        conditions.manageCallback(CallbackType.CB_ERROR_NETWORK, null);
                         break;
-                    case SpeechRecognizer.ERROR_SPEECH_TIMEOUT:
+                    case SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS:
                         if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_SPEECH_TIMEOUT");
+                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_INSUFFICIENT_PERMISSIONS");
                         }
-                        conditions.manageCallback(CallbackType.CB_ERROR_NO_MATCH, null);
+                        conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
                         break;
                     case JB_TIMEOUT_ERROR:
                         if (DEBUG) {

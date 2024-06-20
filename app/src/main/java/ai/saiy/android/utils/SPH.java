@@ -97,6 +97,7 @@ public class SPH {
     private static final String USER_NAME = "user_name";
     private static final String USER_GENDER = "user_gender";
     private static final String USER_ACCOUNT = "user_account";
+    private static final String SHOWN_OFFLINE_INSTALLATION = "shown_offline_installation";
     private static final String HOTWORD = "hotword";
     private static final String HOTWORD_BOOT = "hotword_boot";
     private static final String HOTWORD_DRIVING = "hotword_driving";
@@ -138,7 +139,9 @@ public class SPH {
     private static final String ANNOUNCE_TASKER = "announce_tasker";
     private static final String ANNOUNCE_NOTIFICATIONS = "announce_notifications";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
+    private static final String RECOGNIZER_BUSY_INCREMENT = "recognizer_busy_increment";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
+    private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
     private static final String ALEXA_CODE_VERIFIER = "alexa_code_verifier";
     private static final String ALEXA_ACCESS_TOKEN = "alexa_access_token";
     private static final String ALEXA_REFRESH_TOKEN = "alexa_refresh_token";
@@ -1880,6 +1883,17 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean isOfflineInstallationShown(Context context) {
+        final SharedPreferences pref = getPref(context);
+        if (pref.getBoolean(SHOWN_OFFLINE_INSTALLATION, false)) {
+            return true;
+        }
+        final SharedPreferences.Editor edit = getEditor(pref);
+        edit.putBoolean(SHOWN_OFFLINE_INSTALLATION, true);
+        edit.apply();
+        return false;
+    }
+
     /**
      * Set whether the recogniser should use a workaround
      *
@@ -1928,6 +1942,32 @@ public class SPH {
     public static boolean getOkayGoogleFix(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
         return pref.getBoolean(OKAY_GOOGLE_FIX, Installed.isGoogleNowLauncherDefault(ctx));
+    }
+
+    public static long getRecognizerBusyIncrement(Context context) {
+        return getPref(context).getLong(RECOGNIZER_BUSY_INCREMENT, 0L);
+    }
+
+    public static void recognizerBusyAutoIncrease(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(RECOGNIZER_BUSY_INCREMENT, getRecognizerBusyIncrement(context) + 1);
+        edit.apply();
+    }
+
+    public static void resetRecognizerBusyIncrement(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(RECOGNIZER_BUSY_INCREMENT, 0L);
+        edit.apply();
+    }
+
+    public static boolean getDoubleBeepFix(Context context) {
+        return getPref(context).getBoolean(DOUBLE_BEEP_FIX, false);
+    }
+
+    public static void setDoubleBeepFix(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(DOUBLE_BEEP_FIX, condition);
+        edit.apply();
     }
 
     public static boolean isFirstForMicroPhone(Context context) {

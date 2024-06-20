@@ -183,6 +183,14 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                 ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
         mObjects.add(containerUI);
 
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_double_beep_fix));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
+        containerUI.setIconMain(R.drawable.ic_google);
+        containerUI.setIconExtra(SPH.getDoubleBeepFix(getApplicationContext())
+                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+        mObjects.add(containerUI);
+
         return mObjects;
     }
 

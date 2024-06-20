@@ -29,7 +29,9 @@ import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
+import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.Vibrator;
@@ -953,6 +955,10 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                                 }
                                 recogNative.cancel();
                                 Recognition.setState(Recognition.State.IDLE);
+                                if (!isCancelled() && (SPH.getOkayGoogleFix(mContext)) || SPH.getRecogniserBusyFix(mContext) || SPH.getDoubleBeepFix(mContext)) {
+                                    releaseRecognition(recogNative);
+                                    onVRError();
+                                }
                                 break;
                             case LISTENING:
                                 if (DEBUG) {
@@ -960,6 +966,10 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                                 }
                                 recogNative.stopListening();
                                 Recognition.setState(Recognition.State.IDLE);
+                                if (!isCancelled() && (SPH.getOkayGoogleFix(mContext)) || SPH.getRecogniserBusyFix(mContext) || SPH.getDoubleBeepFix(mContext)) {
+                                    releaseRecognition(recogNative);
+                                    onVRError();
+                                }
                                 break;
                         }
                         break;
@@ -1062,6 +1072,28 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
      */
     public void killCallbacks() {
         remoteCallbacks.kill();
+    }
+
+    private void releaseRecognition(SpeechRecognizer speechRecognizer) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "releaseRecognition");
+            MyLog.i(CLS_NAME, "releaseRecognition: isMain thread: " + (Looper.myLooper() == Looper.getMainLooper()));
+            MyLog.i(CLS_NAME, "releaseRecognition: threadTid: " + Process.getThreadPriority(Process.myTid()));
+        }
+        if (speechRecognizer == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "releaseRecognition: null");
+            }
+            return;
+        }
+        try {
+            speechRecognizer.destroy();
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "releaseRecognition: Exception");
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
