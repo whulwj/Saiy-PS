@@ -25,7 +25,9 @@ public class Unknown {
 
     public static final int UNKNOWN_STATE = 0;
     public static final int UNKNOWN_REPEAT = 1;
-    public static final int UNKNOWN_GOOGLE_SEARCH = 2;
-    public static final int UNKNOWN_WOLFRAM_ALPHA = 3;
-    public static final int UNKNOWN_TASKER = 4;
+    public static final int UNKNOWN_GOOGLE_SEARCH = 3;
+    public static final int UNKNOWN_ALEXA = 4;
+    public static final int UNKNOWN_MICROSOFT_CORTANA = 5;
+    public static final int UNKNOWN_WOLFRAM_ALPHA = 6;
+    public static final int UNKNOWN_TASKER = 7;
 }

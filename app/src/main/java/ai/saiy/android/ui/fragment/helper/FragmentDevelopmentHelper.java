@@ -24,6 +24,7 @@ import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentDevelopment;
+import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
@@ -50,35 +51,35 @@ public class FragmentDevelopmentHelper {
         containerUI.setTitle(getString(R.string.menu_translation));
         containerUI.setSubtitle(getString(R.string.menu_tap_contribute));
         containerUI.setIconMain(R.drawable.ic_translate);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
  
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_report_bug));
         containerUI.setSubtitle(getString(R.string.menu_tap_send));
         containerUI.setIconMain(R.drawable.ic_bug);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
  
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_to_do_list));
         containerUI.setSubtitle(getString(R.string.menu_tap_view));
         containerUI.setIconMain(R.drawable.ic_command_list);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
  
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_source_code));
         containerUI.setSubtitle(getString(R.string.menu_tap_view));
         containerUI.setIconMain(R.drawable.ic_github);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
  
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_developer_api));
         containerUI.setSubtitle(getString(R.string.menu_tap_view));
         containerUI.setIconMain(R.drawable.ic_code);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
         return arrayList;
     }

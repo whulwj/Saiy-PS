@@ -29,12 +29,14 @@ import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentApplications;
+import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
 public class FragmentApplicationsHelper {
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentApplicationsHelper.class.getSimpleName();
+    private static final int CHECK = R.drawable.ic_check;
 
     private final FragmentApplications parentFragment;
 
@@ -55,7 +57,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_facebook));
         boolean packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_FACEBOOK);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_facebook);
         arrayList.add(containerUI);
 
@@ -63,14 +65,14 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_link_facebook));
         containerUI.setSubtitle(getString(R.string.menu_tap_authorise));
         containerUI.setIconMain(R.drawable.ic_login);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_twitter));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_TWITTER);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_twitter);
         arrayList.add(containerUI);
 
@@ -78,14 +80,14 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_link_twitter));
         containerUI.setSubtitle(getString(R.string.menu_tap_authorise));
         containerUI.setIconMain(R.drawable.ic_login);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_alexa));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_ALEXA);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_alexa);
         arrayList.add(containerUI);
 
@@ -93,14 +95,14 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_link_alexa));
         containerUI.setSubtitle(TokenHelper.hasToken(getApplicationContext()) ? getString(R.string.menu_tap_deauthorise) : getString(R.string.menu_tap_authorise));
         containerUI.setIconMain(R.drawable.ic_login);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_tasker));
         boolean b2 = TaskerIntent.taskerInstalled(getApplicationContext());
         containerUI.setSubtitle(b2 ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(b2 ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(b2 ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_tasker);
         arrayList.add(containerUI);
 
@@ -108,14 +110,14 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_link_tasker));
         containerUI.setSubtitle(getString(R.string.menu_tap_authorise));
         containerUI.setIconMain(R.drawable.ic_login);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_linkedin));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_LINKED_IN);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_linkedin);
         arrayList.add(containerUI);
 
@@ -123,14 +125,14 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_link_linkedin));
         containerUI.setSubtitle(getString(R.string.menu_tap_authorise));
         containerUI.setIconMain(R.drawable.ic_login);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_foursquare));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_FOUR_SQUARED);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_foursquare);
         arrayList.add(containerUI);
 
@@ -138,14 +140,14 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_link_foursquare));
         containerUI.setSubtitle(getString(R.string.menu_tap_authorise));
         containerUI.setIconMain(R.drawable.ic_login);
-        containerUI.setIconExtra(R.drawable.chevron);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_wolfram_alpha));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_WOLFRAM_ALPHA);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_wolfram_alpha);
         arrayList.add(containerUI);
 
@@ -153,7 +155,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_shazam));
         boolean c2 = ai.saiy.android.applications.Installed.shazamInstalled(getApplicationContext());
         containerUI.setSubtitle(c2 ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(c2 ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(c2 ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_shazam);
         arrayList.add(containerUI);
 
@@ -161,7 +163,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_soundhound));
         boolean d = ai.saiy.android.applications.Installed.soundHoundInstalled(getApplicationContext());
         containerUI.setSubtitle(d ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(d ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(d ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_image_unknown);
         arrayList.add(containerUI);
 
@@ -169,7 +171,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_trackid));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_TRACK_ID);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_image_unknown);
         arrayList.add(containerUI);
 
@@ -177,7 +179,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_google_sound_search));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_SOUND_SEARCH);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_google_play);
         arrayList.add(containerUI);
 
@@ -185,7 +187,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_ebay));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_EBAY);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_ebay);
         arrayList.add(containerUI);
 
@@ -193,7 +195,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_amazon));
         boolean k = ai.saiy.android.applications.Installed.amazonInstalled(getApplicationContext());
         containerUI.setSubtitle(k ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(k ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(k ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_amazon);
         arrayList.add(containerUI);
 
@@ -201,7 +203,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_spotify));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_SPOTIFY_MUSIC);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_spotify);
         arrayList.add(containerUI);
 
@@ -209,7 +211,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_deezer));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_DEEZER);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_image_unknown);
         arrayList.add(containerUI);
 
@@ -217,7 +219,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_play_music));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_MUSIC);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_image_unknown);
         arrayList.add(containerUI);
 
@@ -225,7 +227,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_tidal));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_ASPIRO_TINDER);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_tidal);
         arrayList.add(containerUI);
 
@@ -233,7 +235,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_amazon_music));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_AMAZON_MUSIC);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_amazon);
         arrayList.add(containerUI);
 
@@ -241,7 +243,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_netflix));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_NETFLIX);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_netflix);
         arrayList.add(containerUI);
 
@@ -249,7 +251,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_imdb));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_IMDB);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_imdb);
         arrayList.add(containerUI);
 
@@ -257,7 +259,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_youtube));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_YOUTUBE);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_youtube);
         arrayList.add(containerUI);
 
@@ -265,7 +267,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_google_maps));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_MAPS);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_google_maps);
         arrayList.add(containerUI);
 
@@ -273,7 +275,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_google_earth));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_EARTH);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_google_earth);
         arrayList.add(containerUI);
 
@@ -281,7 +283,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_google_sky_map));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_SKY);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_image_unknown);
         arrayList.add(containerUI);
 
@@ -289,7 +291,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_google_translate));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_TRANSLATE);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_google_translate);
         arrayList.add(containerUI);
 
@@ -297,7 +299,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_yelp));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_YELP);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_yelp);
         arrayList.add(containerUI);
 
@@ -305,7 +307,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_uber));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_UBER);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_uber);
         arrayList.add(containerUI);
 
@@ -313,7 +315,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_dropbox));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_DROPBOX);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_dropbox);
         arrayList.add(containerUI);
 
@@ -321,7 +323,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_evernote));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_EVERNOTE);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_evernote);
         arrayList.add(containerUI);
 
@@ -329,7 +331,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_box));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_BOX);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_box);
         arrayList.add(containerUI);
 
@@ -337,7 +339,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_drive));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_DOCS);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_google_drive);
         arrayList.add(containerUI);
 
@@ -345,7 +347,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_keep));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_KEEP);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_image_unknown);
         arrayList.add(containerUI);
 
@@ -353,7 +355,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_automate));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_AUTOMATE);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled ? R.drawable.ic_check : R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_image_unknown);
         arrayList.add(containerUI);
 
@@ -361,7 +363,7 @@ public class FragmentApplicationsHelper {
         containerUI.setTitle(getString(R.string.menu_google_play_store));
         packageInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_STORE);
         containerUI.setSubtitle(packageInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(packageInstalled? R.drawable.ic_check:R.drawable.chevron);
+        containerUI.setIconExtra(packageInstalled? FragmentApplicationsHelper.CHECK:FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_google_play);
         arrayList.add(containerUI);
         return arrayList;

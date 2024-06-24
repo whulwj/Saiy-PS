@@ -88,6 +88,8 @@ public class SPH {
     private static final String EMOTION_PERMISSION = "emotion_permission";
     private static final String VIBRATE = "vibrate";
     private static final String NETWORK_SYNTHESIS = "network_synthesis";
+    private static final String NETWORK_SYNTHESIS_WIFI = "network_synthesis_wifi";
+    private static final String NETWORK_SYNTHESIS_4G = "network_synthesis_4g";
     private static final String USE_OFFLINE = "use_offline";
     private static final String PING_CHECK = "ping_check";
     private static final String COMMAND_UNKNOWN_ACTION = "command_unknown_action";
@@ -138,10 +140,16 @@ public class SPH {
     private static final String DEFAULT_SONG_RECOGNITION = "default_song_recognition";
     private static final String ANNOUNCE_TASKER = "announce_tasker";
     private static final String ANNOUNCE_NOTIFICATIONS = "announce_notifications";
+    private static final String AUTO_CONNECT_HEADSET = "aut_connect_headset";
+    private static final String HEADSET_SYSTEM = "headset_system";
+    private static final String HEADSET_STREAM_TYPE = "headset_stream_type";
+    private static final String HEADSET_CONNECTION_TYPE = "headset_connection_type";
+    private static final String CACHE_SPEECH = "cache_speech";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String RECOGNIZER_BUSY_INCREMENT = "recognizer_busy_increment";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
     private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
+    private static final String HEADSET_OVERVIEW_COUNT = "headset_overview_count";
     private static final String ALEXA_CODE_VERIFIER = "alexa_code_verifier";
     private static final String ALEXA_ACCESS_TOKEN = "alexa_access_token";
     private static final String ALEXA_REFRESH_TOKEN = "alexa_refresh_token";
@@ -149,10 +157,12 @@ public class SPH {
     private static final String ALEXA_REGION = "alexa_region";
     private static final String UNIQUE_ID = "unique_id";
     private static final String ALEXA_NOTIFICATION_BUTTON = "alexa_notification_button";
+    private static final String SHOWN_VOLUME_BUG = "shown_volume_bug";
     private static final String REINSTALLATION_PROCESS = "reinstallation_process";
     private static final String UNKNOWN_SOURCES = "unknown_sources";
     private static final String ANNOUNCE_CALLER = "announce_caller";
     private static final String QUIET_TIMES = "quiet_times";
+    private static final String RUN_DIAGNOSTICS = "run_diagnostics";
     private static final String MIC_FIRST = "mic_first";
 
     /**
@@ -1525,6 +1535,46 @@ public class SPH {
         return pref.getBoolean(ANNOUNCE_NOTIFICATIONS, false);
     }
 
+    public static boolean isAutoConnectHeadset(Context context) {
+        return getPref(context).getBoolean(AUTO_CONNECT_HEADSET, true);
+    }
+
+    public static void setAutoConnectHeadset(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(AUTO_CONNECT_HEADSET, condition);
+        edit.apply();
+    }
+
+    public static int getHeadsetSystem(Context context) {
+        return getPref(context).getInt(HEADSET_SYSTEM, 0);
+    }
+
+    public static void setHeadsetSystem(Context context, int i) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(HEADSET_SYSTEM, i);
+        edit.apply();
+    }
+
+    public static int getHeadsetStreamType(Context context) {
+        return getPref(context).getInt(HEADSET_STREAM_TYPE, 0);
+    }
+
+    public static void setHeadsetStreamType(Context context, int i) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(HEADSET_STREAM_TYPE, i);
+        edit.apply();
+    }
+
+    public static int getHeadsetConnectionType(Context context) {
+        return getPref(context).getInt(HEADSET_CONNECTION_TYPE, 0);
+    }
+
+    public static void setHeadsetConnectionType(Context context, int i) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(HEADSET_CONNECTION_TYPE, i);
+        edit.apply();
+    }
+
     /**
      * Set the user's preference for pinging the network prior to making a request.
      *
@@ -1699,6 +1749,26 @@ public class SPH {
 
         edit.putBoolean(NETWORK_SYNTHESIS, condition);
         edit.apply();
+    }
+
+    public static boolean isNetworkSynthesisWifi(Context context) {
+        return getPref(context).getBoolean(NETWORK_SYNTHESIS_WIFI, true);
+    }
+
+    public static void setNetworkSynthesisWifi(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(NETWORK_SYNTHESIS_WIFI, condition);
+        edit.apply();
+    }
+
+    public static boolean isNetworkSynthesis4g(Context context) {
+        return getPref(context).getBoolean(NETWORK_SYNTHESIS_4G, true);
+    }
+
+    public static void setNetworkSynthesis4g(Context context, boolean condition) {
+        SharedPreferences.Editor a2 = getEditor(getPref(context));
+        a2.putBoolean(NETWORK_SYNTHESIS_4G, condition);
+        a2.apply();
     }
 
     /**
@@ -1894,6 +1964,16 @@ public class SPH {
         return false;
     }
 
+    public static boolean isCacheSpeech(Context context) {
+        return getPref(context).getBoolean(CACHE_SPEECH, true);
+    }
+
+    public static void setCacheSpeech(Context context, boolean condition) {
+        SharedPreferences.Editor a2 = getEditor(getPref(context));
+        a2.putBoolean(CACHE_SPEECH, condition);
+        a2.apply();
+    }
+
     /**
      * Set whether the recogniser should use a workaround
      *
@@ -1975,6 +2055,16 @@ public class SPH {
         return pref.getBoolean(MIC_FIRST, true);
     }
 
+    public static int getHeadsetOverviewCount(Context context) {
+        return getPref(context).getInt(HEADSET_OVERVIEW_COUNT, 0);
+    }
+
+    public static void headsetOverviewCountAutoIncrease(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(HEADSET_OVERVIEW_COUNT, getHeadsetOverviewCount(context) + 1);
+        edit.apply();
+    }
+
     public static String setCodeVerifier(Context context) {
         return getPref(context).getString(ALEXA_CODE_VERIFIER, null);
     }
@@ -2045,6 +2135,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean haveShownVolumeBug(Context context) {
+        return getPref(context).getBoolean(SHOWN_VOLUME_BUG, false);
+    }
+
+    public static void setShownVolumeBug(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(SHOWN_VOLUME_BUG, condition);
+        edit.apply();
+    }
+
     public static boolean isCheckReinstallationNeeded(Context context) {
         return getPref(context).getBoolean(REINSTALLATION_PROCESS, false);
     }
@@ -2082,6 +2182,16 @@ public class SPH {
     public static void setQuietTimes(Context context, String str) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(QUIET_TIMES, str);
+        edit.apply();
+    }
+
+    public static boolean getRunDiagnostics(Context context) {
+        return getPref(context).getBoolean(RUN_DIAGNOSTICS, false);
+    }
+
+    public static void setRunDiagnostics(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(RUN_DIAGNOSTICS, condition);
         edit.apply();
     }
 

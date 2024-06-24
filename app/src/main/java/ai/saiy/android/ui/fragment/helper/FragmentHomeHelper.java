@@ -93,6 +93,13 @@ public class FragmentHomeHelper {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_command_list));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_view));
+        containerUI.setIconMain(R.drawable.ic_command_list);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_development));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_contribute));
         containerUI.setIconMain(R.drawable.ic_pulse);

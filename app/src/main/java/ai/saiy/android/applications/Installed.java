@@ -68,6 +68,7 @@ public class Installed {
     public static final String PACKAGE_GOOGLE_YOUTUBE = "com.google.android.youtube";
     public static final String PACKAGE_IMDB = "com.imdb.mobile";
     public static final String PACKAGE_LINKED_IN = "com.linkedin.android";
+    public static final String PACKAGE_MICROSOFT_CORTANA = "com.microsoft.cortana";
     public static final String PACKAGE_NETFLIX = "com.netflix.mediaclient";
     public static final String PACKAGE_TWITTER = "com.twitter.android";
     public static final String PACKAGE_SNAPCHAT = "com.snapchat.android";

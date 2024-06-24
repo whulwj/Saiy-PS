@@ -19,15 +19,28 @@ package ai.saiy.android.ui.fragment.helper;
 
 import static android.widget.AdapterView.INVALID_POSITION;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
 import android.text.TextUtils;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -35,24 +48,41 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
+import ai.saiy.android.api.SaiyDefaults;
+import ai.saiy.android.applications.Install;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.command.battery.BatteryInformation;
+import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.command.unknown.Unknown;
+import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.thirdparty.tasker.TaskerHelper;
+import ai.saiy.android.tts.helper.SaiyVoice;
+import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIMainAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
+import ai.saiy.android.ui.fragment.FragmentApplications;
+import ai.saiy.android.ui.fragment.FragmentDiagnostics;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsParcelable;
+import ai.saiy.android.utils.UtilsString;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -65,6 +95,108 @@ public class FragmentSettingsHelper {
     private final String CLS_NAME = FragmentSettingsHelper.class.getSimpleName();
 
     private final FragmentSettings parentFragment;
+    private TextToSpeech tts;
+    private String defaultTTSPackage;
+    private final TextToSpeech.OnInitListener initListener = new TextToSpeech.OnInitListener() {
+        @Override
+        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        public void onInit(int status) {
+            if (status == TextToSpeech.SUCCESS) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onInit: SUCCESS");
+                }
+                if (tts == null) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onInit: tts null");
+                    }
+                    shutdownTTS();
+                    toast(getString(R.string.error_tts_initialisation), Toast.LENGTH_SHORT);
+                    return;
+                }
+                Set<Voice> set = null;
+                if (UtilsString.notNaked(defaultTTSPackage) && defaultTTSPackage.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
+                    try {
+                        set = tts.getVoices();
+                    } catch (NullPointerException e) {
+                        if (DEBUG) {
+                            MyLog.e(CLS_NAME, "getVoices: NullPointerException");
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        if (DEBUG) {
+                            MyLog.e(CLS_NAME, "getVoices: Exception");
+                            e.printStackTrace();
+                        }
+                    }
+                    receivedVoices(set);
+                    return;
+                }
+                defaultTTSPackage = tts.getDefaultEngine();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onInit: defaultTTSPackage: " + defaultTTSPackage);
+                }
+                if (UtilsString.notNaked(defaultTTSPackage)) {
+                    if (!defaultTTSPackage.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
+                        showGoogleDefaultDialog();
+                        shutdownTTS();
+                        return;
+                    }
+                    try {
+                        set = tts.getVoices();
+                    } catch (NullPointerException e) {
+                        if (DEBUG) {
+                            MyLog.e(CLS_NAME, "getVoices: NullPointerException");
+                            e.printStackTrace();
+                        }
+                    } catch (Exception e) {
+                        if (DEBUG) {
+                            MyLog.e(CLS_NAME, "getVoices: Exception");
+                            e.printStackTrace();
+                        }
+                    }
+                    receivedVoices(set);
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onInit: defaultTTSPackage null");
+                }
+                defaultTTSPackage = reflectEngine();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "reflect: defaultTTSPackage: " + defaultTTSPackage);
+                }
+                if (!UtilsString.notNaked(defaultTTSPackage)) {
+                    shutdownTTS();
+                    toast(getString(R.string.error_tts_initialisation), Toast.LENGTH_SHORT);
+                    return;
+                }
+                if (!defaultTTSPackage.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
+                    showGoogleDefaultDialog();
+                    shutdownTTS();
+                    return;
+                }
+                try {
+                    set = tts.getVoices();
+                } catch (NullPointerException e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "getVoices: NullPointerException");
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "getVoices: Exception");
+                        e.printStackTrace();
+                    }
+                }
+                receivedVoices(set);
+            } else {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onInit: ERROR");
+                }
+                shutdownTTS();
+                toast(getString(R.string.error_tts_initialisation), Toast.LENGTH_SHORT);
+            }
+        }
+    };
 
     /**
      * Constructor
@@ -73,6 +205,239 @@ public class FragmentSettingsHelper {
      */
     public FragmentSettingsHelper(@NonNull final FragmentSettings parentFragment) {
         this.parentFragment = parentFragment;
+    }
+
+    private String getString(@StringRes int resId) {
+        return getApplicationContext().getString(resId);
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setVoice(Voice voice) {
+        if (this.tts == null) {
+            shutdownTTS();
+            toast(getString(R.string.error_tts_initialisation), Toast.LENGTH_SHORT);
+            return;
+        }
+        switch (this.tts.setVoice(voice)) {
+            case TextToSpeech.ERROR:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "setVoice: ERROR");
+                }
+                toast("Voice error!", Toast.LENGTH_SHORT);
+                break;
+            case TextToSpeech.SUCCESS:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setVoice: SUCCESS");
+                }
+                switch (this.tts.speak("Testing testing 1 2 3", TextToSpeech.QUEUE_FLUSH, new Bundle(), getApplicationContext().getPackageName())) {
+                    case TextToSpeech.ERROR:
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "speak: ERROR");
+                        }
+                        toast("Speech error!", Toast.LENGTH_SHORT);
+                        break;
+                    case TextToSpeech.SUCCESS:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "speak: SUCCESS");
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            default:
+                break;
+        }
+    }
+
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void showVoiceSelector(final Set<Voice> set) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Iterator<Voice> it = set.iterator();
+                while (it.hasNext()) {
+                    Voice voice = it.next();
+                    if (!ai.saiy.android.utils.UtilsLocale.localesLanguageMatch(voice.getLocale(), SupportedLanguage.ENGLISH.getLocale())) {
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "removing locale: " + voice.getLocale().toString());
+                        }
+                        it.remove();
+                    } else if (DEBUG) {
+                        MyLog.d(CLS_NAME, "keeping locale: " + voice.getLocale().toString());
+                    }
+                }
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "post supported language check: " + set.size());
+                }
+                if (set.isEmpty()) {
+                    shutdownTTS();
+                    toast(getString(R.string.diagnostics_no_tts_sl), Toast.LENGTH_LONG);
+                    SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.TTS);
+                    return;
+                }
+                final ArrayList<Voice> voices = new ArrayList<>(set);
+                Collections.sort(voices, new SaiyVoice.VoiceComparator());
+                if (DEBUG) {
+                    for (Voice voice : voices) {
+                        MyLog.d("Voice: ", voice.toString());
+                    }
+                }
+                final ArrayList<String> namesOfVoice = new ArrayList<>(voices.size());
+                for (Voice voice : voices) {
+                    namesOfVoice.add(voice.getName());
+                }
+                String defaultSaiyVoiceString = ai.saiy.android.utils.SPH.getDefaultTTSVoice(getApplicationContext());
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "defaultSaiyVoiceString: " + defaultSaiyVoiceString);
+                }
+                int checkedIndex = 0;
+                if (ai.saiy.android.utils.UtilsString.notNaked(defaultSaiyVoiceString)) {
+                    SaiyVoice saiyVoice = UtilsParcelable.unmarshall(defaultSaiyVoiceString, SaiyVoice.CREATOR);
+                    if (saiyVoice != null) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "defaultSaiyVoice: " + saiyVoice.getName());
+                        }
+                        for (int i = 0; i < namesOfVoice.size(); ++i) {
+                            if (namesOfVoice.get(i).matches("(?i)" + Pattern.quote(saiyVoice.getName()))) {
+                                checkedIndex = i;
+                                break;
+                            }
+                        }
+                    } else if (DEBUG) {
+                        MyLog.w(CLS_NAME, "defaultSaiyVoice: null");
+                    }
+                }
+
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "finalCheckedIndex: " + checkedIndex);
+                }
+                final int finalCheckedIndex = checkedIndex;
+                getParentActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_tts_voice)
+                                .setMessage("Test & select a voice")
+                                .setIcon(R.drawable.ic_voice_over)
+                                .setSingleChoiceItems(namesOfVoice.toArray(new String[0]), finalCheckedIndex, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showVoiceSelector: onSelection: " + which + ": " + namesOfVoice.get(which));
+                                        }
+                                        if (voices.get(which).isNetworkConnectionRequired()) {
+                                            toast("Requires network", Toast.LENGTH_SHORT);
+                                        }
+                                    }
+                                })
+                                .setNeutralButton("Sample", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showVoiceSelector: onNeutral: " + voices.get(position));
+                                            }
+                                            setVoice(voices.get(position));
+                                        }
+                                    }
+                                })
+                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showVoiceSelector: onPositive: " + position);
+                                            }
+                                            new Thread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    Voice voice = voices.get(position);
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "showVoiceSelector: onPositive: " + voice.toString());
+                                                    }
+                                                    TTSDefaults.Google[] values = TTSDefaults.Google.values();
+                                                    SaiyVoice saiyVoice = new SaiyVoice(voice);
+                                                    saiyVoice.setEngine(TTSDefaults.TTS_PKG_NAME_GOOGLE);
+                                                    String quote = Pattern.quote(voice.getName());
+                                                    for (TTSDefaults.Google google : values) {
+                                                        if (google.getVoiceName().matches("(?i)" + quote)) {
+                                                            saiyVoice.setGender(google.getGender());
+                                                            break;
+                                                        }
+                                                    }
+                                                    String base64String = UtilsParcelable.parcelable2String(saiyVoice);
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "setDefaultVoice: base64String: " + base64String);
+                                                    }
+                                                    SPH.setDefaultTTSVoice(getApplicationContext(), base64String);
+                                                }
+                                            }).start();
+                                            shutdownTTS();
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showVoiceSelector: onNegative");
+                                        }
+                                        dialog.dismiss();
+                                        shutdownTTS();
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(final DialogInterface dialog) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showVoiceSelector: onCancel");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+                        materialDialog.show();
+                        showProgress(false);
+                    }
+                });
+            }
+        });
+    }
+
+    public void toast(String text, int duration) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "makeToast: " + text);
+        }
+        if (getParent().isActive()) {
+            getParentActivity().toast(text, duration);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "toast Fragment detached");
+        }
+    }
+
+    public void showProgress(boolean visible) {
+        if (getParent().isActive()) {
+            getParentActivity().showProgress(visible);
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    public void receivedVoices(Set<Voice> set) {
+        if (set != null && !set.isEmpty()) {
+            showVoiceSelector(set);
+            return;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "receivedVoices: naked");
+        }
+        shutdownTTS();
+        toast(getString(R.string.diagnostics_no_tts_sl), Toast.LENGTH_LONG);
+        SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.TTS);
     }
 
     /**
@@ -88,16 +453,30 @@ public class FragmentSettingsHelper {
         final ArrayList<ContainerUI> mObjects = new ArrayList<>();
 
         ContainerUI containerUI = new ContainerUI();
-        containerUI.setTitle(getParent().getString(R.string.menu_language));
+        containerUI.setTitle(getParent().getString(R.string.menu_supported_languages));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_options));
         containerUI.setIconMain(R.drawable.ic_language);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_tts_voice));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_options));
+        containerUI.setIconMain(R.drawable.ic_voice_over);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_unknown_commands));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_options));
-        containerUI.setIconMain(R.drawable.ic_not_equal);
+        containerUI.setIconMain(R.drawable.ic_help_circle);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_bluetooth_headsets));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_options));
+        containerUI.setIconMain(R.drawable.ic_bluetooth_connect);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 
@@ -109,24 +488,31 @@ public class FragmentSettingsHelper {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
-        containerUI.setTitle(getParent().getString(R.string.menu_synthesised_voice));
+        containerUI.setTitle(getParent().getString(R.string.menu_alexa_shortcut));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
-        containerUI.setIconMain(R.drawable.ic_google);
-        containerUI.setIconExtra(SPH.getNetworkSynthesis(getApplicationContext())
+        containerUI.setIconMain(R.drawable.ic_alexa);
+        containerUI.setIconExtra(SPH.showAlexaNotification(getApplicationContext())
                 ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_launcher_shortcut));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_create));
+        containerUI.setIconMain(R.drawable.ic_link);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_synthesised_voice));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_configure));
+        containerUI.setIconMain(R.drawable.ic_google);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_temperature_units));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_options));
         containerUI.setIconMain(R.drawable.ic_thermometer);
-        containerUI.setIconExtra(FragmentHome.CHEVRON);
-        mObjects.add(containerUI);
-
-        containerUI = new ContainerUI();
-        containerUI.setTitle(getParent().getString(R.string.menu_default_apps));
-        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_set));
-        containerUI.setIconMain(R.drawable.ic_apps);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 
@@ -144,8 +530,7 @@ public class FragmentSettingsHelper {
             MyLog.i(CLS_NAME, "getRecyclerView");
         }
 
-        final RecyclerView mRecyclerView = (RecyclerView)
-                parent.findViewById(R.id.layout_common_fragment_recycler_view);
+        final RecyclerView mRecyclerView = parent.findViewById(R.id.layout_common_fragment_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getParentActivity(), null));
@@ -174,9 +559,9 @@ public class FragmentSettingsHelper {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                final ArrayList<ContainerUI> tempArray = FragmentSettingsHelper.this.getUIComponents();
+                final ArrayList<ContainerUI> tempArray = getUIComponents();
 
-                if (FragmentSettingsHelper.this.getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
+                if (getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
 
                     try {
                         Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
@@ -188,14 +573,14 @@ public class FragmentSettingsHelper {
                     }
                 }
 
-                if (FragmentSettingsHelper.this.getParent().isActive()) {
+                if (getParent().isActive()) {
 
-                    FragmentSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
+                    getParentActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
 
-                            FragmentSettingsHelper.this.getParent().getObjects().addAll(tempArray);
-                            FragmentSettingsHelper.this.getParent().getAdapter().notifyItemRangeInserted(0, FragmentSettingsHelper.this.getParent().getObjects().size());
+                            getParent().getObjects().addAll(tempArray);
+                            getParent().getAdapter().notifyItemRangeInserted(0, getParent().getObjects().size());
                         }
                     });
 
@@ -208,6 +593,69 @@ public class FragmentSettingsHelper {
         });
     }
 
+    public void showVoicesDialog() {
+        final boolean needDiagnostics = SPH.getRunDiagnostics(getApplicationContext());
+        if (needDiagnostics && Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getVoices();
+            return;
+        }
+        MaterialAlertDialogBuilder dialogBuilder = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_tts_voice)
+                .setIcon(R.drawable.ic_voice_over);
+        dialogBuilder.setNeutralButton(R.string.title_diagnostics, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "showVoicesDialog: onNeutral");
+                }
+                dialog.dismiss();
+                if (getParent().isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_DIAGNOSTICS))) {
+                    getParentActivity().doFragmentAddTransaction(FragmentDiagnostics.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_DIAGNOSTICS), ActivityHome.ANIMATION_FADE, ActivityHome.MENU_INDEX_SETTINGS);
+                } else if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_DIAGNOSTICS being added");
+                }
+            }
+        });
+        dialogBuilder.setPositiveButton(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP? R.string.title_voice:R.string.title_doh_, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "showVoicesDialog: onPositive");
+                }
+                dialog.dismiss();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    getVoices();
+                }
+            }
+        });
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            dialogBuilder.setMessage(R.string.diagnostics_voice_dialog_content_suggest); //message
+        } else {
+            String suffix;
+            if (needDiagnostics) {
+                suffix = getString(R.string.diagnostics_voice_dialog_content_suggest_settings);
+            } else {
+                suffix = getString(R.string.diagnostics_voice_dialog_content_suggest_diagnostics);
+            }
+            dialogBuilder.setMessage(getString(R.string.diagnostics_voice_dialog_content_unsupported) + suffix);
+            dialogBuilder.setNegativeButton(needDiagnostics ? R.string.title_settings:android.R.string.cancel, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "showVoicesDialog: onNegative");
+                    }
+                    dialog.dismiss();
+                    if (needDiagnostics) {
+                        SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.DEVICE);
+                    }
+                }
+            });
+        }
+        final AlertDialog materialDialog = dialogBuilder.create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
     /**
      * Show the temperature units selector
      */
@@ -218,20 +666,20 @@ public class FragmentSettingsHelper {
             @Override
             public void run() {
 
-                final String[] units = FragmentSettingsHelper.this.getParent().getResources().getStringArray(R.array.array_temperature_units);
+                final String[] units = getParent().getResources().getStringArray(R.array.array_temperature_units);
 
                 for (int i = 0; i < units.length; i++) {
                     units[i] = StringUtils.capitalize(units[i]);
                 }
 
-                FragmentSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
+                getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentSettingsHelper.this.getParentActivity())
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                                 .setCancelable(false)
                                 .setTitle(R.string.menu_temperature_units)
                                 .setIcon(R.drawable.ic_thermometer)
-                                .setSingleChoiceItems((CharSequence[]) units, SPH.getDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext()), new DialogInterface.OnClickListener() {
+                                .setSingleChoiceItems(units, SPH.getDefaultTemperatureUnits(getApplicationContext()), new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int which) {
                                         if (DEBUG) {
@@ -250,14 +698,14 @@ public class FragmentSettingsHelper {
                                                     if (DEBUG) {
                                                         MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onPositive: CELSIUS");
                                                     }
-                                                    SPH.setDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext(),
+                                                    SPH.setDefaultTemperatureUnits(getApplicationContext(),
                                                             BatteryInformation.CELSIUS);
                                                     break;
                                                 case BatteryInformation.FAHRENHEIT:
                                                     if (DEBUG) {
                                                         MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onPositive: FAHRENHEIT");
                                                     }
-                                                    SPH.setDefaultTemperatureUnits(FragmentSettingsHelper.this.getApplicationContext(),
+                                                    SPH.setDefaultTemperatureUnits(getApplicationContext(),
                                                             BatteryInformation.FAHRENHEIT);
                                                     break;
 
@@ -293,6 +741,146 @@ public class FragmentSettingsHelper {
         });
     }
 
+    public void showHeadsetOverviewDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showHeadsetOverviewDialog");
+        }
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_headset_woes)
+                .setMessage(R.string.content_headset_overview)
+                .setIcon(R.drawable.ic_bluetooth_connect)
+                .setPositiveButton(R.string.menu_grey_hairs, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showHeadsetOverviewDialog: onPositive");
+                        }
+                        dialog.dismiss();
+                        showHeadsetDialog();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showHeadsetOverviewDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                        showHeadsetDialog();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showHeadsetOverviewDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                        showHeadsetDialog();
+                    }
+                })
+                .create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
+    public void showHeadsetDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.bluetooth_headsets_dialog_layout)
+                .setCancelable(false)
+                .setTitle(R.string.menu_bluetooth_headsets)
+                .setIcon(R.drawable.ic_bluetooth_connect)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showHeadsetDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            int checkedRadioButtonId = ((RadioGroup) ((AlertDialog) dialog).getWindow().findViewById(R.id.rgStreamType)).getCheckedRadioButtonId();
+                            if (R.id.rbStreamCommunication == checkedRadioButtonId) {
+                                SPH.setHeadsetStreamType(getApplicationContext(), 0);
+                            } else if (R.id.rbStreamCall == checkedRadioButtonId) {
+                                SPH.setHeadsetStreamType(getApplicationContext(), 1);
+                            } else if (R.id.rbStreamVoiceCall == checkedRadioButtonId) {
+                                SPH.setHeadsetStreamType(getApplicationContext(), 2);
+                            }
+                            checkedRadioButtonId = ((RadioGroup) ((AlertDialog) dialog).getWindow().findViewById(R.id.rgConnectionType)).getCheckedRadioButtonId();
+                            if (R.id.rbConnectionTypeA2DP == checkedRadioButtonId) {
+                                SPH.setHeadsetConnectionType(getApplicationContext(), 0);
+                            } else if (R.id.rbConnectionSCO == checkedRadioButtonId) {
+                                SPH.setHeadsetConnectionType(getApplicationContext(), 1);
+                            }
+                            checkedRadioButtonId = ((RadioGroup) ((AlertDialog) dialog).getWindow().findViewById(R.id.rgSystem)).getCheckedRadioButtonId();
+                            if (R.id.rbSystem1 == checkedRadioButtonId) {
+                                SPH.setHeadsetSystem(getApplicationContext(), 0);
+                            } else if (R.id.rbSystem2 == checkedRadioButtonId) {
+                                SPH.setHeadsetSystem(getApplicationContext(), 1);
+                            } else if (R.id.rbSystem3 == checkedRadioButtonId) {
+                                SPH.setHeadsetSystem(getApplicationContext(), 2);
+                            }
+                            SPH.setAutoConnectHeadset(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbAutoConnect)).isChecked());
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showHeadsetDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showHeadsetDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+
+        RadioGroup radioGroup = materialDialog.findViewById(R.id.rgSystem);
+        switch (SPH.getHeadsetSystem(getApplicationContext())) {
+            case 0:
+                radioGroup.check(R.id.rbSystem1);
+                break;
+            case 1:
+                radioGroup.check(R.id.rbSystem2);
+                break;
+            case 2:
+                radioGroup.check(R.id.rbSystem3);
+                break;
+        }
+        radioGroup = materialDialog.findViewById(R.id.rgStreamType);
+        switch (SPH.getHeadsetStreamType(getApplicationContext())) {
+            case 0:
+                radioGroup.check(R.id.rbStreamCommunication);
+                break;
+            case 1:
+                radioGroup.check(R.id.rbStreamCall);
+                break;
+            case 2:
+                radioGroup.check(R.id.rbStreamVoiceCall);
+                break;
+        }
+        radioGroup = materialDialog.findViewById(R.id.rgConnectionType);
+        switch (SPH.getHeadsetConnectionType(getApplicationContext())) {
+            case 0:
+                radioGroup.check(R.id.rbConnectionTypeA2DP);
+                break;
+            case 1:
+                radioGroup.check(R.id.rbConnectionSCO);
+                break;
+        }
+        ((CheckBox) materialDialog.findViewById(R.id.cbAutoConnect)).setChecked(SPH.isAutoConnectHeadset(getApplicationContext()));
+    }
+
     /**
      * Show the unknown command action selector
      */
@@ -303,43 +891,45 @@ public class FragmentSettingsHelper {
             @Override
             public void run() {
 
-                final String[] actions = FragmentSettingsHelper.this.getParent().getResources().getStringArray(R.array.array_unknown_action);
+                final String[] actions = getParent().getResources().getStringArray(R.array.array_unknown_action);
 
                 for (int i = 0; i < actions.length; i++) {
 
                     switch (i) {
 
                     case Unknown.UNKNOWN_STATE:
-                        break;
                     case Unknown.UNKNOWN_REPEAT:
-                        break;
+                         break;
                     case Unknown.UNKNOWN_GOOGLE_SEARCH:
-                        actions[i] = getParent().getString(R.string.menu_send_to) + " " + actions[i];
-                        break;
+                    case Unknown.UNKNOWN_ALEXA:
+                    case Unknown.UNKNOWN_MICROSOFT_CORTANA:
                     case Unknown.UNKNOWN_WOLFRAM_ALPHA:
-                        actions[i] = getParent().getString(R.string.menu_send_to) + " " + actions[i];
-                        break;
                     case Unknown.UNKNOWN_TASKER:
-                        actions[i] = getParent().getString(R.string.menu_send_to) + " " + actions[i];
+                            actions[i] = getParent().getString(R.string.menu_send_to) + " " + actions[i];
                         break;
-                }
+                    }
             }
 
                 final ArrayList<Integer> disabledIndicesList = new ArrayList<>();
-
-                if (!Installed.isPackageInstalled(FragmentSettingsHelper.this.getApplicationContext(),
+                if (!Installed.isPackageInstalled(getApplicationContext(),
+                        Installed.PACKAGE_MICROSOFT_CORTANA)) {
+                    disabledIndicesList.add(Unknown.UNKNOWN_MICROSOFT_CORTANA);
+                }
+                if (!Installed.isPackageInstalled(getApplicationContext(),
                         Installed.PACKAGE_WOLFRAM_ALPHA)) {
                     disabledIndicesList.add(Unknown.UNKNOWN_WOLFRAM_ALPHA);
                 }
-
-                if (!new TaskerHelper().isTaskerInstalled(FragmentSettingsHelper.this.getApplicationContext()).first) {
+                if (!new TaskerHelper().isTaskerInstalled(getApplicationContext()).first) {
                     disabledIndicesList.add(Unknown.UNKNOWN_TASKER);
                 }
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    disabledIndicesList.add(Unknown.UNKNOWN_ALEXA);
+                }
 
-                FragmentSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
+                getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        final int defaultIndex = SPH.getCommandUnknownAction(FragmentSettingsHelper.this.getApplicationContext());
+                        final int defaultIndex = SPH.getCommandUnknownAction(getApplicationContext());
                         int checkedItem = INVALID_POSITION;
                         final List<String> items = new ArrayList<>();
                         for (int i = 0, j = 0; i < actions.length; i++, j++) {
@@ -347,6 +937,9 @@ public class FragmentSettingsHelper {
                                 continue;
                             }
                             items.add(actions[i]);
+                            if (Unknown.UNKNOWN_ALEXA == i && !ai.saiy.android.amazon.TokenHelper.hasToken(getApplicationContext())) {
+                                continue;
+                            }
                             if (i == defaultIndex) {
                                 checkedItem = j;
                             }
@@ -354,7 +947,7 @@ public class FragmentSettingsHelper {
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                         .setCancelable(false)
                         .setTitle(R.string.content_unknown_command)
-                        .setIcon(R.drawable.ic_not_equal)
+                        .setIcon(R.drawable.ic_help_circle)
                         .setSingleChoiceItems(items.toArray(new String[0]), checkedItem, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -382,8 +975,21 @@ public class FragmentSettingsHelper {
                                                 MyLog.i(CLS_NAME, "showUnknownCommandSelector: onPositive: " + selectedIndex);
                                             }
 
-                                            SPH.setCommandUnknownAction(FragmentSettingsHelper.this.getApplicationContext(),
-                                                    (selectedIndex == INVALID_POSITION) ? Unknown.UNKNOWN_STATE : selectedIndex);
+                                            if (Unknown.UNKNOWN_ALEXA != selectedIndex || ai.saiy.android.amazon.TokenHelper.hasToken(getApplicationContext())) {
+                                                SPH.setCommandUnknownAction(getApplicationContext(),
+                                                        (selectedIndex == INVALID_POSITION) ? Unknown.UNKNOWN_STATE : selectedIndex);
+                                                SPH.setToastUnknown(getApplicationContext(), selectedIndex <= Unknown.UNKNOWN_REPEAT);
+                                                if (Unknown.UNKNOWN_ALEXA != selectedIndex) {
+                                                    SPH.setDefaultRecognition(getApplicationContext(), SaiyDefaults.VR.NATIVE);
+                                                }
+                                            } else {
+                                                getParentActivity().speak(R.string.amazon_auth_request, LocalRequest.ACTION_SPEAK_ONLY);
+                                                if (getParent().isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS))) {
+                                                    getParentActivity().doFragmentAddTransaction(FragmentApplications.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS), ActivityHome.ANIMATION_FADE, ActivityHome.INDEX_FRAGMENT_SETTINGS);
+                                                } else if (DEBUG) {
+                                                    MyLog.i(CLS_NAME, "onClick: INDEX_FRAGMENT_SUPPORTED_APPS being added");
+                                                }
+                                            }
                                         }
                                         dialog.dismiss();
                                     }
@@ -428,7 +1034,7 @@ public class FragmentSettingsHelper {
                 .setCancelable(false)
                 .setTitle(R.string.menu_volume_settings)
                 .setIcon(R.drawable.ic_pause_octagon_outline)
-                .setNegativeButton(R.string.text_default, new DialogInterface.OnClickListener() {
+                .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (dialog instanceof AlertDialog) {
@@ -437,7 +1043,6 @@ public class FragmentSettingsHelper {
                         }
                     }
                 })
-
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -454,8 +1059,7 @@ public class FragmentSettingsHelper {
                         dialog.dismiss();
                     }
                 })
-
-                .setNegativeButton(android.R.string.cancel,new DialogInterface.OnClickListener() {
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
@@ -464,7 +1068,6 @@ public class FragmentSettingsHelper {
                         dialog.dismiss();
                     }
                 })
-
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
@@ -581,6 +1184,267 @@ public class FragmentSettingsHelper {
             public void onStopTrackingTouch(final SeekBar seekBar) {
             }
         });
+    }
+
+    public void showNetworkSynthesisDialog() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                final String[] stringArray = getParent().getResources().getStringArray(R.array.array_google_synthesised_voice);
+                String[] networkSynthesis;
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // The last one not available
+                    networkSynthesis = new String[stringArray.length - 1];
+                    System.arraycopy(stringArray, 0, networkSynthesis, 0, stringArray.length - 1);
+                } else {
+                    networkSynthesis = stringArray;
+                }
+                final boolean[] checkedItems = new boolean[networkSynthesis.length];
+                if (SPH.getNetworkSynthesis(getApplicationContext())) {
+                    checkedItems[0] = true;
+                }
+                if (SPH.isNetworkSynthesisWifi(getApplicationContext())) {
+                    checkedItems[1] = true;
+                }
+                if (SPH.isNetworkSynthesis4g(getApplicationContext())) {
+                    checkedItems[2] = true;
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && SPH.isCacheSpeech(getApplicationContext())) {
+                    checkedItems[3] = true;
+                }
+                getParentActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_network_synthesis)
+                                .setMessage(R.string.synthesis_intro_text)
+                                .setIcon(R.drawable.ic_google)
+                                .setMultiChoiceItems(stringArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onSelection: " + which + ", " + isChecked);
+                                        }
+                                    }
+                                })
+                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onPositive");
+                                        }
+                                        if (dialog instanceof AlertDialog) {
+                                            final List<Integer> selectedIndices = new ArrayList<>();
+                                            for (int i = 0; i < checkedItems.length; ++i) {
+                                                if (checkedItems[i]) {
+                                                    selectedIndices.add(i);
+                                                }
+                                            }
+                                            final Integer[] selected = selectedIndices.toArray(new Integer[0]);
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onPositive: length: " + selected.length);
+                                                for (Integer num : selected) {
+                                                    MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onPositive: " + num);
+                                                }
+                                            }
+                                            SPH.setNetworkSynthesis(getApplicationContext(), ArrayUtils.contains(selected, 0));
+                                            SPH.setNetworkSynthesisWifi(getApplicationContext(), ArrayUtils.contains(selected, 1) || ArrayUtils.contains(selected, 2));
+                                            SPH.setNetworkSynthesis4g(getApplicationContext(), ArrayUtils.contains(selected, 2));
+                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                                SPH.setCacheSpeech(getApplicationContext(), ArrayUtils.contains(selected, 3));
+                                            }
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onNegative");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(final DialogInterface dialog) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onCancel");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+                        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+                        materialDialog.show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void showNoEnginesToast() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showNoEnginesToast");
+        }
+        showProgress(false);
+        toast(getString(R.string.diagnostics_install_tts), Toast.LENGTH_LONG);
+        Install.showInstallLink(getApplicationContext(), TTSDefaults.TTS_PKG_NAME_GOOGLE);
+    }
+
+    private void showGoogleDefaultDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showGoogleDefaultDialog");
+        }
+        showProgress(false);
+        getParentActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                        .setTitle(R.string.title_google_tts_engine)
+                        .setMessage(R.string.diagnostics_only_google_supported)
+                        .setIcon(R.drawable.ic_google)
+                        .setPositiveButton(R.string.title_settings, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showVoiceSelector: onPositive");
+                                }
+                                dialog.dismiss();
+                                SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.TTS);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showVoiceSelector: onNegative");
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                materialDialog.show();
+            }
+        });
+    }
+
+    private void showOnlyGoogleSupportedDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showOnlyGoogleSupportedDialog");
+        }
+        showProgress(false);
+        getParentActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                        .setTitle(R.string.title_google_tts_engine)
+                        .setMessage(R.string.diagnostics_install_google)
+                        .setIcon(R.drawable.ic_google)
+                        .setPositiveButton(R.string.title_install, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showOnlyGoogleSupportedDialog: onPositive");
+                                }
+                                dialog.dismiss();
+                                Install.showInstallLink(getApplicationContext(), TTSDefaults.TTS_PKG_NAME_GOOGLE);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showOnlyGoogleSupportedDialog: onNegative");
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .create();
+                materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                materialDialog.show();
+            }
+        });
+    }
+
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    private void getVoices() {
+        showProgress(true);
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+                List<ResolveInfo> queryIntentActivities = getParentActivity().getPackageManager().queryIntentActivities(intent, PackageManager.GET_META_DATA);
+                if (!ai.saiy.android.utils.UtilsList.notNaked(queryIntentActivities)) {
+                    showNoEnginesToast();
+                    return;
+                }
+                boolean haveGoogleTTS = false;
+                for (ResolveInfo resolveInfo: queryIntentActivities) {
+                    if (resolveInfo.activityInfo.applicationInfo.packageName.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
+                        haveGoogleTTS = true;
+                        break;
+                    }
+                }
+                if (!haveGoogleTTS) {
+                    showOnlyGoogleSupportedDialog();
+                    return;
+                }
+                defaultTTSPackage = getDefaultTTSPackage();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getVoices: defaultTTSPackage: " + defaultTTSPackage);
+                }
+                if (!ai.saiy.android.utils.UtilsString.notNaked(defaultTTSPackage)) {
+                    tts = new TextToSpeech(getApplicationContext(), initListener, TTSDefaults.TTS_PKG_NAME_GOOGLE);
+                } else if (!defaultTTSPackage.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
+                    showGoogleDefaultDialog();
+                } else {
+                    tts = new TextToSpeech(getApplicationContext(), initListener, TTSDefaults.TTS_PKG_NAME_GOOGLE);
+                }
+            }
+        });
+    }
+
+    private String getDefaultTTSPackage() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getDefaultTTSPackage");
+        }
+        return Settings.Secure.getString(getApplicationContext().getContentResolver(), Settings.Secure.TTS_DEFAULT_SYNTH);
+    }
+
+    private String reflectEngine() {
+        try {
+            Field declaredField = this.tts.getClass().getSuperclass().getDeclaredField("mCurrentEngine");
+            declaredField.setAccessible(true);
+            return (String) declaredField.get(this.tts);
+        } catch (IllegalAccessException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "IllegalAccessException");
+                e.printStackTrace();
+            }
+            return null;
+        } catch (NoSuchFieldException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "NoSuchFieldException");
+                e.printStackTrace();
+            }
+            return null;
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    private void shutdownTTS() {
+        showProgress(false);
+        if (this.tts != null) {
+            this.tts.shutdown();
+            this.tts = null;
+        }
     }
 
     /**

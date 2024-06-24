@@ -431,8 +431,8 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
                         MyLog.i(CLS_NAME, "doAudioCache: " + this.audioCacheFile.getAbsolutePath());
                     }
                     HashMap<String, String> hashMap = new HashMap<>();
-                    hashMap.put("utteranceId", "alexa_utt_id");
-                    hashMap.put("networkTts", String.valueOf(false));
+                    hashMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "alexa_utt_id");
+                    hashMap.put(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS, String.valueOf(false));
                     this.tts.setLanguage(Locale.ENGLISH);
                     this.responseTime = System.nanoTime();
                     this.tts.synthesizeToFile(this.recognitionResult, hashMap, this.audioCacheFile.getPath());

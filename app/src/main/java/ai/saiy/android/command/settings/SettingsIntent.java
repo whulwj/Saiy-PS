@@ -183,7 +183,7 @@ public class SettingsIntent {
         }
         Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        ArrayList arrayList = new ArrayList();
+        ArrayList<ComponentName> arrayList = new ArrayList<>();
         arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, IntentConstants.COMPONENT_VOICE_SEARCH_PREFERENCES_VELVET));
         arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, IntentConstants.COMPONENT_VOICE_SEARCH_PREFERENCES));
         arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences"));

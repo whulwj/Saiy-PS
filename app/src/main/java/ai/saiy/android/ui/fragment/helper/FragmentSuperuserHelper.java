@@ -344,7 +344,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 }
 
                                 final List<Integer> selectedIndices = new ArrayList<>();
-                                for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                for (int i = 0; i < checkedItems.length; ++i) {
                                     if (checkedItems[i]) {
                                         selectedIndices.add(i);
                                     }

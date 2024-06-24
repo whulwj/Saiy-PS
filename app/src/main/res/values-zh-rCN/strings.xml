@@ -114,10 +114,8 @@
     <string name="menu_prevent_sleep" translatable="true">"防止设备休眠"</string>
     <string name="menu_lock_security" translatable="true">"锁定时确保信息安全"</string>
     <string name="menu_algorithms" translatable="true">算法</string>
-    <string name="menu_language" translatable="true">语言</string>
     <string name="menu_synthesised_voice" translatable="true">谷歌合成声音</string>
     <string name="menu_user_guide" translatable="true">用户指南</string>
-    <string name="menu_default_apps" translatable="true">默认应用程序</string>
     <string name="menu_toast" translatable="true">Toast（信息提示）未知命令</string>
     <string name="menu_offline" translatable="true">使用离线识别</string>
     <string name="menu_hotword_detection" translatable="true">热词检测</string>

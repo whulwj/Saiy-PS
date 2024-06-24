@@ -6,7 +6,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -20,14 +19,12 @@ public class UICommandsAdapter extends RecyclerView.Adapter<UICommandsAdapter.Vi
     private final View.OnClickListener onClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final CardView cardView;
         private final TextView tvTitle;
         private final TextView tvContent;
         private int boundPosition = RecyclerView.NO_POSITION;
 
         private ViewHolder(View view) {
             super(view);
-            this.cardView = view.findViewById(R.id.cardView);
             this.tvTitle = view.findViewById(R.id.tvCommandTitle);
             this.tvContent = view.findViewById(R.id.tvCommandContent);
         }
@@ -56,7 +53,7 @@ public class UICommandsAdapter extends RecyclerView.Adapter<UICommandsAdapter.Vi
         viewHolder.tvTitle.setText(this.mObjects.get(position).getTitle());
         viewHolder.tvContent.setText(this.mObjects.get(position).getContent());
         viewHolder.setBoundPosition(position);
-        viewHolder.cardView.setOnClickListener(this.onClickListener);
+        viewHolder.itemView.setOnClickListener(this.onClickListener);
     }
 
     @Override

@@ -313,12 +313,12 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
         if (this.DEBUG) {
             MyLog.i(this.CLS_NAME, "onCreateView");
         }
-        View inflate = layoutInflater.inflate(R.layout.layout_common_fragment_parent, viewGroup, false);
-        this.mRecyclerView = this.helper.getRecyclerView(inflate);
+        View rootView = layoutInflater.inflate(R.layout.layout_common_fragment_parent, viewGroup, false);
+        this.mRecyclerView = this.helper.getRecyclerView(rootView);
         this.mObjects = new ArrayList<>();
         this.mAdapter = this.helper.getAdapter(this.mObjects);
         this.mRecyclerView.setAdapter(this.mAdapter);
-        return inflate;
+        return rootView;
     }
 
     @Override

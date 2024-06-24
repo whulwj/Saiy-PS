@@ -98,6 +98,7 @@
     <string name="save" translatable="true">save</string>
     <string name="close" translatable="true">close</string>
     <string name="engine" translatable="true">engine</string>
+    <string name="engines">engines</string>
     <string name="ask_repeat" translatable="true">Ask you to repeat</string>
     <string name="menu_tts">Text to Speech</string>
     <string name="menu_web_search">Perform a web search</string>
@@ -115,8 +116,8 @@
     <string name="menu_lets_do_it" translatable="true">"Let's do it!"</string>
     <string name="menu_excited" translatable="true">"I'm so excited!!"</string>
     <string name="menu_select" translatable="true">"Select"</string>
-    <string name="menu_supported_languages" translatable="true">Supported Languages</string>
     <string name="menu_unknown_commands" translatable="true">Unknown Commands</string>
+    <string name="menu_bluetooth_headsets">Bluetooth Headsets</string>
     <string name="custom_intro_text" translatable="true">How should I address you?</string>
     <string name="custom_intro_hint" translatable="true">I\'m listening your greatness</string>
     <string name="custom_intro_checkbox_title" translatable="true">Use randomly</string>
@@ -158,6 +159,7 @@
     <string name="menu_tap_legends" translatable="true">tap for legends</string>
     <string name="menu_tap_send" translatable="true">tap to send</string>
     <string name="menu_tap_help" translatable="true">tap for help</string>
+    <string name="menu_tap_create">tap to create</string>
 
     <string name="title_home" translatable="true">Home</string>
     <string name="title_settings" translatable="true">Settings</string>
@@ -211,11 +213,13 @@
     <string name="menu_okay_google">Okay Google</string>
     <string name="menu_lock_security" translatable="true">"Secure info when locked"</string>
     <string name="menu_algorithms" translatable="true">Algorithms</string>
-    <string name="menu_language" translatable="true">Language</string>
+    <string name="menu_supported_languages" translatable="true">Supported Languages</string>
+    <string name="menu_tts_voice">Text to Speech Voice</string>
     <string name="menu_synthesised_voice" translatable="true">Google Synthesised Voice</string>
+    <string name="menu_network_synthesis">Network Synthesis</string>
+    <string name="synthesis_intro_text">Configure network synthesis</string>
     <string name="menu_user_guide" translatable="true">User Guide</string>
     <string name="lp_user_guide">A user guide, that will teach you in more detail how elements of the application work.</string>
-    <string name="menu_default_apps" translatable="true">Default Applications</string>
     <string name="menu_toast" translatable="true">Toast Unknown Commands</string>
     <string name="menu_offline" translatable="true">Use Offline Recognition</string>
     <string name="menu_hotword_detection" translatable="true">Hotword Detection</string>
@@ -257,6 +261,10 @@
     <string name="menu_custom_intro" translatable="true">Custom Intro</string>
     <string name="menu_privacy_policy" translatable="true">Privacy Policy</string>
     <string name="menu_volume_settings" translatable="true">Volume Settings</string>
+    <string name="menu_alexa_shortcut">Alexa Shortcut</string>
+    <string name="menu_launcher_shortcut">Launcher Shortcut</string>
+    <string name="launcher_shortcut_description">Click to activate Saiy</string>
+    <string name="menu_shortcut_failed">Failed to create shortcut!?</string>
     <string name="hint_bugs_command" translatable="true">Enter a command to run…</string>
     <string name="menu_recogniser_busy_fix" translatable="true">Recognizer Busy Fix</string>
     <string name="menu_okay_google_fix" translatable="true">Okay Google Fix</string>
@@ -341,7 +349,9 @@
     <string name="permission_audio_snack">If I can\'t record audio, I won\'t be able to hear you!</string>
     <string name="permission_system_alert">So I can float the command window anywhere on the device, including over the top of other applications, I need the permission for system overlays.</string>
     <string name="permission_system_alert_snack">To \'float\' the command list anywhere on the device, I require this permission.</string>
+    <string name="menu_command_list">Command List</string>
     <string name="title_commands">Commands</string>
+    <string name="lp_commands">A list of inbuilt structured commands that I obey</string>
     <string name="lp_tutorial">A voice tutorial that will guide you through the basics of the application.</string>
     <string name="tutorial_1">Welcome to the first release of me. Say. To stop this tutorial, you can tap the notification in the status bar at any time. Otherwise, sit back, relax and let\'s take a look around.</string>
     <string name="tutorial_2">First place we\'ll go is the command list where the in-built structured commands are detailed. I\'m going to give you thirty seconds to memorise them all, and then we\'ll start the test. Go.</string>
@@ -711,6 +721,85 @@
     <string name="command_wifi_content_1">• Toggle/enable/disable WiFi</string>
     <string name="an_unknown_application" translatable="true">"an unknown application"</string>
 
+    <string name="menu_headset_woes">Headset Woes</string>
+    <string name="content_headset_overview">My developer has aged considerably, whilst attempting to get headsets to work correctly. The behaviour of each varies exponentially depending on the following:\n\n• Headset manufacturer\n• Headset protocol\n• Android device manufacturer\n• Android version\n• Text to Speech engine\n\nThe next dialog will provide you with a vast number of options, that can independently be changed in order to cover as manually eventualities as possible.\n\nFinding the right combination that works best for you, may take a little trial and error. Please do attempt each combination a few times, as often there can be a delay applying the chosen configuration. You\'ll need to press \'Save\' after each change you make.\n\nIf weird and wonderful things start happening, disconnecting and reconnecting your headset should resolve the newly created problem!\n\nWhilst testing different configurations, you will notice the following behavioural changes, for better or for worse…\n\n• TTS audio output\n• Audio output quality\n• Audio input quality\n• Audio prompts (beeps)\n\nHopefully you will find the configuration combination that accomplishes all! If you don\'t, please feel free to send my developer an email containing your headset details. They are his favourite kind!\n\nNote: Google settled for the low quality audio option for their Assistant…</string>
+    <string name="menu_grey_hairs">Grey Hairs</string>
+    <string name="menu_auto_connect">Auto connect</string>
+    <string name="menu_connection_type">Connection type</string>
+    <string name="menu_a2dp">A2DP</string>
+    <string name="menu_sco">SCO</string>
+    <string name="menu_stream_type">Stream type</string>
+    <string name="menu_communication">Communication</string>
+    <string name="menu_call">Call</string>
+    <string name="menu_voice_call">Voice call</string>
+    <string name="menu_system">System</string>
+    <string name="menu_system_1">System 1</string>
+    <string name="menu_system_2">System 2</string>
+    <string name="menu_system_3">System 3</string>
+    <string name="title_diagnostics">Diagnostics</string>
+    <string name="data_root_">data root: </string>
+    <string name="diagnostics_analysing">Analysing results…</string>
+    <string name="diagnostics_awaiting_locales">Awaiting supported locales…</string>
+    <string name="diagnostics_checking_tts">Checking text to speech providers</string>
+    <string name="diagnostics_checking_vr">Checking voices recognition providers</string>
+    <string name="diagnostics_default_provider_">Default provider:</string>
+    <string name="diagnostics_has_supported_language">Has a supported language</string>
+    <string name="diagnostics_init_failed">Initialisation failed</string>
+    <string name="diagnostics_init_prepare">Preparing to initialise</string>
+    <string name="diagnostics_init_success">Initialisation successful</string>
+    <string name="diagnostics_initialising">Initialising</string>
+    <string name="diagnostics_install_google">Currently, only the Google Text-to-Speech engine supports this feature correctly.\n\nYou\'ll need to install the engine from the Play Store to use this feature.</string>
+    <string name="diagnostics_install_google_now">You need to install Google Now from the Play Store</string>
+    <string name="diagnostics_install_tts">You need to install a text to speech engine from the Play Store. It\'s recommended to install Google Text to Speech</string>
+    <string name="diagnostics_install_tts_google">It\'s recommended to install the Google Text to Speech from the Play Store</string>
+    <string name="diagnostics_no_changes">No need to make any changes</string>
+    <string name="diagnostics_no_tts_sl">Please install a supported Text-to-Speech language</string>
+    <string name="diagnostics_no_vr_languages_bug">Google Voice Recognition did not return any supported languages due to a known bug</string>
+    <string name="diagnostics_only_google_supported">Out of your installed Text-to-Speech engines, only Google currently supports this feature correctly.\n\nPlease switch your default engine to Google to use this feature.</string>
+    <string name="diagnostics_passed_test">Passed the speech test</string>
+    <string name="diagnostics_perfect">Your device is configured perfectly!</string>
+    <string name="diagnostics_set_tts_google">It\'s recommended to set your default text to speech engine to Google Text to Speech</string>
+    <string name="diagnostics_set_vr_google">You need to set your Voice Recognition Provider to Google in the Android Settings</string>
+    <string name="diagnostics_speech_complete">Speech complete</string>
+    <string name="diagnostics_speech_error">Speech error</string>
+    <string name="diagnostics_speech_start">Speech started</string>
+    <string name="diagnostics_supported_language_1">Your default voice engine is reporting that it does not have an installed supported language. Please see if you are able to install one from the Android Text to Speech Settings.</string>
+    <string name="diagnostics_supported_language_2">Alternatively, switch your default voice engine to Google Text to Speech, which fully supports all features.</string>
+    <string name="diagnostics_supported_language_3">Alternatively, install the recommended Google Text to Speech Engine from the Play Store, which fully supports all features.</string>
+    <string name="diagnostics_supported_language_4">Your default voice engine failed the speech test. You can try uninstalling and reinstalling the engine and any associated language packs you have installed.</string>
+    <string name="diagnostics_supported_language_5">Google Text to Speech engine failed the speech test. This is unfortunate, as it is usually the most reliable amongst its alternatives. However, it can take a long time to initialise on some devices, under low memory conditions, so a fresh reboot of your device may solve the issue in the short term. Alternatively, try uninstalling and reinstalling the engine and any associated language packs you have installed. If it continues to fail, you may need to switch to a lower quality, unsupported voice engine, such a Pico TTS</string>
+    <string name="diagnostics_switch_voices">Is able to switch voices</string>
+    <string name="diagnostics_testing_speech">Testing speech with a 15 second timeout</string>
+    <string name="diagnostics_tts_installed">Text to Speech engine installed</string>
+    <string name="diagnostics_voice_dialog_content_suggest">Many Text to Speech Engines don\'t support switching between genders and languages, or don\'t support it correctly…\n\nI would recommend running the diagnostics check before selecting a voice, to check if your current default voice engine will behave when attempting this!</string>
+    <string name="diagnostics_voice_dialog_content_suggest_diagnostics">\n\nRegardless, it\'s a good idea to run the diagnostics to check everything else is working correctly with your current default voice engine.</string>
+    <string name="diagnostics_voice_dialog_content_suggest_settings">\n\nWhy not check in your Android About Settings to see if an update is available?</string>
+    <string name="diagnostics_voice_dialog_content_unsupported">Your device doesn\'t support this feature as it was only introduced in Android 5.0 Lollipop ☹</string>
+    <string name="diagnostics_vr_installed">Voice recognition provider installed</string>
+    <string name="diagnostics_wait_1">Can take up to 60 seconds :(</string>
+    <string name="diagnostics_wait_2">Please be patient…</string>
+    <string name="diagnostics_wait_3">I\'m bored too…</string>
+    <string name="diagnostics_wait_4">ZZZZzzzzzzzz…!</string>
+    <string name="diagnostics_wait_5">OMG!</string>
+    <string name="diagnostics_wait_6">I AM SO BORED!!!!</string>
+    <string name="diagnostics_wait_7">Might have to give up…</string>
+    <string name="menu_errors_detected">Errors Detected</string>
+    <string name="menu_voice_recognition_providers">Voice Recognition Providers</string>
+    <string name="menu_tts_providers">Text to Speech Providers</string>
+    <string name="menu_tests_passed">Tests Passed</string>
+    <string name="title_google_tts_engine">Google TTS engine</string>
+    <string name="title_doh_">Doh!</string>
+    <string name="title_voice">Voice</string>
+    <string name="lp_supported_languages">In the current release, only English is supported. But don\'t fear, translation to all languages supported by Google Voice Recognition is underway! Head to the development section if you\'d like to assist translating me to your native language.</string>
+    <string name="lp_tts_voice">If your device and text to speech engine supports it, you can select the voice I will speak in here.</string>
+    <string name="lp_unknown_commands">Rather than me simply announcing when I don\'t understand your voice input, you can select alternative options here. You could select passing unknown commands to the Google Assistant. That way, you can deliberately ask me something I won\'t understand, and Google will take over. Click to check out the other options.</string>
+    <string name="lp_headset">Click here for more headset options, than there are atoms in the Universe.</string>
+    <string name="lp_volume_settings">If you\'d like me to speak at a fixed level above or below your media stream, then you can apply this setting here. Unfortunately it\'s not working correctly on some Android versions, but my developer is on the case of that. There are two other options. One to show a toast when I believe my text to speech output might be set too low, and another to set which volume streams I check. On some Android devices, the global device volume profile overrides your media stream. On others, it doesn\'t. If I seem to be reporting incorrectly that your volume is too low, try un-ticking the, assume global volume, option.</string>
+    <string name="lp_alexa_shortcut">If you\'d like to show or remove the shortcut button on the permanent notification to directly speak to Alexa, you can do so by tapping here.</string>
+    <string name="lp_launcher_shortcut">If you\'d like to place a shortcut on your launcher that activates me, you can do so by tapping here.</string>
+    <string name="lp_network_synthesis">If your default voice engine is Google, you can decide whether to use a higher quality network synthesised voice. When your device network connection is slow, this may cause considerable lag when waiting for me to speak. There\'s an option you can select to only synthesise when you\'re connected to WiFi.</string>
+    <string name="lp_temperature_units">You can select your default temperature units to apply here. They\'ll be used across the application whenever applicable.</string>
+
     <string name="acs_ui_main_switch">An on off icon</string>
     <string name="menu_logged_out">Logged out</string>
     <string name="menu_login_amazon">Login with Amazon</string>
@@ -840,6 +929,7 @@
     <string name="app_speech_notification_policy">So I am able to reduce your ringtone volume, when you receive an incoming call, I require the, do not disturb, permission here.</string>
     <string name="lp_announce_caller">If you\'d like me to announce incoming calls and give you the option to answer or decline them, then this is the option for you. Do be aware, some Android versions don\'t play well with this function, especially when you request I answer the call on loudspeaker. I\'m sure my developer will solve this problem soon.</string>
     <string name="amazon_notification_auth_request">You need to manually authorise my access to your Amazon account to use this feature. You\'re not required to own any Alexa hardware, as I can connect remotely to the default Alexa service associated with your account. Otherwise, if you\'d like to remove the button from the notification, you can do so in the settings.</string>
+    <string name="amazon_auth_request">You need to manually authorise my access to your Amazon account to use this feature.</string>
     <string name="an_unknown_caller">an unknown caller</string>
     <string name="incoming_call_from">Incoming call from</string>
     <string name="would_you_like_to_answer_it">would you like to answer it?</string>
@@ -857,6 +947,7 @@
     <string name="error_audio" translatable="true">"There was an audio recording error"</string>
     <string name="error_offline">Do you need to install offline language files?</string>
     <string name="error_recogniser_busy">You may be suffering from a bug associated with Google\'s voice recognition service, where their assistant is not playing nicely and won\'t share the microphone with me. I hope they\'ll fix this issue soon, but in the mean time, you\'ll need to force stop the application to get things working again.</string>
+    <string name="content_android_bug">Not working correctly on many Android versions!</string>
 
     <!-- TTS - Specific error Strings -->
     <string name="error_tts_initialisation" translatable="true">"There is a problem with your Text to Speech engine."</string>

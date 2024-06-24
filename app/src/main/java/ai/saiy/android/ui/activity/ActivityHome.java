@@ -107,6 +107,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     public static final int INDEX_FRAGMENT_DEVELOPMENT = 7;
     public static final int INDEX_FRAGMENT_SUPPORTED_APPS = 8;
     public static final int INDEX_FRAGMENT_COMMANDS = 9;
+    public static final int INDEX_FRAGMENT_DIAGNOSTICS = 11;
 
     public static final int MENU_INDEX_HOME = 0;
     public static final int MENU_INDEX_SETTINGS = 1;
@@ -715,6 +716,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     case INDEX_FRAGMENT_COMMANDS:
                         proceed = true;
                         break;
+                    case INDEX_FRAGMENT_DIAGNOSTICS:
+                        proceed = true;
+                        break;
                     default:
                         proceed = false;
                         break;
@@ -1234,6 +1238,11 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 case INDEX_FRAGMENT_COMMANDS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onBackStackChanged: INDEX_FRAGMENT_COMMANDS");
+                    }
+                    break;
+                case INDEX_FRAGMENT_DIAGNOSTICS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onBackStackChanged: INDEX_FRAGMENT_DIAGNOSTICS");
                     }
                     break;
                 default:

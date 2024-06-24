@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,14 +83,14 @@ public class FragmentSuperUser extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         this.mContext = context.getApplicationContext();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(final Activity activity) {
+    public void onAttach(@NonNull final Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.mContext = activity.getApplicationContext();
@@ -112,7 +113,7 @@ public class FragmentSuperUser extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }

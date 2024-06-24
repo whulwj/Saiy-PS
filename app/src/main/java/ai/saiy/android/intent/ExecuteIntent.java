@@ -32,6 +32,9 @@ import android.speech.RecognizerIntent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.pm.ShortcutInfoCompat;
+import androidx.core.content.pm.ShortcutManagerCompat;
+import androidx.core.graphics.drawable.IconCompat;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,7 @@ import ai.saiy.android.api.request.SaiyRequest;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.device.DeviceInfo;
+import ai.saiy.android.ui.activity.ActivityLauncherShortcut;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsBundle;
@@ -736,5 +740,16 @@ public class ExecuteIntent {
         }
 
         return voiceSearchSettings(ctx);
+    }
+
+    public static boolean launcherShortcut(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "launcherShortcut");
+        }
+        Intent intent = new Intent(context, ActivityLauncherShortcut.class);
+        intent.setAction(Intent.ACTION_MAIN);
+        intent.setPackage(context.getPackageName());
+        ShortcutManagerCompat.requestPinShortcut(context, new ShortcutInfoCompat.Builder(context, "start_recognition_shortcut").setShortLabel(context.getString(R.string.app_name)).setLongLabel(context.getString(R.string.launcher_shortcut_description)).setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_record_voice_over)).setIntent(intent).build(), null);
+        return true;
     }
 }

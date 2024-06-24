@@ -204,6 +204,15 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 helper.showUserGuideDialog();
                 break;
             case 2:
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_COMMANDS))) {
+                    getParentActivity().doFragmentReplaceTransaction(FragmentCommands.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_COMMANDS), ActivityHome.ANIMATION_FADE);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_COMMANDS being added");
+                    }
+                }
+                break;
+            case 3:
                 if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT))) {
                     getParentActivity().doFragmentReplaceTransaction(FragmentDevelopment.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT), ActivityHome.ANIMATION_FADE);
                 } else {
@@ -212,21 +221,41 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                     }
                 }
                 break;
-            case 3:
-                getParentActivity().doFragmentReplaceTransaction(FragmentSettings.newInstance(null),
-                        String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS), ActivityHome.ANIMATION_FADE);
-                break;
             case 4:
-                getParentActivity().doFragmentReplaceTransaction(FragmentCustomisation.newInstance(null),
-                        String.valueOf(ActivityHome.INDEX_FRAGMENT_CUSTOMISATION), ActivityHome.ANIMATION_FADE);
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS))) {
+                    getParentActivity().doFragmentReplaceTransaction(FragmentSettings.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS), ActivityHome.ANIMATION_FADE);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_SETTINGS being added");
+                    }
+                }
                 break;
             case 5:
-                getParentActivity().doFragmentReplaceTransaction(FragmentAdvancedSettings.newInstance(null),
-                        String.valueOf(ActivityHome.INDEX_FRAGMENT_ADVANCED_SETTINGS), ActivityHome.ANIMATION_FADE);
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_CUSTOMISATION))) {
+                    getParentActivity().doFragmentReplaceTransaction(FragmentCustomisation.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_CUSTOMISATION), ActivityHome.ANIMATION_FADE);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_CUSTOMISATION being added");
+                    }
+                }
                 break;
             case 6:
-                getParentActivity().doFragmentReplaceTransaction(FragmentBugs.newInstance(null),
-                        String.valueOf(ActivityHome.INDEX_FRAGMENT_BUGS), ActivityHome.ANIMATION_FADE);
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_ADVANCED_SETTINGS))) {
+                    getParentActivity().doFragmentReplaceTransaction(FragmentAdvancedSettings.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_ADVANCED_SETTINGS), ActivityHome.ANIMATION_FADE);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_ADVANCED_SETTINGS being added");
+                    }
+                }
+                break;
+            case 7:
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_BUGS))) {
+                    getParentActivity().doFragmentReplaceTransaction(FragmentBugs.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_BUGS), ActivityHome.ANIMATION_FADE);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_BUGS being added");
+                    }
+                }
                 break;
             default:
                 break;
@@ -257,18 +286,21 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 getParentActivity().speak(R.string.lp_user_guide, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 2:
-                getParentActivity().speak(R.string.lp_development, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_commands, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 3:
-                getParentActivity().speak(R.string.lp_settings, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_development, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 4:
-                getParentActivity().speak(R.string.lp_customisation, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_settings, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 5:
-                getParentActivity().speak(R.string.lp_advanced, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_customisation, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 6:
+                getParentActivity().speak(R.string.lp_advanced, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 7:
                 getParentActivity().speak(R.string.lp_bugs, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             default:
