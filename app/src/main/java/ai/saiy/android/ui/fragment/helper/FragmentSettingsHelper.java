@@ -79,6 +79,7 @@ import ai.saiy.android.ui.fragment.FragmentApplications;
 import ai.saiy.android.ui.fragment.FragmentDiagnostics;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
+import ai.saiy.android.utils.BluetoothConstants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsParcelable;
@@ -799,25 +800,25 @@ public class FragmentSettingsHelper {
                         if (dialog instanceof AlertDialog) {
                             int checkedRadioButtonId = ((RadioGroup) ((AlertDialog) dialog).getWindow().findViewById(R.id.rgStreamType)).getCheckedRadioButtonId();
                             if (R.id.rbStreamCommunication == checkedRadioButtonId) {
-                                SPH.setHeadsetStreamType(getApplicationContext(), 0);
+                                SPH.setHeadsetStreamType(getApplicationContext(), BluetoothConstants.STREAM_COMMUNICATION);
                             } else if (R.id.rbStreamCall == checkedRadioButtonId) {
-                                SPH.setHeadsetStreamType(getApplicationContext(), 1);
+                                SPH.setHeadsetStreamType(getApplicationContext(), BluetoothConstants.STREAM_CALL);
                             } else if (R.id.rbStreamVoiceCall == checkedRadioButtonId) {
-                                SPH.setHeadsetStreamType(getApplicationContext(), 2);
+                                SPH.setHeadsetStreamType(getApplicationContext(), BluetoothConstants.STREAM_VOICE_CALL);
                             }
                             checkedRadioButtonId = ((RadioGroup) ((AlertDialog) dialog).getWindow().findViewById(R.id.rgConnectionType)).getCheckedRadioButtonId();
                             if (R.id.rbConnectionTypeA2DP == checkedRadioButtonId) {
-                                SPH.setHeadsetConnectionType(getApplicationContext(), 0);
+                                SPH.setHeadsetConnectionType(getApplicationContext(), BluetoothConstants.CONNECTION_A2DP);
                             } else if (R.id.rbConnectionSCO == checkedRadioButtonId) {
-                                SPH.setHeadsetConnectionType(getApplicationContext(), 1);
+                                SPH.setHeadsetConnectionType(getApplicationContext(), BluetoothConstants.CONNECTION_SCO);
                             }
                             checkedRadioButtonId = ((RadioGroup) ((AlertDialog) dialog).getWindow().findViewById(R.id.rgSystem)).getCheckedRadioButtonId();
                             if (R.id.rbSystem1 == checkedRadioButtonId) {
-                                SPH.setHeadsetSystem(getApplicationContext(), 0);
+                                SPH.setHeadsetSystem(getApplicationContext(), BluetoothConstants.SYSTEM_ONE);
                             } else if (R.id.rbSystem2 == checkedRadioButtonId) {
-                                SPH.setHeadsetSystem(getApplicationContext(), 1);
+                                SPH.setHeadsetSystem(getApplicationContext(), BluetoothConstants.SYSTEM_TWO);
                             } else if (R.id.rbSystem3 == checkedRadioButtonId) {
-                                SPH.setHeadsetSystem(getApplicationContext(), 2);
+                                SPH.setHeadsetSystem(getApplicationContext(), BluetoothConstants.SYSTEM_THREE);
                             }
                             SPH.setAutoConnectHeadset(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbAutoConnect)).isChecked());
                         }
@@ -847,34 +848,34 @@ public class FragmentSettingsHelper {
 
         RadioGroup radioGroup = materialDialog.findViewById(R.id.rgSystem);
         switch (SPH.getHeadsetSystem(getApplicationContext())) {
-            case 0:
+            case BluetoothConstants.SYSTEM_ONE:
                 radioGroup.check(R.id.rbSystem1);
                 break;
-            case 1:
+            case BluetoothConstants.SYSTEM_TWO:
                 radioGroup.check(R.id.rbSystem2);
                 break;
-            case 2:
+            case BluetoothConstants.SYSTEM_THREE:
                 radioGroup.check(R.id.rbSystem3);
                 break;
         }
         radioGroup = materialDialog.findViewById(R.id.rgStreamType);
         switch (SPH.getHeadsetStreamType(getApplicationContext())) {
-            case 0:
+            case BluetoothConstants.STREAM_COMMUNICATION:
                 radioGroup.check(R.id.rbStreamCommunication);
                 break;
-            case 1:
+            case BluetoothConstants.STREAM_CALL:
                 radioGroup.check(R.id.rbStreamCall);
                 break;
-            case 2:
+            case BluetoothConstants.STREAM_VOICE_CALL:
                 radioGroup.check(R.id.rbStreamVoiceCall);
                 break;
         }
         radioGroup = materialDialog.findViewById(R.id.rgConnectionType);
         switch (SPH.getHeadsetConnectionType(getApplicationContext())) {
-            case 0:
+            case BluetoothConstants.CONNECTION_A2DP:
                 radioGroup.check(R.id.rbConnectionTypeA2DP);
                 break;
-            case 1:
+            case BluetoothConstants.CONNECTION_SCO:
                 radioGroup.check(R.id.rbConnectionSCO);
                 break;
         }
@@ -1033,13 +1034,16 @@ public class FragmentSettingsHelper {
                 .setView(R.layout.tts_volume_dialog_layout)
                 .setCancelable(false)
                 .setTitle(R.string.menu_volume_settings)
-                .setIcon(R.drawable.ic_pause_octagon_outline)
+                .setIcon(R.drawable.ic_volume_high)
                 .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (dialog instanceof AlertDialog) {
                             ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.volumeSeekBar))
                                     .setProgress(4);
+                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbSystemManagedVolume)).setChecked(true);
+                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbGlobalVolume)).setChecked(true);
+                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbToastVolume)).setChecked(true);
                         }
                     }
                 })
@@ -1055,6 +1059,9 @@ public class FragmentSettingsHelper {
                             }
 
                             SPH.setTTSVolume(getApplicationContext(), volume);
+                            SPH.setAssumeGlobalVolume(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbGlobalVolume)).isChecked());
+                            SPH.setToastVolumeWarnings(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbToastVolume)).isChecked());
+                            SPH.setSystemManagedVolume(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbSystemManagedVolume)).isChecked());
                         }
                         dialog.dismiss();
                     }
@@ -1081,8 +1088,8 @@ public class FragmentSettingsHelper {
         materialDialog.show();
 
         final int userVolume = SPH.getTTSVolume(getApplicationContext());
-        final TextView seekText = (TextView) materialDialog.findViewById(R.id.volumeSeekBarText);
-        final SeekBar seekbar = (SeekBar) materialDialog.findViewById(R.id.volumeSeekBar);
+        final TextView seekText = materialDialog.findViewById(R.id.volumeSeekBarText);
+        final SeekBar seekbar = materialDialog.findViewById(R.id.volumeSeekBar);
 
         switch (userVolume) {
             case -40:
@@ -1184,6 +1191,9 @@ public class FragmentSettingsHelper {
             public void onStopTrackingTouch(final SeekBar seekBar) {
             }
         });
+        ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbGlobalVolume)).setChecked(SPH.getAssumeGlobalVolume(getApplicationContext()));
+        ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbToastVolume)).setChecked(SPH.getToastVolumeWarnings(getApplicationContext()));
+        ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbSystemManagedVolume)).setChecked(SPH.getSystemManagedVolume(getApplicationContext()));
     }
 
     public void showNetworkSynthesisDialog() {

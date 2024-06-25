@@ -79,6 +79,9 @@ public class SPH {
     private static final String VR_LOCALE = "vr_locale";
     private static final String TTS_LOCALE = "tts_locale";
     private static final String TTS_VOLUME = "tts_volume";
+    private static final String ASSUME_GLOBAL_VOLUME = "assume_global_volume";
+    private static final String TOAST_VOLUME_WARNINGS = "toast_volume_warnings";
+    private static final String SYSTEM_MANAGED_VOLUME = "system_managed_volume";
     private static final String CUSTOM_INTRO = "custom_intro";
     private static final String CUSTOM_INTRO_RANDOM = "custom_intro_random";
     private static final String DEFAULT_TTS_VOICE = "default_tts_voice";
@@ -318,6 +321,36 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(TTS_VOLUME, level);
+        edit.apply();
+    }
+
+    public static boolean getSystemManagedVolume(Context context) {
+        return getPref(context).getBoolean(SYSTEM_MANAGED_VOLUME, true);
+    }
+
+    public static void setSystemManagedVolume(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(SYSTEM_MANAGED_VOLUME, condition);
+        edit.apply();
+    }
+
+    public static boolean getAssumeGlobalVolume(Context context) {
+        return getPref(context).getBoolean(ASSUME_GLOBAL_VOLUME, true);
+    }
+
+    public static void setAssumeGlobalVolume(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ASSUME_GLOBAL_VOLUME, condition);
+        edit.apply();
+    }
+
+    public static boolean getToastVolumeWarnings(Context context) {
+        return getPref(context).getBoolean(TOAST_VOLUME_WARNINGS, true);
+    }
+
+    public static void setToastVolumeWarnings(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(TOAST_VOLUME_WARNINGS, condition);
         edit.apply();
     }
 
@@ -1545,31 +1578,31 @@ public class SPH {
         edit.apply();
     }
 
-    public static int getHeadsetSystem(Context context) {
-        return getPref(context).getInt(HEADSET_SYSTEM, 0);
+    public static @BluetoothConstants.HeadsetSystem int getHeadsetSystem(Context context) {
+        return getPref(context).getInt(HEADSET_SYSTEM, BluetoothConstants.SYSTEM_ONE);
     }
 
-    public static void setHeadsetSystem(Context context, int i) {
+    public static void setHeadsetSystem(Context context, @BluetoothConstants.HeadsetSystem int i) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_SYSTEM, i);
         edit.apply();
     }
 
-    public static int getHeadsetStreamType(Context context) {
-        return getPref(context).getInt(HEADSET_STREAM_TYPE, 0);
+    public static @BluetoothConstants.HeadsetStreamType int getHeadsetStreamType(Context context) {
+        return getPref(context).getInt(HEADSET_STREAM_TYPE, BluetoothConstants.STREAM_COMMUNICATION);
     }
 
-    public static void setHeadsetStreamType(Context context, int i) {
+    public static void setHeadsetStreamType(Context context, @BluetoothConstants.HeadsetStreamType int i) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_STREAM_TYPE, i);
         edit.apply();
     }
 
-    public static int getHeadsetConnectionType(Context context) {
-        return getPref(context).getInt(HEADSET_CONNECTION_TYPE, 0);
+    public static @BluetoothConstants.HeadsetConnectionType int getHeadsetConnectionType(Context context) {
+        return getPref(context).getInt(HEADSET_CONNECTION_TYPE, BluetoothConstants.CONNECTION_A2DP);
     }
 
-    public static void setHeadsetConnectionType(Context context, int i) {
+    public static void setHeadsetConnectionType(Context context, @BluetoothConstants.HeadsetConnectionType int i) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_CONNECTION_TYPE, i);
         edit.apply();

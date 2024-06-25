@@ -103,6 +103,7 @@ import ai.saiy.android.tts.engine.EngineNuance;
 import ai.saiy.android.tts.helper.PendingTTS;
 import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.utils.BluetoothConstants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -626,6 +627,27 @@ public class SelfAware extends Service {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "speak: " + utterance);
                             }
+                            switch (SPH.getHeadsetSystem(getApplicationContext())) {
+                                case BluetoothConstants.SYSTEM_ONE:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "slRun: BluetoothConstants.SYSTEM_ONE");
+                                    }
+                                    if (isSpeakListen) {
+                                        conditions.startBluetoothAudio();
+                                    }
+                                    break;
+                                case BluetoothConstants.SYSTEM_TWO:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "slRun: BluetoothConstants.SYSTEM_TWO");
+                                    }
+                                    break;
+                                case BluetoothConstants.SYSTEM_THREE:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "slRun: BluetoothConstants.SYSTEM_THREE");
+                                    }
+                                    conditions.startBluetoothAudio();
+                                    break;
+                            }
 
                             if (!conditions.isSilentUtterance()) {
 
@@ -786,6 +808,24 @@ public class SelfAware extends Service {
 
                     break;
             }
+            switch (SPH.getHeadsetSystem(getApplicationContext())) {
+                case BluetoothConstants.SYSTEM_ONE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "soRun: BluetoothConstants.SYSTEM_ONE");
+                    }
+                    break;
+                case BluetoothConstants.SYSTEM_TWO:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "soRun: BluetoothConstants.SYSTEM_TWO");
+                    }
+                    break;
+                case BluetoothConstants.SYSTEM_THREE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "soRun: BluetoothConstants.SYSTEM_THREE");
+                    }
+                    conditions.stopBluetoothAudio();
+                    break;
+            }
 
             SPH.setLastUsed(getApplicationContext());
         }
@@ -806,6 +846,24 @@ public class SelfAware extends Service {
 
                 if (conditions.isNetworkAvailable() ||
                         conditions.getDefaultRecognition() == SaiyDefaults.VR.NATIVE) {
+                    switch (SPH.getHeadsetSystem(getApplicationContext())) {
+                        case BluetoothConstants.SYSTEM_ONE:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "slRun: BluetoothConstants.SYSTEM_ONE");
+                            }
+                            break;
+                        case BluetoothConstants.SYSTEM_TWO:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "slRun: BluetoothConstants.SYSTEM_TWO");
+                            }
+                            conditions.startBluetoothAudio();
+                            break;
+                        case BluetoothConstants.SYSTEM_THREE:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "slRun: BluetoothConstants.SYSTEM_THREE");
+                            }
+                            break;
+                    }
 
                     switch (conditions.getDefaultRecognition()) {
 
@@ -2702,6 +2760,7 @@ public class SelfAware extends Service {
         conditions.killCallbacks();
         conditions.removeRunnableCallback(null);
         conditions.getSaiySoundPool().release();
+        conditions.unregisterBluetoothController();
         TTS.setState(TTS.State.IDLE);
         Recognition.setState(Recognition.State.IDLE);
         releasePartialHelper();

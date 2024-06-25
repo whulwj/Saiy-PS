@@ -235,6 +235,9 @@
     <string name="pause_detection_text" translatable="true">Pause for breath is</string>
     <string name="menu_announce_caller">Announce Caller ID</string>
     <string name="media_stream" translatable="true">media stream</string>
+    <string name="menu_volume_assume_global">Assume global volume</string>
+    <string name="menu_volume_managed">System managed</string>
+    <string name="menu_volume_toast">Toast volume warnings</string>
     <string name="above" translatable="true">above</string>
     <string name="below" translatable="true">below</string>
     <string name="adhere_to" translatable="true">adhere to</string>

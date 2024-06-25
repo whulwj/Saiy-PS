@@ -79,6 +79,7 @@ import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.audio.AudioParameters;
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.audio.SaiySoundPool;
+import ai.saiy.android.bluetooth.BluetoothController;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.configuration.BluemixConfiguration;
@@ -119,6 +120,7 @@ import ai.saiy.android.tts.helper.SaiyVoice;
 import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.utils.BluetoothConstants;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -202,6 +204,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
     private volatile boolean isCancelled;
     private volatile boolean restartHotword;
     private final SaiySoundPool saiySoundPool;
+    private final BluetoothController bluetoothController;
 
     /**
      * Constructor
@@ -227,6 +230,10 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                 WAKELOCK_DISPLAY_TAG);
 
         saiySoundPool = new SaiySoundPool().setUp(this.mContext, SaiySoundPool.VOICE_RECOGNITION);
+        bluetoothController = new BluetoothController(mContext);
+        if (bluetoothController.startController() && DEBUG) {
+           MyLog.w(CLS_NAME, "bluetoothController: setup failed");
+        }
     }
 
     /**
@@ -1176,6 +1183,10 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
     }
 
+    public void unregisterBluetoothController() {
+        bluetoothController.unregister();
+    }
+
     /**
      * An event has occurred that may require a callback to a remote listener. Check the existence
      * of such and remove the callback as done if required.
@@ -1654,6 +1665,14 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         return SPH.getTTSLocale(mContext);
     }
 
+    public void startBluetoothAudio() {
+        bluetoothController.startBluetoothAudio();
+    }
+
+    public void stopBluetoothAudio() {
+        bluetoothController.stopBluetoothAudio();
+    }
+
     /**
      * Add the recognition results to the existing {@link Bundle}
      *
@@ -1771,6 +1790,10 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
 
         return SPH.getVRLocale(mContext);
+    }
+
+    public int getTTSAudioStream() {
+        return bluetoothController.getTTSAudioStream();
     }
 
     /**
@@ -2530,6 +2553,25 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onVREnded");
         }
+        switch (SPH.getHeadsetSystem(mContext)) {
+            case BluetoothConstants.SYSTEM_ONE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onVREnded: BluetoothConstants.SYSTEM_ONE");
+                }
+                stopBluetoothAudio();
+                break;
+            case BluetoothConstants.SYSTEM_TWO:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onVREnded: BluetoothConstants.SYSTEM_TWO");
+                }
+                stopBluetoothAudio();
+                break;
+            case BluetoothConstants.SYSTEM_THREE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onVREnded: BluetoothConstants.SYSTEM_THREE");
+                }
+                break;
+        }
         Recognition.setState(Recognition.State.PROCESSING);
         VolumeHelper.abandonAudioMedia(mContext);
         NotificationHelper.cancelListeningNotification(mContext);
@@ -2557,6 +2599,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onVRError");
         }
+        stopBluetoothAudio();
         Recognition.setState(Recognition.State.IDLE);
         VolumeHelper.abandonAudioMedia(mContext);
         removeRunnableCallback(fetchingNotification);

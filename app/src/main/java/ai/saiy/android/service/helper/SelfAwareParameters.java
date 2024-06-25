@@ -18,7 +18,6 @@
 package ai.saiy.android.service.helper;
 
 import android.content.Context;
-import android.media.AudioManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -171,7 +170,7 @@ public class SelfAwareParameters extends HashMap<String, String> {
         }
 
         putObject(TextToSpeech.Engine.KEY_PARAM_VOLUME, getVolume());
-        putObject(TextToSpeech.Engine.KEY_PARAM_STREAM, AudioManager.STREAM_MUSIC);
+        putObject(TextToSpeech.Engine.KEY_PARAM_STREAM, conditions.getTTSAudioStream());
         putObject(TextToSpeech.Engine.KEY_PARAM_PAN, getPan());
         if (bundle.containsKey(LocalRequest.EXTRA_ALEXA_FILE_PATH)) {
             if (DEBUG) {
