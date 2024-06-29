@@ -160,6 +160,7 @@
     <string name="menu_tap_send" translatable="true">tap to send</string>
     <string name="menu_tap_help" translatable="true">tap for help</string>
     <string name="menu_tap_create">tap to create</string>
+    <string name="menu_tap_run">tap to run</string>
 
     <string name="title_home" translatable="true">Home</string>
     <string name="title_settings" translatable="true">Settings</string>
@@ -221,17 +222,21 @@
     <string name="menu_user_guide" translatable="true">User Guide</string>
     <string name="lp_user_guide">A user guide, that will teach you in more detail how elements of the application work.</string>
     <string name="menu_toast" translatable="true">Toast Unknown Commands</string>
+    <string name="toast_unknown_error">Not compatible with your Unknown Command selection</string>
     <string name="menu_offline" translatable="true">Use Offline Recognition</string>
+    <string name="lp_offline_recognition">Should you wish, you can select here whether I use offline voice recognition by default, even when an active network connection is available. Do be aware, the offline recognition is far less accurate than its network equivalent, so you\'ll need to be prepared for more unknown command responses than normal. Additionally, even if you have successfully installed the offline recognition files, it may take a number of device reboots before Google correctly detects them. More information on this issue can be found in the Troubleshooting and Bugs section.</string>
     <string name="menu_hotword_detection" translatable="true">Hotword Detection</string>
+    <string name="lp_hotword_detection">This feature is experimental, and uses an offline recognition engine, separate to Google\'s. In testing, it was often necessary for the wake up phrases to be repeated more than once in order to be detected. This was especially prevalent with a high level of background ambient noise. These issues are being worked on and will no doubt be resolved soon. Whilst this feature doesn\'t require an active network connection, you should be aware that it cannot make use of the dedicated CPU cores that some devices are equipped with. Consequently, it will consume a considerably greater amount of battery power, compared to Google\'s own, okay, implementation. Which as a system application, is able to make use of this. When the hotword detection is active, an intrusive notification will be placed in the status bar. This is to ensure you don\'t accidentally leave the feature enabled, and kill your battery.</string>
     <string name="menu_tts_gender" translatable="true">Text-to-Speech Gender</string>
+    <string name="lp_tts_gender">If your text to speech engine supports it, this setting allows you to configure whether I should speak in a male or female voice by default. I will attempt to apply this setting when pronouncing translations for you. Which can sound a little silly when I suddenly change from an English lady, to a German man. Only at the weekends. Ahem.</string>
     <string name="menu_blacklist" translatable="true">Manage Blacklist</string>
     <string name="menu_vocal_verification" translatable="true">Vocal Verification</string>
     <string name="dialog_id_verification" translatable="true">Select voice account: an account to associate</string>
     <string name="menu_unlink_association" translatable="true">Unlink Association</string>
     <string name="content_unlink_association" translatable="true">%1$s already has a vocal
         association with Saiy. Would you like to unlink the current association and start a new one?</string>
-    <string name="menu_motion" translatable="true">Motion Activity Recognition</string>
     <string name="menu_pause" translatable="true">Pause Timeout</string>
+    <string name="lp_pause_timeout">When working correctly, this option allows you to shorten or extend the amount of time you are given, before the voice recognition assumes you have completed your input. Unfortunately, Google have been ignoring these parameters for a long time, which means you are going to need to compose long emails and text messages without taking a breath. You will also need to begin speaking immediately after the recognition beep. I really hope Google fixes these issues soon, so we can all breathe a sigh of relief, without the recognition timing out.</string>
     <string name="pause_detection_text" translatable="true">Pause for breath is</string>
     <string name="menu_announce_caller">Announce Caller ID</string>
     <string name="media_stream" translatable="true">media stream</string>
@@ -243,6 +248,7 @@
     <string name="adhere_to" translatable="true">adhere to</string>
     <string name="memory_usage_text" translatable="true">Release resources after %1$s</string>
     <string name="menu_haptic" translatable="true">Use Haptic Feedback</string>
+    <string name="lp_haptic_feedback">Here you can select whether I use device vibration at different points throughout the application. Please be aware, some vibrations are generated by the Android system, or Google voice recognition, and cannot be prevented.</string>
     <string name="menu_temperature_units" translatable="true">Temperature Units</string>
     <string name="menu_saiy" translatable="true">Copyright © 2017 Saiy\u00AE Ltd.</string>
     <string name="menu_legal" translatable="true">License &amp; Legal</string>
@@ -294,6 +300,17 @@
     <string name="menu_secure_driving">When driving</string>
     <string name="menu_secure_headset">When headset connected</string>
     <string name="menu_secure_wear">When watch connected</string>
+
+    <string name="menu_blocked_apps">Blocked apps</string>
+    <string name="menu_blocked_content">Blocked content</string>
+    <string name="menu_blocked_content_hint">location set by GPS, input method</string>
+    <string name="menu_ignore_restricted_content">Ignore restricted content</string>
+    <string name="menu_sms_content">Announce SMS content</string>
+    <string name="menu_hangout_content">Announce Hangout content</string>
+    <string name="menu_whatsapp_content">Announce WhatsApp content</string>
+    <string name="input_format_error">The input cannot contain special characters</string>
+    <string name="saiy_signature">Composed by voice #Saiy</string>
+    <string name="custom_signature_text">Appended to voice messages</string>
 
     <string name="hearts">hearts</string>
     <string name="clubs">clubs</string>
@@ -723,6 +740,9 @@
     <string name="command_wifi">WiFi</string>
     <string name="command_wifi_content_1">• Toggle/enable/disable WiFi</string>
     <string name="an_unknown_application" translatable="true">"an unknown application"</string>
+    <string name="blocked_input_method">input method</string>
+    <string name="blocked_location">location set by GPS</string>
+    <string name="new_messages">new messages</string>
 
     <string name="menu_headset_woes">Headset Woes</string>
     <string name="content_headset_overview">My developer has aged considerably, whilst attempting to get headsets to work correctly. The behaviour of each varies exponentially depending on the following:\n\n• Headset manufacturer\n• Headset protocol\n• Android device manufacturer\n• Android version\n• Text to Speech engine\n\nThe next dialog will provide you with a vast number of options, that can independently be changed in order to cover as manually eventualities as possible.\n\nFinding the right combination that works best for you, may take a little trial and error. Please do attempt each combination a few times, as often there can be a delay applying the chosen configuration. You\'ll need to press \'Save\' after each change you make.\n\nIf weird and wonderful things start happening, disconnecting and reconnecting your headset should resolve the newly created problem!\n\nWhilst testing different configurations, you will notice the following behavioural changes, for better or for worse…\n\n• TTS audio output\n• Audio output quality\n• Audio input quality\n• Audio prompts (beeps)\n\nHopefully you will find the configuration combination that accomplishes all! If you don\'t, please feel free to send my developer an email containing your headset details. They are his favourite kind!\n\nNote: Google settled for the low quality audio option for their Assistant…</string>
@@ -740,6 +760,7 @@
     <string name="menu_system_2">System 2</string>
     <string name="menu_system_3">System 3</string>
     <string name="title_diagnostics">Diagnostics</string>
+    <string name="lp_diagnostics">Whether or not the voice recognition and text to speech engine appear to behave correctly on your device, you can run a quick diagnostics check here. Once it has completed, it may provide some suggested improvements to help things function even better. My developer had fun making this feature, mainly because he is a massive geek.</string>
     <string name="data_root_">data root: </string>
     <string name="diagnostics_analysing">Analysing results…</string>
     <string name="diagnostics_awaiting_locales">Awaiting supported locales…</string>
@@ -892,7 +913,19 @@
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 
     <!-- Accessibility Content descriptions -->
+    <string name="menu_accessibility">Accessibility</string>
+    <string name="menu_accessibility_disable">Disable Accessibility</string>
     <string name="ac_button_done" translatable="true">Done button</string>
+    <string name="content_accessibility_change">UPDATE!\n\nThe way in which I announce notifications has changed and therefore, if you only have my Accessibility Service enabled for this reason, you can now disable it to save some battery.</string>
+    <string name="announce_not_no_content">With restricted content</string>
+    <string name="saying">saying</string>
+    <string name="structured_default">Notification from</string>
+    <string name="structured_email_1">You\'ve received another email</string>
+    <string name="structured_email_2">You now have</string>
+    <string name="structured_email_3">to read</string>
+    <string name="structured_email_4">You\'ve received an email from</string>
+    <string name="structured_sms_1">You\'ve received a new text message from</string>
+    <string name="structured_sms_1a">You\'ve received a new text message</string>
 
     <!-- Permission Strings -->
     <string name="permission_notification_ticker" translatable="true">Permission Request</string>
@@ -921,6 +954,7 @@
     <string name="notification_tap_cancel" translatable="true">"tap to cancel"</string>
     <string name="notification_tap_stop" translatable="true">"tap to stop"</string>
     <string name="notification_stop_hotword" translatable="true">"Stop hotword detection"</string>
+    <string name="notification_stop_driving_profile">Stop driving profile</string>
     <string name="notification_stop_tutorial">Stop tutorial</string>
     <string name="notification_access">notification access</string>
     <string name="notifications_enable">You\'ll need to manually grant me notification access permissions to use this feature.</string>
@@ -929,6 +963,14 @@
     <string name="lp_quiet_times">Use this feature to set a global quiet time, so I can identify if it is too early or too late to make you aware of content I would normally announce. I wouldn\'t want to disturb your beauty sleep now, would I.</string>
     <string name="quiet_time_end">Quiet time end</string>
     <string name="quiet_time_start">Quiet time start</string>
+    <string name="menu_date_of_birth">Date of Birth</string>
+    <string name="lp_dob">Here you can set your date of birth, so I can automatically fetch the corresponding astrological reading for you. Details of how you should interpret your horoscope, and help it guide you through your daily life, can be found in the, doesn\'t exist, section.</string>
+    <string name="menu_call_confirm">Confirm Before Calling</string>
+    <string name="lp_confirm_before_calling">For some users, my ability to accurately detect the correct contact, is flawless, even if Google failed to return the precise name in the voice data. For those who are fortunate enough to experience this, the requirement to confirm the contact each time may become an annoyance, and therefore you have the option here to turn off the confirmation. Disable at your own risk though. As it would be just typical, that I\'d end up incorrectly calling an ex partner of yours, to whom you\'d really rather not explain, that your virtual assistant did it by accident. Honest.</string>
+    <string name="title_announce_notifications">Announce notifications</string>
+    <string name="lp_announce_notifications">Here you can allow me to announce notifications received by your device, and in some cases, whether or not I should include the content. Many notifications contain content that I am unable to access, or occur very frequently. You can prevent me from announcing these notifications by excluding specific application packages, keywords or keyphrases. Some Android devices, frequently display a location notification, stating, location set by GPS. This is automatically ignored for you. You can add as many exclusion keyphrases as you like, separated by a comma.</string>
+    <string name="menu_sms_email_signature">SMS &amp; Email Signature</string>
+    <string name="lp_signature">Whilst I do my best to correctly punctuate the voice data I receive, it is often missing the basics, and consequently, so will any message content you dictate. Allowing the recipient to know it was composed by voice, by including a signature, may prevent them from assuming you rarely attended English class at school. You can customise the signature content here, and decide whether or not to include my developer\'s shameless plug.</string>
     <string name="app_speech_notification_policy">So I am able to reduce your ringtone volume, when you receive an incoming call, I require the, do not disturb, permission here.</string>
     <string name="lp_announce_caller">If you\'d like me to announce incoming calls and give you the option to answer or decline them, then this is the option for you. Do be aware, some Android versions don\'t play well with this function, especially when you request I answer the call on loudspeaker. I\'m sure my developer will solve this problem soon.</string>
     <string name="amazon_notification_auth_request">You need to manually authorise my access to your Amazon account to use this feature. You\'re not required to own any Alexa hardware, as I can connect remotely to the default Alexa service associated with your account. Otherwise, if you\'d like to remove the button from the notification, you can do so in the settings.</string>
@@ -1046,6 +1088,7 @@
     <string name="listening" translatable="true">"listening"</string>
     <string name="hotword" translatable="true">"hotword"</string>
     <string name="hot_word" translatable="true">"hot word"</string>
+    <string name="menu_requires_hotword_restart">Requires hotword restart!</string>
 
     <!-- Command - Emotion -->
     <string name="emotion" translatable="true">"emotion"</string>
@@ -1327,7 +1370,16 @@
     <string name="alexa_media_response">Alexa\'s media requests make little sense I\'m afraid.</string>
     <string name="alexa_volume_response">Alexa just asked me to set the volume to, %1$s. I\'m not sure how to go about doing that.</string>
 
+    <string name="lp_toast_unknown">When I haven\'t understood a command, this option allows me to show you a toast of the speech content returned by Google. It\'s a little selfish really, as I want you to blame them, and not me!</string>
     <string name="menu_driving_profile">Driving Profile</string>
+    <string name="driving">driving</string>
+    <string name="i_am_driving">i am driving</string>
+    <string name="i_m_driving">i\'m driving</string>
+    <string name="i_ve_started_driving">i\'ve started driving</string>
+    <string name="driving_profile_already_response">Your driving profile is already %1$s.</string>
+    <string name="driving_profile_intro_text">Configure driving profile</string>
     <string name="driving_profile_missing_permissions">Your current driving profile configuration requires some additional permissions. Click on the option below, and once you\'ve made your selection, press save. And I will guide you from there.</string>
+    <string name="driving_profile_response">Driving profile %1$s.</string>
+    <string name="profile">profile</string>
     <string name="lp_driving_profile">This feature allows you to configure my behaviour when I detect that you are driving. Under these conditions, you may wish that I behave in a more verbose manner than normal. Such as announcing the identity of incoming callers, or automatically reading your message content. Many more options will be added to the driving profile in future releases. In the mean time, please do stay safe, and don\'t use your device whilst driving.</string>
 </resources>

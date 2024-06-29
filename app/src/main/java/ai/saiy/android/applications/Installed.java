@@ -59,7 +59,9 @@ public class Installed {
     public static final String PACKAGE_FOUR_SQUARED = "com.joelapenna.foursquared";
     public static final String PACKAGE_GOOGLE_DOCS = "com.google.android.apps.docs";
     public static final String PACKAGE_GOOGLE_EARTH = "com.google.earth";
+    public static final String PACKAGE_GOOGLE_HANGOUT = "com.google.android.talk";
     public static final String PACKAGE_GOOGLE_MAPS = "com.google.android.apps.maps";
+    public static final String PACKAGE_GOOGLE_MESSAGE = "com.google.android.apps.messaging";
     public static final String PACKAGE_GOOGLE_MUSIC = "com.google.android.music";
     public static final String PACKAGE_GOOGLE_KEEP = "com.google.android.keep";
     public static final String PACKAGE_GOOGLE_SKY = "com.google.android.stardroid";

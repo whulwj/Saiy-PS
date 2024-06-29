@@ -70,7 +70,7 @@ public class SpeechRecognizer {
             }
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "stream: Audio sent");
-                MyLog.d("stream", nanoTime);
+                MyLog.getElapsed("stream", nanoTime);
             }
         } catch (Exception e) {
             if (DEBUG) {

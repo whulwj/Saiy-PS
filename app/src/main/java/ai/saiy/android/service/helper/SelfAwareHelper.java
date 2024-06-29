@@ -225,7 +225,6 @@ public class SelfAwareHelper {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_TRANSLATION");
                 }
-                // TODO
                 break;
             case Condition.CONDITION_USER_CUSTOM:
                 if (DEBUG) {
@@ -354,7 +353,6 @@ public class SelfAwareHelper {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_TRANSLATION");
                 }
-                // TODO
                 break;
             case Condition.CONDITION_USER_CUSTOM:
                 if (DEBUG) {
@@ -952,6 +950,16 @@ public class SelfAwareHelper {
         final Intent intent = new Intent(ctx, SaiyAccessibilityService.class);
         intent.setAction(ctx.getApplicationContext().getPackageName());
         ctx.getApplicationContext().startService(intent);
+    }
+
+    public static void disableAccessibilityService(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "disableAccessibilityService");
+        }
+        Intent intent = new Intent(context, SaiyAccessibilityService.class);
+        intent.putExtra(SaiyAccessibilityService.EXTRA_START_COMMAND_KEY, 1);
+        intent.setAction(context.getApplicationContext().getPackageName());
+        context.getApplicationContext().startService(intent);
     }
 
     /**

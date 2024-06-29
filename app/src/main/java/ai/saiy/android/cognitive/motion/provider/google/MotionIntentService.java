@@ -28,6 +28,7 @@ import com.google.android.gms.location.DetectedActivity;
 
 import java.util.Set;
 
+import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
@@ -72,38 +73,65 @@ public class MotionIntentService extends IntentService {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onHandleIntent");
         }
-
-        if (SPH.getMotionEnabled(getApplicationContext())) {
-
-            if (intent != null) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                if (!SPH.getSelfAwareEnabled(getApplicationContext())) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: self aware disabled by user");
+                    }
+                    return;
+                }
                 if (DEBUG) {
-                    examineIntent(intent);
+                    MyLog.i(CLS_NAME, "onHandleIntent: DrivingProfileHelper.isProfileEnabled: " + DrivingProfileHelper.isEnabled(getApplicationContext()));
+                    MyLog.i(CLS_NAME, "onHandleIntent: DrivingProfileHelper.shouldStartAutomatically: " + DrivingProfileHelper.shouldStartAutomatically(getApplicationContext()));
+                    MyLog.i(CLS_NAME, "onHandleIntent: DrivingProfileHelper.shouldStopAutomatically: " + DrivingProfileHelper.shouldStopAutomatically(getApplicationContext()));
+                    MyLog.i(CLS_NAME, "onHandleIntent: getHotwordStartDriving: " + SPH.getHotwordStartDriving(getApplicationContext()));
+                    MyLog.i(CLS_NAME, "onHandleIntent: getHotwordStopDriving: " + SPH.getHotwordStopDriving(getApplicationContext()));
+                    if (DrivingProfileHelper.isEnabled(getApplicationContext()) || !DrivingProfileHelper.shouldStartAutomatically(getApplicationContext())) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: condition one: false");
+                    } else {
+                        MyLog.i(CLS_NAME, "onHandleIntent: condition one: true");
+                    }
+                    if (DrivingProfileHelper.isEnabled(getApplicationContext()) && DrivingProfileHelper.shouldStopAutomatically(getApplicationContext())) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: condition two: true");
+                    } else {
+                        MyLog.i(CLS_NAME, "onHandleIntent: condition two: false");
+                    }
+                }
+                if (DrivingProfileHelper.isEnabled(getApplicationContext()) || !DrivingProfileHelper.shouldStartAutomatically(getApplicationContext()) || ((DrivingProfileHelper.isEnabled(getApplicationContext()) && DrivingProfileHelper.shouldStopAutomatically(getApplicationContext())) || SPH.getHotwordStartDriving(getApplicationContext()) || SPH.getHotwordStopDriving(getApplicationContext()))) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: no requirements.");
+                    }
+                    return;
                 }
 
-                if (ActivityRecognitionResult.hasResult(intent)) {
-                    final Motion motion = extractMotion(intent);
-                    if (motion != null) {
-                        MotionHelper.setMotion(getApplicationContext(), motion);
+                if (intent != null) {
+                    if (DEBUG) {
+                        examineIntent(intent);
+                    }
+
+                    if (ActivityRecognitionResult.hasResult(intent)) {
+                        final Motion motion = extractMotion(intent);
+                        if (motion != null) {
+                            MotionHelper.setMotion(getApplicationContext(), motion);
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "onHandleIntent: motion null: ignoring");
+                            }
+                        }
                     } else {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onHandleIntent: motion null: ignoring");
+                            MyLog.i(CLS_NAME, "onHandleIntent: no ActivityRecognition results");
                         }
                     }
                 } else {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onHandleIntent: no ActivityRecognition results");
+                        MyLog.w(CLS_NAME, "onHandleIntent: intent: null");
                     }
                 }
-            } else {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "onHandleIntent: intent: null");
-                }
             }
-        } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onHandleIntent: user has switched off. Don't store.");
-            }
-        }
+        }).start();
     }
 
     /**

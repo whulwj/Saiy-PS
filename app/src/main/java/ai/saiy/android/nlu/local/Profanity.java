@@ -52,7 +52,7 @@ public final class Profanity {
 
     private final ArrayList<String> voiceData;
     private static Pattern pCalculate;
-    private static final Pattern pProfanity = Pattern.compile("[\\*]+");
+    public static final Pattern pProfanity = Pattern.compile("[\\*]+");
 
     private static String calculate;
 

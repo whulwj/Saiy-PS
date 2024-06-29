@@ -128,7 +128,6 @@ public class RecognitionAction {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_TRANSLATION");
                     }
-                    // TODO
                     break;
                 case Condition.CONDITION_USER_CUSTOM:
                     if (DEBUG) {

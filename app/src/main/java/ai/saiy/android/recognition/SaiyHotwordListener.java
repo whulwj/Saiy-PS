@@ -48,12 +48,14 @@ public class SaiyHotwordListener implements RecognitionListener {
     public static final int ERROR_PERMISSIONS = 3;
 
     private boolean hotwordDetected;
+    private boolean hotwordOkayGoogle;
 
-    public void onHotwordInitialised() {
+    public void onHotwordInitialised(boolean condition) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onHotwordInitialised");
         }
         hotwordDetected = false;
+        hotwordOkayGoogle = condition;
     }
 
     public void onHotwordStarted() {
@@ -104,7 +106,9 @@ public class SaiyHotwordListener implements RecognitionListener {
                     hotwordDetected = true;
 
                     if (pOKAY_GOOGLE.matcher(detected.trim()).matches()) {
-                        onHotwordDetected(OKAY_GOOGLE);
+                        if (hotwordOkayGoogle) {
+                            onHotwordDetected(OKAY_GOOGLE);
+                        }
                     } else if (pWAKEUP_SAIY.matcher(detected.trim()).matches()) {
                         onHotwordDetected(WAKEUP_SAIY);
                     } else if (pSTOP_LISTENING.matcher(detected.trim()).matches()) {

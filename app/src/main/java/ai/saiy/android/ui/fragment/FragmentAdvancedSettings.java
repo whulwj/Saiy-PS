@@ -26,13 +26,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
+import ai.saiy.android.command.settings.SettingsIntent;
+import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.permissions.PermissionHelper;
@@ -54,7 +58,7 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
     private final String CLS_NAME = FragmentAdvancedSettings.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentAdvancedSettingsHelper helper;
 
@@ -79,14 +83,14 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         this.mContext = context.getApplicationContext();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(final Activity activity) {
+    public void onAttach(@NonNull final Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.mContext = activity.getApplicationContext();
@@ -109,7 +113,7 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }
@@ -141,8 +145,13 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
         switch (position) {
 
             case 0:
+                final boolean isToastUnknown = SPH.getToastUnknown(getApplicationContext());
+                if (!isToastUnknown && SPH.getCommandUnknownAction(getApplicationContext()) > Unknown.UNKNOWN_REPEAT) {
+                    toast(getString(R.string.toast_unknown_error), Toast.LENGTH_LONG);
+                    return;
+                }
                 getParentActivity().vibrate();
-                SPH.setToastUnknown(getApplicationContext(), !SPH.getToastUnknown(getApplicationContext()));
+                SPH.setToastUnknown(getApplicationContext(), !isToastUnknown);
                 mObjects.get(position).setIconExtra(SPH.getToastUnknown(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
@@ -178,22 +187,37 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                 helper.showGenderSelector();
                 break;
             case 5:
-                getParentActivity().vibrate();
-                SPH.setMotionEnabled(getApplicationContext(), !SPH.getMotionEnabled(getApplicationContext()));
-                mObjects.get(position).setIconExtra(SPH.getMotionEnabled(getApplicationContext()) ?
-                        FragmentHome.CHECKED : FragmentHome.UNCHECKED);
-                mAdapter.notifyItemChanged(position);
-                break;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
+                        && !PermissionHelper.checkUsageStatsPermission(getApplicationContext())) {
+                    if (ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_USAGE_STATS)) {
+                        getParentActivity().speak(R.string.app_speech_usage_stats, LocalRequest.ACTION_SPEAK_ONLY);
+                    } else {
+                        getParentActivity().speak(R.string.issue_usage_stats_bug, LocalRequest.ACTION_SPEAK_ONLY);
+                    }
+                } else {
+                    helper.showDrivingProfileSelector();
+                }
             case 6:
-                getParentActivity().vibrate();
-                break;
-            case 7:
                 helper.showQuietTimesDialog();
                 break;
+            case 7:
+                helper.showDOBDialog();
+                break;
             case 8:
+                if (!SPH.getShownPauseBug(getApplicationContext())) {
+                    SPH.setShownPauseBug(getApplicationContext(), true);
+                    toast(getString(R.string.content_android_bug), Toast.LENGTH_LONG);
+                }
                 helper.showPauseDetectionSlider();
                 break;
             case 9:
+                getParentActivity().vibrate();
+                SPH.setCallConfirmation(getApplicationContext(), !SPH.getCallConfirmation(getApplicationContext()));
+                mObjects.get(position).setIconExtra(SPH.getCallConfirmation(getApplicationContext()) ?
+                        FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                mAdapter.notifyItemChanged(position);
+                break;
+            case 10:
                 if (SPH.announceCallerStats(getApplicationContext())) {
                     SPH.setAnnounceCaller(getApplicationContext(), false);
                     this.mObjects.get(position).setIconExtra(FragmentHome.UNCHECKED);
@@ -209,6 +233,58 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                         this.mObjects.get(position).setIconExtra(FragmentHome.CHECKED);
                         this.mAdapter.notifyItemChanged(position);
                     }
+                }
+                break;
+            case 11:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                    helper.showAnnounceNotificationsDialog();
+                } else if (SPH.getAccessibilityChange(getApplicationContext()) || !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            boolean isNotificationListenerEnabled = false;
+                            for (String s : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
+                                if (s.equals(getApplicationContext().getPackageName())) {
+                                    isNotificationListenerEnabled = true;
+                                    break;
+                                }
+                            }
+                            if (isNotificationListenerEnabled) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "notification listener service running");
+                                }
+                                getParentActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        helper.showAnnounceNotificationsDialog();
+                                    }
+                                });
+                            } else {
+                                if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
+                                    getParentActivity().speak(R.string.notifications_enable, LocalRequest.ACTION_SPEAK_ONLY);
+                                    return;
+                                }
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "notification listener: settings location unknown");
+                                }
+                                ai.saiy.android.applications.UtilsApplication.openApplicationSpecificSettings(getApplicationContext(), getApplicationContext().getPackageName());
+                                getParentActivity().speak(getString(R.string.settings_missing, getString(R.string.notification_access)), LocalRequest.ACTION_SPEAK_ONLY);
+                            }
+                        }
+                    }).start();
+                } else {
+                    SPH.setAccessibilityChange(getApplicationContext());
+                    helper.showAccessibilityChangeDialog();
+                }
+                break;
+            case 12:
+                helper.showSignatureDialog();
+                break;
+            case 13:
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_DIAGNOSTICS))) {
+                    getParentActivity().doFragmentAddTransaction(FragmentDiagnostics.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_DIAGNOSTICS), ActivityHome.ANIMATION_FADE, ActivityHome.MENU_INDEX_ADVANCED_SETTINGS);
+                } else if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_DIAGNOSTICS being added");
                 }
                 break;
             default:
@@ -234,20 +310,64 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
         final int position = (int) view.getTag();
 
         switch (position) {
-            case 6:
+            case 0:
+                getParentActivity().speak(R.string.lp_toast_unknown, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 1:
+                getParentActivity().speak(R.string.lp_haptic_feedback, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 2:
+                getParentActivity().speak(R.string.lp_offline_recognition, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 3:
+                getParentActivity().speak(R.string.lp_hotword_detection, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 4:
+                getParentActivity().speak(R.string.lp_tts_gender, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 5:
                 getParentActivity().speak(R.string.lp_driving_profile, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 7:
+            case 6:
                 getParentActivity().speak(R.string.lp_quiet_times, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
+            case 7:
+                getParentActivity().speak(R.string.lp_dob, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 8:
+                getParentActivity().speak(R.string.lp_pause_timeout, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
             case 9:
+                getParentActivity().speak(R.string.lp_confirm_before_calling, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 10:
                 getParentActivity().speak(R.string.lp_announce_caller, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 11:
+                getParentActivity().speak(R.string.lp_announce_notifications, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 12:
+                getParentActivity().speak(R.string.lp_signature, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 13:
+                getParentActivity().speak(R.string.lp_diagnostics, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             default:
                 break;
         }
 
         return true;
+    }
+
+    public void toast(String text, int duration) {
+        if (DEBUG) {
+            MyLog.d(CLS_NAME, "makeToast: " + text);
+        }
+        if (isActive()) {
+            getParentActivity().toast(text, duration);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "toast Fragment detached");
+        }
     }
 
     public boolean isActive() {
@@ -278,7 +398,7 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
      *
      * @return the current adapter
      */
-    public RecyclerView.Adapter getAdapter() {
+    public RecyclerView.Adapter<?> getAdapter() {
         return mAdapter;
     }
 

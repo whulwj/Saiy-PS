@@ -20,16 +20,22 @@ package ai.saiy.android.ui.fragment.helper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -40,10 +46,22 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import ai.saiy.android.R;
+import ai.saiy.android.accessibility.BlockedApplications;
+import ai.saiy.android.accessibility.BlockedApplicationsHelper;
+import ai.saiy.android.applications.Installed;
+import ai.saiy.android.command.driving.DrivingProfile;
+import ai.saiy.android.command.driving.DrivingProfileHelper;
+import ai.saiy.android.command.settings.SettingsIntent;
+import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
+import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.tts.attributes.Gender;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
@@ -127,14 +145,6 @@ public class FragmentAdvancedSettingsHelper {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
-        containerUI.setTitle(getString(R.string.menu_motion));
-        containerUI.setSubtitle(getString(R.string.menu_tap_toggle));
-        containerUI.setIconMain(R.drawable.ic_bike);
-        containerUI.setIconExtra(SPH.getMotionEnabled(getApplicationContext())
-                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
-        mObjects.add(containerUI);
-
-        containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_driving_profile));
         containerUI.setSubtitle(getString(R.string.menu_tap_configure));
         containerUI.setIconMain(R.drawable.ic_car);
@@ -149,10 +159,24 @@ public class FragmentAdvancedSettingsHelper {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_date_of_birth));
+        containerUI.setSubtitle(getString(R.string.menu_tap_set));
+        containerUI.setIconMain(R.drawable.ic_baby);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_pause));
         containerUI.setSubtitle(getString(R.string.menu_tap_set));
-        containerUI.setIconMain(R.drawable.ic_pause_octagon_outline);
+        containerUI.setIconMain(R.drawable.ic_pause_circle_outline);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_call_confirm));
+        containerUI.setSubtitle(getString(R.string.menu_tap_toggle));
+        containerUI.setIconMain(R.drawable.ic_phone_paused);
+        containerUI.setIconExtra(SPH.getCallConfirmation(getApplicationContext())? FragmentHome.CHECKED: FragmentHome.UNCHECKED);
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
@@ -160,6 +184,27 @@ public class FragmentAdvancedSettingsHelper {
         containerUI.setSubtitle(getString(R.string.menu_tap_toggle));
         containerUI.setIconMain(R.drawable.ic_phone_in_talk);
         containerUI.setIconExtra(SPH.announceCallerStats(getApplicationContext())? FragmentHome.CHECKED: FragmentHome.UNCHECKED);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.title_announce_notifications));
+        containerUI.setSubtitle(getString(R.string.menu_tap_configure));
+        containerUI.setIconMain(R.drawable.ic_white_balance_irradescent);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_sms_email_signature));
+        containerUI.setSubtitle(getString(R.string.menu_tap_set));
+        containerUI.setIconMain(R.drawable.ic_transcribe_close);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.title_diagnostics));
+        containerUI.setSubtitle(getString(R.string.menu_tap_run));
+        containerUI.setIconMain(R.drawable.ic_pulse);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 
         return mObjects;
@@ -236,6 +281,17 @@ public class FragmentAdvancedSettingsHelper {
                 }
             }
         });
+    }
+
+    public void toast(String text, int duration) {
+        if (DEBUG) {
+            MyLog.d(CLS_NAME, "makeToast: " + text);
+        }
+        if (getParent().isActive()) {
+            getParentActivity().toast(text, duration);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "toast Fragment detached");
+        }
     }
 
     /**
@@ -330,29 +386,30 @@ public class FragmentAdvancedSettingsHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showHotwordSelector() {
-
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-
                 final String[] hotwordActions = FragmentAdvancedSettingsHelper.this.getParent().getResources().getStringArray(R.array.array_hotword);
-
                 final ArrayList<Integer> selectedList = new ArrayList<>();
-
                 if (SPH.getHotwordBoot(FragmentAdvancedSettingsHelper.this.getApplicationContext())) {
                     selectedList.add(0);
                 }
-
-                if (SPH.getHotwordDriving(getApplicationContext())) {
+                if (SPH.getHotwordStartDriving(getApplicationContext())) {
                     selectedList.add(1);
                 }
-
-                if (SPH.getHotwordWakelock(getApplicationContext())) {
+                if (SPH.getHotwordStopDriving(getApplicationContext())) {
                     selectedList.add(2);
                 }
-
-                if (SPH.getHotwordSecure(getApplicationContext())) {
+                if (SPH.getHotwordWakelock(getApplicationContext())) {
                     selectedList.add(3);
+                }
+                selectedList.add(4);
+                if (SPH.getHotwordOkayGoogle(getApplicationContext())) {
+                    selectedList.add(5);
+                }
+                selectedList.add(6);
+                if (SPH.getHotwordSecure(getApplicationContext())) {
+                    selectedList.add(7);
                 }
 
                 FragmentAdvancedSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
@@ -366,7 +423,7 @@ public class FragmentAdvancedSettingsHelper {
                                 .setCancelable(false)
                                 .setTitle(R.string.hotword_intro_text)
                                 .setIcon(R.drawable.ic_blur)
-                                .setMultiChoiceItems((CharSequence[]) hotwordActions, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                .setMultiChoiceItems(hotwordActions, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
                                         if (DEBUG) {
@@ -374,7 +431,6 @@ public class FragmentAdvancedSettingsHelper {
                                         }
                                     }
                                 })
-
                                 .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -382,7 +438,7 @@ public class FragmentAdvancedSettingsHelper {
                                             final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
                                             if (adapter instanceof BaseAdapter) {
                                                 for (int i = checkedItems.length - 1; i >= 0; --i) {
-                                                    checkedItems[i] = false;
+                                                    checkedItems[i] = (4 == i || 6 == i);
                                                 }
                                                 ((BaseAdapter) adapter).notifyDataSetChanged();
                                             } else {
@@ -391,7 +447,6 @@ public class FragmentAdvancedSettingsHelper {
                                         }
                                     }
                                 })
-
                                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -401,7 +456,7 @@ public class FragmentAdvancedSettingsHelper {
 
                                         final List<Integer> selectedIndices = new ArrayList<>();
                                         for (int i = 0; i < checkedItems.length; ++i) {
-                                            if (checkedItems[i]) {
+                                            if (checkedItems[i] || (4 == i || 6 == i)) {
                                                 selectedIndices.add(i);
                                             }
                                         }
@@ -416,21 +471,22 @@ public class FragmentAdvancedSettingsHelper {
 
                                         SPH.setHotwordBoot(getApplicationContext(),
                                                 ArrayUtils.contains(selected, 0));
-
-                                        SPH.setHotwordDriving(getApplicationContext(),
+                                        SPH.setHotwordStartDriving(getApplicationContext(),
                                                 ArrayUtils.contains(selected, 1));
-
-                                        if (SPH.getHotwordDriving(getApplicationContext())) {
-                                            SPH.setMotionEnabled(getApplicationContext(), true);
-                                        }
-
-                                        SPH.setHotwordWakelock(getApplicationContext(),
+                                        SPH.setHotwordStopDriving(getApplicationContext(),
                                                 ArrayUtils.contains(selected, 2));
-
-                                        SPH.setHotwordSecure(getApplicationContext(),
+                                        SPH.setHotwordWakelock(getApplicationContext(),
                                                 ArrayUtils.contains(selected, 3));
+                                        final boolean hotwordOkayGoogle = ArrayUtils.contains(selected, 5);
+                                        SPH.setHotwordSecure(getApplicationContext(),
+                                                ArrayUtils.contains(selected, 7));
 
+                                        if (hotwordOkayGoogle != SPH.getHotwordOkayGoogle(getApplicationContext())) {
+                                            toast(getString(R.string.menu_requires_hotword_restart), Toast.LENGTH_LONG);
+                                        }
+                                        SPH.setHotwordOkayGoogle(getApplicationContext(), hotwordOkayGoogle);
                                         dialog.dismiss();
+                                        SelfAwareHelper.restartService(getApplicationContext());
                                     }
                                 })
 
@@ -461,6 +517,314 @@ public class FragmentAdvancedSettingsHelper {
                 });
             }
         });
+    }
+
+    public void showDrivingProfileSelector() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                final String[] stringArray = getParent().getResources().getStringArray(R.array.array_driving_profile);
+                final DrivingProfile drivingProfile = DrivingProfileHelper.getDrivingProfile(getApplicationContext());
+                final ArrayList<Integer> arrayList = new ArrayList<>();
+                if (drivingProfile.shouldStartAutomatically()) {
+                    arrayList.add(0);
+                }
+                if (drivingProfile.shouldStopAutomatically()) {
+                    arrayList.add(1);
+                }
+                if (drivingProfile.getStartHotword()) {
+                    arrayList.add(2);
+                }
+                if (drivingProfile.getAnnounceNotifications()) {
+                    arrayList.add(3);
+                }
+                if (drivingProfile.getAnnounceCallerId()) {
+                    arrayList.add(4);
+                }
+                getParentActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean[] checkedItems = new boolean[stringArray.length];
+                        for (int i = 0; i < arrayList.size(); i++) {
+                            checkedItems[arrayList.get(i)] = true;
+                        }
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentAdvancedSettingsHelper.this.getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.driving_profile_intro_text)
+                                .setIcon(R.drawable.ic_car)
+                                .setMultiChoiceItems(stringArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showDrivingProfileSelector: onSelection: " + which + ", " + isChecked);
+                                        }
+                                    }
+                                })
+                                .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
+                                            if (adapter instanceof BaseAdapter) {
+                                                for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                                    checkedItems[i] = false;
+                                                }
+                                                ((BaseAdapter) adapter).notifyDataSetChanged();
+                                            } else {
+                                                MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                            }
+                                        }
+                                    }
+                                })
+                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive");
+                                        }
+
+                                        final List<Integer> selectedIndices = new ArrayList<>();
+                                        for (int i = 0; i < checkedItems.length; ++i) {
+                                            if (checkedItems[i]) {
+                                                selectedIndices.add(i);
+                                            }
+                                        }
+                                        final Integer[] selected = selectedIndices.toArray(new Integer[0]);
+
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive: length: " + selected.length);
+                                            for (final Integer aSelected : selected) {
+                                                MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive: " + aSelected);
+                                            }
+                                        }
+                                        drivingProfile.setStartAutomatically(ArrayUtils.contains(selected, 0));
+                                        drivingProfile.setStopAutomatically(ArrayUtils.contains(selected, 1));
+                                        drivingProfile.setStartHotword(ArrayUtils.contains(selected, 2));
+                                        final boolean announceNotifications = ArrayUtils.contains(selected, 3);
+                                        drivingProfile.setAnnounceNotifications(announceNotifications);
+
+                                        boolean checkAnnounceCallerId;
+                                        if (!announceNotifications) {
+                                            checkAnnounceCallerId = true;
+                                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                            boolean isNotificationListenerRunning = false;
+                                            for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
+                                                if (packageName.equals(getApplicationContext().getPackageName())) {
+                                                    isNotificationListenerRunning = true;
+                                                    break;
+                                                }
+                                            }
+                                            if (isNotificationListenerRunning) {
+                                                checkAnnounceCallerId = true;
+                                            } else {
+                                                if (DEBUG) {
+                                                    MyLog.i(CLS_NAME, "notification listener service not running");
+                                                }
+                                                if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
+                                                    getParentActivity().speak(R.string.notifications_enable, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
+                                                    checkAnnounceCallerId = false;
+                                                } else {
+                                                    if (DEBUG) {
+                                                        MyLog.w(CLS_NAME, "notification listener: settings location unknown");
+                                                    }
+                                                    getParentActivity().speak(getParent().getString(R.string.settings_missing, getString(R.string.notification_access)), LocalRequest.ACTION_SPEAK_ONLY);
+                                                    checkAnnounceCallerId = false;
+                                                }
+                                            }
+                                        } else if (ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
+                                            ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
+                                            checkAnnounceCallerId = true;
+                                        } else {
+                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
+                                            getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
+                                            checkAnnounceCallerId = false;
+                                        }
+                                        if (!checkAnnounceCallerId) {
+                                            if (DEBUG) {
+                                                MyLog.w(CLS_NAME, "showDrivingProfileSelector: proceed: false");
+                                            }
+                                            return;
+                                        }
+                                        final boolean announceCallerId = ArrayUtils.contains(selected, 4);
+                                        if (announceCallerId && !ai.saiy.android.permissions.PermissionHelper.checkNotificationPolicyPermission(getApplicationContext())) {
+                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                                            getParentActivity().speak(R.string.app_speech_notification_policy, LocalRequest.ACTION_SPEAK_ONLY);
+                                        } else if (ai.saiy.android.permissions.PermissionHelper.checkReadCallerPermissions(getApplicationContext())) {
+                                            drivingProfile.setAnnounceCallerId(announceCallerId);
+                                            DrivingProfileHelper.save(getApplicationContext(), drivingProfile);
+                                            dialog.dismiss();
+                                            ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
+                                        }
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showDrivingProfileSelector: onNegative");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(final DialogInterface dialog) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showDrivingProfileSelector: onCancel");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+
+                        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+                        materialDialog.show();
+                    }
+                });
+            }
+        });
+    }
+
+    public void showAccessibilityChangeDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showAccessibilityChangeDialog");
+        }
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_accessibility)
+                .setMessage(R.string.content_accessibility_change)
+                .setIcon(R.drawable.ic_information)
+                .setPositiveButton(R.string.menu_accessibility_disable, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAccessibilityChangeDialog: onPositive");
+                        }
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                            SelfAwareHelper.disableAccessibilityService(getApplicationContext());
+                            toast(getString(R.string.success), Toast.LENGTH_SHORT);
+                        } else {
+                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAccessibilityChangeDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
+    public void showAnnounceNotificationsDialog() {
+        final View view = LayoutInflater.from(getParent().getContext()).inflate(R.layout.announce_notifications_dialog_layout, null);
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setCancelable(false)
+                .setTitle(R.string.menu_announce_notifications)
+                .setIcon(R.drawable.ic_white_balance_irradescent)
+                .setView(view)
+                .setNeutralButton(R.string.menu_blocked_apps, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onNeutral");
+                        }
+                        //TODO a(1100);
+                    }
+                })
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etBlockedContent);
+                            final CheckBox cbEnabled = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbEnabled);
+                            final CheckBox cbDeviceLocked = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbDeviceLocked);
+                            final CheckBox cbRestricted = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbRestricted);
+                            final CheckBox cbSMSContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbSMSContent);
+                            final CheckBox cbHangoutContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbHangoutContent);
+                            final CheckBox cbWhatsAppContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbWhatsAppContent);
+                            if (editText.getText() != null) {
+                                String str = editText.getText().toString().trim();
+                                if (ai.saiy.android.utils.UtilsString.notNaked(str) &&
+                                        !ai.saiy.android.utils.UtilsString.regexCheck(str)) {
+                                    toast(getString(R.string.input_format_error), Toast.LENGTH_SHORT);
+                                    return;
+                                }
+                            }
+                            AsyncTask.execute(new Runnable() {
+                                @Override
+                                public void run() {
+                                    BlockedApplications blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
+                                    blockedApplications.setText(null);
+                                    BlockedApplicationsHelper.save(getApplicationContext(), blockedApplications);
+                                    SPH.setAnnounceNotifications(getApplicationContext(), cbEnabled.isChecked());
+                                    SPH.setAnnounceNotificationsSecure(getApplicationContext(), cbDeviceLocked.isChecked());
+                                    SPH.setIgnoreRestrictedContent(getApplicationContext(), cbRestricted.isChecked());
+                                    SPH.setAnnounceNotificationsSMS(getApplicationContext(), cbSMSContent.isChecked());
+                                    SPH.setAnnounceNotificationsHangouts(getApplicationContext(), cbHangoutContent.isChecked());
+                                    SPH.setAnnounceNotificationsWhatsapp(getApplicationContext(), cbWhatsAppContent.isChecked());
+                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                                        if (SPH.getAnnounceNotifications(getApplicationContext()) && !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
+                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
+                                            getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
+                                        } else if (SPH.getAnnounceNotifications(getApplicationContext())) {
+                                            ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+
+        BlockedApplications blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
+        if (ai.saiy.android.utils.UtilsString.notNaked(blockedApplications.getText())) {
+            ((EditText) view.findViewById(R.id.etBlockedContent)).setText(blockedApplications.getText());
+        }
+        ((CheckBox) view.findViewById(R.id.cbEnabled)).setChecked(SPH.getAnnounceNotifications(getApplicationContext()));
+        ((CheckBox) view.findViewById(R.id.cbDeviceLocked)).setChecked(SPH.getAnnounceNotificationsSecure(getApplicationContext()));
+        ((CheckBox) view.findViewById(R.id.cbRestricted)).setChecked(SPH.getIgnoreRestrictedContent(getApplicationContext()));
+        ((CheckBox) view.findViewById(R.id.cbSMSContent)).setChecked(SPH.getAnnounceNotificationsSMS(getApplicationContext()));
+        final CheckBox cbHangoutContent = view.findViewById(R.id.cbHangoutContent);
+        if (Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_HANGOUT)) {
+            cbHangoutContent.setChecked(SPH.getAnnounceNotificationsHangouts(getApplicationContext()));
+        } else {
+            cbHangoutContent.setEnabled(false);
+        }
+        final CheckBox cbWhatsAppContent = view.findViewById(R.id.cbWhatsAppContent);
+        if (Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_WHATSAPP)) {
+            cbWhatsAppContent.setChecked(SPH.getAnnounceNotificationsWhatsapp(getApplicationContext()));
+        } else {
+            cbWhatsAppContent.setEnabled(false);
+        }
     }
 
     public void showQuietTimesDialog() {
@@ -528,7 +892,7 @@ public class FragmentAdvancedSettingsHelper {
                 .setView(R.layout.pause_detection_dialog_layout)
                 .setCancelable(false)
                 .setTitle(R.string.menu_pause)
-                .setIcon(R.drawable.ic_pause_octagon_outline)
+                .setIcon(R.drawable.ic_pause_circle_outline)
                 .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -627,6 +991,95 @@ public class FragmentAdvancedSettingsHelper {
             public void onStopTrackingTouch(final SeekBar seekBar) {
             }
         });
+    }
+
+    public void showDOBDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.date_of_birth_dialog_layout)
+                .setCancelable(false)
+                .setTitle(R.string.menu_date_of_birth)
+                .setIcon(R.drawable.ic_baby)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showDOBDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            DatePicker datePicker = (DatePicker) ((AlertDialog) dialog).getWindow().findViewById(R.id.dobDatePicker);
+//TODO                            ai.saiy.android.command.horoscope.d.a(getApplicationContext(), datePicker.getDayOfMonth(), datePicker.getMonth(), datePicker.getYear());
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showDOBDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showDOBDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        calendar.setLenient(true);
+        calendar.set(SPH.getDobYear(getApplicationContext()), SPH.getDobMonth(getApplicationContext()), SPH.getDobDay(getApplicationContext()));
+        ((DatePicker) materialDialog.getWindow().findViewById(R.id.dobDatePicker)).updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));
+    }
+
+    public void showSignatureDialog() {
+        String input = SPH.getMessageSignature(getApplicationContext());
+        //TODO EditText
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setCancelable(false)
+                .setTitle(R.string.menu_sms_email_signature)
+                .setMessage(R.string.custom_signature_text)
+                .setIcon(R.drawable.ic_transcribe_close)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showSignatureDialog: onPositive");
+                        }
+                        CharSequence charSequence = null; //TODO
+                        if (charSequence != null) {
+                            if (ai.saiy.android.utils.UtilsString.notNaked(charSequence.toString())) {
+//                                SPH.a(getApplicationContext(), dialog.f());
+                                SPH.setMessageSignature(getApplicationContext(), charSequence.toString().trim());
+                            } else {
+                                SPH.setMessageSignatureCondition(getApplicationContext(), false);
+                                SPH.setMessageSignature(getApplicationContext(), "");
+                            }
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
     }
 
     private String getString(final int id) {

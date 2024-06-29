@@ -168,7 +168,7 @@ public class RecommendationHelper {
             arrayList.add("----------------------------------------");
         }
         if (this.DEBUG) {
-            MyLog.d(CLS_NAME, nanoTime);
+            MyLog.getElapsed(CLS_NAME, nanoTime);
         }
         return arrayList;
     }

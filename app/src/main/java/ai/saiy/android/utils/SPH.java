@@ -27,6 +27,7 @@ import androidx.annotation.Nullable;
 
 import java.util.Locale;
 
+import ai.saiy.android.R;
 import ai.saiy.android.algorithms.Algorithm;
 import ai.saiy.android.algorithms.distance.jarowinkler.JaroWinklerHelper;
 import ai.saiy.android.algorithms.distance.levenshtein.LevenshteinHelper;
@@ -75,6 +76,8 @@ public class SPH {
     private static final String DEFAULT_TTS_GENDER = "default_tts_gender";
     private static final String DEFAULT_TEMPERATURE_UNITS = "default_temperature_units";
     private static final String DEFAULT_RINGER = "default_ringer";
+    private static final String MESSAGE_SIGNATURE = "message_signature";
+    private static final String MESSAGE_SIGNATURE_CONDITION = "message_signature_condition";
     private static final String INACTIVITY_TIMEOUT = "inactivity_timeout";
     private static final String VR_LOCALE = "vr_locale";
     private static final String TTS_LOCALE = "tts_locale";
@@ -93,24 +96,33 @@ public class SPH {
     private static final String NETWORK_SYNTHESIS = "network_synthesis";
     private static final String NETWORK_SYNTHESIS_WIFI = "network_synthesis_wifi";
     private static final String NETWORK_SYNTHESIS_4G = "network_synthesis_4g";
+    private static final String BLOCKED_NOTIFICATION_APPLICATIONS = "blocked_notification_applications";
     private static final String USE_OFFLINE = "use_offline";
     private static final String PING_CHECK = "ping_check";
     private static final String COMMAND_UNKNOWN_ACTION = "command_unknown_action";
+    private static final String DRIVING_COOLDOWN_TIME = "driving_cooldown_time";
     private static final String INTERCEPT_GOOGLE_NOW = "intercept_google_now";
     private static final String PING_TIMEOUT = "ping_timeout";
     private static final String CONNECTION_MINIMUM = "connection_minimum";
     private static final String USER_NAME = "user_name";
     private static final String USER_GENDER = "user_gender";
     private static final String USER_ACCOUNT = "user_account";
+    private static final String DOB_YEAR = "dob_year";
+    private static final String DOB_MONTH = "dob_month";
+    private static final String DOB_DAY= "dob_day";
     private static final String SHOWN_OFFLINE_INSTALLATION = "shown_offline_installation";
     private static final String HOTWORD = "hotword";
     private static final String HOTWORD_BOOT = "hotword_boot";
     private static final String HOTWORD_DRIVING = "hotword_driving";
+    private static final String HOTWORD_START_DRIVING = "hotword_start_driving";
+    private static final String HOTWORD_STOP_DRIVING = "hotword_stop_driving";
     private static final String HOTWORD_WAKELOCK = "hotword_wakelock";
+    private static final String HOTWORD_OKAY_GOOGLE = "hotword_okay_google";
     private static final String HOTWORD_SECURE = "hotword_secure";
     private static final String HOTWORD_USAGE_STATS = "hotword_usage_stats";
     private static final String BOOT_START = "boot_start";
     private static final String SELF_AWARE_ENABLED = "self_aware_enabled";
+    private static final String CALL_CONFIRMATION = "call_confirmation";
     private static final String ENROLLMENT_VERBOSE = "enrollment_verbose";
     private static final String DISCLAIMER = "disclaimer";
     private static final String WHATS_NEW = "whats_new";
@@ -123,6 +135,7 @@ public class SPH {
     private static final String SAIY_ACCOUNTS = "saiy_accounts";
     private static final String MEMORY = "memory";
     private static final String EMOTION = "emotion";
+    private static final String LAST_DRIVING_TIME = "last_driving_time";
     private static final String MOTION = "motion";
     private static final String MOTION_ENABLED = "motion_enabled";
     private static final String TOAST_UNKNOWN = "toast_unknown";
@@ -143,6 +156,10 @@ public class SPH {
     private static final String DEFAULT_SONG_RECOGNITION = "default_song_recognition";
     private static final String ANNOUNCE_TASKER = "announce_tasker";
     private static final String ANNOUNCE_NOTIFICATIONS = "announce_notifications";
+    private static final String ANNOUNCE_NOTIFICATIONS_SECURE = "announce_notifications_secure";
+    private static final String ANNOUNCE_NOTIFICATIONS_SMS = "announce_notifications_sms";
+    private static final String ANNOUNCE_NOTIFICATIONS_HANGOUTS = "announce_notifications_hangouts";
+    private static final String ANNOUNCE_NOTIFICATIONS_WHATSAPP = "announce_notifications_whatsapp";
     private static final String AUTO_CONNECT_HEADSET = "aut_connect_headset";
     private static final String HEADSET_SYSTEM = "headset_system";
     private static final String HEADSET_STREAM_TYPE = "headset_stream_type";
@@ -150,9 +167,11 @@ public class SPH {
     private static final String CACHE_SPEECH = "cache_speech";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String RECOGNIZER_BUSY_INCREMENT = "recognizer_busy_increment";
+    private static final String IGNORE_RESTRICTED_CONTENT = "ignore_restricted_content";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
     private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
     private static final String HEADSET_OVERVIEW_COUNT = "headset_overview_count";
+    private static final String ACCESSIBILITY_CHANGE = "accessibility_change";
     private static final String ALEXA_CODE_VERIFIER = "alexa_code_verifier";
     private static final String ALEXA_ACCESS_TOKEN = "alexa_access_token";
     private static final String ALEXA_REFRESH_TOKEN = "alexa_refresh_token";
@@ -161,10 +180,15 @@ public class SPH {
     private static final String UNIQUE_ID = "unique_id";
     private static final String ALEXA_NOTIFICATION_BUTTON = "alexa_notification_button";
     private static final String SHOWN_VOLUME_BUG = "shown_volume_bug";
+    private static final String SHOWN_PAUSE_BUG = "shown_pause_bug";
     private static final String REINSTALLATION_PROCESS = "reinstallation_process";
     private static final String UNKNOWN_SOURCES = "unknown_sources";
     private static final String ANNOUNCE_CALLER = "announce_caller";
+    private static final String DRIVING_PROFILE = "driving_profile";
     private static final String QUIET_TIMES = "quiet_times";
+    private static final String OVERRIDE_SECURE = "override_secure";
+    private static final String OVERRIDE_SECURE_HEADSET = "override_secure_headset";
+    private static final String OVERRIDE_SECURE_DRIVING = "override_secure_driving";
     private static final String RUN_DIAGNOSTICS = "run_diagnostics";
     private static final String MIC_FIRST = "mic_first";
 
@@ -377,6 +401,26 @@ public class SPH {
 
         edit.putInt(DEFAULT_RINGER, ringerDefault);
         edit.apply();
+    }
+
+    public static String getMessageSignature(Context context) {
+        return getPref(context).getString(MESSAGE_SIGNATURE, context.getString(R.string.saiy_signature));
+    }
+
+    public static void setMessageSignature(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(MESSAGE_SIGNATURE, str);
+        edit.apply();
+    }
+
+    public static boolean getMessageSignatureCondition(Context context) {
+        return getPref(context).getBoolean(MESSAGE_SIGNATURE_CONDITION, true);
+    }
+
+    public static void setMessageSignatureCondition(Context context, boolean condition) {
+        SharedPreferences.Editor a2 = getEditor(getPref(context));
+        a2.putBoolean(MESSAGE_SIGNATURE_CONDITION, condition);
+        a2.commit();
     }
 
     /**
@@ -792,6 +836,16 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(BLACKLIST, blacklist);
+        edit.apply();
+    }
+
+    public static long getLastDrivingTime(Context context) {
+        return getPref(context).getLong(LAST_DRIVING_TIME, 1L);
+    }
+
+    public static void setLastDrivingTime(Context context, long timestamp) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(LAST_DRIVING_TIME, timestamp);
         edit.apply();
     }
 
@@ -1233,6 +1287,16 @@ public class SPH {
         return pref.getBoolean(SELF_AWARE_ENABLED, true);
     }
 
+    public static boolean getCallConfirmation(Context context) {
+        return getPref(context).getBoolean(CALL_CONFIRMATION, true);
+    }
+
+    public static void setCallConfirmation(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(CALL_CONFIRMATION, condition);
+        edit.apply();
+    }
+
     /**
      * Set whether or not to start the {@link SelfAware} service at boot.
      *
@@ -1568,6 +1632,46 @@ public class SPH {
         return pref.getBoolean(ANNOUNCE_NOTIFICATIONS, false);
     }
 
+    public static boolean getAnnounceNotificationsSecure(Context context) {
+        return getPref(context).getBoolean(ANNOUNCE_NOTIFICATIONS_SECURE, false);
+    }
+
+    public static void setAnnounceNotificationsSecure(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ANNOUNCE_NOTIFICATIONS_SECURE, condition);
+        edit.apply();
+    }
+
+    public static boolean getAnnounceNotificationsSMS(Context context) {
+        return getPref(context).getBoolean(ANNOUNCE_NOTIFICATIONS_SMS, false);
+    }
+
+    public static void setAnnounceNotificationsSMS(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ANNOUNCE_NOTIFICATIONS_SMS, condition);
+        edit.apply();
+    }
+
+    public static boolean getAnnounceNotificationsHangouts(Context context) {
+        return getPref(context).getBoolean(ANNOUNCE_NOTIFICATIONS_HANGOUTS, false);
+    }
+
+    public static void setAnnounceNotificationsHangouts(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ANNOUNCE_NOTIFICATIONS_HANGOUTS, condition);
+        edit.apply();
+    }
+
+    public static boolean getAnnounceNotificationsWhatsapp(Context context) {
+        return getPref(context).getBoolean(ANNOUNCE_NOTIFICATIONS_WHATSAPP, false);
+    }
+
+    public static void setAnnounceNotificationsWhatsapp(Context context, boolean z) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ANNOUNCE_NOTIFICATIONS_WHATSAPP, z);
+        edit.apply();
+    }
+
     public static boolean isAutoConnectHeadset(Context context) {
         return getPref(context).getBoolean(AUTO_CONNECT_HEADSET, true);
     }
@@ -1658,6 +1762,16 @@ public class SPH {
         return pref.getBoolean(HOTWORD_WAKELOCK, false);
     }
 
+    public static boolean getHotwordOkayGoogle(Context context) {
+        return getPref(context).getBoolean(HOTWORD_OKAY_GOOGLE, true);
+    }
+
+    public static void setHotwordOkayGoogle(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(HOTWORD_OKAY_GOOGLE, condition);
+        edit.apply();
+    }
+
     /**
      * Set the user's preference for hotword when driving.
      *
@@ -1681,6 +1795,26 @@ public class SPH {
     public static boolean getHotwordDriving(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
         return pref.getBoolean(HOTWORD_DRIVING, false);
+    }
+
+    public static boolean getHotwordStartDriving(Context context) {
+        return getPref(context).getBoolean(HOTWORD_START_DRIVING, false);
+    }
+
+    public static void setHotwordStartDriving(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(HOTWORD_START_DRIVING, condition);
+        edit.apply();
+    }
+
+    public static boolean getHotwordStopDriving(Context context) {
+        return getPref(context).getBoolean(HOTWORD_STOP_DRIVING, false);
+    }
+
+    public static void setHotwordStopDriving(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(HOTWORD_STOP_DRIVING, condition);
+        edit.apply();
     }
 
     /**
@@ -1742,6 +1876,16 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putBoolean(HOTWORD_USAGE_STATS, true);
+        edit.apply();
+    }
+
+    public static String getBlockedNotificationApplications(Context context) {
+        return getPref(context).getString(BLOCKED_NOTIFICATION_APPLICATIONS, null);
+    }
+
+    public static void setBlockedNotificationApplications(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(BLOCKED_NOTIFICATION_APPLICATIONS, str);
         edit.apply();
     }
 
@@ -1837,6 +1981,16 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(COMMAND_UNKNOWN_ACTION, action);
+        edit.apply();
+    }
+
+    public static long getDrivingCooldownTime(Context context) {
+        return getPref(context).getLong(DRIVING_COOLDOWN_TIME, 1L);
+    }
+
+    public static void setDrivingCooldownTime(Context context, long timestamp) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(DRIVING_COOLDOWN_TIME, timestamp);
         edit.apply();
     }
 
@@ -1986,6 +2140,18 @@ public class SPH {
         edit.apply();
     }
 
+    public static int getDobDay(Context context) {
+        return getPref(context).getInt(DOB_DAY, 1);
+    }
+
+    public static int getDobMonth(Context context) {
+        return getPref(context).getInt(DOB_MONTH, 0);
+    }
+
+    public static int getDobYear(Context context) {
+        return getPref(context).getInt(DOB_YEAR, 1950);
+    }
+
     public static boolean isOfflineInstallationShown(Context context) {
         final SharedPreferences pref = getPref(context);
         if (pref.getBoolean(SHOWN_OFFLINE_INSTALLATION, false)) {
@@ -2005,6 +2171,16 @@ public class SPH {
         SharedPreferences.Editor a2 = getEditor(getPref(context));
         a2.putBoolean(CACHE_SPEECH, condition);
         a2.apply();
+    }
+
+    public static boolean getIgnoreRestrictedContent(Context context) {
+        return getPref(context).getBoolean(IGNORE_RESTRICTED_CONTENT, true);
+    }
+
+    public static void setIgnoreRestrictedContent(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(IGNORE_RESTRICTED_CONTENT, condition);
+        edit.apply();
     }
 
     /**
@@ -2098,6 +2274,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static void setAccessibilityChange(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ACCESSIBILITY_CHANGE, true);
+        edit.apply();
+    }
+
+    public static boolean getAccessibilityChange(Context context) {
+        return getPref(context).getBoolean(ACCESSIBILITY_CHANGE, false);
+    }
+
     public static String setCodeVerifier(Context context) {
         return getPref(context).getString(ALEXA_CODE_VERIFIER, null);
     }
@@ -2178,6 +2364,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean getShownPauseBug(Context context) {
+        return getPref(context).getBoolean(SHOWN_PAUSE_BUG, false);
+    }
+
+    public static void setShownPauseBug(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(SHOWN_PAUSE_BUG, condition);
+        edit.apply();
+    }
+
     public static boolean isCheckReinstallationNeeded(Context context) {
         return getPref(context).getBoolean(REINSTALLATION_PROCESS, false);
     }
@@ -2208,6 +2404,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static String getDrivingProfile(Context context) {
+        return getPref(context).getString(DRIVING_PROFILE, null);
+    }
+
+    public static void setDrivingProfile(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(DRIVING_PROFILE, str);
+        edit.apply();
+    }
+
     public static String getQuietTimes(Context context) {
         return getPref(context).getString(QUIET_TIMES, null);
     }
@@ -2215,6 +2421,36 @@ public class SPH {
     public static void setQuietTimes(Context context, String str) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(QUIET_TIMES, str);
+        edit.apply();
+    }
+
+    public static boolean getOverrideSecure(Context context) {
+        return getPref(context).getBoolean(OVERRIDE_SECURE, false);
+    }
+
+    public static void setOverrideSecure(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(OVERRIDE_SECURE, condition);
+        edit.apply();
+    }
+
+    public static boolean getOverrideSecureHeadset(Context context) {
+        return getPref(context).getBoolean(OVERRIDE_SECURE_HEADSET, false);
+    }
+
+    public static void setOverrideSecureHeadset(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(OVERRIDE_SECURE_HEADSET, condition);
+        edit.apply();
+    }
+
+    public static boolean getOverrideSecureDriving(Context context) {
+        return getPref(context).getBoolean(OVERRIDE_SECURE_DRIVING, false);
+    }
+
+    public static void setOverrideSecureDriving(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(OVERRIDE_SECURE_DRIVING, condition);
         edit.apply();
     }
 

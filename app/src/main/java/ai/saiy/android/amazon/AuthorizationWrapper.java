@@ -19,6 +19,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Random;
 
 import ai.saiy.android.amazon.listener.IAlexaToken;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
@@ -96,8 +97,8 @@ public class AuthorizationWrapper implements AuthorizationListener {
     }
 
     @SuppressLint({"HardwareIds"})
-    public void authoriseUser(ai.saiy.android.amazon.listener.AuthorizationListener aVar) {
-        this.listener = aVar;
+    public void authoriseUser(ai.saiy.android.amazon.listener.AuthorizationListener listener) {
+        this.listener = listener;
         Bundle bundle = new Bundle();
         JSONObject jSONObject = new JSONObject();
         JSONObject jSONProduct = new JSONObject();
@@ -108,7 +109,7 @@ public class AuthorizationWrapper implements AuthorizationListener {
                 deviceID = Settings.Secure.getString(this.context.getContentResolver(), "android_id");
             }
             jSONDevice.put("deviceSerialNumber", deviceID);
-            jSONProduct.put("productID", "Saiy");
+            jSONProduct.put("productID", Constants.SAIY);
             jSONProduct.put("productInstanceAttributes", jSONDevice);
             jSONObject.put(SCOPES[0], jSONProduct);
             bundle.putString(AuthzConstants.BUNDLE_KEY.SCOPE_DATA.val, jSONObject.toString());

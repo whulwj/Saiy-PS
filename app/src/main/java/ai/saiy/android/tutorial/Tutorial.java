@@ -472,11 +472,11 @@ public class Tutorial {
                 new Timer().schedule(new TimerTask() {
                     @Override
                     public void run() {
-                        Bundle bundle2 = new Bundle();
-                        bundle2.putInt(ActivityHome.DIALOG_INDEX, ActivityHome.INDEX_DIALOG_USER_GUIDE);
-                        ExecuteIntent.saiyActivity(Tutorial.this.context, ActivityHome.class, bundle2, true);
+                        Bundle innerBundle = new Bundle();
+                        innerBundle.putInt(ActivityHome.DIALOG_INDEX, ActivityHome.INDEX_DIALOG_USER_GUIDE);
+                        ExecuteIntent.saiyActivity(Tutorial.this.context, ActivityHome.class, innerBundle, true);
                     }
-                }, 25000L);
+                }, 25 * 1000L);
                 break;
             case STAGE_DEVELOPMENT:
                 if (DEBUG) {
@@ -492,12 +492,12 @@ public class Tutorial {
                     MyLog.i(CLS_NAME, "action: STAGE_FINAL");
                 }
                 boolean isUserNameUnknown;
-                String aJ2 = SPH.getUserName(context);
-                String b8 = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.master);
-                if (UtilsString.notNaked(aJ2)) {
-                    isUserNameUnknown = aJ2.matches(b8);
+                final String currentUserName = SPH.getUserName(context);
+                final String defaultUserName = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.master);
+                if (UtilsString.notNaked(currentUserName)) {
+                    isUserNameUnknown = currentUserName.matches(defaultUserName);
                 } else {
-                    SPH.setUserName(context, b8);
+                    SPH.setUserName(context, defaultUserName);
                     isUserNameUnknown = true;
                 }
                 if (DEBUG) {
@@ -531,6 +531,7 @@ public class Tutorial {
             default:
                 Global.setVoiceTutorialState(context, false);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_INVALID, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_22), false);
+                break;
         }
     }
 }

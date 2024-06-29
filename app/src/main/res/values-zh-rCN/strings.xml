@@ -125,7 +125,6 @@
     <string name="dialog_id_verification" translatable="true">选择语音账号: 要关联的账号</string>
     <string name="menu_unlink_association" translatable="true">解除关联</string>
     <string name="content_unlink_association" translatable="true">%1$s已有Saiy语音关联。是否要解除当前关联并开始一个新关联？</string>
-    <string name="menu_motion" translatable="true">运动活动识别</string>
     <string name="menu_pause" translatable="true">暂停超时</string>
     <string name="pause_detection_text" translatable="true">喘口气:</string>
     <string name="media_stream" translatable="true">媒体流</string>

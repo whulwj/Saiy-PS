@@ -65,6 +65,7 @@ import ai.saiy.android.cognitive.emotion.provider.beyondverbal.BeyondVerbal;
 import ai.saiy.android.cognitive.identity.provider.microsoft.SpeakerEnrollment;
 import ai.saiy.android.cognitive.identity.provider.microsoft.SpeakerIdentification;
 import ai.saiy.android.cognitive.motion.provider.google.MotionRecognition;
+import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.translate.provider.bing.BingCredentials;
 import ai.saiy.android.configuration.MicrosoftConfiguration;
@@ -208,9 +209,11 @@ public class SelfAware extends Service {
         params = new SelfAwareParameters(getApplicationContext());
         cache = new SelfAwareCache(getApplicationContext());
 
-        if (SPH.getMotionEnabled(getApplicationContext())) {
+        if (SPH.getOverrideSecureDriving(getApplicationContext()) || SPH.getHotwordStartDriving(getApplicationContext()) || SPH.getHotwordStopDriving(getApplicationContext()) || DrivingProfileHelper.isAutomatic(getApplicationContext())) {
             motionRecognition.prepare(getApplicationContext());
             motionRecognition.connect();
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "onCreate: motion activity recognition not required");
         }
         this.conditions.handleReinstallation();
     }
@@ -740,6 +743,57 @@ public class SelfAware extends Service {
         resetPendingConditions();
     }
 
+    protected void toggleDrivingProfile(Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "toggleDrivingProfile");
+            MyLog.v(CLS_NAME, "toggleDrivingProfile: calling app: " + getPackageManager().getNameForUid(Binder.getCallingUid()));
+            MyLog.i(CLS_NAME, "toggleDrivingProfile: isMain thread: " + (Looper.myLooper() == Looper.getMainLooper()));
+            MyLog.i(CLS_NAME, "toggleDrivingProfile: threadTid: " + Process.getThreadPriority(Process.myTid()));
+        }
+        if (DrivingProfileHelper.isEnabled(getApplicationContext())) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "toggleDrivingProfile: disabling");
+            }
+            DrivingProfileHelper.disable(getApplicationContext());
+            Pair<Boolean, Boolean> isHotwordActive = isHotwordActive();
+            if (isHotwordActive.first || isHotwordActive.second) {
+                stopListening(true);
+            } else {
+                startForeground(NotificationHelper.NOTIFICATION_SELF_AWARE);
+            }
+            return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "toggleDrivingProfile: enabling");
+        }
+        DrivingProfileHelper.enable(getApplicationContext());
+        if (!DrivingProfileHelper.isStartHotwordEnabled(getApplicationContext())) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "toggleDrivingProfile: enabling: no hotword");
+            }
+            startForeground(NotificationHelper.NOTIFICATION_DRIVING_PROFILE);
+            return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "toggleDrivingProfile: enabling: need hotword");
+        }
+        Pair<Boolean, Boolean> isHotwordActive = isHotwordActive();
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "toggleDrivingProfile: enabling hotwordPair.first: " + isHotwordActive.first);
+            MyLog.i(CLS_NAME, "toggleDrivingProfile: enabling hotwordPair.second: " + isHotwordActive.second);
+        }
+        if (isHotwordActive.first || isHotwordActive.second) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "toggleDrivingProfile: enabling foreground");
+            }
+            startForeground(NotificationHelper.NOTIFICATION_DRIVING_PROFILE);
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "toggleDrivingProfile: enabling hotword");
+            }
+            startHotwordDetection(bundle);
+        }
+    }
 
     /**
      * Stop the recognition currently in use
@@ -1659,7 +1713,11 @@ public class SelfAware extends Service {
             }
             conditions.acquireWakeLock();
             conditions.getSaiySoundPool().play(conditions.getSaiySoundPool().getBeepStart());
-            startForeground(NotificationHelper.NOTIFICATION_HOTWORD);
+            if (DrivingProfileHelper.isEnabled(getApplicationContext())) {
+                startForeground(NotificationHelper.NOTIFICATION_DRIVING_PROFILE);
+            } else {
+                startForeground(NotificationHelper.NOTIFICATION_HOTWORD);
+            }
         }
 
         @Override
@@ -2080,11 +2138,11 @@ public class SelfAware extends Service {
                             localRequest.execute();
                             return;
                         case android.speech.tts.TextToSpeech.SUCCESS:
-                            int i = results.getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
-                            if (i == LocalRequest.ACTION_SPEAK_LISTEN) {
+                            int action = results.getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                            if (action == LocalRequest.ACTION_SPEAK_LISTEN) {
                                 localRequest.setRecognitionProvider(SaiyDefaults.VR.ALEXA);
                             }
-                            localRequest.prepareDefault(i, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), "alex_speech");
+                            localRequest.prepareDefault(action, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), "alex_speech");
                             localRequest.setAlexaFilePath(string);
                             localRequest.execute();
                             return;

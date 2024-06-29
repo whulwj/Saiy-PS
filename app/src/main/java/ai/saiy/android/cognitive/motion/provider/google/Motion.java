@@ -17,11 +17,16 @@
 
 package ai.saiy.android.cognitive.motion.provider.google;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 /**
  * Created by benrandall76@gmail.com on 05/07/2016.
  */
 
-public class Motion {
+public class Motion implements Parcelable {
 
     protected transient static final int CONFIDENCE_THRESHOLD = 75;
 
@@ -35,6 +40,18 @@ public class Motion {
         this.time = time;
     }
 
+    public static final Creator<Motion> CREATOR = new Creator<Motion>() {
+        @Override
+        public Motion createFromParcel(Parcel in) {
+            return new Motion(in.readInt(), in.readInt(), in.readLong());
+        }
+
+        @Override
+        public Motion[] newArray(int size) {
+            return new Motion[size];
+        }
+    };
+
     public int getConfidence() {
         return confidence;
     }
@@ -45,5 +62,26 @@ public class Motion {
 
     public long getTime() {
         return time;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(type);
+        parcel.writeInt(confidence);
+        parcel.writeLong(time);
+    }
+
+    @Override
+    public @NonNull String toString() {
+        return "Motion{" +
+                "type=" + type +
+                ", confidence=" + confidence +
+                ", time=" + time +
+                '}';
     }
 }

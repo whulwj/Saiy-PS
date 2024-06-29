@@ -21,13 +21,16 @@ import android.annotation.SuppressLint;
 import android.app.ActivityManager;
 import android.app.usage.UsageStats;
 import android.app.usage.UsageStatsManager;
+import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -339,5 +342,26 @@ public class UtilsApplication {
         }
 
         return null;
+    }
+
+    public static void openApplicationSpecificSettings(Context context, String packageName) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "openApplicationSpecificSettings");
+        }
+        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + packageName));
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "openApplicationSpecificSettings: ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "openApplicationSpecificSettings: Exception");
+                e.printStackTrace();
+            }
+        }
     }
 }

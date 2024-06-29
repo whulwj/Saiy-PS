@@ -79,6 +79,7 @@ public class NotificationService extends IntentService {
     public static final int NOTIFICATION_IDENTIFICATION = 29;
     public static final int NOTIFICATION_TUTORIAL = 30;
     public static final int NOTIFICATION_FLOATING_WINDOW = 31;
+    public static final int NOTIFICATION_DRIVING_PROFILE = 32;
     public static final int NOTIFICATION_ALEXA = 36;
 
     /**
@@ -370,6 +371,14 @@ public class NotificationService extends IntentService {
                                     MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_FLOATING_WINDOW");
                                 }
                                 StandOutWindow.closeAll(getApplicationContext(), FloatingCommandsService.class);
+                                break;
+                            case NOTIFICATION_DRIVING_PROFILE:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_DRIVING_PROFILE");
+                                }
+                                SPH.setDrivingCooldownTime(getApplicationContext(), System.currentTimeMillis());
+                                bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
+                                new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
                                 break;
                             case NOTIFICATION_ALEXA:
                                 if (DEBUG) {

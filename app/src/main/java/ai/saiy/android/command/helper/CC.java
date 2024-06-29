@@ -48,6 +48,7 @@ public enum CC {
     COMMAND_HOTWORD(false, false),
     COMMAND_VOICE_IDENTIFY(true, false),
     COMMAND_HELP(false, false),
+    COMMAND_DRIVING(false, true),
     COMMAND_FLOAT_COMMANDS(false, false),
     COMMAND_ALEXA(true, true),
 

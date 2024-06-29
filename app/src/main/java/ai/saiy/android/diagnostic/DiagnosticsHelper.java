@@ -196,7 +196,7 @@ public class DiagnosticsHelper {
         public void onDone(String utteranceId) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "progressListener: onDone");
-                MyLog.d("onDone", startTime);
+                MyLog.getElapsed("onDone", startTime);
             }
             diagnosticsInfo.getVoiceEngineInfos().get(diagnosticIndex.get()).setTextToSpeechDone(true);
             diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_speech_complete));

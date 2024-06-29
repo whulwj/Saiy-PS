@@ -30,6 +30,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyHotwordListener;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsFile;
 import edu.cmu.pocketsphinx.Assets;
 import edu.cmu.pocketsphinx.SpeechRecognizer;
@@ -125,7 +126,7 @@ public class RecognitionSphinx {
                 recognizer.addKeywordSearch(HOTWORD_SEARCH, new File(assetsDir, HOTWORD_FILE));
                 recognizer.addListener(listener);
 
-                listener.onHotwordInitialised();
+                listener.onHotwordInitialised(SPH.getHotwordOkayGoogle(mContext));
 
             } catch (final NullPointerException e) {
                 if (DEBUG) {

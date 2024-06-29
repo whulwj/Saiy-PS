@@ -75,7 +75,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             }
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "processing complete. Queue empty");
-                MyLog.d(CLS_NAME, "writeTo", nanoTime);
+                MyLog.getElapsed(CLS_NAME, "writeTo", nanoTime);
             }
             AlexaTTS.this.requestTime = System.nanoTime();
         }
@@ -176,68 +176,66 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             @Override
             public void run() {
                 try {
-                    try {
-                        new ai.saiy.android.amazon.SpeechRecognizer(AlexaTTS.this.requestBody).stream(UtilsNetwork.getUrl(AlexaTTS.this.mContext), AlexaTTS.this.alexaAccessToken, new ai.saiy.android.amazon.listener.StreamListener() {
-                            @Override
-                            public void onError(Exception e) {
+                    new ai.saiy.android.amazon.SpeechRecognizer(AlexaTTS.this.requestBody).stream(UtilsNetwork.getUrl(AlexaTTS.this.mContext), AlexaTTS.this.alexaAccessToken, new ai.saiy.android.amazon.listener.StreamListener() {
+                        @Override
+                        public void onError(Exception e) {
+                            if (DEBUG) {
+                                MyLog.e(CLS_NAME, "onError: Exception");
+                                e.printStackTrace();
+                            }
+                        }
+
+                        @Override
+                        public void onSuccess(okhttp3.Call call) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "onSuccess");
+                            }
+                            try {
+                                Response response = call.execute();
+                                if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "onSuccess: Silence");
+                                    }
+                                    response.body().close();
+                                    return;
+                                }
+                                ResolveAmazon resolveAmazon = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(AlexaTTS.this.mContext));
+                                DirectiveList directiveList = resolveAmazon.parse();
+                                response.body().close();
+                                AlexaTTS.this.isWorking = false;
+                                AlexaTTS.this.saveResults(directiveList);
                                 if (DEBUG) {
-                                    MyLog.e(CLS_NAME, "onError: Exception");
+                                    MyLog.i(CLS_NAME, "onSuccess: end");
+                                }
+                            } catch (IOException e) {
+                                if (DEBUG) {
+                                    MyLog.e(CLS_NAME, "onSuccess: IOException");
+                                    e.printStackTrace();
+                                }
+                            } catch (JSONException e) {
+                                if (DEBUG) {
+                                    MyLog.e(CLS_NAME, "onSuccess: JSONException");
                                     e.printStackTrace();
                                 }
                             }
-
-                            @Override
-                            public void onSuccess(okhttp3.Call call) {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onSuccess");
-                                }
-                                try {
-                                    Response response = call.execute();
-                                    if (response.code() == HttpURLConnection.HTTP_NO_CONTENT) {
-                                        if (DEBUG) {
-                                            MyLog.w(CLS_NAME, "onSuccess: Silence");
-                                        }
-                                        response.body().close();
-                                        return;
-                                    }
-                                    ResolveAmazon resolveAmazon = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(AlexaTTS.this.mContext));
-                                    DirectiveList directiveList = resolveAmazon.parse();
-                                    response.body().close();
-                                    AlexaTTS.this.isWorking = false;
-                                    AlexaTTS.this.saveResults(directiveList);
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onSuccess: end");
-                                    }
-                                } catch (IOException e) {
-                                    if (DEBUG) {
-                                        MyLog.e(CLS_NAME, "onSuccess: IOException");
-                                        e.printStackTrace();
-                                    }
-                                } catch (JSONException e) {
-                                    if (DEBUG) {
-                                        MyLog.e(CLS_NAME, "onSuccess: JSONException");
-                                        e.printStackTrace();
-                                    }
-                                }
-                            }
-                        });
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "sendAudio: finally");
                         }
-                        if (AlexaTTS.this.isWorking) {
-                            AlexaTTS.this.shutdownTTS();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.e(CLS_NAME, "sendAudio: Exception");
-                            e.printStackTrace();
-                        }
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "sendAudio: finally");
-                        }
-                        if (AlexaTTS.this.isWorking) {
-                            AlexaTTS.this.shutdownTTS();
-                        }
+                    });
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "sendAudio: finally");
+                    }
+                    if (AlexaTTS.this.isWorking) {
+                        AlexaTTS.this.shutdownTTS();
+                    }
+                } catch (Exception e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "sendAudio: Exception");
+                        e.printStackTrace();
+                    }
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "sendAudio: finally");
+                    }
+                    if (AlexaTTS.this.isWorking) {
+                        AlexaTTS.this.shutdownTTS();
                     }
                 } catch (Throwable th) {
                     if (DEBUG) {
@@ -253,7 +251,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
 
     private void saveResults(DirectiveList directiveList) {
         if (DEBUG) {
-            MyLog.d(CLS_NAME, "saveResults start", this.requestTime);
+            MyLog.getElapsed(CLS_NAME, "saveResults start", this.requestTime);
         }
         if (directiveList.getErrorCode() != 0) {
             if (DEBUG) {
@@ -336,7 +334,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             MyLog.i(CLS_NAME, "onBeginSynthesis: sampleRateInHz: " + sampleRateInHz);
             MyLog.i(CLS_NAME, "onBeginSynthesis: audioFormat: " + audioFormat);
             MyLog.i(CLS_NAME, "onBeginSynthesis: channelCount: " + channelCount);
-            MyLog.d(CLS_NAME, "onBeginSynthesis", this.responseTime);
+            MyLog.getElapsed(CLS_NAME, "onBeginSynthesis", this.responseTime);
         }
     }
 
@@ -344,7 +342,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
     public void onDone(String utteranceId) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onDone");
-            MyLog.d(CLS_NAME, "onDone", this.responseTime);
+            MyLog.getElapsed(CLS_NAME, "onDone", this.responseTime);
         }
         try {
             this.fileBytes = org.apache.commons.io.FileUtils.readFileToByteArray(this.audioCacheFile);
@@ -461,7 +459,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
     public void onStart(String utteranceId) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onStart");
-            MyLog.d(CLS_NAME, "onStart", this.responseTime);
+            MyLog.getElapsed(CLS_NAME, "onStart", this.responseTime);
         }
     }
 }

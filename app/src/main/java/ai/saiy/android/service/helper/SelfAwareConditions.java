@@ -80,6 +80,7 @@ import ai.saiy.android.audio.AudioParameters;
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.audio.SaiySoundPool;
 import ai.saiy.android.bluetooth.BluetoothController;
+import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.configuration.BluemixConfiguration;
@@ -2250,7 +2251,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
      * @param shutdown true if the hotword should be permanently shutdown, false otherwise
      */
     public void setHotwordShutdown(@Nullable final RecognitionSphinx recogSphinx, final boolean shutdown) {
-        restartHotword = !shutdown && (restartHotword || (recogSphinx != null && recogSphinx.isListening()));
+        restartHotword = !shutdown && (restartHotword || (DrivingProfileHelper.isStartHotwordEnabled(mContext) || (recogSphinx != null && recogSphinx.isListening())));
 
         if (DEBUG) {
             MyLog.i(CLS_NAME, "setHotwordShutdown: restartHotword " + restartHotword);

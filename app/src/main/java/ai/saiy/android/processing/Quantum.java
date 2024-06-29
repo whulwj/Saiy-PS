@@ -415,6 +415,11 @@ public class Quantum extends Tunnelling {
                     bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
                     ExecuteIntent.saiyActivity(mContext, ActivityHome.class, bundle, true);
                     break;
+                case COMMAND_DRIVING:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_DRIVING.name());
+                    }
+                    break;
                 case COMMAND_FLOAT_COMMANDS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_FLOAT_COMMANDS.name());

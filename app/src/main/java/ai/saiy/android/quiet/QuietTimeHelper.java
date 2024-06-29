@@ -3,8 +3,6 @@ package ai.saiy.android.quiet;
 import android.content.Context;
 
 import com.google.gson.JsonSyntaxException;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -12,6 +10,7 @@ import java.util.TimeZone;
 
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsParcelable;
 
 public class QuietTimeHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -25,11 +24,11 @@ public class QuietTimeHelper {
         if (quietTime == null) {
             quietTime = defaultQuietTime();
         }
-        String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(quietTime);
+        String base64String = UtilsParcelable.parcelable2String(quietTime);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "save: gsonString: " + gsonString);
+            MyLog.i(CLS_NAME, "save: base64String: " + base64String);
         }
-        SPH.setQuietTimes(context, gsonString);
+        SPH.setQuietTimes(context, base64String);
     }
 
     public static boolean canProceed(Context context) {
@@ -66,12 +65,11 @@ public class QuietTimeHelper {
     }
 
     public static QuietTime getQuietTimes(Context context) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         if (haveQuietTimes(context)) {
             try {
-                QuietTime quietTime = gson.fromJson(SPH.getQuietTimes(context), QuietTime.class);
+                QuietTime quietTime = UtilsParcelable.unmarshall(SPH.getQuietTimes(context), QuietTime.CREATOR);
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "profile: " + gson.toJson(quietTime));
+                    MyLog.i(CLS_NAME, "profile: " + quietTime);
                 }
                 return quietTime;
             } catch (JsonSyntaxException e) {

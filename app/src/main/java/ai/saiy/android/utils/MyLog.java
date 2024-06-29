@@ -45,22 +45,6 @@ public final class MyLog {
 
     public static final String DO_DEBUG = "DEBUG:";
 
-    public static long d(String str, long startTime) {
-        long nanoTime = System.nanoTime() - startTime;
-        if (DEBUG) {
-            Log.d(TAG, str + ": elapsed: " + TimeUnit.MILLISECONDS.convert(nanoTime, TimeUnit.NANOSECONDS));
-        }
-        return nanoTime;
-    }
-
-    public static long d(String clsName, String message, long startTime) {
-        long nanoTime = System.nanoTime() - startTime;
-        if (DEBUG) {
-            Log.d(TAG, clsName + ": " + message + ": elapsed: " + TimeUnit.MILLISECONDS.convert(nanoTime, TimeUnit.NANOSECONDS));
-        }
-        return nanoTime;
-    }
-
     public static void d(@NonNull final String clsName, @NonNull final String message) {
         Log.d(TAG, clsName + ": " + message);
     }

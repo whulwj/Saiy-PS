@@ -160,7 +160,7 @@ public class ResolveAmazon {
                 MyLog.i(CLS_NAME, "parse");
                 MyLog.i(CLS_NAME, "parse: directives size: " + arrayList.size());
                 MyLog.i(CLS_NAME, "parse: audio size: " + multiPartList.size());
-                MyLog.d(CLS_NAME, "parse", nanoTime);
+                MyLog.getElapsed(CLS_NAME, "parse", nanoTime);
             }
             if (responseString.contains("Exception")) {
                 if (DEBUG) {

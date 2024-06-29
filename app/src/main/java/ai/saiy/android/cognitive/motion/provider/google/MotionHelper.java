@@ -22,13 +22,13 @@ import android.content.Context;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.location.DetectedActivity;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsParcelable;
 
 /**
  * Helper class to store the most recent ActivityRecognition event in the user's shared preferences
@@ -39,6 +39,7 @@ public class MotionHelper {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = MotionHelper.class.getSimpleName();
+    private static final long DEFAULT_INACTIVITY_TIMEOUT = 900000L;
 
     /**
      * Check if we have a recent {@link Motion} object stored
@@ -58,14 +59,12 @@ public class MotionHelper {
      * @param motion {@link Motion} object
      */
     public static void setMotion(@NonNull final Context ctx, @NonNull final Motion motion) {
-
-        final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(motion);
-
+        final String base64String = UtilsParcelable.parcelable2String(motion);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "setMotion: gsonString: " + gsonString);
+            MyLog.i(CLS_NAME, "setMotion: base64String: " + base64String);
         }
 
-        SPH.setMotion(ctx, gsonString);
+        SPH.setMotion(ctx, base64String);
         reactMotion(ctx, motion);
     }
 
@@ -80,44 +79,86 @@ public class MotionHelper {
             MyLog.i(CLS_NAME, "reactMotion");
         }
 
-        switch (motion.getType()) {
-
-            case DetectedActivity.WALKING:
-                break;
-            case DetectedActivity.IN_VEHICLE:
+        if (motion.getType() == DetectedActivity.IN_VEHICLE) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "reactMotion: IN_VEHICLE");
+            }
+            if (!DrivingProfileHelper.isEnabled(ctx) && DrivingProfileHelper.shouldStartAutomatically(ctx)) {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "reactMotion: IN_VEHICLE");
+                    MyLog.i(CLS_NAME, "reactMotion: IN_VEHICLE: starting driving profile");
                 }
-
-                if (SPH.getHotwordDriving(ctx)) {
+                if (isOverDrivingCooldownThreshold(ctx, DEFAULT_INACTIVITY_TIMEOUT)) {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "reactMotion: IN_VEHICLE: enabled");
+                        MyLog.i(CLS_NAME, "reactMotion: over driving cooldown threshold");
                     }
-
+                    final LocalRequest request = new LocalRequest(ctx);
+                    request.prepareDefault(LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE, null);
+                    request.execute();
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "reactMotion: within driving cooldown threshold");
+                }
+            } else if (SPH.getHotwordStartDriving(ctx)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "reactMotion: IN_VEHICLE: starting hotword");
+                }
+                if (isOverDrivingCooldownThreshold(ctx, DEFAULT_INACTIVITY_TIMEOUT)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "reactMotion: over driving cooldown threshold");
+                    }
                     final LocalRequest request = new LocalRequest(ctx);
                     request.prepareDefault(LocalRequest.ACTION_START_HOTWORD, null);
                     request.execute();
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "reactMotion: within driving cooldown threshold");
+                }
+            } else if (DEBUG) {
+                MyLog.i(CLS_NAME, "reactMotion: IN_VEHICLE: hotword/driving profile not automatic");
+            }
+            SPH.setLastDrivingTime(ctx, System.currentTimeMillis());
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "reactMotion: OTHER");
+            }
+            if (DrivingProfileHelper.isEnabled(ctx) && DrivingProfileHelper.shouldStopAutomatically(ctx)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "reactMotion: OTHER: handle driving profile automatically: enabled");
+                }
+                if (!isOverDrivingThreshold(ctx, DEFAULT_INACTIVITY_TIMEOUT)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "reactMotion: within driving threshold");
+                    }
                 } else {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "reactMotion: IN_VEHICLE: disabled");
+                        MyLog.i(CLS_NAME, "reactMotion: over driving threshold");
                     }
+                    final LocalRequest request = new LocalRequest(ctx);
+                    request.prepareDefault(LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE, null);
+                    request.execute();
                 }
+                return;
+            }
+            if (!SPH.getHotwordStopDriving(ctx)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "checkDrivingProfile: OTHER: handle driving/hotword automatically: disabled");
+                }
+                return;
+            }
 
-                break;
-            case DetectedActivity.ON_BICYCLE:
-                break;
-            case DetectedActivity.ON_FOOT:
-                break;
-            case DetectedActivity.RUNNING:
-                break;
-            case DetectedActivity.STILL:
-                break;
-            case DetectedActivity.TILTING:
-                break;
-            case DetectedActivity.UNKNOWN:
-                break;
-            default:
-                break;
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "reactMotion: OTHER: handle hotword automatically: enabled");
+            }
+            if (!isOverDrivingThreshold(ctx, DEFAULT_INACTIVITY_TIMEOUT)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "reactMotion: within driving threshold");
+                }
+            } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "reactMotion: over driving threshold");
+                }
+                final LocalRequest request = new LocalRequest(ctx);
+                request.prepareDefault(LocalRequest.ACTION_STOP_HOTWORD, null);
+                request.execute();
+            }
         }
     }
 
@@ -129,15 +170,13 @@ public class MotionHelper {
      */
     public static Motion getMotion(@NonNull final Context ctx) {
 
-        final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         final Motion motion;
 
         if (haveMotion(ctx)) {
-
             try {
-                motion = gson.fromJson(SPH.getMemory(ctx), Motion.class);
+                motion = UtilsParcelable.unmarshall(SPH.getMemory(ctx), Motion.CREATOR);
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "motion: " + gson.toJson(motion));
+                    MyLog.i(CLS_NAME, "motion: " + motion);
                 }
                 return motion;
             } catch (final JsonSyntaxException e) {
@@ -170,4 +209,11 @@ public class MotionHelper {
         return new Motion(DetectedActivity.UNKNOWN, 0, 0L);
     }
 
+    public static boolean isOverDrivingThreshold(Context context, long timeout) {
+        return System.currentTimeMillis() > SPH.getLastDrivingTime(context) + timeout;
+    }
+
+    public static boolean isOverDrivingCooldownThreshold(Context context, long timeout) {
+        return System.currentTimeMillis() > SPH.getDrivingCooldownTime(context) + timeout;
+    }
 }

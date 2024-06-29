@@ -20,10 +20,9 @@ package ai.saiy.android.accessibility;
 import android.accessibilityservice.AccessibilityService;
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.Notification;
-import android.os.AsyncTask;
-import android.os.Bundle;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Parcelable;
-import android.speech.SpeechRecognizer;
 import android.util.Pair;
 import android.view.accessibility.AccessibilityEvent;
 import android.view.accessibility.AccessibilityNodeInfo;
@@ -31,22 +30,23 @@ import android.view.accessibility.AccessibilityNodeInfo;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.common.collect.Lists;
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
+import ai.saiy.android.applications.ApplicationBasic;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.applications.UtilsApplication;
-import ai.saiy.android.command.helper.CC;
-import ai.saiy.android.intent.ExecuteIntent;
-import ai.saiy.android.intent.IntentConstants;
+import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
-import ai.saiy.android.nlu.local.Resolve;
-import ai.saiy.android.processing.Condition;
-import ai.saiy.android.recognition.RecognitionAction;
-import ai.saiy.android.recognition.helper.RecognitionDefaults;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
@@ -61,26 +61,31 @@ public class SaiyAccessibilityService extends AccessibilityService {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyAccessibilityService.class.getSimpleName();
+    public static final String EXTRA_START_COMMAND_KEY = "start_command_key";
+    private static final int DEFAULT = 0;
+    private static final int GMAIL = 1;
+    private static final int TEXT_MESSAGE = 2;
 
     private static final long COMMAND_UPDATE_DELAY = 3000L;
     private static final long UPDATE_TIMEOUT = 250L;
     private long previousCommandTime;
     private String previousCommandProcessed = null;
-    private String previousCommandInterimChecked = null;
-    private String previousCommandFinalChecked = null;
 
-    private final Pattern pGoogleNow = Pattern.compile(Installed.PACKAGE_NAME_GOOGLE_NOW, Pattern.CASE_INSENSITIVE);
-    private final Pattern pGoogleNowInterim = Pattern.compile(RecognitionDefaults.GOOGLE_NOW_INTERIM_FIELD, Pattern.CASE_INSENSITIVE);
-    private final Pattern pGoogleNowFinal = Pattern.compile(RecognitionDefaults.GOOGLE_NOW_FINAL_EDIT_TEXT, Pattern.CASE_INSENSITIVE);
-
+    private final Pattern saiy = Pattern.compile("ai\\.saiy\\.android", Pattern.CASE_INSENSITIVE);
+    private final Pattern phone = Pattern.compile("com\\.android\\.phone", Pattern.CASE_INSENSITIVE);
+    private final Pattern googleDialer = Pattern.compile("com\\.google\\.android\\.dialer", Pattern.CASE_INSENSITIVE);
+    private final Pattern dialer = Pattern.compile("com\\.android\\.dialer", Pattern.CASE_INSENSITIVE);
 
     private SupportedLanguage sl;
-    private Pattern pListening;
-
-    private boolean initInterceptGoogle;
+    private String blockedInputMethod;
+    private String blockedLocation;
+    private String newMessages;
+    private String anUnknownApplication;
     private boolean initAnnounceNotifications;
+    private boolean initIgnoreRestrictedContent;
+    private BlockedApplications blockedApplications;
 
-    private final boolean EXTRA_VERBOSE = false;
+    private static final boolean EXTRA_VERBOSE = false;
 
     @Override
     public void onCreate() {
@@ -90,10 +95,11 @@ public class SaiyAccessibilityService extends AccessibilityService {
 
         sl = SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext()));
         final SaiyResources sr = new SaiyResources(getApplicationContext(), sl);
-        final String listening = sr.getString(R.string.listening);
+        this.blockedInputMethod = sr.getString(R.string.blocked_input_method);
+        this.blockedLocation = sr.getString(R.string.blocked_location);
+        this.newMessages = sr.getString(R.string.new_messages);
+        this.anUnknownApplication = sr.getString(R.string.an_unknown_application);
         sr.reset();
-
-        pListening = Pattern.compile("^" + listening + ".*?", Pattern.CASE_INSENSITIVE);
     }
 
     @Override
@@ -102,8 +108,9 @@ public class SaiyAccessibilityService extends AccessibilityService {
             MyLog.i(CLS_NAME, "onServiceConnected");
         }
 
-        initInterceptGoogle = SPH.getInterceptGoogle(getApplicationContext());
-        initAnnounceNotifications = SPH.getAnnounceNotifications(getApplicationContext());
+        initAnnounceNotifications = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isAnnounceNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext()))));
+        blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
+        initIgnoreRestrictedContent = SPH.getIgnoreRestrictedContent(getApplicationContext());
 
         setDynamicContent();
     }
@@ -113,44 +120,24 @@ public class SaiyAccessibilityService extends AccessibilityService {
      */
     private void setDynamicContent() {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "setDynamicContent: interceptGoogle: " + initInterceptGoogle);
             MyLog.i(CLS_NAME, "setDynamicContent: announceNotifications: " + initAnnounceNotifications);
+            MyLog.i(CLS_NAME, "setDynamicContent: ignoreRestrictedContent: " + initIgnoreRestrictedContent);
         }
 
-        if (!initInterceptGoogle && !initAnnounceNotifications) {
+        if (!initAnnounceNotifications) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "setDynamicContent: none required: finishing");
             }
-
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-//                this.disableSelf();
-//            }
-//
-//            this.stopSelf();
-
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "setDynamicContent: updating content");
             }
 
             final AccessibilityServiceInfo serviceInfo = new AccessibilityServiceInfo();
-
             serviceInfo.feedbackType = AccessibilityServiceInfo.FEEDBACK_SPOKEN;
             serviceInfo.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
             serviceInfo.notificationTimeout = UPDATE_TIMEOUT;
-
-            if (initInterceptGoogle && initAnnounceNotifications) {
-                serviceInfo.eventTypes = AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                        | AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED
-                        | AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
-            } else if (initInterceptGoogle) {
-                serviceInfo.packageNames = new String[]{Installed.PACKAGE_NAME_GOOGLE_NOW};
-                serviceInfo.eventTypes = AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED
-                        | AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED;
-            } else {
-                serviceInfo.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
-            }
-
+            serviceInfo.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
             this.setServiceInfo(serviceInfo);
         }
     }
@@ -159,17 +146,17 @@ public class SaiyAccessibilityService extends AccessibilityService {
      * Check if we need to update the content we are receiving by comparing the current content values to the ones checked
      * on the most recent accessibility event.
      *
-     * @param interceptGoogle       if we should be intercepting Google Now commands
      * @param announceNotifications if we should be announcing notification content
+     * @param ignoreRestrictedContent if we should ignore restricted content
      */
-    private void updateServiceInfo(final boolean interceptGoogle, final boolean announceNotifications) {
+    private void updateServiceInfo(final boolean announceNotifications, final boolean ignoreRestrictedContent) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "updateServiceInfo");
         }
 
-        if (initInterceptGoogle != interceptGoogle || initAnnounceNotifications != announceNotifications) {
-            initInterceptGoogle = interceptGoogle;
+        if (initAnnounceNotifications != announceNotifications || initIgnoreRestrictedContent != ignoreRestrictedContent) {
             initAnnounceNotifications = announceNotifications;
+            initIgnoreRestrictedContent = ignoreRestrictedContent;
             setDynamicContent();
         } else {
             if (DEBUG) {
@@ -190,10 +177,9 @@ public class SaiyAccessibilityService extends AccessibilityService {
             return;
         }
 
-        updateServiceInfo(SPH.getInterceptGoogle(getApplicationContext()),
-                SPH.getAnnounceNotifications(getApplicationContext()));
+        updateServiceInfo(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isAnnounceNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext())))), SPH.getIgnoreRestrictedContent(getApplicationContext()));
 
-        if (!initAnnounceNotifications && !initInterceptGoogle) {
+        if (!initAnnounceNotifications) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onAccessibilityEvent: not required");
             }
@@ -205,440 +191,217 @@ public class SaiyAccessibilityService extends AccessibilityService {
                 MyLog.i(CLS_NAME, "onAccessibilityEvent: contentDesc: " + event.getContentDescription());
                 getEventType(event.getEventType());
             }
-
             AccessibilityNodeInfo source = null;
+            if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+                if (initAnnounceNotifications) {
 
-            switch (event.getEventType()) {
+                    final Parcelable parcelable = event.getParcelableData();
 
-                case AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED:
+                    if (parcelable != null) {
 
-                    if (initAnnounceNotifications) {
-
-                        final Parcelable parcelable = event.getParcelableData();
-
-                        if (parcelable != null) {
-
-                            if (parcelable instanceof Notification) {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "fast instance of Notification: continuing");
-                                }
-
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "fast not instance of Notification");
-                                }
-                                return;
+                        if (parcelable instanceof Notification) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "fast instance of Notification: continuing");
                             }
+
                         } else {
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "fast parcelable null");
-                            }
-                            return;
-                        }
-
-                    } else {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: fast not announcing notifications");
-                        }
-                        return;
-                    }
-
-                    break;
-                case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
-                case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
-
-                    if (initInterceptGoogle) {
-
-                        if (event.getPackageName() != null && pGoogleNow.matcher(event.getPackageName()).matches()) {
-
-                            source = event.getSource();
-
-                            if (source == null) {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: fast: source null");
-                                }
-                                return;
-                            }
-
-                            if (source.getClassName() == null) {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: fast: source className null");
-                                }
-
-                                try {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: fast: recycling source");
-                                    }
-                                    source.recycle();
-                                } catch (final IllegalStateException e) {
-                                    if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "onAccessibilityEvent: fast: IllegalStateException source recycle");
-                                        e.printStackTrace();
-                                    }
-                                }
-
-                                return;
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: fast: checking for google: false");
+                                MyLog.i(CLS_NAME, "fast not instance of Notification");
                             }
                             return;
                         }
                     } else {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: fast: not intercepting Google");
+                            MyLog.i(CLS_NAME, "fast parcelable null");
                         }
                         return;
                     }
 
-                    break;
-                default:
-                    break;
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onAccessibilityEvent: fast not announcing notifications");
+                    }
+                    return;
+                }
             }
 
-            switch (event.getEventType()) {
-
-                case AccessibilityEvent.TYPE_WINDOW_CONTENT_CHANGED:
+            if (event.getEventType() == AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED) {
+                final String packageName = event.getPackageName().toString();
+                if (!UtilsString.notNaked(packageName)) {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: TYPE_WINDOW_CONTENT_CHANGED");
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: checking for google: true");
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: event.getPackageName: " + event.getPackageName());
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: event.getClassName: " + event.getClassName());
+                        MyLog.i(CLS_NAME, "package name naked");
                     }
-
-                    //noinspection ConstantConditions
-                    if (pGoogleNowInterim.matcher(source.getClassName()).matches()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: className interim: true");
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: source.getClassName: " + source.getClassName());
-                        }
-
-                        if (source.getText() != null) {
-
-                            final String text = source.getText().toString();
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "packageName: " + packageName);
+                }
+                if (isPackageRestricted(packageName)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "package restricted");
+                    }
+                    return;
+                }
+                String str;
+                boolean noEventText;
+                String eventText = null;
+                Pair<Boolean, String> a2 = UtilsApplication.getAppNameFromPackage(getApplicationContext(), packageName);
+                String applicationName = a2.first ? a2.second : this.anUnknownApplication;
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "applicationName: " + applicationName);
+                }
+                List<CharSequence> eventTextList = event.getText();
+                if (UtilsList.notNaked(eventTextList)) {
+                    StringBuilder sb = new StringBuilder();
+                    for (CharSequence charSequence : eventTextList) {
+                        if (charSequence != null) {
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: interim text: " + text);
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: interim contentDesc: " + source.getContentDescription());
+                                MyLog.i(CLS_NAME, "charSequence: " + charSequence);
                             }
+                            sb.append(XMLResultsHandler.SEP_SPACE);
+                            sb.append(charSequence);
+                        }
+                    }
+                    str = sb.toString().trim();
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "eventTextList naked");
+                    }
+                    str = null;
+                }
+                if (UtilsString.notNaked(str)) {
+                    eventText = str;
+                    noEventText = false;
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "eventText naked");
+                    }
+                    if (this.initIgnoreRestrictedContent) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "eventText naked: ignoring restricted");
+                        }
+                    } else {
+                        eventText = getString(R.string.announce_not_no_content);
+                    }
+                    noEventText = true;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "eventText: " + eventText);
+                }
+                if (!UtilsString.notNaked(eventText) || (!noEventText && isRestrictedContent(eventText))) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "content restricted");
+                    }
+                    return;
+                }
 
-                            if (UtilsString.notNaked(text)) {
-
-                                if (!commandPreviousInterimChecked(text)) {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousChecked: false");
-                                    }
-
-                                    previousCommandInterimChecked = text;
-
-                                    if (interimMatch(text)) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onAccessibilityEvent: child: interim match: true");
-                                        }
-
-                                        if (commandDelaySufficient(event.getEventTime())) {
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "onAccessibilityEvent: commandDelaySufficient: true");
-                                            }
-
-                                            if (!commandPreviousMatches(text)) {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousMatches: false");
-                                                }
-
-                                                previousCommandTime = event.getEventTime();
-                                                previousCommandProcessed = text;
-
-                                                killGoogle(true);
-                                                process(text);
-
-                                            } else {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousMatches: true");
-                                                }
-                                            }
-                                        } else {
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "onAccessibilityEvent: commandDelaySufficient: false");
-                                            }
-                                        }
-                                        break;
-                                    } else {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onAccessibilityEvent: child: interim match: false");
-                                        }
-                                    }
-                                } else {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousChecked: true");
-                                    }
-                                }
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: interim text: naked");
-                                }
-                            }
+                String utterance;
+                SaiyResources sr = new SaiyResources(getApplicationContext(), sl);
+                String quote = Pattern.quote(eventText);
+                switch (getPackageType(packageName)) {
+                    case GMAIL:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "GMAIL");
+                        }
+                        if (quote.contains(this.newMessages)) {
+                            utterance = sr.getString(R.string.structured_email_1) + ". " + sr.getString(R.string.structured_email_2) + XMLResultsHandler.SEP_SPACE + eventText.replace(this.newMessages, "").trim() + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.structured_email_3);
                         } else {
+                            utterance = sr.getString(R.string.structured_email_4) + XMLResultsHandler.SEP_SPACE + eventText;
+                        }
+                        break;
+                    case TEXT_MESSAGE:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "TEXT_MESSAGE");
+                        }
+                        boolean announceSMS = SPH.getAnnounceNotificationsSMS(getApplicationContext());
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "TEXT_MESSAGE: announce content: " + announceSMS);
+                        }
+                        if (quote.contains(":")) {
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: interim text: null");
+                                MyLog.i(CLS_NAME, "attempting to separate");
                             }
-                        }
-                    } else if (pGoogleNowFinal.matcher(source.getClassName()).matches()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: className final: true");
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: source.getClassName: " + source.getClassName());
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: source.getText: " + source.getText());
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: source.contentDesc: " + source.getContentDescription());
-                        }
-
-                        final int childCount = source.getChildCount();
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: childCount: " + childCount);
-                        }
-
-                        if (childCount > 0) {
-                            for (int i = 0; i < childCount; i++) {
-
-                                final String text = examineChild(source.getChild(i));
-
-                                if (UtilsString.notNaked(text)) {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: child text: " + text);
-                                    }
-
-                                    if (!commandPreviousFinalChecked(text)) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousChecked: false");
-                                        }
-
-                                        previousCommandFinalChecked = text;
-
-                                        if (finalMatch(text)) {
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "onAccessibilityEvent: child: final match: true");
-                                            }
-
-                                            if (commandDelaySufficient(event.getEventTime())) {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: commandDelaySufficient: true");
-                                                }
-
-                                                if (!commandPreviousMatches(text)) {
-                                                    if (DEBUG) {
-                                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousMatches: false");
-                                                    }
-
-                                                    previousCommandTime = event.getEventTime();
-                                                    previousCommandProcessed = text;
-
-                                                    killGoogle(true);
-                                                    process(text);
-
-                                                } else {
-                                                    if (DEBUG) {
-                                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousMatches: true");
-                                                    }
-                                                }
-                                            } else {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: commandDelaySufficient: false");
-                                                }
-                                            }
-                                            break;
-                                        } else {
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "onAccessibilityEvent: child: final match: false");
-                                            }
-                                        }
-                                    } else {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousChecked: true");
-                                        }
-                                    }
-                                } else {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: child text: naked");
-                                    }
+                            String[] split = eventText.split(":", 2);
+                            if (split.length > 1) {
+                                String senderName = split[0].trim();
+                                String smsContent = split[1].trim();
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "senderName: " + senderName);
+                                    MyLog.i(CLS_NAME, "smsContent: " + smsContent);
                                 }
+                                utterance = UtilsString.notNaked(senderName) ? announceSMS ? sr.getString(R.string.structured_sms_1) + XMLResultsHandler.SEP_SPACE + senderName + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.saying) + ". " + smsContent : sr.getString(R.string.structured_sms_1) + XMLResultsHandler.SEP_SPACE + senderName : announceSMS ? sr.getString(R.string.structured_sms_1a) + ". " + eventText : sr.getString(R.string.structured_sms_1a);
+                            } else {
+                                utterance = announceSMS ? sr.getString(R.string.structured_sms_1a) + ". " + eventText : sr.getString(R.string.structured_sms_1a);
                             }
+                        } else if (announceSMS) {
+                            utterance = sr.getString(R.string.structured_sms_1a) + ". " + eventText;
+                        } else {
+                            utterance = sr.getString(R.string.structured_sms_1a);
+                        }
+                        break;
+                    default:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "DEFAULT");
+                        }
+                        utterance = sr.getString(R.string.structured_default) + XMLResultsHandler.SEP_SPACE + applicationName + ". " + eventText;
+                        break;
+                }
+                sr.reset();
+                if (!commandDelaySufficient(event.getEventTime())) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandDelaySufficient: false");
+                    }
+                } else if (commandPreviousMatches(utterance)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousMatches: true");
+                    }
+                } else {
+                    this.previousCommandTime = event.getEventTime();
+                    this.previousCommandProcessed = utterance;
+                    LocalRequest localRequest = new LocalRequest(getApplicationContext());
+                    localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, SPH.getVRLocale(getApplicationContext()), SPH.getTTSLocale(getApplicationContext()), utterance);
+                    localRequest.setSpeechPriority(SpeechPriority.PRIORITY_MAX);
+                    localRequest.execute();
+                }
+            } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onAccessibilityEvent: not interested in type");
+                }
+
+                if (EXTRA_VERBOSE) {
+                    source = event.getSource();
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted contentDesc: " + source.getContentDescription());
+                    }
+                    if (source.getText() != null) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: " + source.getText().toString());
                         }
                     } else {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: className: unwanted " + source.getClassName());
-                        }
-
-                        if (EXTRA_VERBOSE) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted contentDesc: " + source.getContentDescription());
-                            }
-
-                            if (source.getText() != null) {
-
-                                final String text = source.getText().toString();
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: " + text);
-                                }
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: null");
-                                }
-                            }
-
-                            final int childCount = source.getChildCount();
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted childCount: " + childCount);
-                            }
-
-                            if (childCount > 0) {
-
-                                for (int i = 0; i < childCount; i++) {
-
-                                    final String text = examineChild(source.getChild(i));
-
-                                    if (UtilsString.notNaked(text)) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted child text: " + text);
-                                        }
-                                    }
-                                }
-                            }
+                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: null");
                         }
                     }
 
-                    break;
-
-                case AccessibilityEvent.TYPE_VIEW_TEXT_SELECTION_CHANGED:
+                    final int childCount = source.getChildCount();
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: TYPE_VIEW_TEXT_SELECTION_CHANGED");
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: checking for google: true");
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: event.getPackageName: " + event.getPackageName());
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: event.getClassName: " + event.getClassName());
+                        MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted childCount: " + childCount);
                     }
 
-                    //noinspection ConstantConditions
-                    if (pGoogleNowFinal.matcher(source.getClassName()).matches()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: className final editText: true");
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: source.getClassName: " + source.getClassName());
-                        }
+                    if (childCount > 0) {
 
-                        if (source.getText() != null) {
+                        for (int i = 0; i < childCount; i++) {
 
-                            final String text = source.getText().toString();
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: final editText text: " + text);
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: final editText contentDesc: " + source.getContentDescription());
-                            }
+                            final String childText = examineChild(source.getChild(i));
 
-                            if (UtilsString.notNaked(text)) {
-
-                                if (!commandPreviousFinalChecked(text)) {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousChecked: false");
-                                    }
-
-                                    previousCommandFinalChecked = text;
-
-                                    if (finalMatch(text)) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onAccessibilityEvent: child: final match: true");
-                                        }
-
-                                        if (commandDelaySufficient(event.getEventTime())) {
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "onAccessibilityEvent: commandDelaySufficient: true");
-                                            }
-
-                                            if (!commandPreviousMatches(text)) {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousMatches: false");
-                                                }
-
-                                                previousCommandTime = event.getEventTime();
-                                                previousCommandProcessed = text;
-
-                                                killGoogle(true);
-                                                process(text);
-
-                                            } else {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousMatches: true");
-                                                }
-                                            }
-                                        } else {
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "onAccessibilityEvent: commandDelaySufficient: false");
-                                            }
-                                        }
-                                        break;
-                                    } else {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onAccessibilityEvent: final editText match: false");
-                                        }
-                                    }
-                                } else {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: commandPreviousChecked: true");
-                                    }
-                                }
-                            } else {
+                            if (childText != null) {
                                 if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: final editText: naked");
-                                }
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: final editText text: null");
-                            }
-                        }
-                    }
-
-                    break;
-
-                default:
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: not interested in type");
-                    }
-
-                    if (EXTRA_VERBOSE) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted contentDesc: " + source.getContentDescription());
-                        }
-
-                        if (source.getText() != null) {
-
-                            final String text = source.getText().toString();
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: " + text);
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: null");
-                            }
-                        }
-
-                        final int childCount = source.getChildCount();
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted childCount: " + childCount);
-                        }
-
-                        if (childCount > 0) {
-
-                            for (int i = 0; i < childCount; i++) {
-
-                                final String text = examineChild(source.getChild(i));
-
-                                if (text != null) {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted child text: " + text);
-                                    }
+                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted child text: " + childText);
                                 }
                             }
                         }
                     }
-
-                    break;
-
+                }
             }
 
             try {
@@ -660,7 +423,6 @@ public class SaiyAccessibilityService extends AccessibilityService {
                 MyLog.i(CLS_NAME, "onAccessibilityEvent: event null");
             }
         }
-
     }
 
     /**
@@ -695,191 +457,70 @@ public class SaiyAccessibilityService extends AccessibilityService {
             MyLog.i(CLS_NAME, "commandPreviousMatches");
         }
 
-        return previousCommandProcessed != null && previousCommandProcessed.matches(text);
+        return previousCommandProcessed != null && !ai.saiy.android.nlu.local.Profanity.pProfanity.matcher(previousCommandProcessed).find() && !ai.saiy.android.nlu.local.Profanity.pProfanity.matcher(text).find() && ai.saiy.android.utils.UtilsString.regexCheck(previousCommandProcessed) && ai.saiy.android.utils.UtilsString.regexCheck(text) && previousCommandProcessed.matches(text);
     }
 
-    /**
-     * Check if the previous command/text matches the current text we are considering processing
-     *
-     * @param text the current text
-     * @return true if the text matches the previous text we processed, false otherwise.
-     */
-    private boolean commandPreviousInterimChecked(@NonNull final String text) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "commandPreviousInterimChecked");
+    private int getPackageType(String packageName) {
+        if (packageName.matches("com.google.android.gm")) {
+            return GMAIL;
         }
-
-        return previousCommandInterimChecked != null && previousCommandInterimChecked.matches(text);
+        if (packageName.matches("com.android.mms") || packageName.matches(Installed.PACKAGE_GOOGLE_MESSAGE)) {
+            return TEXT_MESSAGE;
+        }
+        String defaultSMSPackage = null; //ai.saiy.android.command.ac.d.b(getApplicationContext());
+        if (!ai.saiy.android.utils.UtilsString.notNaked(defaultSMSPackage) || !packageName.matches(defaultSMSPackage)) {
+            return DEFAULT;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "canStructure default SMS provider");
+        }
+        return TEXT_MESSAGE;
     }
 
-    /**
-     * Check if the previous command/text matches the current text we are considering processing
-     *
-     * @param text the current text
-     * @return true if the text matches the previous text we processed, false otherwise.
-     */
-    private boolean commandPreviousFinalChecked(@NonNull final String text) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "commandPreviousFinalChecked");
-        }
-
-        return previousCommandFinalChecked != null && previousCommandFinalChecked.matches(text);
-    }
-
-    /**
-     * Check if the interim text matches a command we want to intercept
-     *
-     * @param text the intercepted text
-     * @return true if the text matches a command false otherwise
-     */
-    private boolean interimMatch(@NonNull final String text) {
-
-        if (isListening(text)) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "interimMatch: listening");
-            }
-            return false;
-        } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "interimMatch: Processing: " + text);
-            }
-        }
-
-        final ArrayList<String> toResolve = new ArrayList<>(1);
-        toResolve.add(text);
-
-        final float[] confidence = new float[1];
-        confidence[0] = 1f;
-
-        final ArrayList<Pair<CC, Float>> resolveArray = new Resolve(getApplicationContext(),
-                toResolve, confidence, sl, true).resolve();
-
-        if (DEBUG) {
-            if (UtilsList.notNaked(resolveArray)) {
-                MyLog.i(CLS_NAME, "interimMatch: resolveArray size:  " + resolveArray.size());
-                MyLog.i(CLS_NAME, "interimMatch: resolveArray CC:  " + resolveArray.get(0).first.name());
-            } else {
-                MyLog.i(CLS_NAME, "interimMatch: resolveArray naked");
-            }
-        }
-
-        return UtilsList.notNaked(resolveArray);
-    }
-
-    /**
-     * Check if the final text matches a command we want to intercept
-     *
-     * @param text the intercepted text
-     * @return true if the text matches a command false otherwise
-     */
-    private boolean finalMatch(@NonNull final String text) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "finalMatch");
-        }
-
-        if (isListening(text)) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "finalMatch: listening");
-            }
-            return false;
-        } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "finalMatch: Processing: " + text);
-            }
-        }
-
-        final ArrayList<String> toResolve = new ArrayList<>(1);
-        toResolve.add(text);
-
-        final float[] confidence = new float[1];
-        confidence[0] = 1f;
-
-        final ArrayList<Pair<CC, Float>> resolveArray = new Resolve(getApplicationContext(),
-                toResolve, confidence, sl, false).resolve();
-
-        if (DEBUG) {
-            if (UtilsList.notNaked(resolveArray)) {
-                MyLog.i(CLS_NAME, "finalMatch: resolveArray size:  " + resolveArray.size());
-                MyLog.i(CLS_NAME, "finalMatch: resolveArray CC:  " + resolveArray.get(0).first.name());
-            } else {
-                MyLog.i(CLS_NAME, "finalMatch: resolveArray naked");
-            }
-        }
-
-        return UtilsList.notNaked(resolveArray);
-    }
-
-    /**
-     * Check if the text matches the standard 'listening...' text
-     *
-     * @param text the input text
-     * @return true if a match is found, false otherwise
-     */
-    private boolean isListening(@NonNull final String text) {
-        return pListening.matcher(text).matches();
-    }
-
-    /**
-     * Process the extracted text as identified as a command
-     *
-     * @param text the command to process
-     */
-    private void process(@NonNull final String text) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "process");
-        }
-
-        final Bundle bundle = new Bundle();
-
-        final ArrayList<String> voiceResults = new ArrayList<>(1);
-        voiceResults.add(text);
-
-        final float[] confidence = new float[1];
-        confidence[0] = 1f;
-
-        bundle.putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, voiceResults);
-        bundle.putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, confidence);
-        bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_GOOGLE_NOW);
-
-        AsyncTask.execute(new Runnable() {
-            @Override
-            public void run() {
-                new RecognitionAction(SaiyAccessibilityService.this.getApplicationContext(), SPH.getVRLocale(SaiyAccessibilityService.this.getApplicationContext()),
-                        SPH.getTTSLocale(SaiyAccessibilityService.this.getApplicationContext()), sl, bundle);
-            }
-        });
-    }
-
-    /**
-     * Kill or reset Google
-     */
-    private void killGoogle(final boolean terminate) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "killGoogle");
-        }
-
-        if (terminate) {
-            AsyncTask.execute(new Runnable() {
-                @Override
-                public void run() {
-                    ExecuteIntent.googleNow(SaiyAccessibilityService.this.getApplicationContext(), "");
-
-                    try {
-                        Thread.sleep(150);
-                    } catch (final InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "killGoogle InterruptedException");
-                            e.printStackTrace();
-                        }
+    private boolean isPackageRestricted(String name) {
+        if (this.blockedApplications != null) {
+            List<ApplicationBasic> applicationArray = this.blockedApplications.getApplicationArray();
+            if (UtilsList.notNaked(applicationArray)) {
+                String packageName;
+                for (ApplicationBasic next : applicationArray) {
+                    packageName = next.getPackageName();
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "isPackageRestrictedPackage: " + packageName + " ~ " + name);
                     }
-
-                    ExecuteIntent.goHome(SaiyAccessibilityService.this.getApplicationContext());
-                    UtilsApplication.killPackage(SaiyAccessibilityService.this.getApplicationContext(), IntentConstants.PACKAGE_NAME_GOOGLE_NOW);
+                    if (UtilsString.notNaked(packageName) && next.getPackageName().matches(name)) {
+                        return true;
+                    }
                 }
-            });
-        } else {
-            ExecuteIntent.googleNow(getApplicationContext(), "");
+            }
         }
+        return this.saiy.matcher(name).matches() || this.dialer.matcher(name).matches() || this.phone.matcher(name).matches() || this.googleDialer.matcher(name).matches();
+    }
+
+    private boolean isRestrictedContent(String str) {
+        ArrayList<String> arrayList;
+        if (ai.saiy.android.nlu.local.Profanity.pProfanity.matcher(str).find() || !ai.saiy.android.utils.UtilsString.regexCheck(str)) {
+            return true;
+        }
+        if (this.blockedApplications != null) {
+            if (ai.saiy.android.utils.UtilsString.notNaked(this.blockedApplications.getText())) {
+                arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).omitEmptyStrings().split(this.blockedApplications.getText()));
+                arrayList.removeAll(Collections.singleton(null));
+                arrayList.removeAll(Collections.singleton(""));
+            } else {
+                arrayList = new ArrayList<>();
+            }
+            arrayList.add(this.blockedInputMethod);
+            arrayList.add(this.blockedLocation);
+            for (String restrictedContent : arrayList) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "isRestrictedContent: " + restrictedContent);
+                }
+                if (org.apache.commons.lang3.StringUtils.containsIgnoreCase(str, restrictedContent)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
@@ -1106,6 +747,25 @@ public class SaiyAccessibilityService extends AccessibilityService {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onInterrupt");
         }
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onStartCommand");
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || intent == null || !intent.hasExtra(EXTRA_START_COMMAND_KEY)) {
+            initAnnounceNotifications = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isAnnounceNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext()))));
+            blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
+            initIgnoreRestrictedContent = SPH.getIgnoreRestrictedContent(getApplicationContext());
+            setDynamicContent();
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onStartCommand: disabling");
+            }
+            disableSelf();
+        }
+        return super.onStartCommand(intent, flags, startId);
     }
 
     @Override

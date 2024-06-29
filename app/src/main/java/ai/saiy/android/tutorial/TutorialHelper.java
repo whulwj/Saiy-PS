@@ -66,36 +66,36 @@ public class TutorialHelper {
         }
     }
 
-    private static void initStrings(ai.saiy.android.localisation.SaiyResources aVar) {
-        sausage = aVar.getString(R.string.sausage);
-        bean = aVar.getString(R.string.bean);
-        bean_sic = aVar.getString(R.string.bean_sic);
-        chip = aVar.getString(R.string.chip);
-        one = aVar.getString(R.string.one);
-        two = aVar.getString(R.string.two);
-        three = aVar.getString(R.string.three);
-        four = aVar.getString(R.string.four);
-        five = aVar.getString(R.string.five);
-        numeric_1_2_3_4_5 = aVar.getString(R.string.numeric_1_2_3_4_5);
-        male = aVar.getString(R.string.male);
-        male_sic = aVar.getString(R.string.male_sic);
-        female = aVar.getString(R.string.female);
-        boy = aVar.getString(R.string.boy);
-        girl = aVar.getString(R.string.girl);
-        woman = aVar.getString(R.string.woman);
-        man = aVar.getString(R.string.man);
-        lady = aVar.getString(R.string.lady);
-        gentleman = aVar.getString(R.string.gentleman);
-        hermaphrodite = aVar.getString(R.string.hermaphrodite);
-        both = aVar.getString(R.string.both);
-        ladyBoy = aVar.getString(R.string.ladyboy);
-        lady_boy = aVar.getString(R.string.lady_boy);
-        call_me = aVar.getString(R.string.call_me_);
-        address_me_as = aVar.getString(R.string.address_me_as_);
-        addressed_as = aVar.getString(R.string.addressed_as_);
-        my_name_is = aVar.getString(R.string.my_name_is_);
-        be_called = aVar.getString(R.string.be_called_);
-        be_known_as = aVar.getString(R.string.be_known_as_);
+    private static void initStrings(ai.saiy.android.localisation.SaiyResources sr) {
+        sausage = sr.getString(R.string.sausage);
+        bean = sr.getString(R.string.bean);
+        bean_sic = sr.getString(R.string.bean_sic);
+        chip = sr.getString(R.string.chip);
+        one = sr.getString(R.string.one);
+        two = sr.getString(R.string.two);
+        three = sr.getString(R.string.three);
+        four = sr.getString(R.string.four);
+        five = sr.getString(R.string.five);
+        numeric_1_2_3_4_5 = sr.getString(R.string.numeric_1_2_3_4_5);
+        male = sr.getString(R.string.male);
+        male_sic = sr.getString(R.string.male_sic);
+        female = sr.getString(R.string.female);
+        boy = sr.getString(R.string.boy);
+        girl = sr.getString(R.string.girl);
+        woman = sr.getString(R.string.woman);
+        man = sr.getString(R.string.man);
+        lady = sr.getString(R.string.lady);
+        gentleman = sr.getString(R.string.gentleman);
+        hermaphrodite = sr.getString(R.string.hermaphrodite);
+        both = sr.getString(R.string.both);
+        ladyBoy = sr.getString(R.string.ladyboy);
+        lady_boy = sr.getString(R.string.lady_boy);
+        call_me = sr.getString(R.string.call_me_);
+        address_me_as = sr.getString(R.string.address_me_as_);
+        addressed_as = sr.getString(R.string.addressed_as_);
+        my_name_is = sr.getString(R.string.my_name_is_);
+        be_called = sr.getString(R.string.be_called_);
+        be_known_as = sr.getString(R.string.be_known_as_);
     }
 
     public Pair<Boolean, Boolean> getAnswerOneResult() {

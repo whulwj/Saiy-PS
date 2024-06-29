@@ -26,6 +26,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.regex.PatternSyntaxException;
 
 /**
  * A collection of handy methods. Static for easy access
@@ -33,6 +34,8 @@ import java.io.InputStreamReader;
  * Created by benrandall76@gmail.com on 07/02/2016.
  */
 public class UtilsString {
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = UtilsString.class.getSimpleName();
 
     /**
      * Prevent instantiation
@@ -122,5 +125,31 @@ public class UtilsString {
         } else {
             return inputString;
         }
+    }
+
+    public static boolean regexCheck(String str) {
+        if (str == null) {
+            return false;
+        }
+        try {
+            "testsdVVasdasdas".matches(str);
+            return true;
+        } catch (PatternSyntaxException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "regexCheck: PatternSyntaxException");
+                e.printStackTrace();
+            }
+        } catch (RuntimeException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "regexCheck: RuntimeException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "regexCheck: Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 }

@@ -62,6 +62,7 @@ import ai.saiy.android.audio.AudioCompression;
 import ai.saiy.android.audio.SaiyAudioTrack;
 import ai.saiy.android.cache.speech.SpeechCacheResult;
 import ai.saiy.android.database.DBSpeech;
+import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareCache;
@@ -1150,7 +1151,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
             return result;
         } else {
 
-            result = setVoiceDeprecated(language, region);
+            result = setVoiceDeprecated(language, region, conditions);
 
             if (DEBUG) {
                 switch (result) {
@@ -1301,7 +1302,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice null");
                 }
-                return setVoiceDeprecated(language, region);
+                return setVoiceDeprecated(language, region, conditions);
             } else {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice: " + boundSaiyVoice.toString());
@@ -1482,7 +1483,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
             MyLog.i(CLS_NAME, "setVoice21: falling back to setVoiceDeprecated");
         }
 
-        return setVoiceDeprecated(language, region);
+        return setVoiceDeprecated(language, region, conditions);
     }
 
     /**
@@ -1525,7 +1526,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "resolveVoice: Setting Locale deprecated");
                 }
-                return setVoiceDeprecated(voicePair.second.getLanguage(), voicePair.second.getCountry());
+                return setVoiceDeprecated(voicePair.second.getLanguage(), voicePair.second.getCountry(), conditions);
             } else {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "resolveVoice: voicePair.second null: falling back");
@@ -1541,25 +1542,52 @@ public class SaiyTextToSpeech extends TextToSpeech {
      *
      * @param language the {@link Locale} language
      * @param region   the {@link Locale} region
+     * @param conditions the {@link SelfAwareConditions}
      * @return one of {@link #SUCCESS} or {@link #ERROR}
      */
 
-    private int setVoiceDeprecated(@NonNull final String language, @NonNull final String region) {
+    private int setVoiceDeprecated(@NonNull final String language, @NonNull final String region, @NonNull SelfAwareConditions conditions) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "setVoiceDeprecated: Setting Locale");
         }
 
         try {
-
             Locale locale = new Locale(language, region);
-
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "setVoiceDeprecated: comparing current: " + getLanguage()
-                        + " with " + locale.toString());
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: comparing current: " + getLanguage() + " with " + locale);
+                }
+            } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: comparing current: " + getDefaultLanguage() + " with " + locale);
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: getDefaultLanguage: " + getDefaultLanguage());
+                }
+            }
+            MyLog.i(CLS_NAME, "setVoiceDeprecated: getLanguage: " + getLanguage());
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                if (conditions.getCondition() == Condition.CONDITION_TRANSLATION) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: setting request Locale");
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "setVoiceDeprecated: checking standard match");
+                    }
+                    locale = SupportedLanguage.getSupportedLanguage(getDefaultLanguage()).getLocale();
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "setVoiceDeprecated: SupportedLanguage: defaultEngineLocale: " + locale);
+                    }
+                }
             }
 
             if (!UtilsLocale.localesMatch(getLanguage(), locale)) {
-
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    if (conditions.getCondition() == Condition.CONDITION_TRANSLATION) {
+                        MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: locales not matched");
+                    } else {
+                        MyLog.i(CLS_NAME, "setVoiceDeprecated: locales not matched");
+                    }
+                }
                 try {
                     locale.getCountry();
                     if (DEBUG) {
@@ -1578,7 +1606,11 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 return resolveSuccess(super.setLanguage(locale));
             } else {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "setVoice: Current matches");
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && conditions.getCondition() == Condition.CONDITION_TRANSLATION) {
+                        MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: Current matches");
+                    } else {
+                        MyLog.i(CLS_NAME, "setVoice: Current matches");
+                    }
                 }
                 return SUCCESS;
             }

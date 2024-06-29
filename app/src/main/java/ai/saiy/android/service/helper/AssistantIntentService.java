@@ -35,6 +35,8 @@ import java.util.Set;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.SaiyDefaults;
+import ai.saiy.android.command.driving.CommandDriving;
+import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
@@ -303,7 +305,13 @@ public class AssistantIntentService extends IntentService {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_DRIVING");
                     }
-                    //TODO
+                    if (CommandDriving.haveDrivingProfilePermissions(getApplicationContext(), DrivingProfileHelper.getDrivingProfile(getApplicationContext()))) {
+                        actionBundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
+                    } else {
+                        actionBundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.driving_profile_missing_permissions));
+                        CommandDriving.openAdvancedSettings(getApplicationContext());
+                    }
                 } else if (intent.getAction().equals(ACTION_NOTIFICATIONS)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_NOTIFICATIONS");

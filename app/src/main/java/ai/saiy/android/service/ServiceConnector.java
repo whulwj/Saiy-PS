@@ -152,7 +152,7 @@ public class ServiceConnector {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "ACTION_TOGGLE_DRIVING_PROFILE");
                     }
-                    //TODO
+                    selfAwareService.toggleDrivingProfile(request.getBundle());
                 } else if (isListening) {
                     selfAwareService.stopListening(request.getShutdownHotword());
                 } else if (isSpeakingPair.first) {

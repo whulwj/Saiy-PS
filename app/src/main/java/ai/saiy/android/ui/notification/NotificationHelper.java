@@ -229,6 +229,19 @@ public final class NotificationHelper {
                 }
 
                 break;
+            case NOTIFICATION_DRIVING_PROFILE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getForegroundNotification: NOTIFICATION_DRIVING_PROFILE");
+                }
+                actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_DRIVING_PROFILE);
+                builder.addAction(ai.saiy.android.R.drawable.ic_car, ctx.getString(ai.saiy.android.R.string.notification_stop_driving_profile), PendingIntent.getService(ctx, NotificationService.NOTIFICATION_DRIVING_PROFILE, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                    builder.setPriority(Notification.PRIORITY_MAX);
+                } else {
+                    builder.setColorized(true);
+                    builder.setColor(Color.RED);
+                }
+                break;
             case NOTIFICATION_TUTORIAL:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "getForegroundNotification: NOTIFICATION_TUTORIAL");

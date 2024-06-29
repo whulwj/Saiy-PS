@@ -137,7 +137,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                 int responseCode = urlConnection.getResponseCode();
                 if (DEBUG) {
                     MyLog.d(CLS_NAME, "responseCode: " + responseCode);
-                    MyLog.d(CLS_NAME, "WitResponseTime", nanoTime);
+                    MyLog.getElapsed(CLS_NAME, "WitResponseTime", nanoTime);
                 }
                 if (responseCode != HttpURLConnection.HTTP_OK) {
                     if (DEBUG) {
