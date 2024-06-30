@@ -1382,4 +1382,23 @@
     <string name="driving_profile_response">Driving profile %1$s.</string>
     <string name="profile">profile</string>
     <string name="lp_driving_profile">This feature allows you to configure my behaviour when I detect that you are driving. Under these conditions, you may wish that I behave in a more verbose manner than normal. Such as announcing the identity of incoming callers, or automatically reading your message content. Many more options will be added to the driving profile in future releases. In the mean time, please do stay safe, and don\'t use your device whilst driving.</string>
+
+    <string name="horoscope">horoscope</string>
+    <string name="horoscope_dob_request">To get your astrological information, I need to know your date of birth</string>
+    <string name="horoscope_provider_fyf">According to find your fate dot com</string>
+    <string name="capricorn">capricorn</string>
+    <string name="aquarius">aquarius</string>
+    <string name="pisces">pisces</string>
+    <string name="aries">aries</string>
+    <string name="taurus">taurus</string>
+    <string name="gemini">gemini</string>
+    <string name="cancer">cancer</string>
+    <string name="leo">leo</string>
+    <string name="virgo">virgo</string>
+    <string name="scorpio">scorpio</string>
+    <string name="sagittarius">sagittarius</string>
+    <string name="libra">libra</string>
+    <string name="birthday_notification_text">Saiy interaction - click for details</string>
+    <string name="birthday_notification_ticker">Saiy interaction</string>
+    <string name="content_birthday">Hey, %1$s. I just wanted to wish you a very happy birthday. I hope you have a fantastic day.</string>
 </resources>

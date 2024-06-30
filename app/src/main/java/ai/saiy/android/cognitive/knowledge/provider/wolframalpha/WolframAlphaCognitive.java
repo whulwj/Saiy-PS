@@ -34,6 +34,7 @@ import ai.saiy.android.cognitive.knowledge.provider.wolframalpha.resolve.Resolve
 import ai.saiy.android.cognitive.knowledge.provider.wolframalpha.resolve.WolframAlphaRequest;
 import ai.saiy.android.cognitive.knowledge.provider.wolframalpha.resolve.WolframAlphaResponse;
 import ai.saiy.android.configuration.WolframConfiguration;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -90,7 +91,7 @@ public class WolframAlphaCognitive {
 
             urlConnection = (HttpURLConnection) new URL(urlString).openConnection();
 
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod(Constants.HTTP_GET);
             urlConnection.setDoInput(true);
             urlConnection.connect();
 
@@ -198,7 +199,7 @@ public class WolframAlphaCognitive {
 
             urlConnection = (HttpURLConnection) new URL(urlString).openConnection();
 
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod(Constants.HTTP_GET);
             urlConnection.setDoInput(true);
             urlConnection.connect();
 

@@ -725,4 +725,33 @@ public final class NotificationHelper {
             }
         }
     }
+
+    public static void createBirthdayNotification(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "createBirthdayNotification");
+        }
+        try {
+            final Intent actionIntent = new Intent(NotificationService.INTENT_CLICK);
+            actionIntent.setPackage(context.getPackageName());
+            actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_BIRTHDAY);
+            final PendingIntent pendingIntent = PendingIntent.getService(context, NotificationService.NOTIFICATION_BIRTHDAY, actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_INFORMATION);
+            builder.setContentIntent(pendingIntent).setSmallIcon(ai.saiy.android.R.drawable.ic_stat_gift)
+                    .setTicker(context.getString(ai.saiy.android.R.string.birthday_notification_ticker))
+                    .setWhen(System.currentTimeMillis())
+                    .setContentTitle(context.getString(ai.saiy.android.R.string.app_name))
+                    .setContentText(context.getString(ai.saiy.android.R.string.birthday_notification_text))
+                    .setAutoCancel(true);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder.setColorized(false);
+                builder.setColor(Color.RED);
+            }
+            ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(NotificationService.NOTIFICATION_BIRTHDAY, builder.build());
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createBirthdayNotification failure");
+                e.printStackTrace();
+            }
+        }
+    }
 }

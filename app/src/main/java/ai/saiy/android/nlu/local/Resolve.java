@@ -36,8 +36,10 @@ import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.command.battery.Battery;
 import ai.saiy.android.command.cancel.Cancel;
+import ai.saiy.android.command.driving.Driving;
 import ai.saiy.android.command.emotion.Emotion;
 import ai.saiy.android.command.helper.CC;
+import ai.saiy.android.command.horoscope.Horoscope;
 import ai.saiy.android.command.hotword.Hotword;
 import ai.saiy.android.command.pardon.Pardon;
 import ai.saiy.android.command.songrecognition.SongRecognition;
@@ -108,6 +110,8 @@ public final class Resolve {
         callableList.add(new Emotion(sr, sl, voiceData, confidence));
         callableList.add(new Hotword(sr, sl, voiceData, confidence));
         callableList.add(new VocalRecognition(sr, sl, voiceData, confidence));
+        callableList.add(new Horoscope(sr, sl, voiceData, confidence));
+        callableList.add(new Driving(sr, sl, voiceData, confidence));
         sr.reset();
     }
 

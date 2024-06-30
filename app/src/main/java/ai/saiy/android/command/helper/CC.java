@@ -47,6 +47,7 @@ public enum CC {
     COMMAND_EMOTION(true, true),
     COMMAND_HOTWORD(false, false),
     COMMAND_VOICE_IDENTIFY(true, false),
+    COMMAND_HOROSCOPE(true, false),
     COMMAND_HELP(false, false),
     COMMAND_DRIVING(false, true),
     COMMAND_FLOAT_COMMANDS(false, false),

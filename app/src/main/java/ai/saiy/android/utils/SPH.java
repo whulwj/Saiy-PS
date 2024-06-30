@@ -41,6 +41,7 @@ import ai.saiy.android.applications.Installed;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.containers.BVCredentials;
 import ai.saiy.android.cognitive.motion.provider.google.Motion;
 import ai.saiy.android.command.battery.BatteryInformation;
+import ai.saiy.android.command.horoscope.CommandHoroscopeValues;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.database.DBSpeech;
@@ -107,9 +108,10 @@ public class SPH {
     private static final String USER_NAME = "user_name";
     private static final String USER_GENDER = "user_gender";
     private static final String USER_ACCOUNT = "user_account";
+    private static final String STAR_SIGN = "star_sign";
     private static final String DOB_YEAR = "dob_year";
     private static final String DOB_MONTH = "dob_month";
-    private static final String DOB_DAY= "dob_day";
+    private static final String DOB_DAY = "dob_day";
     private static final String SHOWN_OFFLINE_INSTALLATION = "shown_offline_installation";
     private static final String HOTWORD = "hotword";
     private static final String HOTWORD_BOOT = "hotword_boot";
@@ -164,6 +166,7 @@ public class SPH {
     private static final String HEADSET_SYSTEM = "headset_system";
     private static final String HEADSET_STREAM_TYPE = "headset_stream_type";
     private static final String HEADSET_CONNECTION_TYPE = "headset_connection_type";
+    private static final String HOROSCOPE_INCREMENT = "horoscope_increment";
     private static final String CACHE_SPEECH = "cache_speech";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String RECOGNIZER_BUSY_INCREMENT = "recognizer_busy_increment";
@@ -2140,6 +2143,10 @@ public class SPH {
         edit.apply();
     }
 
+    public static CommandHoroscopeValues.Sign getStarSign(Context context) {
+        return CommandHoroscopeValues.Sign.valueOf(getPref(context).getString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name()));
+    }
+
     public static int getDobDay(Context context) {
         return getPref(context).getInt(DOB_DAY, 1);
     }
@@ -2150,6 +2157,19 @@ public class SPH {
 
     public static int getDobYear(Context context) {
         return getPref(context).getInt(DOB_YEAR, 1950);
+    }
+
+    public static void setHoroscope(Context context, int dayOfMonth, int month, int year, CommandHoroscopeValues.Sign sign) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(DOB_DAY, dayOfMonth);
+        edit.putInt(DOB_MONTH, month - 1);
+        edit.putInt(DOB_YEAR, year);
+        if (sign != null) {
+            edit.putString(STAR_SIGN, sign.name());
+        } else {
+            edit.putString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name());
+        }
+        edit.apply();
     }
 
     public static boolean isOfflineInstallationShown(Context context) {
@@ -2163,14 +2183,24 @@ public class SPH {
         return false;
     }
 
+    public static long getHoroscopeIncrement(Context context) {
+        return getPref(context).getLong(HOROSCOPE_INCREMENT, 0L);
+    }
+
+    public static void horoscopeAutoIncrease(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(HOROSCOPE_INCREMENT, getHoroscopeIncrement(context) + 1);
+        edit.apply();
+    }
+
     public static boolean isCacheSpeech(Context context) {
         return getPref(context).getBoolean(CACHE_SPEECH, true);
     }
 
     public static void setCacheSpeech(Context context, boolean condition) {
-        SharedPreferences.Editor a2 = getEditor(getPref(context));
-        a2.putBoolean(CACHE_SPEECH, condition);
-        a2.apply();
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(CACHE_SPEECH, condition);
+        edit.apply();
     }
 
     public static boolean getIgnoreRestrictedContent(Context context) {

@@ -407,6 +407,11 @@ public class Quantum extends Tunnelling {
                     }
 
                     break;
+                case COMMAND_HOROSCOPE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HOROSCOPE.name());
+                    }
+                    break;
                 case COMMAND_HELP:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HELP.name());

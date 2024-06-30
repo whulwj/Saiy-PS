@@ -80,6 +80,7 @@ public class NotificationService extends IntentService {
     public static final int NOTIFICATION_TUTORIAL = 30;
     public static final int NOTIFICATION_FLOATING_WINDOW = 31;
     public static final int NOTIFICATION_DRIVING_PROFILE = 32;
+    public static final int NOTIFICATION_BIRTHDAY = 35;
     public static final int NOTIFICATION_ALEXA = 36;
 
     /**
@@ -378,6 +379,13 @@ public class NotificationService extends IntentService {
                                 }
                                 SPH.setDrivingCooldownTime(getApplicationContext(), System.currentTimeMillis());
                                 bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
+                                new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                                break;
+                            case NOTIFICATION_BIRTHDAY:
+                                bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
+                                bundle.putString(LocalRequest.EXTRA_UTTERANCE, String.format(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.content_birthday), SPH.getUserName(getApplicationContext())));
+                                bundle.putString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE, SPH.getVRLocale(getApplicationContext()).toString());
+                                bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, SPH.getTTSLocale(getApplicationContext()).toString());
                                 new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
                                 break;
                             case NOTIFICATION_ALEXA:

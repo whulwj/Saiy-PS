@@ -681,6 +681,13 @@ public final class PersonalityResponse {
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getHoroscopeError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl,
+                R.array.array_error_horoscope);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
     /**
      * Get the vocal id error response.
      *

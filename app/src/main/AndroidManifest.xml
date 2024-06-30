@@ -290,6 +290,13 @@
         </activity>
 
         <activity
+            android:theme="@style/Theme.MaterialDialog.Transparent"
+            android:name="ai.saiy.android.ui.activity.ActivityShowDialog"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:configChanges="screenSize|orientation|keyboardHidden"/>
+
+        <activity
             android:name=".ui.activity.ActivityTilePreferences"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="false"
@@ -411,6 +418,10 @@
             </intent-filter>
         </receiver>
 
+        <receiver
+            android:name="ai.saiy.android.broadcast.BRBirthday"
+            android:enabled="true"
+            android:exported="false"/>
         <receiver
             android:name="ai.saiy.android.broadcast.BRRemote"
             android:enabled="true"

@@ -57,6 +57,7 @@ import ai.saiy.android.accessibility.BlockedApplicationsHelper;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.command.driving.DrivingProfile;
 import ai.saiy.android.command.driving.DrivingProfileHelper;
+import ai.saiy.android.command.horoscope.HoroscopeHelper;
 import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
@@ -1006,8 +1007,8 @@ public class FragmentAdvancedSettingsHelper {
                             MyLog.i(CLS_NAME, "showDOBDialog: onPositive");
                         }
                         if (dialog instanceof AlertDialog) {
-                            DatePicker datePicker = (DatePicker) ((AlertDialog) dialog).getWindow().findViewById(R.id.dobDatePicker);
-//TODO                            ai.saiy.android.command.horoscope.d.a(getApplicationContext(), datePicker.getDayOfMonth(), datePicker.getMonth(), datePicker.getYear());
+                            DatePicker datePicker = ((AlertDialog) dialog).getWindow().findViewById(R.id.dobDatePicker);
+                            HoroscopeHelper.calculateHoroscope(getApplicationContext(), datePicker.getDayOfMonth(), datePicker.getMonth(), datePicker.getYear());
                         }
                         dialog.dismiss();
                     }

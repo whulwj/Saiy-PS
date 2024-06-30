@@ -17,10 +17,17 @@
 
 package ai.saiy.android.broadcast;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
+import java.util.Calendar;
+import java.util.Locale;
+import java.util.TimeZone;
+
+import ai.saiy.android.command.horoscope.CommandHoroscopeValues;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.utils.MyLog;
@@ -77,6 +84,35 @@ public class BRBoot extends BroadcastReceiver {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onReceive: start at boot disabled by user");
             }
+        }
+        if (SPH.getStarSign(context) != CommandHoroscopeValues.Sign.UNKNOWN) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onReceive: setting user birthday alarm");
+            }
+            final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            final PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, new Intent(context, BRBirthday.class), PendingIntent.FLAG_IMMUTABLE);
+            final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.set(Calendar.DAY_OF_MONTH, SPH.getDobDay(context));
+            calendar.set(Calendar.MONTH, SPH.getDobMonth(context));
+            calendar.set(Calendar.HOUR_OF_DAY, 10);
+            calendar.set(Calendar.MINUTE, 30);
+            if (Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).after(calendar)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onReceive: calendar after: adding year");
+                }
+                calendar.add(Calendar.YEAR, 1);
+            } else if (DEBUG) {
+                MyLog.i(CLS_NAME, "onReceive: calendar before");
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onReceive: calendar: date: " + calendar.get(Calendar.DAY_OF_MONTH));
+                MyLog.i(CLS_NAME, "onReceive: calendar: month: " + (calendar.get(Calendar.MONTH) + 1));
+                MyLog.i(CLS_NAME, "onReceive: calendar: year: " + calendar.get(Calendar.YEAR));
+            }
+            alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), broadcast);
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "onReceive: DOB unknown");
         }
         UtilsFile.createDirs(context);
     }
