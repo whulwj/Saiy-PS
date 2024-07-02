@@ -23,11 +23,14 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.graphics.drawable.Drawable;
+import android.provider.MediaStore;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -164,6 +167,88 @@ public class Installed {
         return holdsPermission;
     }
 
+    public static ArrayList<Application> getInstalledApplications(Context context, boolean includeSystemApplication, boolean sortByName) {
+        final long startTime = System.nanoTime();
+        final ArrayList<Application> arrayList = new ArrayList<>();
+        final PackageManager packageManager = context.getPackageManager();
+        final List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(0);
+        if (sortByName) {
+            Collections.sort(installedApplications, new ApplicationInfo.DisplayNameComparator(packageManager));
+        }
+        CharSequence label;
+        String packageName;
+        for (ApplicationInfo applicationInfo : installedApplications) {
+            if (includeSystemApplication || applicationInfo.flags != ApplicationInfo.FLAG_SYSTEM) {
+                label = applicationInfo.loadLabel(packageManager);
+                packageName = applicationInfo.packageName;
+                if (packageName != null) {
+                    arrayList.add(new Application(label, packageName, applicationInfo.loadIcon(packageManager)));
+                }
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, startTime);
+        }
+        return arrayList;
+    }
+
+    public static ArrayList<Application> getSearchApplications(@NonNull PackageManager packageManager) {
+        final long startTime = System.nanoTime();
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.putExtra("query", "blah");
+        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
+        Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
+        final ArrayList<Application> arrayList = new ArrayList<>();
+        CharSequence label;
+        String packageName;
+        Drawable icon;
+        Application application;
+        for (ResolveInfo resolveInfo : queryIntentActivities) {
+            if (resolveInfo.activityInfo.exported) {
+                label = resolveInfo.loadLabel(packageManager);
+                packageName = resolveInfo.activityInfo.packageName;
+                icon = resolveInfo.loadIcon(packageManager);
+                if (packageName != null && label != null && icon != null) {
+                    application = new Application(label, packageName, icon);
+                    application.a(Intent.ACTION_SEARCH);
+                    arrayList.add(application);
+                }
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, startTime);
+        }
+        return insertPlayFromSearch(arrayList, packageManager);
+    }
+
+    private static ArrayList<Application> insertPlayFromSearch(@NonNull ArrayList<Application> arrayList, @NonNull PackageManager packageManager) {
+        final long startTime = System.nanoTime();
+        final Intent intent = new Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
+        intent.putExtra("query", "blah");
+        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
+        Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
+        CharSequence label;
+        String packageName;
+        Drawable icon;
+        Application application;
+        for (ResolveInfo resolveInfo : queryIntentActivities) {
+            if (resolveInfo.activityInfo.exported) {
+                label = resolveInfo.loadLabel(packageManager);
+                packageName = resolveInfo.activityInfo.packageName;
+                icon = resolveInfo.loadIcon(packageManager);
+                if (packageName != null && label != null && icon != null) {
+                    application = new Application(label, packageName, icon);
+                    application.a(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
+                    arrayList.add(0, application);
+                }
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, startTime);
+        }
+        return arrayList;
+    }
+
     /**
      * Get a list of all of the installed applications that hold the {@link Constants#PERMISSION_CONTROL_SAIY},
      * regardless of whether or not the permission has been explicitly granted. The results exclude our own
@@ -242,6 +327,30 @@ public class Installed {
         }
 
         return false;
+    }
+
+    public static ArrayList<Application> getAccessibleApplications(@NonNull PackageManager packageManager) {
+        final long startTime = System.nanoTime();
+        final Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
+        Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
+        final ArrayList<Application> arrayList = new ArrayList<>();
+        CharSequence label;
+        String packageName;
+        Drawable icon;
+        for (ResolveInfo resolveInfo : queryIntentActivities) {
+            label = resolveInfo.loadLabel(packageManager);
+            packageName = resolveInfo.activityInfo.packageName;
+            icon = resolveInfo.loadIcon(packageManager);
+            if (packageName != null && label != null && icon != null) {
+                arrayList.add(new Application(label, packageName, icon));
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, startTime);
+        }
+        return arrayList;
     }
 
     /**

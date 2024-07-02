@@ -17,8 +17,10 @@
 
 package ai.saiy.android.ui.fragment.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.view.LayoutInflater;
@@ -34,6 +36,8 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.view.GravityCompat;
@@ -41,6 +45,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -54,6 +59,7 @@ import java.util.TimeZone;
 import ai.saiy.android.R;
 import ai.saiy.android.accessibility.BlockedApplications;
 import ai.saiy.android.accessibility.BlockedApplicationsHelper;
+import ai.saiy.android.applications.ApplicationBasic;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.command.driving.DrivingProfile;
 import ai.saiy.android.command.driving.DrivingProfileHelper;
@@ -64,6 +70,7 @@ import ai.saiy.android.recognition.provider.android.RecognitionNative;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.tts.attributes.Gender;
+import ai.saiy.android.ui.activity.ActivityApplicationPickerMulti;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIMainAdapter;
@@ -72,6 +79,7 @@ import ai.saiy.android.ui.fragment.FragmentAdvancedSettings;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsString;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -83,6 +91,7 @@ public class FragmentAdvancedSettingsHelper {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAdvancedSettingsHelper.class.getSimpleName();
+    private static final int APP_PICKER_MULTI_REQ_CODE = 1100;
 
     private final FragmentAdvancedSettings parentFragment;
 
@@ -222,24 +231,24 @@ public class FragmentAdvancedSettingsHelper {
             MyLog.i(CLS_NAME, "getRecyclerView");
         }
 
-        final RecyclerView mRecyclerView = (RecyclerView) parent.findViewById(R.id.layout_common_fragment_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getParentActivity(), null));
-        return mRecyclerView;
+        final RecyclerView recyclerView = parent.findViewById(R.id.layout_common_fragment_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getParentActivity(), null));
+        return recyclerView;
     }
 
     /**
      * Get the adapter for this fragment
      *
-     * @param mObjects list of {@link ContainerUI} elements
+     * @param objects list of {@link ContainerUI} elements
      * @return the {@link UIMainAdapter}
      */
-    public UIMainAdapter getAdapter(@NonNull final ArrayList<ContainerUI> mObjects) {
+    public UIMainAdapter getAdapter(@NonNull final ArrayList<ContainerUI> objects) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getAdapter");
         }
-        return new UIMainAdapter(mObjects, getParent(), getParent());
+        return new UIMainAdapter(objects, getParent(), getParent());
     }
 
     /**
@@ -282,6 +291,45 @@ public class FragmentAdvancedSettingsHelper {
                 }
             }
         });
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onActivityResult: " + requestCode + " ~ " + resultCode);
+        }
+        if (resultCode != Activity.RESULT_OK) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onActivityResult: RESULT_CANCELED");
+            }
+            return;
+        }
+        if (data == null) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onActivityResult: data null");
+            }
+            return;
+        }
+        if (requestCode == APP_PICKER_MULTI_REQ_CODE) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onActivityResult: APP_PICKER_MULTI_REQ_CODE");
+            }
+            if (!data.hasExtra(ActivityApplicationPickerMulti.EXTRA_APPLICATION_ARRAY)) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onActivityResult: no application array");
+                }
+                return;
+            }
+            final ArrayList<ApplicationBasic> arrayList = data.getParcelableArrayListExtra(ActivityApplicationPickerMulti.EXTRA_APPLICATION_ARRAY);
+            if (DEBUG && arrayList != null) {
+                for (ApplicationBasic applicationBasic : arrayList) {
+                    MyLog.i(CLS_NAME, "getName: " + applicationBasic.getName());
+                    MyLog.i(CLS_NAME, "getPackageName: " + applicationBasic.getPackageName());
+                }
+            }
+            final BlockedApplications blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
+            blockedApplications.setApplicationArray(arrayList);
+            BlockedApplicationsHelper.save(getApplicationContext(), blockedApplications);
+        }
     }
 
     public void toast(String text, int duration) {
@@ -734,7 +782,17 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onNeutral");
                         }
-                        //TODO a(1100);
+                        final Intent intent = new Intent(getApplicationContext(), ActivityApplicationPickerMulti.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        intent.putExtra(ActivityApplicationPickerMulti.EXTRA_BLOCKED_APPLICATIONS, BlockedApplicationsHelper.getBlockedApplications(getApplicationContext()));
+                        try {
+                            getParent().startActivityForResult(intent, APP_PICKER_MULTI_REQ_CODE);
+                        } catch (Exception e) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "Exception");
+                                e.printStackTrace();
+                            }
+                        }
                     }
                 })
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -1041,12 +1099,10 @@ public class FragmentAdvancedSettingsHelper {
     }
 
     public void showSignatureDialog() {
-        String input = SPH.getMessageSignature(getApplicationContext());
-        //TODO EditText
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                 .setCancelable(false)
+                .setView(R.layout.text_input_dialog_layout)
                 .setTitle(R.string.menu_sms_email_signature)
-                .setMessage(R.string.custom_signature_text)
                 .setIcon(R.drawable.ic_transcribe_close)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
@@ -1054,14 +1110,18 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showSignatureDialog: onPositive");
                         }
-                        CharSequence charSequence = null; //TODO
-                        if (charSequence != null) {
-                            if (ai.saiy.android.utils.UtilsString.notNaked(charSequence.toString())) {
-//                                SPH.a(getApplicationContext(), dialog.f());
-                                SPH.setMessageSignature(getApplicationContext(), charSequence.toString().trim());
-                            } else {
-                                SPH.setMessageSignatureCondition(getApplicationContext(), false);
-                                SPH.setMessageSignature(getApplicationContext(), "");
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editText = ((AlertDialog) dialog).findViewById(android.R.id.input);
+                            final CharSequence charSequence = (editText == null)? null : editText.getText();
+                            if (charSequence != null) {
+                                if (UtilsString.notNaked(charSequence.toString())) {
+                                    final CheckBox checkBox = ((AlertDialog) dialog).findViewById(android.R.id.checkbox);
+                                    SPH.setMessageSignatureCondition(getApplicationContext(), checkBox != null && checkBox.isChecked());
+                                    SPH.setMessageSignature(getApplicationContext(), charSequence.toString().trim());
+                                } else {
+                                    SPH.setMessageSignatureCondition(getApplicationContext(), false);
+                                    SPH.setMessageSignature(getApplicationContext(), "");
+                                }
                             }
                         }
                         dialog.dismiss();
@@ -1081,10 +1141,20 @@ public class FragmentAdvancedSettingsHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
+
+        final TextInputLayout textInputLayout = materialDialog.getWindow().findViewById(android.R.id.inputArea);
+        textInputLayout.setHint(R.string.custom_signature_text);
+        final EditText editText = textInputLayout.findViewById(android.R.id.input);
+        editText.setText(SPH.getMessageSignature(getApplicationContext()));
+        final CheckBox checkBox = textInputLayout.findViewById(android.R.id.checkbox);
+        checkBox.setText(R.string.menu_enabled);
+        checkBox.setChecked(SPH.getMessageSignatureCondition(getApplicationContext()));
+        checkBox.jumpDrawablesToCurrentState();
+        checkBox.setVisibility(View.VISIBLE);
     }
 
-    private String getString(final int id) {
-        return getApplicationContext().getString(id);
+    private String getString(@StringRes int resId) {
+        return getApplicationContext().getString(resId);
     }
 
     /**

@@ -39,14 +39,22 @@ package ai.saiy.android.utils;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
+import android.webkit.URLUtil;
 
 import androidx.annotation.Nullable;
+
+import com.google.common.collect.Lists;
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
+
+import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by benrandall76@gmail.com on 23/04/2016.
  */
 public class UtilsBundle {
-
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = UtilsBundle.class.getSimpleName();
     /**
      * Prevent instantiation
      */
@@ -98,5 +106,161 @@ public class UtilsBundle {
         }
 
         return false;
+    }
+
+    public static boolean stringExtrasToBundle(String str) {
+        if (!UtilsString.notNaked(str)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "stringExtrasToBundle: naked");
+            }
+            return false;
+        }
+        final ArrayList<String> arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).trimResults().split(str));
+        arrayList.removeAll(Collections.singleton(null));
+        arrayList.removeAll(Collections.singleton(""));
+        if (!UtilsList.notNaked(arrayList)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "stringExtrasToBundle: no content");
+            }
+            return false;
+        }
+        for (String stringExtra : arrayList) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "stringExtra: " + stringExtra);
+            }
+            if (!stringExtra.contains(":")) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "stringExtra: delimiter missing");
+                }
+                return false;
+            }
+            final String[] split = stringExtra.split(":", 2);
+            final int length = split.length;
+            if (length != 2) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "extractedArrayLength: incorrect" + length);
+                }
+                return false;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "extractedArrayLength: " + length);
+                for (int i = 0; i < length; i++) {
+                    MyLog.i(CLS_NAME, "extracted: " + i + " : " + split[i]);
+                }
+            }
+            final String key = split[0].trim();
+            final String value = split[1].trim();
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "key: " + key);
+                MyLog.i(CLS_NAME, "value: " + value);
+            }
+            if (!UtilsString.notNaked(key) || !UtilsString.notNaked(value)) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "key or value naked" + length);
+                }
+                return false;
+            }
+            if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(value)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "not numeric: " + value);
+                }
+                if (!URLUtil.isValidUrl(value)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "not Uri: " + value);
+                    }
+                    try {
+                        org.apache.commons.lang3.BooleanUtils.toBoolean(value, String.valueOf(true), String.valueOf(false));
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "resolved to: boolean: " + value);
+                        }
+                    } catch (IllegalArgumentException e) {
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "toBoolean: IllegalArgumentException");
+                        }
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "not boolean: " + value);
+                        }
+                        if (value.matches("null")) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "string representation of null");
+                            }
+                            return false;
+                        }
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "resolved to: string: " + value);
+                        }
+                    }
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "resolved to: Uri: " + value);
+                }
+            } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "F")) {
+                try {
+                    Float.parseFloat(value);
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: float: " + value);
+                    }
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseFloat: NumberFormatException");
+                    }
+                    return false;
+                }
+            } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "L")) {
+                try {
+                    Long.parseLong(value.substring(0, value.length() - 1));
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: long: " + value);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseLong: IndexOutOfBoundsException");
+                    }
+                    return false;
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseLong: NumberFormatException");
+                    }
+                    return false;
+                }
+            } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "D")) {
+                try {
+                    Double.parseDouble(value);
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: double: " + value);
+                    }
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseDouble: NumberFormatException");
+                    }
+                    return false;
+                }
+            } else {
+                try {
+                    Integer.parseInt(value);
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: int: " + value);
+                    }
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseInt: NumberFormatException");
+                    }
+                    try {
+                        Double.parseDouble(value);
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "resolved to: double: " + value);
+                        }
+                    } catch (NumberFormatException numberFormatException) {
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "parseDouble: NumberFormatException");
+                        }
+                        if (DEBUG) {
+                            MyLog.e(CLS_NAME, "isCreatable: no number created");
+                        }
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
     }
 }

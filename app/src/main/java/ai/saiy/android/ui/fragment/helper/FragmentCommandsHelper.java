@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.view.View;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -366,11 +367,17 @@ public class FragmentCommandsHelper {
         return new UICommandsAdapter(arrayList, getParent());
     }
 
-    public RecyclerView getRecyclerView(View view) {
+    /**
+     * Get the recycler view for this fragment
+     *
+     * @param parent the view parent
+     * @return the {@link RecyclerView}
+     */
+    public RecyclerView getRecyclerView(@NonNull final View parent) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getRecyclerView");
         }
-        RecyclerView recyclerView = view.findViewById(R.id.layout_common_fragment_recycler_view);
+        final RecyclerView recyclerView = parent.findViewById(R.id.layout_common_fragment_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
         return recyclerView;

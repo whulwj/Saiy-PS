@@ -19,6 +19,7 @@ package ai.saiy.android.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -368,6 +369,12 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
         } else if (DEBUG) {
             MyLog.w(CLS_NAME, "toast Fragment detached");
         }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        helper.onActivityResult(requestCode, resultCode, data);
     }
 
     public boolean isActive() {

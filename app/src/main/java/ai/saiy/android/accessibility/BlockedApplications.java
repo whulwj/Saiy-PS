@@ -33,11 +33,11 @@ public class BlockedApplications implements Parcelable {
                 applicationArray = new ArrayList<>();
                 in.readParcelableList(applicationArray, BlockedApplications.class.getClassLoader());
             } else {
-                int size = in.readInt();
-                if (size > 0) {
+                final int size = in.readInt();
+                if (size >= 0) {
                     applicationArray = new ArrayList<>(size);
                     for (int i = 0; i < size; ++i) {
-                        applicationArray.add(ApplicationBasic.CREATOR.createFromParcel(in));
+                        applicationArray.add(in.readParcelable(ApplicationBasic.class.getClassLoader()));
                     }
                 }
             }
@@ -88,9 +88,24 @@ public class BlockedApplications implements Parcelable {
 
     @Override
     public @NonNull String toString() {
-        return "BlockedApplications{" +
-                "applicationArray=" + (applicationArray == null ? -1 : applicationArray.size()) +
-                ", text='" + text + '\'' +
-                '}';
+        final StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("BlockedApplications{applicationArray=");
+        if (applicationArray == null || applicationArray.isEmpty()) {
+            stringBuilder.append("[]");
+        } else {
+            stringBuilder.append("[");
+            for (int i = 0, size = applicationArray.size(); i < size; ++i) {
+                stringBuilder.append(applicationArray.get(i));
+                if (i < (size - 1)) {
+                    stringBuilder.append(", ");
+                }
+            }
+            stringBuilder.append("]");
+        }
+        stringBuilder.append(", text='");
+        stringBuilder.append(text);
+        stringBuilder.append('\'');
+        stringBuilder.append('}');
+        return stringBuilder.toString();
     }
 }

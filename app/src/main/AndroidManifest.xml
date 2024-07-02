@@ -293,7 +293,7 @@
             android:theme="@style/Theme.MaterialDialog.Transparent"
             android:name="ai.saiy.android.ui.activity.ActivityShowDialog"
             android:excludeFromRecents="true"
-            android:exported="true"
+            android:exported="false"
             android:configChanges="screenSize|orientation|keyboardHidden"/>
 
         <activity
@@ -337,6 +337,31 @@
                 android:name="com.android.systemui.action_assist_icon"
                 android:resource="@mipmap/ic_launcher"/>
         </activity>
+
+        <activity
+            android:name="ai.saiy.android.ui.activity.ActivityApplicationPicker"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="ai.saiy.android.ui.activity.ActivityActivityPicker"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name="ai.saiy.android.ui.activity.ActivityApplicationPickerMulti"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:noHistory="true"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <service
             android:name="ai.saiy.android.service.SelfAware"

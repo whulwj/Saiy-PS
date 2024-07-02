@@ -138,7 +138,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
             serviceInfo.flags = AccessibilityServiceInfo.FLAG_INCLUDE_NOT_IMPORTANT_VIEWS;
             serviceInfo.notificationTimeout = UPDATE_TIMEOUT;
             serviceInfo.eventTypes = AccessibilityEvent.TYPE_NOTIFICATION_STATE_CHANGED;
-            this.setServiceInfo(serviceInfo);
+            setServiceInfo(serviceInfo);
         }
     }
 
@@ -245,8 +245,8 @@ public class SaiyAccessibilityService extends AccessibilityService {
                 String str;
                 boolean noEventText;
                 String eventText = null;
-                Pair<Boolean, String> a2 = UtilsApplication.getAppNameFromPackage(getApplicationContext(), packageName);
-                String applicationName = a2.first ? a2.second : this.anUnknownApplication;
+                final Pair<Boolean, String> appNameFromPackage = UtilsApplication.getAppNameFromPackage(getApplicationContext(), packageName);
+                String applicationName = appNameFromPackage.first ? appNameFromPackage.second : anUnknownApplication;
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "applicationName: " + applicationName);
                 }
@@ -276,7 +276,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "eventText naked");
                     }
-                    if (this.initIgnoreRestrictedContent) {
+                    if (initIgnoreRestrictedContent) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "eventText naked: ignoring restricted");
                         }
@@ -303,8 +303,8 @@ public class SaiyAccessibilityService extends AccessibilityService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "GMAIL");
                         }
-                        if (quote.contains(this.newMessages)) {
-                            utterance = sr.getString(R.string.structured_email_1) + ". " + sr.getString(R.string.structured_email_2) + XMLResultsHandler.SEP_SPACE + eventText.replace(this.newMessages, "").trim() + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.structured_email_3);
+                        if (quote.contains(newMessages)) {
+                            utterance = sr.getString(R.string.structured_email_1) + ". " + sr.getString(R.string.structured_email_2) + XMLResultsHandler.SEP_SPACE + eventText.replace(newMessages, "").trim() + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.structured_email_3);
                         } else {
                             utterance = sr.getString(R.string.structured_email_4) + XMLResultsHandler.SEP_SPACE + eventText;
                         }
@@ -478,8 +478,8 @@ public class SaiyAccessibilityService extends AccessibilityService {
     }
 
     private boolean isPackageRestricted(String name) {
-        if (this.blockedApplications != null) {
-            List<ApplicationBasic> applicationArray = this.blockedApplications.getApplicationArray();
+        if (blockedApplications != null) {
+            List<ApplicationBasic> applicationArray = blockedApplications.getApplicationArray();
             if (UtilsList.notNaked(applicationArray)) {
                 String packageName;
                 for (ApplicationBasic next : applicationArray) {
@@ -493,7 +493,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
                 }
             }
         }
-        return this.saiy.matcher(name).matches() || this.dialer.matcher(name).matches() || this.phone.matcher(name).matches() || this.googleDialer.matcher(name).matches();
+        return saiy.matcher(name).matches() || dialer.matcher(name).matches() || phone.matcher(name).matches() || googleDialer.matcher(name).matches();
     }
 
     private boolean isRestrictedContent(String str) {
@@ -501,16 +501,16 @@ public class SaiyAccessibilityService extends AccessibilityService {
         if (ai.saiy.android.nlu.local.Profanity.pProfanity.matcher(str).find() || !ai.saiy.android.utils.UtilsString.regexCheck(str)) {
             return true;
         }
-        if (this.blockedApplications != null) {
-            if (ai.saiy.android.utils.UtilsString.notNaked(this.blockedApplications.getText())) {
-                arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).omitEmptyStrings().split(this.blockedApplications.getText()));
+        if (blockedApplications != null) {
+            if (ai.saiy.android.utils.UtilsString.notNaked(blockedApplications.getText())) {
+                arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).trimResults().split(blockedApplications.getText()));
                 arrayList.removeAll(Collections.singleton(null));
                 arrayList.removeAll(Collections.singleton(""));
             } else {
                 arrayList = new ArrayList<>();
             }
-            arrayList.add(this.blockedInputMethod);
-            arrayList.add(this.blockedLocation);
+            arrayList.add(blockedInputMethod);
+            arrayList.add(blockedLocation);
             for (String restrictedContent : arrayList) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "isRestrictedContent: " + restrictedContent);

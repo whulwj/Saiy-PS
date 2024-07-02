@@ -192,6 +192,8 @@
     <string name="title_service">Service</string>
     <string name="action_power" translatable="true">Power</string>
     <string name="title_start_listening">Start Listening</string>
+    <string name="action_save">Save</string>
+    <string name="action_select_all">Select All</string>
     <string name="menu_voice_tutorial" translatable="true">Voice Tutorial</string>
     <string name="content_start_voice_tutorial">Would you like to start the Voice Tutorial?</string>
     <string name="menu_yes_please">Yes please!</string>
@@ -1401,4 +1403,17 @@
     <string name="birthday_notification_text">Saiy interaction - click for details</string>
     <string name="birthday_notification_ticker">Saiy interaction</string>
     <string name="content_birthday">Hey, %1$s. I just wanted to wish you a very happy birthday. I hope you have a fantastic day.</string>
+
+    <string name="acs_app_icon">The application icon</string>
+    <string name="acs_chevron_icon">A chevron icon</string>
+    <string name="title_select_app_activity">Select app activity</string>
+    <string name="title_select_application">Select application</string>
+    <string name="title_select_applications">Select applications</string>
+    <string name="_auto_play"> (Auto Play)</string>
+    <string name="menu_intent_extras">Intent Extras</string>
+    <string name="custom_extras_title">Comma separated extras, if required</string>
+    <string name="custom_extras_hint">a_boolean:true,some_string:I\'m words!,my_number:76</string>
+    <string name="content_extras_format_incorrect">Extras format incorrect!</string>
+    <string name="title_none">None</string>
+    <string name="content_access_forbidden">Access forbidden!</string>
 </resources>

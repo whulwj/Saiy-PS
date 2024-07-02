@@ -7,6 +7,7 @@ import android.view.View;
 
 import java.util.ArrayList;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -352,11 +353,17 @@ public class FloatingCommandsHelper {
         return new UIFloatingCommandsAdapter(arrayList, getService());
     }
 
-    public RecyclerView getRecyclerView(View view) {
+    /**
+     * Get the recycler view for this fragment
+     *
+     * @param parent the view parent
+     * @return the {@link RecyclerView}
+     */
+    public RecyclerView getRecyclerView(@NonNull final View parent) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getRecyclerView");
         }
-        RecyclerView recyclerView = view.findViewById(R.id.layout_floating_recycler_view);
+        final RecyclerView recyclerView = parent.findViewById(R.id.layout_floating_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getService()));
         recyclerView.addItemDecoration(new ai.saiy.android.ui.components.DividerItemDecoration(getService(), null));

@@ -22,6 +22,7 @@ import android.os.AsyncTask;
 import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -329,8 +330,8 @@ public class FragmentAboutHelper {
         return notices;
     }
 
-    private String getString(final int id) {
-        return getApplicationContext().getString(id);
+    private String getString(@StringRes int resId) {
+        return getApplicationContext().getString(resId);
     }
 
     /**

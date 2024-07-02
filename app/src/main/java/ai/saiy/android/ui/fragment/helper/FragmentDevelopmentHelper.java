@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
@@ -95,11 +96,17 @@ public class FragmentDevelopmentHelper {
         return new UIApplicationsAdapter(arrayList, getParent(), getParent());
     }
 
-    public RecyclerView getRecyclerView(View view) {
+    /**
+     * Get the recycler view for this fragment
+     *
+     * @param parent the view parent
+     * @return the {@link RecyclerView}
+     */
+    public RecyclerView getRecyclerView(@NonNull final View parent) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getRecyclerView");
         }
-        RecyclerView recyclerView = view.findViewById(R.id.layout_common_fragment_recycler_view);
+        final RecyclerView recyclerView = parent.findViewById(R.id.layout_common_fragment_recycler_view);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getParentActivity(), null));
