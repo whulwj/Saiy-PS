@@ -85,7 +85,7 @@ public class SelfAwareHelper {
     private static final String FULL_STOP_SPACE = ". ";
     private static final String QUESTION_MARK_SPACE = "? ";
     private static final String EXCLAMATION_MARK_SPACE = "! ";
-    private static final String LINE_SEPARATOR = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ?System.lineSeparator():System.getProperty("line.separator");;
+    private static final String LINE_SEPARATOR = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) ?System.lineSeparator():System.getProperty("line.separator");
     private static final String COMMA_SPACE = ", ";
     private static final String JUST_A_SPACE = " ";
 
@@ -384,11 +384,15 @@ public class SelfAwareHelper {
                 }
                 // TODO
                 break;
+            case Condition.CONDITION_CONTACT:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "Condition.CONDITION_CONTACT");
+                }
+                break;
             case Condition.CONDITION_ANNOUNCE_CALLER:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_ANNOUNCE_CALLER");
                 }
-                // TODO
                 break;
             case Condition.CONDITION_TUTORIAL:
                 showToast("Google Recognizer: silence detected?", Toast.LENGTH_SHORT);

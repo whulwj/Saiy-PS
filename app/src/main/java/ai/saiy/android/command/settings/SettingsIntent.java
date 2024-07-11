@@ -161,18 +161,16 @@ public class SettingsIntent {
             context.startActivity(intent);
             return true;
         } catch (ActivityNotFoundException e) {
-            if (!DEBUG) {
-                return false;
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "settingsIntent: ActivityNotFoundException");
+                e.printStackTrace();
             }
-            MyLog.e(CLS_NAME, "settingsIntent: ActivityNotFoundException");
-            e.printStackTrace();
             return false;
         } catch (Exception e) {
-            if (!DEBUG) {
-                return false;
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "settingsIntent: Exception");
+                e.printStackTrace();
             }
-            MyLog.e(CLS_NAME, "settingsIntent: Exception");
-            e.printStackTrace();
             return false;
         }
     }

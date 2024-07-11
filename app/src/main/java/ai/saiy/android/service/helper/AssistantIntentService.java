@@ -71,7 +71,6 @@ public class AssistantIntentService extends IntentService {
     private static final String ACTION_ASSIST_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
     public static final String ACTION_WIDGET_ASSIST = "ai.saiy.android.action.WIDGET_ASSIST";
     private static final String ACTION_QL_ASSIST = "ai.saiy.android.action.QL_ASSIST";
-    private static final String EXTRA_RESOLVED = "extra_resolved";
     private static final String ACTION_ALEXA = "ai.saiy.android.action.ALEXA";
     private static final String ACTION_HOTWORD = "ai.saiy.android.HOTWORD";
     private static final String ACTION_DRIVING ="ai.saiy.android.DRIVING";
@@ -254,7 +253,7 @@ public class AssistantIntentService extends IntentService {
                         } else {
                             ArrayList<String> arrayList = new ArrayList<>(1);
                             arrayList.add(stringExtra);
-                            actionBundle.putBoolean(EXTRA_RESOLVED, true);
+                            actionBundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
                             actionBundle.putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, arrayList);
                             actionBundle.putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, new float[]{0.9f});
                         }

@@ -20,6 +20,7 @@ package ai.saiy.android.service.helper;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 
@@ -82,6 +83,8 @@ public class LocalRequest {
     public static final String EXTRA_CONDITION_RETRY = "extra_condition_retry";
     public static final String EXTRA_ALEXA_FILE_PATH = "extra_alexa_file_path";
     public static final String EXTRA_VR_RETRY = "extra_vr_retry";
+    public static final String EXTRA_OBJECT = "extra_object";
+    public static final String EXTRA_RESOLVED = "extra_resolved";
 
     private final ServiceConnector sc;
     private final WeakReference<Context> weakContext;
@@ -209,6 +212,10 @@ public class LocalRequest {
 
     public void setTutorialStage(int tutorialStage) {
         this.bundle.putInt(LocalRequest.EXTRA_TUTORIAL_STAGE, tutorialStage);
+    }
+
+    public void setParcelableObject(Parcelable object) {
+        this.bundle.putParcelable(LocalRequest.EXTRA_OBJECT, object);
     }
 
     /**

@@ -1,7 +1,6 @@
 package ai.saiy.android.nlu.local;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
@@ -30,12 +29,12 @@ public class OnOff {
         CANCEL
     }
 
-    public OnOff(ai.saiy.android.localisation.SaiyResources aVar) {
+    public OnOff(ai.saiy.android.localisation.SaiyResources sr) {
         if (on == null) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "initialising strings");
             }
-            initStrings(aVar);
+            initStrings(sr);
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }
@@ -67,19 +66,18 @@ public class OnOff {
         stop = Pattern.compile(".*\\b" + sr.getString(R.string.stop) + "\\b.*");
     }
 
-    public int a() {
+    public int getConfidence() {
         return this.confidence;
     }
 
-    public Result a(ArrayList<String> voiceData, SupportedLanguage supportedLanguage) { //resolve
+    public Result resolve(ArrayList<String> voiceData, SupportedLanguage supportedLanguage) { //resolve
         final Locale locale = supportedLanguage.getLocale();
-        final Iterator<String> it = voiceData.iterator();
         int toggleCount = 0;
         int offCount = 0;
         int onCount = 0;
         String vdLower;
-        while (it.hasNext()) {
-            vdLower = it.next().toLowerCase(locale).trim();
+        for (String voiceDatum : voiceData) {
+            vdLower = voiceDatum.toLowerCase(locale).trim();
             if (on.matcher(vdLower).matches() || enable.matcher(vdLower).matches() || start.matcher(vdLower).matches()) {
                 onCount++;
             }
@@ -94,18 +92,17 @@ public class OnOff {
         return (onCount <= offCount || onCount <= toggleCount) ? (offCount <= onCount || offCount <= toggleCount) ? (toggleCount <= onCount || toggleCount <= offCount) ? Result.UNRESOLVED : Result.TOGGLE : Result.OFF : Result.ON;
     }
 
-    public Result a(ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.localisation.SaiyResources sr) {
+    public Result resolve(ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.localisation.SaiyResources sr) {
         if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, sr, true).detectCancel(voiceData)) {
             return Result.CANCEL;
         }
         final Locale locale = supportedLanguage.getLocale();
-        final Iterator<String> it = voiceData.iterator();
         int toggleCount = 0;
         int offCount = 0;
         int onCount = 0;
         String vdLower;
-        while (it.hasNext()) {
-            vdLower = it.next().toLowerCase(locale).trim();
+        for (String voiceDatum : voiceData) {
+            vdLower = voiceDatum.toLowerCase(locale).trim();
             if (on.matcher(vdLower).matches() || enable.matcher(vdLower).matches() || start.matcher(vdLower).matches()) {
                 onCount++;
             }

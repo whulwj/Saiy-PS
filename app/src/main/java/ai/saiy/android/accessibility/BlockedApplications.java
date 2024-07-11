@@ -28,18 +28,12 @@ public class BlockedApplications implements Parcelable {
     public static final Creator<BlockedApplications> CREATOR = new Creator<BlockedApplications>() {
         @Override
         public BlockedApplications createFromParcel(Parcel in) {
-            ArrayList<ApplicationBasic> applicationArray = null;
+            ArrayList<ApplicationBasic> applicationArray;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 applicationArray = new ArrayList<>();
-                in.readParcelableList(applicationArray, BlockedApplications.class.getClassLoader());
+                in.readParcelableList(applicationArray, ApplicationBasic.class.getClassLoader());
             } else {
-                final int size = in.readInt();
-                if (size >= 0) {
-                    applicationArray = new ArrayList<>(size);
-                    for (int i = 0; i < size; ++i) {
-                        applicationArray.add(in.readParcelable(ApplicationBasic.class.getClassLoader()));
-                    }
-                }
+                applicationArray = in.createTypedArrayList(ApplicationBasic.CREATOR);
             }
             return new BlockedApplications(applicationArray, in.readString());
         }
@@ -76,12 +70,7 @@ public class BlockedApplications implements Parcelable {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             parcel.writeParcelableList(applicationArray, flags);
         } else {
-            parcel.writeInt(applicationArray == null ? -1 : applicationArray.size());
-            if (applicationArray != null) {
-                for (ApplicationBasic applicationBasic : applicationArray) {
-                    parcel.writeParcelable(applicationBasic, flags);
-                }
-            }
+            parcel.writeTypedList(applicationArray);
         }
         parcel.writeString(text);
     }

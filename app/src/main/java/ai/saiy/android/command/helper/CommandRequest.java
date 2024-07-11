@@ -18,6 +18,7 @@
 package ai.saiy.android.command.helper;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
@@ -48,6 +49,7 @@ public class CommandRequest {
     private String utterance;
     private int action = LocalRequest.ACTION_SPEAK_ONLY;
 
+    private Bundle bundle;
     private final Locale vrLocale;
     private final Locale ttsLocale;
     private final SupportedLanguage sl;
@@ -227,5 +229,13 @@ public class CommandRequest {
 
     public void setAction(final int action) {
         this.action = action;
+    }
+
+    public void setBundle(Bundle bundle) {
+        this.bundle = bundle;
+    }
+
+    public Bundle getBundle() {
+        return this.bundle != null ? this.bundle : new Bundle();
     }
 }

@@ -30,6 +30,7 @@ import java.util.Set;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.SaiyDefaults;
+import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.AnalysisResultHelper;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.command.helper.CC;
@@ -138,7 +139,7 @@ public class NotificationService extends IntentService {
                                     Global.setVoiceTutorialState(getApplicationContext(), false);
                                     bundle.putInt(LocalRequest.EXTRA_SPEECH_PRIORITY, SpeechPriority.PRIORITY_TUTORIAL);
                                     bundle.putBoolean(LocalRequest.EXTRA_PREVENT_RECOGNITION, true);
-                                    bundle.putString(LocalRequest.EXTRA_UTTERANCE, "silence");
+                                    bundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyRequestParams.SILENCE);
                                     new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
                                     return;
                                 }
@@ -203,18 +204,23 @@ public class NotificationService extends IntentService {
                                         }
                                         permissionContent = getString(ai.saiy.android.R.string.permission_audio);
                                         break;
+                                    case PermissionHelper.REQUEST_FILE:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_FILE");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_group_files);
+                                        break;
                                     case PermissionHelper.REQUEST_GROUP_CONTACTS:
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_GROUP_CONTACTS");
                                         }
                                         permissionContent = getString(ai.saiy.android.R.string.permission_group_contacts);
                                         break;
-                                    case PermissionHelper.REQUEST_FILE:
+                                    case PermissionHelper.REQUEST_GROUP_TELEPHONY:
                                         if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_FILE");
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_GROUP_TELEPHONY");
                                         }
-                                        // TODO
-                                        permissionContent = getString(ai.saiy.android.R.string.permission_unknown);
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_group_telephony);
                                         break;
                                     default:
                                         if (DEBUG) {
@@ -364,7 +370,7 @@ public class NotificationService extends IntentService {
                                 Global.setVoiceTutorialState(getApplicationContext(), false);
                                 bundle.putInt(LocalRequest.EXTRA_SPEECH_PRIORITY, SpeechPriority.PRIORITY_TUTORIAL);
                                 bundle.putBoolean(LocalRequest.EXTRA_PREVENT_RECOGNITION, true);
-                                bundle.putString(LocalRequest.EXTRA_UTTERANCE, "silence");
+                                bundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyRequestParams.SILENCE);
                                 new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
                                 break;
                             case NOTIFICATION_FLOATING_WINDOW:

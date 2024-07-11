@@ -73,6 +73,7 @@
     <string name="navigation_drawer_open" translatable="true">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="true">Close navigation drawer</string>
     <string name="app_name" translatable="false">Saiy</string>
+    <string name="saiy_hyperlink">&lt;a href=http://saiy.ai&gt;Saiy&lt;/a&gt;</string>
     <string name="control_saiy_permission_label" translatable="true">Remotely control Saiy features</string>
     <string name="control_saiy_permission_description" translatable="true">control certain features of Saiy. These features include
         the recording of audio, passing of this speech data to the remote application and varying the type of voice engine used.</string>
@@ -937,6 +938,7 @@
     <string name="permission_audio" translatable="true">I require the, microphone, permission to record your voice and
         understand what you are saying. Without this permission, I\'m afraid I\'ll be useless\!
         You can grant this by clicking the Permissions button below</string>
+    <string name="permission_group_files">I require the, files, permission, in order to access sounds effects that are placed on your device storage, as well as import and export your custom commands.</string>
     <string name="permission_group_contacts" translatable="true">I require the, accounts and contacts, permission
         to do many things. To associate your voice with a specific account. To assist you with making
         and receiving calls. To help you send text messages and announce their content. Sending emails, your
@@ -944,6 +946,7 @@
     <string name="permission_group_contacts_denied" translatable="true">I require the, accounts and contacts,
         permission to use this feature. You can manually allow this in the Application Settings, under
         permissions.</string>
+    <string name="permission_group_telephony">I require the, telephony and call log, permissions to do many things. To assist you with making and receiving calls. To announce who is calling you or who you may have missed a call from.</string>
 
     <!-- Notification data -->
     <string name="notification_ticker" translatable="true">"Saiy has become self-aware"</string>
@@ -1371,6 +1374,7 @@
 
     <string name="alexa_media_response">Alexa\'s media requests make little sense I\'m afraid.</string>
     <string name="alexa_volume_response">Alexa just asked me to set the volume to, %1$s. I\'m not sure how to go about doing that.</string>
+    <string name="error_alexa_marshmallow">Sorry, but due to Amazon\'s strict encryption requirements, this feature is only available on devices running Marshmallow or higher.</string>
 
     <string name="lp_toast_unknown">When I haven\'t understood a command, this option allows me to show you a toast of the speech content returned by Google. It\'s a little selfish really, as I want you to blame them, and not me!</string>
     <string name="menu_driving_profile">Driving Profile</string>
@@ -1416,4 +1420,261 @@
     <string name="content_extras_format_incorrect">Extras format incorrect!</string>
     <string name="title_none">None</string>
     <string name="content_access_forbidden">Access forbidden!</string>
+
+    <string name="contact">contact</string>
+    <string name="contacts">contacts</string>
+    <string name="address">address</string>
+    <string name="destination">destination</string>
+    <string name="location">location</string>
+    <string name="with_a_location_listed">with a location listed</string>
+    <string name="closest">closest</string>
+    <string name="nearest">nearest</string>
+    <string name="speaker">speaker</string>
+    <string name="call">call</string>
+    <string name="calling">calling</string>
+    <string name="dial">dial</string>
+    <string name="dialing">dialing</string>
+    <string name="ring">ring</string>
+    <string name="display">display</string>
+    <string name="displayed" translatable="false">displayed</string>
+    <string name="edit">edit</string>
+    <string name="editing">editing</string>
+    <string name="navigate">navigate</string>
+    <string name="navigating">navigating</string>
+    <string name="listed">listed</string>
+    <string name="read">read</string>
+    <string name="free_dial">free dial</string>
+    <string name="read_dial">read dial</string>
+    <string name="re_dial">re dial</string>
+    <string name="redial">redial</string>
+    <string name="skype">skype</string>
+    <string name="skype_handle">skype handle</string>
+    <string name="skyping">skyping</string>
+    <string name="at">at</string>
+    <string name="via">via</string>
+    <string name="by">by</string>
+    <string name="and">and</string>
+    <string name="or">or</string>
+    <string name="from">from</string>
+    <string name="of">of</string>
+
+    <string name="set">set</string>
+    <string name="word_new">new</string>
+    <string name="create">create</string>
+    <string name="appointment">appointment</string>
+    <string name="event">event</string>
+    <string name="calendar">calendar</string>
+    <string name="alarm">alarm</string>
+    <string name="schedule">schedule</string>
+    <string name="remind_me">remind me</string>
+    <string name="reminder">reminder</string>
+    <string name="meeting">meeting</string>
+    <string name="calendar_to_alarm">I thought it would be more suitable to set an alarm for that.</string>
+    <string name="calendar_error_insert">something went wrong attempting to set that event</string>
+    <string name="calendar_error_structure">Sorry, but I couldn\'t structure that event</string>
+    <string name="that_date_is">that date is</string>
+    <string name="JANUARY">january</string>
+    <string name="FEBRUARY">february</string>
+    <string name="MARCH">march</string>
+    <string name="APRIL">april</string>
+    <string name="MAY">may</string>
+    <string name="JUNE">june</string>
+    <string name="JULY">july</string>
+    <string name="AUGUST">august</string>
+    <string name="SEPTEMBER">september</string>
+    <string name="OCTOBER">october</string>
+    <string name="NOVEMBER">november</string>
+    <string name="DECEMBER">december</string>
+    <string name="MONDAY">monday</string>
+    <string name="TUESDAY">tuesday</string>
+    <string name="WEDNESDAY">wednesday</string>
+    <string name="THURSDAY">thursday</string>
+    <string name="FRIDAY">friday</string>
+    <string name="SATURDAY">saturday</string>
+    <string name="SUNDAY">sunday</string>
+    <string name="hour">hour</string>
+    <string name="called">called</string>
+    <string name="calls">calls</string>
+    <string name="name">name</string>
+    <string name="named">named</string>
+    <string name="names">names</string>
+    <string name="FIRST">first</string>
+    <string name="SECOND">second</string>
+    <string name="THIRD">third</string>
+    <string name="FOURTH">fourth</string>
+    <string name="FIFTH">fifth</string>
+    <string name="SIXTH">sixth</string>
+    <string name="SEVENTH">seventh</string>
+    <string name="EIGHTH">eighth</string>
+    <string name="NINTH">ninth</string>
+    <string name="TENTH">tenth</string>
+    <string name="ELEVENTH">eleventh</string>
+    <string name="TWELFTH">twelfth</string>
+    <string name="THIRTEENTH">thirteenth</string>
+    <string name="FOURTEENTH">fourteenth</string>
+    <string name="FIFTEENTH">fifteenth</string>
+    <string name="SIXTEENTH">sixteenth</string>
+    <string name="SEVENTEENTH">seventeenth</string>
+    <string name="EIGHTEENTH">eighteenth</string>
+    <string name="NINETEENTH">nineteenth</string>
+    <string name="TWENTIETH">twentieth</string>
+    <string name="TWENTY_FIRST">twenty first</string>
+    <string name="TWENTY_SECOND">twenty second</string>
+    <string name="TWENTY_THIRD">twenty third</string>
+    <string name="TWENTY_FOURTH">twenty fourth</string>
+    <string name="TWENTY_FIFTH">twenty fifth</string>
+    <string name="TWENTY_SIXTH">twenty sixth</string>
+    <string name="TWENTY_SEVENTH">twenty seventh</string>
+    <string name="TWENTY_EIGHTH">twenty eighth</string>
+    <string name="TWENTY_NINTH">twenty ninth</string>
+    <string name="THIRTIETH">thirtieth</string>
+    <string name="THIRTY_FIRST">thirty first</string>
+    <string name="TODAY">today</string>
+    <string name="today">today</string>
+    <string name="TOMORROW">tomorrow</string>
+    <string name="yesterday">yesterday</string>
+    <string name="_MORNING"> morning</string>
+    <string name="_EVENING"> evening</string>
+    <string name="_NIGHT"> night</string>
+    <string name="_AFTERNOON"> afternoon</string>
+    <string name="all_day">all day</string>
+    <string name="allday">allday</string>
+    <string name="FOR_MINUTES">for minutes</string>
+    <string name="TO_MINUTES">to minutes</string>
+    <string name="OF_THE_">of the </string>
+    <string name="O_CLOCK">o clock</string>
+    <string name="O__CLOCK">o\'clock</string>
+    <string name="IN_THE_AFTERNOON">in the afternoon</string>
+    <string name="IN_THE_EVENING">in the evening</string>
+    <string name="IN_THE_MORNING">in the morning</string>
+    <string name="FIVE_TO">five to</string>
+    <string name="TEN_TO">ten to</string>
+    <string name="NUMERIC_TEN_TO">10 to</string>
+    <string name="QUARTER_TO">quarter to</string>
+    <string name="TWENTY_TO">twenty to</string>
+    <string name="NUMERIC_TWENTY_FIVE_TO">25 five to</string>
+    <string name="TWENTY_FIVE_TO">twenty five to</string>
+    <string name="HALF_PAST">half past</string>
+    <string name="NUMERIC_TWENTY_FIVE_PAST">25 five past</string>
+    <string name="TWENTY_FIVE_PAST">twenty five past</string>
+    <string name="TWENTY_NUMERIC_FIVE_PAST">twenty 5 past</string>
+    <string name="NUMERIC_TWENTY_PAST">20 past</string>
+    <string name="TWENTY_PAST">twenty past</string>
+    <string name="QUARTER_PAST">quarter past</string>
+    <string name="NUMERIC_TEN_PAST">10 past</string>
+    <string name="TEN_PAST">ten past</string>
+    <string name="NUMERIC_FIVE_PAST">5 past</string>
+    <string name="FIVE_PAST">five past</string>
+    <string name="MINUTE_PAST">minute past</string>
+    <string name="PAST">past</string>
+    <string name="MINUTES_PAST">minutes past</string>
+    <string name="MINUTE_TO">minute to</string>
+    <string name="MINUTES_TO">minutes to</string>
+    <string name="EXACTLY">exactly</string>
+    <string name="it_s">it\'s</string>
+    <string name="time_am">A M</string>
+    <string name="time_pm">P M</string>
+
+    <string name="text">text</string>
+    <string name="message">message</string>
+    <string name="email">email</string>
+    <string name="me">me</string>
+    <string name="text_to_speech">text to speech</string>
+    <string name="send">send</string>
+    <string name="sms">sms</string>
+    <string name="compose">compose</string>
+    <string name="callback">callback</string>
+    <string name="call_back">call back</string>
+    <string name="call_black">call black</string>
+    <string name="call_bak">call bak</string>
+    <string name="call_bag">call bag</string>
+    <string name="mobile">mobile</string>
+    <string name="work">work</string>
+    <string name="office">office</string>
+    <string name="home">home</string>
+    <string name="the">the</string>
+    <string name="number">number</string>
+    <string name="his">his</string>
+    <string name="her">her</string>
+    <string name="their">their</string>
+    <string name="there">there</string>
+    <string name="my">my</string>
+    <string name="a_message">a message</string>
+    <string name="a_text">a text</string>
+    <string name="an">an</string>
+    <string name="not_a">not a</string>
+    <string name="an_email">an email</string>
+    <string name="an_email_message">an email message</string>
+    <string name="an_sms">an sms</string>
+    <string name="an_sms_message">an sms message</string>
+    <string name="an_unknown_sender">an unknown sender</string>
+    <string name="attacks_message">attacks message</string>
+    <string name="send_a">send a</string>
+    <string name="send_an">send an</string>
+    <string name="send_a_message">send a message</string>
+    <string name="send_a_message_to">send a message to</string>
+    <string name="send_message_to">send message to</string>
+    <string name="compose_a_message">compose a message</string>
+    <string name="compose_a_message_to">compose a message to</string>
+    <string name="compose_a">compose a</string>
+    <string name="compose_an">compose an</string>
+    <string name="compose_message_to">compose message to</string>
+    <string name="text_message">text message</string>
+    <string name="text_message_to">text message to</string>
+    <string name="text_to">text to</string>
+    <string name="email_message">email message</string>
+    <string name="email_message_to">email message to</string>
+    <string name="email_to">email to</string>
+    <string name="sms_contact_response_part_1">Your last text message from %1$s</string>
+    <string name="sms_contact_response_part_2">was received at %1$s</string>
+    <string name="sms_contact_response_part_2a">was received %1$s at %2$s</string>
+    <string name="sms_contact_response_part_3">was received on %1$s at %2$s</string>
+    <string name="sms_contact_response_part_4">saying</string>
+    <string name="sms_response_part_1a">Your last text message was received %1$s at %2$s</string>
+    <string name="sms_message">sms message</string>
+    <string name="sms_message_to">sms message to</string>
+    <string name="sms_to">sms to</string>
+    <string name="message_to">message to</string>
+    <string name="say">say</string>
+    <string name="to_say">to say</string>
+    <string name="that_says">that says</string>
+    <string name="tell">tell</string>
+    <string name="telling_her">telling her</string>
+    <string name="telling_him">telling him</string>
+    <string name="telling_them">telling them</string>
+    <string name="tell_her">tell her</string>
+    <string name="tell_him">tell him</string>
+    <string name="tell_them">tell them</string>
+    <string name="to_tell">to tell</string>
+    <string name="to_tell_her">to tell her</string>
+    <string name="to_tell_him">to tell him</string>
+    <string name="to_tell_them">to tell them</string>
+
+    <string name="exclamation_mark">exclamation mark</string>
+    <string name="exclamation_point">exclamation point</string>
+    <string name="question_mark">question mark</string>
+    <string name="kiss">kiss</string>
+    <string name="kiss_kiss">kiss kiss</string>
+    <string name="kiss_kiss_kiss">kiss kiss kiss</string>
+
+    <string name="error_answer_call">Failed to answer call…</string>
+    <string name="sms_error_1">There was a problem accessing the last message content</string>
+    <string name="sms_error_2">I have no record of any messages from %1$s</string>
+    <string name="sms_error_3">I was unable to query your messages from the contact %1$s</string>
+    <string name="sms_error_4">There was a problem accessing the last message content</string>
+    <string name="sms_error_5">There was a problem querying your messages for that contact</string>
+    <string name="sms_error_7">Due to a known Android bug, I appear to require your permission to read the phone state, before I can automatically send messages on your behalf. For reasons not yet resolved, this only applies to certain contacts. I apologise for this inconvenience, on their behalf.</string>
+    <string name="error_message_length">Due to the length of this message, for security, I won\'t ask if you want me to automatically send it</string>
+    <string name="error_detecting_contact">There was a problem detecting that contact</string>
+    <string name="error_loading_contact">There was a problem loading that contact</string>
+    <string name="error_no_numbers">has no numbers listed</string>
+    <string name="error_skype_install">You need to install Skype to use this feature.</string>
+    <string name="error_navigation">There was a problem attempting to navigate to that contact</string>
+    <string name="error_navigation_install">You need to install a supported navigation application to use this feature.</string>
+    <string name="error_calling_number">There was a problem %1$s that number</string>
+    <string name="contact_not_detected_verbose">Please be aware, contacts stored on your SIM card won\'t be detected. If you still have any saved there, it might be a good time to do some housekeeping. Most decent contact applications have an import, export wizard, to make the process nice and easy.</string>
+    <string name="error_alarm_duration">Android will only allow alarms to be set within 24 hours from now</string>
+    <string name="error_alarm_schedule">Something went wrong setting that alarm</string>
+    <string name="error_alarm_structure">Sorry, but I was unable to structure that alarm</string>
+    <string name="error_navigation_app_failed">There was a problem opening your maps application.</string>
 </resources>

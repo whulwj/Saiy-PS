@@ -48,13 +48,13 @@ public class UIApplicationPickerAdapter extends RecyclerView.Adapter<UIApplicati
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
         final Application application = mObjects.get(position);
-        final String action = application.d();
+        final String action = application.getAction();
         if (action == null || !action.matches(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH)) {
-            viewHolder.appName.setText(application.b());
+            viewHolder.appName.setText(application.getLabel());
         } else {
-            viewHolder.appName.setText(String.format("%s%s", application.b(), autoPlay));
+            viewHolder.appName.setText(String.format("%s%s", application.getLabel(), autoPlay));
         }
-        viewHolder.appIcon.setImageDrawable(application.a());
+        viewHolder.appIcon.setImageDrawable(application.getIcon());
         viewHolder.itemContainer.setOnClickListener(onClickListener);
         viewHolder.itemContainer.setTag(position);
     }

@@ -85,6 +85,7 @@ public class Installed {
     public static final String PACKAGE_SPOTIFY_MUSIC = "com.spotify.music";
     public static final String PACKAGE_SOUND_HOUND = "com.melodis.midomiMusicIdentifier.freemium";
     public static final String PACKAGE_SOUND_HOUND_PREMIUM = "com.melodis.midomiMusicIdentifier";
+    public static final String PACKAGE_SKYPE = "com.skype.raider";
     @Deprecated
     public static final String PACKAGE_TRACK_ID = "com.sonyericsson.trackid";
     public static final String PACKAGE_GOOGLE_SOUND_SEARCH = "com.google.android.ears";
@@ -210,7 +211,7 @@ public class Installed {
                 icon = resolveInfo.loadIcon(packageManager);
                 if (packageName != null && label != null && icon != null) {
                     application = new Application(label, packageName, icon);
-                    application.a(Intent.ACTION_SEARCH);
+                    application.setAction(Intent.ACTION_SEARCH);
                     arrayList.add(application);
                 }
             }
@@ -238,7 +239,7 @@ public class Installed {
                 icon = resolveInfo.loadIcon(packageManager);
                 if (packageName != null && label != null && icon != null) {
                     application = new Application(label, packageName, icon);
-                    application.a(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
+                    application.setAction(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
                     arrayList.add(0, application);
                 }
             }

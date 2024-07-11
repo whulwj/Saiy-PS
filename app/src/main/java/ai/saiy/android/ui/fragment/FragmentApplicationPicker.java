@@ -84,8 +84,8 @@ public class FragmentApplicationPicker extends Fragment implements View.OnClickL
             MyLog.i(CLS_NAME, "onClick: " + view.getTag());
         }
         final Application application = mObjects.get((Integer) view.getTag());
-        final ApplicationBasic applicationBasic = new ApplicationBasic(application.b().toString(), application.c());
-        applicationBasic.setAction(application.d());
+        final ApplicationBasic applicationBasic = new ApplicationBasic(application.getLabel().toString(), application.getPackageName());
+        applicationBasic.setAction(application.getAction());
         getParentActivity().setResult(applicationBasic);
     }
 

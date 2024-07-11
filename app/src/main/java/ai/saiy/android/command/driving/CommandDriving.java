@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
+import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
@@ -114,7 +115,7 @@ public class CommandDriving {
         }
         if (toggleDrivingProfile) {
             LocalRequest localRequest = new LocalRequest(context);
-            localRequest.prepareDefault(LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE, sl, vrLocale, ttsLocale, "silence");
+            localRequest.prepareDefault(LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE, sl, vrLocale, ttsLocale, SaiyRequestParams.SILENCE);
             localRequest.execute();
         }
         return returnOutcome(outcome);

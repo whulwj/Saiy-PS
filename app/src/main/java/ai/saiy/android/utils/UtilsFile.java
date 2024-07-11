@@ -145,11 +145,10 @@ public class UtilsFile {
             org.apache.commons.io.FileUtils.copyFile(file, new File(Environment.getExternalStorageDirectory() + TTS_GOOGLE_DIRECTORY + file.getName()));
             return targetFile;
         } catch (IOException e) {
-            if (!DEBUG) {
-                return file;
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "copyFileToGoogleTTSDir IOException");
+                e.printStackTrace();
             }
-            MyLog.w(CLS_NAME, "copyFileToGoogleTTSDir IOException");
-            e.printStackTrace();
             return file;
         }
     }
@@ -475,10 +474,9 @@ public class UtilsFile {
             MyLog.i(CLS_NAME, "createDirs");
         }
         if (!ai.saiy.android.permissions.PermissionHelper.checkFilePermissionsNR(context)) {
-            if (!DEBUG) {
-                return false;
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "createDirs: permission denied");
             }
-            MyLog.w(CLS_NAME, "createDirs: permission denied");
             return false;
         }
         if (isSaiyDirectoryExists() && isImportDirectoryExists() && isExportDirectoryExists() && isSoundDirectoryExists() && isNoMediaFileExists() && isQuickLaunchFileExists()) {

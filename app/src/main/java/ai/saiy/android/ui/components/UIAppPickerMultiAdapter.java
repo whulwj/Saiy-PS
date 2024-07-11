@@ -52,9 +52,9 @@ public class UIAppPickerMultiAdapter extends RecyclerView.Adapter<UIAppPickerMul
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         final Application application = mObjects.get(position);
-        viewHolder.appName.setText(application.b());
+        viewHolder.appName.setText(application.getLabel());
         viewHolder.appName.setChecked(sparseBooleanArray.get(position));
-        viewHolder.appIcon.setImageDrawable(application.a());
+        viewHolder.appIcon.setImageDrawable(application.getIcon());
         viewHolder.itemContainer.setOnClickListener(onClickListener);
         viewHolder.itemContainer.setTag(position);
     }

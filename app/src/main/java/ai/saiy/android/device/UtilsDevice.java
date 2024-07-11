@@ -50,7 +50,7 @@ public class UtilsDevice {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ? ((KeyguardManager) ctx.getSystemService(Context.KEYGUARD_SERVICE)).isDeviceLocked() : ((KeyguardManager) ctx.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked() && ((KeyguardManager) ctx.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardSecure();
     }
 
-    public static boolean satisfySecureConditions(Context context, CC cc, ai.saiy.android.command.helper.CommandRequest aVar) {
+    public static boolean satisfySecureConditions(Context context, CC cc, ai.saiy.android.command.helper.CommandRequest cr) {
         boolean headsetSecure;
         if (SPH.getOverrideSecureHeadset(context)) {
             AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -67,11 +67,11 @@ public class UtilsDevice {
             MyLog.i(CLS_NAME, "satisfySecureConditions: MotionHelper.isOverDrivingThreshold: " + ai.saiy.android.cognitive.motion.provider.google.MotionHelper.isOverDrivingThreshold(context, 300000L));
             MyLog.i(CLS_NAME, "satisfySecureConditions: drivingSecure: " + drivingSecure);
             MyLog.i(CLS_NAME, "satisfySecureConditions: command.isSecure(): " + cc.isSecure());
-            MyLog.i(CLS_NAME, "satisfySecureConditions: cr.wasSecure(): " + aVar.wasSecure());
+            MyLog.i(CLS_NAME, "satisfySecureConditions: cr.wasSecure(): " + cr.wasSecure());
             MyLog.i(CLS_NAME, "satisfySecureConditions: isDeviceLocked: " + isDeviceLocked(context));
             MyLog.i(CLS_NAME, "satisfySecureConditions: getOverrideSecure: " + SPH.getOverrideSecure(context));
         }
-        return cc.isSecure() && aVar.wasSecure() && isDeviceLocked(context) && !SPH.getOverrideSecure(context) && !headsetSecure && !drivingSecure;
+        return cc.isSecure() && cr.wasSecure() && isDeviceLocked(context) && !SPH.getOverrideSecure(context) && !headsetSecure && !drivingSecure;
     }
 
     /**

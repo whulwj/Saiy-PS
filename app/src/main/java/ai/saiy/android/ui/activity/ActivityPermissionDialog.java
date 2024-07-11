@@ -25,6 +25,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import ai.saiy.android.permissions.PermissionHelper;
+import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsBundle;
@@ -40,6 +41,7 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityPermissionDialog.class.getSimpleName();
 
+    private Bundle bundle;
     private long then;
 
     @Override
@@ -53,7 +55,7 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
 
         then = System.nanoTime();
 
-        final Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
 
         if (UtilsBundle.notNaked(bundle) && !UtilsBundle.isSuspicious(bundle)) {
 
@@ -124,12 +126,18 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
         }
 
         switch (requestCode) {
-
             case PermissionHelper.REQUEST_AUDIO:
-
                 if (granted(grantResults)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_AUDIO: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_AUDIO: PERMISSION_GRANTED: Proceed command");
+                        }
+                        final LocalRequest localRequest = new LocalRequest(getApplicationContext());
+                        localRequest.prepareIntro();
+                        localRequest.execute();
                     }
                 } else {
                     if (DEBUG) {
@@ -139,10 +147,16 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
                 }
                 break;
             case PermissionHelper.REQUEST_FILE:
-
                 if (granted(grantResults)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_FILE: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_FILE: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
                     }
                     new Thread(new Runnable() {
                         @Override
@@ -158,14 +172,96 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
                 }
                 break;
             case PermissionHelper.REQUEST_GROUP_CONTACTS:
-
                 if (granted(grantResults)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_GROUP_CONTACTS: PERMISSION_GRANTED");
                     }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_GROUP_CONTACTS: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
                 } else {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_GROUP_CONTACTS: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                }
+                break;
+            case PermissionHelper.REQUEST_GROUP_TELEPHONY:
+                if (granted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_GROUP_TELEPHONY: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_GROUP_TELEPHONY: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_GROUP_TELEPHONY: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                }
+                break;
+            case PermissionHelper.REQUEST_CALENDAR:
+                if (granted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_CALENDAR: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_CALENDAR: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_CALENDAR: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                }
+                break;
+            case PermissionHelper.REQUEST_SMS_READ:
+                if (granted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_SMS_READ: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_SMS_READ: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_SMS_READ: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                }
+                break;
+            case PermissionHelper.REQUEST_SMS_SEND:
+                if (granted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_SMS_SEND: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_SMS_SEND: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_SMS_SEND: PERMISSION_DENIED");
                     }
                     createPermissionsNotification(requestCode);
                 }

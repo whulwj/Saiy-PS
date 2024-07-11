@@ -56,7 +56,7 @@ public class Driving_en {
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }
-        final OnOff.Result result = onOff.a(voiceData, supportedLanguage);
+        final OnOff.Result result = onOff.resolve(voiceData, supportedLanguage);
         String vdLower;
         for (String vd : voiceData) {
             vdLower = vd.toLowerCase(locale).trim();
@@ -93,7 +93,7 @@ public class Driving_en {
         final long startTime = System.nanoTime();
         final ArrayList<Pair<CC, Float>> toReturn = new ArrayList<>();
         if (UtilsList.notNaked(this.voiceData) && UtilsList.notNaked(this.confidence) && this.voiceData.size() == this.confidence.length) {
-            final OnOff.Result result = onOff.a(this.voiceData, this.sl);
+            final OnOff.Result result = onOff.resolve(this.voiceData, this.sl);
             final Locale locale = this.sl.getLocale();
             String vdLower;
             final int size = this.voiceData.size();

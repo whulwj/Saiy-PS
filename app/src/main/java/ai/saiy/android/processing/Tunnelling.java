@@ -75,7 +75,7 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
     private static final long COMPUTING_DELAY = 1000L;
     public static final long CLIPBOARD_DELAY = 175L;
 
-    protected int result = Outcome.SUCCESS;
+    protected @Outcome.Result int result = Outcome.SUCCESS;
     CC COMMAND = CC.COMMAND_UNKNOWN;
     private final Timer timer = new Timer();
     protected final long then;

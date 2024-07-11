@@ -17,8 +17,11 @@
 
 package ai.saiy.android.processing;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.Locale;
 
 import ai.saiy.android.service.helper.LocalRequest;
@@ -33,9 +36,12 @@ public class Outcome {
 
     public static final int SUCCESS = 0;
     public static final int FAILURE = 1;
+    @IntDef({Outcome.SUCCESS, Outcome.FAILURE})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Result {}
 
     private String utterance;
-    private int outcome = SUCCESS;
+    private @Result int outcome = SUCCESS;
     private EntangledPair entangledPair;
     private Qubit qubit;
     private int action;
@@ -86,7 +92,7 @@ public class Outcome {
      *
      * @param outcome one of {@link #SUCCESS} or {@link #FAILURE}
      */
-    public void setOutcome(int outcome) {
+    public void setOutcome(@Result int outcome) {
         this.outcome = outcome;
     }
 
@@ -95,7 +101,7 @@ public class Outcome {
      *
      * @return either {@link #SUCCESS} or {@link #FAILURE}
      */
-    public int getOutcome() {
+    public @Result int getOutcome() {
         return this.outcome;
     }
 

@@ -16,23 +16,23 @@ public class Application {
         this.icon = icon;
     }
 
-    public Drawable a() {
+    public Drawable getIcon() {
         return this.icon;
     }
 
-    public void a(String str) {
+    public void setAction(String str) {
         this.action = str;
     }
 
-    public CharSequence b() {
+    public CharSequence getLabel() {
         return this.label;
     }
 
-    public String c() {
+    public String getPackageName() {
         return this.packageName;
     }
 
-    public String d() {
+    public String getAction() {
         return this.action;
     }
 }

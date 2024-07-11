@@ -36,8 +36,8 @@ public class PositiveNegative {
         return this.confidence;
     }
 
-    public Result resolve(Context context, ArrayList<String> arrayList, SupportedLanguage supportedLanguage) {
-        Locale locale = supportedLanguage.getLocale();
+    public Result resolve(Context context, ArrayList<String> resultsRecognition, SupportedLanguage supportedLanguage) {
+        final Locale locale = supportedLanguage.getLocale();
         ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
         Pattern yes = Pattern.compile(".*\\b" + sr.getString(R.string.yes) + "\\b.*");
         Pattern no = Pattern.compile(".*\\b" + sr.getString(R.string.no) + "\\b.*");
@@ -53,17 +53,18 @@ public class PositiveNegative {
         Pattern do_not = Pattern.compile(".*\\b" + sr.getString(R.string.do_not) + "\\b.*");
         Pattern yeah = Pattern.compile(".*\\b" + sr.getString(R.string.yeah) + "\\b.*");
         sr.reset();
-        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage), true).detectCancel(arrayList)) {
+        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage), true).detectCancel(resultsRecognition)) {
             return Result.CANCEL;
         }
         int negativeCount = 0;
         int positiveCount = 0;
-        for (String string : arrayList) {
-            String trim = string.toLowerCase(locale).trim();
-            if (yes.matcher(trim).matches() || it_is.matcher(trim).matches() || right.matcher(trim).matches() || correct.matcher(trim).matches() || sure.matcher(trim).matches() || yeah.matcher(trim).matches() || ok.matcher(trim).matches() || okay.matcher(trim).matches()) {
+        String vdLower;
+        for (String string : resultsRecognition) {
+            vdLower = string.toLowerCase(locale).trim();
+            if (yes.matcher(vdLower).matches() || it_is.matcher(vdLower).matches() || right.matcher(vdLower).matches() || correct.matcher(vdLower).matches() || sure.matcher(vdLower).matches() || yeah.matcher(vdLower).matches() || ok.matcher(vdLower).matches() || okay.matcher(vdLower).matches()) {
                 positiveCount++;
             }
-            if (no.matcher(trim).matches() || wrong.matcher(trim).matches() || incorrect.matcher(trim).matches() || doNot.matcher(trim).matches() || do_not.matcher(trim).matches()) {
+            if (no.matcher(vdLower).matches() || wrong.matcher(vdLower).matches() || incorrect.matcher(vdLower).matches() || doNot.matcher(vdLower).matches() || do_not.matcher(vdLower).matches()) {
                 negativeCount++;
             }
         }

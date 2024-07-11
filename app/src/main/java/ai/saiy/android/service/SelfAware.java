@@ -69,6 +69,7 @@ import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.translate.provider.bing.BingCredentials;
 import ai.saiy.android.configuration.MicrosoftConfiguration;
+import ai.saiy.android.contacts.ContactHelper;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.nlu.apiai.ApiRequest;
 import ai.saiy.android.nlu.apiai.ResolveAPIAI;
@@ -491,9 +492,18 @@ public class SelfAware extends Service {
                     }
 
                     if (priorityPair.first.second || !priorityPair.second.first || conditions.isQueueAdd(bundle)) {
-
+                        if (!conditions.servingRemote() && bundle.containsKey(LocalRequest.EXTRA_RESOLVED)) {
+                            bundle.remove(LocalRequest.EXTRA_RESOLVED);
+                            new ai.saiy.android.recognition.RecognitionAction(getApplicationContext(), conditions.getVRLocale(false), conditions.getTTSLocale(false), conditions.getSupportedLanguage(false), bundle);
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "speak: isResolved: true");
+                            }
+                            return;
+                        }
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "speak: isResolved: false");
+                        }
                         switch (conditions.getDefaultTTS()) {
-
                             case LOCAL:
                                 conditions.setInitialisingCountdown();
                                 break;
@@ -2424,8 +2434,7 @@ public class SelfAware extends Service {
                                     if (DEBUG) {
                                         MyLog.i(CLS_NAME, "PhoneStateListener: still ringing");
                                     }
-                                    //TODO get contact's name
-                                    String userName = "";
+                                    String userName = new ContactHelper().getNameFromNumber(getApplicationContext(), incomingNumber);
                                     if (!UtilsString.notNaked(userName)) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "PhoneStateListener: unable to resolve caller name");

@@ -22,10 +22,14 @@ import android.content.res.Resources;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Locale;
+import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 /**
@@ -73,6 +77,31 @@ public class UtilsString {
         }
 
         return output;
+    }
+
+    public static String convertProperCase(String str, @NonNull Locale locale) {
+        if (!notNaked(str)) {
+            return "";
+        }
+        final String[] separated = str.trim().split("");
+        final Pattern question_mark = Pattern.compile("\\?");
+        final Pattern exclamation_mark = Pattern.compile("\\!");
+        final Pattern period = Pattern.compile("\\.");
+        final Pattern space = Pattern.compile(XMLResultsHandler.SEP_SPACE);
+        final int length = separated.length - 2;
+        for (int i = 0; i < length; i++) {
+            if ((question_mark.matcher(separated[i]).matches() || exclamation_mark.matcher(separated[i]).matches() || period.matcher(separated[i]).matches()) && space.matcher(separated[i + 1]).matches()) {
+                separated[i + 2] = separated[i + 2].toUpperCase(locale);
+            }
+            if (i == 1) {
+                separated[1] = separated[1].toUpperCase(locale);
+            }
+        }
+        final StringBuilder sb = new StringBuilder();
+        for (String separatedString : separated) {
+            sb.append(separatedString);
+        }
+        return sb.toString().replaceAll(" i ", " I ").replaceAll(" i'", " I'");
     }
 
     /**

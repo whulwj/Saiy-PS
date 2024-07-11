@@ -82,6 +82,7 @@ public class SPH {
     private static final String INACTIVITY_TIMEOUT = "inactivity_timeout";
     private static final String VR_LOCALE = "vr_locale";
     private static final String TTS_LOCALE = "tts_locale";
+    private static final String JWD_UPPER_THRESHOLD_CONTACT = "jwd_upper_threshold_contact";
     private static final String TTS_VOLUME = "tts_volume";
     private static final String ASSUME_GLOBAL_VOLUME = "assume_global_volume";
     private static final String TOAST_VOLUME_WARNINGS = "toast_volume_warnings";
@@ -98,6 +99,7 @@ public class SPH {
     private static final String NETWORK_SYNTHESIS_WIFI = "network_synthesis_wifi";
     private static final String NETWORK_SYNTHESIS_4G = "network_synthesis_4g";
     private static final String BLOCKED_NOTIFICATION_APPLICATIONS = "blocked_notification_applications";
+    private static final String RESET_SPEAKER = "reset_speaker";
     private static final String USE_OFFLINE = "use_offline";
     private static final String PING_CHECK = "ping_check";
     private static final String COMMAND_UNKNOWN_ACTION = "command_unknown_action";
@@ -108,7 +110,10 @@ public class SPH {
     private static final String USER_NAME = "user_name";
     private static final String USER_GENDER = "user_gender";
     private static final String USER_ACCOUNT = "user_account";
+    private static final String UNKNOWN_CONTACT_VERBOSE = "unknown_contact_verbose";
+    private static final String EMAIL_AUTO_VERBOSE = "email_auto_verbose";
     private static final String STAR_SIGN = "star_sign";
+    private static final String LAST_CONTACT_UPDATE = "last_contact_update";
     private static final String DOB_YEAR = "dob_year";
     private static final String DOB_MONTH = "dob_month";
     private static final String DOB_DAY = "dob_day";
@@ -168,6 +173,8 @@ public class SPH {
     private static final String HEADSET_CONNECTION_TYPE = "headset_connection_type";
     private static final String HOROSCOPE_INCREMENT = "horoscope_increment";
     private static final String CACHE_SPEECH = "cache_speech";
+    private static final String SMS_ID_FIX = "sms_id_fix";
+    private static final String SMS_BODY_FIX = "sms_body_fix";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String RECOGNIZER_BUSY_INCREMENT = "recognizer_busy_increment";
     private static final String IGNORE_RESTRICTED_CONTENT = "ignore_restricted_content";
@@ -348,6 +355,16 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(TTS_VOLUME, level);
+        edit.apply();
+    }
+
+    public static double getJwdUpperThresholdForContact(Context context) {
+        return Double.valueOf(getPref(context).getString(JWD_UPPER_THRESHOLD_CONTACT, String.valueOf(0.77d))).doubleValue();
+    }
+
+    public static void setJwdUpperThresholdForContact(Context context, double value) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(JWD_UPPER_THRESHOLD_CONTACT, String.valueOf(value));
         edit.apply();
     }
 
@@ -1882,6 +1899,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean getResetSpeaker(Context context) {
+        return getPref(context).getBoolean(RESET_SPEAKER, false);
+    }
+
+    public static void setResetSpeaker(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(RESET_SPEAKER, condition);
+        edit.apply();
+    }
+
     public static String getBlockedNotificationApplications(Context context) {
         return getPref(context).getString(BLOCKED_NOTIFICATION_APPLICATIONS, null);
     }
@@ -2159,6 +2186,26 @@ public class SPH {
         return getPref(context).getInt(DOB_YEAR, 1950);
     }
 
+    public static int getUnknownContactVerbose(Context context) {
+        return getPref(context).getInt(UNKNOWN_CONTACT_VERBOSE, 0);
+    }
+
+    public static void autoIncreaseUnknownContactVerbose(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(UNKNOWN_CONTACT_VERBOSE, getUnknownContactVerbose(context) + 1);
+        edit.apply();
+    }
+
+    public static int getEmailAutoVerbose(Context context) {
+        return getPref(context).getInt(EMAIL_AUTO_VERBOSE, 0);
+    }
+
+    public static void autoIncreaseEmailAutoVerbose(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(EMAIL_AUTO_VERBOSE, getEmailAutoVerbose(context) + 1);
+        edit.apply();
+    }
+
     public static void setHoroscope(Context context, int dayOfMonth, int month, int year, CommandHoroscopeValues.Sign sign) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(DOB_DAY, dayOfMonth);
@@ -2169,6 +2216,16 @@ public class SPH {
         } else {
             edit.putString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name());
         }
+        edit.apply();
+    }
+
+    public static long getLastContactUpdate(Context context) {
+        return getPref(context).getLong(LAST_CONTACT_UPDATE, 1L);
+    }
+
+    public static void setLastContactUpdate(Context context, long timeStamp) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(LAST_CONTACT_UPDATE, timeStamp);
         edit.apply();
     }
 
@@ -2210,6 +2267,26 @@ public class SPH {
     public static void setIgnoreRestrictedContent(Context context, boolean condition) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(IGNORE_RESTRICTED_CONTENT, condition);
+        edit.apply();
+    }
+
+    public static boolean getSmsIdFix(Context context) {
+        return getPref(context).getBoolean(SMS_ID_FIX, false);
+    }
+
+    public static void setSmsIdFix(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(SMS_ID_FIX, condition);
+        edit.apply();
+    }
+
+    public static boolean getSmsBodyFix(Context context) {
+        return getPref(context).getBoolean(SMS_BODY_FIX, true);
+    }
+
+    public static void setSmsBodyFix(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(SMS_BODY_FIX, condition);
         edit.apply();
     }
 

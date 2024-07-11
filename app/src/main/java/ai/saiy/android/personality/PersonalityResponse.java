@@ -779,4 +779,140 @@ public final class PersonalityResponse {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_alexa_volume_insert);
         return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.alexa_volume_response), stringArray[new Random().nextInt(stringArray.length)]);
     }
+
+    public static String getNoContactForSms(Context context, SupportedLanguage supportedLanguage, String contactName) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_error_3), contactName);
+    }
+
+    public static String getCallConfirmation(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_call_confirmation);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getCallConfirmationRepeat(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_call_confirmation_repeat);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getCallConfirmationMisHeard(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_call_confirmation_misheard);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getTextConfirmationMisHeard(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_text_confirmation_misheard);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getContactNotDetectedError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_contact_not_detected);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getContactNotDetectedExtra(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_contact_not_detected_extra);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getMessageProofReadAcknowledge(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_message_proof_read_acknowledge);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getEmailProofReadVerbose(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_email_proof_read_verbose);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getNavigationDestinationError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_navigation_destination);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getHardwareUnsupportedError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_hardware_unsupported);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getCalendarAccessError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_calendar_access);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getCalendarEventsError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_calendar_events);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getRedialError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_redial);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getMissedCallError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_missed_call);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getNoPermissionForSms(Context context, SupportedLanguage supportedLanguage) {
+        return SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_error_7);
+    }
+
+    public static String getGenericAcknowledgement(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_generic_acknowledgement);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getSmsConfirmation(Context context, SupportedLanguage supportedLanguage, String contactName, String generic) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_sms_confirmation);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], contactName, generic);
+    }
+
+    public static String getEmailConfirmation(Context context, SupportedLanguage supportedLanguage, String contactName, String generic) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_email_confirmation);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], contactName, generic);
+    }
+
+    public static String getMessageContentRequest(Context context, SupportedLanguage supportedLanguage, String contactName) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_message_content_request);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], contactName));
+    }
+
+    public static String getContactResponsePart2(Context context, SupportedLanguage supportedLanguage, String date, String time) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_contact_response_part_2a), date, time);
+    }
+
+    public static String getMessageSentConfirmation(Context context, SupportedLanguage supportedLanguage, String contactName) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_message_sent_confirmation);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], contactName);
+    }
+
+    public static String getContactMissingData(Context context, SupportedLanguage supportedLanguage, String contactName) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_contact_missing_data);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], contactName));
+    }
+
+    public static String getSmsResponsePart1(Context context, SupportedLanguage supportedLanguage, String date, String time) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_response_part_1a), date, time);
+    }
+
+    public static String getNavigationInstallError(Context context, SupportedLanguage supportedLanguage) {
+        return SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_navigation_install);
+    }
+
+    public static String getSkypeInstallError(Context context, SupportedLanguage supportedLanguage) {
+        return SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_skype_install);
+    }
+
+    public static String getCallingNumberError(Context context, SupportedLanguage supportedLanguage, String action) {
+        return UtilsString.stripNameSpace(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_calling_number), action));
+    }
+
+    public static String getSmsContactResponsePart1(Context context, SupportedLanguage supportedLanguage, String address) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_contact_response_part_1), address);
+    }
+
+    public static String getNoRecordForSms(Context context, SupportedLanguage supportedLanguage, String contactName) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_error_2), contactName);
+    }
 }

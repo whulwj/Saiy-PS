@@ -85,7 +85,7 @@ public class FragmentAppPickerMultiHelper {
                     final int size = tempArray.size();
                     for (int i = 0; i < size; i++) {
                         for (ApplicationBasic applicationBasic : applicationArray) {
-                            if (tempArray.get(i).c().matches(applicationBasic.getPackageName())) {
+                            if (tempArray.get(i).getPackageName().matches(applicationBasic.getPackageName())) {
                                 ((UIAppPickerMultiAdapter) getParent().getAdapter()).getCheckedArray().put(i, true);
                             }
                         }

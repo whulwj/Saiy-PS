@@ -407,18 +407,50 @@ public class Quantum extends Tunnelling {
                     }
 
                     break;
+                case COMMAND_CONTACT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CONTACT.name());
+                    }
+                    break;
+                case COMMAND_NAVIGATION:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_NAVIGATION.name());
+                    }
+                    break;
+                case COMMAND_REDIAL:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_REDIAL.name());
+                    }
+                    break;
+                case COMMAND_CALL_BACK:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CALL_BACK.name());
+                    }
+                    break;
                 case COMMAND_HOROSCOPE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HOROSCOPE.name());
+                    }
+                    break;
+                case COMMAND_ALARM:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALARM.name());
+                    }
+                    break;
+                case COMMAND_CALENDAR:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CALENDAR.name());
+                    }
+                    break;
+                case COMMAND_SMS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SMS.name());
                     }
                     break;
                 case COMMAND_HELP:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HELP.name());
                     }
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
-                    ExecuteIntent.saiyActivity(mContext, ActivityHome.class, bundle, true);
                     break;
                 case COMMAND_DRIVING:
                     if (DEBUG) {
@@ -431,8 +463,21 @@ public class Quantum extends Tunnelling {
                     }
                     break;
                 case COMMAND_ALEXA:
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                        if (ai.saiy.android.amazon.TokenHelper.hasToken(mContext)) {
+//2813                            ai.saiy.android.command.c.d r0 = new ai.saiy.android.command.c.d();
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name() + ": have request");
+                            }
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name() + ": no auth");
+                            }
+                        }
+                    } else {
+                        request.setUtterance(ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(mContext, sl, R.string.error_alexa_marshmallow));
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        result = Outcome.SUCCESS;
                     }
                     break;
                 case COMMAND_UNKNOWN:
@@ -678,6 +723,69 @@ public class Quantum extends Tunnelling {
                         ExecuteIntent.saiyActivity(mContext, ActivityHome.class, bundle, true);
                     }
 
+                    break;
+                case COMMAND_CONTACT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CONTACT.name());
+                    }
+                    break;
+                case COMMAND_NAVIGATION:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_NAVIGATION.name());
+                    }
+                    break;
+                case COMMAND_REDIAL:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_REDIAL.name());
+                    }
+                    break;
+                case COMMAND_CALL_BACK:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALL_BACK.name());
+                    }
+                    break;
+                case COMMAND_HOROSCOPE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HOROSCOPE.name());
+                    }
+                    break;
+                case COMMAND_ALARM:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_ALARM.name());
+                    }
+                    break;
+                case COMMAND_CALENDAR:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALENDAR.name());
+                    }
+                    break;
+                case COMMAND_SMS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SMS.name());
+                    }
+                    break;
+                case COMMAND_HELP:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HELP.name());
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
+                    ExecuteIntent.saiyActivity(mContext, ActivityHome.class, bundle, true);
+                    break;
+                case COMMAND_DRIVING:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DRIVING.name());
+                    }
+                    break;
+                case COMMAND_FLOAT_COMMANDS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_FLOAT_COMMANDS.name());
+                    }
+                    break;
+                case COMMAND_ALEXA:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_ALEXA.name());
+                    }
                     break;
                 case COMMAND_UNKNOWN:
                     if (DEBUG) {

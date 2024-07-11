@@ -138,10 +138,9 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
     @Override
     public int getAppIcon() {
-        if (!DEBUG) {
-            return R.drawable.ic_saiy_not;
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getAppIcon");
         }
-        MyLog.i(CLS_NAME, "getAppIcon");
         return R.drawable.ic_saiy_not;
     }
 

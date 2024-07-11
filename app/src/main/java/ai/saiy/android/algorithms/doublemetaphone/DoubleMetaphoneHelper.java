@@ -18,8 +18,10 @@
 package ai.saiy.android.algorithms.doublemetaphone;
 
 import android.content.Context;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,7 +34,9 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import ai.saiy.android.algorithms.Algorithm;
+import ai.saiy.android.algorithms.contact.ContactNameHelper;
 import ai.saiy.android.algorithms.distance.jarowinkler.JaroWinklerDistance;
+import ai.saiy.android.contacts.Contact;
 import ai.saiy.android.custom.CustomCommand;
 import ai.saiy.android.custom.CustomCommandContainer;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -58,6 +62,7 @@ public class DoubleMetaphoneHelper implements Callable<Object> {
     private final ArrayList<String> inputData;
     private final Locale loc;
     private final ArrayList<?> genericData;
+    private final ContactNameHelper contactNameHelper;
 
 
     /**
@@ -67,13 +72,16 @@ public class DoubleMetaphoneHelper implements Callable<Object> {
      * @param genericData an array containing generic data
      * @param inputData   an array of Strings containing the input comparison data
      * @param loc         the {@link Locale} extracted from the {@link SupportedLanguage}
+     * @param helper      the helper for {@link Contact}
      */
     public DoubleMetaphoneHelper(@NonNull final Context mContext, @NonNull final ArrayList<?> genericData,
-                                 @NonNull final ArrayList<String> inputData, @NonNull final Locale loc) {
+                                 @NonNull final ArrayList<String> inputData, @NonNull final Locale loc,
+                                 @Nullable ContactNameHelper helper) {
         this.mContext = mContext;
         this.genericData = genericData;
         this.inputData = inputData;
         this.loc = loc;
+        this.contactNameHelper = helper;
     }
 
     /**
@@ -228,6 +236,117 @@ public class DoubleMetaphoneHelper implements Callable<Object> {
         return container;
     }
 
+    public ArrayList<AlgorithmicContainer> executeContact() {
+        long then = System.nanoTime();
+
+        final double jwdLowerThreshold = SPH.getJaroWinklerLower(mContext);
+
+        final ArrayList<AlgorithmicContainer> toKeep = new ArrayList<>();
+        final DoubleMetaphone metaphone = new DoubleMetaphone();
+        final JaroWinklerDistance jwd = new JaroWinklerDistance();
+
+        String genericLower;
+        AlgorithmicContainer container;
+        double score;
+        boolean matches;
+        Contact contact;
+        double drift = ContactNameHelper.DEFAULT_DRIFT;
+        ArrayList<Pair<String, String>> wordGroup = null;
+
+        final int size = genericData.size();
+
+        for (int i = 0; i < size; i++) {
+            contact = (Contact) this.genericData.get(i);
+            if (contactNameHelper != null) {
+                wordGroup = null;
+                switch (contact.getWordCount()) {
+                    case 1:
+                        wordGroup = this.contactNameHelper.getOneWordGroup();
+                        drift = ContactNameHelper.DRIFT_ONE;
+                        break;
+                    case 2:
+                        wordGroup = this.contactNameHelper.getTwoWordsGroup();
+                        drift = ContactNameHelper.DRIFT_TWO;
+                        break;
+                    case 3:
+                        wordGroup = this.contactNameHelper.getThreeWordsGroup();
+                        drift = ContactNameHelper.DRIFT_THREE;
+                        break;
+                    case 4:
+                        wordGroup = this.contactNameHelper.getFourWordsGroup();
+                        drift = ContactNameHelper.DRIFT_FOUR;
+                        break;
+                    default:
+                        break;
+                }
+                if (wordGroup == null || wordGroup.isEmpty()) {
+                    continue;
+                }
+            }
+
+            genericLower = contact.getName().toLowerCase(loc).trim();
+            if (contactNameHelper == null) {
+                for (String vd : inputData) {
+                    vd = vd.toLowerCase(loc).trim();
+                    matches = metaphone.isDoubleMetaphoneEqual(genericLower, vd);
+
+                    if (matches && Algorithm.checkLength(genericLower, vd)) {
+                        score = jwd.apply(genericLower, vd);
+
+                        if (score > jwdLowerThreshold) {
+                            container = new AlgorithmicContainer();
+                            container.setInput(vd);
+                            container.setGenericMatch(genericLower);
+                            container.setScore(score);
+                            container.setAlgorithm(Algorithm.DOUBLE_METAPHONE);
+                            container.setParentPosition(i);
+                            container.setExactMatch(true);
+                            toKeep.add(container);
+                            break;
+                        }
+                    }
+                }
+            } else {
+                String vd;
+                for (Pair<String, String> stringPair : wordGroup) {
+                    vd = stringPair.first.toLowerCase(loc).trim();
+                    matches = metaphone.isDoubleMetaphoneEqual(genericLower, vd);
+
+                    if (matches && Algorithm.checkLength(genericLower, vd)) {
+                        score = jwd.apply(genericLower, vd);
+
+                        if (score > jwdLowerThreshold) {
+                            container = new AlgorithmicContainer();
+                            container.setInput(stringPair.second);
+                            container.setGenericMatch(genericLower);
+                            container.setScore(score + drift);
+                            container.setAlgorithm(Algorithm.DOUBLE_METAPHONE);
+                            container.setParentPosition(i);
+                            container.setExactMatch(true);
+                            toKeep.add(container);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (UtilsList.notNaked(toKeep)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "Have a match");
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "no matches");
+            }
+        }
+
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+
+        return toKeep;
+    }
+
     /**
      * Computes a result, or throws an exception if unable to do so.
      *
@@ -236,11 +355,13 @@ public class DoubleMetaphoneHelper implements Callable<Object> {
      */
     @Override
     public Object call() throws Exception {
-
         if (UtilsList.notNaked(genericData)) {
-            if (genericData.get(0) instanceof String) {
+            final Object object = genericData.get(0);
+            if (object instanceof String) {
                 return executeGeneric();
-            } else {
+            }  else if (object instanceof Contact) {
+                return executeContact();
+            } else if (object instanceof CustomCommand) {
                 return executeCustomCommand();
             }
         }

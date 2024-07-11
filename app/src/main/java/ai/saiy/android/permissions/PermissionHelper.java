@@ -53,7 +53,10 @@ public class PermissionHelper {
     public static final int REQUEST_AUDIO = 1;
     public static final int REQUEST_FILE = 2;
     public static final int REQUEST_GROUP_CONTACTS = 3;
-    public static final int REQUEST_READ_SMS = 8;
+    public static final int REQUEST_GROUP_TELEPHONY = 4;
+    public static final int REQUEST_CALENDAR = 7;
+    public static final int REQUEST_SMS_READ = 8;
+    public static final int REQUEST_SMS_SEND = 9;
     public static final int REQUEST_PHONE_STATE = 10;
 
     /**
@@ -198,6 +201,31 @@ public class PermissionHelper {
         }
     }
 
+    public static boolean checkTelephonyGroupPermissions(Context context, Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkTelephonyGroupPermissions");
+        }
+        if (hasSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkTelephonyGroupPermissions: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkTelephonyGroupPermissions: PERMISSION_DENIED");
+        }
+        final Intent intent = new Intent(context, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (!UtilsBundle.notNaked(bundle)) {
+            bundle = new Bundle();
+        }
+        bundle.putStringArray(REQUESTED_PERMISSION, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.READ_CALL_LOG, Manifest.permission.WRITE_CALL_LOG});
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_GROUP_TELEPHONY);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+        return false;
+    }
+
     public static boolean checkPhoneStatePermissionsNR(Context context) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkPhoneStatePermissionsNR");
@@ -230,6 +258,31 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.w(CLS_NAME, "checkAnswerCallsPermissionsNR: PERMISSION_DENIED");
         }
+        return false;
+    }
+
+    public static boolean checkCalendarPermissions(Context context, Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkCalendarPermissions");
+        }
+        if (hasSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkCalendarPermissions: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkCalendarPermissions: PERMISSION_DENIED");
+        }
+        final Intent intent = new Intent(context, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (!UtilsBundle.notNaked(bundle)) {
+            bundle = new Bundle();
+        }
+        bundle.putStringArray(REQUESTED_PERMISSION, new String[]{Manifest.permission.READ_CALENDAR});
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_CALENDAR);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
         return false;
     }
 
@@ -280,7 +333,7 @@ public class PermissionHelper {
                     bundle = new Bundle();
                 }
                 bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.READ_SMS});
-                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_READ_SMS);
+                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_SMS_READ);
                 intent.putExtras(bundle);
                 context.startActivity(intent);
                 return false;
@@ -289,6 +342,31 @@ public class PermissionHelper {
 
     public static boolean checkAnnounceCallerPermissionsNR(Context context) {
         return checkPhoneStatePermissionsNR(context) && checkAnswerCallsPermissionsNR(context) && checkNotificationPolicyPermission(context) && checkContactGroupPermissionsNR(context);
+    }
+
+    public static boolean checkSMSSendPermissions(Context context, Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkSMSSendPermissions");
+        }
+        if (hasSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkSMSSendPermissions: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkSMSSendPermissions: PERMISSION_DENIED");
+        }
+        final Intent intent = new Intent(context, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (!UtilsBundle.notNaked(bundle)) {
+            bundle = new Bundle();
+        }
+        bundle.putStringArray(REQUESTED_PERMISSION, new String[]{Manifest.permission.SEND_SMS});
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_SMS_SEND);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+        return false;
     }
 
     public static boolean checkReadCallerPermissions(Context context) {
@@ -478,15 +556,12 @@ public class PermissionHelper {
 
         final Intent intent = new Intent(ctx, ActivityPermissionDialog.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
         if (!UtilsBundle.notNaked(bundle)) {
             bundle = new Bundle();
         }
         bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.GET_ACCOUNTS});
         bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_GROUP_CONTACTS);
-
         intent.putExtras(bundle);
-
         ctx.startActivity(intent);
         return false;
     }

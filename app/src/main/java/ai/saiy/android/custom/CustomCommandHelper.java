@@ -210,17 +210,14 @@ public class CustomCommandHelper {
         }
 
         if (UtilsList.notNaked(cccArray)) {
-
             for (final Algorithm algorithm : algorithms) {
-
                 switch (algorithm) {
-
                     case JARO_WINKLER:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: JARO_WINKLER");
                         }
 
-                        callableList.add(new JaroWinklerHelper(ctx, cccArray, voiceData, loc));
+                        callableList.add(new JaroWinklerHelper(ctx, cccArray, voiceData, loc, null));
                         break;
                     case LEVENSHTEIN:
                         if (DEBUG) {
@@ -236,7 +233,7 @@ public class CustomCommandHelper {
                         }
 
                         callableList.add(new SoundexHelper(ctx, cccArray,
-                                voiceData, loc));
+                                voiceData, loc, null));
                         break;
                     case METAPHONE:
                         if (DEBUG) {
@@ -244,7 +241,7 @@ public class CustomCommandHelper {
                         }
 
                         callableList.add(new MetaphoneHelper(ctx, cccArray,
-                                voiceData, loc));
+                                voiceData, loc, null));
                         break;
                     case DOUBLE_METAPHONE:
                         if (DEBUG) {
@@ -252,7 +249,7 @@ public class CustomCommandHelper {
                         }
 
                         callableList.add(new DoubleMetaphoneHelper(ctx, cccArray,
-                                voiceData, loc));
+                                voiceData, loc, null));
                         break;
                     case FUZZY:
                         if (DEBUG) {

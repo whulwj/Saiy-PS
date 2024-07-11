@@ -93,7 +93,7 @@ public class FragmentAppPickerMulti extends Fragment implements View.OnClickList
         ((UIAppPickerMultiAdapter) getAdapter()).getCheckedArray().put(position, !isChecked);
         getAdapter().notifyItemChanged(position);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: application: " + mObjects.get(position).b());
+            MyLog.i(CLS_NAME, "onClick: application: " + mObjects.get(position).getLabel());
             SparseBooleanArray sparseBooleanArray = ((UIAppPickerMultiAdapter) getAdapter()).getCheckedArray();
             final int size = sparseBooleanArray.size();
             for (int i = 0; i < size; i++) {
@@ -101,7 +101,7 @@ public class FragmentAppPickerMulti extends Fragment implements View.OnClickList
                 boolean value = sparseBooleanArray.get(key);
                 MyLog.i(CLS_NAME, "sparse array: key: " + key + " ~ value: " + value);
                 if (value) {
-                    MyLog.i(CLS_NAME, "sparse array: app: " + mObjects.get(key).b());
+                    MyLog.i(CLS_NAME, "sparse array: app: " + mObjects.get(key).getLabel());
                 }
             }
         }
@@ -168,9 +168,9 @@ public class FragmentAppPickerMulti extends Fragment implements View.OnClickList
                 if (value) {
                     Application app = mObjects.get(key);
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "sparse array: app: " + app.b());
+                        MyLog.i(CLS_NAME, "sparse array: app: " + app.getLabel());
                     }
-                    arrayList.add(new ApplicationBasic(app.b().toString(), app.c()));
+                    arrayList.add(new ApplicationBasic(app.getLabel().toString(), app.getPackageName()));
                 }
             }
             getParentActivity().setResult(arrayList, true);

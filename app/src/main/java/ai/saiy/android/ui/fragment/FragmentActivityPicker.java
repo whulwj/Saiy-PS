@@ -31,7 +31,6 @@ import ai.saiy.android.ui.activity.ActivityActivityPicker;
 import ai.saiy.android.ui.components.UIActivityPickerAdapter;
 import ai.saiy.android.ui.fragment.helper.FragmentActivityPickerHelper;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.utils.SPH;
 
 public class FragmentActivityPicker extends Fragment implements AdapterView.OnItemLongClickListener, ExpandableListView.OnChildClickListener {
     private static final Object lock = new Object();
@@ -161,14 +160,14 @@ public class FragmentActivityPicker extends Fragment implements AdapterView.OnIt
             MyLog.i(CLS_NAME, "onChildClick: groupPosition: " + groupPosition + " : childPosition: " + childPosition);
         }
         try {
-            final PackageInfo packageInfo = packageManager.getPackageInfo(mObjects.get(groupPosition).c(), PackageManager.GET_ACTIVITIES);
+            final PackageInfo packageInfo = packageManager.getPackageInfo(mObjects.get(groupPosition).getPackageName(), PackageManager.GET_ACTIVITIES);
             if (packageInfo.activities[childPosition] != null) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "tmp.activities[childPosition].name: " + packageInfo.activities[childPosition].name);
                     MyLog.i(CLS_NAME, "tmp.activities[childPosition].packageName: " + packageInfo.activities[childPosition].packageName);
                 }
                 if (packageInfo.activities[childPosition].exported) {
-                    showIntentExtrasDialog(new ApplicationActivityBasic(mObjects.get(groupPosition).b(), mObjects.get(groupPosition).c(), packageInfo.activities[childPosition].name, null));
+                    showIntentExtrasDialog(new ApplicationActivityBasic(mObjects.get(groupPosition).getLabel(), mObjects.get(groupPosition).getPackageName(), packageInfo.activities[childPosition].name, null));
                 } else {
                     toast(getString(R.string.content_access_forbidden), Toast.LENGTH_SHORT);
                 }

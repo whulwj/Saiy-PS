@@ -21,7 +21,7 @@ public class RecommendationHelper {
     private final String CLS_NAME = RecommendationHelper.class.getSimpleName();
 
     private void debug(ArrayList<VoiceEngineInfo> voiceEngineInfos) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             for (VoiceEngineInfo voiceEngineInfo : voiceEngineInfos) {
                 MyLog.d(CLS_NAME, "------------------------------------------");
                 MyLog.d(CLS_NAME, "getEngineName: " + voiceEngineInfo.getApplicationName());
@@ -167,7 +167,7 @@ public class RecommendationHelper {
             }
             arrayList.add("----------------------------------------");
         }
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.getElapsed(CLS_NAME, nanoTime);
         }
         return arrayList;

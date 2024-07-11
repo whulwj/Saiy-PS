@@ -41,12 +41,12 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     }
 
     public void toast(String text, int duration) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "makeToast: " + text);
         }
         if (isActive()) {
             getParentActivity().toast(text, duration);
-        } else if (this.DEBUG) {
+        } else if (DEBUG) {
             MyLog.w(this.CLS_NAME, "toast Fragment detached");
         }
     }
@@ -94,11 +94,11 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
                 position = ((UICommandsAdapter.ViewHolder) viewHolder).getBoundPosition();
             }
         }
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "onClick: " + position);
         }
         if (Global.isInVoiceTutorial()) {
-            if (this.DEBUG) {
+            if (DEBUG) {
                 MyLog.i(this.CLS_NAME, "onClick: tutorialActive");
             }
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_LONG);
@@ -302,7 +302,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "onCreate");
         }
         this.helper = new FragmentCommandsHelper(this);
@@ -310,7 +310,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "onCreateView");
         }
         View rootView = layoutInflater.inflate(R.layout.layout_common_fragment_parent, viewGroup, false);
@@ -324,7 +324,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "onDestroy");
         }
     }
@@ -332,7 +332,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "onPause");
         }
     }
@@ -340,7 +340,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "onResume");
         }
     }
@@ -348,7 +348,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     @Override
     public void onStart() {
         super.onStart();
-        if (this.DEBUG) {
+        if (DEBUG) {
             MyLog.i(this.CLS_NAME, "onStart");
         }
         synchronized (lock) {

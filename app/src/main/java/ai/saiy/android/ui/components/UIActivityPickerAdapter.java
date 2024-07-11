@@ -51,7 +51,7 @@ public class UIActivityPickerAdapter extends BaseExpandableListAdapter {
             MyLog.i(CLS_NAME, "getChild");
         }
         try {
-            final PackageInfo packageInfo = packageManager.getPackageInfo(mObjects.get(groupPosition).c(), PackageManager.GET_ACTIVITIES);
+            final PackageInfo packageInfo = packageManager.getPackageInfo(mObjects.get(groupPosition).getPackageName(), PackageManager.GET_ACTIVITIES);
             if (packageInfo.activities != null) {
                 return packageInfo.activities[childPosition];
             }
@@ -93,7 +93,7 @@ public class UIActivityPickerAdapter extends BaseExpandableListAdapter {
     @Override
     public int getChildrenCount(int groupPosition) {
         try {
-            final PackageInfo packageInfo = packageManager.getPackageInfo(mObjects.get(groupPosition).c(), PackageManager.GET_ACTIVITIES);
+            final PackageInfo packageInfo = packageManager.getPackageInfo(mObjects.get(groupPosition).getPackageName(), PackageManager.GET_ACTIVITIES);
             if (packageInfo.activities != null) {
                 return packageInfo.activities.length;
             }
@@ -132,10 +132,10 @@ public class UIActivityPickerAdapter extends BaseExpandableListAdapter {
         }
        final Application application = mObjects.get(groupPosition);
         if (groupViewHolder.appIcon != null) {
-            groupViewHolder.appIcon.setImageDrawable(application.a());
+            groupViewHolder.appIcon.setImageDrawable(application.getIcon());
         }
         if (groupViewHolder.appName != null) {
-            groupViewHolder.appName.setText(application.b());
+            groupViewHolder.appName.setText(application.getLabel());
         }
         return convertView;
     }

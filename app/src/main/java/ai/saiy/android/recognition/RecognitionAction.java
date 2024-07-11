@@ -28,6 +28,9 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ai.saiy.android.command.contact.AnswerCallConfirm;
+import ai.saiy.android.command.contact.CommandContactValues;
+import ai.saiy.android.command.contact.ContactConfirm;
 import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
@@ -58,14 +61,14 @@ public class RecognitionAction {
     /**
      * Constructor.
      *
-     * @param mContext  the application context
+     * @param context  the application context
      * @param vrLocale  the voice recognition {@link Locale}
      * @param ttsLocale the Text to Speech {@link Locale}
      */
-    public RecognitionAction(@NonNull final Context mContext, @NonNull final Locale vrLocale,
+    public RecognitionAction(@NonNull final Context context, @NonNull final Locale vrLocale,
                              @NonNull final Locale ttsLocale, @NonNull final SupportedLanguage sl,
                              @NonNull final Bundle bundle) {
-        this.mContext = mContext.getApplicationContext();
+        this.mContext = context.getApplicationContext();
         this.bundle = bundle;
 
         this.resultsRecognition = this.bundle.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
@@ -100,6 +103,7 @@ public class RecognitionAction {
             cr.setResultsArray(resultsRecognition);
             cr.setConfidenceArray(confidenceScores);
             cr.setWasSecure(bundle.getBoolean(RecognizerIntent.EXTRA_SECURE, false));
+            cr.setBundle(bundle);
 
             final Quantum quantum = new Quantum(mContext);
 
@@ -161,18 +165,24 @@ public class RecognitionAction {
 
                     quantum.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cr);
                     break;
+                case Condition.CONDITION_CONTACT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Condition.CONDITION_CONTACT");
+                    }
+                    new ContactConfirm(mContext, bundle, ((CommandContactValues) bundle.getParcelable(LocalRequest.EXTRA_OBJECT)).getConfirmType(), vrLocale, ttsLocale).confirm();
+                    break;
                 case Condition.CONDITION_ANNOUNCE_CALLER:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_ANNOUNCE_CALLER");
                     }
-                    //TODO AnswerCallConfirm
+                    new AnswerCallConfirm(mContext, bundle, AnswerCallConfirm.ConfirmType.ANSWER, vrLocale, ttsLocale).answer();
                     break;
                 case Condition.CONDITION_TUTORIAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL");
                     }
                     this.bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, false);
-                    new ai.saiy.android.tutorial.Tutorial(this.mContext, this.vrLocale, this.ttsLocale, this.sl, this.bundle).execute();
+                    new ai.saiy.android.tutorial.Tutorial(mContext, vrLocale, ttsLocale, sl, bundle).execute();
                     break;
                 case Condition.CONDITION_ALEXA_TTS:
                     if (DEBUG) {
