@@ -19,8 +19,12 @@ package ai.saiy.android.processing;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.provider.Settings;
+import android.speech.SpeechRecognizer;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +33,7 @@ import java.util.ArrayList;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.SaiyDefaults;
+import ai.saiy.android.command.alexa.CommandAlexa;
 import ai.saiy.android.command.battery.CommandBattery;
 import ai.saiy.android.command.clipboard.ClipboardHelper;
 import ai.saiy.android.command.custom.CommandCustom;
@@ -57,6 +62,7 @@ import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.helper.QuantumHelper;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.thirdparty.tasker.TaskerHelper;
 import ai.saiy.android.ui.activity.ActivityChooserDialog;
 import ai.saiy.android.ui.activity.ActivityHome;
@@ -411,65 +417,177 @@ public class Quantum extends Tunnelling {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CONTACT.name());
                     }
+                    final ai.saiy.android.command.contact.CommandContact commandContact = new ai.saiy.android.command.contact.CommandContact();
+                    outcome = commandContact.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    request.setCondition(outcome.getCondition());
+                    final Object extra = outcome.getExtra();
+                    if (extra instanceof Parcelable) {
+                        request.setParcelableObject((Parcelable) extra);
+                    }
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_NAVIGATION:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_NAVIGATION.name());
                     }
+                    final ai.saiy.android.command.navigation.CommandNavigation commandNavigation = new ai.saiy.android.command.navigation.CommandNavigation();
+                    outcome = commandNavigation.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_REDIAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_REDIAL.name());
+                    }
+                    if (!secure) {
+                        final ai.saiy.android.command.call.CommandRedial commandRedial = new ai.saiy.android.command.call.CommandRedial();
+                        outcome = commandRedial.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
                     }
                     break;
                 case COMMAND_CALL_BACK:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CALL_BACK.name());
                     }
+                    if (!secure) {
+                        final ai.saiy.android.command.call.CommandCallBack commandCallBack = new ai.saiy.android.command.call.CommandCallBack();
+                        outcome = commandCallBack.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    }
                     break;
                 case COMMAND_HOROSCOPE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HOROSCOPE.name());
                     }
+                    final ai.saiy.android.command.horoscope.CommandHoroscope commandHoroscope = new ai.saiy.android.command.horoscope.CommandHoroscope();
+                    outcome = commandHoroscope.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_ALARM:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALARM.name());
                     }
+                    final ai.saiy.android.command.alarm.CommandAlarm commandAlarm = new ai.saiy.android.command.alarm.CommandAlarm();
+                    outcome = commandAlarm.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_CALENDAR:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CALENDAR.name());
                     }
+                    final ai.saiy.android.command.calendar.CommandCalendar commandCalendar = new ai.saiy.android.command.calendar.CommandCalendar();
+                    outcome = commandCalendar.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_SMS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SMS.name());
+                    }
+                    if (!secure) {
+                        final ai.saiy.android.command.sms.CommandSms commandSms = new ai.saiy.android.command.sms.CommandSms();
+                        outcome = commandSms.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
                     }
                     break;
                 case COMMAND_HELP:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HELP.name());
                     }
+                    final ai.saiy.android.command.help.CommandHelp commandHelp = new ai.saiy.android.command.help.CommandHelp();
+                    outcome = commandHelp.getResponse(mContext, toResolve, sl, cr);
+                    qubit = outcome.getQubit();
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_DRIVING:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_DRIVING.name());
+                    }
+                    if (!secure) {
+                        final ai.saiy.android.command.driving.CommandDriving commandDriving = new ai.saiy.android.command.driving.CommandDriving();
+                        outcome = commandDriving.getResponse(mContext, toResolve, sl, cr, vrLocale, ttsLocale);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
                     }
                     break;
                 case COMMAND_FLOAT_COMMANDS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_FLOAT_COMMANDS.name());
                     }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !android.provider.Settings.canDrawOverlays(mContext)) {
+                        request.setUtterance(SaiyResourcesHelper.getStringResource(mContext, sl, R.string.permission_system_alert));
+                        final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + mContext.getPackageName()));
+                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                        mContext.startActivity(intent);
+                    } else {
+                        request.setUtterance(PersonalityResponse.getGenericAcknowledgement(mContext, sl));
+                        SelfAwareHelper.startFloatingService(mContext, ai.saiy.android.tutorial.Tutorial.TUTORIAL_WINDOW_ID);
+                    }
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = Outcome.SUCCESS;
                     break;
                 case COMMAND_ALEXA:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                         if (ai.saiy.android.amazon.TokenHelper.hasToken(mContext)) {
-//2813                            ai.saiy.android.command.c.d r0 = new ai.saiy.android.command.c.d();
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name() + ": have request");
+                            final CommandAlexa commandAlexa = new CommandAlexa();
+                            outcome = commandAlexa.getResponse(mContext, toResolve, sl, cr);
+                            result = outcome.getOutcome();
+                            if (result == Outcome.SUCCESS) {
+                                request.setAction(LocalRequest.ACTION_ALEXA_TTS);
+                                request.setUtteranceArray(toResolve);
+                                final ArrayList<String> resultsArray = new ArrayList<>();
+                                resultsArray.add(outcome.getUtterance());
+                                request.getBundle().putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, resultsArray);
+                                request.getBundle().putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, new float[] {0.9f});
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name() + ": have request");
+                                }
+                            } else {
+                                request.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
+                                request.setUtterance(PersonalityResponse.getAlexaIntro(mContext, sl));
+                                request.setRecognitionProvider(ai.saiy.android.api.SaiyDefaults.VR.ALEXA);
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name() + ": starting request");
+                                }
                             }
                         } else {
+                            request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                            request.getBundle().putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
+                            request.setUtterance(SaiyResourcesHelper.getStringResource(mContext, sl, R.string.amazon_notification_auth_request));
+                            ExecuteIntent.saiyActivity(mContext, ActivityHome.class, request.getBundle(), true);
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name() + ": no auth");
                             }

@@ -61,7 +61,7 @@ public class CommandDriving {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
         this.then = System.nanoTime();
-        Outcome outcome = new Outcome();
+        final Outcome outcome = new Outcome();
         outcome.setAction(LocalRequest.ACTION_SPEAK_ONLY);
         outcome.setOutcome(Outcome.SUCCESS);
         final CommandDrivingValues commandDrivingValues = new Driving(sl).fetch(context, voiceData);

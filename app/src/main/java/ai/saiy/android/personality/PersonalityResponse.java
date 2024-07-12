@@ -908,6 +908,11 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_calling_number), action));
     }
 
+    public static String getAlexaIntro(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_alexa_intro);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
     public static String getSmsContactResponsePart1(Context context, SupportedLanguage supportedLanguage, String address) {
         return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_contact_response_part_1), address);
     }

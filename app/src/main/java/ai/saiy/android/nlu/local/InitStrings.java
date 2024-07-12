@@ -22,14 +22,23 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
+import ai.saiy.android.command.alarm.Alarm;
+import ai.saiy.android.command.alexa.Alexa;
 import ai.saiy.android.command.battery.Battery;
+import ai.saiy.android.command.calendar.Calendar;
+import ai.saiy.android.command.call.CallBack;
+import ai.saiy.android.command.call.Redial;
 import ai.saiy.android.command.cancel.Cancel;
+import ai.saiy.android.command.contact.Contact;
 import ai.saiy.android.command.driving.Driving;
 import ai.saiy.android.command.emotion.Emotion;
+import ai.saiy.android.command.help.Help;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.horoscope.Horoscope;
 import ai.saiy.android.command.hotword.Hotword;
+import ai.saiy.android.command.navigation.Navigation;
 import ai.saiy.android.command.pardon.Pardon;
+import ai.saiy.android.command.sms.Sms;
 import ai.saiy.android.command.songrecognition.SongRecognition;
 import ai.saiy.android.command.spell.Spell;
 import ai.saiy.android.command.tasker.Tasker;
@@ -89,8 +98,17 @@ public final class InitStrings {
         callableList.add(new Emotion(sr, sl, voiceData, confidence));
         callableList.add(new Hotword(sr, sl, voiceData, confidence));
         callableList.add(new VocalRecognition(sr, sl, voiceData, confidence));
+        callableList.add(new Contact(sr, sl, voiceData, confidence));
+        callableList.add(new Navigation(sr, sl, voiceData, confidence));
+        callableList.add(new Redial(sr, sl, voiceData, confidence));
+        callableList.add(new CallBack(sr, sl, voiceData, confidence));
         callableList.add(new Horoscope(sr, sl, voiceData, confidence));
+        callableList.add(new Alarm(sr, sl, voiceData, confidence));
+        callableList.add(new Calendar(sr, sl, voiceData, confidence));
+        callableList.add(new Sms(sr, sl, voiceData, confidence));
+        callableList.add(new Help(sr, sl, voiceData, confidence));
         callableList.add(new Driving(sr, sl, voiceData, confidence));
+        callableList.add(new Alexa(sr, sl, voiceData, confidence));
         sr.reset();
     }
 

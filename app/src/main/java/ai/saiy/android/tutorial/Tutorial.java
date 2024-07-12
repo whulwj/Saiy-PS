@@ -32,7 +32,7 @@ import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
 
 public class Tutorial {
-    private static final int TUTORIAL_WINDOW_ID = 2;
+    public static final int TUTORIAL_WINDOW_ID = 2;
     private static final byte STAGE_INVALID = -1;
     public static final byte STAGE_INTRO = 1;
     private static final byte STAGE_INTRO_2 = 2;

@@ -34,6 +34,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import ai.saiy.android.command.alexa.AlexaPartial;
 import ai.saiy.android.command.cancel.CancelPartial;
 import ai.saiy.android.command.translate.TranslatePartial;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
@@ -60,6 +61,7 @@ public class PartialHelper {
     private final List<Callable<Pair<Boolean, Integer>>> callableList = new ArrayList<>();
     private final CancelPartial cancelPartial;
     private volatile TranslatePartial translatePartial;
+    private volatile AlexaPartial alexaPartial;
     private final IPartial iPartial;
 
     /**
@@ -90,6 +92,10 @@ public class PartialHelper {
                 callableList.add(translatePartial);
                 break;
         }
+        if (ai.saiy.android.amazon.TokenHelper.hasToken(mContext)) {
+            this.alexaPartial = new AlexaPartial(sr, sl);
+            callableList.add(alexaPartial);
+        }
 
         sr.reset();
     }
@@ -111,6 +117,9 @@ public class PartialHelper {
 
                 if (translatePartial != null) {
                     translatePartial.setPartialData(partialResults);
+                }
+                if (alexaPartial != null) {
+                    alexaPartial.setPartialData(partialResults);
                 }
 
                 try {

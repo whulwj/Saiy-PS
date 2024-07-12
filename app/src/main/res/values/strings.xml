@@ -1372,9 +1372,14 @@
     <string name="neutral" translatable="true">"neutral"</string>
     <string name="positive" translatable="true">"positive"</string>
 
+    <string name="alexa">alexa</string>
+    <string name="ask_alexa">ask alexa</string>
     <string name="alexa_media_response">Alexa\'s media requests make little sense I\'m afraid.</string>
     <string name="alexa_volume_response">Alexa just asked me to set the volume to, %1$s. I\'m not sure how to go about doing that.</string>
     <string name="error_alexa_marshmallow">Sorry, but due to Amazon\'s strict encryption requirements, this feature is only available on devices running Marshmallow or higher.</string>
+    <string name="tell_alexa">tell alexa</string>
+    <string name="tell_me">tell me</string>
+    <string name="to_tell_me">to tell me</string>
 
     <string name="lp_toast_unknown">When I haven\'t understood a command, this option allows me to show you a toast of the speech content returned by Google. It\'s a little selfish really, as I want you to blame them, and not me!</string>
     <string name="menu_driving_profile">Driving Profile</string>
@@ -1677,4 +1682,8 @@
     <string name="error_alarm_schedule">Something went wrong setting that alarm</string>
     <string name="error_alarm_structure">Sorry, but I was unable to structure that alarm</string>
     <string name="error_navigation_app_failed">There was a problem opening your maps application.</string>
+
+    <string name="help">help</string>
+    <string name="help_response">Please see the structured command list to understand what I can do, and how you can get me to do it. If you have a problem, please see the troubleshooting and bugs section in the main application. If you\'re still stuck, do feel free to email the developer or check out the community forum</string>
+    <string name="what_can_you_do">what can you do</string>
 </resources>
