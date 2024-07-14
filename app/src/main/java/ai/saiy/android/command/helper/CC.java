@@ -52,6 +52,7 @@ public enum CC {
     COMMAND_REDIAL(false, true),
     COMMAND_CALL_BACK(false, true),
     COMMAND_HOROSCOPE(true, false),
+    COMMAND_NOTE(false, false),
     COMMAND_ALARM(false, false),
     COMMAND_CALENDAR(false, false),
     COMMAND_SMS(false, true),

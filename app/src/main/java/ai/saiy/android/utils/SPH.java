@@ -45,6 +45,7 @@ import ai.saiy.android.command.horoscope.CommandHoroscopeValues;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.database.DBSpeech;
+import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.memory.Memory;
@@ -102,6 +103,7 @@ public class SPH {
     private static final String RESET_SPEAKER = "reset_speaker";
     private static final String USE_OFFLINE = "use_offline";
     private static final String PING_CHECK = "ping_check";
+    private static final String NOTE_PROVIDER_VERBOSE = "note_provider_verbose";
     private static final String COMMAND_UNKNOWN_ACTION = "command_unknown_action";
     private static final String DRIVING_COOLDOWN_TIME = "driving_cooldown_time";
     private static final String INTERCEPT_GOOGLE_NOW = "intercept_google_now";
@@ -182,6 +184,7 @@ public class SPH {
     private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
     private static final String HEADSET_OVERVIEW_COUNT = "headset_overview_count";
     private static final String ACCESSIBILITY_CHANGE = "accessibility_change";
+    private static final String DEFAULT_NOTE = "default_note";
     private static final String ALEXA_CODE_VERIFIER = "alexa_code_verifier";
     private static final String ALEXA_ACCESS_TOKEN = "alexa_access_token";
     private static final String ALEXA_REFRESH_TOKEN = "alexa_refresh_token";
@@ -438,9 +441,9 @@ public class SPH {
     }
 
     public static void setMessageSignatureCondition(Context context, boolean condition) {
-        SharedPreferences.Editor a2 = getEditor(getPref(context));
-        a2.putBoolean(MESSAGE_SIGNATURE_CONDITION, condition);
-        a2.commit();
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(MESSAGE_SIGNATURE_CONDITION, condition);
+        edit.commit();
     }
 
     /**
@@ -1973,9 +1976,9 @@ public class SPH {
     }
 
     public static void setNetworkSynthesis4g(Context context, boolean condition) {
-        SharedPreferences.Editor a2 = getEditor(getPref(context));
-        a2.putBoolean(NETWORK_SYNTHESIS_4G, condition);
-        a2.apply();
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(NETWORK_SYNTHESIS_4G, condition);
+        edit.apply();
     }
 
     /**
@@ -1987,6 +1990,16 @@ public class SPH {
     public static boolean getNetworkSynthesis(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
         return pref.getBoolean(NETWORK_SYNTHESIS, true);
+    }
+
+    public static void markNoteProviderVerbose(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(NOTE_PROVIDER_VERBOSE, true);
+        edit.apply();
+    }
+
+    public static boolean getNoteProviderVerbose(Context context) {
+        return getPref(context).getBoolean(NOTE_PROVIDER_VERBOSE, false);
     }
 
     /**
@@ -2389,6 +2402,16 @@ public class SPH {
 
     public static boolean getAccessibilityChange(Context context) {
         return getPref(context).getBoolean(ACCESSIBILITY_CHANGE, false);
+    }
+
+    public static int getDefaultNote(Context context) {
+        return getPref(context).getInt(DEFAULT_NOTE, NoteProvider.NOTE_ACTION_SELF_NOTE);
+    }
+
+    public static void setDefaultNote(Context context, int action) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(DEFAULT_NOTE, action);
+        edit.apply();
     }
 
     public static String setCodeVerifier(Context context) {

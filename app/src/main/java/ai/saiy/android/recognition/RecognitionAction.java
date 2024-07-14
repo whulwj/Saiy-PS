@@ -32,6 +32,7 @@ import ai.saiy.android.command.contact.AnswerCallConfirm;
 import ai.saiy.android.command.contact.CommandContactValues;
 import ai.saiy.android.command.contact.ContactConfirm;
 import ai.saiy.android.command.helper.CommandRequest;
+import ai.saiy.android.command.note.NoteManager;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
@@ -170,6 +171,12 @@ public class RecognitionAction {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_CONTACT");
                     }
                     new ContactConfirm(mContext, bundle, ((CommandContactValues) bundle.getParcelable(LocalRequest.EXTRA_OBJECT)).getConfirmType(), vrLocale, ttsLocale).confirm();
+                    break;
+                case Condition.CONDITION_NOTE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Condition.CONDITION_NOTE");
+                    }
+                    new NoteManager(mContext, bundle, bundle.getParcelable(LocalRequest.EXTRA_OBJECT), vrLocale, ttsLocale).execute();
                     break;
                 case Condition.CONDITION_ANNOUNCE_CALLER:
                     if (DEBUG) {

@@ -1686,4 +1686,17 @@
     <string name="help">help</string>
     <string name="help_response">Please see the structured command list to understand what I can do, and how you can get me to do it. If you have a problem, please see the troubleshooting and bugs section in the main application. If you\'re still stuck, do feel free to email the developer or check out the community forum</string>
     <string name="what_can_you_do">what can you do</string>
+
+    <string name="app_name_created">Created via Saiy</string>
+    <string name="content_note_provider_verbose">Please be aware. If your preferred note provider is not appearing as a choice. You can head to the Superuser Section, where you\'ll find the Note Provider options. Long press the menu item for a further, more detailed explanation.</string>
+    <string name="evernote">evernote</string>
+    <string name="error_default_app_failed">Sorry %1$s, but there was a problem opening the %2$s application</string>
+    <string name="note">note</string>
+    <string name="note_content_request">Okay. Please say the content of the note</string>
+    <string name="note_error_response">There was a problem passing that note to your default provider</string>
+    <string name="note_success_response">I\'ve passed that to your default note provider</string>
+    <string name="note_title_request">Thank you. And the title?</string>
+    <string name="search_suggest_install">I would suggest installing the %1$s application to use this feature</string>
+    <string name="test_note_prompt">Tap to test</string>
+    <string name="title">title</string>
 </resources>

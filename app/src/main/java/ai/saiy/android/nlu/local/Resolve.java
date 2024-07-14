@@ -36,6 +36,7 @@ import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.command.alexa.Alexa;
 import ai.saiy.android.command.help.Help;
+import ai.saiy.android.command.note.Note;
 import ai.saiy.android.command.sms.Sms;
 import ai.saiy.android.command.call.CallBack;
 import ai.saiy.android.command.call.Redial;
@@ -124,6 +125,7 @@ public final class Resolve {
         callableList.add(new Redial(sr, sl, voiceData, confidence));
         callableList.add(new CallBack(sr, sl, voiceData, confidence));
         callableList.add(new Horoscope(sr, sl, voiceData, confidence));
+        callableList.add(new Note(sr, sl, voiceData, confidence));
         callableList.add(new Alarm(sr, sl, voiceData, confidence));
         callableList.add(new Calendar(sr, sl, voiceData, confidence));
         callableList.add(new Sms(sr, sl, voiceData, confidence));

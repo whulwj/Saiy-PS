@@ -40,6 +40,7 @@ import ai.saiy.android.command.custom.CommandCustom;
 import ai.saiy.android.command.emotion.CommandEmotion;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
+import ai.saiy.android.command.note.CommandNote;
 import ai.saiy.android.command.songrecognition.CommandSongRecognition;
 import ai.saiy.android.command.spell.CommandSpell;
 import ai.saiy.android.command.tasker.CommandTasker;
@@ -480,6 +481,16 @@ public class Quantum extends Tunnelling {
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_NOTE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_NOTE.name());
+                    }
+                    final CommandNote commandNote = new CommandNote();
+                    outcome = commandNote.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_ALARM:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALARM.name());
@@ -865,6 +876,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_HOROSCOPE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HOROSCOPE.name());
+                    }
+                    break;
+                case COMMAND_NOTE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_NOTE.name());
                     }
                     break;
                 case COMMAND_ALARM:

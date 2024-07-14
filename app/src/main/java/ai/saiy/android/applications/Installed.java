@@ -35,9 +35,11 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.BuildConfig;
+import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -495,6 +497,37 @@ public class Installed {
         }
 
         return providers;
+    }
+
+    public static ArrayList<NoteProvider> getEvernote(Context context) {
+        final ArrayList<NoteProvider> arrayList = new ArrayList<>(1);
+        try {
+            context.getApplicationContext().getPackageManager().getApplicationInfo(PACKAGE_EVERNOTE, 0);
+            arrayList.add(NoteProvider.EVERNOTE);
+            if (DEBUG) {
+                MyLog.d(CLS_NAME, "Evernote installed");
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            if (DEBUG) {
+                MyLog.d(CLS_NAME, "Evernote not installed");
+            }
+        }
+        return arrayList;
+    }
+
+    public static Pair<Boolean, Integer> getVoiceNoteProvidersCount(Context context) {
+        final int size = context.getPackageManager().queryIntentActivities(new Intent(NoteProvider.VOICE_NOTE), PackageManager.GET_META_DATA).size();
+        return size > 0 ? new Pair<>(true, size) : new Pair<>(false, 0);
+    }
+
+    public static Pair<String, String> getVoiceNoteProviders(Context context) {
+        final Intent intent = new Intent(NoteProvider.VOICE_NOTE);
+        final PackageManager packageManager = context.getPackageManager();
+        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, PackageManager.GET_META_DATA);
+        if (UtilsList.notNaked(queryIntentActivities)) {
+            return new Pair<>(queryIntentActivities.get(0).activityInfo.packageName, queryIntentActivities.get(0).loadLabel(packageManager).toString());
+        }
+        return null;
     }
 
     /**

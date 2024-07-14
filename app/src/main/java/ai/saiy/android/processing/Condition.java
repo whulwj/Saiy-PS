@@ -41,6 +41,7 @@ public final class Condition {
     public static final int CONDITION_GOOGLE_NOW = 8;
     public static final int CONDITION_SECURE = 9;
     public static final int CONDITION_CONTACT = 10;
+    public static final int CONDITION_NOTE = 11;
     public static final int CONDITION_ANNOUNCE_CALLER = 12;
     public static final int CONDITION_CHECK_REINSTALLATION = 15;
     public static final int CONDITION_TUTORIAL = 16;

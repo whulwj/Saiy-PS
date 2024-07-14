@@ -887,6 +887,10 @@ public final class PersonalityResponse {
         return String.format(stringArray[new Random().nextInt(stringArray.length)], contactName);
     }
 
+    public static String getDefaultAppFailed(Context context, SupportedLanguage supportedLanguage, String str) {
+        return UtilsString.stripNameSpace(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_default_app_failed), PersonalityHelper.getUserNameOrNot(context), str));
+    }
+
     public static String getContactMissingData(Context context, SupportedLanguage supportedLanguage, String contactName) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_contact_missing_data);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], contactName));
@@ -906,6 +910,10 @@ public final class PersonalityResponse {
 
     public static String getCallingNumberError(Context context, SupportedLanguage supportedLanguage, String action) {
         return UtilsString.stripNameSpace(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_calling_number), action));
+    }
+
+    public static String getSearchSuggestInstall(Context context, SupportedLanguage supportedLanguage, String str) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.search_suggest_install), str);
     }
 
     public static String getAlexaIntro(Context context, SupportedLanguage supportedLanguage) {

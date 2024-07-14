@@ -37,6 +37,7 @@ import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.horoscope.Horoscope;
 import ai.saiy.android.command.hotword.Hotword;
 import ai.saiy.android.command.navigation.Navigation;
+import ai.saiy.android.command.note.Note;
 import ai.saiy.android.command.pardon.Pardon;
 import ai.saiy.android.command.sms.Sms;
 import ai.saiy.android.command.songrecognition.SongRecognition;
@@ -103,6 +104,7 @@ public final class InitStrings {
         callableList.add(new Redial(sr, sl, voiceData, confidence));
         callableList.add(new CallBack(sr, sl, voiceData, confidence));
         callableList.add(new Horoscope(sr, sl, voiceData, confidence));
+        callableList.add(new Note(sr, sl, voiceData, confidence));
         callableList.add(new Alarm(sr, sl, voiceData, confidence));
         callableList.add(new Calendar(sr, sl, voiceData, confidence));
         callableList.add(new Sms(sr, sl, voiceData, confidence));
