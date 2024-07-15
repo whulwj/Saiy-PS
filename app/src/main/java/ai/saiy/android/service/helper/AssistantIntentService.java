@@ -234,8 +234,8 @@ public class AssistantIntentService extends IntentService {
                         || action.equals(RecognizerIntent.ACTION_WEB_SEARCH) || action.equals(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE)
                         || action.equals(ACTION_WIDGET_ASSIST) || action.equals(ACTION_QL_ASSIST)) {
                     if (DEBUG) {
-                        if (bundle.containsKey(EXTRA_ASSIST_CONTEXT)) {
-                            final Bundle assistBundle = bundle.getBundle(EXTRA_ASSIST_CONTEXT);
+                        if (intent.hasExtra(EXTRA_ASSIST_CONTEXT)) {
+                            final Bundle assistBundle = intent.getBundleExtra(EXTRA_ASSIST_CONTEXT);
 
                             MyLog.i(CLS_NAME, "onHandleIntent checking assistBundle");
                             examineBundle(assistBundle);

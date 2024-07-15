@@ -51,6 +51,8 @@ import ai.saiy.android.utils.UtilsList;
  * Created by benrandall76@gmail.com on 21/04/2016.
  */
 public class JaroWinklerHelper implements Callable<Object> {
+    private static final double CONTACT_DEFAULT_THRESHOLD = 0.77;
+    private static final double CONTACT_LEGACY_THRESHOLD = 0.7;
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = JaroWinklerHelper.class.getSimpleName();
@@ -272,7 +274,7 @@ public class JaroWinklerHelper implements Callable<Object> {
     public ArrayList<AlgorithmicContainer> executeContact() {
         long then = System.nanoTime();
 
-        final double jwdUpperThreshold = SPH.getJwdUpperThresholdForContact(mContext);
+        final double jwdUpperThreshold = SPH.getJwdUpperThresholdForContact(mContext)? CONTACT_DEFAULT_THRESHOLD : CONTACT_LEGACY_THRESHOLD;
 
         final ArrayList<AlgorithmicContainer> toKeep = new ArrayList<>();
         final JaroWinklerDistance jwd = new JaroWinklerDistance();

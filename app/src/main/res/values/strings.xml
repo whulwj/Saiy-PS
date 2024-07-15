@@ -161,6 +161,8 @@
     <string name="menu_tap_send" translatable="true">tap to send</string>
     <string name="menu_tap_help" translatable="true">tap for help</string>
     <string name="menu_tap_create">tap to create</string>
+    <string name="menu_tap_reset">tap to reset</string>
+    <string name="menu_tap_restore">tap to restore</string>
     <string name="menu_tap_run">tap to run</string>
 
     <string name="title_home" translatable="true">Home</string>
@@ -276,11 +278,41 @@
     <string name="menu_alexa_shortcut">Alexa Shortcut</string>
     <string name="menu_launcher_shortcut">Launcher Shortcut</string>
     <string name="launcher_shortcut_description">Click to activate Saiy</string>
+    <string name="menu_install_shortcut_app">Install Shortcut App</string>
     <string name="menu_shortcut_failed">Failed to create shortcut!?</string>
     <string name="hint_bugs_command" translatable="true">Enter a command to run…</string>
     <string name="menu_recogniser_busy_fix" translatable="true">Recognizer Busy Fix</string>
     <string name="menu_okay_google_fix" translatable="true">Okay Google Fix</string>
     <string name="menu_double_beep_fix">Double Beep Fix</string>
+    <string name="menu_flashlight_fix">Flashlight Fix</string>
+    <string name="menu_wired_headset_fix">Wired Headset Fix</string>
+    <string name="menu_reset">Reset to Default</string>
+    <string name="menu_reset_error">Failed to reset!?</string>
+    <string name="menu_reset_saiy_defaults">Reset Saiy Defaults</string>
+    <string name="menu_reset_success">Reset success!</string>
+    <string name="menu_override_secure">Override Secure Commands</string>
+    <string name="secure_intro_text">Select override conditions</string>
+    <string name="content_reset">This will reset all settings to default, as if you\'d just installed Saiy.\n\nThis includes all customisations, tweaks and commands.</string>
+    <string name="content_override_secure">This will allow me to respond to all commands, even when the device is locked.\n\nPlease consider carefully whether you should enable this feature, as I will respond to all requests from any voice instruction to read and send messages, call contacts, announce your agenda - and much more.</string>
+    <string name="lp_algorithms_2">In a future release, here you\'ll be able to tweak the thresholds of the algorithms I use to compare spoken words, to close alternatives. Increasing them too much will result in many false positives, but finding the right balance may help me to detect your commands, even if Google is sending back something completely different. At present, the legacy option only applies to contact matching.</string>
+    <string name="lp_blacklist">External applications installed on your device, can request that I speak on their behalf, or register keyphrases that perform actions specific to their content. Any such application will need to request permission from you to do so. If you find that one is abusing the privilege, you can blacklist it here, and prevent it from connecting to me.</string>
+    <string name="lp_double_beep_fix">Due to a bug in Google\'s hotword detection service, where they are hogging the microphone and not sharing. I may just keep beeping multiple times when you try to activate me. Enabling this option will allow me to identify when this is occurring, and murder Google\'s Assistant. With pleasure.</string>
+    <string name="lp_flashlight_fix">Certain Android devices don\'t like the way I attempt to enable the flashlight. Toggle this setting if you are having problems. My developer is aware of an issue that causes the torch to disable when the display turns off. He\'s working on it.</string>
+    <string name="lp_install_ql">If you require a stand alone application to launch me in listening mode. Perhaps for your car unit, or a button mapping app. Then this is the option for you.</string>
+    <string name="lp_memory_usage">To function, I need to bind to both a text to speech, and a voice recognition engine. The combination of my own memory usage, as well as theirs, will show in the Android running process list, as a collective total. This level may alarm some users, and lead them to incorrectly believe the memory allocation is proportional to my battery consumption. This is an incorrect assumption. Regardless, here you can set how quickly I release my binding to both engines. Before you consider reducing this time span, please do read further in the Troubleshooting and Bugs section.</string>
+    <string name="lp_note_provider">If your preferred note provider is not appearing as a choice, then this is the place for you. There are many ways different note apps expect to receive the content and title, and here I do my best to provide you with as many options as possible to make your favourite app work correctly. Select an option and then press test. If the note app you want appears as a choice, then select them and check the test content and title are populated correctly. If you exhaust all of the options, then it may be that the app you want, simply isn\'t handling the request correctly. Drop my developer a quick email from the Development Section, and he\'ll do his best to give them a nudge.</string>
+    <string name="lp_okay_google_fix">Due to a bug in Google\'s hotword detection service, your okay Google command might not be functioning correctly. Enabling this option should work around this problem for now.</string>
+    <string name="lp_override_secure">This setting allows you to override what I consider to be a secure function, and perform it even when the device is locked. This is not recommended. Tap for a detailed explanation.</string>
+    <string name="lp_ping">Prior to speaking, initiating the voice recognition, or performing a command that requires a network connection, I check the network speed by using a ping test. If for some reason, this is negatively affecting how I perform, you can disable it here.</string>
+    <string name="lp_recogniser_busy_fix">Due to a bug in Google\'s recognition service, you might be plagued by an error that says the service is busy. Enabling this option should provide a temporary fix.</string>
+    <string name="lp_reset_default">If something has happened that is causing me to misbehave, you can reset me to a default installation state here.</string>
+    <string name="lp_reset_saiy_defaults">If you\'d like to clear the default options in Android, that Saiy responds to, such as a headset button press, clicking here will remove all defaults set.</string>
+    <string name="lp_root">When enabled in a coming release, you\'ll be able to customise commands that require root or system access to process.</string>
+    <string name="lp_start_boot">You can toggle this setting to decide whether or not I am automatically started by the Android System</string>
+    <string name="lp_sms_body_fix">For some users, dictated message content fails to appear in their default messaging application. Toggling this setting should fix the issue.</string>
+    <string name="lp_sms_id_fix">For a small number of users, requesting text message content from a specific contact will fail. Toggling this setting will hopefully resolve this issue.</string>
+    <string name="lp_vocal_verification">This is an experimental feature. Tap for a detailed explanation.</string>
+    <string name="lp_wired_headset_fix">If the voice action button on your wired headset is not doing anything, or not defaulting to me, when your screen is off, you can use this fix to set things up correctly. When you tap on this option, if I\'m activated successfully, then all is good. If it starts another application, then you\'ll need to locate that app in the Android Application Settings, and click on. Clear defaults. Before returning here to try again. You\'ll most likely get shown a dialog to choose between the various Assistants on your device. I would highly recommend you choose me. For obvious reasons.</string>
 
     <string name="menu_europe">Europe</string>
     <string name="menu_north_america">North America</string>
@@ -366,6 +398,9 @@
     <string name="incorrect">incorrect</string>
     <string name="dont">don\'t</string>
     <string name="do_not">do not</string>
+    <string name="don_t_do_it_">Don\'t do it!</string>
+    <string name="configure">configure</string>
+    <string name="confirm">confirm</string>
 
     <string name="settings_missing">Due to the manufacturer of your device altering the location of certain settings, you\'ll need to manually find the setting that will grant me, the %1$s permission. If you have any trouble finding it, I\'m sure Google will be your friend.</string>
     <string name="content_system_overlays">draw over other apps, or System overlays</string>
@@ -1580,6 +1615,8 @@
     <string name="time_am">A M</string>
     <string name="time_pm">P M</string>
 
+    <string name="menu_sms_body_fix">SMS Body Fix</string>
+    <string name="menu_sms_id_fix">SMS ID Fix</string>
     <string name="text">text</string>
     <string name="message">message</string>
     <string name="email">email</string>
@@ -1687,6 +1724,7 @@
     <string name="help_response">Please see the structured command list to understand what I can do, and how you can get me to do it. If you have a problem, please see the troubleshooting and bugs section in the main application. If you\'re still stuck, do feel free to email the developer or check out the community forum</string>
     <string name="what_can_you_do">what can you do</string>
 
+    <string name="menu_note_provider">Note Provider</string>
     <string name="app_name_created">Created via Saiy</string>
     <string name="content_note_provider_verbose">Please be aware. If your preferred note provider is not appearing as a choice. You can head to the Superuser Section, where you\'ll find the Note Provider options. Long press the menu item for a further, more detailed explanation.</string>
     <string name="evernote">evernote</string>
@@ -1697,6 +1735,10 @@
     <string name="note_success_response">I\'ve passed that to your default note provider</string>
     <string name="note_title_request">Thank you. And the title?</string>
     <string name="search_suggest_install">I would suggest installing the %1$s application to use this feature</string>
+    <string name="menu_test">Test</string>
+    <string name="test_note_content">I\'m note content</string>
     <string name="test_note_prompt">Tap to test</string>
+    <string name="test_note_title">I\'m a note title</string>
     <string name="title">title</string>
+    <string name="title_no_note_response">No note apps responded</string>
 </resources>

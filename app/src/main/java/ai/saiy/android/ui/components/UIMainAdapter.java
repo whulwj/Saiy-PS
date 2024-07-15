@@ -88,7 +88,7 @@ public class UIMainAdapter extends RecyclerView.Adapter<UIMainAdapter.ViewHolder
     }
 
     @Override
-    public UIMainAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+    public @NonNull UIMainAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(
                         parent.getContext()).inflate(R.layout.layout_item_ui_main, parent, false));

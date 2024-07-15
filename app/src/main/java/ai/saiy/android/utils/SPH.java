@@ -81,6 +81,7 @@ public class SPH {
     private static final String MESSAGE_SIGNATURE = "message_signature";
     private static final String MESSAGE_SIGNATURE_CONDITION = "message_signature_condition";
     private static final String INACTIVITY_TIMEOUT = "inactivity_timeout";
+    private static final String INACTIVITY_TOAST = "inactivity_toast";
     private static final String VR_LOCALE = "vr_locale";
     private static final String TTS_LOCALE = "tts_locale";
     private static final String JWD_UPPER_THRESHOLD_CONTACT = "jwd_upper_threshold_contact";
@@ -106,12 +107,12 @@ public class SPH {
     private static final String NOTE_PROVIDER_VERBOSE = "note_provider_verbose";
     private static final String COMMAND_UNKNOWN_ACTION = "command_unknown_action";
     private static final String DRIVING_COOLDOWN_TIME = "driving_cooldown_time";
-    private static final String INTERCEPT_GOOGLE_NOW = "intercept_google_now";
     private static final String PING_TIMEOUT = "ping_timeout";
     private static final String CONNECTION_MINIMUM = "connection_minimum";
     private static final String USER_NAME = "user_name";
     private static final String USER_GENDER = "user_gender";
     private static final String USER_ACCOUNT = "user_account";
+    private static final String TORCH_FIX = "torch_fix";
     private static final String UNKNOWN_CONTACT_VERBOSE = "unknown_contact_verbose";
     private static final String EMAIL_AUTO_VERBOSE = "email_auto_verbose";
     private static final String STAR_SIGN = "star_sign";
@@ -361,13 +362,13 @@ public class SPH {
         edit.apply();
     }
 
-    public static double getJwdUpperThresholdForContact(Context context) {
-        return Double.valueOf(getPref(context).getString(JWD_UPPER_THRESHOLD_CONTACT, String.valueOf(0.77d))).doubleValue();
+    public static boolean getJwdUpperThresholdForContact(Context context) {
+        return getPref(context).getBoolean(JWD_UPPER_THRESHOLD_CONTACT, true);
     }
 
-    public static void setJwdUpperThresholdForContact(Context context, double value) {
+    public static void setJwdUpperThresholdForContact(Context context, boolean useDefault) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
-        edit.putString(JWD_UPPER_THRESHOLD_CONTACT, String.valueOf(value));
+        edit.putBoolean(JWD_UPPER_THRESHOLD_CONTACT, useDefault);
         edit.apply();
     }
 
@@ -1507,6 +1508,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean getInactivityToast(Context context) {
+        return getPref(context).getBoolean(INACTIVITY_TOAST, false);
+    }
+
+    public static void setInactivityToast(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(INACTIVITY_TOAST, condition);
+        edit.apply();
+    }
+
     /**
      * Get the amount of times the user has been informed of this verbose information
      *
@@ -1603,31 +1614,6 @@ public class SPH {
     public static int getPingTimeout(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
         return pref.getInt(PING_TIMEOUT, Network.PING_TIMEOUT);
-    }
-
-    /**
-     * Set the user's preference for intercepting the Google Now commands.
-     *
-     * @param ctx       the application context
-     * @param condition to be applied
-     */
-    public static void setInterceptGoogle(@NonNull final Context ctx, final boolean condition) {
-        final SharedPreferences pref = getPref(ctx);
-        final SharedPreferences.Editor edit = getEditor(pref);
-
-        edit.putBoolean(INTERCEPT_GOOGLE_NOW, condition);
-        edit.apply();
-    }
-
-    /**
-     * Get the user's preference for intercepting the Google Now commands.
-     *
-     * @param ctx the application context
-     * @return true if Google Now commands should be intercepted, false otherwise
-     */
-    public static boolean getInterceptGoogle(@NonNull final Context ctx) {
-        final SharedPreferences pref = getPref(ctx);
-        return pref.getBoolean(INTERCEPT_GOOGLE_NOW, false);
     }
 
     /**
@@ -2183,6 +2169,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean getTorchFix(Context context) {
+        return getPref(context).getBoolean(TORCH_FIX, false);
+    }
+
+    public static void setTorchFix(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(TORCH_FIX, condition);
+        edit.apply();
+    }
+
     public static CommandHoroscopeValues.Sign getStarSign(Context context) {
         return CommandHoroscopeValues.Sign.valueOf(getPref(context).getString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name()));
     }
@@ -2600,5 +2596,16 @@ public class SPH {
 
         edit.putBoolean(MIC_FIRST, false);
         edit.apply();
+    }
+
+    public static boolean reset(Context context) {
+        final SharedPreferences pref = getPref(context);
+        final SharedPreferences.Editor edit = getEditor(pref);
+        final boolean result = edit.clear().commit();
+        if (result) {
+            SPH.setAcceptedDisclaimer(context);
+            SPH.setDeveloperNote(context);
+        }
+        return result;
     }
 }

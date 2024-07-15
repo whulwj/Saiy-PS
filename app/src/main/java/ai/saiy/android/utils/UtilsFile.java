@@ -21,6 +21,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Environment;
 import android.util.Pair;
 
@@ -29,9 +30,12 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import ai.saiy.android.tts.helper.TTSDefaults;
 
@@ -46,7 +50,7 @@ public class UtilsFile {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = UtilsFile.class.getSimpleName();
 
-    private static final String FILE_PROVIDER = "ai.saiy.android.fileprovider";
+    public static final String FILE_PROVIDER = "ai.saiy.android.fileprovider";
     private static final String SOUND_EFFECT_DIR = "/se/";
     @Deprecated private static final String TTS_GOOGLE_DIRECTORY = "/Android/data/" + TTSDefaults.TTS_PKG_NAME_GOOGLE + "/files/";
     private static final String SAIY_DIRECTORY = "/Saiy";
@@ -121,7 +125,15 @@ public class UtilsFile {
                                        @NonNull final File file) {
 
         try {
-            FileUtils.copyInputStreamToFile(ctx.getResources().openRawResource(resourceId), file);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoMethodException: File#toPath()
+                FileUtils.copyInputStreamToFile(ctx.getResources().openRawResource(resourceId), file);
+            } else {
+                try (InputStream inputStream = ctx.getResources().openRawResource(resourceId)) {
+                    try (FileOutputStream outputStream = FileUtils.openOutputStream(file)) {
+                        IOUtils.copy(inputStream, outputStream);
+                    }
+                }
+            }
             return file;
         } catch (final IOException e) {
             if (DEBUG) {

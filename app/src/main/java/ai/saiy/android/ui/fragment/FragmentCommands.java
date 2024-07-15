@@ -42,12 +42,12 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
 
     public void toast(String text, int duration) {
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "makeToast: " + text);
+            MyLog.i(CLS_NAME, "makeToast: " + text);
         }
         if (isActive()) {
             getParentActivity().toast(text, duration);
         } else if (DEBUG) {
-            MyLog.w(this.CLS_NAME, "toast Fragment detached");
+            MyLog.w(CLS_NAME, "toast Fragment detached");
         }
     }
 
@@ -60,15 +60,15 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     }
 
     public Context getApplicationContext() {
-        return this.mContext;
+        return mContext;
     }
 
     public RecyclerView.Adapter<?> getAdapter() {
-        return this.mAdapter;
+        return mAdapter;
     }
 
     public ArrayList<SimpleContainerUI> getObjects() {
-        return this.mObjects;
+        return mObjects;
     }
 
     @Override
@@ -95,11 +95,11 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
             }
         }
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "onClick: " + position);
+            MyLog.i(CLS_NAME, "onClick: " + position);
         }
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
-                MyLog.i(this.CLS_NAME, "onClick: tutorialActive");
+                MyLog.i(CLS_NAME, "onClick: tutorialActive");
             }
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_LONG);
             return;
@@ -303,7 +303,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "onCreate");
+            MyLog.i(CLS_NAME, "onCreate");
         }
         this.helper = new FragmentCommandsHelper(this);
     }
@@ -311,13 +311,13 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(@NonNull LayoutInflater layoutInflater, ViewGroup viewGroup, Bundle bundle) {
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "onCreateView");
+            MyLog.i(CLS_NAME, "onCreateView");
         }
         View rootView = layoutInflater.inflate(R.layout.layout_common_fragment_parent, viewGroup, false);
-        this.mRecyclerView = this.helper.getRecyclerView(rootView);
+        this.mRecyclerView = helper.getRecyclerView(rootView);
         this.mObjects = new ArrayList<>();
-        this.mAdapter = this.helper.getAdapter(this.mObjects);
-        this.mRecyclerView.setAdapter(this.mAdapter);
+        this.mAdapter = helper.getAdapter(mObjects);
+        this.mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
 
@@ -325,7 +325,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "onDestroy");
+            MyLog.i(CLS_NAME, "onDestroy");
         }
     }
 
@@ -333,7 +333,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     public void onPause() {
         super.onPause();
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "onPause");
+            MyLog.i(CLS_NAME, "onPause");
         }
     }
 
@@ -341,7 +341,7 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "onResume");
+            MyLog.i(CLS_NAME, "onResume");
         }
     }
 
@@ -349,12 +349,12 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
     public void onStart() {
         super.onStart();
         if (DEBUG) {
-            MyLog.i(this.CLS_NAME, "onStart");
+            MyLog.i(CLS_NAME, "onStart");
         }
         synchronized (lock) {
-            if (this.mObjects.isEmpty()) {
+            if (mObjects.isEmpty()) {
                 getParentActivity().setTitle(getString(R.string.title_commands));
-                this.helper.finaliseUI();
+                helper.finaliseUI();
             }
         }
     }

@@ -1235,6 +1235,7 @@ public class FragmentSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onSelection: " + which + ", " + isChecked);
                                         }
+                                        checkedItems[which] = isChecked;
                                     }
                                 })
                                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {

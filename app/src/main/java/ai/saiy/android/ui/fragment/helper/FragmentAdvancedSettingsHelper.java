@@ -478,6 +478,7 @@ public class FragmentAdvancedSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showHotwordSelector: onSelection: " + which + ", " + isChecked);
                                         }
+                                        checkedItems[which] = isChecked;
                                     }
                                 })
                                 .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
@@ -607,6 +608,7 @@ public class FragmentAdvancedSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showDrivingProfileSelector: onSelection: " + which + ", " + isChecked);
                                         }
+                                        checkedItems[which] = isChecked;
                                     }
                                 })
                                 .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {

@@ -384,7 +384,7 @@ public class ContactHelper {
     }
 
     private boolean useLegacy(Context context) {
-        return SPH.getJwdUpperThresholdForContact(context) == 0.7d;
+        return !SPH.getJwdUpperThresholdForContact(context);
     }
 
     public Pair<Boolean, Contact> getContact(Context context, ArrayList<Contact> contacts, Contact.Weighting weighting, int type) {

@@ -22,6 +22,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Process;
 import android.speech.tts.TextToSpeech;
 import android.util.Pair;
 import android.view.View;
@@ -29,8 +30,10 @@ import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -49,6 +52,12 @@ import ai.saiy.android.R;
 import ai.saiy.android.api.helper.BlackListHelper;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.command.note.NoteValues;
+import ai.saiy.android.database.DBApplication;
+import ai.saiy.android.database.DBContact;
+import ai.saiy.android.database.DBCustomCommand;
+import ai.saiy.android.database.DBSpeech;
+import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -116,6 +125,13 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_install_shortcut_app));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_install));
+        containerUI.setIconMain(R.drawable.ic_voice_over);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_start_boot));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
         containerUI.setIconMain(R.drawable.ic_fan);
@@ -153,14 +169,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
-        containerUI.setTitle(getParent().getString(R.string.menu_intercept_google));
-        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
-        containerUI.setIconMain(R.drawable.ic_google);
-        containerUI.setIconExtra(SPH.getInterceptGoogle(getApplicationContext())
-                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
-        mObjects.add(containerUI);
-
-        containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_algorithms));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_configure));
         containerUI.setIconMain(R.drawable.ic_function);
@@ -168,9 +176,32 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_note_provider));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_set));
+        containerUI.setIconMain(R.drawable.ic_note_text);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_sms_body_fix));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
+        containerUI.setIconMain(R.drawable.ic_message_text_outline);
+        containerUI.setIconExtra(SPH.getSmsBodyFix(getApplicationContext())
+                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_sms_id_fix));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
+        containerUI.setIconMain(R.drawable.ic_message_text_outline);
+        containerUI.setIconExtra(SPH.getSmsIdFix(getApplicationContext())
+                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_recogniser_busy_fix));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
-        containerUI.setIconMain(R.drawable.ic_block_helper);
+        containerUI.setIconMain(R.drawable.ic_google);
         containerUI.setIconExtra(SPH.getRecogniserBusyFix(getApplicationContext())
                 ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
         mObjects.add(containerUI);
@@ -189,6 +220,42 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         containerUI.setIconMain(R.drawable.ic_google);
         containerUI.setIconExtra(SPH.getDoubleBeepFix(getApplicationContext())
                 ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_flashlight_fix));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
+        containerUI.setIconMain(R.drawable.ic_flashlight);
+        containerUI.setIconExtra(SPH.getTorchFix(getApplicationContext())
+                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_wired_headset_fix));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_run));
+        containerUI.setIconMain(R.drawable.ic_wired_mic);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_reset_saiy_defaults));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_reset));
+        containerUI.setIconMain(R.drawable.ic_reset);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_reset));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_restore));
+        containerUI.setIconMain(R.drawable.ic_reset);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_override_secure));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_configure));
+        containerUI.setIconMain(R.drawable.ic_security);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 
         return mObjects;
@@ -271,43 +338,40 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
      * @return true if the applications installed to populate the selector, false otherwise
      */
     public boolean showBlackListSelector() {
-
         final BlackListHelper blackListHelper = new BlackListHelper();
         final ArrayList<String> blackListArray = blackListHelper.fetch(getApplicationContext());
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showBlackListSelector: blackListArray: " + blackListArray.size());
         }
-
         final ArrayList<Pair<String, String>> installedPackages = Installed.declaresSaiyPermission(
                 getApplicationContext());
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showBlackListSelector: installedPackages: " + installedPackages.size());
         }
-
         if (!UtilsList.notNaked(installedPackages)) {
             return false;
         }
 
         final ArrayList<String> appNames = new ArrayList<>(installedPackages.size());
         final ArrayList<Integer> selectedList = new ArrayList<>();
+        for (final Pair<String, String> appPair : installedPackages) {
+            appNames.add(appPair.first);
 
-        for (final Pair appPair : installedPackages) {
-            appNames.add((String) appPair.first);
-
-            //noinspection SuspiciousMethodCalls
             if (blackListArray.contains(appPair.second)) {
                 selectedList.add((appNames.size() - 1));
+            }
+        }
+        final CharSequence[] items = appNames.toArray(new String[0]);
+        final boolean[] checkedItems = new boolean[items.length];
+        for (int i = 0; i < items.length; ++i) {
+            if (selectedList.contains(i)) {
+                checkedItems[i] = true;
             }
         }
 
         getParentActivity().runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                final CharSequence[] items = appNames.toArray(new String[0]);
-                final boolean[] checkedItems = new boolean[items.length];
-                if (checkedItems.length > 0) {
-                    checkedItems[0] = true;
-                }
                 final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                         .setCancelable(false)
                         .setTitle(R.string.blacklist_intro_text)
@@ -318,6 +382,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onSelection: " + which + ", " + isChecked);
                                 }
+                                checkedItems[which] = isChecked;
                             }
                         })
                         .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
@@ -356,7 +421,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 }
 
                                 final ArrayList<String> userBlackListed = new ArrayList<>(selected.length);
-
                                 for (final Integer aSelected : selected) {
                                     if (DEBUG) {
                                         MyLog.i(CLS_NAME, "showBlackListSelector: onPositive: "
@@ -370,8 +434,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                             + userBlackListed);
                                 }
 
-                                blackListHelper.save(FragmentSuperuserHelper.this.getApplicationContext(), userBlackListed);
-
+                                blackListHelper.save(getApplicationContext(), userBlackListed);
                                 dialog.dismiss();
                             }
                         })
@@ -396,7 +459,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
                 materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                 materialDialog.show();
-
             }
         });
 
@@ -439,7 +501,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         dialog.dismiss();
                     }
                 })
-
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -479,12 +540,9 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         seekbar.setProgress(currentTimeout - 1);
 
         seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-
             @Override
             public void onProgressChanged(final SeekBar seekBar, int progress, final boolean fromUser) {
-
                 progress++;
-
                 switch (progress) {
                     case 1:
                         seekText.setText(getParent().getString(R.string.memory_usage_text,
@@ -495,6 +553,11 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 progress + " " + getParent().getString(R.string.minutes)));
                         break;
                 }
+                if (progress >= 10 || SPH.getInactivityToast(getApplicationContext())) {
+                    return;
+                }
+                toast(getString(R.string.don_t_do_it_), Toast.LENGTH_LONG);
+                SPH.setInactivityToast(getApplicationContext(), true);
             }
 
             @Override
@@ -503,6 +566,150 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
             @Override
             public void onStopTrackingTouch(final SeekBar seekBar) {
+            }
+        });
+    }
+
+    public void showAlgorithmSelector() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                final String[] stringArray = getParent().getResources().getStringArray(R.array.array_algorithms);
+                final int checkedItem = SPH.getJwdUpperThresholdForContact(getApplicationContext()) ? 0 : 1;
+                getParentActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_algorithms)
+                                .setIcon(R.drawable.ic_function)
+                                .setSingleChoiceItems(stringArray, checkedItem, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showAccountPicker: onSelection: " + which + ": " + stringArray[which]);
+                                        }
+                                    }
+                                })
+                                .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final int selected = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showAlgorithmSelector: onPositive: " + selected);
+                                            }
+                                            SPH.setJwdUpperThresholdForContact(getApplicationContext(), 0 == selected);
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showAlgorithmSelector: onNegative");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(final DialogInterface dialog) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showAlgorithmSelector: onCancel");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+
+                        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+                        materialDialog.show();
+                    }
+                });
+            }
+        });
+    }
+
+    public void showNoteProviderSelector() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                final String[] stringArray = getParent().getResources().getStringArray(R.array.array_note_provider);
+                final int checkedItem = SPH.getDefaultNote(getApplicationContext());
+                getParentActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.menu_note_provider)
+                                .setIcon(R.drawable.ic_note_text)
+                                .setSingleChoiceItems(stringArray, checkedItem, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showNoteProviderSelector: onSelection: " + which + ": " + stringArray[which]);
+                                        }
+                                    }
+                                })
+                                .setNeutralButton(R.string.menu_test, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final int selected = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNoteProviderSelector: onNeutral: " + selected);
+                                            }
+                                            final NoteValues noteValues = new NoteValues();
+                                            noteValues.setNoteBody(getString(R.string.test_note_content));
+                                            noteValues.setNoteTitle(getString(R.string.test_note_title));
+                                            if (NoteProvider.publishNoteTest(getApplicationContext(), noteValues, selected)) {
+                                                return;
+                                            }
+                                            toast(getString(R.string.title_no_note_response), Toast.LENGTH_SHORT);
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final int selected = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNoteProviderSelector: onPositive: " + selected);
+                                            }
+                                            SPH.setDefaultNote(getApplicationContext(), selected);
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showNoteProviderSelector: onNegative");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(final DialogInterface dialog) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showNoteProviderSelector: onCancel");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+
+                        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+                        materialDialog.show();
+                    }
+                });
             }
         });
     }
@@ -521,17 +728,26 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-
                     final AccountManager accountManager = AccountManager.get(FragmentSuperuserHelper.this.getApplicationContext());
                     final Account[] accounts = accountManager.getAccountsByType(Install.getAccountType());
 
-                    if (accounts.length > 0) {
+                    if (accounts.length <= 0) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showAccountPicker: accounts: " + accounts.length);
+                            MyLog.w(CLS_NAME, "showAccountPicker: no accounts");
                         }
 
-                    final String[] accountNames = new String[accounts.length];
+                        if (getParent().isActive()) {
+                            ExecuteIntent.settingsIntent(FragmentSuperuserHelper.this.getApplicationContext(), IntentConstants.SETTINGS_ADD_ACCOUNT);
+                            FragmentSuperuserHelper.this.getParentActivity().speak(R.string.error_vi_no_account,
+                                    LocalRequest.ACTION_SPEAK_ONLY);
+                        }
+                        return;
+                    }
 
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "showAccountPicker: accounts: " + accounts.length);
+                    }
+                    final String[] accountNames = new String[accounts.length];
                     for (int i = 0; i < accounts.length; i++) {
                         if (DEBUG) {
                             MyLog.v(CLS_NAME, "account : " + accounts[i].toString());
@@ -539,16 +755,16 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                             MyLog.v(CLS_NAME, "type : " + accounts[i].type);
                         }
 
-                            accountNames[i] = accounts[i].name;
-                        }
-
+                        accountNames[i] = accounts[i].name;
+                    }
+                    if (getParent().isActive()) {
                         FragmentSuperuserHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
-                                .setCancelable(false)
-                                .setTitle(R.string.dialog_id_verification)
-                                .setIcon(R.drawable.ic_account_key)
+                                        .setCancelable(false)
+                                        .setTitle(R.string.dialog_id_verification)
+                                        .setIcon(R.drawable.ic_account_key)
                                         .setSingleChoiceItems(accountNames, 0, new DialogInterface.OnClickListener() {
                                             @Override
                                             public void onClick(DialogInterface dialog, int which) {
@@ -576,7 +792,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                                     }
 
                                                     final Account account = accounts[selected];
-
                                                     if (DEBUG) {
                                                         MyLog.v(CLS_NAME, "account : " + account.toString());
                                                         MyLog.v(CLS_NAME, "name : " + account.name);
@@ -610,18 +825,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 materialDialog.show();
                             }
                         });
-
-                    } else {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "showAccountPicker: no accounts");
-                        }
-
-                        ExecuteIntent.settingsIntent(FragmentSuperuserHelper.this.getApplicationContext(), IntentConstants.SETTINGS_ADD_ACCOUNT);
-                        FragmentSuperuserHelper.this.getParentActivity().speak(R.string.error_vi_no_account,
-                                LocalRequest.ACTION_SPEAK_ONLY);
-
                     }
-
                 }
             });
         } else {
@@ -636,6 +840,10 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         }
     }
 
+    private String getString(@StringRes int resId) {
+        return getApplicationContext().getString(resId);
+    }
+
     /**
      * Start the process of enrolling the user's voice against the given account, first ensuring that
      * an association does not already exist.
@@ -648,7 +856,11 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
             MyLog.i(CLS_NAME, "startEnrollment");
         }
 
-        if (SaiyAccountHelper.accountExists(getApplicationContext(), accountName, null)) {
+        if (!getParent().isActive()) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "startEnrollment fragment detached");
+            }
+        } else if (SaiyAccountHelper.accountExists(getApplicationContext(), accountName, null)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startEnrollment: account exists");
             }
@@ -658,7 +870,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                     .setTitle(R.string.menu_unlink_association)
                     .setMessage(getParent().getString(R.string.content_unlink_association, accountName))
                     .setIcon(R.drawable.ic_account_switch)
-
                     .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -673,7 +884,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                             dialog.dismiss();
                         }
                     })
-
                     .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
@@ -683,7 +893,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                             dialog.dismiss();
                         }
                     })
-
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
                         @Override
                         public void onCancel(final DialogInterface dialog) {
@@ -696,7 +905,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
             materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
             materialDialog.show();
-
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startEnrollment: account does not exist");
@@ -725,9 +933,8 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         saiyAccount.setAccountId(getApplicationContext(), this);
         saiyAccount.setPseudonym(SPH.getUserName(getApplicationContext()), true);
 
-        getParentActivity().showProgress(true);
+        showProgress(true);
         monitorAccountCreation(accountName);
-
     }
 
     @Override
@@ -740,7 +947,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
             accountInitialised.set(true);
             cancelTimer();
 
-            getParentActivity().showProgress(false);
+            showProgress(false);
 
             if (accountSetUpComplete(saiyAccount)) {
                 if (DEBUG) {
@@ -757,6 +964,23 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onAccountInitialisation: enrollment cancelled");
             }
+        }
+    }
+
+    public void toast(String text, int duration) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "makeToast: " + text);
+        }
+        if (getParent().isActive()) {
+            getParentActivity().toast(text, duration);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "toast Fragment detached");
+        }
+    }
+
+    public void showProgress(boolean visible) {
+        if (getParent().isActive()) {
+            getParentActivity().showProgress(visible);
         }
     }
 
@@ -780,7 +1004,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                     MyLog.i(CLS_NAME, "timerTask: checking account status");
                 }
 
-                getParentActivity().showProgress(false);
+                showProgress(false);
 
                 if (accountInitialised.get()) {
                     if (DEBUG) {
@@ -881,6 +1105,250 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                 }
             }
         }
+    }
+
+    public void showResetDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_reset)
+                .setMessage(R.string.content_reset)
+                .setIcon(R.drawable.ic_reset)
+                .setPositiveButton(R.string.confirm, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showProgress(true);
+                        new Thread() {
+                            @Override
+                            public void run() {
+                                Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
+                                final Context context = getApplicationContext();
+                                if (!SPH.reset(context)) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "rest failed");
+                                    }
+                                    showProgress(false);
+                                    toast(getString(R.string.menu_reset_error), Toast.LENGTH_SHORT);
+                                    return;
+                                }
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "rest SPH success: deleting databases");
+                                }
+                                new DBApplication(context).deleteTable();
+                                new DBContact(context).deleteTable();
+                                new DBCustomCommand(context).deleteTable();
+                                new DBSpeech(context).deleteTable();
+                                final ActivityHome activity = getParentActivity();
+                                if (activity == null || activity.isFinishing()) {
+                                    return;
+                                }
+                                showProgress(false);
+                                toast(getString(R.string.menu_reset_success), Toast.LENGTH_SHORT);
+                                getParentActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        final ArrayList<ContainerUI> objects = getParent().getObjects();
+                                        if (objects.isEmpty()) {
+                                            return;
+                                        }
+                                        ContainerUI containerUI = objects.get(2);
+                                        containerUI.setIconExtra(SPH.getStartAtBoot(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        getParent().getAdapter().notifyItemChanged(2);
+                                        containerUI = objects.get(4);
+                                        containerUI.setIconExtra(SPH.getPingCheck(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        getParent().getAdapter().notifyItemChanged(4);
+                                        containerUI = objects.get(9);
+                                        containerUI.setIconExtra(SPH.getSmsBodyFix(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        containerUI = objects.get(10);
+                                        containerUI.setIconExtra(SPH.getSmsIdFix(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        containerUI = objects.get(11);
+                                        containerUI.setIconExtra(SPH.getRecogniserBusyFix(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        containerUI = objects.get(12);
+                                        containerUI.setIconExtra(SPH.getOkayGoogleFix(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        containerUI = objects.get(13);
+                                        containerUI.setIconExtra(SPH.getDoubleBeepFix(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        containerUI = objects.get(14);
+                                        containerUI.setIconExtra(SPH.getTorchFix(getApplicationContext())
+                                                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                                        getParent().getAdapter().notifyItemRangeChanged(9, 6);
+                                    }
+                                });
+                            }
+                        }.start();
+                        dialog.dismiss();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showResetDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showResetDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
+    public void showOverrideSecureConfirmation() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_override_secure)
+                .setMessage(R.string.content_override_secure)
+                .setIcon(R.drawable.ic_security)
+                .setPositiveButton(R.string.configure, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        showOverrideSecureSelector();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showOverrideSecureConfirmation: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showOverrideSecureConfirmation: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
+    public void showOverrideSecureSelector() {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                if (!getParent().isActive()) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "showOverrideSecureSelector Fragment detached");
+                    }
+                    return;
+                }
+                final String[] items = getParent().getResources().getStringArray(R.array.array_secure);
+                final boolean[] checkedItems = new boolean[items.length];
+                if (SPH.getOverrideSecure(getApplicationContext())) {
+                    checkedItems[0] = true;
+                }
+                if (SPH.getOverrideSecureDriving(getApplicationContext())) {
+                    checkedItems[1] = true;
+                }
+                if (SPH.getOverrideSecureHeadset(getApplicationContext())) {
+                    checkedItems[2] = true;
+                }
+
+                getParentActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                                .setCancelable(false)
+                                .setTitle(R.string.secure_intro_text)
+                                .setIcon(R.drawable.ic_security)
+                                .setMultiChoiceItems(items, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showOverrideSecureSelector: onSelection: " + which + ", " + isChecked);
+                                        }
+                                        checkedItems[which] = isChecked;
+                                    }
+                                })
+                                .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
+                                            if (adapter instanceof BaseAdapter) {
+                                                for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                                    checkedItems[i] = false;
+                                                }
+                                                ((BaseAdapter) adapter).notifyDataSetChanged();
+                                            } else {
+                                                MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                            }
+                                        }
+                                    }
+                                })
+                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showOverrideSecureSelector: onPositive");
+                                        }
+
+                                        final List<Integer> selectedIndices = new ArrayList<>();
+                                        for (int i = 0; i < checkedItems.length; ++i) {
+                                            if (checkedItems[i]) {
+                                                selectedIndices.add(i);
+                                            }
+                                        }
+                                        final Integer[] selected = selectedIndices.toArray(new Integer[0]);
+                                        assert selected != null;
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showOverrideSecureSelector: onPositive: " + selected.length);
+                                            for (Integer num : selected) {
+                                                MyLog.i(CLS_NAME, "showOverrideSecureSelector: onPositive: " + num);
+                                            }
+                                        }
+                                        SPH.setOverrideSecure(getApplicationContext(), org.apache.commons.lang3.ArrayUtils.contains(selected, 0));
+                                        SPH.setOverrideSecureDriving(getApplicationContext(), org.apache.commons.lang3.ArrayUtils.contains(selected, 1));
+                                        SPH.setOverrideSecureHeadset(getApplicationContext(), org.apache.commons.lang3.ArrayUtils.contains(selected, 2));
+
+                                        dialog.dismiss();
+                                        ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
+                                    }
+                                })
+                                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showOverrideSecureSelector: onNegative");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                })
+                                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                    @Override
+                                    public void onCancel(final DialogInterface dialog) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showOverrideSecureSelector: onCancel");
+                                        }
+                                        dialog.dismiss();
+                                    }
+                                }).create();
+
+                        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+                        materialDialog.show();
+                    }
+                });
+            }
+        });
     }
 
     /**
