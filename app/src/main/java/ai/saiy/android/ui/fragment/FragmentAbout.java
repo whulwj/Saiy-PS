@@ -35,12 +35,14 @@ import java.util.ArrayList;
 
 import ai.saiy.android.R;
 import ai.saiy.android.intent.ExecuteIntent;
+import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentAboutHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 import de.psdev.licensesdialog.LicensesDialog;
 import de.psdev.licensesdialog.model.Notices;
 
@@ -54,7 +56,7 @@ public class FragmentAbout extends Fragment implements View.OnClickListener, Vie
     private final String CLS_NAME = FragmentAbout.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentAboutHelper helper;
 
@@ -139,37 +141,45 @@ public class FragmentAbout extends Fragment implements View.OnClickListener, Vie
         }
 
         final int position = (int) view.getTag();
-
         switch (position) {
-
             case 0:
                 ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_WEB_URL);
                 break;
             case 1:
-                getParentActivity().toast(getString(R.string.menu_release_notes), Toast.LENGTH_SHORT);
+                helper.showReleaseNotes();
                 break;
             case 2:
                 ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_PRIVACY_URL);
                 break;
             case 3:
-                prepareLicenses();
+                ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_TOU_URL);
                 break;
             case 4:
-                ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_GITHUB_URL);
+                prepareLicenses();
                 break;
             case 5:
-                ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_GITHUB_URL);
+                getParentActivity().vibrate();
+                SPH.setAnonymousUsageStats(getApplicationContext(), !SPH.getAnonymousUsageStats(getApplicationContext()));
+                mObjects.get(position).setIconExtra(SPH.getAnonymousUsageStats(getApplicationContext()) ?
+                        FragmentHome.CHECKED : FragmentHome.UNCHECKED);
+                mAdapter.notifyItemChanged(position);
                 break;
             case 6:
-                ExecuteIntent.webSearch(getApplicationContext(), Constants.STUDIO_AHREMARK_WEB_URL);
+                ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_GITHUB_URL);
                 break;
             case 7:
-                ExecuteIntent.webSearch(getApplicationContext(), Constants.SCHLAPA_WEB_URL);
+                ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_GITHUB_URL);
                 break;
             case 8:
-                getParentActivity().toast(getString(R.string.menu_special_thanks), Toast.LENGTH_SHORT);
+                ExecuteIntent.webSearch(getApplicationContext(), Constants.STUDIO_AHREMARK_WEB_URL);
                 break;
             case 9:
+                ExecuteIntent.webSearch(getApplicationContext(), Constants.SCHLAPA_WEB_URL);
+                break;
+            case 10:
+                helper.showLegendsDialog();
+                break;
+            case 11:
                 if (!ExecuteIntent.sendEmail(getApplicationContext(), new String[]{Constants.SAIY_ENQUIRIES_EMAIL},
                         getString(R.string.menu_commercial_enquiry), null)) {
                     getParentActivity().toast(getString(R.string.error_no_application),
@@ -199,6 +209,42 @@ public class FragmentAbout extends Fragment implements View.OnClickListener, Vie
         final int position = (int) view.getTag();
 
         switch (position) {
+            case 0:
+                getParentActivity().speak(R.string.lp_saiy_version, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 1:
+                getParentActivity().speak(R.string.lp_release_notes, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 2:
+                getParentActivity().speak(R.string.lp_privacy_policy, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 3:
+                getParentActivity().speak(R.string.lp_terms_of_use, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 4:
+                getParentActivity().speak(R.string.lp_license, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 5:
+                getParentActivity().speak(R.string.lp_anonymous_usage_stats, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 6:
+                getParentActivity().speak(R.string.lp_source_code, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 7:
+                getParentActivity().speak(R.string.lp_developer_api, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 8:
+                getParentActivity().speak(R.string.lp_hannes, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 9:
+                getParentActivity().speak(R.string.lp_schlapa, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 10:
+                getParentActivity().speak(R.string.lp_legends, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 11:
+                getParentActivity().speak(R.string.lp_commercial, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
             default:
                 break;
         }
@@ -260,7 +306,7 @@ public class FragmentAbout extends Fragment implements View.OnClickListener, Vie
      *
      * @return the current adapter
      */
-    public RecyclerView.Adapter getAdapter() {
+    public RecyclerView.Adapter<?> getAdapter() {
         return mAdapter;
     }
 

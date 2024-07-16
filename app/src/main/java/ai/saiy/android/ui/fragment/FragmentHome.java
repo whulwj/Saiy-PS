@@ -43,6 +43,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -63,6 +64,7 @@ import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsAnalytic;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
@@ -362,6 +364,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             bundle = new Bundle();
             bundle.putInt(LocalRequest.EXTRA_TUTORIAL_STAGE, Tutorial.STAGE_INTRO);
             new Tutorial(getApplicationContext(), vrLocale, SPH.getTTSLocale(getApplicationContext()), supportedLanguage, bundle).execute();
+            UtilsAnalytic.tutorialStarted(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "startTutorial: no longer active");
         }

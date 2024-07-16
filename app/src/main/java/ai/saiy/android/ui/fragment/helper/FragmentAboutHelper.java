@@ -18,13 +18,17 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
+import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 
@@ -39,6 +43,7 @@ import ai.saiy.android.ui.fragment.FragmentAbout;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 import de.psdev.licensesdialog.licenses.ApacheSoftwareLicense20;
 import de.psdev.licensesdialog.licenses.BSD2ClauseLicense;
 import de.psdev.licensesdialog.licenses.CreativeCommonsAttributionShareAlike30Unported;
@@ -103,10 +108,25 @@ public class FragmentAboutHelper {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_terms));
+        containerUI.setSubtitle(getString(R.string.menu_tap_view));
+        containerUI.setIconMain(R.drawable.ic_note_text);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_legal));
         containerUI.setSubtitle(getString(R.string.menu_tap_view));
         containerUI.setIconMain(R.drawable.ic_gavel);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_anonymous_usage_stats));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
+        containerUI.setIconMain(R.drawable.ic_reset);
+        containerUI.setIconExtra(SPH.getAnonymousUsageStats(getApplicationContext())
+                ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
@@ -167,11 +187,11 @@ public class FragmentAboutHelper {
             MyLog.i(CLS_NAME, "getRecyclerView");
         }
 
-        final RecyclerView mRecyclerView = (RecyclerView) parent.findViewById(R.id.layout_common_fragment_recycler_view);
-        mRecyclerView.setHasFixedSize(true);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
-        mRecyclerView.addItemDecoration(new DividerItemDecoration(getParentActivity(), null));
-        return mRecyclerView;
+        final RecyclerView recyclerView = parent.findViewById(R.id.layout_common_fragment_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getParentActivity(), null));
+        return recyclerView;
     }
 
     /**
@@ -313,6 +333,11 @@ public class FragmentAboutHelper {
                 getString(R.string.license_sound_bible),
                 new CreativeCommonsAttributionShareAlike30Unported()));
 
+        notices.addNotice(new Notice(getString(R.string.math_eval),
+                "http://tech.dolhub.com/code/src/MathEval.java",
+                getString(R.string.license_math_eval),
+                new ApacheSoftwareLicense20()));
+
         notices.addNotice(new Notice(getString(R.string.freesound_org),
                 "http://freesound.org",
                 getString(R.string.license_freesound),
@@ -328,6 +353,40 @@ public class FragmentAboutHelper {
                 new AmazonSoftwareLicense()));
 
         return notices;
+    }
+
+    public void showReleaseNotes() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_release_notes)
+                .setMessage("~ V1.0.3 ~\n• Wear integration (test)\n• Note provider options (fix)\n• More bugs fixes! Tks for reports!!")
+                .setIcon(R.drawable.ic_info)
+                .setPositiveButton(R.string.menu_close, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+    }
+
+    public void showLegendsDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_special_thanks)
+                .setMessage(R.string.content_legends)
+                .setIcon(R.drawable.ic_xda)
+                .setPositiveButton(R.string.menu_legen_dary, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                })
+                .create();
+
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
     }
 
     private String getString(@StringRes int resId) {

@@ -133,6 +133,10 @@ public class SPH {
     private static final String BOOT_START = "boot_start";
     private static final String SELF_AWARE_ENABLED = "self_aware_enabled";
     private static final String CALL_CONFIRMATION = "call_confirmation";
+    private static final String HAS_PHRASE = "has_phrase";
+    private static final String HAS_NICKNAME = "has_nickname";
+    private static final String HAS_REPLACEMENT = "has_replacement";
+    private static final String HAS_CUSTOM = "has_custom";
     private static final String ENROLLMENT_VERBOSE = "enrollment_verbose";
     private static final String DISCLAIMER = "disclaimer";
     private static final String WHATS_NEW = "whats_new";
@@ -180,6 +184,7 @@ public class SPH {
     private static final String SMS_BODY_FIX = "sms_body_fix";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String RECOGNIZER_BUSY_INCREMENT = "recognizer_busy_increment";
+    private static final String ANONYMOUS_USAGE_STATS = "anonymous_usage_stats";
     private static final String IGNORE_RESTRICTED_CONTENT = "ignore_restricted_content";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
     private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
@@ -1321,6 +1326,46 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean hasPhrase(Context context) {
+        return getPref(context).getBoolean(HAS_PHRASE, false);
+    }
+
+    public static void setHasPhrase(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(HAS_PHRASE, condition);
+        edit.apply();
+    }
+
+    public static boolean hasNickname(Context context) {
+        return getPref(context).getBoolean(HAS_NICKNAME, false);
+    }
+
+    public static void setHasNickname(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(HAS_NICKNAME, condition);
+        edit.apply();
+    }
+
+    public static boolean hasReplacement(Context context) {
+        return getPref(context).getBoolean(HAS_REPLACEMENT, false);
+    }
+
+    public static void setHasReplacement(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(HAS_REPLACEMENT, condition);
+        edit.apply();
+    }
+
+    public static boolean hasCustomisation(Context context) {
+        return getPref(context).getBoolean(HAS_CUSTOM, false);
+    }
+
+    public static void setHasCustomisationreal(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(HAS_CUSTOM, condition);
+        edit.apply();
+    }
+
     /**
      * Set whether or not to start the {@link SelfAware} service at boot.
      *
@@ -2362,6 +2407,16 @@ public class SPH {
     public static void resetRecognizerBusyIncrement(Context context) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(RECOGNIZER_BUSY_INCREMENT, 0L);
+        edit.apply();
+    }
+
+    public static boolean getAnonymousUsageStats(Context context) {
+        return getPref(context).getBoolean(ANONYMOUS_USAGE_STATS, true);
+    }
+
+    public static void setAnonymousUsageStats(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ANONYMOUS_USAGE_STATS, condition);
         edit.apply();
     }
 

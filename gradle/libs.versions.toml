@@ -44,6 +44,7 @@ desugar_jdk_libs_version = "2.0.4"
 simpleXml = "2.7.1"
 libraries-bom = "26.37.0"
 cloud-dialogflow = "4.49.0"
+firebase-analytics = "19.0.2"
 firebase-auth = "21.0.4"
 firebase-messaging = "23.4.1"
 firebase-functions = "20.4.0"
@@ -101,6 +102,7 @@ desugar_jdk_libs = { group = "com.android.tools", name = "desugar_jdk_libs", ver
 simple-xml = { module = "org.simpleframework:simple-xml", version.ref = "simpleXml" }
 libraries-bom = { module = "com.google.cloud:libraries-bom", version.ref = "libraries-bom" }
 cloud-dialogflow = { module = "com.google.cloud:google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
 firebase-functions = { group = "com.google.firebase", name = "firebase-functions", version.ref = "firebase-functions" }

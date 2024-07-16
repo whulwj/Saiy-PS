@@ -29,6 +29,8 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
+
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -71,6 +73,7 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsAnalytic;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 
@@ -104,6 +107,9 @@ import ai.saiy.android.utils.UtilsLocale;
  * Created by benrandall76@gmail.com on 08/02/2016.
  */
 public class Quantum extends Tunnelling {
+    private static final String COMMAND_CONSTANT = "command_constant";
+    private static final String IS_CUSTOM_COMMAND = "is_custom_command";
+    private static final String LANGUAGE_MODEL = "language_model";
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Quantum.class.getSimpleName();
@@ -130,20 +136,22 @@ public class Quantum extends Tunnelling {
         }
 
         final CustomResolver customResolver = new QuantumHelper().resolve(mContext, sl, cr);
-
         final ArrayList<String> toResolve = customResolver.getVoiceData();
+        final Bundle eventExtra;
 
         if (customResolver.isCustom()) {
             cch = customResolver.getCustomCommandHelper();
             COMMAND = cch.getCommandConstant();
+            eventExtra = (CC.COMMAND_UNKNOWN == COMMAND || CC.COMMAND_EMPTY_ARRAY == COMMAND || CC.COMMAND_SOMETHING_WEIRD == COMMAND)? null : new Bundle(5);
+            if (eventExtra != null) {
+                eventExtra.putString(COMMAND_CONSTANT, COMMAND.name());
+                eventExtra.putBoolean(IS_CUSTOM_COMMAND, true);
+                eventExtra.putString(LANGUAGE_MODEL, SPH.getDefaultLanguageModel(mContext).name());
+            }
         } else if (UtilsList.notNaked(toResolve)) {
-
             final float[] confidence = cr.getConfidenceArray();
-
             final SaiyDefaults.LanguageModel languageModel = SPH.getDefaultLanguageModel(mContext);
-
             switch (languageModel) {
-
                 case LOCAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "LanguageModel LOCAL");
@@ -175,12 +183,19 @@ public class Quantum extends Tunnelling {
 
                     break;
             }
+            eventExtra = (CC.COMMAND_UNKNOWN == COMMAND || CC.COMMAND_EMPTY_ARRAY == COMMAND || CC.COMMAND_SOMETHING_WEIRD == COMMAND)? null : new Bundle(5);
+            if (eventExtra != null) {
+                eventExtra.putString(COMMAND_CONSTANT, COMMAND.name());
+                eventExtra.putBoolean(IS_CUSTOM_COMMAND, false);
+                eventExtra.putString(LANGUAGE_MODEL, languageModel.name());
+            }
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "toResolve naked");
             }
 
             COMMAND = CC.COMMAND_EMPTY_ARRAY;
+            eventExtra = null;
         }
 
         final Outcome outcome;
@@ -739,7 +754,11 @@ public class Quantum extends Tunnelling {
 
                     break;
             }
-
+            if (eventExtra != null) {
+                eventExtra.putBoolean("command_outcome_success", (Outcome.SUCCESS == result));
+                eventExtra.putBoolean("secure_request", secure);
+                UtilsAnalytic.onCommandComplete(mContext, FirebaseAnalytics.getInstance(mContext), eventExtra);
+            }
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "DT networkProceed failed");

@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -44,6 +45,7 @@ import ai.saiy.android.diagnostic.VoiceEngine;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsAnalytic;
 
 public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListener, View.OnClickListener {
     private static final Object lock = new Object();
@@ -57,6 +59,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
     private ScrollView svDiagnostics;
     private ArrayList<VoiceEngine> containerVEArray;
     private int requestCount;
+    private FirebaseAnalytics firebaseAnalytics;
     private TelephonyManager telephonyManager;
     private Context mContext;
 
@@ -230,6 +233,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
             return;
         }
 
+        UtilsAnalytic.diagnosticsComplete(getApplicationContext(), firebaseAnalytics, diagnosticsInfo.getErrorCount() > 0);
         checkErrors();
         AsyncTask.execute(new Runnable() {
             @Override
@@ -539,6 +543,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
         setDiagnosticInfo("");
         changeGravity(Gravity.TOP);
         getEngines();
+        UtilsAnalytic.diagnosticsStarted(getApplicationContext(), firebaseAnalytics);
     }
 
     @Override
@@ -547,7 +552,8 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreate");
         }
-        telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+        this.firebaseAnalytics = FirebaseAnalytics.getInstance(getApplicationContext());
+        this.telephonyManager = (TelephonyManager) getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
         if (telephonyManager != null) {
             telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
         }
@@ -579,6 +585,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
         if (helper != null && !helper.isCancelled()) {
             helper.cancel();
         }
+        this.firebaseAnalytics = null;
         if (telephonyManager != null) {
             telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
             telephonyManager = null;

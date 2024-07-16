@@ -20,6 +20,7 @@ import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.security.ProviderInstaller;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.analytics.FirebaseAnalytics;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -45,6 +46,7 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentApplicationsHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsAnalytic;
 
 public class FragmentApplications extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final Object lock = new Object();
@@ -222,6 +224,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
             MyLog.d(CLS_NAME, "authoriseAlexa");
         }
         showProgress(true);
+        UtilsAnalytic.alexaAuthorised(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
         new AuthorizationWrapper(getApplicationContext()).authoriseUser(new AuthorizationListener() {
             @Override
             public void onSuccess() {
@@ -230,6 +233,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 }
                 FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.success_), Toast.LENGTH_SHORT);
                 FragmentApplications.this.onAuthorizationStatusChange();
+                UtilsAnalytic.alexaAuthSuccess(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
             }
 
             @Override
@@ -240,6 +244,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 }
                 FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.failed), Toast.LENGTH_SHORT);
                 FragmentApplications.this.showProgress(false);
+                UtilsAnalytic.alexaAuthError(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
             }
 
             @Override
@@ -262,6 +267,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         ai.saiy.android.utils.SPH.setAlexaAccessTokenExpiry(getApplicationContext(), 0L);
         ai.saiy.android.utils.SPH.setAlexaNotification(getApplicationContext(), false);
         ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
+        UtilsAnalytic.alexaDeauthorised(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
         com.amazon.identity.auth.device.api.authorization.AuthorizationManager.signOut(getApplicationContext(), new com.amazon.identity.auth.device.api.Listener<Void, AuthError>() {
             @Override
             public void onError(AuthError authError) {

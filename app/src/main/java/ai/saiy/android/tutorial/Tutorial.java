@@ -7,6 +7,7 @@ import android.os.Vibrator;
 import android.speech.SpeechRecognizer;
 import android.util.Pair;
 
+import com.google.firebase.analytics.FirebaseAnalytics;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
@@ -29,6 +30,7 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsAnalytic;
 import ai.saiy.android.utils.UtilsString;
 
 public class Tutorial {
@@ -514,6 +516,7 @@ public class Tutorial {
                     str = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20a);
                 }
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_RESET, str, false);
+                UtilsAnalytic.tutorialComplete(context, FirebaseAnalytics.getInstance(context), sErrorCount > 0);
                 break;
             case STAGE_RESET:
                 if (DEBUG) {
