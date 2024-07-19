@@ -12,12 +12,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.ApplicationActivityBasic;
+import ai.saiy.android.firebase.UserFirebaseListener;
 import ai.saiy.android.ui.fragment.FragmentActivityPicker;
+import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import me.drakeet.support.toast.ToastCompat;
 
-public class ActivityActivityPicker extends AppCompatActivity {
+public class ActivityActivityPicker extends AppCompatActivity implements UserFirebaseListener {
     public static final String EXTRA_APPLICATION = "extra_blocked_applications";
     private ProgressBar progressBar;
 
@@ -69,6 +71,13 @@ public class ActivityActivityPicker extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onDetermineAdFree(boolean isAddFree) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onDetermineAdFree: " + isAddFree);
+        }
+    }
+
     /**
      * Utility method to show or hide the progress bar
      *
@@ -108,6 +117,12 @@ public class ActivityActivityPicker extends AppCompatActivity {
         }
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContent, FragmentActivityPicker.newInstance(getIntent().getExtras()), String.valueOf(0)).commitAllowingStateLoss();
         setupToolbar();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new UserFirebaseHelper().isAdFree(getApplication(), ActivityActivityPicker.this);
+            }
+        });
     }
 
     @Override

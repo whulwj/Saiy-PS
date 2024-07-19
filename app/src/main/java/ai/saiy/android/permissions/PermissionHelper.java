@@ -54,6 +54,7 @@ public class PermissionHelper {
     public static final int REQUEST_FILE = 2;
     public static final int REQUEST_GROUP_CONTACTS = 3;
     public static final int REQUEST_GROUP_TELEPHONY = 4;
+    public static final int REQUEST_LOCATION = 6;
     public static final int REQUEST_CALENDAR = 7;
     public static final int REQUEST_SMS_READ = 8;
     public static final int REQUEST_SMS_SEND = 9;
@@ -258,6 +259,31 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.w(CLS_NAME, "checkAnswerCallsPermissionsNR: PERMISSION_DENIED");
         }
+        return false;
+    }
+
+    public static boolean checkLocationPermissions(Context context, Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkLocationPermissions");
+        }
+        if (hasSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkLocationPermissions: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkLocationPermissions: PERMISSION_DENIED");
+        }
+        final Intent intent = new Intent(context, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        if (!UtilsBundle.notNaked(bundle)) {
+            bundle = new Bundle();
+        }
+        bundle.putStringArray(REQUESTED_PERMISSION, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_LOCATION);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
         return false;
     }
 

@@ -784,6 +784,11 @@ public final class PersonalityResponse {
         return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_error_3), contactName);
     }
 
+    public static String getTwitterConfirmation(Context context, SupportedLanguage supportedLanguage, String str) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_twitter_confirmation);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], str);
+    }
+
     public static String getCallConfirmation(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_call_confirmation);
         return stringArray[new Random().nextInt(stringArray.length)];
@@ -834,6 +839,11 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getLocationAccessError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_location_access);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getCalendarAccessError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_calendar_access);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
@@ -866,6 +876,26 @@ public final class PersonalityResponse {
     public static String getSmsConfirmation(Context context, SupportedLanguage supportedLanguage, String contactName, String generic) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_sms_confirmation);
         return String.format(stringArray[new Random().nextInt(stringArray.length)], contactName, generic);
+    }
+
+    public static String getTwitterConfirmationMisheard(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_twitter_confirmation_misheard);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getTwitterAcknowledge(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_twitter_acknowledge);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context));
+    }
+
+    public static String getTwitterPostError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_twitter_post_error);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getFoursquareNearbyError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_foursquare_nearby_error);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
     public static String getEmailConfirmation(Context context, SupportedLanguage supportedLanguage, String contactName, String generic) {

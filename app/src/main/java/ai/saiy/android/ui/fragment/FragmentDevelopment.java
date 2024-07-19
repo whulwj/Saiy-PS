@@ -2,6 +2,7 @@ package ai.saiy.android.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -28,8 +29,8 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
     private static final Object lock = new Object();
 
     private final boolean DEBUG = MyLog.DEBUG;
-
     private final String CLS_NAME = FragmentDevelopment.class.getSimpleName();
+    public static final int RC_ACCOUNT = 110;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<?> mAdapter;
@@ -111,18 +112,21 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
         }
         switch (getPosition(view)) {
             case 0:
-                this.helper.showTranslationDialog();
+                helper.showAccountOverviewDialog();
                 break;
             case 1:
-                this.helper.showReportBugDialog();
+                this.helper.showTranslationDialog();
                 break;
             case 2:
-                this.helper.showToDoListDialog();
+                this.helper.showReportBugDialog();
                 break;
             case 3:
-                ai.saiy.android.intent.ExecuteIntent.webSearch(getApplicationContext(), "https://github.com/brandall76/Saiy-PS");
+                this.helper.showToDoListDialog();
                 break;
             case 4:
+                ai.saiy.android.intent.ExecuteIntent.webSearch(getApplicationContext(), "https://github.com/brandall76/Saiy-PS");
+                break;
+            case 5:
                 ai.saiy.android.intent.ExecuteIntent.webSearch(getApplicationContext(), "https://github.com/brandall76/API-Example-App");
                 break;
             default:
@@ -175,22 +179,40 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
 
         switch (getPosition(view)) {
             case 0:
-                getParentActivity().speak(R.string.lp_translation, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.content_account_overview, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 1:
-                getParentActivity().speak(R.string.lp_bug_report, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_translation, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 2:
-                getParentActivity().speak(R.string.lp_to_do, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_bug_report, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 3:
-                getParentActivity().speak(R.string.lp_source_code, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_to_do, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 4:
+                getParentActivity().speak(R.string.lp_source_code, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 5:
                 getParentActivity().speak(R.string.lp_developer_api, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
         }
         return true;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, requestCode, intent);
+        if (RC_ACCOUNT == requestCode) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onActivityResult: RC_ACCOUNT");
+            }
+            helper.handleActivityResult(resultCode, intent);
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onActivityResult: DEFAULT");
+            }
+        }
     }
 
     @Override

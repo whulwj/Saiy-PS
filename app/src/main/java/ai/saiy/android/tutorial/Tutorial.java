@@ -30,7 +30,7 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
-import ai.saiy.android.utils.UtilsAnalytic;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.utils.UtilsString;
 
 public class Tutorial {

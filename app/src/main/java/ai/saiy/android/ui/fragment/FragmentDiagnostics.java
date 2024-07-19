@@ -45,7 +45,7 @@ import ai.saiy.android.diagnostic.VoiceEngine;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.utils.UtilsAnalytic;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 
 public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListener, View.OnClickListener {
     private static final Object lock = new Object();

@@ -33,6 +33,8 @@ import ai.saiy.android.command.contact.CommandContactValues;
 import ai.saiy.android.command.contact.ContactConfirm;
 import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.command.note.NoteManager;
+import ai.saiy.android.command.twitter.CommandTwitterValues;
+import ai.saiy.android.command.twitter.TwitterConfirm;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
@@ -183,6 +185,12 @@ public class RecognitionAction {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_ANNOUNCE_CALLER");
                     }
                     new AnswerCallConfirm(mContext, bundle, AnswerCallConfirm.ConfirmType.ANSWER, vrLocale, ttsLocale).answer();
+                    break;
+                case Condition.CONDITION_TWITTER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Condition.CONDITION_TWITTER");
+                    }
+                    new TwitterConfirm(mContext, bundle, ((CommandTwitterValues) bundle.getParcelable(LocalRequest.EXTRA_OBJECT)).getContentType(), vrLocale, ttsLocale).confirm();
                     break;
                 case Condition.CONDITION_TUTORIAL:
                     if (DEBUG) {

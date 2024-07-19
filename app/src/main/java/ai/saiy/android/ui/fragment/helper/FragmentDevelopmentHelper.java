@@ -2,37 +2,52 @@ package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.firebase.ui.auth.AuthUI;
+import com.firebase.ui.auth.ErrorCodes;
+import com.firebase.ui.auth.IdpResponse;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import ai.saiy.android.R;
 import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.intent.ExecuteIntent;
+import ai.saiy.android.firebase.database.model.PremiumUser;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.ui.fragment.FragmentHome;
+import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 
 public class FragmentDevelopmentHelper {
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentDevelopmentHelper.class.getSimpleName();
 
+    private volatile Pair<Boolean, PremiumUser> premiumUserPair;
     private final FragmentDevelopment parentFragment;
 
     public FragmentDevelopmentHelper(FragmentDevelopment parentFragment) {
@@ -49,6 +64,13 @@ public class FragmentDevelopmentHelper {
         }
         ArrayList<ContainerUI> arrayList = new ArrayList<>();
         ContainerUI containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_account));
+        containerUI.setSubtitle(getString(R.string.menu_tap_manage));
+        containerUI.setIconMain(R.drawable.ic_face);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        arrayList.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_translation));
         containerUI.setSubtitle(getString(R.string.menu_tap_contribute));
         containerUI.setIconMain(R.drawable.ic_translate);
@@ -147,6 +169,126 @@ public class FragmentDevelopmentHelper {
         });
     }
 
+    public void handleActivityResult(final int resultCode, Intent intent) {
+        if (!getParent().isActive()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "handleActivityResult: no longer active");
+            }
+            return;
+        }
+        final IdpResponse idpResponse = IdpResponse.fromResultIntent(intent);
+        if (resultCode != ActivityHome.RESULT_OK) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "handleActivityResult: ResultCodes.CANCELLED");
+            }
+            if (idpResponse == null) {
+                snack(getParent().getView(), getString(R.string.cancelled), Snackbar.LENGTH_SHORT, null, null);
+                return;
+            }
+            final @ErrorCodes.Code int code = (idpResponse.getError() == null)? ErrorCodes.UNKNOWN_ERROR : idpResponse.getError().getErrorCode();
+            if (code== ErrorCodes.NO_NETWORK) {
+                snack(getParent().getView(), getString(R.string.error_network), Snackbar.LENGTH_SHORT, null, null);
+            } else {
+                snack(getParent().getView(), getString(R.string.content_account_error), Snackbar.LENGTH_SHORT, null, null);
+            }
+            return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "handleActivityResult: ResultCodes.OK");
+        }
+        if (idpResponse == null) {
+            snack(getParent().getView(), getString(R.string.content_account_error), Snackbar.LENGTH_SHORT, null, null);
+            return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "handleActivityResult: token: " + idpResponse.getIdpToken());
+            MyLog.i(CLS_NAME, "handleActivityResult: secret: " + idpResponse.getIdpSecret());
+            MyLog.i(CLS_NAME, "handleActivityResult: newUser: " + idpResponse.isNewUser());
+            MyLog.i(CLS_NAME, "handleActivityResult: getProviderType: " + idpResponse.getProviderType());
+        }
+        snack(getParent().getView(), getString(R.string.content_account_create_success), Snackbar.LENGTH_SHORT, null, null);
+        final com.google.firebase.auth.FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "handleActivityResult: firebaseUser null");
+            }
+            return;
+        }
+        final String uid = firebaseUser.getUid();
+        if (!ai.saiy.android.utils.UtilsString.notNaked(uid)) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "handleActivityResult: firebaseUser uId naked");
+            }
+            return;
+        }
+        if (firebaseUser.isAnonymous()) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "handleActivityResult: firebaseUser remains anonymous");
+            }
+            return;
+        }
+        String anonymousUid = ai.saiy.android.utils.SPH.getFirebaseAnonymousUid(getApplicationContext());
+        final boolean isNewUser = idpResponse.isNewUser();
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "handleActivityResult: anonymousUid: " + anonymousUid);
+        }
+
+        if (ai.saiy.android.utils.UtilsString.notNaked(anonymousUid)) {
+            if (DEBUG) {
+                if (isNewUser) {
+                    MyLog.w(CLS_NAME, "handleActivityResult: migration new user: using anonymousUid");
+                } else {
+                    MyLog.i(CLS_NAME, "handleActivityResult: migration uIds");
+                }
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "handleActivityResult: not previously anonymous");
+            }
+            anonymousUid = null;
+        }
+        ai.saiy.android.utils.SPH.setFirebaseAnonymousUid(getApplicationContext(), null);
+        ai.saiy.android.utils.SPH.setFirebaseUid(getApplicationContext(), uid);
+        ai.saiy.android.utils.SPH.setFirebaseMigratedUid(getApplicationContext(), anonymousUid);
+        if (ai.saiy.android.utils.UtilsString.notNaked(anonymousUid)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "handleActivityResult: migrating");
+            }
+            migratePremium(anonymousUid, uid);
+        }
+    }
+
+    private void migratePremium(final String anonymousUid, final String uid) {
+        AsyncTask.execute(new Runnable() {
+            @Override
+            public void run() {
+                new UserFirebaseHelper().getRequestPremiumUser(anonymousUid);
+                if (premiumUserPair == null || !premiumUserPair.first) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "migratePremium: not premium");
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "migratePremium: premium user");
+                    }
+                    new UserFirebaseHelper().migrateUser(anonymousUid, uid, premiumUserPair.second);
+                }
+            }
+        });
+    }
+
+    public void snack(@Nullable final View view, @Nullable final String text, final int length, @Nullable final String toAction,
+                  @Nullable final View.OnClickListener onClickListener) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "snack: " + text);
+        }
+        if (getParent().isActive()) {
+            getParentActivity().snack(view, text, length, toAction, onClickListener);
+        } else {
+            MyLog.w(CLS_NAME, "snack Fragment detached");
+        }
+    }
+
     public void toast(String text, int duration) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "makeToast: " + text);
@@ -156,6 +298,56 @@ public class FragmentDevelopmentHelper {
         } else if (DEBUG) {
             MyLog.w(CLS_NAME, "toast Fragment detached");
         }
+    }
+
+    public void showAccountOverviewDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showAccountOverviewDialog");
+        }
+        if (SPH.getAccountOverview(getApplicationContext())) {
+            accountAction();
+            return;
+        }
+        SPH.markAccountOverview(getApplicationContext());
+        getParentActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                        .setTitle(R.string.menu_account)
+                        .setMessage(R.string.content_account_overview)
+                        .setIcon(R.drawable.ic_face)
+                        .setPositiveButton(R.string.title_login, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showAccountOverviewDialog: onPositive");
+                                }
+                                dialog.dismiss();
+                                accountAction();
+                            }
+                        })
+                        .setNegativeButton(R.string.title_maybe_later, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showAccountOverviewDialog: onNegative");
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(final DialogInterface dialog) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showAccountOverviewDialog: onCancel");
+                                }
+                                dialog.dismiss();
+                            }
+                        }).create();
+                materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                materialDialog.show();
+            }
+        });
     }
 
     public void showTranslationDialog() {
@@ -283,6 +475,116 @@ public class FragmentDevelopmentHelper {
                         }).create();
                 materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
                 materialDialog.show();
+            }
+        });
+    }
+
+    private void accountAction() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "accountAction");
+        }
+        final com.google.firebase.auth.FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser == null || firebaseUser.isAnonymous()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createAccount");
+            }
+            final String anonymousUid = SPH.getFirebaseAnonymousUid(getApplicationContext());
+            if (ai.saiy.android.utils.UtilsString.notNaked(anonymousUid)) {
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        FragmentDevelopmentHelper.this.premiumUserPair = new UserFirebaseHelper().getPremiumUser(anonymousUid);
+                    }
+                }).start();
+            }
+            if (getParent().isActive()) {
+                final AuthUI.SignInIntentBuilder intentBuilder = AuthUI.getInstance().createSignInIntentBuilder()
+                        .setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher)
+                        .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(), new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.FacebookBuilder().build(), new AuthUI.IdpConfig.TwitterBuilder().build()))
+                        .setTosUrl(Constants.SAIY_TOU_URL).setIsSmartLockEnabled(false);
+                if (ai.saiy.android.utils.UtilsString.notNaked(anonymousUid)) {
+                    intentBuilder.enableAnonymousUsersAutoUpgrade();
+                }
+                getParent().startActivityForResult(intentBuilder.setLockOrientation(false).build(), FragmentDevelopment.RC_ACCOUNT);
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "showDeleteAccountDialog");
+            }
+            getParentActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                            .setTitle(R.string.menu_account)
+                            .setMessage(R.string.content_delete_account)
+                            .setIcon(R.drawable.ic_face)
+                            .setPositiveButton(R.string.title_delete, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showDeleteAccountDialog: onPositive");
+                                    }
+                                    dialog.dismiss();
+                                    logOutAccount();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showDeleteAccountDialog: onNegative");
+                                    }
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(final DialogInterface dialog) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showDeleteAccountDialog: onCancel");
+                                    }
+                                    dialog.dismiss();
+                                }
+                            }).create();
+                    materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                    materialDialog.show();
+                }
+            });
+        }
+    }
+
+    private void logOutAccount() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "logOutAccount");
+        }
+        AuthUI.getInstance().signOut(getApplicationContext()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    snack(getParent().getView(), getString(R.string.content_account_delete_success), Snackbar.LENGTH_SHORT, null, null);
+                } else {
+                    snack(getParent().getView(), getString(R.string.content_account_error), Snackbar.LENGTH_SHORT, null, null);
+                }
+                deleteAccount();
+                SPH.setFirebaseUid(getApplicationContext(), null);
+            }
+        });
+    }
+
+    private void deleteAccount() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "deleteAccount");
+        }
+        AuthUI.getInstance().delete(getApplicationContext()).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (DEBUG) {
+                    if (task.isSuccessful()) {
+                        MyLog.i(CLS_NAME, "deleteAccount: isSuccessful");
+                    } else {
+                        MyLog.i(CLS_NAME, "deleteAccount: failure");
+                    }
+                }
             }
         });
     }

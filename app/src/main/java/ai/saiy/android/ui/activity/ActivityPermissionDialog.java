@@ -209,6 +209,25 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
                     createPermissionsNotification(requestCode);
                 }
                 break;
+            case PermissionHelper.REQUEST_LOCATION:
+                if (granted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_LOCATION: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_LOCATION: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_LOCATION: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                }
+                break;
             case PermissionHelper.REQUEST_CALENDAR:
                 if (granted(grantResults)) {
                     if (DEBUG) {

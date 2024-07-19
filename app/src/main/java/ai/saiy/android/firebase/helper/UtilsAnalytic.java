@@ -1,4 +1,4 @@
-package ai.saiy.android.utils;
+package ai.saiy.android.firebase.helper;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -12,6 +12,9 @@ import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileI
 import ai.saiy.android.user.SaiyAccount;
 import ai.saiy.android.user.SaiyAccountHelper;
 import ai.saiy.android.user.SaiyAccountList;
+import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsString;
 
 public class UtilsAnalytic {
     private static final boolean DEBUG = MyLog.DEBUG;

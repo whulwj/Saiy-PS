@@ -64,7 +64,7 @@ import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
-import ai.saiy.android.utils.UtilsAnalytic;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.

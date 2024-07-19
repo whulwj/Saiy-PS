@@ -17,22 +17,41 @@
 
 package ai.saiy.android.device;
 
+import ai.saiy.android.firebase.database.reference.IAPReference;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.Signature;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognitionService;
 import android.speech.tts.TextToSpeech;
+import android.util.Base64;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.common.io.BaseEncoding;
+import com.tozny.crypto.android.AesCbcWithIntegrity;
+
+import java.io.ByteArrayInputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.GeneralSecurityException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateEncodingException;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.X509Certificate;
+import java.security.interfaces.RSAPublicKey;
 import java.util.List;
 import java.util.Locale;
 
 import ai.saiy.android.BuildConfig;
 import ai.saiy.android.R;
+import ai.saiy.android.firebase.database.model.IAP;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
@@ -145,5 +164,89 @@ public class DeviceInfo {
             }
         }
         return "No Engine installed";
+    }
+
+    public String createKeys(Context context, String str) {
+        try {
+            final IAP iap = new IAPReference().getRequestIAP();
+            if (iap == null || !UtilsString.notNaked(iap.getVersionCode())) {
+                return null;
+            }
+            final AesCbcWithIntegrity.CipherTextIvMac cipherTextIvMac = new AesCbcWithIntegrity.CipherTextIvMac(str);
+            final Pair<String, Integer> keys = createKeys(context);
+            return (keys == null || keys.first == null) ? null : AesCbcWithIntegrity.decryptString(cipherTextIvMac, AesCbcWithIntegrity.generateKeyFromPassword(Base64.encodeToString((keys.first + keys.second).getBytes(StandardCharsets.UTF_8), Base64.DEFAULT), Base64.encodeToString(iap.getVersionCode().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT)));
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (NoSuchAlgorithmException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: NoSuchAlgorithmException");
+                e.printStackTrace();
+            }
+        } catch (CertificateEncodingException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: CertificateEncodingException");
+                e.printStackTrace();
+            }
+        } catch (CertificateException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: CertificateException");
+                e.printStackTrace();
+            }
+        } catch (GeneralSecurityException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: GeneralSecurityException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: Exception");
+                e.printStackTrace();
+            }
+        }
+        return null;
+    }
+
+    private Pair<String, Integer> createKeys(Context context) {
+        try {
+           final Signature[] signatures = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures;
+            if (signatures != null && signatures.length > 0) {
+                final X509Certificate x509Certificate = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(signatures[0].toByteArray()));
+                final int hashCode = ((RSAPublicKey) x509Certificate.getPublicKey()).getModulus().hashCode();
+                return new Pair<>(BaseEncoding.base16().ignoreCase().encode(MessageDigest.getInstance("SHA1").digest(x509Certificate.getEncoded())), hashCode);
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            if (DEBUG) {
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (NoSuchAlgorithmException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: NoSuchAlgorithmException");
+                e.printStackTrace();
+            }
+        } catch (CertificateEncodingException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: CertificateEncodingException");
+                e.printStackTrace();
+            }
+        } catch (CertificateException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: CertificateException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createKeys: Exception");
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 }

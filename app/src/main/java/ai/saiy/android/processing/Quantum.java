@@ -40,6 +40,7 @@ import ai.saiy.android.command.battery.CommandBattery;
 import ai.saiy.android.command.clipboard.ClipboardHelper;
 import ai.saiy.android.command.custom.CommandCustom;
 import ai.saiy.android.command.emotion.CommandEmotion;
+import ai.saiy.android.command.foursquare.CommandFoursquare;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.command.note.CommandNote;
@@ -47,6 +48,7 @@ import ai.saiy.android.command.songrecognition.CommandSongRecognition;
 import ai.saiy.android.command.spell.CommandSpell;
 import ai.saiy.android.command.tasker.CommandTasker;
 import ai.saiy.android.command.translate.CommandTranslate;
+import ai.saiy.android.command.twitter.CommandTwitter;
 import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.command.username.CommandUserName;
 import ai.saiy.android.command.vocalrecognition.CommandVocalRecognition;
@@ -73,7 +75,7 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
-import ai.saiy.android.utils.UtilsAnalytic;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 
@@ -438,9 +440,8 @@ public class Quantum extends Tunnelling {
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     request.setCondition(outcome.getCondition());
-                    final Object extra = outcome.getExtra();
-                    if (extra instanceof Parcelable) {
-                        request.setParcelableObject((Parcelable) extra);
+                    if (outcome.getExtra() instanceof Parcelable) {
+                        request.setParcelableObject((Parcelable) outcome.getExtra());
                     }
                     result = outcome.getOutcome();
                     break;
@@ -562,6 +563,46 @@ public class Quantum extends Tunnelling {
                         outcome = commandDriving.getResponse(mContext, toResolve, sl, cr, vrLocale, ttsLocale);
                         request.setUtterance(outcome.getUtterance());
                         request.setAction(outcome.getAction());
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    }
+                    break;
+                case COMMAND_TWITTER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TWITTER.name());
+                    }
+                    if (!secure) {
+                        final CommandTwitter commandTwitter = new CommandTwitter();
+                        outcome = commandTwitter.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        request.setCondition(outcome.getCondition());
+                        if (outcome.getExtra() instanceof Parcelable) {
+                            request.setParcelableObject((Parcelable) outcome.getExtra());
+                        }
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    }
+                    break;
+                case COMMAND_FOURSQUARE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_FOURSQUARE.name());
+                    }
+                    if (!secure) {
+                        final CommandFoursquare commandFoursquare = new CommandFoursquare();
+                        outcome = commandFoursquare.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        request.setCondition(outcome.getCondition());
+                        if (outcome.getExtra() instanceof Parcelable) {
+                            request.setParcelableObject((Parcelable) outcome.getExtra());
+                        }
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
@@ -928,6 +969,16 @@ public class Quantum extends Tunnelling {
                 case COMMAND_DRIVING:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DRIVING.name());
+                    }
+                    break;
+                case COMMAND_TWITTER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TWITTER.name());
+                    }
+                    break;
+                case COMMAND_FOURSQUARE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_FOURSQUARE.name());
                     }
                     break;
                 case COMMAND_FLOAT_COMMANDS:

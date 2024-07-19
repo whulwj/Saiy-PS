@@ -205,3 +205,8 @@
 
 # apache commons codec
 -dontwarn org.apache.commons.codec.binary.**
+
+# firebase database
+-keepclassmembers class ai.saiy.android.firebase.database.model.** {
+    public *;
+}

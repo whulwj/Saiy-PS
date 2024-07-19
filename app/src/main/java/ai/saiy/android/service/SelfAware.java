@@ -892,6 +892,7 @@ public class SelfAware extends Service {
             }
 
             SPH.setLastUsed(getApplicationContext());
+            conditions.doPeriodic();
         }
     };
 

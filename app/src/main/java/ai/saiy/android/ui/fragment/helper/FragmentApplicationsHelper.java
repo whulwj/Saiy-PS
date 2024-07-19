@@ -418,7 +418,7 @@ public class FragmentApplicationsHelper {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
                 if (FragmentApplicationsHelper.this.getParent().isActive()) {
-                    FragmentApplicationsHelper.this.getParentActivity().runOnUiThread(new Runnable() { // from class: ai.saiy.android.ui.b.a.n.1.1
+                    FragmentApplicationsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             FragmentApplicationsHelper.this.getParent().getObjects().addAll(tempArray);

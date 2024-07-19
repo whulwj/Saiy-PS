@@ -45,14 +45,21 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
+import ai.saiy.android.firebase.UserFirebaseListener;
+import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -69,6 +76,7 @@ import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
+import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.AuthUtils;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
@@ -85,7 +93,8 @@ import me.drakeet.support.toast.ToastCompat;
  */
 
 public class ActivityHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        FragmentManager.OnBackStackChangedListener {
+        FragmentManager.OnBackStackChangedListener,
+        UserFirebaseListener {
 
     private final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityHome.class.getSimpleName();
@@ -129,7 +138,39 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private Menu menu;
 
-    private ActivityHomeHelper helper = new ActivityHomeHelper();
+    private final ActivityHomeHelper helper = new ActivityHomeHelper();
+    private FirebaseAuth firebaseAuth;
+    private volatile boolean isUserSignedIn;
+    private volatile boolean havePersisted;
+    private final AtomicInteger signInCount = new AtomicInteger();
+    private final FirebaseAuth.AuthStateListener mAuth = new FirebaseAuth.AuthStateListener() {
+        @Override
+        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+            final com.google.firebase.auth.FirebaseUser a2 = firebaseAuth.getCurrentUser();
+            if (a2 == null) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser null");
+                }
+                ActivityHome.this.signInAnonymously();
+                return;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser signed in: " + a2.getUid());
+                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser anonymous: " + a2.isAnonymous());
+            }
+            ActivityHome.this.isUserSignedIn = true;
+            if (a2.isAnonymous()) {
+                SPH.setFirebaseAnonymousUid(getApplicationContext(), a2.getUid());
+            } else {
+                SPH.setFirebaseUid(getApplicationContext(), a2.getUid());
+            }
+            if (ActivityHome.this.havePersisted) {
+                return;
+            }
+            ActivityHome.this.havePersisted = true;
+            ActivityHome.this.persistFirebase();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,6 +190,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         }
 
         setupUI();
+        this.firebaseAuth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -1271,6 +1313,24 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        if (this.firebaseAuth != null) {
+            this.firebaseAuth.removeAuthStateListener(mAuth);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (this.firebaseAuth != null) {
+            this.firebaseAuth.addAuthStateListener(mAuth);
+        } else if (DEBUG) {
+            MyLog.e(CLS_NAME, "mAuth null");
+        }
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
         if (DEBUG) {
@@ -1317,5 +1377,78 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
     private final ActivityResultLauncher<String[]> mChatPermissionRequest = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
     });
+
+    private void persistFirebase() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "persistFirebase");
+        }
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final com.google.firebase.database.DatabaseReference databaseReference = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read");
+                databaseReference.child("bing").child("translate").keepSynced(true);
+                databaseReference.child("bing").child("speaker_recognition").keepSynced(true);
+                databaseReference.child("provider").child("translation").keepSynced(true);
+                databaseReference.child("provider").child("weather").keepSynced(true);
+                databaseReference.child("bugs").child("known_bugs").keepSynced(true);
+                databaseReference.child("google").child("translate").keepSynced(true);
+                databaseReference.child("google").child("geo").keepSynced(true);
+                databaseReference.child("open_weather_map").keepSynced(true);
+                databaseReference.child("twitter").keepSynced(true);
+                databaseReference.child("weather_online").keepSynced(true);
+                databaseReference.child("wordnik").keepSynced(true);
+                databaseReference.child("beyond_verbal").keepSynced(true);
+                databaseReference.child("foursquare").keepSynced(true);
+                databaseReference.child("version").keepSynced(true);
+                databaseReference.child("iap").keepSynced(true);
+                ai.saiy.android.firebase.UserFirebase a4 = UtilsFirebase.getUserFirebase(getApplicationContext());
+                if (a4 != null) {
+                    com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(a4.getUid()).keepSynced(true);
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "persistFirebase: userFirebase null");
+                }
+                new UserFirebaseHelper().isAdFree(getApplication(), ActivityHome.this);
+            }
+        }).start();
+    }
+
+    private void signInAnonymously() {
+        firebaseAuth.signInAnonymously().addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<com.google.firebase.auth.AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "signInAnonymously: onComplete: " + task.isSuccessful());
+                }
+                if (task.isSuccessful()) {
+                    ActivityHome.this.isUserSignedIn = true;
+                    return;
+                }
+                if (DEBUG) {
+                    task.getException().printStackTrace();
+                }
+                if (ActivityHome.this.signInCount.incrementAndGet() < 4) {
+                    try {
+                        Thread.sleep(ActivityHome.this.signInCount.get() * 5000);
+                    } catch (InterruptedException e) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "signInAnonymously InterruptedException");
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    public boolean userSignedIn() {
+        return this.isUserSignedIn;
+    }
+
+    @Override
+    public void onDetermineAdFree(boolean isAddFree) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onDetermineAdFree: " + isAddFree);
+        }
+    }
 }
 

@@ -100,6 +100,9 @@ public class SPH {
     private static final String NETWORK_SYNTHESIS = "network_synthesis";
     private static final String NETWORK_SYNTHESIS_WIFI = "network_synthesis_wifi";
     private static final String NETWORK_SYNTHESIS_4G = "network_synthesis_4g";
+    private static final String FIREBASE_ANONYMOUS_UID = "firebase_anonymous_uid";
+    private static final String FIREBASE_AUTH_UID = "firebase_auth_uid";
+    private static final String FIREBASE_MIGRATED_UID = "firebase_migrated_uid";
     private static final String BLOCKED_NOTIFICATION_APPLICATIONS = "blocked_notification_applications";
     private static final String RESET_SPEAKER = "reset_speaker";
     private static final String USE_OFFLINE = "use_offline";
@@ -133,6 +136,7 @@ public class SPH {
     private static final String BOOT_START = "boot_start";
     private static final String SELF_AWARE_ENABLED = "self_aware_enabled";
     private static final String CALL_CONFIRMATION = "call_confirmation";
+    private static final String WEATHER_PROVIDER = "weather_provider";
     private static final String HAS_PHRASE = "has_phrase";
     private static final String HAS_NICKNAME = "has_nickname";
     private static final String HAS_REPLACEMENT = "has_replacement";
@@ -165,7 +169,10 @@ public class SPH {
     private static final String SOUNDEX_UPPER_THRESHOLD = "soundex_upper_threshold";
     private static final String REMOTE_COMMAND_VERBOSE = "remote_command_verbose";
     private static final String LAST_USED = "last_used";
+    private static final String TWITTER_TOKEN = "twitter_token";
+    private static final String TWITTER_SECRET = "twitter_secret";
     private static final String USED_INCREMENT = "used_increment";
+    private static final String FOURSQUARE_TOKEN = "foursquare_token";
     private static final String MAX_SPEECH_CACHE_SIZE = "max_speech_cache_size";
     private static final String DEFAULT_SONG_RECOGNITION = "default_song_recognition";
     private static final String ANNOUNCE_TASKER = "announce_tasker";
@@ -178,6 +185,8 @@ public class SPH {
     private static final String HEADSET_SYSTEM = "headset_system";
     private static final String HEADSET_STREAM_TYPE = "headset_stream_type";
     private static final String HEADSET_CONNECTION_TYPE = "headset_connection_type";
+    private static final String ACCOUNT_OVERVIEW = "account_overview";
+    private static final String PREMIUM_CONTENT_VERBOSE = "premium_content_verbose";
     private static final String HOROSCOPE_INCREMENT = "horoscope_increment";
     private static final String CACHE_SPEECH = "cache_speech";
     private static final String SMS_ID_FIX = "sms_id_fix";
@@ -559,6 +568,26 @@ public class SPH {
         SPH.incrementUsed(ctx);
     }
 
+    public static String getTwitterToken(Context context) {
+        return getPref(context).getString(TWITTER_TOKEN, null);
+    }
+
+    public static void setTwitterToken(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(TWITTER_TOKEN, str);
+        edit.apply();
+    }
+
+    public static String getTwitterSecret(Context context) {
+        return getPref(context).getString(TWITTER_SECRET, null);
+    }
+
+    public static void setTwitterSecret(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(TWITTER_SECRET, str);
+        edit.apply();
+    }
+
     /**
      * Get the number of speech requests that have been made, since the application data was last
      * wiped. This will be used to run various housekeeping tasks.
@@ -581,6 +610,16 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putLong(USED_INCREMENT, (getUsedIncrement(ctx) + 1));
+        edit.apply();
+    }
+
+    public static String getFoursquareToken(Context context) {
+        return getPref(context).getString(FOURSQUARE_TOKEN, null);
+    }
+
+    public static void setFoursquareToken(Context context, String token) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(FOURSQUARE_TOKEN, token);
         edit.apply();
     }
 
@@ -1326,6 +1365,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static int getWeatherProvider(Context context) {
+        return getPref(context).getInt(WEATHER_PROVIDER, 2);
+    }
+
+    public static void setWeatherProvider(Context context, int i) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(WEATHER_PROVIDER, i);
+        edit.apply();
+    }
+
     public static boolean hasPhrase(Context context) {
         return getPref(context).getBoolean(HAS_PHRASE, false);
     }
@@ -2012,6 +2061,36 @@ public class SPH {
         edit.apply();
     }
 
+    public static String getFirebaseAnonymousUid(Context context) {
+        return getPref(context).getString(FIREBASE_ANONYMOUS_UID, null);
+    }
+
+    public static void setFirebaseAnonymousUid(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(FIREBASE_ANONYMOUS_UID, str);
+        edit.apply();
+    }
+
+    public static String getFirebaseUid(Context context) {
+        return getPref(context).getString(FIREBASE_AUTH_UID, null);
+    }
+
+    public static void setFirebaseUid(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(FIREBASE_AUTH_UID, str);
+        edit.apply();
+    }
+
+    public static String getFirebaseMigratedUid(Context context) {
+        return getPref(context).getString(FIREBASE_MIGRATED_UID, null);
+    }
+
+    public static void setFirebaseMigratedUid(Context context, String str) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(FIREBASE_MIGRATED_UID, str);
+        edit.apply();
+    }
+
     /**
      * Get the user's preference for a network synthesised voice.
      *
@@ -2292,6 +2371,26 @@ public class SPH {
         edit.putBoolean(SHOWN_OFFLINE_INSTALLATION, true);
         edit.apply();
         return false;
+    }
+
+    public static boolean getAccountOverview(Context context) {
+        return getPref(context).getBoolean(ACCOUNT_OVERVIEW, false);
+    }
+
+    public static void markAccountOverview(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(ACCOUNT_OVERVIEW, true);
+        edit.apply();
+    }
+
+    public static boolean getPremiumContentVerbose(Context context) {
+        return getPref(context).getBoolean(PREMIUM_CONTENT_VERBOSE, false);
+    }
+
+    public static void setPremiumContentVerbose(Context context, boolean condition) {
+        SharedPreferences.Editor a2 = getEditor(getPref(context));
+        a2.putBoolean(PREMIUM_CONTENT_VERBOSE, condition);
+        a2.apply();
     }
 
     public static long getHoroscopeIncrement(Context context) {

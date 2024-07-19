@@ -2405,6 +2405,11 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
     }
 
     @Override
+    public void doPeriodic() {
+        super.doPeriodic();
+    }
+
+    @Override
     public void issueNoVRProvider() {
         super.issueNoVRProvider();
     }

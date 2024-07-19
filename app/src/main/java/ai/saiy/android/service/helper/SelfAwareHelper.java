@@ -504,6 +504,10 @@ public class SelfAwareHelper {
         }
     }
 
+    public void doPeriodic() {
+        ai.saiy.android.firebase.UtilsFirebase.doPeriodic(mContext);
+    }
+
     /**
      * The user's device is missing a voice recognition provider. This method will start the
      * {@link ActivityIssue} with the relevant details populated in

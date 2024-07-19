@@ -11,10 +11,12 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.ApplicationBasic;
+import ai.saiy.android.firebase.UserFirebaseListener;
 import ai.saiy.android.ui.fragment.FragmentApplicationPicker;
+import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 
-public class ActivityApplicationPicker extends AppCompatActivity {
+public class ActivityApplicationPicker extends AppCompatActivity implements UserFirebaseListener {
     public static final String EXTRA_APPLICATION = "extra_blocked_applications";
     public static final String EXTRA_TYPE = "extra_type";
     public static final int SEARCH_APPLICATION_TYPE = 1;
@@ -52,6 +54,13 @@ public class ActivityApplicationPicker extends AppCompatActivity {
         }
         setResult(resultCode, intent);
         finish();
+    }
+
+    @Override
+    public void onDetermineAdFree(boolean isAddFree) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onDetermineAdFree: " + isAddFree);
+        }
     }
 
     /**
@@ -93,6 +102,12 @@ public class ActivityApplicationPicker extends AppCompatActivity {
         }
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContent, FragmentApplicationPicker.newInstance(getIntent().getExtras()), String.valueOf(0)).commitAllowingStateLoss();
         setupToolbar();
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                new UserFirebaseHelper().isAdFree(getApplication(), ActivityApplicationPicker.this);
+            }
+        });
     }
 
     @Override

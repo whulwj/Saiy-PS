@@ -58,6 +58,8 @@ public enum CC {
     COMMAND_SMS(false, true),
     COMMAND_HELP(false, false),
     COMMAND_DRIVING(false, true),
+    COMMAND_TWITTER(true, true),
+    COMMAND_FOURSQUARE(true, true),
     COMMAND_FLOAT_COMMANDS(false, false),
     COMMAND_ALEXA(true, true),
 

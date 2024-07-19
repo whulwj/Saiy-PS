@@ -43,6 +43,7 @@ public final class Condition {
     public static final int CONDITION_CONTACT = 10;
     public static final int CONDITION_NOTE = 11;
     public static final int CONDITION_ANNOUNCE_CALLER = 12;
+    public static final int CONDITION_TWITTER = 14;
     public static final int CONDITION_CHECK_REINSTALLATION = 15;
     public static final int CONDITION_TUTORIAL = 16;
     public static final int CONDITION_SELF_AWARE = 17;

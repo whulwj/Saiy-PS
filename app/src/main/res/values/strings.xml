@@ -17,6 +17,10 @@
 
 <resources>
     <string name="gcp_project_id" translatable="false">plucky-sound-315505</string>
+    <!--Firebase Google Sign-In Authentication-->
+    <string name="default_web_client_id" translatable="false">997068182928-rv7vtailtqrup3hdenre58gu5r56rim6.apps.googleusercontent.com</string>
+    <string name="facebook_application_id" translatable="false">todo-CHANGE-ME</string>
+
     <!-- SPEECH STRINGS -->
 
     <!-- PLEASE NOTE -->
@@ -58,6 +62,12 @@
     <string name="license_math_eval">Copyright © Lawrence PC Dol</string>
     <string name="freesound_org">freesound.org</string>
     <string name="license_freesound">Credit bone666138 &amp; deathpie @ freesound.org</string>
+    <string name="twitter_oauth_view">TwitterOAuthView</string>
+    <string name="license_twitter_oauth_view">Copyright (C) 2012-2013 Neo Visionaries Inc.</string>
+    <string name="twitter4j">Twitter4j</string>
+    <string name="license_twitter4j">Copyright 2007 Yusuke Yamamoto</string>
+    <string name="java_aes_crypto">java-aes-crypto</string>
+    <string name="license_java_aes_crypto">Copyright (c) 2014-2015 Tozny, LLC; (http://tozny.com)</string>
     <string name="standout">StandOut</string>
     <string name="license_standout">Copyright (c) Mark Wei github@pingpongboss - credits github@jasonconnery &amp; github@sherpya</string>
     <string name="amazon_avs">Amazon AVS</string>
@@ -163,6 +173,7 @@
     <string name="menu_tap_send" translatable="true">tap to send</string>
     <string name="menu_tap_help" translatable="true">tap for help</string>
     <string name="menu_tap_create">tap to create</string>
+    <string name="menu_tap_manage">tap to manage</string>
     <string name="menu_tap_reset">tap to reset</string>
     <string name="menu_tap_restore">tap to restore</string>
     <string name="menu_tap_run">tap to run</string>
@@ -858,7 +869,7 @@
     <string name="title_google_tts_engine">Google TTS engine</string>
     <string name="title_doh_">Doh!</string>
     <string name="title_voice">Voice</string>
-    <string name="lp_supported_languages">In the current release, only English is supported. But don\'t fear, translation to all languages supported by Google Voice Recognition is underway! Head to the development section if you\'d like to assist translating me to your native language.</string>
+    <string name="lp_supported_languages">In the current release, only English is supported. But don\'t fear, translationProvider to all languages supported by Google Voice Recognition is underway! Head to the development section if you\'d like to assist translating me to your native language.</string>
     <string name="lp_tts_voice">If your device and text to speech engine supports it, you can select the voice I will speak in here.</string>
     <string name="lp_unknown_commands">Rather than me simply announcing when I don\'t understand your voice input, you can select alternative options here. You could select passing unknown commands to the Google Assistant. That way, you can deliberately ask me something I won\'t understand, and Google will take over. Click to check out the other options.</string>
     <string name="lp_headset">Click here for more headset options, than there are atoms in the Universe.</string>
@@ -936,6 +947,12 @@
     <string name="content_tasker_reinstall_6">Don\'t forget to change the setting back to block external installations. It\'ll keep your device safe.</string>
     <string name="content_tasker_reinstall_7">Tap on the install button and I\'ll be back shortly.</string>
 
+    <string name="menu_account">Account</string>
+    <string name="content_account_overview">If you would like any credits you earn to persist across multiple devices, or in a future release, be able to redeem them, you will need to identify yourself using one of a number of familiar login procedures.\n\nIt\'s pretty painless and only takes a few clicks!</string>
+    <string name="content_account_create_success">Account created successfully!</string>
+    <string name="content_delete_account">Are you sure you want to delete your account?\n\nThis will remove all history of any credits you have earned to date.</string>
+    <string name="content_account_delete_success">Account deleted successfully</string>
+    <string name="content_account_error">An error occurred</string>
     <string name="menu_translation">Translation</string>
     <string name="content_translate_overview">Saiy will be translated into every language that is supported by a voice recognition provider, but as you can imagine, this is going to be a mammoth task!\n\nI\'ll need the help of our community of users to achieve this and we\'re going to attempt it using the Crowdin Platform.\n\nIf you want to get involved and translate the odd word or sentence every now and then over a coffee (no pressure!) click the sign up link below to create an account! It\'s free and easy!\n\nThanks in advance!</string>
     <string name="lp_translation">If you\'d like to help translate me into your native language, this is the place to get started.</string>
@@ -958,6 +975,9 @@
     <string name="lp_source_code">Should you like to see how I\'ve been created in Java, tap here to view my source code.</string>
     <string name="lp_terms_of_use">Click to read the application\'s terms of use</string>
     <string name="content_legends">• nobnut@xda\n• waydownsouth@xda\n• GLDavis@xda\n• dtrieb@xda\n• meadowsjared@xda\n• themadproducer@xda\n• LegendsCrazy@xda\n• Shawn13165@xda\n• ltassos@xda\n• regor99@xda\n• faku1810@xda\n• Drifternz@xda\n• gbossley@xda\n• meminiau@xda\n• Extreme_One@xda\n• sdfgsteve@xda\n• philipoflyboy\n• ChazRiain\n• Gesonovich\n• Hans Willem Wolzak\n• Eliran Gonen\n• Jason Koltz\n</string>
+    <string name="title_login">Login</string>
+    <string name="title_maybe_later">Maybe later</string>
+    <string name="title_delete">Delete</string>
     <string name="title_copy_link">Copy link</string>
     <string name="title_clipboard_copied">Copied to clipboard</string>
     <string name="title_sign_up">Sign up</string>
@@ -1318,7 +1338,7 @@
 
     <!-- Command - Translate error -->
     <string name="error_translate_length" translatable="true">"I'm afraid %1$s, that translations are currently limited to 2000 characters."</string>
-    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translation."</string>
+    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translationProvider."</string>
     <string name="error_translate_unsupported" translatable="true">"I'm sorry %1$s, but that language is not currently supported for
         translations"</string>
 
@@ -1514,6 +1534,7 @@
     <string name="or">or</string>
     <string name="from">from</string>
     <string name="of">of</string>
+    <string name="in">in</string>
 
     <string name="set">set</string>
     <string name="word_new">new</string>
@@ -1758,4 +1779,29 @@
     <string name="test_note_title">I\'m a note title</string>
     <string name="title">title</string>
     <string name="title_no_note_response">No note apps responded</string>
+
+    <string name="check_in">check in</string>
+    <string name="check_in_to">check in to</string>
+    <string name="check_into">check into</string>
+    <string name="check_me_in_to">check me in to</string>
+    <string name="check_me_into">check me into</string>
+    <string name="checkin_to">checkin to</string>
+    <string name="closest_match_extra">the closest match of</string>
+    <string name="four_square">four square</string>
+    <string name="foursquare">foursquare</string>
+    <string name="foursquare_auth_cancelled">Foursquare authorisation cancelled</string>
+    <string name="foursquare_auth_error">Foursquare authorisation failed</string>
+    <string name="foursquare_auth_success">Foursquare authorisation successful</string>
+    <string name="i_found">I found</string>
+    <string name="nearby">nearby</string>
+    <string name="post">post</string>
+    <string name="tweet">tweet</string>
+    <string name="twitter">twitter</string>
+    <string name="twitter_auth_cancelled">Twitter authorisation cancelled</string>
+    <string name="twitter_auth_error">Twitter authorisation failed</string>
+    <string name="twitter_auth_request">You need to authorise my access to your Twitter feed, so I can automatically tweet content for you.</string>
+    <string name="twitter_auth_success">Twitter authorisation successful</string>
+    <string name="twitter_content_request">Please say the content of your tweet</string>
+    <string name="twitter_reauth_request">We need to update my authorisation, to access your Twitter content.</string>
+    <string name="update">update</string>
 </resources>

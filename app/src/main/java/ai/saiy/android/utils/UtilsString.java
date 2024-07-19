@@ -156,6 +156,14 @@ public class UtilsString {
         }
     }
 
+    public static int stripSpace(String str) {
+        String trim = str.trim();
+        if (trim.isEmpty()) {
+            return 0;
+        }
+        return trim.split("\\s+").length;
+    }
+
     public static boolean regexCheck(String str) {
         if (str == null) {
             return false;

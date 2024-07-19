@@ -44,14 +44,21 @@ desugar_jdk_libs_version = "2.0.4"
 simpleXml = "2.7.1"
 libraries-bom = "26.37.0"
 cloud-dialogflow = "4.49.0"
+firebase-bom = "28.4.2"
 firebase-analytics = "19.0.2"
 firebase-auth = "21.0.4"
 firebase-messaging = "23.4.1"
 firebase-functions = "20.4.0"
+firebase-database = "20.2.2"
+firebaseUI = "8.0.2"
 simmetricsCore = "4.1.1"
 speechkit = "2.2.4"
 speechrecognition = "1.2.2"
 volley = "1.2.1"
+
+java-aes-crypto = "1.1.0"
+twitter4j = "4.1.2"
+facebook-login ="17.0.0"
 
 [libraries]
 com-google-auth-google-auth-library-oauth2-http3 = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "comGoogleAuthGoogleAuthLibraryOauth2Http2" }
@@ -104,12 +111,19 @@ libraries-bom = { module = "com.google.cloud:libraries-bom", version.ref = "libr
 cloud-dialogflow = { module = "com.google.cloud:google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
+firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
 firebase-functions = { group = "com.google.firebase", name = "firebase-functions", version.ref = "firebase-functions" }
+firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
+firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUI" }
 simmetrics-core = { module = "com.github.mpkorstanje:simmetrics-core", version.ref = "simmetricsCore" }
 speechkit = { module = "com.nuance:speechkit", version.ref = "speechkit" }
 speechrecognition = { module = "com.microsoft.projectoxford:speechrecognition", version.ref = "speechrecognition" }
 volley = { module = "com.android.volley:volley", version.ref = "volley" }
+
+java-aes-crypto = { group = "com.github.tozny", name = "java-aes-crypto", version.ref= "java-aes-crypto" }
+twitter4j = { group = "org.twitter4j", name = "twitter4j-core", version.ref= "twitter4j" }
+facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref= "facebook-login" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradlePlugin" }

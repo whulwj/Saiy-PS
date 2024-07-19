@@ -446,7 +446,7 @@
 
     <!-- Command - Translate error -->
     <string name="error_translate_length" translatable="true">"I'm afraid %1$s, that translations are currently limited to 2000 characters."</string>
-    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translation."</string>
+    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translationProvider."</string>
     <string name="error_translate_unsupported" translatable="true">"I'm sorry %1$s, but that language is not currently supported for
         translations"</string>
 

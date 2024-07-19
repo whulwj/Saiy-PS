@@ -46,7 +46,7 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentApplicationsHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.utils.UtilsAnalytic;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 
 public class FragmentApplications extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final Object lock = new Object();

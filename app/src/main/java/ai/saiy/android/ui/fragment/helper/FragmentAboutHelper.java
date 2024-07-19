@@ -343,6 +343,21 @@ public class FragmentAboutHelper {
                 getString(R.string.license_freesound),
                 new CreativeCommonsAttributionShareAlike30Unported()));
 
+        notices.addNotice(new Notice(getString(R.string.twitter_oauth_view),
+                "https://github.com/TakahikoKawasaki/TwitterOAuthView",
+                getString(R.string.license_twitter_oauth_view),
+                new ApacheSoftwareLicense20()));
+
+        notices.addNotice(new Notice(getString(R.string.twitter4j),
+                "http://twitter4j.org",
+                getString(R.string.license_twitter4j),
+                new ApacheSoftwareLicense20()));
+
+        notices.addNotice(new Notice(getString(R.string.java_aes_crypto),
+                "https://github.com/tozny/java-aes-crypto",
+                getString(R.string.license_java_aes_crypto),
+                new ApacheSoftwareLicense20()));
+
         notices.addNotice(new Notice(getString(R.string.standout),
                 "https://github.com/pingpongboss/StandOut",
                 getString(R.string.license_standout), new MITLicense()));
