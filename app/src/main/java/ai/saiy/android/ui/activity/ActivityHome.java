@@ -77,7 +77,7 @@ import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
 import ai.saiy.android.user.UserFirebaseHelper;
-import ai.saiy.android.utils.AuthUtils;
+import ai.saiy.android.utils.UtilsAuth;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -146,8 +146,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     private final FirebaseAuth.AuthStateListener mAuth = new FirebaseAuth.AuthStateListener() {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            final com.google.firebase.auth.FirebaseUser a2 = firebaseAuth.getCurrentUser();
-            if (a2 == null) {
+            final com.google.firebase.auth.FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+            if (firebaseUser == null) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser null");
                 }
@@ -155,14 +155,14 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 return;
             }
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser signed in: " + a2.getUid());
-                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser anonymous: " + a2.isAnonymous());
+                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser signed in: " + firebaseUser.getUid());
+                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser anonymous: " + firebaseUser.isAnonymous());
             }
             ActivityHome.this.isUserSignedIn = true;
-            if (a2.isAnonymous()) {
-                SPH.setFirebaseAnonymousUid(getApplicationContext(), a2.getUid());
+            if (firebaseUser.isAnonymous()) {
+                SPH.setFirebaseAnonymousUid(getApplicationContext(), firebaseUser.getUid());
             } else {
-                SPH.setFirebaseUid(getApplicationContext(), a2.getUid());
+                SPH.setFirebaseUid(getApplicationContext(), firebaseUser.getUid());
             }
             if (ActivityHome.this.havePersisted) {
                 return;
@@ -356,8 +356,6 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             return;
         }
         checkPermissions();
-        AuthUtils.signInAnonymously(this);
-        AuthUtils.getFirebaseInstanceId();
         helper.checkAppRestrictionsStatus(this);
     }
 
@@ -1385,7 +1383,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final com.google.firebase.database.DatabaseReference databaseReference = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read");
+                com.google.firebase.database.FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+/*                final com.google.firebase.database.DatabaseReference databaseReference = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read");
                 databaseReference.child("bing").child("translate").keepSynced(true);
                 databaseReference.child("bing").child("speaker_recognition").keepSynced(true);
                 databaseReference.child("provider").child("translation").keepSynced(true);
@@ -1400,10 +1399,10 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 databaseReference.child("beyond_verbal").keepSynced(true);
                 databaseReference.child("foursquare").keepSynced(true);
                 databaseReference.child("version").keepSynced(true);
-                databaseReference.child("iap").keepSynced(true);
-                ai.saiy.android.firebase.UserFirebase a4 = UtilsFirebase.getUserFirebase(getApplicationContext());
-                if (a4 != null) {
-                    com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(a4.getUid()).keepSynced(true);
+                databaseReference.child("iap").keepSynced(true);*/
+                final ai.saiy.android.firebase.UserFirebase userFirebase = UtilsFirebase.getUserFirebase(getApplicationContext());
+                if (userFirebase != null) {
+                    com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(userFirebase.getUid()).keepSynced(true);
                 } else if (DEBUG) {
                     MyLog.i(CLS_NAME, "persistFirebase: userFirebase null");
                 }
@@ -1412,6 +1411,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         }).start();
     }
 
+    /**
+     * function to sign in to Firebase Anonymously
+     */
     private void signInAnonymously() {
         firebaseAuth.signInAnonymously().addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<com.google.firebase.auth.AuthResult>() {
             @Override
@@ -1420,12 +1422,15 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     MyLog.i(CLS_NAME, "signInAnonymously: onComplete: " + task.isSuccessful());
                 }
                 if (task.isSuccessful()) {
+                    // Sign in success
                     ActivityHome.this.isUserSignedIn = true;
+                    UtilsAuth.getFirebaseInstanceId();
                     return;
                 }
                 if (DEBUG) {
                     task.getException().printStackTrace();
                 }
+                // If sign in fails, try it again later.
                 if (ActivityHome.this.signInCount.incrementAndGet() < 4) {
                     try {
                         Thread.sleep(ActivityHome.this.signInCount.get() * 5000);

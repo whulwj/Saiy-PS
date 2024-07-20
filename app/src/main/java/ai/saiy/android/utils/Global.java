@@ -25,6 +25,10 @@ import android.os.Bundle;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.appcheck.FirebaseAppCheck;
+import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
+
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.processing.Condition;
@@ -59,6 +63,10 @@ public class Global extends MultiDexApplication {
         // TODO
         PROJECT_ID = getApplicationContext().getString(R.string.gcp_project_id);
         setGlobalId();
+        FirebaseApp.initializeApp(this);
+        final FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
+        firebaseAppCheck.installAppCheckProviderFactory(
+                DebugAppCheckProviderFactory.getInstance());
     }
 
     public static boolean isInVoiceTutorial() {

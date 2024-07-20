@@ -51,11 +51,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.TimeZone;
+import java.util.UUID;
 
 import ai.saiy.android.utils.Global;
 
 public class ApiRequest {
-    public static final String SESSION_ID = "sessionId";
+    public static final String SESSION_ID = UUID.randomUUID().toString();
 
     private final Context mContext;
     private String token = null;

@@ -24,8 +24,11 @@ import androidx.annotation.NonNull;
 
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
+
 import ai.saiy.android.api.language.nlu.NLULanguageAPIAI;
-import ai.saiy.android.utils.AuthUtils;
+import ai.saiy.android.utils.UtilsAuth;
 import ai.saiy.android.utils.MyLog;
 
 /**
@@ -60,12 +63,12 @@ public class RemoteAPIAI {
         try {
             DetectIntentResponse response;
             // check if the token is received and expiry time is received and not expired
-            if (AuthUtils.isTokenValid()) {
-                response = apiRequest.callAPI(AuthUtils.token, AuthUtils.expiryTime, utterance, null, true, true, true);
+            if (UtilsAuth.isTokenValid()) {
+                response = apiRequest.callAPI(UtilsAuth.token, new Date(TimeUnit.SECONDS.toMillis(UtilsAuth.expiryTime)), utterance, null, true, true, true);
             } else {
                 response = null;
                 // get new token if expired or not received
-                AuthUtils.callFirebaseFunction();
+                UtilsAuth.refreshFirebaseInstanceToken();
             }
 
             if (response != null) {

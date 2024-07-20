@@ -23,6 +23,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.ArrayList;
@@ -30,8 +32,8 @@ import java.util.Arrays;
 
 import ai.saiy.android.R;
 import ai.saiy.android.device.DeviceInfo;
-import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.firebase.database.model.PremiumUser;
+import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIApplicationsAdapter;
@@ -39,6 +41,7 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.user.UserFirebaseHelper;
+import ai.saiy.android.utils.UtilsAuth;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -178,16 +181,41 @@ public class FragmentDevelopmentHelper {
         }
         final IdpResponse idpResponse = IdpResponse.fromResultIntent(intent);
         if (resultCode != ActivityHome.RESULT_OK) {
+            // Sign in failed
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "handleActivityResult: ResultCodes.CANCELLED");
             }
             if (idpResponse == null) {
+                // User pressed back button
                 snack(getParent().getView(), getString(R.string.cancelled), Snackbar.LENGTH_SHORT, null, null);
                 return;
             }
             final @ErrorCodes.Code int code = (idpResponse.getError() == null)? ErrorCodes.UNKNOWN_ERROR : idpResponse.getError().getErrorCode();
-            if (code== ErrorCodes.NO_NETWORK) {
+            if (code == ErrorCodes.NO_NETWORK) {
                 snack(getParent().getView(), getString(R.string.error_network), Snackbar.LENGTH_SHORT, null, null);
+            } else if (code == ErrorCodes.ANONYMOUS_UPGRADE_MERGE_CONFLICT) {
+                // We need to deal with a merge conflict. Occurs after catching an email link
+                final AuthCredential pendingCredential = idpResponse.getCredentialForLinking();
+                if (pendingCredential == null) {
+                    MyLog.w(CLS_NAME, "Nothing to resolve");
+                    snack(getParent().getView(), getString(R.string.content_account_error), Snackbar.LENGTH_SHORT, null, null);
+                } else {
+                    // Signed in anonymous, awaiting merge conflict
+                    FirebaseAuth.getInstance().signInWithCredential(pendingCredential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+                                snack(getParent().getView(), getString(R.string.content_account_create_success), Snackbar.LENGTH_SHORT, null, null);
+                                handleSignInResult(idpResponse.isNewUser());
+                                UtilsAuth.getFirebaseInstanceId();
+                            } else {
+                                snack(getParent().getView(), getString(R.string.content_account_disabled), Snackbar.LENGTH_SHORT, null, null);
+                            }
+                        }
+                    });
+                }
+            } else if (code == ErrorCodes.ERROR_USER_DISABLED) {
+                snack(getParent().getView(), getString(R.string.content_account_disabled), Snackbar.LENGTH_SHORT, null, null);
             } else {
                 snack(getParent().getView(), getString(R.string.content_account_error), Snackbar.LENGTH_SHORT, null, null);
             }
@@ -207,6 +235,11 @@ public class FragmentDevelopmentHelper {
             MyLog.i(CLS_NAME, "handleActivityResult: getProviderType: " + idpResponse.getProviderType());
         }
         snack(getParent().getView(), getString(R.string.content_account_create_success), Snackbar.LENGTH_SHORT, null, null);
+        handleSignInResult(idpResponse.isNewUser());
+        UtilsAuth.getFirebaseInstanceId();
+    }
+
+    private void handleSignInResult(final boolean isNewUser) {
         final com.google.firebase.auth.FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         if (firebaseUser == null) {
             if (DEBUG) {
@@ -228,7 +261,6 @@ public class FragmentDevelopmentHelper {
             return;
         }
         String anonymousUid = ai.saiy.android.utils.SPH.getFirebaseAnonymousUid(getApplicationContext());
-        final boolean isNewUser = idpResponse.isNewUser();
         if (DEBUG) {
             MyLog.i(CLS_NAME, "handleActivityResult: anonymousUid: " + anonymousUid);
         }
@@ -501,7 +533,7 @@ public class FragmentDevelopmentHelper {
                 final AuthUI.SignInIntentBuilder intentBuilder = AuthUI.getInstance().createSignInIntentBuilder()
                         .setTheme(R.style.AppTheme).setLogo(R.mipmap.ic_launcher)
                         .setAvailableProviders(Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build(), new AuthUI.IdpConfig.GoogleBuilder().build(), new AuthUI.IdpConfig.FacebookBuilder().build(), new AuthUI.IdpConfig.TwitterBuilder().build()))
-                        .setTosUrl(Constants.SAIY_TOU_URL).setIsSmartLockEnabled(false);
+                        .setTosAndPrivacyPolicyUrls(Constants.SAIY_TOU_URL, Constants.SAIY_PRIVACY_URL).setIsSmartLockEnabled(false);
                 if (ai.saiy.android.utils.UtilsString.notNaked(anonymousUid)) {
                     intentBuilder.enableAnonymousUsersAutoUpgrade();
                 }

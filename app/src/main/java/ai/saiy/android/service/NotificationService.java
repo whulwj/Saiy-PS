@@ -69,6 +69,7 @@ public class NotificationService extends IntentService {
     public static final String EXTRA_FLOATING_WINDOW_ID = "floating_window_id";
 
     public static final int NOTIFICATION_FOREGROUND = 77;
+    public static final int NOTIFICATION_FCM = 11;
     public static final int NOTIFICATION_LISTENING = 21;
     public static final int NOTIFICATION_SPEAKING = 22;
     public static final int NOTIFICATION_FETCHING = 23;
@@ -197,7 +198,6 @@ public class NotificationService extends IntentService {
                                 String permissionContent;
 
                                 switch (bundle.getInt(PermissionHelper.REQUESTED_PERMISSION, 0)) {
-
                                     case PermissionHelper.REQUEST_AUDIO:
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_AUDIO");
@@ -221,6 +221,36 @@ public class NotificationService extends IntentService {
                                             MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_GROUP_TELEPHONY");
                                         }
                                         permissionContent = getString(ai.saiy.android.R.string.permission_group_telephony);
+                                        break;
+                                    case PermissionHelper.REQUEST_LOCATION:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_LOCATION");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_location);
+                                        break;
+                                    case PermissionHelper.REQUEST_CALENDAR:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_CALENDAR");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_calendar);
+                                        break;
+                                    case PermissionHelper.REQUEST_SMS_READ:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_SMS_READ");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_sms_read);
+                                        break;
+                                    case PermissionHelper.REQUEST_SMS_SEND:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_SMS_SEND");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_sms_send);
+                                        break;
+                                    case PermissionHelper.REQUEST_PHONE_STATE:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_PHONE_STATE");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_phone_state);
                                         break;
                                     default:
                                         if (DEBUG) {

@@ -19,8 +19,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-sdk tools:overrideLibrary="com.google.firebase.auth, com.google.firebase.messaging, com.google.android.gms.cloudmessaging" />
-
     <queries>
         <!-- In order to use the TextToSpeech API, if targeting Android 11 -->
         <intent>

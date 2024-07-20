@@ -8,6 +8,7 @@ public class PremiumUser {
     public long timeout;
 
     public PremiumUser() {
+        // Default constructor required for calls to DataSnapshot.getValue(User.class)
     }
 
     public PremiumUser(long credits, long timeout) {

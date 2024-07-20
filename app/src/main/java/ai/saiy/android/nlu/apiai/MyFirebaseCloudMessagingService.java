@@ -16,54 +16,105 @@
 
 package ai.saiy.android.nlu.apiai;
 
-import ai.saiy.android.utils.AuthUtils;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
+import android.media.RingtoneManager;
+import android.net.Uri;
+import android.os.Build;
+import android.text.TextUtils;
+
+import androidx.annotation.NonNull;
+import androidx.core.app.NotificationCompat;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-import android.content.Intent;
-import android.util.Log;
+import ai.saiy.android.R;
+import ai.saiy.android.service.NotificationService;
+import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsAuth;
 
-import androidx.annotation.NonNull;
-
+/**
+ * NOTE: There can only be one service in each app that receives FCM messages. If multiple
+ * are declared in the Manifest then the first one will be chosen.
+ */
 public class MyFirebaseCloudMessagingService extends FirebaseMessagingService {
-    public static final String TOKEN_RECEIVED = "TOKEN_RECEIVED";
     private static final String TAG = MyFirebaseCloudMessagingService.class.getSimpleName();
+    public static final int REQUEST_CODE = 16;
 
+    /**
+     * Called when message is received.
+     *
+     * @param remoteMessage Object representing the message received from Firebase Cloud Messaging.
+     */
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.i("FirebaseMessage", "From: " + remoteMessage.getFrom());
+        MyLog.i(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a notification payload.
         if (remoteMessage.getNotification() != null) {
-            Log.i(TAG, "Notification Body: " + remoteMessage.getNotification().getBody());
-            handleNotification(remoteMessage.getNotification().getTitle(),
-                    remoteMessage.getNotification().getBody());
+            MyLog.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
+            String notificationBody = remoteMessage.getNotification().getBody();
+            if (notificationBody != null) {
+                sendNotification(notificationBody);
+            }
         }
     }
 
+    /**
+     * Called if InstanceID token is updated. This may occur if the security of
+     * the previous token had been compromised. Note that this is called when the InstanceID token
+     * is initially generated so this is where you would retrieve the token.
+     */
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        handleToken(token);
+        final String oldToken = UtilsAuth.token;
+        UtilsAuth.token = token;
+        if (TextUtils.equals(oldToken, token)) {
+            MyLog.w(TAG, "onNewToken already get");
+            return;
+        }
+        UtilsAuth.getFirebaseInstanceToken();
     }
 
     /**
-     * function to save the token data in the AppController
+     * Create and show a simple notification containing the received FCM message.
      *
-     * @param expiryTime :   expiry time received from FCM
-     * @param token      :   token received from FCM
+     * @param messageBody FCM message body received.
      */
-    private void handleNotification(String expiryTime, String token) {
-        AuthUtils.setExpiryTime(expiryTime);
+    private void sendNotification(String messageBody) {
+        final Intent intent = new Intent(this, ActivityHome.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        final PendingIntent pendingIntent = PendingIntent.getActivity(this, REQUEST_CODE, intent,
+                PendingIntent.FLAG_IMMUTABLE);
 
-        handleToken(token);
-    }
+        final String channelId = NotificationHelper.NOTIFICATION_CHANNEL_INFORMATION;
+        final Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        final NotificationCompat.Builder notificationBuilder =
+                new NotificationCompat.Builder(this, channelId)
+                        .setContentTitle(getString(R.string.app_name))
+                        .setContentText(messageBody)
+                        .setAutoCancel(true)
+                        .setSound(defaultSoundUri)
+                        .setContentIntent(pendingIntent);
 
-    private void handleToken(String token) {
-        AuthUtils.token = token;
+        final NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        Intent intent = new Intent(TOKEN_RECEIVED);
-        sendBroadcast(intent);
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            final NotificationChannel channel = new NotificationChannel(channelId,
+                    getString(R.string.menu_not_channel_information),
+                    NotificationManager.IMPORTANCE_HIGH);
+            notificationManager.createNotificationChannel(channel);
+        }
+
+        notificationManager.notify(NotificationService.NOTIFICATION_FCM, notificationBuilder.build());
     }
 }

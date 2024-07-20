@@ -14,6 +14,7 @@ import ai.saiy.android.firebase.database.reference.TranslationProviderReference;
 import ai.saiy.android.firebase.database.model.TranslationProvider;
 import ai.saiy.android.firebase.database.model.WeatherProvider;
 import ai.saiy.android.firebase.database.reference.WeatherProviderReference;
+import ai.saiy.android.utils.UtilsAuth;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -115,18 +116,25 @@ public class UtilsFirebase {
                                     MyLog.i(CLS_NAME, "signInAnonymously: onComplete: " + task.isSuccessful());
                                 }
                                 if (!task.isSuccessful()) {
+                                    // Sign in fails
                                     if (DEBUG) {
                                         task.getException().printStackTrace();
                                     }
                                     return;
                                 }
+                                // Sign in success, update UI with the signed-in user's information
                                 try {
                                     final FirebaseUser firebaseUser = task.getResult().getUser();
-                                    if (firebaseUser.isAnonymous()) {
-                                        ai.saiy.android.utils.SPH.setFirebaseAnonymousUid(context, firebaseUser.getUid());
+                                    if (firebaseUser != null) {
+                                        if (firebaseUser.isAnonymous()) {
+                                            ai.saiy.android.utils.SPH.setFirebaseAnonymousUid(context, firebaseUser.getUid());
+                                        } else {
+                                            ai.saiy.android.utils.SPH.setFirebaseUid(context, firebaseUser.getUid());
+                                        }
                                     } else {
-                                        ai.saiy.android.utils.SPH.setFirebaseUid(context, firebaseUser.getUid());
+                                        ai.saiy.android.utils.MyLog.w(CLS_NAME, "signInAnonymously: no user");
                                     }
+                                    UtilsAuth.getFirebaseInstanceId();
                                     doPeriodicProviders(context);
                                 } catch (NullPointerException e) {
                                     if (DEBUG) {

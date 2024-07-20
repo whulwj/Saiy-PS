@@ -1,6 +1,6 @@
 [versions]
 gradlePlugin = "8.2.2"
-comGoogleAuthGoogleAuthLibraryOauth2Http2 = "1.23.0"
+googleAuthLibraryOauth2Http = "1.24.0"
 commonsIo = "2.16.1"
 commonsCollections4 = "4.4"
 commonsCodec = "1.17.0"
@@ -12,7 +12,7 @@ grpcJava = "1.63.0"
 javaxAnnotationApi = "1.3.2"
 licensesdialog = "2.2.0"
 javaWebsocket = "1.5.6"
-googleHttpClientGson = "1.44.1"
+googleHttpClientGson = "1.44.2"
 gson = "2.10.1"
 guava = "32.1.3-android"
 googleServicesVersion = "4.4.1"
@@ -46,8 +46,9 @@ libraries-bom = "26.37.0"
 cloud-dialogflow = "4.49.0"
 firebase-bom = "28.4.2"
 firebase-analytics = "19.0.2"
+firebase-appcheck = "17.1.2"
 firebase-auth = "21.0.4"
-firebase-messaging = "23.4.1"
+firebase-messaging = "22.0.0"
 firebase-functions = "20.4.0"
 firebase-database = "20.2.2"
 firebaseUI = "8.0.2"
@@ -61,7 +62,7 @@ twitter4j = "4.1.2"
 facebook-login ="17.0.0"
 
 [libraries]
-com-google-auth-google-auth-library-oauth2-http3 = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "comGoogleAuthGoogleAuthLibraryOauth2Http2" }
+google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
@@ -110,6 +111,8 @@ simple-xml = { module = "org.simpleframework:simple-xml", version.ref = "simpleX
 libraries-bom = { module = "com.google.cloud:libraries-bom", version.ref = "libraries-bom" }
 cloud-dialogflow = { module = "com.google.cloud:google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
+firebase-appcheck = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebase-appcheck" }
+firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebase-appcheck" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
