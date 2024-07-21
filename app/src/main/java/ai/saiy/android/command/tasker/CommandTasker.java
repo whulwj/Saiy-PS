@@ -53,7 +53,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class CommandTasker {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandTasker.class.getSimpleName();
 
     private long then;

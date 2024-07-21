@@ -63,7 +63,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class BRRemote extends BroadcastReceiver {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BRRemote.class.getSimpleName();
 
     private static final String SAIY_INTENT_RECEIVER = "ai.saiy.android.SAIY_INTENT_RECEIVER";

@@ -89,7 +89,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class FragmentAdvancedSettingsHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAdvancedSettingsHelper.class.getSimpleName();
     private static final int APP_PICKER_MULTI_REQ_CODE = 1100;
 

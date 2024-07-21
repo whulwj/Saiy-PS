@@ -92,7 +92,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class FragmentSettingsHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentSettingsHelper.class.getSimpleName();
 
     private final FragmentSettings parentFragment;
@@ -898,18 +898,18 @@ public class FragmentSettingsHelper {
 
                     switch (i) {
 
-                    case Unknown.UNKNOWN_STATE:
-                    case Unknown.UNKNOWN_REPEAT:
-                         break;
-                    case Unknown.UNKNOWN_GOOGLE_SEARCH:
-                    case Unknown.UNKNOWN_ALEXA:
-                    case Unknown.UNKNOWN_MICROSOFT_CORTANA:
-                    case Unknown.UNKNOWN_WOLFRAM_ALPHA:
-                    case Unknown.UNKNOWN_TASKER:
+                        case Unknown.UNKNOWN_STATE:
+                        case Unknown.UNKNOWN_REPEAT:
+                            break;
+                        case Unknown.UNKNOWN_GOOGLE_ASSISTANT:
+                        case Unknown.UNKNOWN_ALEXA:
+                        case Unknown.UNKNOWN_MICROSOFT_CORTANA:
+                        case Unknown.UNKNOWN_WOLFRAM_ALPHA:
+                        case Unknown.UNKNOWN_TASKER:
                             actions[i] = getParent().getString(R.string.menu_send_to) + " " + actions[i];
-                        break;
+                            break;
                     }
-            }
+                }
 
                 final ArrayList<Integer> disabledIndicesList = new ArrayList<>();
                 if (!Installed.isPackageInstalled(getApplicationContext(),
@@ -946,17 +946,17 @@ public class FragmentSettingsHelper {
                             }
                         }
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
-                        .setCancelable(false)
-                        .setTitle(R.string.content_unknown_command)
-                        .setIcon(R.drawable.ic_help_circle)
-                        .setSingleChoiceItems(items.toArray(new String[0]), checkedItem, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showUnknownCommandSelector: onSelection: " + which + ": " + items.get(which));
-                                }
-                            }
-                        })
+                                .setCancelable(false)
+                                .setTitle(R.string.content_unknown_command)
+                                .setIcon(R.drawable.ic_help_circle)
+                                .setSingleChoiceItems(items.toArray(new String[0]), checkedItem, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showUnknownCommandSelector: onSelection: " + which + ": " + items.get(which));
+                                        }
+                                    }
+                                })
 
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override

@@ -31,7 +31,7 @@ import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandContact {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandContact.class.getSimpleName();
 
     private Choice getChoice(ArrayList<Choice> choices, int type) {

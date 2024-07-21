@@ -36,11 +36,12 @@ import ai.saiy.android.utils.MyLog;
  */
 public class SaiyRecognitionListener implements RecognitionListener, IPartial {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyRecognitionListener.class.getSimpleName();
 
     public static final String ALEXA_DIRECTIVE = "alex_directive";
     public static final String ALEX_FILE = "alex_file";
+    public static final String ALEX_SPEECH = "alex_speech";
 
     private boolean doError;
     private boolean doEndOfSpeech;

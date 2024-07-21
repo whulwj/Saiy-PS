@@ -35,7 +35,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
 public class FragmentApplicationsHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentApplicationsHelper.class.getSimpleName();
     private static final int CHECK = R.drawable.ic_check;
 

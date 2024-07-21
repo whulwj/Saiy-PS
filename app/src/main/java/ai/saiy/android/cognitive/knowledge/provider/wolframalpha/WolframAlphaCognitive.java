@@ -44,7 +44,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class WolframAlphaCognitive {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = WolframAlphaCognitive.class.getSimpleName();
 
     private static final String REINTERPRET = "&reinterpret=true";

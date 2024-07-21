@@ -43,7 +43,7 @@ import ai.saiy.android.service.helper.LocalRequest;
  */
 public class Global extends MultiDexApplication {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
     public static final Install.Location installLocation = PLAYSTORE;
     public static String PROJECT_ID = "";

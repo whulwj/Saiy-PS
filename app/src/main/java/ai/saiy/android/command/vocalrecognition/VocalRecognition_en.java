@@ -38,7 +38,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class VocalRecognition_en {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = VocalRecognition_en.class.getSimpleName();
 
     private static String voice;

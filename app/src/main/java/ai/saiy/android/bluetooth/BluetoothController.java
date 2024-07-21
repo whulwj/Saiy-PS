@@ -24,7 +24,7 @@ public class BluetoothController {
     private final Context mContext;
     private final AudioManager audioManager;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BluetoothController.class.getSimpleName();
 
     private boolean profileRegistered = false;

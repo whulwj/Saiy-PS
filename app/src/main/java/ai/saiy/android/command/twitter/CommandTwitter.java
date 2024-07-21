@@ -17,7 +17,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandTwitter {
-    private final boolean DEBUG = ai.saiy.android.utils.MyLog.DEBUG;
+    private static final boolean DEBUG = ai.saiy.android.utils.MyLog.DEBUG;
     private final String CLS_NAME = CommandTwitter.class.getSimpleName();
 
     private long then;

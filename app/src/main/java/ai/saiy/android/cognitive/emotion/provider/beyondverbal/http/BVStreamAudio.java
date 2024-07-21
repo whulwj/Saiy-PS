@@ -55,7 +55,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class BVStreamAudio implements IMic {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BVStreamAudio.class.getSimpleName();
 
     private static final String RECORDING_URL = "https://apiv4.beyondverbal.com/v4/recording/";

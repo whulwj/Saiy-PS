@@ -40,7 +40,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class ServiceConnector {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ServiceConnector.class.getSimpleName();
 
     private SelfAware selfAwareService;

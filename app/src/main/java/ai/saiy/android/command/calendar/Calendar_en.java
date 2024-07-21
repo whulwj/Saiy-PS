@@ -21,7 +21,7 @@ public class Calendar_en {
     private static String schedule;
     private static String meeting;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Calendar_en.class.getSimpleName();
     private final SupportedLanguage sl;
     private final ArrayList<String> voiceData;

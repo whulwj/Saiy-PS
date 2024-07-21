@@ -22,7 +22,7 @@ import ai.saiy.android.utils.MyLog;
 public class AnswerCallConfirm {
     private static Pattern pSpeaker;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = AnswerCallConfirm.class.getSimpleName();
 
     private final Context mContext;

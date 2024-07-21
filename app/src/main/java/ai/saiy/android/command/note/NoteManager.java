@@ -18,7 +18,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
 public class NoteManager {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = NoteManager.class.getSimpleName();
 
     private final Context mContext;

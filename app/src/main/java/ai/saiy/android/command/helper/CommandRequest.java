@@ -37,7 +37,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class CommandRequest {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandRequest.class.getSimpleName();
 
     private CC cc;
@@ -50,6 +50,7 @@ public class CommandRequest {
     private int action = LocalRequest.ACTION_SPEAK_ONLY;
 
     private Bundle bundle;
+    private boolean isAlexaTTS;
     private final Locale vrLocale;
     private final Locale ttsLocale;
     private final SupportedLanguage sl;
@@ -237,5 +238,13 @@ public class CommandRequest {
 
     public Bundle getBundle() {
         return this.bundle != null ? this.bundle : new Bundle();
+    }
+
+    public boolean isAlexaTTS() {
+        return isAlexaTTS;
+    }
+
+    public void setAlexaTTS(boolean alexaTTS) {
+        isAlexaTTS = alexaTTS;
     }
 }

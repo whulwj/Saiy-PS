@@ -55,7 +55,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class DoubleMetaphoneHelper implements Callable<Object> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = DoubleMetaphoneHelper.class.getSimpleName();
 
     private final Context mContext;

@@ -30,10 +30,16 @@ public class EntangledPair {
     private final CC cc;
     private String toastContent;
     private String utterance;
+    private final boolean isAlexaTTS;
 
-    public EntangledPair(@NonNull final Position position, @NonNull final CC cc) {
+    public EntangledPair(@NonNull final Position position, @NonNull final CC cc, boolean isAlexaTTS) {
         this.position = position;
         this.cc = cc;
+        this.isAlexaTTS = isAlexaTTS;
+    }
+
+    public EntangledPair(@NonNull final Position position, @NonNull final CC cc) {
+        this(position, cc, false);
     }
 
     public Position getPosition() {
@@ -58,5 +64,9 @@ public class EntangledPair {
 
     public void setToastContent(@NonNull final String toastContent) {
         this.toastContent = toastContent;
+    }
+
+    public boolean isAlexaTTS() {
+        return isAlexaTTS;
     }
 }

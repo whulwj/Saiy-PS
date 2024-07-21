@@ -39,7 +39,7 @@ import ai.saiy.android.utils.SPH;
 
 public class SpeakerIdentification implements IMic {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SpeakerIdentification.class.getSimpleName();
 
     public static final long MINIMUM_AUDIO_TIME = 3000;

@@ -38,7 +38,7 @@ import ai.saiy.android.utils.UtilsFile;
  */
 public class ActivityPermissionDialog extends AppCompatActivity implements ActivityCompat.OnRequestPermissionsResultCallback {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityPermissionDialog.class.getSimpleName();
 
     private Bundle bundle;

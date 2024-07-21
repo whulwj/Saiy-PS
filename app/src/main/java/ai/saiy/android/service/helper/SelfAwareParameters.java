@@ -51,7 +51,7 @@ public class SelfAwareParameters extends HashMap<String, String> {
     // Unused
     private static final long serialVersionUID = 516920492195138564L;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SelfAwareParameters.class.getSimpleName();
 
     private final Context mContext;

@@ -41,7 +41,7 @@ import edu.cmu.pocketsphinx.SpeechRecognizer;
 
 public class RecognitionSphinx {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionSphinx.class.getSimpleName();
 
     private static final String HOTWORD_SEARCH = "hotwords";

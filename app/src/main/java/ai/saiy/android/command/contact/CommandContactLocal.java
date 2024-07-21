@@ -8,7 +8,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 
 public class CommandContactLocal {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandContactLocal.class.getSimpleName();
 
     public ai.saiy.android.processing.Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {

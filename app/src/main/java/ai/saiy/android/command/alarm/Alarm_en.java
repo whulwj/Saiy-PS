@@ -20,7 +20,7 @@ public class Alarm_en {
     private static String reminder;
     private static String remind_me;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Alarm_en.class.getSimpleName();
     private final SupportedLanguage sl;
     private final ArrayList<String> voiceData;

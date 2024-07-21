@@ -386,6 +386,19 @@ public final class PersonalityResponse {
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getNoComprendeForAlexa(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_no_comprende_alexa);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
+    public static String getAlexaNoNetwork(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_no_comprende);
+        final String[] noNetworkArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_alexa_no_network);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                noNetworkArray[new Random().nextInt(noNetworkArray.length)]));
+    }
+
     /**
      * Get the standard repeat command response, adding the user's name if defined.
      *
@@ -839,6 +852,11 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getCalculateWolframAlpha(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_calculate_wolfram_alpha);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getLocationAccessError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_location_access);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
@@ -864,13 +882,18 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
-    public static String getNoPermissionForSms(Context context, SupportedLanguage supportedLanguage) {
-        return SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_error_7);
+    public static String getSearchError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_search);
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getGenericAcknowledgement(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_generic_acknowledgement);
         return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getNoPermissionForSms(Context context, SupportedLanguage supportedLanguage) {
+        return SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_error_7);
     }
 
     public static String getSmsConfirmation(Context context, SupportedLanguage supportedLanguage, String contactName, String generic) {
@@ -921,6 +944,10 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_default_app_failed), PersonalityHelper.getUserNameOrNot(context), str));
     }
 
+    public static String getSearchConfirm(Context context, SupportedLanguage supportedLanguage, String engineName, String str) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.search_confirm), engineName, str);
+    }
+
     public static String getContactMissingData(Context context, SupportedLanguage supportedLanguage, String contactName) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_contact_missing_data);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], contactName));
@@ -949,6 +976,11 @@ public final class PersonalityResponse {
     public static String getAlexaIntro(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_alexa_intro);
         return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getAlexaVolumeInsert(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_alexa_volume_insert);
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.alexa_volume_response), stringArray[new Random().nextInt(stringArray.length)]);
     }
 
     public static String getSmsContactResponsePart1(Context context, SupportedLanguage supportedLanguage, String address) {

@@ -39,7 +39,7 @@ import ai.saiy.android.utils.SPH;
 
 public class SpeakerEnrollment implements IMic {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SpeakerEnrollment.class.getSimpleName();
 
     public static final long MINIMUM_AUDIO_TIME = 15000;

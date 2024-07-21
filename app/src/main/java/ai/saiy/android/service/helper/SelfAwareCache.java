@@ -50,7 +50,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class SelfAwareCache extends SaiyProgressListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SelfAwareCache.class.getSimpleName();
 
     public static final int MAX_UTTERANCE_CHARS = 150;

@@ -33,7 +33,7 @@ import wei.mark.standout.ui.Window;
 
 public class FloatingCommandsService extends StandOutWindow implements View.OnClickListener {
     private static final Object lock = new Object();
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FloatingCommandsService.class.getSimpleName();
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<?> mAdapter;

@@ -140,7 +140,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class SelfAware extends Service {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SelfAware.class.getSimpleName();
 
     private static final int MAX_INIT_ATTEMPTS = 4;
@@ -2153,7 +2153,7 @@ public class SelfAware extends Service {
                             if (action == LocalRequest.ACTION_SPEAK_LISTEN) {
                                 localRequest.setRecognitionProvider(SaiyDefaults.VR.ALEXA);
                             }
-                            localRequest.prepareDefault(action, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), "alex_speech");
+                            localRequest.prepareDefault(action, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), SaiyRecognitionListener.ALEX_SPEECH);
                             localRequest.setAlexaFilePath(string);
                             localRequest.execute();
                             return;

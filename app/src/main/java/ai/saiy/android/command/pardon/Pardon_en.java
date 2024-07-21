@@ -37,7 +37,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class Pardon_en {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Pardon_en.class.getSimpleName();
 
     private static String pardon;

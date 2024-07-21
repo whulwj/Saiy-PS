@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import ai.saiy.android.utils.MyLog;
 
 public class DBApplication extends SQLiteOpenHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = DBApplication.class.getSimpleName();
 
     private static final String DATABASE_NAME = "application.db";

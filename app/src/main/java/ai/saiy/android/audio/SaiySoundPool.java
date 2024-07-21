@@ -36,7 +36,7 @@ import ai.saiy.android.utils.MyLog;
 
 public class SaiySoundPool implements SoundPool.OnLoadCompleteListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiySoundPool.class.getSimpleName();
 
     public static final int VOICE_RECOGNITION = 1;

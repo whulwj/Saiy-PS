@@ -17,7 +17,7 @@ import ai.saiy.android.applications.Application;
 import ai.saiy.android.utils.MyLog;
 
 public class UIActivityPickerAdapter extends BaseExpandableListAdapter {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = UIActivityPickerAdapter.class.getSimpleName();
 
     private final ArrayList<Application> mObjects;

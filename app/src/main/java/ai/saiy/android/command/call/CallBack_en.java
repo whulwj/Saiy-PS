@@ -17,7 +17,7 @@ public class CallBack_en {
     private static String call_bak;
     private static String call_bag;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CallBack_en.class.getSimpleName();
     private final SupportedLanguage sl;
     private final ArrayList<String> voiceData;

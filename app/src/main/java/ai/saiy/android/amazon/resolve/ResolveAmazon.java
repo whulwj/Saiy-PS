@@ -43,7 +43,7 @@ public class ResolveAmazon {
     private final Response response;
     private final File file;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ResolveAmazon.class.getSimpleName();
     private final String boundaryIdentifier = getBoundaryIdentifier();
 

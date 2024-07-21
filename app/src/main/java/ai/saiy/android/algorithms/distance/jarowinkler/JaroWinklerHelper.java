@@ -54,7 +54,7 @@ public class JaroWinklerHelper implements Callable<Object> {
     private static final double CONTACT_DEFAULT_THRESHOLD = 0.77;
     private static final double CONTACT_LEGACY_THRESHOLD = 0.7;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = JaroWinklerHelper.class.getSimpleName();
 
     private final Context mContext;

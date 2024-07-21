@@ -39,7 +39,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class CommandUserName {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandUserName.class.getSimpleName();
 
     private long then;

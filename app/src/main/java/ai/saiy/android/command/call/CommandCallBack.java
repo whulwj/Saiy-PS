@@ -13,7 +13,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandCallBack {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandCallBack.class.getSimpleName();
 
     public Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {

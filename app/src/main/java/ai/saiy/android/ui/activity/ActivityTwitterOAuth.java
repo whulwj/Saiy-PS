@@ -26,7 +26,7 @@ public class ActivityTwitterOAuth extends AppCompatActivity implements TwitterOA
     private TwitterOAuthView twitterOAuthView;
     private volatile Timer timer;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityTwitterOAuth.class.getSimpleName();
     private boolean isOAuthStarted = false;
     private final AtomicBoolean isFinishing = new AtomicBoolean();

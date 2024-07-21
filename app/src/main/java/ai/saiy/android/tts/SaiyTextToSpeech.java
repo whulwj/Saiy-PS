@@ -2055,7 +2055,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     private class TTSVoice {
 
-        private final boolean DEBUG = MyLog.DEBUG;
+        private static final boolean DEBUG = MyLog.DEBUG;
         private final String CLS_NAME = TTSVoice.class.getSimpleName();
 
         private final String language;

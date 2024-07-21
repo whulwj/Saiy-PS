@@ -55,7 +55,7 @@ import ai.saiy.android.utils.SPH;
 
 public class FragmentAdvancedSettings extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAdvancedSettings.class.getSimpleName();
 
     private RecyclerView mRecyclerView;

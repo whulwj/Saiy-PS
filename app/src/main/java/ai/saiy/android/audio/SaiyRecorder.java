@@ -35,7 +35,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class SaiyRecorder {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyRecorder.class.getSimpleName();
 
     private SaiyAudio saiyAudio;

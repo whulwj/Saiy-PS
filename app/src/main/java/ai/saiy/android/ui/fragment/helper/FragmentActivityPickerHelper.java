@@ -18,7 +18,7 @@ import ai.saiy.android.ui.fragment.FragmentActivityPicker;
 import ai.saiy.android.utils.MyLog;
 
 public class FragmentActivityPickerHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentActivityPickerHelper.class.getSimpleName();
 
     private final FragmentActivityPicker parentFragment;

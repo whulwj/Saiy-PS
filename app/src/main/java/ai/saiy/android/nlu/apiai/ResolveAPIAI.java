@@ -35,7 +35,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class ResolveAPIAI {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ResolveAPIAI.class.getSimpleName();
 
     private NLUAPIAI nluAPIAI;

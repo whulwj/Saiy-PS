@@ -24,7 +24,7 @@ public class TimeHelper {
     private static String minute = "null";
     private static String format = "null";
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = TimeHelper.class.getSimpleName();
 
     private int getNextHour() {

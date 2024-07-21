@@ -47,7 +47,7 @@ import ai.saiy.android.utils.UtilsLocale;
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class SaiyInteractionService extends VoiceInteractionService {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyInteractionService.class.getSimpleName();
 
     private static final String ACTION_MANAGE_VOICE_KEYPHRASES = "com.android.intent.action.MANAGE_VOICE_KEYPHRASES";

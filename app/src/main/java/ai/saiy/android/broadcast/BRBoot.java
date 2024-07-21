@@ -42,7 +42,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class BRBoot extends BroadcastReceiver {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BRBoot.class.getSimpleName();
 
     @Override

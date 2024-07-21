@@ -59,7 +59,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class SaiyAccessibilityService extends AccessibilityService {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyAccessibilityService.class.getSimpleName();
     public static final String EXTRA_START_COMMAND_KEY = "start_command_key";
     private static final int DEFAULT = 0;

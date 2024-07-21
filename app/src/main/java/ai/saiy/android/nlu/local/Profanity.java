@@ -47,7 +47,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public final class Profanity {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Profanity.class.getSimpleName();
 
     private final ArrayList<String> voiceData;

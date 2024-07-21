@@ -46,7 +46,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class CommandVocalRecognition {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandVocalRecognition.class.getSimpleName();
 
     /**

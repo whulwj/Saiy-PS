@@ -27,7 +27,7 @@ import ai.saiy.android.utils.MyLog;
 
 public class QuantumHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = QuantumHelper.class.getSimpleName();
 
     public CustomResolver resolve(@NonNull final Context ctx, @NonNull final SupportedLanguage sl,

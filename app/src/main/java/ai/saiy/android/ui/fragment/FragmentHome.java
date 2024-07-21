@@ -72,7 +72,7 @@ import ai.saiy.android.firebase.helper.UtilsAnalytic;
 
 public class FragmentHome extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentHome.class.getSimpleName();
 
     /**

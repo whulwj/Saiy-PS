@@ -40,7 +40,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class ResolveNuance {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ResolveNuance.class.getSimpleName();
 
     private NLUNuance nluNuance;

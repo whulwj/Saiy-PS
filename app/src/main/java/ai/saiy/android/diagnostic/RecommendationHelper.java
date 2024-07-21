@@ -17,7 +17,7 @@ import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 
 public class RecommendationHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecommendationHelper.class.getSimpleName();
 
     private void debug(ArrayList<VoiceEngineInfo> voiceEngineInfos) {

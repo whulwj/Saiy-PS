@@ -18,7 +18,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
 public class ContactHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ContactHelper.class.getSimpleName();
 
     private final Context mContext;

@@ -38,7 +38,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class Hotword_en {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Hotword_en.class.getSimpleName();
 
     private static String start;

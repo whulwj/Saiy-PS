@@ -56,7 +56,7 @@ import ai.saiy.android.utils.UtilsString;
 public class FragmentBugs extends Fragment implements View.OnClickListener, View.OnLongClickListener,
         TextView.OnEditorActionListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentBugs.class.getSimpleName();
 
     private static final int IME_GO = 99;

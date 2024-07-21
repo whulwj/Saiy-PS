@@ -34,7 +34,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class SaiyAudio extends AudioRecord {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyAudio.class.getSimpleName();
 
     /**

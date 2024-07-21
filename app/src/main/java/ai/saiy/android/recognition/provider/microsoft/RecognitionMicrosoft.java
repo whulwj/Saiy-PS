@@ -63,7 +63,7 @@ import ai.saiy.android.utils.UtilsLocale;
  */
 public class RecognitionMicrosoft implements ISpeechRecognitionServerEvents {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionMicrosoft.class.getSimpleName();
 
     private final Bundle partialBundle = new Bundle();

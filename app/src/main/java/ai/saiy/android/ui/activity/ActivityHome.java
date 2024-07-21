@@ -96,7 +96,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         FragmentManager.OnBackStackChangedListener,
         UserFirebaseListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityHome.class.getSimpleName();
 
     private static final long ARBITRARY_WAIT = 2000L;

@@ -33,7 +33,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class CommandBatteryValues {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandBatteryValues.class.getSimpleName();
 
     /**

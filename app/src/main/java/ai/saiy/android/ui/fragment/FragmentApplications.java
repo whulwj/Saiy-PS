@@ -51,7 +51,7 @@ import ai.saiy.android.firebase.helper.UtilsAnalytic;
 public class FragmentApplications extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final Object lock = new Object();
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentApplications.class.getSimpleName();
 
     private RecyclerView mRecyclerView;

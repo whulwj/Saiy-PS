@@ -53,7 +53,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class CreateIDEnrollment {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CreateIDEnrollment.class.getSimpleName();
 
     private static final String ENROLLMENT_URL = "https://westus.api.cognitive.microsoft.com/spid/v1.0/identificationProfiles/";

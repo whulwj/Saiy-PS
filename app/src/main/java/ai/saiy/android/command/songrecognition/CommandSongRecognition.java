@@ -40,7 +40,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class CommandSongRecognition {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandSongRecognition.class.getSimpleName();
 
     private final Outcome outcome = new Outcome();

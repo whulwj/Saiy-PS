@@ -27,7 +27,7 @@ import ai.saiy.android.utils.MyLog;
 public class FragmentCommands extends Fragment implements View.OnClickListener {
     private static final Object lock = new Object();
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentCommands.class.getSimpleName();
 
     private RecyclerView mRecyclerView;

@@ -21,7 +21,7 @@ import ai.saiy.android.utils.MyLog;
 public class ActivityApplicationPickerMulti extends AppCompatActivity implements UserFirebaseListener {
     public static final String EXTRA_BLOCKED_APPLICATIONS = "extra_blocked_applications";
     public static final String EXTRA_APPLICATION_ARRAY = "extra_application_array";
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityApplicationPickerMulti.class.getSimpleName();
     private ProgressBar progressBar;
 

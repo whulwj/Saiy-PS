@@ -36,7 +36,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class GoogleNowMonitor {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = GoogleNowMonitor.class.getSimpleName();
 
     private static final Pattern pPACKAGE_NAME_GOOGLE_NOW = Pattern.compile(IntentConstants.PACKAGE_NAME_GOOGLE_NOW);

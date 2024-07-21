@@ -49,7 +49,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class ResolveWolframAlpha {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ResolveWolframAlpha.class.getSimpleName();
 
     private static final String DELIMITER = "\\s\\|";

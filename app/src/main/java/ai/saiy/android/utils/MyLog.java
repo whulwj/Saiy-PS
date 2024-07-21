@@ -39,7 +39,7 @@ public final class MyLog {
     }
 
     /* Set to false in production. All Classes check this */
-    public static boolean DEBUG = true;
+    public static final boolean DEBUG = true;
 
     private static final String TAG = "SAIY";
 

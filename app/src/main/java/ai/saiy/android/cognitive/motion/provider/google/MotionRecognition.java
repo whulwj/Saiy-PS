@@ -50,7 +50,7 @@ import ai.saiy.android.utils.MyLog;
 public class MotionRecognition implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
         ResultCallback<Status> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = MotionRecognition.class.getSimpleName();
 
     private PendingIntent pendingIntent;

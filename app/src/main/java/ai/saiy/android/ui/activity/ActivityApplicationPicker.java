@@ -23,7 +23,7 @@ public class ActivityApplicationPicker extends AppCompatActivity implements User
     public static final int ACCESSIBLE_APPLICATION_TYPE = 0;
     private ProgressBar progressBar;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityApplicationPicker.class.getSimpleName();
 
     private void setupToolbar() {

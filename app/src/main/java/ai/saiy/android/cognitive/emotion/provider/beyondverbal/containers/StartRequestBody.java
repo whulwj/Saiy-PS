@@ -35,7 +35,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class StartRequestBody {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = StartRequestBody.class.getSimpleName();
 
     private static final String DATA_FORMAT = "dataFormat";

@@ -15,7 +15,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 
 public class CommandCalendar {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandCalendar.class.getSimpleName();
 
     private long then;

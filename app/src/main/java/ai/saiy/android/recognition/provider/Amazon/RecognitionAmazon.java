@@ -50,7 +50,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
     private volatile SaiyRecorder saiyRecorder;
     private final Context mContext;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionAmazon.class.getSimpleName();
 
     private final AtomicBoolean isRecording = new AtomicBoolean();

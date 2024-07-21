@@ -45,7 +45,7 @@ import ai.saiy.android.utils.MyLog;
 
 public class FragmentCustomisation extends Fragment implements View.OnClickListener, View.OnLongClickListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentCustomisation.class.getSimpleName();
 
     private RecyclerView mRecyclerView;

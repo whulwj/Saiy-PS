@@ -52,7 +52,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class PartialHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = PartialHelper.class.getSimpleName();
 
     private static final long THREADS_TIMEOUT = 100L;

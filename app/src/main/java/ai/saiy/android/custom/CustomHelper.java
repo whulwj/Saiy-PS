@@ -50,7 +50,7 @@ import ai.saiy.android.utils.UtilsList;
 
 public class CustomHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CustomHelper.class.getSimpleName();
 
     private static final long THREADS_TIMEOUT = 1000L;

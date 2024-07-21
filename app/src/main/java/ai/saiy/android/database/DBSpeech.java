@@ -45,7 +45,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class DBSpeech extends SQLiteOpenHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = DBSpeech.class.getSimpleName();
 
     public static final long MAX_CACHE_SIZE = 20000000L;

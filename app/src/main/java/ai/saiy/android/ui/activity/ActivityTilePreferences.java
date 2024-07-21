@@ -29,7 +29,7 @@ import ai.saiy.android.utils.MyLog;
 
 public class ActivityTilePreferences extends AppCompatActivity {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityTilePreferences.class.getSimpleName();
 
     long then;

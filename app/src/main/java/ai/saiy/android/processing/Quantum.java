@@ -56,9 +56,11 @@ import ai.saiy.android.command.wolframalpha.CommandWolframAlpha;
 import ai.saiy.android.custom.CustomResolver;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionChooser;
 import ai.saiy.android.device.UtilsDevice;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
+import ai.saiy.android.localisation.SaiyWebHelper;
 import ai.saiy.android.memory.Memory;
 import ai.saiy.android.memory.MemoryHelper;
 import ai.saiy.android.nlu.local.FrequencyAnalysis;
@@ -66,6 +68,7 @@ import ai.saiy.android.nlu.local.Resolve;
 import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.helper.QuantumHelper;
+import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.thirdparty.tasker.TaskerHelper;
@@ -75,9 +78,10 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
-import ai.saiy.android.firebase.helper.UtilsAnalytic;
+import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
+import ai.saiy.android.utils.UtilsString;
 
 /**
  * This is the main class for resolving and actioning a spoken command. Regardless or not as to whether
@@ -113,7 +117,7 @@ public class Quantum extends Tunnelling {
     private static final String IS_CUSTOM_COMMAND = "is_custom_command";
     private static final String LANGUAGE_MODEL = "language_model";
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Quantum.class.getSimpleName();
 
     /**
@@ -142,11 +146,12 @@ public class Quantum extends Tunnelling {
         final Bundle eventExtra;
 
         if (customResolver.isCustom()) {
+            setAlexaTTS(cr.isAlexaTTS());
             cch = customResolver.getCustomCommandHelper();
             COMMAND = cch.getCommandConstant();
             eventExtra = (CC.COMMAND_UNKNOWN == COMMAND || CC.COMMAND_EMPTY_ARRAY == COMMAND || CC.COMMAND_SOMETHING_WEIRD == COMMAND)? null : new Bundle(5);
             if (eventExtra != null) {
-                eventExtra.putString(COMMAND_CONSTANT, COMMAND.name());
+                eventExtra.putString(COMMAND_CONSTANT, cr.isAlexaTTS()? CC.COMMAND_ALEXA.name() : COMMAND.name());
                 eventExtra.putBoolean(IS_CUSTOM_COMMAND, true);
                 eventExtra.putString(LANGUAGE_MODEL, SPH.getDefaultLanguageModel(mContext).name());
             }
@@ -187,7 +192,7 @@ public class Quantum extends Tunnelling {
             }
             eventExtra = (CC.COMMAND_UNKNOWN == COMMAND || CC.COMMAND_EMPTY_ARRAY == COMMAND || CC.COMMAND_SOMETHING_WEIRD == COMMAND)? null : new Bundle(5);
             if (eventExtra != null) {
-                eventExtra.putString(COMMAND_CONSTANT, COMMAND.name());
+                eventExtra.putString(COMMAND_CONSTANT, cr.isAlexaTTS()? CC.COMMAND_ALEXA.name() : COMMAND.name());
                 eventExtra.putBoolean(IS_CUSTOM_COMMAND, false);
                 eventExtra.putString(LANGUAGE_MODEL, languageModel.name());
             }
@@ -212,6 +217,9 @@ public class Quantum extends Tunnelling {
             }
 
             secure = COMMAND.isSecure() && cr.wasSecure() && UtilsDevice.isDeviceLocked(this.mContext);
+            if (cr.isAlexaTTS()) {
+                COMMAND = CC.COMMAND_UNKNOWN;
+            }
 
             switch (COMMAND) {
 
@@ -435,7 +443,7 @@ public class Quantum extends Tunnelling {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CONTACT.name());
                     }
-                    final ai.saiy.android.command.contact.CommandContact commandContact = new ai.saiy.android.command.contact.CommandContact();
+                    final ai.saiy.android.command.contact.CommandContactLocal commandContact = new ai.saiy.android.command.contact.CommandContactLocal();
                     outcome = commandContact.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
@@ -645,7 +653,7 @@ public class Quantum extends Tunnelling {
                             } else {
                                 request.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
                                 request.setUtterance(PersonalityResponse.getAlexaIntro(mContext, sl));
-                                request.setRecognitionProvider(ai.saiy.android.api.SaiyDefaults.VR.ALEXA);
+                                request.setRecognitionProvider(SaiyDefaults.VR.ALEXA);
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ALEXA.name() + ": starting request");
                                 }
@@ -669,11 +677,8 @@ public class Quantum extends Tunnelling {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_UNKNOWN.name());
                     }
-
-                    final int unknownAction = SPH.getCommandUnknownAction(mContext);
-
+                    final int unknownAction = cr.isAlexaTTS()? Unknown.UNKNOWN_ALEXA : SPH.getCommandUnknownAction(mContext);
                     switch (unknownAction) {
-
                         case Unknown.UNKNOWN_STATE:
                         case Unknown.UNKNOWN_REPEAT:
                             if (SPH.getToastUnknown(mContext)) {
@@ -688,7 +693,6 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
 
                     switch (unknownAction) {
-
                         case Unknown.UNKNOWN_STATE:
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "Unknown.UNKNOWN_STATE");
@@ -702,9 +706,19 @@ public class Quantum extends Tunnelling {
                             request.setUtterance(PersonalityResponse.getRepeatCommand(mContext, sl));
                             request.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
                             break;
-                        case Unknown.UNKNOWN_GOOGLE_SEARCH:
+                        case Unknown.UNKNOWN_WEB_SEARCH:
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_STATE");
+                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_WEB_SEARCH");
+                            }
+                            if (ExecuteIntent.webSearch(mContext, "http://google." + ai.saiy.android.localisation.SaiyWebHelper.extension(SaiyWebHelper.GOOGLE, sl) + "/search?q=" + toResolve.get(0).trim().replaceAll("\\s", "\\%20"))) {
+                                request.setUtterance(PersonalityResponse.getSearchConfirm(mContext, sl, mContext.getString(R.string.google), toResolve.get(0).trim()));
+                            } else {
+                                request.setUtterance(PersonalityResponse.getSearchError(mContext, sl));
+                            }
+                            break;
+                        case Unknown.UNKNOWN_GOOGLE_ASSISTANT:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_GOOGLE_ASSISTANT");
                             }
 
                             if (!ExecuteIntent.googleNow(mContext, toResolve.get(0))) {
@@ -716,9 +730,121 @@ public class Quantum extends Tunnelling {
                                 publishProgress(entangledPair);
                             }
                             break;
+                        case Unknown.UNKNOWN_ALEXA:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA");
+                            }
+                            if (Network.isConnected(mContext)) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: isAlexaTTS: " + cr.isAlexaTTS());
+                                }
+                                Bundle alexaBundle = null;
+                                for (int i = 0; i <= 10; ++i) {
+                                    alexaBundle = ai.saiy.android.utils.Global.getAlexDirectiveBundle();
+                                    if (UtilsBundle.notNaked(alexaBundle)) {
+                                        break;
+                                    }
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: sleeping");
+                                    }
+                                    try {
+                                        java.lang.Thread.sleep(1000);
+                                    } catch (InterruptedException e) {
+                                        if (DEBUG) {
+                                            MyLog.w(CLS_NAME, "Unknown.UNKNOWN_ALEXA: InterruptedException");
+                                        }
+                                    }
+                                }
+                                if (UtilsBundle.notNaked(alexaBundle)) {
+                                    final int action = alexaBundle.getInt(LocalRequest.EXTRA_ACTION);
+                                    request.setAction(action);
+                                    if (action == LocalRequest.ACTION_SPEAK_LISTEN) {
+                                        request.setRecognitionProvider(SaiyDefaults.VR.ALEXA);
+                                    }
+                                    if (alexaBundle.containsKey(SaiyRecognitionListener.ALEXA_DIRECTIVE)) {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: containsKey: ALEXA_DIRECTIVE");
+                                        }
+                                        ai.saiy.android.amazon.directives.DirectiveType directiveType = (ai.saiy.android.amazon.directives.DirectiveType) alexaBundle.getSerializable(SaiyRecognitionListener.ALEXA_DIRECTIVE);
+                                        if (directiveType == null) {
+                                            if (DEBUG) {
+                                                MyLog.w(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DirectiveType null");
+                                            }
+                                        } else {
+                                            switch (directiveType) {
+                                                case DIRECTIVE_CANCEL:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DIRECTIVE_CANCEL");
+                                                    }
+                                                    request.setUtterance(PersonalityResponse.getCancelled(mContext, sl));
+                                                    break;
+                                                case DIRECTIVE_ABANDON:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DIRECTIVE_ABANDON");
+                                                    }
+                                                    alexaBundle.putString(SaiyRecognitionListener.ALEX_FILE, null);
+                                                    break;
+                                                case DIRECTIVE_VOLUME:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DIRECTIVE_VOLUME");
+                                                    }
+                                                    request.setUtterance(PersonalityResponse.getAlexaVolumeInsert(mContext, sl));
+                                                    break;
+                                                case DIRECTIVE_MEDIA:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DIRECTIVE_MEDIA");
+                                                    }
+                                                    request.setUtterance(SaiyResourcesHelper.getStringResource(mContext, sl, R.string.alexa_media_response));
+                                                    break;
+                                                default:
+                                                    if (DEBUG) {
+                                                        MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DIRECTIVE_NONE");
+                                                    }
+                                                    break;
+                                            }
+                                        }
+                                    }
+                                    final String pathOfFile = alexaBundle.getString(SaiyRecognitionListener.ALEX_FILE, null);
+                                    if (UtilsString.notNaked(pathOfFile)) {
+                                        request.setAlexaFilePath(pathOfFile);
+                                        request.setUtterance(SaiyRecognitionListener.ALEX_SPEECH);
+                                    } else {
+                                        if (DEBUG) {
+                                            MyLog.w(CLS_NAME, "Unknown.UNKNOWN_ALEXA: ALEXA_FILE null");
+                                        }
+                                        if (!UtilsString.notNaked(request.getUtterance())) {
+                                            request.setUtterance(PersonalityResponse.getNoComprendeForAlexa(mContext, sl));
+                                        }
+                                    }
+                                } else {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: alexaBundle null");
+                                    }
+                                    request.setUtterance(PersonalityResponse.getNoComprendeForAlexa(mContext, sl));
+                                }
+                            } else {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: no network");
+                                }
+                                request.setUtterance(PersonalityResponse.getAlexaNoNetwork(mContext, sl));
+                            }
+                            break;
+                        case Unknown.UNKNOWN_MICROSOFT_CORTANA:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_MICROSOFT_CORTANA");
+                            }
+                            if (!ExecuteIntent.microsoftCortana(mContext, toResolve.get(0))) {
+                                request.setUtterance(PersonalityResponse.getNoComprende(mContext, sl));
+                                SPH.setCommandUnknownAction(mContext, Unknown.UNKNOWN_STATE);
+
+                                final EntangledPair entangledPair = new EntangledPair(Position.TOAST_SHORT, CC.COMMAND_UNKNOWN);
+                                entangledPair.setToastContent(mContext.getString(R.string.error_microsoft_cortana_broadcast));
+                                publishProgress(entangledPair);
+                            }
+                            break;
                         case Unknown.UNKNOWN_WOLFRAM_ALPHA:
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_STATE");
+                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_WOLFRAM_ALPHA");
                             }
 
                             if (!ExecuteIntent.wolframAlpha(mContext, toResolve.get(0))) {
@@ -732,7 +858,7 @@ public class Quantum extends Tunnelling {
                             break;
                         case Unknown.UNKNOWN_TASKER:
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_STATE");
+                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_TASKER");
                             }
 
                             if (!TaskerHelper.broadcastVoiceData(mContext, toResolve)) {
@@ -745,7 +871,6 @@ public class Quantum extends Tunnelling {
                             }
                             break;
                     }
-
                     break;
                 case COMMAND_EMPTY_ARRAY:
                     if (DEBUG) {
@@ -1086,8 +1211,13 @@ public class Quantum extends Tunnelling {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Position " + entangledPair.getPosition().name());
                         MyLog.i(CLS_NAME, "Position " + entangledPair.getCC().name());
+                        MyLog.i(CLS_NAME, "Position isAlexaTTS: " + entangledPair.isAlexaTTS());
                     }
-                    NotificationHelper.createComputingNotification(mContext);
+                    if (entangledPair.isAlexaTTS()) {
+                        NotificationHelper.createFetchingNotification(mContext);
+                    } else {
+                        NotificationHelper.createComputingNotification(mContext);
+                    }
                     break;
                 default:
                     if (DEBUG) {

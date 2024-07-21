@@ -15,7 +15,7 @@ import ai.saiy.android.utils.MyLog;
 public class WidgetProvider extends AppWidgetProvider {
     public static final int REQUEST_CODE = 32;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = WidgetProvider.class.getSimpleName();
 
     @Override

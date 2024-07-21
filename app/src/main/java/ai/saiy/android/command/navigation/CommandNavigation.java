@@ -24,7 +24,7 @@ import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandNavigation {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandNavigation.class.getSimpleName();
 
     private final Outcome outcome = new Outcome();

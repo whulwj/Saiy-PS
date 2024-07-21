@@ -47,7 +47,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class CommandSpellLocal {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandSpellLocal.class.getSimpleName();
 
     private final Outcome outcome = new Outcome();

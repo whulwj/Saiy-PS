@@ -56,7 +56,7 @@ import ai.saiy.android.utils.UtilsVolley;
  */
 public class BingTranslateAPI {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BingTranslateAPI.class.getSimpleName();
 
     private static final String SERVICE_URL = "http://api.microsofttranslator.com/V2/Ajax.svc/Translate?";

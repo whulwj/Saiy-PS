@@ -54,7 +54,7 @@ import ai.saiy.android.utils.SPH;
 
 public final class InitStrings {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = InitStrings.class.getSimpleName();
 
     private static final long THREADS_TIMEOUT = 1000L;

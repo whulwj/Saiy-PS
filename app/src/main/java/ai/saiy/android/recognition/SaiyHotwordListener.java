@@ -32,7 +32,7 @@ import edu.cmu.pocketsphinx.RecognitionListener;
 
 public class SaiyHotwordListener implements RecognitionListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyHotwordListener.class.getSimpleName();
 
     protected static final String OKAY_GOOGLE = "okaygoogle";

@@ -54,7 +54,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class LocalRequest {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = LocalRequest.class.getSimpleName();
 
     public static final int ACTION_UNKNOWN = 0;

@@ -69,7 +69,7 @@ import ai.saiy.android.utils.MyLog;
 
 abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Tunnelling.class.getSimpleName();
 
     private static final long COMPUTING_DELAY = 1000L;
@@ -89,6 +89,7 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
 
     protected final LocalRequest request;
     protected final Context mContext;
+    private boolean isAlexaTTS;
 
     /**
      * Constructor
@@ -118,7 +119,8 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "timerTask: show computing");
                 }
-                onProgressUpdate(new EntangledPair(Position.SHOW_COMPUTING, CC.COMMAND_UNKNOWN));
+                final EntangledPair entangledPair = new EntangledPair(Position.SHOW_COMPUTING, CC.COMMAND_UNKNOWN, isAlexaTTS);
+                onProgressUpdate(entangledPair);
             }
         };
 
@@ -143,6 +145,10 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
     }
 
     protected abstract Qubit doTunnelling(final CommandRequest commandRequest);
+
+    public void setAlexaTTS(boolean alexaTTS) {
+        isAlexaTTS = alexaTTS;
+    }
 
     @Override
     protected void onProgressUpdate(final EntangledPair... entangledPairArray) {

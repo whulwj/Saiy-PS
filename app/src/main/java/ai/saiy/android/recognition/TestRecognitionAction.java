@@ -45,7 +45,7 @@ import ai.saiy.android.utils.debug.DebugAction;
  */
 public class TestRecognitionAction {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = TestRecognitionAction.class.getSimpleName();
 
     /**
@@ -100,20 +100,6 @@ public class TestRecognitionAction {
                 final int action = Integer.parseInt(instructionArray[1].trim());
 
                 switch (action) {
-
-                    case DebugAction.DEBUG_TOGGLE_LOGGING:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "runDebug: DEBUG_TOGGLE_LOGGING");
-                        }
-
-                        if (MyLog.DEBUG) {
-                            MyLog.DEBUG = false;
-                            toast(ctx, ctx.getString(R.string.disabled));
-                        } else {
-                            MyLog.DEBUG = true;
-                            toast(ctx, ctx.getString(R.string.enabled));
-                        }
-                        break;
                     case DebugAction.DEBUG_VALIDATE_SIGNATURE:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "runDebug: DEBUG_VALIDATE_SIGNATURE");
@@ -141,7 +127,7 @@ public class TestRecognitionAction {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "runDebug: default");
                         }
-                        toast(ctx, ctx.getString(R.string.error) + " " + String.valueOf(action));
+                        toast(ctx, ctx.getString(R.string.error) + " " + action);
                         break;
                 }
 

@@ -46,7 +46,7 @@ public class TutorialHelper {
     private final ArrayList<String> resultsRecognition;
     private final Locale locale;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = TutorialHelper.class.getSimpleName();
 
     public TutorialHelper(Context context, SupportedLanguage supportedLanguage, ArrayList<String> arrayList) {

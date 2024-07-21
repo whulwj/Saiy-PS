@@ -86,7 +86,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class FragmentSuperuserHelper implements ISaiyAccount {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentSuperuserHelper.class.getSimpleName();
 
     private static final long ARBITRARY_DELAY = 7000;

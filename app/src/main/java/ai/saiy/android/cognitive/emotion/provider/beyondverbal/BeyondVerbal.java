@@ -46,7 +46,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class BeyondVerbal {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BeyondVerbal.class.getSimpleName();
 
     public static final long FETCH_ANALYSIS_DELAY = 6000;

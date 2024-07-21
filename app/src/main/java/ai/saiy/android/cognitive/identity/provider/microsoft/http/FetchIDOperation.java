@@ -56,7 +56,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class FetchIDOperation {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FetchIDOperation.class.getSimpleName();
 
     private static final String OCP_SUBSCRIPTION_KEY_HEADER = "Ocp-Apim-Subscription-Key";

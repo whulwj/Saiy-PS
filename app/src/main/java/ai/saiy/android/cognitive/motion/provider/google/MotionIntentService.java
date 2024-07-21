@@ -43,7 +43,7 @@ import ai.saiy.android.utils.SPH;
 
 public class MotionIntentService extends IntentService {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = MotionIntentService.class.getSimpleName();
 
     protected static final long UPDATE_INTERVAL = 600000L;

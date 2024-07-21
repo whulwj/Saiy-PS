@@ -146,7 +146,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class SelfAwareConditions extends SelfAwareHelper implements IConditionListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SelfAwareConditions.class.getSimpleName();
 
     private static final String WAKELOCK_TAG = SelfAware.class.getSimpleName() + "Lock";

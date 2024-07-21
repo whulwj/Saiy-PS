@@ -43,7 +43,7 @@ import ai.saiy.android.utils.UtilsList;
 
 public class CustomHelper implements Callable<Object> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CustomHelper.class.getSimpleName();
 
     private final ArrayList<String> inputData;

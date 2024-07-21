@@ -42,7 +42,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class NLUNuanceHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = NLUNuanceHelper.class.getSimpleName();
 
     /**

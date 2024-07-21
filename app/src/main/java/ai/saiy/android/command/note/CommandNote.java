@@ -23,7 +23,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 
 public class CommandNote {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandNote.class.getSimpleName();
     private final Intent intent = new Intent();
     private long then;

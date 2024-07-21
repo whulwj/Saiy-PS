@@ -54,7 +54,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public final class FrequencyAnalysis {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FrequencyAnalysis.class.getSimpleName();
 
     private static final int THRESHOLD = 65;

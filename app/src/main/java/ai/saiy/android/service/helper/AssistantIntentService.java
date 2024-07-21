@@ -63,7 +63,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class AssistantIntentService extends IntentService {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = AssistantIntentService.class.getSimpleName();
 
     private static final String EXTRA_ASSIST_CONTEXT = "android.intent.extra.ASSIST_CONTEXT";

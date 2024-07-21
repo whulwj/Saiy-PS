@@ -40,7 +40,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class NLUMicrosoftHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = NLUMicrosoftHelper.class.getSimpleName();
 
     /**

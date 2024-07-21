@@ -35,7 +35,7 @@ import ai.saiy.android.utils.MyLog;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class SaiyTileService extends TileService {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyTileService.class.getSimpleName();
 
     public SaiyTileService() {

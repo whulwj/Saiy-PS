@@ -36,7 +36,7 @@ public class FragmentAppPickerMulti extends Fragment implements View.OnClickList
     private FragmentAppPickerMultiHelper helper;
     private Context mContext;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAppPickerMulti.class.getSimpleName();
     private boolean isAllChecked = false;
 

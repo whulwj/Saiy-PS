@@ -17,7 +17,7 @@ public class OnOff {
     private static Pattern start;
     private static Pattern stop;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = OnOff.class.getSimpleName();
     private int confidence;
 

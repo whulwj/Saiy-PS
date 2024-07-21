@@ -42,7 +42,7 @@ import ai.saiy.android.utils.UtilsMap;
  */
 public class NLUAPIAIHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = NLUAPIAIHelper.class.getSimpleName();
 
     /**

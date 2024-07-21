@@ -21,7 +21,7 @@ import ai.saiy.android.utils.MyLog;
 
 public class FragmentCommandsHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentCommandsHelper.class.getSimpleName();
 
     private final FragmentCommands parentFragment;

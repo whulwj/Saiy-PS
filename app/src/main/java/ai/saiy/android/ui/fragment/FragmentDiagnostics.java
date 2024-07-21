@@ -63,7 +63,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
     private TelephonyManager telephonyManager;
     private Context mContext;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentDiagnostics.class.getSimpleName();
     private DiagnosticsHelper helper = null;
     private final AtomicInteger linesCount = new AtomicInteger();

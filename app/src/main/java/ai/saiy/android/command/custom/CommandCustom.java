@@ -49,7 +49,7 @@ import ai.saiy.android.utils.UtilsString;
  */
 public class CommandCustom {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandCustom.class.getSimpleName();
 
     private static final int CUSTOM_COMMAND_VERBOSE_LIMIT = 3;

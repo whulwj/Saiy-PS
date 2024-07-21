@@ -17,7 +17,7 @@ public class ContactNameHelper {
     public static final double DRIFT_THREE = -0.002d;
     public static final double DRIFT_FOUR = -0.001d;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ContactNameHelper.class.getSimpleName();
 
     private final ArrayList<Pair<String, String>> oneWordGroup = new ArrayList<>();

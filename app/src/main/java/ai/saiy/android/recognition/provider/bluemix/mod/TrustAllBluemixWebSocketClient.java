@@ -48,7 +48,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class TrustAllBluemixWebSocketClient extends WebSocketClient {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = TrustAllBluemixWebSocketClient.class.getSimpleName();
 
     private static final String SSL_NULL = "ssl == null";

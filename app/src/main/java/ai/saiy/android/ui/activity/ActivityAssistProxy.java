@@ -35,7 +35,7 @@ import ai.saiy.android.utils.SPH;
 
 public class ActivityAssistProxy extends AppCompatActivity {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityAssistProxy.class.getSimpleName();
 
     long then;

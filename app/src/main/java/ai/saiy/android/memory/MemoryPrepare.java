@@ -42,7 +42,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class MemoryPrepare {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = MemoryPrepare.class.getSimpleName();
 
     private final String vrLanguage;

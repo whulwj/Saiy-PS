@@ -540,6 +540,33 @@ public class ExecuteIntent {
         return false;
     }
 
+    public static boolean microsoftCortana(@NonNull final Context ctx, String str) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "microsoftCortana");
+        }
+
+        final Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setPackage(Installed.PACKAGE_MICROSOFT_CORTANA);
+        intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(Uri.parse("ms-cortana://search?speech=1&input=1&formcode=WNSGPH&cc=gb&setlang=en-gb&mkt=en-gb&q=" + str.replaceAll("\\s", "%20")));
+        try {
+            ctx.startActivity(intent);
+            return true;
+        } catch (final ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "microsoftCortana: ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "microsoftCortana: Exception");
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Launch an Activity of the application
      *

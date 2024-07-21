@@ -22,7 +22,7 @@ public class ActivityFoursquareOAuth extends AppCompatActivity implements Foursq
     private FoursquareOAuthView foursquareOAuthView;
     private volatile Timer timer;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityFoursquareOAuth.class.getSimpleName();
     private boolean isOAuthStarted = false;
     private final AtomicBoolean isFinishing = new AtomicBoolean();

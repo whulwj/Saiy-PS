@@ -14,7 +14,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 
 public class CommandHelp {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandHelp.class.getSimpleName();
 
     private long then;

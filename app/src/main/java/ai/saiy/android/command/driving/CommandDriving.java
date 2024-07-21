@@ -17,7 +17,7 @@ import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.utils.MyLog;
 
 public class CommandDriving {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandDriving.class.getSimpleName();
 
     private long then;

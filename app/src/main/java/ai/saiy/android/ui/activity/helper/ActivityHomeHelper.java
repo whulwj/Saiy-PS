@@ -50,7 +50,7 @@ import ai.saiy.android.utils.SPH;
 
 public class ActivityHomeHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityHomeHelper.class.getSimpleName();
     private static final int REQUEST_CODE = 1;
 

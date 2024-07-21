@@ -8,7 +8,7 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.MyLog;
 
 public class BRBirthday extends BroadcastReceiver {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BRBirthday.class.getSimpleName();
 
     @Override

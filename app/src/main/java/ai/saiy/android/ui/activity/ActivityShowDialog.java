@@ -20,7 +20,7 @@ import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 
 public class ActivityShowDialog extends AppCompatActivity {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityShowDialog.class.getSimpleName();
     private long then;
 

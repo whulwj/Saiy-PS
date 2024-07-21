@@ -18,7 +18,7 @@ public class Help_en {
     private static String help_me;
     private static String what_can_you_do;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Help_en.class.getSimpleName();
     private final SupportedLanguage sl;
     private final ArrayList<String> voiceData;

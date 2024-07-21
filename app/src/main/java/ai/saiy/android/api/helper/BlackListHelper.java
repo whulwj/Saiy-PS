@@ -41,7 +41,7 @@ import ai.saiy.android.utils.UtilsList;
 
 public class BlackListHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BlackListHelper.class.getSimpleName();
 
     private final Type type = new TypeToken<ArrayList<String>>() {

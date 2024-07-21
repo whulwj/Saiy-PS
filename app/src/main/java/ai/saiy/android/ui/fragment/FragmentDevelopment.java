@@ -28,7 +28,7 @@ import ai.saiy.android.utils.MyLog;
 public class FragmentDevelopment extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final Object lock = new Object();
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentDevelopment.class.getSimpleName();
     public static final int RC_ACCOUNT = 110;
 

@@ -23,7 +23,7 @@ import twitter4j.v1.Status;
 import twitter4j.TwitterException;
 
 public class TwitterConfirm {
-    private final boolean DEBUG = ai.saiy.android.utils.MyLog.DEBUG;
+    private static final boolean DEBUG = ai.saiy.android.utils.MyLog.DEBUG;
     private final String CLS_NAME = TwitterConfirm.class.getSimpleName();
 
     private final Context mContext;

@@ -43,7 +43,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class SoundEffectHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SoundEffectHelper.class.getSimpleName();
 
     public static final Pattern pSOUND_EFFECT = Pattern.compile(".*\\[[0-9A-Za-z\\s]+\\].*", Pattern.DOTALL);

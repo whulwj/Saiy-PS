@@ -49,7 +49,7 @@ public class DiagnosticsHelper {
     private ArrayList<VoiceEngine> containerVoiceEngine;
     private final PackageManager packageManager;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = DiagnosticsHelper.class.getSimpleName();
 
     private final AtomicBoolean isBroadcastReceived = new AtomicBoolean();

@@ -59,7 +59,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class ListIDProfiles {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ListIDProfiles.class.getSimpleName();
 
     private static final String LIST_URL = "https://westus.api.cognitive.microsoft.com/spid/v1.0/identificationProfiles";

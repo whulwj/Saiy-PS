@@ -49,7 +49,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class PauseDetector {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = PauseDetector.class.getSimpleName();
 
     private final int PAUSE_THRESHOLD = 7;

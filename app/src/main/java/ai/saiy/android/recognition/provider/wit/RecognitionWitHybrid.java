@@ -84,7 +84,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
     private InputStream inputStream;
     private final String apiKey;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
 
     private final AtomicBoolean isRecording = new AtomicBoolean();

@@ -17,7 +17,7 @@ import com.google.android.gms.location.LocationServices;
 import ai.saiy.android.utils.MyLog;
 
 public class FusedLocationHelper implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FusedLocationHelper.class.getSimpleName();
 
     private GoogleApiClient googleApiClient;

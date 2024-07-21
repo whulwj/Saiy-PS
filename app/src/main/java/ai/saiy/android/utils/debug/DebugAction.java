@@ -46,7 +46,8 @@ public class DebugAction {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = DebugAction.class.getSimpleName();
 
-    public static final int DEBUG_TOGGLE_LOGGING = 0;
+    @Deprecated
+    private static final int DEBUG_TOGGLE_LOGGING = 0;
     public static final int DEBUG_VALIDATE_SIGNATURE = 1;
     public static final int DEBUG_CLEAR_SYNTHESIS = 2;
     public static final int DEBUG_CLEAR_CUSTOM_COMMANDS = 3;
@@ -99,7 +100,7 @@ public class DebugAction {
                     key = cert.getPublicKey();
                     modulusHash = ((RSAPublicKey) key).getModulus().hashCode();
                     mhString = String.valueOf(modulusHash)
-                            + String.valueOf(ctx.getResources().getInteger(R.integer.hash_version));
+                            + ctx.getResources().getInteger(R.integer.hash_version);
 
                     if (DEBUG) {
                         MyLog.v(CLS_NAME, "hash: " + mhString);

@@ -48,7 +48,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class CommandSpell {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandSpell.class.getSimpleName();
 
     public static final int COMMAND_SPELL_VERBOSE_LIMIT = 3;

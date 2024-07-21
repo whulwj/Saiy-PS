@@ -64,7 +64,7 @@ public class Tutorial {
 
     boolean vrRetry;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Tutorial.class.getSimpleName();
     private final Context context;
     private final ArrayList<String> resultsRecognition;

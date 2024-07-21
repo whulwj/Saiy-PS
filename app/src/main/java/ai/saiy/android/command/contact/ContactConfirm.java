@@ -27,7 +27,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class ContactConfirm {
     private static final String RETRY = ai.saiy.android.recognition.provider.nuance.RecognitionNuance.RETRY;
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ContactConfirm.class.getSimpleName();
 
     private final Context mContext;

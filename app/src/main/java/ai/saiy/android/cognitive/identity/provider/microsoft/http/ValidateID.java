@@ -54,7 +54,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class ValidateID implements IMic {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ValidateID.class.getSimpleName();
 
     private static final String IDENTIFICATION_URL = "https://westus.api.cognitive.microsoft.com/spid/v1.0/identify?identificationProfileIds=";

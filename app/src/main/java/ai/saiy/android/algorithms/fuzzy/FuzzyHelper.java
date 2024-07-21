@@ -52,7 +52,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class FuzzyHelper implements Callable<Object> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FuzzyHelper.class.getSimpleName();
 
     private final Context mContext;

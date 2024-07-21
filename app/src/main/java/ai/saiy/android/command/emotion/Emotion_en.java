@@ -38,7 +38,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class Emotion_en {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Emotion_en.class.getSimpleName();
 
     private static String emotion;

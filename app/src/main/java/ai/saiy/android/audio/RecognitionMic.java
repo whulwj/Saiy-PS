@@ -40,7 +40,7 @@ import ai.saiy.android.utils.MyLog;
 
 public class RecognitionMic implements PauseListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionMic.class.getSimpleName();
 
     public static final int SAMPLE_RATE_HZ_16000 = 16000;

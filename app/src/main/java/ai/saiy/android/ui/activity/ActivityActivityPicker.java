@@ -23,7 +23,7 @@ public class ActivityActivityPicker extends AppCompatActivity implements UserFir
     public static final String EXTRA_APPLICATION = "extra_blocked_applications";
     private ProgressBar progressBar;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityActivityPicker.class.getSimpleName();
 
     private void setupToolbar() {

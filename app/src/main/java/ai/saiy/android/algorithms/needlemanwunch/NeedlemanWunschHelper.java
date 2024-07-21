@@ -51,7 +51,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class NeedlemanWunschHelper implements Callable<Object> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = NeedlemanWunschHelper.class.getSimpleName();
 
     private final Context mContext;

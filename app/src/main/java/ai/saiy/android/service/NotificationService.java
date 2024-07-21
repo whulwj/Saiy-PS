@@ -59,7 +59,7 @@ import wei.mark.standout.StandOutWindow;
  */
 public class NotificationService extends IntentService {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = NotificationService.class.getSimpleName();
 
     private long then;

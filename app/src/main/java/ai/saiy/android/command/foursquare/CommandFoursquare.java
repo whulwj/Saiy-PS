@@ -25,7 +25,7 @@ import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandFoursquare {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandFoursquare.class.getSimpleName();
 
     private long then;

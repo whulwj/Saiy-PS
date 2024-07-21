@@ -115,6 +115,7 @@
     <string name="ask_repeat" translatable="true">Ask you to repeat</string>
     <string name="menu_tts">Text to Speech</string>
     <string name="menu_web_search">Perform a web search</string>
+    <string name="search_confirm">Searching %1$s, for %2$s</string>
     <string name="google_assistant">Google Assistant</string>
     <string name="menu_alexa">Alexa</string>
     <string name="menu_alexa_closest_region">Select closest region for Alexa</string>
@@ -1155,6 +1156,9 @@
     <!-- Command - Google Now | error -->
     <string name="error_google_now_broadcast" translatable="true">"Failed sending to Google Now"</string>
 
+    <!-- Command - Microsoft Cortana | error -->
+    <string name="error_microsoft_cortana_broadcast">Failed sending to Cortana</string>
+
     <!-- Command - Wolfram Alpha | error -->
     <string name="error_wolfram_alpha_broadcast" translatable="true">"Failed sending to Wolfram Alpha"</string>
 
@@ -1228,6 +1232,7 @@
     <string name="name_that_tune" translatable="true">"name that tune"</string>
 
     <string name="sound_search" translatable="true">"sound search"</string>
+    <string name="google">google</string>
     <string name="google_capital" translatable="false">"Google"</string>
     <string name="sound_hound" translatable="false">"Sound Hound"</string>
     <string name="sound_hound_premium" translatable="false">"Sound Hound Premium"</string>

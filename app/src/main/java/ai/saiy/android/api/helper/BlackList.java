@@ -31,8 +31,8 @@ import ai.saiy.android.utils.MyLog;
  */
 public class BlackList {
 
-    private transient static final boolean DEBUG = MyLog.DEBUG;
-    private transient static final String CLS_NAME = BlackList.class.getSimpleName();
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = BlackList.class.getSimpleName();
 
     private static final int MAX_ACQUIRE_REJECT = 10;
     private static final int MAX_PAST_TIME = 30000;

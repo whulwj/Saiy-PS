@@ -84,7 +84,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public final class Resolve {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Resolve.class.getSimpleName();
 
     private static final long THREADS_TIMEOUT = 1000L;

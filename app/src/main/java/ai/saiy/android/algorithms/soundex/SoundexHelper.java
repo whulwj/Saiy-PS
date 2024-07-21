@@ -58,7 +58,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class SoundexHelper implements Callable<Object> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SoundexHelper.class.getSimpleName();
 
     private final Context mContext;

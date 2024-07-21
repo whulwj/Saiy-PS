@@ -38,7 +38,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class CommandEmotion {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandEmotion.class.getSimpleName();
 
     private static final int COMMAND_EMOTION_EXTRA_VERBOSE_LIMIT = 1;

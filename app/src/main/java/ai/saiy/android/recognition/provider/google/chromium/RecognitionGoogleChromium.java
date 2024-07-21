@@ -72,7 +72,7 @@ public class RecognitionGoogleChromium implements PauseListener {
 
     // TODO - The interface is messy as multiple errors of the same type can be thrown from each thread
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionGoogleChromium.class.getSimpleName();
 
     private static final long MIN = 10000000;

@@ -59,7 +59,7 @@ import de.psdev.licensesdialog.model.Notices;
 
 public class FragmentAboutHelper {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAboutHelper.class.getSimpleName();
 
     private final FragmentAbout parentFragment;

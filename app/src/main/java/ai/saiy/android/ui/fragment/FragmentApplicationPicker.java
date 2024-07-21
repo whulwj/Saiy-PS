@@ -25,7 +25,7 @@ public class FragmentApplicationPicker extends Fragment implements View.OnClickL
     private static final Object lock = new Object();
     private int type = ActivityApplicationPicker.ACCESSIBLE_APPLICATION_TYPE;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentApplicationPicker.class.getSimpleName();
 
     private RecyclerView mRecyclerView;

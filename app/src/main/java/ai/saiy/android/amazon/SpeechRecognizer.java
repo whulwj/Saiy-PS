@@ -19,7 +19,7 @@ public class SpeechRecognizer {
     private static final String META_DATA = "metadata";
     private static final String AUDIO = "audio";
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SpeechRecognizer.class.getSimpleName();
     private final RequestBody requestBody;
 

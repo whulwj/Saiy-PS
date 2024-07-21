@@ -23,7 +23,7 @@ import ai.saiy.android.ui.fragment.FragmentAppPickerMulti;
 import ai.saiy.android.utils.MyLog;
 
 public class FragmentAppPickerMultiHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAppPickerMultiHelper.class.getSimpleName();
 
     private final FragmentAppPickerMulti parentFragment;

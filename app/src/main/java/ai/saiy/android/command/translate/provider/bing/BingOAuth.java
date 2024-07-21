@@ -51,7 +51,7 @@ import ai.saiy.android.utils.SPH;
  */
 public class BingOAuth {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BingOAuth.class.getSimpleName();
 
     private static final String ENCODING = "UTF-8";

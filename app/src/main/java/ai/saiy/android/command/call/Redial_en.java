@@ -16,7 +16,7 @@ public class Redial_en {
     private static String free_dial;
     private static String read_dial;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Redial_en.class.getSimpleName();
     private final SupportedLanguage sl;
     private final ArrayList<String> voiceData;

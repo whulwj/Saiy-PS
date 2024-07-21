@@ -48,7 +48,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class LevenshteinHelper implements Callable<Object> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = LevenshteinHelper.class.getSimpleName();
 
     private final Context mContext;

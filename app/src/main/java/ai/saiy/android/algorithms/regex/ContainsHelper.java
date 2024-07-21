@@ -41,7 +41,7 @@ import ai.saiy.android.utils.UtilsList;
 
 public class ContainsHelper implements Callable<Object> {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ContainsHelper.class.getSimpleName();
 
     private final ArrayList<String> inputData;

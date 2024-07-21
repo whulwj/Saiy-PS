@@ -26,7 +26,7 @@ import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandSms {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandSms.class.getSimpleName();
 
     private long then;

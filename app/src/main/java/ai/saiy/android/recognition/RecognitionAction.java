@@ -50,7 +50,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 public class RecognitionAction {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionAction.class.getSimpleName();
 
     private final Context mContext;
@@ -203,6 +203,7 @@ public class RecognitionAction {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_ALEXA_TTS");
                     }
+                    cr.setAlexaTTS(true);
                     quantum.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cr);
                     break;
                 case Condition.CONDITION_IGNORE:

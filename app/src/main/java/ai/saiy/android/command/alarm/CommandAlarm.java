@@ -14,7 +14,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 
 public class CommandAlarm {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandAlarm.class.getSimpleName();
 
     private long then;

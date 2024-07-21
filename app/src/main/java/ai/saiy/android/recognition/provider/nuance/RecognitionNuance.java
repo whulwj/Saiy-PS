@@ -70,7 +70,7 @@ import ai.saiy.android.utils.UtilsLocale;
  */
 public class RecognitionNuance {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionNuance.class.getSimpleName();
 
     private static final String RECORDER = "recorder";

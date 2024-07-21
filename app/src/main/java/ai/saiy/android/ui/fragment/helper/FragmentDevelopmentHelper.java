@@ -47,7 +47,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
 public class FragmentDevelopmentHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentDevelopmentHelper.class.getSimpleName();
 
     private volatile Pair<Boolean, PremiumUser> premiumUserPair;

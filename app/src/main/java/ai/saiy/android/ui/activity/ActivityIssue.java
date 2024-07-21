@@ -30,7 +30,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class ActivityIssue extends AppCompatActivity {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityIssue.class.getSimpleName();
 
     @Override

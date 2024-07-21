@@ -41,7 +41,7 @@ public class FragmentActivityPicker extends Fragment implements AdapterView.OnIt
     private FragmentActivityPickerHelper helper;
     private Context mContext;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentActivityPicker.class.getSimpleName();
     private ExpandableListView expandableListView = null;
 

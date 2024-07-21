@@ -50,7 +50,7 @@ import ai.saiy.android.utils.UtilsString;
 
 public class RecognitionWit implements PauseListener {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionWit.class.getSimpleName();
 
     private static final String AUTHORIZATION = "Authorization";

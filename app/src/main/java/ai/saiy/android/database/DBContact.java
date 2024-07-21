@@ -13,7 +13,7 @@ import ai.saiy.android.contacts.Contact;
 import ai.saiy.android.utils.MyLog;
 
 public class DBContact extends SQLiteOpenHelper {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = DBContact.class.getSimpleName();
 
     private static final String DATABASE_NAME = "contacts.db";

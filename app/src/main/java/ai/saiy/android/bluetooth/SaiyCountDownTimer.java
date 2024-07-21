@@ -9,7 +9,7 @@ import androidx.annotation.CallSuper;
 import ai.saiy.android.utils.MyLog;
 
 public class SaiyCountDownTimer extends CountDownTimer {
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = SaiyCountDownTimer.class.getSimpleName();
 
     private volatile boolean isStarted;

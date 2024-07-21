@@ -52,7 +52,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
     private String initEngine;
     private volatile byte[] fileBytes;
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = AlexaTTS.class.getSimpleName();
 
     private RequestBody requestBody = new RequestBody() {

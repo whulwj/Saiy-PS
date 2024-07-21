@@ -36,7 +36,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class RemoteAPIAI {
 
-    private final boolean DEBUG = MyLog.DEBUG;
+    private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RemoteAPIAI.class.getSimpleName();
 
     private final String utterance;
