@@ -207,7 +207,6 @@ public class TimeHelper {
     }
 
     public Pair<String, String> formatSpokenTimeIn(Context context, String dateTime) {
-        String string;
         Calendar calendar = Calendar.getInstance();
         try {
             calendar.setTime(new SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.ENGLISH).parse(dateTime));
@@ -229,11 +228,7 @@ public class TimeHelper {
         }
         final int minute = calendar.get(Calendar.MINUTE);
         final String minuteString = (minute == 0) ? "" : minute < 10 ? "O " + minute : String.valueOf(minute);
-        if (calendar.get(Calendar.AM_PM) == Calendar.AM) {
-            string = context.getString(R.string.time_am);
-        } else {
-            string = context.getString(R.string.time_pm);
-        }
+        final String string = (calendar.get(Calendar.AM_PM) == Calendar.AM)? context.getString(R.string.time_am) :  context.getString(R.string.time_pm);
         return new Pair<>(UtilsDate.getWeekday(context, calendar.get(Calendar.DAY_OF_WEEK)), hour + XMLResultsHandler.SEP_SPACE + minuteString + XMLResultsHandler.SEP_SPACE + string);
     }
 

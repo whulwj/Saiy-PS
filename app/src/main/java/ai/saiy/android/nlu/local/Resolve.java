@@ -35,6 +35,8 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.command.alexa.Alexa;
+import ai.saiy.android.command.weather.Weather;
+import ai.saiy.android.command.foursquare.Foursquare;
 import ai.saiy.android.command.help.Help;
 import ai.saiy.android.command.note.Note;
 import ai.saiy.android.command.sms.Sms;
@@ -55,7 +57,9 @@ import ai.saiy.android.command.pardon.Pardon;
 import ai.saiy.android.command.songrecognition.SongRecognition;
 import ai.saiy.android.command.spell.Spell;
 import ai.saiy.android.command.tasker.Tasker;
+import ai.saiy.android.command.time.Time;
 import ai.saiy.android.command.translate.Translate;
+import ai.saiy.android.command.twitter.Twitter;
 import ai.saiy.android.command.username.UserName;
 import ai.saiy.android.command.vocalrecognition.VocalRecognition;
 import ai.saiy.android.command.wolframalpha.WolframAlpha;
@@ -122,15 +126,19 @@ public final class Resolve {
         callableList.add(new VocalRecognition(sr, sl, voiceData, confidence));
         callableList.add(new Contact(sr, sl, voiceData, confidence));
         callableList.add(new Navigation(sr, sl, voiceData, confidence));
+        callableList.add(new Time(sr, sl, voiceData, confidence));
         callableList.add(new Redial(sr, sl, voiceData, confidence));
         callableList.add(new CallBack(sr, sl, voiceData, confidence));
         callableList.add(new Horoscope(sr, sl, voiceData, confidence));
+        callableList.add(new Weather(sr, sl, voiceData, confidence));
         callableList.add(new Note(sr, sl, voiceData, confidence));
         callableList.add(new Alarm(sr, sl, voiceData, confidence));
         callableList.add(new Calendar(sr, sl, voiceData, confidence));
         callableList.add(new Sms(sr, sl, voiceData, confidence));
         callableList.add(new Help(sr, sl, voiceData, confidence));
         callableList.add(new Driving(sr, sl, voiceData, confidence));
+        callableList.add(new Twitter(sr, sl, voiceData, confidence));
+        callableList.add(new Foursquare(sr, sl, voiceData, confidence));
         callableList.add(new Alexa(sr, sl, voiceData, confidence));
         sr.reset();
     }
@@ -181,7 +189,7 @@ public final class Resolve {
      */
     public ArrayList<Pair<CC, Float>> resolve() {
         if (DEBUG) {
-            MyLog.d(CLS_NAME, "analyse: voiceData: " + voiceData.size() + " : " + voiceData.toString());
+            MyLog.d(CLS_NAME, "analyse: voiceData: " + voiceData.size() + " : " + voiceData);
             MyLog.d(CLS_NAME, "analyse: availableProcessors: " + Runtime.getRuntime().availableProcessors());
         }
 

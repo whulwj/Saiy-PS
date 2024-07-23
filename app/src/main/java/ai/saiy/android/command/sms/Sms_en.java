@@ -27,7 +27,7 @@ public class Sms_en {
     private final ArrayList<String> voiceData;
     private final float[] confidence;
 
-    public Sms_en(ai.saiy.android.localisation.SaiyResources sl, SupportedLanguage supportedLanguage, ArrayList<String> voiceData, float[] confidence) {
+    public Sms_en(ai.saiy.android.localisation.SaiyResources sr, SupportedLanguage supportedLanguage, ArrayList<String> voiceData, float[] confidence) {
         this.sl = supportedLanguage;
         this.voiceData = voiceData;
         this.confidence = confidence;
@@ -35,7 +35,7 @@ public class Sms_en {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "initialising strings");
             }
-            initStrings(sl);
+            initStrings(sr);
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }

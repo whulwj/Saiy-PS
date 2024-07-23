@@ -1,6 +1,5 @@
 package ai.saiy.android.amazon.resolve;
 
-import android.os.Build;
 import android.util.Pair;
 
 import com.google.gson.Gson;
@@ -20,7 +19,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -33,7 +31,6 @@ import ai.saiy.android.amazon.directives.Payload;
 import ai.saiy.android.amazon.directives.StructuralDirective;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.utils.UtilsFile;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 import okhttp3.Response;
@@ -180,7 +177,7 @@ public class ResolveAmazon {
                     Header header = directive.getHeader();
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "parse: directiveParent json: " + jSONObject);
-                        MyLog.i(CLS_NAME, "parse: directive: " + directive.toString());
+                        MyLog.i(CLS_NAME, "parse: directive: " + directive);
                         MyLog.i(CLS_NAME, "parse: header: " + header.toString());
                         MyLog.i(CLS_NAME, "parse: payload: " + payload.toString());
                         MyLog.i(CLS_NAME, "parse: payload: isCancel: " + payload.isCancel());
@@ -235,14 +232,10 @@ public class ResolveAmazon {
     }
 
     private String getString(byte[] bytes) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+        try {
             return new String(bytes, StandardCharsets.UTF_8);
-        } else {
-            try {
-                return new String(bytes, Constants.ENCODING_UTF8);
-            } catch (UnsupportedEncodingException e) {
-                return new String(bytes, Charset.defaultCharset());
-            }
+        } catch (Exception e) {
+            return new String(bytes, Charset.defaultCharset());
         }
     }
 }

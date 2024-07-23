@@ -133,8 +133,8 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         this.sl = supportedLanguage;
         this.servingRemote = servingRemote;
         this.ssp = ssp;
-        ai.saiy.android.audio.AudioParameters audioParameters = ai.saiy.android.audio.AudioParameters.getDefault();
-        if (this.servingRemote) {
+        final ai.saiy.android.audio.AudioParameters audioParameters = ai.saiy.android.audio.AudioParameters.getDefault();
+        if (servingRemote) {
             this.pauseDetector = new PauseDetector(this, audioParameters.getSampleRateInHz(), audioParameters.getnChannels(), 3250L);
         }
         new Thread(new Runnable() {
@@ -153,13 +153,13 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (DEBUG) {
            MyLog.v(CLS_NAME, "in handleError");
         }
-        synchronized (this.errorLock) {
-            if (!this.alreadyThrownError) {
+        synchronized (errorLock) {
+            if (!alreadyThrownError) {
                 Recognition.setState(Recognition.State.IDLE);
                 this.alreadyThrownError = true;
-                this.listener.onError(error);
+                listener.onError(error);
             } else if (DEBUG) {
-               MyLog.v(CLS_NAME, "handleError: thrown already: " + this.alreadyThrownError);
+               MyLog.v(CLS_NAME, "handleError: thrown already: " + alreadyThrownError);
             }
         }
     }
@@ -180,23 +180,23 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "sendResults: hasDirectiveType: true" + directiveList.getDirectiveType().name());
             }
-            bundle.putSerializable(SaiyRecognitionListener.ALEXA_DIRECTIVE, directiveList.getDirectiveType());
+            bundle.putParcelable(SaiyRecognitionListener.ALEXA_DIRECTIVE, directiveList.getDirectiveType());
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "sendResults: hasDirectiveType: false");
         }
         bundle.putInt(LocalRequest.EXTRA_ACTION, directiveList.getAction());
         bundle.putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, new ArrayList<>());
         bundle.putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, new float[1]);
-        this.listener.onResults(bundle);
+        listener.onResults(bundle);
     }
 
     private void startRecording() {
-        this.isRecording.set(true);
+        isRecording.set(true);
         this.alreadyThrownError = false;
-        if (this.servingRemote) {
-            this.pauseDetector.begin();
+        if (servingRemote) {
+            pauseDetector.begin();
         }
-        switch (this.saiyRecorder.initialise()) {
+        switch (saiyRecorder.initialise()) {
             case AudioRecord.STATE_UNINITIALIZED:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "AudioRecord.STATE_UNINITIALIZED");
@@ -204,7 +204,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
                 handleError(android.speech.SpeechRecognizer.ERROR_AUDIO);
                 break;
             case AudioRecord.STATE_INITIALIZED:
-                switch (this.saiyRecorder.startRecording()) {
+                switch (saiyRecorder.startRecording()) {
                     case AudioRecord.ERROR:
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "startRecording: != AudioRecord.RECORDSTATE_RECORDING");
@@ -291,12 +291,12 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (DEBUG) {
            MyLog.v(CLS_NAME, "in audioShutdown");
         }
-        synchronized (this.lock) {
-            if (this.saiyRecorder != null) {
-                this.ssp.play(this.ssp.getBeepStop());
+        synchronized (lock) {
+            if (saiyRecorder != null) {
+                ssp.play(ssp.getBeepStop());
                 Recognition.setState(Recognition.State.IDLE);
-                this.listener.onEndOfSpeech();
-                this.saiyRecorder.shutdown(CLS_NAME);
+                listener.onEndOfSpeech();
+                saiyRecorder.shutdown(CLS_NAME);
                 if (DEBUG) {
                     MyLog.d(CLS_NAME, "audioShutdown: audioSession set to NULL");
                 }
@@ -314,7 +314,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "called stopListening");
         }
-        this.isRecording.set(false);
+        isRecording.set(false);
         Recognition.setState(Recognition.State.IDLE);
     }
 
@@ -339,7 +339,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startListening");
         }
-        if (UtilsString.notNaked(this.alexaAccessToken)) {
+        if (UtilsString.notNaked(alexaAccessToken)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startListening: have accessToken");
             }
@@ -350,7 +350,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startListening: accessToken naked");
         }
-        for (int i = 1; !UtilsString.notNaked(this.alexaAccessToken) && i < 7; i++) {
+        for (int i = 1; !UtilsString.notNaked(alexaAccessToken) && i < 7; i++) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startListening: sleeping: " + i);
             }
@@ -363,7 +363,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
                 }
             }
         }
-        if (!UtilsString.notNaked(this.alexaAccessToken)) {
+        if (!UtilsString.notNaked(alexaAccessToken)) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "startListening: retry accessToken null");
             }
@@ -382,7 +382,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onPauseDetected");
         }
-        if (this.isRecording.get()) {
+        if (isRecording.get()) {
             stopListening();
         }
     }

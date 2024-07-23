@@ -1546,6 +1546,7 @@
     <string name="from">from</string>
     <string name="of">of</string>
     <string name="in">in</string>
+    <string name="outside">outside</string>
 
     <string name="set">set</string>
     <string name="word_new">new</string>
@@ -1815,4 +1816,13 @@
     <string name="twitter_content_request">Please say the content of your tweet</string>
     <string name="twitter_reauth_request">We need to update my authorisation, to access your Twitter content.</string>
     <string name="update">update</string>
+
+    <string name="tell_me_the_time">tell me the time</string>
+    <string name="time">time</string>
+    <string name="weather">weather</string>
+    <string name="what_is_the_time">what is the time</string>
+    <string name="what_the_time_is">what the time is</string>
+    <string name="what_time_is_it">what time is it</string>
+    <string name="what_time_it_is">what time it is</string>
+    <string name="whats_the_time">what\'s the time</string>
 </resources>

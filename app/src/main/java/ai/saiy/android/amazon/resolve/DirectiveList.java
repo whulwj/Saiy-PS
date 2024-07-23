@@ -1,5 +1,9 @@
 package ai.saiy.android.amazon.resolve;
 
+import android.os.Build;
+import android.os.Parcel;
+import android.os.Parcelable;
+import android.text.TextUtils;
 import android.util.Pair;
 
 import java.io.File;
@@ -8,7 +12,7 @@ import java.util.ArrayList;
 import ai.saiy.android.amazon.directives.DirectiveType;
 import ai.saiy.android.amazon.directives.StructuralDirective;
 
-public class DirectiveList {
+public class DirectiveList implements Parcelable {
     static final int ACTION_DEFAULT = 1;
     static final int ACTION_EXPECT_SPEECH = 2;
 
@@ -22,6 +26,40 @@ public class DirectiveList {
 
     private int errorCode = 0;
     private int action = ACTION_DEFAULT;
+
+    public static final Creator<DirectiveList> CREATOR = new Creator<DirectiveList>() {
+        @Override
+        public DirectiveList createFromParcel(Parcel in) {
+            final DirectiveList directiveList = new DirectiveList();
+            ArrayList<StructuralDirective> structuralDirectives;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                structuralDirectives = new ArrayList<>();
+                in.readParcelableList(structuralDirectives, StructuralDirective.class.getClassLoader());
+            } else {
+                structuralDirectives = in.createTypedArrayList(StructuralDirective.CREATOR);
+            }
+            directiveList.setDirectiveList(structuralDirectives);
+            final int size = in.readInt();
+            if (size >= 0) {
+                directiveList.multiPartList = new ArrayList<>();
+                Pair<String, byte[]> part;
+                for (int i = 0; i < size; ++i) {
+                    part = new Pair<>(in.readString(), in.createByteArray());
+                    directiveList.multiPartList.add(part);
+                }
+            }
+            final String pathOfFile = in.readString();
+            directiveList.file = (pathOfFile == null || TextUtils.isEmpty(pathOfFile))? null : new File(pathOfFile);
+            directiveList.errorCode = in.readInt();
+            directiveList.action = in.readInt();
+            return directiveList;
+        }
+
+        @Override
+        public DirectiveList[] newArray(int size) {
+            return new DirectiveList[size];
+        }
+    };
 
     public int getAction() {
         return this.action;
@@ -66,5 +104,32 @@ public class DirectiveList {
             }
         }
         return DirectiveType.DIRECTIVE_NONE;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            parcel.writeParcelableList(directiveList, flags);
+        } else {
+            parcel.writeTypedList(directiveList);
+        }
+        parcel.writeInt(multiPartList == null? -1 : multiPartList.size());
+        if (multiPartList != null) {
+            final int size = multiPartList.size();
+            Pair<String, byte[]> part;
+            for (int i = 0; i < size; ++i) {
+                part = multiPartList.get(i);
+                parcel.writeString(part.first);
+                parcel.writeByteArray(part.second);
+            }
+        }
+        parcel.writeString(file == null? null : file.getAbsolutePath());
+        parcel.writeInt(errorCode);
+        parcel.writeInt(action);
     }
 }

@@ -50,7 +50,7 @@ public class TwitterHelper {
 
     public static boolean shareIntent(Context context, String str) {
         if (Installed.isPackageInstalled(context, Installed.PACKAGE_TWITTER)) {
-            str = str.replaceAll("hash tags ", "\\%23").replaceAll("hash tag ", "\\%23").replaceAll("hashtags ", "\\%23").replaceAll("hashtag ", "\\%23");
+            str = str.replaceAll("hash tags ", "%23").replaceAll("hash tag ", "%23").replaceAll("hashtags ", "%23").replaceAll("hashtag ", "%23");
             final Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType(NoteProvider.NOTE_MIME);
             intent.putExtra(Intent.EXTRA_TEXT, str);
@@ -75,7 +75,7 @@ public class TwitterHelper {
     }
 
     private static boolean shareWeb(Context context, String str) {
-        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(("https://twitter.com/intent/tweet?text=" + str.replaceAll("hash tags ", "\\%23").replaceAll("hash tag ", "\\%23").replaceAll("hashtags ", "\\%23").replaceAll("hashtag ", "\\%23")).replaceAll("\\s", "\\%20")));
+        final Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(("https://twitter.com/intent/tweet?text=" + str.replaceAll("hash tags ", "%23").replaceAll("hash tag ", "%23").replaceAll("hashtags ", "%23").replaceAll("hashtag ", "%23")).replaceAll("\\s", "%20")));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
             context.startActivity(intent);

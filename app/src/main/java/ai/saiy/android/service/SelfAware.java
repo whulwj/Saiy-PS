@@ -49,6 +49,7 @@ import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.R;
 import ai.saiy.android.amazon.TokenHelper;
@@ -176,7 +177,7 @@ public class SelfAware extends Service {
 
     private volatile PartialHelper partialHelper;
     private volatile PendingTTS pendingTTS;
-    private volatile int initCount;
+    private final AtomicInteger initCount = new AtomicInteger();
     private volatile TimerTask timerTask;
 
     private final MotionRecognition motionRecognition = new MotionRecognition();
@@ -1557,16 +1558,16 @@ public class SelfAware extends Service {
      */
     private void initTTS() {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "initTTS: pending: " + initPending.get() + " ~ count: " + (initCount + 1));
+            MyLog.i(CLS_NAME, "initTTS: pending: " + initPending.get() + " ~ count: " + (initCount.get() + 1));
         }
 
-        initCount++;
+        initCount.incrementAndGet();
 
         if (initPending.get()) {
             return;
         }
 
-        if (initCount <= MAX_INIT_ATTEMPTS) {
+        if (initCount.intValue() <= MAX_INIT_ATTEMPTS) {
             initPending.set(true);
             initSaiyTTS();
         } else {
@@ -1618,7 +1619,7 @@ public class SelfAware extends Service {
 
         pendingTTS = null;
         initPending.set(false);
-        initCount = 0;
+        initCount.set(0);
     }
 
     /**
@@ -1853,7 +1854,7 @@ public class SelfAware extends Service {
         public void onEvent(final int eventType, final Bundle params) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "recognitionListener: onEvent: " + eventType);
-                MyLog.i(CLS_NAME, "recognitionListener: onEvent bundle: " + String.valueOf(params != null && !params.isEmpty()));
+                MyLog.i(CLS_NAME, "recognitionListener: onEvent bundle: " + (params != null && !params.isEmpty()));
             }
         }
 
@@ -2102,7 +2103,7 @@ public class SelfAware extends Service {
                             MyLog.i(CLS_NAME, "onResults: containsKey: ALEXA_DIRECTIVE");
                         }
                         LocalRequest localRequest = new LocalRequest(getApplicationContext());
-                        DirectiveType directiveType = (DirectiveType) results.getSerializable(SaiyRecognitionListener.ALEXA_DIRECTIVE);
+                        DirectiveType directiveType = results.getParcelable(SaiyRecognitionListener.ALEXA_DIRECTIVE);
                         if (directiveType != null) {
                             switch (directiveType) {
                                 case DIRECTIVE_MEDIA:
@@ -2365,7 +2366,7 @@ public class SelfAware extends Service {
 
                 conditions.onTTSEnded(cache, tts, params);
 
-                switch (Integer.valueOf(onDonePair.second)) {
+                switch (Integer.parseInt(onDonePair.second)) {
 
                     case LocalRequest.ACTION_SPEAK_ONLY:
                         if (DEBUG) {

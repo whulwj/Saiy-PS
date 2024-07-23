@@ -463,6 +463,16 @@ public class Quantum extends Tunnelling {
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_TIME:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TIME.name());
+                    }
+                    final ai.saiy.android.command.time.CommandTime commandTime = new ai.saiy.android.command.time.CommandTime();
+                    outcome = commandTime.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_REDIAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_REDIAL.name());
@@ -501,6 +511,16 @@ public class Quantum extends Tunnelling {
                     }
                     final ai.saiy.android.command.horoscope.CommandHoroscope commandHoroscope = new ai.saiy.android.command.horoscope.CommandHoroscope();
                     outcome = commandHoroscope.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_WEATHER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_WEATHER.name());
+                    }
+                    final ai.saiy.android.command.weather.CommandWeather commandWeather = new ai.saiy.android.command.weather.CommandWeather();
+                    outcome = commandWeather.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -710,7 +730,7 @@ public class Quantum extends Tunnelling {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "Unknown.UNKNOWN_WEB_SEARCH");
                             }
-                            if (ExecuteIntent.webSearch(mContext, "http://google." + ai.saiy.android.localisation.SaiyWebHelper.extension(SaiyWebHelper.GOOGLE, sl) + "/search?q=" + toResolve.get(0).trim().replaceAll("\\s", "\\%20"))) {
+                            if (ExecuteIntent.webSearch(mContext, "http://google." + ai.saiy.android.localisation.SaiyWebHelper.extension(SaiyWebHelper.GOOGLE, sl) + "/search?q=" + toResolve.get(0).trim().replaceAll("\\s", "%20"))) {
                                 request.setUtterance(PersonalityResponse.getSearchConfirm(mContext, sl, mContext.getString(R.string.google), toResolve.get(0).trim()));
                             } else {
                                 request.setUtterance(PersonalityResponse.getSearchError(mContext, sl));
@@ -739,7 +759,7 @@ public class Quantum extends Tunnelling {
                                     MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: isAlexaTTS: " + cr.isAlexaTTS());
                                 }
                                 Bundle alexaBundle = null;
-                                for (int i = 0; i <= 10; ++i) {
+                                for (int i = 0; i < 10; ++i) {
                                     alexaBundle = ai.saiy.android.utils.Global.getAlexDirectiveBundle();
                                     if (UtilsBundle.notNaked(alexaBundle)) {
                                         break;
@@ -765,7 +785,7 @@ public class Quantum extends Tunnelling {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: containsKey: ALEXA_DIRECTIVE");
                                         }
-                                        ai.saiy.android.amazon.directives.DirectiveType directiveType = (ai.saiy.android.amazon.directives.DirectiveType) alexaBundle.getSerializable(SaiyRecognitionListener.ALEXA_DIRECTIVE);
+                                        ai.saiy.android.amazon.directives.DirectiveType directiveType = alexaBundle.getParcelable(SaiyRecognitionListener.ALEXA_DIRECTIVE);
                                         if (directiveType == null) {
                                             if (DEBUG) {
                                                 MyLog.w(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DirectiveType null");
@@ -1048,6 +1068,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_NAVIGATION.name());
                     }
                     break;
+                case COMMAND_TIME:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TIME.name());
+                    }
+                    break;
                 case COMMAND_REDIAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_REDIAL.name());
@@ -1061,6 +1086,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_HOROSCOPE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HOROSCOPE.name());
+                    }
+                    break;
+                case COMMAND_WEATHER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_WEATHER.name());
                     }
                     break;
                 case COMMAND_NOTE:

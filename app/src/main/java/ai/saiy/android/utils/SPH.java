@@ -47,6 +47,7 @@ import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
+import ai.saiy.android.firebase.database.model.WeatherProvider;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.memory.Memory;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
@@ -1366,12 +1367,12 @@ public class SPH {
     }
 
     public static int getWeatherProvider(Context context) {
-        return getPref(context).getInt(WEATHER_PROVIDER, 2);
+        return getPref(context).getInt(WEATHER_PROVIDER, WeatherProvider.OPEN_WEATHER_MAP);
     }
 
-    public static void setWeatherProvider(Context context, int i) {
+    public static void setWeatherProvider(Context context, int provider) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
-        edit.putInt(WEATHER_PROVIDER, i);
+        edit.putInt(WEATHER_PROVIDER, provider);
         edit.apply();
     }
 

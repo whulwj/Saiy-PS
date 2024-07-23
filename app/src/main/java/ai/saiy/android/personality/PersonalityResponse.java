@@ -114,6 +114,13 @@ public final class PersonalityResponse {
                 R.string.error_beyond_verbal_connection), PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getTimeInError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl,
+                R.array.array_error_time_in);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
     /**
      * Get the standard Tasker task executed response.
      *
@@ -688,15 +695,19 @@ public final class PersonalityResponse {
      * @return the required response
      */
     public static String getEnrollmentError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
-        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl,
-                R.array.array_error_enrollment);
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_enrollment);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
     public static String getHoroscopeError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
-        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl,
-                R.array.array_error_horoscope);
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_horoscope);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
+    public static String getWeatherError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_weather);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }

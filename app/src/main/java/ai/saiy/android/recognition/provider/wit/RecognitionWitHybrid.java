@@ -271,7 +271,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "sendResults: hasDirectiveType: true" + directiveList.getDirectiveType().name());
             }
-            bundle.putSerializable(SaiyRecognitionListener.ALEXA_DIRECTIVE, directiveList.getDirectiveType());
+            bundle.putParcelable(SaiyRecognitionListener.ALEXA_DIRECTIVE, directiveList.getDirectiveType());
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "sendResults: hasDirectiveType: false");
         }
