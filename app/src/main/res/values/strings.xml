@@ -1825,4 +1825,21 @@
     <string name="what_time_is_it">what time is it</string>
     <string name="what_time_it_is">what time it is</string>
     <string name="whats_the_time">what\'s the time</string>
+
+    <string name="title_custom_speech">Custom speech</string>
+    <string name="title_display_contact">Display contact</string>
+    <string name="title_tasker_task">Tasker task</string>
+    <string name="title_launch_activity">Launch activity</string>
+    <string name="title_launch_application">Launch application</string>
+    <string name="title_call_contact">Call contact</string>
+    <string name="title_application_shortcut">Application shortcut</string>
+    <string name="title_searchable_application">Searchable application</string>
+    <string name="title_external_command">External command</string>
+    <string name="title_external_command_">External command %1$s</string>
+    <string name="title_iot_connection">IoT connection</string>
+    <string name="title_send_intent">Send intent</string>
+    <string name="title_http_request">HTTP request</string>
+    <string name="title_cast">Cast</string>
+    <string name="title_automate_flow">Automate Flow</string>
+    <string name="menu_custom_command">Custom Command</string>
 </resources>

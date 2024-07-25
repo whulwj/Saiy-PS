@@ -376,6 +376,31 @@ public class TaskerHelper {
         return false;
     }
 
+    public static boolean broadcastVariableValue(Context ctx, String taskName, String name, String value) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "broadcastVariableValue");
+        }
+
+        final TaskerHelper taskerHelper = new TaskerHelper();
+        final Pair<Boolean, String> taskerPair = taskerHelper.isTaskerInstalled(ctx);
+        if (taskerPair.first) {
+            final TaskerIntent taskerIntent = new TaskerIntent(taskName);
+            taskerIntent.addLocalVariable(name, value);
+            try {
+                ctx.sendBroadcast(taskerIntent);
+                return true;
+            } catch (final ActivityNotFoundException e) {
+                if (DEBUG) {
+                    MyLog.e(CLS_NAME, "broadcastVoiceData: ActivityNotFoundException, " + e.getMessage());
+                }
+            } catch (final Exception e) {
+                if (DEBUG) {
+                    MyLog.e(CLS_NAME, "broadcastVoiceData: Exception, " + e.getMessage());
+                }
+            }
+        }
+        return false;
+    }
 
     /**
      * Send an Intent to Tasker containing an array list of detected voice data

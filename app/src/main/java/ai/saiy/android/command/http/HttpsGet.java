@@ -1,0 +1,161 @@
+package ai.saiy.android.command.http;
+
+import android.net.ParseException;
+import android.util.Base64;
+import android.util.Pair;
+
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
+
+import javax.net.ssl.HttpsURLConnection;
+
+import ai.saiy.android.utils.Constants;
+import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsString;
+
+public class HttpsGet {
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = HttpsGet.class.getSimpleName();
+
+    private HttpsURLConnection httpsURLConnection;
+    private Object d = null;
+
+    private void disconnect() {
+        if (httpsURLConnection != null) {
+            try {
+                httpsURLConnection.disconnect();
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "Exception, " + e.getMessage());
+                }
+            }
+        }
+    }
+
+    public Pair<Boolean, Object> process(CustomHttp customHttp) {
+        boolean isSuccessful = false;
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "process");
+            MyLog.i(CLS_NAME, "url:" + customHttp.getUrlString());
+        }
+        final long then = System.nanoTime();
+        int i = 0;
+        try {
+            URL url;
+            URL currentUrl = new URL(customHttp.getUrlString());
+            while (!isSuccessful && i <= 2) {
+                this.httpsURLConnection = (HttpsURLConnection) currentUrl.openConnection();
+                httpsURLConnection.setRequestMethod(Constants.HTTP_GET);
+                httpsURLConnection.setConnectTimeout(7000);
+                httpsURLConnection.setReadTimeout(7000);
+                httpsURLConnection.setDoInput(true);
+                String userInfo = currentUrl.getUserInfo();
+                if (UtilsString.notNaked(userInfo)) {
+                    String decode = URLDecoder.decode(userInfo, "UTF-8");
+                    if (UtilsString.notNaked(decode)) {
+                        String encodeToString = Base64.encodeToString(decode.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
+                        if (UtilsString.notNaked(encodeToString)) {
+                            httpsURLConnection.setRequestProperty("Authorization", "Basic " + encodeToString);
+                        }
+                    }
+                }
+                httpsURLConnection.connect();
+                httpsURLConnection.setInstanceFollowRedirects(true);
+                int responseCode = httpsURLConnection.getResponseCode();
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "responseCode: " + responseCode);
+                }
+                switch (responseCode) {
+                    case HttpsURLConnection.HTTP_OK:
+                        switch (customHttp.getOutputType()) {
+                            case CustomHttp.OUTPUT_TYPE_STRING:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "CustomHttp.OUTPUT_TYPE_STRING");
+                                }
+                                this.d = UtilsString.streamToString(httpsURLConnection.getInputStream());
+                                break;
+                            case CustomHttp.OUTPUT_TYPE_BYTE_ARRAY:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "CustomHttp.OUTPUT_TYPE_BYTE_ARRAY");
+                                }
+                                this.d = com.google.common.io.ByteStreams.toByteArray(httpsURLConnection.getInputStream());
+                                break;
+                            default:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "CustomHttp.OUTPUT_TYPE_NONE");
+                                }
+                                this.d = null;
+                                break;
+                        }
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "response: " + d);
+                        }
+                        url = currentUrl;
+                        isSuccessful = true;
+                        break;
+                    case HttpsURLConnection.HTTP_MOVED_PERM:
+                    case HttpsURLConnection.HTTP_MOVED_TEMP:
+                        String headerField = httpsURLConnection.getHeaderField("Location");
+                        ++i;
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "location: " + headerField);
+                            MyLog.d(CLS_NAME, "redirectCount: " + i);
+                        }
+                        url = new URL(currentUrl, headerField);
+                        break;
+                    default:
+                        if (DEBUG) {
+                            MyLog.e(CLS_NAME, "error stream: " + UtilsString.streamToString(httpsURLConnection.getErrorStream()));
+                        }
+                        this.d = UtilsString.streamToString(httpsURLConnection.getErrorStream());
+                        url = currentUrl;
+                        break;
+                }
+                currentUrl = url;
+            }
+        } catch (MalformedURLException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "MalformedURLException, " + e.getMessage());
+            }
+        } catch (UnsupportedEncodingException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "UnsupportedEncodingException, " + e.getMessage());
+            }
+        } catch (ParseException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "ParseException, " + e.getMessage());
+            }
+        } catch (UnknownHostException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "UnknownHostException, " + e.getMessage());
+            }
+        } catch (IOException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "IOException, " + e.getMessage());
+            }
+        } catch (IllegalStateException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "IllegalStateException, " + e.getMessage());
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "NullPointerException, " + e.getMessage());
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "Exception, " + e.getMessage());
+            }
+        } finally {
+            disconnect();
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+        return new Pair<>(isSuccessful, d);
+    }
+}

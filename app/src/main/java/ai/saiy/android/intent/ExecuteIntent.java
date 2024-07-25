@@ -37,12 +37,14 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.request.SaiyRequest;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.command.intent.CustomIntent;
 import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.ui.activity.ActivityLauncherShortcut;
 import ai.saiy.android.utils.Constants;
@@ -91,6 +93,54 @@ public class ExecuteIntent {
             }
         }
 
+        return false;
+    }
+
+    public static boolean executeCustomIntent(Context ctx, Intent intent, @CustomIntent.Target int target) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "executeCustomIntent");
+        }
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        switch (target) {
+            case CustomIntent.TARGET_BROADCAST_RECEIVER:
+                try {
+                    ctx.sendBroadcast(intent);
+                    return true;
+                } catch (final Exception e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "executeCustomIntent sendBroadcast: Exception, " + e.getMessage());
+                    }
+                }
+                break;
+            case CustomIntent.TARGET_SERVICE:
+                try {
+                    ctx.startService(intent);
+                    return true;
+                } catch (final SecurityException e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "executeCustomIntent startService: SecurityException, " + e.getMessage());
+                    }
+                } catch (final Exception e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "executeCustomIntent startService: Exception, " + e.getMessage());
+                    }
+                }
+                break;
+            default:
+                try {
+                    ctx.startActivity(intent);
+                    return true;
+                } catch (final ActivityNotFoundException e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "executeCustomIntent: ActivityNotFoundException, " + e.getMessage());
+                    }
+                } catch (final Exception e) {
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "executeCustomIntent: Exception, " + e.getMessage());
+                    }
+                }
+                break;
+        }
         return false;
     }
 
@@ -808,6 +858,31 @@ public class ExecuteIntent {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "installQL Exception");
                 e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean launchShortcut(Context context, String str) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "launchShortcut: uri: " + str);
+        }
+        try {
+            final Intent intent = Intent.parseUri(str, Intent.URI_INTENT_SCHEME);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "launchShortcut: ActivityNotFoundException, " + e.getMessage());
+            }
+        } catch (URISyntaxException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "launchShortcut: URISyntaxException, " + e.getMessage());
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "launchShortcut: Exception, " + e.getMessage());
             }
         }
         return false;

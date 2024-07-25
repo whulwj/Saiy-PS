@@ -108,6 +108,160 @@ public class UtilsBundle {
         return false;
     }
 
+    public static Bundle stringExtra(String str) {
+        if (!UtilsString.notNaked(str)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "stringExtra: naked");
+            }
+            return Bundle.EMPTY;
+        }
+        final ArrayList<String> arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).trimResults().split(str));
+        arrayList.removeAll(Collections.singleton(null));
+        arrayList.removeAll(Collections.singleton(""));
+        if (!UtilsList.notNaked(arrayList)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "stringExtra: no content");
+            }
+            return Bundle.EMPTY;
+        }
+        final Bundle bundle = new Bundle();
+        for (String stringExtra : arrayList) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "stringExtra: " + stringExtra);
+            }
+            if (!stringExtra.contains(":")) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "stringExtra: delimiter missing");
+                }
+                continue;
+            }
+            final String[] split = stringExtra.split(":", 2);
+            final int length = split.length;
+            if (length != 2) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "extractedArrayLength: incorrect" + length);
+                }
+                continue;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "extractedArrayLength: " + length);
+                for (int i = 0; i < length; i++) {
+                    MyLog.i(CLS_NAME, "extracted: " + i + " : " + split[i]);
+                }
+            }
+            final String key = split[0].trim();
+            final String value = split[1].trim();
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "key: " + key);
+                MyLog.i(CLS_NAME, "value: " + value);
+            }
+            if (!UtilsString.notNaked(key) || !UtilsString.notNaked(value)) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "key or value naked" + length);
+                }
+                continue;
+            }
+            if (!org.apache.commons.lang3.math.NumberUtils.isCreatable(value)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "not numeric: " + value);
+                }
+                if (!URLUtil.isValidUrl(value)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "not Uri: " + value);
+                    }
+                    try {
+                        bundle.putBoolean(key, org.apache.commons.lang3.BooleanUtils.toBoolean(value, String.valueOf(true), String.valueOf(false)));
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "resolved to: boolean: " + value);
+                        }
+                    } catch (IllegalArgumentException e) {
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "toBoolean: IllegalArgumentException");
+                        }
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "not boolean: " + value);
+                        }
+                        if (value.matches("null")) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "string representation of null");
+                            }
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "resolved to: string: " + value);
+                            }
+                            bundle.putString(key, value);
+                        }
+                    }
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "resolved to: Uri: " + value);
+                    bundle.putString("URI:" + key, value);
+                }
+            } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "F")) {
+                try {
+                    bundle.putFloat(key, Float.parseFloat(value));
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: float: " + value);
+                    }
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseFloat: NumberFormatException");
+                    }
+                }
+            } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "L")) {
+                try {
+                    Long.parseLong(value.substring(0, value.length() - 1));
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: long: " + value);
+                    }
+                } catch (IndexOutOfBoundsException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseLong: IndexOutOfBoundsException");
+                    }
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseLong: NumberFormatException");
+                    }
+                }
+            } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "D")) {
+                try {
+                    bundle.putDouble(key, Double.parseDouble(value));
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: double: " + value);
+                    }
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseDouble: NumberFormatException");
+                    }
+                }
+            } else {
+                try {
+                    bundle.putInt(key, Integer.parseInt(value));
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "resolved to: int: " + value);
+                    }
+                } catch (NumberFormatException e) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "parseInt: NumberFormatException");
+                    }
+                    try {
+                        bundle.putDouble(key, Double.parseDouble(value));
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "resolved to: double: " + value);
+                        }
+                    } catch (NumberFormatException numberFormatException) {
+                        if (DEBUG) {
+                            MyLog.d(CLS_NAME, "parseDouble: NumberFormatException");
+                        }
+                        if (DEBUG) {
+                            MyLog.e(CLS_NAME, "isCreatable: no number created");
+                        }
+                    }
+                }
+            }
+        }
+        return bundle;
+    }
+
     public static boolean stringExtrasToBundle(String str) {
         if (!UtilsString.notNaked(str)) {
             if (DEBUG) {

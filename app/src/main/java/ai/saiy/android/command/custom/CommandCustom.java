@@ -17,12 +17,16 @@
 
 package ai.saiy.android.command.custom;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
 import java.net.URISyntaxException;
 import java.util.Set;
@@ -31,6 +35,8 @@ import ai.saiy.android.api.remote.Request;
 import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.command.helper.CommandRequest;
+import ai.saiy.android.command.http.CustomHttp;
+import ai.saiy.android.command.http.HttpsProcessor;
 import ai.saiy.android.custom.CCC;
 import ai.saiy.android.custom.CustomCommand;
 import ai.saiy.android.intent.ExecuteIntent;
@@ -80,7 +86,7 @@ public class CommandCustom {
             MyLog.i(CLS_NAME, "getScore: " + customCommand.getScore());
             MyLog.i(CLS_NAME, "getCommandConstant: " + customCommand.getCommandConstant().name());
             MyLog.i(CLS_NAME, "getIntent: " + customCommand.getIntent());
-            MyLog.i(CLS_NAME, "getIntent: " + customCommand.getExtraText());
+            MyLog.i(CLS_NAME, "getExtraText: " + customCommand.getExtraText());
 
             if (customCommand.getAlgorithm() != null) {
                 MyLog.i(CLS_NAME, "getAlgorithm: " + customCommand.getAlgorithm().name());
@@ -129,8 +135,7 @@ public class CommandCustom {
 
                 } catch (final URISyntaxException e) {
                     if (DEBUG) {
-                        MyLog.w(CLS_NAME, "Intent.parseUri: URISyntaxException");
-                        e.printStackTrace();
+                        MyLog.w(CLS_NAME, "Intent.parseUri: URISyntaxException, " + e.getMessage());
                     }
                 }
 
@@ -193,13 +198,11 @@ public class CommandCustom {
 
                 } catch (final URISyntaxException e) {
                     if (DEBUG) {
-                        MyLog.w(CLS_NAME, "remoteIntent.parseUri: URISyntaxException");
-                        e.printStackTrace();
+                        MyLog.w(CLS_NAME, "remoteIntent.parseUri: URISyntaxException, " + e.getMessage());
                     }
                 } catch (final NullPointerException e) {
                     if (DEBUG) {
-                        MyLog.w(CLS_NAME, "remoteIntent.parseUri: NullPointerException");
-                        e.printStackTrace();
+                        MyLog.w(CLS_NAME, "remoteIntent.parseUri: NullPointerException, " + e.getMessage());
                     }
                 }
 
@@ -264,6 +267,200 @@ public class CommandCustom {
                     outcome.setOutcome(Outcome.FAILURE);
                 }
 
+                break;
+            case CUSTOM_SEND_INTENT:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, CCC.CUSTOM_SEND_INTENT.name());
+                }
+                final ai.saiy.android.command.intent.CustomIntent customIntent = new GsonBuilder().disableHtmlEscaping().create().fromJson(customCommand.getExtraText(),
+                        new TypeToken<ai.saiy.android.command.intent.CustomIntent>() {}.getType());
+                final Intent httpIntent = UtilsString.notNaked(customIntent.getAction())? new Intent(customIntent.getAction()) : new Intent();
+                if (UtilsString.notNaked(customIntent.getPackageName())) {
+                    httpIntent.setPackage(customIntent.getPackageName());
+                    if (UtilsString.notNaked(customIntent.getClassName())) {
+                        httpIntent.setComponent(new ComponentName(customIntent.getPackageName(), customIntent.getClassName()));
+                    }
+                }
+                if (UtilsString.notNaked(customIntent.getCategory())) {
+                    httpIntent.setPackage(customIntent.getCategory());
+                }
+                if (UtilsString.notNaked(customIntent.getMimeType())) {
+                    httpIntent.setType(customIntent.getMimeType());
+                }
+                if (UtilsString.notNaked(customIntent.getData())) {
+                    try {
+                        httpIntent.setData(android.net.Uri.parse(customIntent.getData()));
+                    } catch (Exception e) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "Execute executeCustomIntent failed, " + e.getMessage());
+                        }
+                    }
+                }
+                if (UtilsString.notNaked(customIntent.getExtras())) {
+                    final Bundle bundle = ai.saiy.android.utils.UtilsBundle.stringExtra(customIntent.getExtras());
+                    if (!bundle.isEmpty()) {
+                        httpIntent.putExtras(bundle);
+                    }
+                    if (httpIntent.getExtras() != null) {
+                        examineIntent(httpIntent);
+                    }
+                }
+                if (ai.saiy.android.intent.ExecuteIntent.executeCustomIntent(ctx, httpIntent, customIntent.getTarget())) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Execute executeCustomIntent success");
+                    }
+                    outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseSuccess())
+                            ? customCommand.getResponseSuccess() : SaiyRequestParams.SILENCE);
+                    outcome.setOutcome(Outcome.SUCCESS);
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Execute executeCustomIntent failed");
+                    }
+                    outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseError())
+                            ? customCommand.getResponseError() : SaiyRequestParams.SILENCE);
+                    outcome.setOutcome(Outcome.FAILURE);
+                }
+                outcome.setAction(customCommand.getAction());
+                break;
+            case CUSTOM_HTTP:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, CCC.CUSTOM_HTTP.name());
+                }
+                final CustomHttp customHttp = new GsonBuilder().disableHtmlEscaping().create().fromJson(customCommand.getExtraText(),
+                        new TypeToken<CustomHttp>() {}.getType());
+                final HttpsProcessor httpsProcessor = new HttpsProcessor();
+                final android.util.Pair<Boolean, Object> processedPair = httpsProcessor.process(customHttp);
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_HTTP success: " + processedPair.first);
+                }
+                if (processedPair.first) {
+                    outcome.setOutcome(Outcome.SUCCESS);
+                    switch (customHttp.getSuccessHandling()) {
+                        case CustomHttp.SUCCESS_SPEAK:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "SUCCESS_SPEAK");
+                            }
+                            outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseSuccess())
+                                    ? customCommand.getResponseSuccess() : SaiyRequestParams.SILENCE);
+                            break;
+                        case CustomHttp.SUCCESS_SPEAK_LISTEN:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "SUCCESS_SPEAK_LISTEN");
+                            }
+                            outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseSuccess())
+                                    ? customCommand.getResponseSuccess() : SaiyRequestParams.SILENCE);
+                            break;
+                        case CustomHttp.SUCCESS_SPEAK_OUTPUT:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "SUCCESS_SPEAK_OUTPUT have output: " + (processedPair.second != null));
+                            }
+                            outcome.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "SUCCESS_SPEAK_OUTPUT instanceof String: " + (processedPair.second instanceof String));
+                            }
+                            outcome.setUtterance((processedPair.second instanceof String)? (String) processedPair.second : SaiyRequestParams.SILENCE);
+                            break;
+                        case CustomHttp.SUCCESS_SPEAK_LISTEN_OUTPUT:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "SUCCESS_SPEAK_LISTEN_OUTPUT have output: " + (processedPair.second != null));
+                            }
+                            outcome.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "SUCCESS_SPEAK_LISTEN_OUTPUT instanceof String: " + (processedPair.second instanceof String));
+                            }
+                            outcome.setUtterance((processedPair.second instanceof String)? (String) processedPair.second : SaiyRequestParams.SILENCE);
+                            break;
+                        default:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "SUCCESS_NONE");
+                            }
+                            break;
+                    }
+                } else {
+                    outcome.setOutcome(Outcome.FAILURE);
+                    switch (customHttp.getErrorHandling()) {
+                        case CustomHttp.ERROR_SPEAK:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "ERROR_SPEAK");
+                            }
+                            outcome.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                            outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseError())
+                                    ? customCommand.getResponseError() : SaiyRequestParams.SILENCE);
+                            break;
+                        case CustomHttp.ERROR_SPEAK_LISTEN:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "ERROR_SPEAK_LISTEN");
+                            }
+                            outcome.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                            outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseError())
+                                    ? customCommand.getResponseError() : SaiyRequestParams.SILENCE);
+                            break;
+                        case CustomHttp.ERROR_SPEAK_OUTPUT:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "ERROR_SPEAK_OUTPUT have error stream: " + (processedPair.second != null));
+                            }
+                            outcome.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "ERROR_SPEAK_OUTPUT instanceof String: " + (processedPair.second instanceof String));
+                            }
+                            outcome.setUtterance((processedPair.second instanceof String)? (String) processedPair.second : SaiyRequestParams.SILENCE);
+                            break;
+                        case CustomHttp.ERROR_SPEAK_LISTEN_OUTPUT:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "ERROR_SPEAK_LISTEN_OUTPUT have error stream: " + (processedPair.second != null));
+                            }
+                            outcome.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "ERROR_SPEAK_LISTEN_OUTPUT instanceof String: " + (processedPair.second instanceof String));
+                            }
+                            outcome.setUtterance((processedPair.second instanceof String)? (String) processedPair.second : SaiyRequestParams.SILENCE);
+                            break;
+                        default:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "ERROR_NONE");
+                            }
+                            outcome.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                            outcome.setUtterance(SaiyRequestParams.SILENCE);
+                            break;
+                    }
+                }
+
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_HTTP: isTasker: " + customHttp.isTasker());
+                }
+                if (customHttp.isTasker()) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "CUSTOM_HTTP getTaskerTaskName: " + customHttp.getTaskerTaskName());
+                        MyLog.i(CLS_NAME, "CUSTOM_HTTP getTaskerVariableName: " + customHttp.getTaskerVariableName());
+                    }
+                    if (processedPair.second instanceof String) {
+                        final boolean result = ai.saiy.android.thirdparty.tasker.TaskerHelper.broadcastVariableValue(ctx, customHttp.getTaskerTaskName(), customHttp.getTaskerVariableName(), (String) processedPair.second);
+                        if (result) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "CUSTOM_HTTP: update tasker success");
+                            }
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "CUSTOM_HTTP: update tasker error");
+                            }
+                        }
+                    }
+                }
+                break;
+            case CUSTOM_AUTOMATE_FLOW:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, CCC.CUSTOM_AUTOMATE_FLOW.name());
+                }
+                final boolean result = ai.saiy.android.intent.ExecuteIntent.launchShortcut(ctx, customCommand.getExtraText());
+                outcome.setOutcome(result? Outcome.SUCCESS : Outcome.FAILURE);
+                if (result) {
+                    outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseSuccess())
+                            ? customCommand.getResponseSuccess() : SaiyRequestParams.SILENCE);
+                } else {
+                    outcome.setUtterance(UtilsString.notNaked(customCommand.getResponseError())
+                            ? customCommand.getResponseError() : SaiyRequestParams.SILENCE);
+                }
+                outcome.setAction(customCommand.getAction());
                 break;
             default:
                 if (DEBUG) {

@@ -52,8 +52,10 @@ public final class Constants {
     public static final String OGG_AUDIO_FILE_SUFFIX = "ogg";
 
     public static final String ENCODING_UTF8 = "UTF-8";
+    public static final String HTTP_DELETE = "DELETE";
     public static final String HTTP_GET = "GET";
     public static final String HTTP_POST = "POST";
+    public static final String HTTP_PUT = "PUT";
 
     public static final String STUDIO_AHREMARK_WEB_URL = "http://www.studioahremark.com/";
     public static final String SCHLAPA_WEB_URL = "https://schlapa.net";
