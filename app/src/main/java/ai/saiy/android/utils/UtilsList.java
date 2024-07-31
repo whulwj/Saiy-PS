@@ -42,4 +42,8 @@ public class UtilsList {
     public static boolean notNaked(@Nullable final byte[] array) {
         return array != null && array.length > 0;
     }
+
+    public static boolean notNaked(@Nullable final CharSequence[] array) {
+        return array != null && array.length > 0;
+    }
 }

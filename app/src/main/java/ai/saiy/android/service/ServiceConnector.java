@@ -30,6 +30,7 @@ import androidx.annotation.NonNull;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.service.helper.SelfAwareHelper;
+import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.utils.MyLog;
 
 /**
@@ -161,12 +162,17 @@ public class ServiceConnector {
                     final int requestPriority = request.getSpeechPriority();
 
                     if (requestPriority == currentPriority && request.getQueueType() != TextToSpeech.QUEUE_ADD) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "priorities match - stopping speech");
+                        if (requestPriority == SpeechPriority.PRIORITY_NOTIFICATION) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "priorities match - PRIORITY_NOTIFICATION: ignoring");
+                            }
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "priorities match - stopping speech");
+                            }
+                            selfAwareService.stopSpeech(request.shouldPreventRecognition());
                         }
-                        selfAwareService.stopSpeech(request.shouldPreventRecognition());
                     } else {
-
                         if (request.getAction() == LocalRequest.ACTION_UNKNOWN) {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "priority mismatch - ACTION_UNKNOWN - stopping speech");

@@ -461,13 +461,13 @@ public class SaiyAccessibilityService extends AccessibilityService {
     }
 
     private int getPackageType(String packageName) {
-        if (packageName.matches("com.google.android.gm")) {
+        if (packageName.matches(Installed.PACKAGE_GMAIL)) {
             return GMAIL;
         }
-        if (packageName.matches("com.android.mms") || packageName.matches(Installed.PACKAGE_GOOGLE_MESSAGE)) {
+        if (packageName.matches(Installed.PACKAGE_ANDROID_MESSAGING) || packageName.matches(Installed.PACKAGE_GOOGLE_MESSAGE)) {
             return TEXT_MESSAGE;
         }
-        String defaultSMSPackage = null; //ai.saiy.android.command.ac.d.b(getApplicationContext());
+        final String defaultSMSPackage = ai.saiy.android.command.sms.SmsHelper.getDefaultSMSPackage(getApplicationContext());
         if (!ai.saiy.android.utils.UtilsString.notNaked(defaultSMSPackage) || !packageName.matches(defaultSMSPackage)) {
             return DEFAULT;
         }

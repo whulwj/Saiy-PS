@@ -54,6 +54,7 @@ public class Installed {
     public static final String PACKAGE_AMAZON = "com.amazon.mShop.android.shopping";
     public static final String PACKAGE_AMAZON_WINDOW_SHOP = "com.amazon.windowshop";
     public static final String PACKAGE_AMAZON_MUSIC = "com.amazon.mp3";
+    public static final String PACKAGE_ANDROID_MESSAGING = "com.android.mms";
     public static final String PACKAGE_AUTOMATE = "com.llamalab.automate";
     public static final String PACKAGE_BOX = "com.box.android";
     public static final String PACKAGE_DEEZER = "deezer.android.app";
@@ -62,6 +63,7 @@ public class Installed {
     public static final String PACKAGE_EVERNOTE = "com.evernote";
     public static final String PACKAGE_FACEBOOK = "com.facebook.katana";
     public static final String PACKAGE_FOUR_SQUARED = "com.joelapenna.foursquared";
+    public static final String PACKAGE_GMAIL = "com.google.android.gm";
     public static final String PACKAGE_GOOGLE_DOCS = "com.google.android.apps.docs";
     public static final String PACKAGE_GOOGLE_EARTH = "com.google.earth";
     public static final String PACKAGE_GOOGLE_HANGOUT = "com.google.android.talk";

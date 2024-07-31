@@ -1028,6 +1028,7 @@
     <string name="permission_phone_state">So I can access the number of your incoming calls, and search for the associated contact. I require the permission to read the phone state.</string>
 
     <!-- Notification data -->
+    <string name="is_typing">is typing</string>
     <string name="notification_ticker" translatable="true">"Saiy has become self-aware"</string>
     <string name="notification_ai_level" translatable="true">"AI level %1$s"</string>
     <string name="notification_listening" translatable="true">"Listening"</string>

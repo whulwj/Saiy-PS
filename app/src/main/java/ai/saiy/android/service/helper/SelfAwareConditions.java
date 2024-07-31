@@ -549,6 +549,9 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                     case SpeechPriority.PRIORITY_LOW:
                         MyLog.i(CLS_NAME, "requestPriority: PRIORITY_LOW");
                         break;
+                    case SpeechPriority.PRIORITY_NOTIFICATION:
+                        MyLog.i(CLS_NAME, "requestPriority: PRIORITY_NOTIFICATION");
+                        break;
                     case SpeechPriority.PRIORITY_REMOTE:
                         MyLog.i(CLS_NAME, "requestPriority: PRIORITY_REMOTE");
                         break;
@@ -564,6 +567,9 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
 
                     case SpeechPriority.PRIORITY_LOW:
                         MyLog.i(CLS_NAME, "proceedPriority: PRIORITY_LOW");
+                        break;
+                    case SpeechPriority.PRIORITY_NOTIFICATION:
+                        MyLog.i(CLS_NAME, "proceedPriority: PRIORITY_NOTIFICATION");
                         break;
                     case SpeechPriority.PRIORITY_REMOTE:
                         MyLog.i(CLS_NAME, "proceedPriority: PRIORITY_REMOTE");

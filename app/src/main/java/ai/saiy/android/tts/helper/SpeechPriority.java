@@ -13,6 +13,7 @@ package ai.saiy.android.tts.helper;
 public class SpeechPriority {
 
     public static final int PRIORITY_LOW = 1;
+    public static final int PRIORITY_NOTIFICATION = 5;
     public static final int PRIORITY_REMOTE = 10;
     public static final int PRIORITY_NORMAL = 25;
     public static final int PRIORITY_TUTORIAL = 45;
