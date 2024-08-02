@@ -39,17 +39,17 @@ public class ContactHelper {
 
     private ArrayList<Contact> setAddress(Context context, ArrayList<Contact> contacts, String str) {
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID}, str, null, null);
-        if (query != null) {
+        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID}, str, null, null);
+        if (cursor != null) {
             try {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "setAddress cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "setAddress cursor count: " + cursor.getCount());
                 }
-                int columnFormattedAddressIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS);
-                int columnContactIdIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID);
-                while (query.moveToNext()) {
-                    String formattedAddress = query.getString(columnFormattedAddressIndex);
-                    String contactId = query.getString(columnContactIdIndex);
+                int columnFormattedAddressIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS);
+                int columnContactIdIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID);
+                while (cursor.moveToNext()) {
+                    String formattedAddress = cursor.getString(columnFormattedAddressIndex);
+                    String contactId = cursor.getString(columnContactIdIndex);
                     if (formattedAddress != null && !formattedAddress.trim().isEmpty()) {
                         for (Contact contact : contacts) {
                             if (contact.getID().equals(contactId)) {
@@ -64,58 +64,23 @@ public class ContactHelper {
                     MyLog.w(CLS_NAME, "setAddress: IllegalStateException");
                     illegalStateException.printStackTrace();
                 }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setAddress: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setAddress: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setAddress: Exception");
-                        e.printStackTrace();
-                    }
-                }
             } catch (SQLiteException sqLiteException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "setAddress: SQLiteException");
                     sqLiteException.printStackTrace();
-                }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setAddress: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setAddress: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setAddress: Exception");
-                        e.printStackTrace();
-                    }
                 }
             } catch (Exception exception) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "setAddress: Exception");
                     exception.printStackTrace();
                 }
+            } finally {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "setAddress: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -127,45 +92,6 @@ public class ContactHelper {
                         MyLog.w(CLS_NAME, "setAddress: Exception");
                         e.printStackTrace();
                     }
-                }
-            } catch (Throwable th) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setAddress: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setAddress: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setAddress: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        if (query != null) {
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "setAddress: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "setAddress: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "setAddress: Exception");
-                    e.printStackTrace();
                 }
             }
         }
@@ -242,17 +168,17 @@ public class ContactHelper {
 
     private ArrayList<Contact> setEmail(Context context, ArrayList<Contact> contacts, String str) {
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Email.ADDRESS, ContactsContract.CommonDataKinds.Email.CONTACT_ID}, str, null, null);
-        if (query != null) {
+        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Email.ADDRESS, ContactsContract.CommonDataKinds.Email.CONTACT_ID}, str, null, null);
+        if (cursor != null) {
             try {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "setEmail cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "setEmail cursor count: " + cursor.getCount());
                 }
-                int columnAddressIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
-                int columnContactIdIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
-                while (query.moveToNext()) {
-                    String address = query.getString(columnAddressIndex);
-                    String contactID = query.getString(columnContactIdIndex);
+                int columnAddressIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
+                int columnContactIdIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.CONTACT_ID);
+                while (cursor.moveToNext()) {
+                    String address = cursor.getString(columnAddressIndex);
+                    String contactID = cursor.getString(columnContactIdIndex);
                     if (address != null && address.contains("@") && !address.trim().isEmpty()) {
                         for (Contact contact : contacts) {
                             if (contact.getID().equals(contactID)) {
@@ -267,58 +193,23 @@ public class ContactHelper {
                     MyLog.w(CLS_NAME, "setEmail: IllegalStateException");
                     illegalStateException.printStackTrace();
                 }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setEmail: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setEmail: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setEmail: Exception");
-                        e.printStackTrace();
-                    }
-                }
             } catch (SQLiteException sqLiteException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "setEmail: SQLiteException");
                     sqLiteException.printStackTrace();
-                }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setEmail: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setEmail: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setEmail: Exception");
-                        e.printStackTrace();
-                    }
                 }
             } catch (Exception exception) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "setEmail: Exception");
                     exception.printStackTrace();
                 }
+            } finally {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "setEmail: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -330,45 +221,6 @@ public class ContactHelper {
                         MyLog.w(CLS_NAME, "setEmail: Exception");
                         e.printStackTrace();
                     }
-                }
-            } catch (Throwable th) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setEmail: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setEmail: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "setEmail: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        if (query != null) {
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "setEmail: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "setEmail: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "setEmail: Exception");
-                    e.printStackTrace();
                 }
             }
         }
@@ -691,22 +543,22 @@ public class ContactHelper {
             contactIDarray[i] = contacts.get(i).getID();
         }
         final ArrayList<Choice> choices = new ArrayList<>();
-        Cursor query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.IS_PRIMARY, ContactsContract.CommonDataKinds.Phone.CONTACT_ID}, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " IN (" + TextUtils.join(XMLResultsHandler.SEP_COMMA, contactIDarray) + ")", null, null);
-        if (query != null) {
+        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.IS_PRIMARY, ContactsContract.CommonDataKinds.Phone.CONTACT_ID}, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " IN (" + TextUtils.join(XMLResultsHandler.SEP_COMMA, contactIDarray) + ")", null, null);
+        if (cursor != null) {
             try {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "getChoices cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "getChoices cursor count: " + cursor.getCount());
                 }
-                int columnNumberIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                int columnTypeIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
-                int columnIsPrimaryIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_PRIMARY);
-                int columnContactIdIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
-                while (query.moveToNext()) {
-                    String number = query.getString(columnNumberIndex);
+                int columnNumberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                int columnTypeIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
+                int columnIsPrimaryIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_PRIMARY);
+                int columnContactIdIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
+                while (cursor.moveToNext()) {
+                    String number = cursor.getString(columnNumberIndex);
                     if (number != null && !number.trim().isEmpty()) {
-                        Choice choice = new Choice(query.getString(columnContactIdIndex), query.getInt(columnTypeIndex), number, query.getInt(columnIsPrimaryIndex) == 1);
+                        Choice choice = new Choice(cursor.getString(columnContactIdIndex), cursor.getInt(columnTypeIndex), number, cursor.getInt(columnIsPrimaryIndex) == 1);
                         if (DEBUG) {
-                            MyLog.d(CLS_NAME, "getChoices number: " + number + " : primary: " + (query.getInt(columnIsPrimaryIndex) == 1));
+                            MyLog.d(CLS_NAME, "getChoices number: " + number + " : primary: " + (cursor.getInt(columnIsPrimaryIndex) == 1));
                         }
                         choices.add(choice);
                     }
@@ -716,58 +568,23 @@ public class ContactHelper {
                     MyLog.w(CLS_NAME, "getChoices: IllegalStateException");
                     illegalStateException.printStackTrace();
                 }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getChoices: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getChoices: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getChoices: Exception");
-                        e.printStackTrace();
-                    }
-                }
             } catch (SQLiteException sqLiteException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getChoices: SQLiteException");
                     sqLiteException.printStackTrace();
-                }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getChoices: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getChoices: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getChoices: Exception");
-                        e.printStackTrace();
-                    }
                 }
             } catch (Exception exception) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getChoices: Exception");
                     exception.printStackTrace();
                 }
+            } finally {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getChoices: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -779,45 +596,6 @@ public class ContactHelper {
                         MyLog.w(CLS_NAME, "getChoices: Exception");
                         e.printStackTrace();
                     }
-                }
-            } catch (Throwable th) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getChoices: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getChoices: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getChoices: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        if (query != null) {
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getChoices: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getChoices: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getChoices: Exception");
-                    e.printStackTrace();
                 }
             }
         }
@@ -881,116 +659,50 @@ public class ContactHelper {
     public Phone getNameAndNumberFromUri(Context context, Uri uri) {
         Phone phone = null;
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.Data.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.TYPE}, null, null, null);
+        Cursor cursor = context.getContentResolver().query(uri, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.Data.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.TYPE}, null, null, null);
         try {
-            try {
-                if (query != null) {
-                    if (DEBUG) {
-                        MyLog.d(CLS_NAME, "getNameAndNumberFromUri cursor count: " + query.getCount());
-                    }
-                    int columnDisplayNameIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-                    int columnNumberIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
-                    int columnTypeIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
-                    while (query.moveToNext()) {
-                        String name = query.getString(columnDisplayNameIndex);
-                        String number = query.getString(columnNumberIndex);
-                        int type = query.getInt(columnTypeIndex);
-                        if (UtilsString.notNaked(name) && UtilsString.notNaked(number)) {
-                            phone = new Phone(name, number, type);
-                            break;
-                        }
-                    }
-                } else if (DEBUG) {
-                    MyLog.v(CLS_NAME, "getNameAndNumberFromUri cursor null");
-                }
-            } catch (SQLiteException sqLiteException) {
+            if (cursor != null) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getNameAndNumberFromUri: SQLiteException");
-                    sqLiteException.printStackTrace();
+                    MyLog.d(CLS_NAME, "getNameAndNumberFromUri cursor count: " + cursor.getCount());
                 }
-                if (query != null) {
-                    try {
-                        if (!query.isClosed()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "getNameAndNumberFromUri: finally closing");
-                            }
-                            query.close();
-                        }
-                    } catch (IllegalStateException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getNameAndNumberFromUri: IllegalStateException");
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getNameAndNumberFromUri: Exception");
-                            e.printStackTrace();
-                        }
+                int columnDisplayNameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                int columnNumberIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                int columnTypeIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.TYPE);
+                while (cursor.moveToNext()) {
+                    String name = cursor.getString(columnDisplayNameIndex);
+                    String number = cursor.getString(columnNumberIndex);
+                    int type = cursor.getInt(columnTypeIndex);
+                    if (UtilsString.notNaked(name) && UtilsString.notNaked(number)) {
+                        phone = new Phone(name, number, type);
+                        break;
                     }
                 }
-            } catch (IllegalStateException illegalStateException) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getNameAndNumberFromUri: IllegalStateException");
-                    illegalStateException.printStackTrace();
-                }
-                if (query != null) {
-                    try {
-                        if (!query.isClosed()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "getNameAndNumberFromUri: finally closing");
-                            }
-                            query.close();
-                        }
-                    } catch (IllegalStateException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getNameAndNumberFromUri: IllegalStateException");
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getNameAndNumberFromUri: Exception");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            } catch (Exception exception) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getNameAndNumberFromUri: Exception");
-                    exception.printStackTrace();
-                }
-                if (query != null) {
-                    try {
-                        if (!query.isClosed()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "getNameAndNumberFromUri: finally closing");
-                            }
-                            query.close();
-                        }
-                    } catch (IllegalStateException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getNameAndNumberFromUri: IllegalStateException");
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getNameAndNumberFromUri: Exception");
-                            e.printStackTrace();
-                        }
-                    }
-                }
+            } else if (DEBUG) {
+                MyLog.v(CLS_NAME, "getNameAndNumberFromUri cursor null");
             }
+        } catch (SQLiteException sqLiteException) {
             if (DEBUG) {
-                MyLog.getElapsed(CLS_NAME, "getNameAndNumberFromUri", then);
+                MyLog.w(CLS_NAME, "getNameAndNumberFromUri: SQLiteException");
+                sqLiteException.printStackTrace();
             }
-            return phone;
+        } catch (IllegalStateException illegalStateException) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getNameAndNumberFromUri: IllegalStateException");
+                illegalStateException.printStackTrace();
+            }
+        } catch (Exception exception) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getNameAndNumberFromUri: Exception");
+                exception.printStackTrace();
+            }
         } finally {
-            if (query != null) {
+            if (cursor != null) {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getNameAndNumberFromUri: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -1005,6 +717,10 @@ public class ContactHelper {
                 }
             }
         }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, "getNameAndNumberFromUri", then);
+        }
+        return phone;
     }
 
     public String getNameFromNumber(Context context, String number) {
@@ -1051,7 +767,7 @@ public class ContactHelper {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getNameFromNumber: Exception");
             }
-        }  finally {
+        } finally {
             try {
                 if (!cursor.isClosed()) {
                     cursor.close();
@@ -1085,104 +801,45 @@ public class ContactHelper {
             }
         }
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS, ContactsContract.CommonDataKinds.StructuredPostal.TYPE}, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = ?", new String[]{contactID}, null);
-        try {
-            if (query != null) {
-                try {
-                    if (DEBUG) {
-                        MyLog.d(CLS_NAME, "getAddress cursor count: " + query.getCount());
-                    }
-                    int columnFormattedAddressIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS);
-                    int columnTypeIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.TYPE);
-                    while (query.moveToNext()) {
-                        String formattedAddress = query.getString(columnFormattedAddressIndex);
-                        if (formattedAddress != null && !formattedAddress.trim().isEmpty() && (type == ContactsContract.CommonDataKinds.StructuredPostal.TYPE_CUSTOM || query.getInt(columnTypeIndex) == type)) {
-                            address = formattedAddress;
-                        }
-                    }
-                } catch (SQLiteException sqLiteException) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAddress: SQLiteException");
-                        sqLiteException.printStackTrace();
-                    }
-                    try {
-                        if (!query.isClosed()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "getAddress: finally closing");
-                            }
-                            query.close();
-                        }
-                    } catch (IllegalStateException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getAddress: IllegalStateException");
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getAddress: Exception");
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (IllegalStateException illegalStateException) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAddress: IllegalStateException");
-                        illegalStateException.printStackTrace();
-                    }
-                    try {
-                        if (!query.isClosed()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "getAddress: finally closing");
-                            }
-                            query.close();
-                        }
-                    } catch (IllegalStateException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getAddress: IllegalStateException");
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getAddress: Exception");
-                            e.printStackTrace();
-                        }
-                    }
-                } catch (Exception exception) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAddress: Exception");
-                        exception.printStackTrace();
-                    }
-                    try {
-                        if (!query.isClosed()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "getAddress: finally closing");
-                            }
-                            query.close();
-                        }
-                    } catch (IllegalStateException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getAddress: IllegalStateException");
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getAddress: Exception");
-                            e.printStackTrace();
-                        }
+        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.StructuredPostal.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS, ContactsContract.CommonDataKinds.StructuredPostal.TYPE}, ContactsContract.CommonDataKinds.StructuredPostal.CONTACT_ID + " = ?", new String[]{contactID}, null);
+        if (cursor != null) {
+            try {
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "getAddress cursor count: " + cursor.getCount());
+                }
+                int columnFormattedAddressIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.FORMATTED_ADDRESS);
+                int columnTypeIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredPostal.TYPE);
+                while (cursor.moveToNext()) {
+                    String formattedAddress = cursor.getString(columnFormattedAddressIndex);
+                    if (formattedAddress != null && !formattedAddress.trim().isEmpty() && (type == ContactsContract.CommonDataKinds.StructuredPostal.TYPE_CUSTOM || cursor.getInt(columnTypeIndex) == type)) {
+                        address = formattedAddress;
                     }
                 }
-            }
-            if (DEBUG) {
-                MyLog.getElapsed("getAddress", then);
-            }
-            return address;
-        } finally {
-            if (query != null) {
+                if (DEBUG) {
+                    MyLog.getElapsed("getAddress", then);
+                }
+            } catch (SQLiteException sqLiteException) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getAddress: SQLiteException");
+                    sqLiteException.printStackTrace();
+                }
+            } catch (IllegalStateException illegalStateException) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getAddress: IllegalStateException");
+                    illegalStateException.printStackTrace();
+                }
+            } catch (Exception exception) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getAddress: Exception");
+                    exception.printStackTrace();
+                }
+            } finally {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getAddress: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -1197,6 +854,7 @@ public class ContactHelper {
                 }
             }
         }
+        return address;
     }
 
     public void syncContacts(final Context context) {
@@ -1294,99 +952,48 @@ public class ContactHelper {
             }
         }
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Email.ADDRESS, ContactsContract.CommonDataKinds.Email.TYPE}, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{contactID}, null);
-        if (query != null) {
+        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Email.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Email.ADDRESS, ContactsContract.CommonDataKinds.Email.TYPE}, ContactsContract.CommonDataKinds.Email.CONTACT_ID + " = ?", new String[]{contactID}, null);
+        if (cursor != null) {
             try {
                 if (DEBUG) {
-                    MyLog.v(CLS_NAME, "getEmail cursor count: " + query.getCount());
+                    MyLog.v(CLS_NAME, "getEmail cursor count: " + cursor.getCount());
                 }
-                int columnAddressIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
-                int columnTypeIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE);
+                int columnAddressIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.ADDRESS);
+                int columnTypeIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Email.TYPE);
                 String address;
-                while (query.moveToNext()) {
-                    address = query.getString(columnAddressIndex);
+                while (cursor.moveToNext()) {
+                    address = cursor.getString(columnAddressIndex);
                     if (address != null && address.contains("@") && !address.trim().isEmpty()) {
-                        if (type == 0 || query.getInt(columnTypeIndex) == type) {
+                        if (type == 0 || cursor.getInt(columnTypeIndex) == type) {
                             emailAddress = address;
                         }
                     }
+                }
+                if (DEBUG) {
+                    MyLog.getElapsed("getEmail", then);
                 }
             } catch (IllegalStateException illegalStateException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getEmail: IllegalStateException");
                     illegalStateException.printStackTrace();
                 }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getEmail: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getEmail: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getEmail: Exception");
-                        e.printStackTrace();
-                    }
-                }
             } catch (SQLiteException sqLiteException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getEmail: SQLiteException");
                     sqLiteException.printStackTrace();
-                }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getEmail: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getEmail: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getEmail: Exception");
-                        e.printStackTrace();
-                    }
                 }
             } catch (Exception exception) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getEmail: Exception");
                     exception.printStackTrace();
                 }
+            } finally {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getEmail: finally closing");
                         }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getEmail: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getEmail: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            } catch (Throwable th) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getEmail: finally closing");
-                        }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -1400,29 +1007,6 @@ public class ContactHelper {
                     }
                 }
             }
-        }
-        if (query != null) {
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getEmail: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getEmail: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getEmail: Exception");
-                    e.printStackTrace();
-                }
-            }
-        }
-        if (DEBUG) {
-            MyLog.getElapsed("getEmail", then);
         }
         return emailAddress;
     }
@@ -1439,87 +1023,52 @@ public class ContactHelper {
                 ContactsContract.Data.CONTACT_ID,
                 ContactsContract.Data.TIMES_CONTACTED,
                 Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? ContactsContract.Data.TIMES_USED : ContactsContract.Data.TIMES_CONTACTED};
-        Cursor query = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI, projection, ContactsContract.Data.MIMETYPE + " = ?", selectionArgs, null);
-        if (query != null) {
+        Cursor cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI, projection, ContactsContract.Data.MIMETYPE + " = ?", selectionArgs, null);
+        if (cursor != null) {
             try {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "getAllContacts cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "getAllContacts cursor count: " + cursor.getCount());
                 }
-                int columnIndex = query.getColumnIndex(ContactsContract.Data.HAS_PHONE_NUMBER);
-                int columnContactIdIndex = query.getColumnIndex(ContactsContract.Data.CONTACT_ID);
-                int columnDisplayNameIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME);
-                int columnPhoneticNameIndex = query.getColumnIndex(ContactsContract.Data.PHONETIC_NAME);
-                int columnGivenNameIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
-                int columnFamilyNameIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
-                int columnTimesIndex = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? query.getColumnIndex(ContactsContract.Data.TIMES_USED) : query.getColumnIndex(ContactsContract.Data.TIMES_CONTACTED);
-                while (query.moveToNext()) {
-                    String contactID = query.getString(columnContactIdIndex);
-                    String name = query.getString(columnDisplayNameIndex);
-                    String phoneticName = query.getString(columnPhoneticNameIndex);
-                    String forename = query.getString(columnGivenNameIndex);
-                    String surname = query.getString(columnFamilyNameIndex);
+                int columnIndex = cursor.getColumnIndex(ContactsContract.Data.HAS_PHONE_NUMBER);
+                int columnContactIdIndex = cursor.getColumnIndex(ContactsContract.Data.CONTACT_ID);
+                int columnDisplayNameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME);
+                int columnPhoneticNameIndex = cursor.getColumnIndex(ContactsContract.Data.PHONETIC_NAME);
+                int columnGivenNameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.GIVEN_NAME);
+                int columnFamilyNameIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.StructuredName.FAMILY_NAME);
+                int columnTimesIndex = Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2 ? cursor.getColumnIndex(ContactsContract.Data.TIMES_USED) : cursor.getColumnIndex(ContactsContract.Data.TIMES_CONTACTED);
+                while (cursor.moveToNext()) {
+                    String contactID = cursor.getString(columnContactIdIndex);
+                    String name = cursor.getString(columnDisplayNameIndex);
+                    String phoneticName = cursor.getString(columnPhoneticNameIndex);
+                    String forename = cursor.getString(columnGivenNameIndex);
+                    String surname = cursor.getString(columnFamilyNameIndex);
                     if (name != null && contactID != null && !name.trim().isEmpty() && !name.contains("@")) {
-                        contacts.add(new Contact(contactID, name, phoneticName, forename, surname, null, name.split("\\s").length, query.getInt(columnTimesIndex), query.getInt(columnIndex) > 0, false, false));
+                        contacts.add(new Contact(contactID, name, phoneticName, forename, surname, name.split("\\s").length, cursor.getInt(columnTimesIndex), cursor.getInt(columnIndex) > 0, false, false));
                     }
                 }
-                query.close();
+                cursor.close();
             } catch (IllegalStateException illegalStateException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getAllContacts: IllegalStateException");
                     illegalStateException.printStackTrace();
-                }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getAllContacts: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAllContacts: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAllContacts: Exception");
-                        e.printStackTrace();
-                    }
                 }
             } catch (SQLiteException sqLiteException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getAllContacts: SQLiteException");
                     sqLiteException.printStackTrace();
                 }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getAllContacts: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAllContacts: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAllContacts: Exception");
-                        e.printStackTrace();
-                    }
-                }
             } catch (Exception exception) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getAllContacts: Exception");
                     exception.printStackTrace();
                 }
+            } finally {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getAllContacts: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -1531,45 +1080,6 @@ public class ContactHelper {
                         MyLog.w(CLS_NAME, "getAllContacts: Exception");
                         e.printStackTrace();
                     }
-                }
-            } catch (Throwable th) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getAllContacts: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAllContacts: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getAllContacts: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        if (query != null) {
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getAllContacts: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getAllContacts: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getAllContacts: Exception");
-                    e.printStackTrace();
                 }
             }
         }
@@ -1587,33 +1097,14 @@ public class ContactHelper {
     public String getUserProfileName(Context context) {
         String displayName = null;
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, new String[]{ContactsContract.Profile.DISPLAY_NAME}, null, null, null);
+        Cursor cursor = context.getContentResolver().query(ContactsContract.Profile.CONTENT_URI, new String[]{ContactsContract.Profile.DISPLAY_NAME}, null, null, null);
         try {
-            if (query != null) {
+            if (cursor != null) {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "getUserProfileName cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "getUserProfileName cursor count: " + cursor.getCount());
                 }
-                if (query.moveToFirst()) {
-                    displayName = query.getString(query.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
-                    try {
-                        if (!query.isClosed()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "getUserProfileName: finally closing");
-                            }
-                            query.close();
-                        }
-                    } catch (IllegalStateException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
-                            e.printStackTrace();
-                        }
-                    } catch (Exception e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "getUserProfileName: Exception");
-                            e.printStackTrace();
-                        }
-                    }
-                    return displayName;
+                if (cursor.moveToFirst()) {
+                    displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
                 }
                 if (DEBUG) {
                     MyLog.v(CLS_NAME, "getUserProfileName cursor empty");
@@ -1629,85 +1120,24 @@ public class ContactHelper {
                 MyLog.w(CLS_NAME, "getUserProfileName: SQLiteException");
                 sqLiteException.printStackTrace();
             }
-            if (query != null) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getUserProfileName: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
         } catch (IllegalStateException illegalStateException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
                 illegalStateException.printStackTrace();
-            }
-            if (query != null) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getUserProfileName: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: Exception");
-                        e.printStackTrace();
-                    }
-                }
             }
         } catch (Exception exception) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getUserProfileName: Exception");
                 exception.printStackTrace();
             }
-            if (query != null) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getUserProfileName: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return displayName;
         } finally {
-            if (query != null) {
+            if (cursor != null) {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getUserProfileName: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -1722,7 +1152,7 @@ public class ContactHelper {
                 }
             }
         }
-        return null;
+        return displayName;
     }
 
     public String getNormalisedNumber(Context context, String number) {
@@ -1769,7 +1199,7 @@ public class ContactHelper {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getNormalisedNumber: Exception");
             }
-        }  finally {
+        } finally {
             try {
                 if (!cursor.isClosed()) {
                     cursor.close();
@@ -1800,18 +1230,18 @@ public class ContactHelper {
             }
         }
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Im.PROTOCOL, ContactsContract.CommonDataKinds.Im.DATA}, ContactsContract.Data.CONTACT_ID + " = ?", new String[]{contactID}, null);
-        if (query != null) {
+        Cursor cursor = context.getContentResolver().query(ContactsContract.Data.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Im.PROTOCOL, ContactsContract.CommonDataKinds.Im.DATA}, ContactsContract.Data.CONTACT_ID + " = ?", new String[]{contactID}, null);
+        if (cursor != null) {
             try {
                 if (DEBUG) {
-                    MyLog.v(CLS_NAME, "getIM cursor count: " + query.getCount());
+                    MyLog.v(CLS_NAME, "getIM cursor count: " + cursor.getCount());
                 }
-                int columnDataIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Im.DATA);
-                int columnProtocolIndex = query.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL);
-                while (query.moveToNext()) {
-                    String data = query.getString(columnDataIndex);
+                int columnDataIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Im.DATA);
+                int columnProtocolIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Im.PROTOCOL);
+                while (cursor.moveToNext()) {
+                    String data = cursor.getString(columnDataIndex);
                     if (data != null && !data.trim().isEmpty()) {
-                        if (query.getInt(columnProtocolIndex) == ContactsContract.CommonDataKinds.Im.PROTOCOL_SKYPE) {
+                        if (cursor.getInt(columnProtocolIndex) == ContactsContract.CommonDataKinds.Im.PROTOCOL_SKYPE) {
                             str = data;
                         }
                     }
@@ -1821,58 +1251,23 @@ public class ContactHelper {
                     MyLog.w(CLS_NAME, "getIM: IllegalStateException");
                     illegalStateException.printStackTrace();
                 }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getIM: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getIM: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getIM: Exception");
-                        e.printStackTrace();
-                    }
-                }
             } catch (SQLiteException sqLiteException) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getIM: SQLiteException");
                     sqLiteException.printStackTrace();
-                }
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getIM: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getIM: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getIM: Exception");
-                        e.printStackTrace();
-                    }
                 }
             } catch (Exception exception) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getIM: Exception");
                     exception.printStackTrace();
                 }
+            } finally {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getIM: finally closing");
                         }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {
@@ -1884,45 +1279,6 @@ public class ContactHelper {
                         MyLog.w(CLS_NAME, "getIM: Exception");
                         e.printStackTrace();
                     }
-                }
-            } catch (Throwable th) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getIM: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getIM: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getIM: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
-        if (query != null) {
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getIM: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getIM: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getIM: Exception");
-                    e.printStackTrace();
                 }
             }
         }
@@ -2003,125 +1359,45 @@ public class ContactHelper {
         }
         final long then = System.nanoTime();
         final ArrayList<String> rawIDs = new ArrayList<>();
-        Cursor query = context.getContentResolver().query(ContactsContract.RawContacts.CONTENT_URI, new String[]{ContactsContract.RawContacts._ID}, ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " LIKE ?", new String[]{displayName}, null);
+        Cursor cursor = context.getContentResolver().query(ContactsContract.RawContacts.CONTENT_URI, new String[]{ContactsContract.RawContacts._ID}, ContactsContract.RawContacts.DISPLAY_NAME_PRIMARY + " LIKE ?", new String[]{displayName}, null);
         try {
-            if (query != null) {
+            if (cursor != null) {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "getRawIdArray cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "getRawIdArray cursor count: " + cursor.getCount());
                 }
-                int columnIdIndex = query.getColumnIndex(ContactsContract.RawContacts._ID);
-                while (query.moveToNext()) {
+                int columnIdIndex = cursor.getColumnIndex(ContactsContract.RawContacts._ID);
+                while (cursor.moveToNext()) {
                     if (DEBUG) {
-                        MyLog.d(CLS_NAME, "getRawIdArray id: " + query.getString(columnIdIndex));
+                        MyLog.d(CLS_NAME, "getRawIdArray id: " + cursor.getString(columnIdIndex));
                     }
-                    rawIDs.add(query.getString(columnIdIndex));
+                    rawIDs.add(cursor.getString(columnIdIndex));
                 }
             } else if (DEBUG) {
                 MyLog.v(CLS_NAME, "getRawIdArray cursor null");
-            }
-            if (query != null) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getRawIdArray: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: Exception");
-                        e.printStackTrace();
-                    }
-                }
             }
         } catch (SQLiteException sqLiteException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getRawIdArray: SQLiteException");
                 sqLiteException.printStackTrace();
             }
-            if (query != null) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getRawIdArray: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
         } catch (IllegalStateException illegalStateException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getRawIdArray: IllegalStateException");
                 illegalStateException.printStackTrace();
-            }
-            if (query != null) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getRawIdArray: finally closing");
-                        }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: Exception");
-                        e.printStackTrace();
-                    }
-                }
             }
         } catch (Exception exception) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getRawIdArray: Exception");
                 exception.printStackTrace();
             }
-            if (query != null) {
+        } finally {
+            if (cursor != null) {
                 try {
-                    if (!query.isClosed()) {
+                    if (!cursor.isClosed()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getRawIdArray: finally closing");
                         }
-                        query.close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: Exception");
-                        e.printStackTrace();
-                    }
-                }
-            }
-        } catch (Throwable th) {
-            if (query != null) {
-                try {
-                    if (!query.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getRawIdArray: finally closing");
-                        }
-                        query.close();
+                        cursor.close();
                     }
                 } catch (IllegalStateException e) {
                     if (DEBUG) {

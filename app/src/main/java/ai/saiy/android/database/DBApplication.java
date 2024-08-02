@@ -54,117 +54,37 @@ public class DBApplication extends SQLiteOpenHelper {
         deleteTable();
         try {
             open();
-            if (this.database.isOpen()) {
-                this.database.beginTransaction();
-                final SQLiteStatement compileStatement = this.database.compileStatement("insert into " + TABLE_APPLICATION + "(" + COLUMN_APPLICATION_NAME + ", " + COLUMN_APPLICATION_PACKAGE + ") values (?, ?)");
+            if (database.isOpen()) {
+                database.beginTransaction();
+                final SQLiteStatement compileStatement = database.compileStatement("insert into " + TABLE_APPLICATION + "(" + COLUMN_APPLICATION_NAME + ", " + COLUMN_APPLICATION_PACKAGE + ") values (?, ?)");
                 for (Pair<String, String> next : arrayList) {
                     compileStatement.bindString(1, next.first);
                     compileStatement.bindString(2, next.second);
                     compileStatement.executeInsert();
                 }
-                this.database.setTransactionSuccessful();
-                this.database.endTransaction();
+                database.setTransactionSuccessful();
+                database.endTransaction();
             } else if (DEBUG) {
                 MyLog.w(CLS_NAME, "insertData: failed to open");
-            }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: Exception");
-                    e.printStackTrace();
-                }
             }
         } catch (IllegalStateException illegalStateException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "insertData: IllegalStateException");
                 illegalStateException.printStackTrace();
             }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: Exception");
-                    e.printStackTrace();
-                }
-            }
         } catch (SQLException sqlException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "insertData: SQLException");
                 sqlException.printStackTrace();
-            }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: Exception");
-                    e.printStackTrace();
-                }
             }
         } catch (Exception exception) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "insertData: Exception");
                 exception.printStackTrace();
             }
+        } finally {
             try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "insertData: Exception");
-                    e.printStackTrace();
-                }
-            }
-        } catch (Throwable t) {
-            try {
-                if (this.database.isOpen()) {
+                if (database.isOpen()) {
                     close();
                 }
             } catch (IllegalStateException e) {
@@ -189,155 +109,38 @@ public class DBApplication extends SQLiteOpenHelper {
         }
     }
 
+    /**
+     * Delete all entries in the current table
+     */
     public boolean deleteTable() {
         try {
             open();
-            if (this.database.isOpen()) {
-                this.database.delete(TABLE_APPLICATION, null, null);
-                try {
-                    if (!this.database.isOpen()) {
-                        return true;
-                    }
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "deleteTable: finally closing");
-                    }
-                    close();
-                    return true;
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "deleteTable: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                    return true;
-                } catch (SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "deleteTable: SQLException");
-                        e.printStackTrace();
-                    }
-                    return true;
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "deleteTable: Exception");
-                        e.printStackTrace();
-                    }
-                    return true;
-                }
+            if (database.isOpen()) {
+                database.delete(TABLE_APPLICATION, null, null);
+                return true;
             } else {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "deleteTable: database not open");
                 }
-                try {
-                    if (this.database.isOpen()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "deleteTable: finally closing");
-                        }
-                        close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "deleteTable: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "deleteTable: SQLException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "deleteTable: Exception");
-                        e.printStackTrace();
-                    }
-                }
-                return false;
             }
-        } catch (IllegalStateException illegalStateException) {
+        } catch (IllegalStateException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "deleteTable: IllegalStateException");
-                illegalStateException.printStackTrace();
+                e.printStackTrace();
             }
-            try {
-                if (this.database.isOpen()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "deleteTable: finally closing");
-                    }
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: Exception");
-                    e.printStackTrace();
-                }
-            }
-        } catch (SQLException sqlException) {
+        } catch (SQLException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "deleteTable: SQLException");
-                sqlException.printStackTrace();
+                e.printStackTrace();
             }
-            try {
-                if (this.database.isOpen()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "deleteTable: finally closing");
-                    }
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: Exception");
-                    e.printStackTrace();
-                }
-            }
-        } catch (Exception exception) {
+        } catch (Exception e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "deleteTable: Exception");
-                exception.printStackTrace();
-            }
-            try {
-                if (this.database.isOpen()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "deleteTable: finally closing");
-                    }
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "deleteTable: Exception");
-                    e.printStackTrace();
-                }
+                e.printStackTrace();
             }
         } finally {
             try {
-                if (this.database.isOpen()) {
+                if (database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -360,45 +163,30 @@ public class DBApplication extends SQLiteOpenHelper {
                 }
             }
         }
+
         return false;
     }
 
+    /**
+     * Get all applications from the database.
+     *
+     * @return the {@link Pair} label and package name
+     */
     public ArrayList<Pair<String, String>> getApplications() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getApplications");
         }
         final long then = System.nanoTime();
-        ArrayList<Pair<String, String>> arrayList = new ArrayList<>();
-        Cursor query = null;
+        final ArrayList<Pair<String, String>> applications = new ArrayList<>();
+        Cursor cursor = null;
         try {
             open();
-            if (this.database.isOpen()) {
-                query = this.database.query(TABLE_APPLICATION, ALL_COLUMNS, null, null, null, null, null);
-                query.moveToFirst();
-                while (!query.isAfterLast()) {
-                    arrayList.add(new Pair<>(query.getString(1), query.getString(2)));
-                    query.moveToNext();
-                }
-                query.close();
-            }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: Exception");
-                    e.printStackTrace();
+            if (database.isOpen()) {
+                cursor = database.query(TABLE_APPLICATION, ALL_COLUMNS, null, null, null, null, null);
+                cursor.moveToFirst();
+                while (!cursor.isAfterLast()) {
+                    applications.add(new Pair<>(cursor.getString(1), cursor.getString(2)));
+                    cursor.moveToNext();
                 }
             }
         } catch (IllegalStateException illegalStateException) {
@@ -406,110 +194,51 @@ public class DBApplication extends SQLiteOpenHelper {
                 MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
                 illegalStateException.printStackTrace();
             }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: Exception");
-                    e.printStackTrace();
-                }
-            }
         } catch (SQLException sqlException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getApplications: SQLException");
                 sqlException.printStackTrace();
-            }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: Exception");
-                    e.printStackTrace();
-                }
             }
         } catch (Exception exception) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getApplications: Exception");
                 exception.printStackTrace();
             }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: Exception");
-                    e.printStackTrace();
-                }
-            }
         } finally {
             try {
-                if (query != null && query.isClosed()) {
-                    query.close();
+                if (cursor != null && cursor.isClosed()) {
+                    cursor.close();
                 }
             } catch (Throwable t) {
                 MyLog.w(CLS_NAME, "getApplications: Throwable");
-            }
-            try {
-                if (this.database.isOpen()) {
-                    close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (SQLException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: SQLException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getApplications: Exception");
-                    e.printStackTrace();
+            } finally {
+                try {
+                    if (database.isOpen()) {
+                        close();
+                    }
+                } catch (IllegalStateException e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
+                        e.printStackTrace();
+                    }
+                } catch (SQLException e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "getApplications: SQLException");
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "getApplications: Exception");
+                        e.printStackTrace();
+                    }
                 }
             }
         }
         if (DEBUG) {
             MyLog.getElapsed(CLS_NAME, "getApplications", then);
-            MyLog.d(CLS_NAME, "getApplications: size: " + arrayList.size());
+            MyLog.d(CLS_NAME, "getApplications: size: " + applications.size());
         }
-        return arrayList;
+        return applications;
     }
 
     @Override
@@ -517,25 +246,25 @@ public class DBApplication extends SQLiteOpenHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "close");
         }
-        this.database.close();
+        database.close();
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sQLiteDatabase) {
+    public void onCreate(SQLiteDatabase dataBase) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreate");
         }
-        sQLiteDatabase.execSQL(DATABASE_CREATE);
+        dataBase.execSQL(DATABASE_CREATE);
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sQLiteDatabase, int oldVersion, int newVersion) {
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onUpgrade");
             MyLog.w(CLS_NAME, "Upgrading database from version " + oldVersion + " to " + newVersion
                     + ", which will destroy all old data");
         }
-        sQLiteDatabase.execSQL("DROP TABLE IF EXISTS " + TABLE_APPLICATION);
-        onCreate(sQLiteDatabase);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_APPLICATION);
+        onCreate(db);
     }
 }

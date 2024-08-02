@@ -56,7 +56,11 @@ import ai.saiy.android.command.note.NoteValues;
 import ai.saiy.android.database.DBApplication;
 import ai.saiy.android.database.DBContact;
 import ai.saiy.android.database.DBCustomCommand;
+import ai.saiy.android.database.DBCustomNickname;
+import ai.saiy.android.database.DBCustomPhrase;
+import ai.saiy.android.database.DBCustomReplacement;
 import ai.saiy.android.database.DBSpeech;
+import ai.saiy.android.database.DBTaskerVariable;
 import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
@@ -1132,10 +1136,14 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 if (DEBUG) {
                                     MyLog.w(CLS_NAME, "rest SPH success: deleting databases");
                                 }
-                                new DBApplication(context).deleteTable();
                                 new DBContact(context).deleteTable();
                                 new DBCustomCommand(context).deleteTable();
+                                new DBCustomNickname(context).deleteTable();
+                                new DBCustomPhrase(context).deleteTable();
+                                new DBCustomReplacement(context).deleteTable();
                                 new DBSpeech(context).deleteTable();
+                                new DBApplication(context).deleteTable();
+                                new DBTaskerVariable(context).deleteTable();
                                 final ActivityHome activity = getParentActivity();
                                 if (activity == null || activity.isFinishing()) {
                                     return;

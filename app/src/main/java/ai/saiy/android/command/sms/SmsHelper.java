@@ -174,29 +174,29 @@ public class SmsHelper {
     public Message getMostRecentMessage(Context context) {
         Message message = null;
         final long then = System.nanoTime();
-        Cursor query = context.getContentResolver().query(CONTENT_URI, new String[]{BODY, ADDRESS, READ, DATE, PERSON}, null, null, DEFAULT_SORT_ORDER + " LIMIT 1");
-        if (query == null) {
+        Cursor cursor = context.getContentResolver().query(CONTENT_URI, new String[]{BODY, ADDRESS, READ, DATE, PERSON}, null, null, DEFAULT_SORT_ORDER + " LIMIT 1");
+        if (cursor == null) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getMostRecentMessage cursor: null");
             }
             return null;
         }
         try {
-            if (query.getCount() > 0) {
+            if (cursor.getCount() > 0) {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "getMostRecentMessage cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "getMostRecentMessage cursor count: " + cursor.getCount());
                 }
-                int columnBodyIndex = query.getColumnIndex(BODY);
-                int columnAddressIndex = query.getColumnIndex(ADDRESS);
-                int columnReadIndex = query.getColumnIndex(READ);
-                int columnDateIndex = query.getColumnIndex(DATE);
-                int columnPersonIndex = query.getColumnIndex(PERSON);
-                query.moveToFirst();
-                String body = query.getString(columnBodyIndex);
-                String address = query.getString(columnAddressIndex);
-                boolean isRead = query.getInt(columnReadIndex) > 0;
-                long date = query.getLong(columnDateIndex);
-                String person = query.getString(columnPersonIndex);
+                int columnBodyIndex = cursor.getColumnIndex(BODY);
+                int columnAddressIndex = cursor.getColumnIndex(ADDRESS);
+                int columnReadIndex = cursor.getColumnIndex(READ);
+                int columnDateIndex = cursor.getColumnIndex(DATE);
+                int columnPersonIndex = cursor.getColumnIndex(PERSON);
+                cursor.moveToFirst();
+                String body = cursor.getString(columnBodyIndex);
+                String address = cursor.getString(columnAddressIndex);
+                boolean isRead = cursor.getInt(columnReadIndex) > 0;
+                long date = cursor.getLong(columnDateIndex);
+                String person = cursor.getString(columnPersonIndex);
                 if (body != null && !body.trim().isEmpty()) {
                     message = new Message(address, body, date, person, isRead);
                 }
@@ -206,77 +206,23 @@ public class SmsHelper {
                 MyLog.w(CLS_NAME, "getMostRecentMessage: SQLiteException");
                 sqLiteException.printStackTrace();
             }
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getMostRecentMessage: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentMessage: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentMessage: Exception");
-                    e.printStackTrace();
-                }
-            }
         } catch (IllegalStateException illegalStateException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getMostRecentMessage: IllegalStateException");
                 illegalStateException.printStackTrace();
-            }
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getMostRecentMessage: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentMessage: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentMessage: Exception");
-                    e.printStackTrace();
-                }
             }
         } catch (Exception exception) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getMostRecentMessage: Exception");
                 exception.printStackTrace();
             }
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getMostRecentMessage: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentMessage: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentMessage: Exception");
-                    e.printStackTrace();
-                }
-            }
         } finally {
             try {
-                if (!query.isClosed()) {
+                if (!cursor.isClosed()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "getMostRecentMessage: finally closing");
                     }
-                    query.close();
+                    cursor.close();
                 }
             } catch (IllegalStateException e) {
                 if (DEBUG) {
@@ -304,29 +250,29 @@ public class SmsHelper {
             rawIdArray[i] = rawIDs.get(i);
         }
         final String selection = PERSON + " IN " + "(" + TextUtils.join(XMLResultsHandler.SEP_COMMA, rawIdArray) + ")";
-        Cursor query = context.getContentResolver().query(CONTENT_URI, new String[]{BODY, ADDRESS, READ, DATE, PERSON}, selection, null, DEFAULT_SORT_ORDER + " LIMIT 1");
-        if (query == null) {
+        Cursor cursor = context.getContentResolver().query(CONTENT_URI, new String[]{BODY, ADDRESS, READ, DATE, PERSON}, selection, null, DEFAULT_SORT_ORDER + " LIMIT 1");
+        if (cursor == null) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getMostRecentContactMessage cursor null");
             }
             return null;
         }
         try {
-            if (query.getCount() > 0) {
+            if (cursor.getCount() > 0) {
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "getMostRecentContactMessage cursor count: " + query.getCount());
+                    MyLog.d(CLS_NAME, "getMostRecentContactMessage cursor count: " + cursor.getCount());
                 }
-                int columnBodyIndex = query.getColumnIndex(BODY);
-                int columnAddressIndex = query.getColumnIndex(ADDRESS);
-                int columnReadIndex = query.getColumnIndex(READ);
-                int columnDateIndex = query.getColumnIndex(DATE);
-                int columnPersonIndex = query.getColumnIndex(PERSON);
-                query.moveToFirst();
-                String body = query.getString(columnBodyIndex);
-                String address = query.getString(columnAddressIndex);
-                boolean isRead = query.getInt(columnReadIndex) > 0;
-                long date = query.getLong(columnDateIndex);
-                String person = query.getString(columnPersonIndex);
+                int columnBodyIndex = cursor.getColumnIndex(BODY);
+                int columnAddressIndex = cursor.getColumnIndex(ADDRESS);
+                int columnReadIndex = cursor.getColumnIndex(READ);
+                int columnDateIndex = cursor.getColumnIndex(DATE);
+                int columnPersonIndex = cursor.getColumnIndex(PERSON);
+                cursor.moveToFirst();
+                String body = cursor.getString(columnBodyIndex);
+                String address = cursor.getString(columnAddressIndex);
+                boolean isRead = cursor.getInt(columnReadIndex) > 0;
+                long date = cursor.getLong(columnDateIndex);
+                String person = cursor.getString(columnPersonIndex);
                 if (body != null && !body.trim().isEmpty()) {
                     message = new Message(address, body, date, person, isRead);
                 }
@@ -336,77 +282,23 @@ public class SmsHelper {
                 MyLog.w(CLS_NAME, "getMostRecentContactMessage: SQLiteException");
                 sqLiteException.printStackTrace();
             }
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getMostRecentContactMessage: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentContactMessage: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentContactMessage: Exception");
-                    e.printStackTrace();
-                }
-            }
         } catch (IllegalStateException illegalStateException) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getMostRecentContactMessage: IllegalStateException");
                 illegalStateException.printStackTrace();
-            }
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getMostRecentContactMessage: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentContactMessage: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentContactMessage: Exception");
-                    e.printStackTrace();
-                }
             }
         } catch (Exception exception) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getMostRecentContactMessage: Exception");
                 exception.printStackTrace();
             }
-            try {
-                if (!query.isClosed()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getMostRecentContactMessage: finally closing");
-                    }
-                    query.close();
-                }
-            } catch (IllegalStateException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentContactMessage: IllegalStateException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "getMostRecentContactMessage: Exception");
-                    e.printStackTrace();
-                }
-            }
         } finally {
             try {
-                if (!query.isClosed()) {
+                if (!cursor.isClosed()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "getMostRecentContactMessage: finally closing");
                     }
-                    query.close();
+                    cursor.close();
                 }
             } catch (IllegalStateException e) {
                 if (DEBUG) {

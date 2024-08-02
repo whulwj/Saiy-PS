@@ -40,7 +40,9 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.ui.activity.ActivityFoursquareOAuth;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.activity.ActivityTwitterOAuth;
 import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentApplicationsHelper;
@@ -71,8 +73,8 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
             getParentActivity().runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    FragmentApplications.this.mObjects.get(5).setSubtitle(TokenHelper.hasToken(FragmentApplications.this.getApplicationContext()) ? FragmentApplications.this.getString(R.string.menu_tap_deauthorise) : FragmentApplications.this.getString(R.string.menu_tap_authorise));
-                    FragmentApplications.this.mAdapter.notifyItemChanged(5);
+                    mObjects.get(5).setSubtitle(TokenHelper.hasToken(getApplicationContext()) ? getString(R.string.menu_tap_deauthorise) : getString(R.string.menu_tap_authorise));
+                    mAdapter.notifyItemChanged(5);
                 }
             });
         }
@@ -94,7 +96,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     }
 
     public boolean isAttemptingReinstallation() {
-        return this.isAttemptingReinstallation;
+        return isAttemptingReinstallation;
     }
 
     public void showAlexaRegionDialog() {
@@ -142,8 +144,8 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "showAlexaRegionDialog: onPositive: " + position);
                             }
-                            ai.saiy.android.utils.SPH.setAlexaRegion(FragmentApplications.this.getApplicationContext(), position);
-                            FragmentApplications.this.showAlexaOverviewDialog();
+                            ai.saiy.android.utils.SPH.setAlexaRegion(getApplicationContext(), position);
+                            showAlexaOverviewDialog();
                         }
                         dialog.dismiss();
                     }
@@ -214,7 +216,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     MyLog.i(CLS_NAME, "ibLoginWithAmazon: onClick");
                 }
                 materialDialog.dismiss();
-                FragmentApplications.this.authoriseAlexa();
+                authoriseAlexa();
             }
         });
     }
@@ -231,8 +233,8 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onSuccess");
                 }
-                FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.success_), Toast.LENGTH_SHORT);
-                FragmentApplications.this.onAuthorizationStatusChange();
+                toast(getString(R.string.success_), Toast.LENGTH_SHORT);
+                onAuthorizationStatusChange();
                 UtilsAnalytic.alexaAuthSuccess(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
             }
 
@@ -242,8 +244,8 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     MyLog.e(CLS_NAME, "onError");
                     e.printStackTrace();
                 }
-                FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.failed), Toast.LENGTH_SHORT);
-                FragmentApplications.this.showProgress(false);
+                toast(getString(R.string.failed), Toast.LENGTH_SHORT);
+                showProgress(false);
                 UtilsAnalytic.alexaAuthError(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
             }
 
@@ -252,7 +254,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onCancel");
                 }
-                FragmentApplications.this.showProgress(false);
+                showProgress(false);
             }
         });
     }
@@ -274,8 +276,8 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "signOut: onError");
                 }
-                FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.menu_logged_out), Toast.LENGTH_SHORT);
-                FragmentApplications.this.onAuthorizationStatusChange();
+                toast(getString(R.string.menu_logged_out), Toast.LENGTH_SHORT);
+                onAuthorizationStatusChange();
             }
 
             @Override
@@ -283,21 +285,18 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "signOut: onSuccess");
                 }
-                FragmentApplications.this.toast(FragmentApplications.this.getString(R.string.menu_logged_out), Toast.LENGTH_SHORT);
-                FragmentApplications.this.onAuthorizationStatusChange();
+                toast(getString(R.string.menu_logged_out), Toast.LENGTH_SHORT);
+                onAuthorizationStatusChange();
             }
         });
     }
 
     public void linkTwitter() {
-        //todo add ActivityTwitterOAuth
-//        ai.saiy.android.intent.ExecuteIntent.saiyActivity(getApplicationContext(), (Class<?>) ActivityTwitterOAuth.class, (Bundle) null, true);
+        ai.saiy.android.intent.ExecuteIntent.saiyActivity(getApplicationContext(), ActivityTwitterOAuth.class, null, true);
     }
 
     public void linkFoursquare() {
-        if (DEBUG) {
-            MyLog.d(CLS_NAME, "ActivityFoursquareOAuth");
-        }
+        ai.saiy.android.intent.ExecuteIntent.saiyActivity(getApplicationContext(), ActivityFoursquareOAuth.class, null, true);
     }
 
     public boolean isActive() {
@@ -309,15 +308,15 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
     }
 
     public Context getApplicationContext() {
-        return this.mContext;
+        return mContext;
     }
 
     public RecyclerView.Adapter<?> getAdapter() {
-        return this.mAdapter;
+        return mAdapter;
     }
 
     public ArrayList<ContainerUI> getObjects() {
-        return this.mObjects;
+        return mObjects;
     }
 
     @Override
@@ -363,7 +362,8 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 return;
             case 1:
                 getParentActivity().vibrate();
-                //todo twitter?
+                toast("Awaiting Facebook approval review", Toast.LENGTH_SHORT);
+                //todo link facebook
             case 2:
                 Install.showInstallLink(getApplicationContext(), Installed.PACKAGE_TWITTER);
                 return;
@@ -383,7 +383,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            ai.saiy.android.utils.UtilsFile.createDirs(FragmentApplications.this.getApplicationContext());
+                            ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext());
                         }
                     }).start();
                     if (TokenHelper.hasToken(getApplicationContext())) {
@@ -397,72 +397,54 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                     MyLog.i(CLS_NAME, "authAlexa: checking encryption provider");
                                 }
                                 try {
-                                    try {
-                                        try {
-                                            ProviderInstaller.installIfNeeded(FragmentApplications.this.getApplicationContext());
-                                            if (FragmentApplications.this.isActive()) {
-                                                FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (DEBUG) {
-                                                            MyLog.i(CLS_NAME, "authAlexa: proceeding");
-                                                        }
-                                                        FragmentApplications.this.showAlexaRegionDialog();
-                                                    }
-                                                });
-                                            }
-                                        } catch (GooglePlayServicesNotAvailableException e) {
-                                            if (DEBUG) {
-                                                MyLog.e(CLS_NAME, "authAlexa: GooglePlayServicesNotAvailableException");
-                                                e.printStackTrace();
-                                            }
-                                            if (FragmentApplications.this.isActive()) {
-                                                FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
-                                                    @Override
-                                                    public void run() {
-                                                        if (DEBUG) {
-                                                            MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
-                                                        }
-                                                        com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
-                                                        googleApiAvailability.showErrorNotification(FragmentApplications.this.getApplicationContext(), googleApiAvailability.isGooglePlayServicesAvailable(FragmentApplications.this.getApplicationContext()));
-                                                    }
-                                                });
-                                            }
-                                        }
-                                    } catch (GooglePlayServicesRepairableException e2) {
-                                        if (DEBUG) {
-                                            MyLog.e(CLS_NAME, "authAlexa: GooglePlayServicesRepairableException");
-                                            e2.printStackTrace();
-                                        }
-                                        if (FragmentApplications.this.isActive()) {
-                                            FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (DEBUG) {
-                                                        MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
-                                                    }
-                                                    com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
-                                                    googleApiAvailability.showErrorNotification(FragmentApplications.this.getApplicationContext(), googleApiAvailability.isGooglePlayServicesAvailable(FragmentApplications.this.getApplicationContext()));
-                                                }
-                                            });
-                                        }
-                                    }
-                                } catch (Throwable th) {
-                                    if (FragmentApplications.this.isActive()) {
-                                        FragmentApplications.this.getParentActivity().runOnUiThread(new Runnable() {
+                                    ProviderInstaller.installIfNeeded(getApplicationContext());
+                                    if (isActive()) {
+                                        getParentActivity().runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
                                                 if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
+                                                    MyLog.i(CLS_NAME, "authAlexa: proceeding");
                                                 }
-                                                com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
-                                                googleApiAvailability.showErrorNotification(FragmentApplications.this.getApplicationContext(), googleApiAvailability.isGooglePlayServicesAvailable(FragmentApplications.this.getApplicationContext()));
+                                                showAlexaRegionDialog();
                                             }
                                         });
+                                    }
+                                } catch (GooglePlayServicesNotAvailableException e) {
+                                    if (DEBUG) {
+                                        MyLog.e(CLS_NAME, "authAlexa: GooglePlayServicesNotAvailableException");
+                                        e.printStackTrace();
+                                    }
+                                    if (isActive()) {
+                                        showErrorNotification();
+                                    }
+                                } catch (GooglePlayServicesRepairableException e) {
+                                    if (DEBUG) {
+                                        MyLog.e(CLS_NAME, "authAlexa: GooglePlayServicesRepairableException");
+                                        e.printStackTrace();
+                                    }
+                                    if (isActive()) {
+                                        showErrorNotification();
+                                    }
+                                } catch (Throwable th) {
+                                    if (isActive()) {
+                                        showErrorNotification();
                                     } else if (DEBUG) {
                                         MyLog.w(CLS_NAME, "authAlexa: showing play services:" + th);
                                     }
                                 }
+                            }
+
+                            private void showErrorNotification() {
+                                getParentActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
+                                        }
+                                        com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
+                                        googleApiAvailability.showErrorNotification(getApplicationContext(), googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext()));
+                                    }
+                                });
                             }
                         }).start();
                         return;
@@ -477,10 +459,10 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     new Thread(new Runnable() {
                         @Override
                         public void run() {
-                            ai.saiy.android.utils.UtilsFile.createDirs(FragmentApplications.this.getApplicationContext());
+                            ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext());
                         }
                     }).start();
-                    this.helper.checkTaskerInstallation();
+                    helper.checkTaskerInstallation();
                     return;
                 }
                 return;
@@ -602,10 +584,10 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
             MyLog.d(CLS_NAME, "onCreateView");
         }
         View inflate = layoutInflater.inflate(R.layout.layout_common_fragment_parent, viewGroup, false);
-        this.mRecyclerView = this.helper.getRecyclerView(inflate);
+        this.mRecyclerView = helper.getRecyclerView(inflate);
         this.mObjects = new ArrayList<>();
-        this.mAdapter = this.helper.getAdapter(this.mObjects);
-        this.mRecyclerView.setAdapter(this.mAdapter);
+        this.mAdapter = helper.getAdapter(mObjects);
+        this.mRecyclerView.setAdapter(mAdapter);
         return inflate;
     }
 
@@ -641,7 +623,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
             case 8:
             case 10:
             default:
-                getParentActivity().speak(getString(R.string.lp_install_link, this.mObjects.get(position).getTitle()), LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(getString(R.string.lp_install_link, mObjects.get(position).getTitle()), LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 3:
                 getParentActivity().speak(R.string.lp_twitter, LocalRequest.ACTION_SPEAK_ONLY);
@@ -679,29 +661,29 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         new Thread(new Runnable() {
             @Override
             public void run() {
-                if (FragmentApplications.this.isAttemptingReinstallation()) {
+                if (isAttemptingReinstallation()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onResume: coming from unknown sources");
                     }
                     FragmentApplications.this.isAttemptingReinstallation = false;
-                    if (!ai.saiy.android.thirdparty.tasker.TaskerHelper.isUnknownSourceInstallAllowed(FragmentApplications.this.getApplicationContext())) {
+                    if (!ai.saiy.android.thirdparty.tasker.TaskerHelper.isUnknownSourceInstallAllowed(getApplicationContext())) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "onResume: coming from unknown sources: user did not change");
                         }
-                        ai.saiy.android.utils.SPH.setCheckUnknownSourcesSettingNeeded(FragmentApplications.this.getApplicationContext(), false);
+                        ai.saiy.android.utils.SPH.setCheckUnknownSourcesSettingNeeded(getApplicationContext(), false);
                         return;
                     }
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onResume: coming from unknown sources: user changed");
                     }
-                    ai.saiy.android.utils.SPH.setCheckReinstallationNeeded(FragmentApplications.this.getApplicationContext(), true);
-                    Locale vrLocale = ai.saiy.android.utils.SPH.getVRLocale(FragmentApplications.this.getApplicationContext());
+                    ai.saiy.android.utils.SPH.setCheckReinstallationNeeded(getApplicationContext(), true);
+                    Locale vrLocale = ai.saiy.android.utils.SPH.getVRLocale(getApplicationContext());
                     SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(vrLocale);
-                    ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(FragmentApplications.this.getApplicationContext(), supportedLanguage);
+                    ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(getApplicationContext(), supportedLanguage);
                     String utterance = sr.getString(R.string.content_tasker_reinstall_3);
                     sr.reset();
-                    ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(FragmentApplications.this.getApplicationContext());
-                    localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, vrLocale, ai.saiy.android.utils.SPH.getTTSLocale(FragmentApplications.this.getApplicationContext()), utterance);
+                    ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
+                    localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, vrLocale, ai.saiy.android.utils.SPH.getTTSLocale(getApplicationContext()), utterance);
                     localRequest.setCondition(Condition.CONDITION_CHECK_REINSTALLATION);
                     localRequest.execute();
                 }
@@ -716,9 +698,9 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
             MyLog.d(CLS_NAME, "onStart");
         }
         synchronized (lock) {
-            if (this.mObjects.isEmpty()) {
+            if (mObjects.isEmpty()) {
                 getParentActivity().setTitle(getString(R.string.title_supported_apps));
-                this.helper.finaliseUI();
+                helper.finaliseUI();
             }
         }
     }

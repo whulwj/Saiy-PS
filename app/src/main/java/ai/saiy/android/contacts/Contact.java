@@ -11,7 +11,6 @@ public class Contact implements Parcelable {
     private final String phoneticName;
     private final String forename;
     private final String surname;
-    private String encoded;
     private final int wordCount;
     private final int frequency;
     private boolean hasPhoneNumber;
@@ -31,13 +30,12 @@ public class Contact implements Parcelable {
         IM
     }
 
-    public Contact(String contactID, String name, String phoneticName, String forename, String surname, String encoded, int wordCountOfName, int frequency, boolean hasPhoneNumber, boolean hasAddress, boolean hasEmail) {
+    public Contact(String contactID, String name, String phoneticName, String forename, String surname, int wordCountOfName, int frequency, boolean hasPhoneNumber, boolean hasAddress, boolean hasEmail) {
         this.id = contactID;
         this.name = name;
         this.phoneticName = phoneticName;
         this.forename = forename;
         this.surname = surname;
-        this.encoded = encoded;
         this.wordCount = wordCountOfName;
         this.frequency = frequency;
         this.hasPhoneNumber = hasPhoneNumber;
@@ -49,7 +47,7 @@ public class Contact implements Parcelable {
         @Override
         public Contact createFromParcel(Parcel in) {
             final Contact contact = new Contact(in.readString(), in.readString(), in.readString(),
-                    in.readString(), in.readString(), in.readString(), in.readInt(), in.readInt(),
+                    in.readString(), in.readString(), in.readInt(), in.readInt(),
                     in.readByte() != 0, in.readByte() != 0, in.readByte() != 0);
             contact.number = in.readString();
             contact.address = in.readString();
@@ -132,10 +130,6 @@ public class Contact implements Parcelable {
         return this.frequency;
     }
 
-    public @NonNull String getEncoded() {
-        return this.encoded != null ? this.encoded : "";
-    }
-
     public boolean hasAddress() {
         return this.hasAddress;
     }
@@ -160,7 +154,6 @@ public class Contact implements Parcelable {
         parcel.writeString(phoneticName);
         parcel.writeString(forename);
         parcel.writeString(surname);
-        parcel.writeString(encoded);
         parcel.writeInt(wordCount);
         parcel.writeInt(frequency);
         parcel.writeByte(hasPhoneNumber ? (byte) 1 : (byte) 0);
