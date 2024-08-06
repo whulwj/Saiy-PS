@@ -6,6 +6,9 @@
 
 package ai.saiy.android.ui.containers;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 import java.io.Serializable;
@@ -16,7 +19,7 @@ import ai.saiy.android.custom.Custom;
  * Created by benrandall76@gmail.com on 27/01/2017.
  */
 
-public class ContainerCustomisation implements Serializable {
+public class ContainerCustomisation implements Parcelable, Serializable {
 
     private static final long serialVersionUID = -630509878907795203L;
 
@@ -39,6 +42,7 @@ public class ContainerCustomisation implements Serializable {
      * @param serialised the serialised string of the customisation
      * @param title      of the element
      * @param subtitle   of the element
+     * @param rowId      of the element
      * @param iconMain   main icon
      * @param iconExtra  secondary icon
      */
@@ -48,10 +52,31 @@ public class ContainerCustomisation implements Serializable {
         this.serialised = serialised;
         this.title = title;
         this.subtitle = subtitle;
+        this.rowId = rowId;
         this.iconMain = iconMain;
         this.iconExtra = iconExtra;
-        this.rowId = rowId;
     }
+
+    public static final Creator<ContainerCustomisation> CREATOR = new Creator<ContainerCustomisation>() {
+        @Override
+        public ContainerCustomisation createFromParcel(Parcel in) {
+            final int index = in.readByte();
+            Custom custom = Custom.CUSTOM_INTRO;
+            for (Custom item: Custom.values()) {
+                if (index == item.ordinal()) {
+                    custom = item;
+                    break;
+                }
+            }
+            return new ContainerCustomisation(custom, in.readString(), in.readString(), in.readString(),
+                    in.readLong(), in.readInt(), in.readInt());
+        }
+
+        @Override
+        public ContainerCustomisation[] newArray(int size) {
+            return new ContainerCustomisation[size];
+        }
+    };
 
     public long getRowId() {
         return rowId;
@@ -103,5 +128,21 @@ public class ContainerCustomisation implements Serializable {
 
     public void setTitle(final String title) {
         this.title = title;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) custom.ordinal());
+        dest.writeString(serialised);
+        dest.writeString(title);
+        dest.writeString(subtitle);
+        dest.writeLong(rowId);
+        dest.writeInt(iconMain);
+        dest.writeInt(iconExtra);
     }
 }

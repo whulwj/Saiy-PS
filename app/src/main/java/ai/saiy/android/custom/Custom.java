@@ -11,7 +11,10 @@ package ai.saiy.android.custom;
  */
 
 public enum Custom {
-
+    CUSTOM_INTRO,
+    CUSTOM_PHRASE,
+    CUSTOM_NICKNAME,
+    CUSTOM_REPLACEMENT,
     CUSTOM_COMMAND
 }
 

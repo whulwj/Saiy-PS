@@ -440,6 +440,7 @@ public class CustomCommandHelper {
      *
      * @param ctx           the application context
      * @param customCommand to be set
+     * @param rowId         the row id of the command to be replaced
      * @return true if the insertion was successful
      */
     public static Pair<Boolean, Long> setCommand(@NonNull final Context ctx, @NonNull final CustomCommand customCommand,

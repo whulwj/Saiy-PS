@@ -7,6 +7,7 @@
 package ai.saiy.android.processing.helper;
 
 import android.content.Context;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
@@ -16,6 +17,9 @@ import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.custom.CustomCommandHelper;
 import ai.saiy.android.custom.CustomHelper;
 import ai.saiy.android.custom.CustomHelperHolder;
+import ai.saiy.android.custom.CustomNicknameHelper;
+import ai.saiy.android.custom.CustomPhraseHelper;
+import ai.saiy.android.custom.CustomReplacementHelper;
 import ai.saiy.android.custom.CustomResolver;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.nlu.local.Profanity;
@@ -40,9 +44,14 @@ public class QuantumHelper {
         final CustomResolver resolver = new CustomResolver();
         final CustomCommandHelper cch = new CustomCommandHelper();
 
-        final ArrayList<String> manipulatedVoiceData = new Profanity(ctx, cr.getResultsArray(), sl).remove();
-
-        resolver.setCustom(cch.isCustomCommand(ctx, manipulatedVoiceData, sl, holder.getCustomCommandArray()));
+        final ArrayList<String> manipulatedVoiceData = new CustomNicknameHelper().replace(new CustomReplacementHelper().replace(new Profanity(ctx, cr.getResultsArray(), sl).remove(), holder.getCustomReplacementArray()), holder.getCustomNicknameArray());
+        final Pair<Boolean, ai.saiy.android.custom.CustomCommand> haveCustomPhrasePair = new CustomPhraseHelper().haveCustomPhrase(ctx, cr, manipulatedVoiceData, holder.getCustomPhraseArray());
+        resolver.setCustom(haveCustomPhrasePair.first);
+        if (resolver.isCustom()) {
+            cch.setCustomCommand(haveCustomPhrasePair.second);
+        } else {
+            resolver.setCustom(cch.isCustomCommand(ctx, manipulatedVoiceData, sl, holder.getCustomCommandArray()));
+        }
         resolver.setCustomCommandHelper(cch);
         resolver.setVoiceData(manipulatedVoiceData);
 

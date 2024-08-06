@@ -142,6 +142,7 @@ public class SPH {
     private static final String HAS_NICKNAME = "has_nickname";
     private static final String HAS_REPLACEMENT = "has_replacement";
     private static final String HAS_CUSTOM = "has_custom";
+    private static final String HAS_TASKER_VARIABLES = "has_tasker_variables";
     private static final String ENROLLMENT_VERBOSE = "enrollment_verbose";
     private static final String DISCLAIMER = "disclaimer";
     private static final String WHATS_NEW = "whats_new";
@@ -1410,10 +1411,14 @@ public class SPH {
         return getPref(context).getBoolean(HAS_CUSTOM, false);
     }
 
-    public static void setHasCustomisationreal(Context context, boolean condition) {
+    public static void setHasCustomisation(Context context, boolean condition) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HAS_CUSTOM, condition);
         edit.apply();
+    }
+
+    public static boolean hasTaskerVariables(Context context) {
+        return getPref(context).getBoolean(HAS_TASKER_VARIABLES, false);
     }
 
     /**

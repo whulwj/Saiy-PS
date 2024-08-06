@@ -28,6 +28,9 @@ import java.util.ArrayList;
 public class CustomHelperHolder {
 
     private ArrayList<CustomCommandContainer> customCommandArray;
+    private ArrayList<CustomNickname> customNicknameArray;
+    private ArrayList<CustomReplacement> customReplacementArray;
+    private ArrayList<CustomPhrase> cetCustomPhraseArray;
 
     public CustomHelperHolder() {
     }
@@ -41,6 +44,30 @@ public class CustomHelperHolder {
     }
 
     public ArrayList<CustomCommandContainer> getCustomCommandArray() {
-        return customCommandArray != null ? customCommandArray : new ArrayList<CustomCommandContainer>();
+        return customCommandArray != null ? customCommandArray : new ArrayList<>();
+    }
+
+    public ArrayList<CustomNickname> getCustomNicknameArray() {
+        return this.customNicknameArray != null ? this.customNicknameArray : new ArrayList<>();
+    }
+
+    public void setCustomNicknameArray(ArrayList<CustomNickname> arrayList) {
+        this.customNicknameArray = arrayList;
+    }
+
+    public ArrayList<CustomPhrase> getCustomPhraseArray() {
+        return this.cetCustomPhraseArray != null ? this.cetCustomPhraseArray : new ArrayList<>();
+    }
+
+    public void setCustomPhraseArray(ArrayList<CustomPhrase> arrayList) {
+        this.cetCustomPhraseArray = arrayList;
+    }
+
+    public ArrayList<CustomReplacement> getCustomReplacementArray() {
+        return this.customReplacementArray != null ? this.customReplacementArray : new ArrayList<>();
+    }
+
+    public void setCustomReplacementArray(ArrayList<CustomReplacement> arrayList) {
+        this.customReplacementArray = arrayList;
     }
 }

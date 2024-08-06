@@ -202,7 +202,7 @@ public final class NotificationHelper {
                 .setContentTitle(contentTitle)
                 .setOngoing(true)
                 .setContentText(String.format(ctx.getString(ai.saiy.android.R.string.notification_ai_level),
-                        AI.getAILevel()));
+                        AI.getAILevel(ctx)));
 
         PendingIntent actionPendingIntent;
 

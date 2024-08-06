@@ -31,10 +31,17 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.custom.TaskerVariable;
+import ai.saiy.android.database.DBTaskerVariable;
 import ai.saiy.android.intent.IntentConstants;
+import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -52,6 +59,37 @@ public class TaskerHelper {
     private static final String COLUMN_TASK_NAME = "name";
     private static final String COLUMN_ENABLED = "enabled";
     private static final String COLUMN_ACCESS = "ext_access";
+
+    public static final Pattern pTask = Pattern.compile(".*%[\\S&&[^%]]+.*", Pattern.DOTALL);
+    public static final Pattern pTaskerVariable = Pattern.compile("(%\\S+)", Pattern.DOTALL);
+
+    public static CharSequence replaceTask(Context context, CharSequence charSequence) {
+        final long then = System.nanoTime();
+        final String empty_tasker_value = ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(context)), R.string.empty_tasker_value);
+        final ArrayList<TaskerVariable> taskerVariables = new DBTaskerVariable(context).getVariables();
+        final Matcher matcher = pTaskerVariable.matcher(charSequence);
+        String str = null;
+        while (matcher.find()) {
+            String variableName = matcher.group(1);
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "variableName: " + variableName);
+            }
+            for (TaskerVariable taskerVariable : taskerVariables) {
+                if (taskerVariable.getVariableName().matches(variableName)) {
+                    str = taskerVariable.getVariableValue();
+                    break;
+                }
+            }
+            if (str == null) {
+                str = empty_tasker_value;
+            }
+            charSequence = charSequence.toString().replaceAll(Pattern.quote(variableName), str);
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+        return charSequence;
+    }
 
 
     /**

@@ -30,12 +30,15 @@ import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.io.comparator.LastModifiedFileComparator;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
 import ai.saiy.android.tts.helper.TTSDefaults;
 
@@ -60,6 +63,7 @@ public class UtilsFile {
     private static final String RELATIVE_IMPORT_DIRECTORY = SAIY_DIRECTORY + IMPORT_DIRECTORY;
     private static final String EXPORT_DIRECTORY = "/Export";
     private static final String RELATIVE_EXPORT_DIRECTORY = SAIY_DIRECTORY + EXPORT_DIRECTORY;
+    public static final String EXPORT_FILE_SUFFIX = "saiy";
     private static final String QUICK_LAUNCH_FILE = "/saiy_ql.apk";
     private static final String NO_MEDIA_FILE = "/.nomedia";
 
@@ -409,6 +413,11 @@ public class UtilsFile {
         return true;
     }
 
+    public static ArrayList<File> sortByLastModified(ArrayList<File> files) {
+        files.sort(LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
+        return files;
+    }
+
     public static File quickLaunchFile() {
         return new File(saiyDirectory() + QUICK_LAUNCH_FILE);
     }
@@ -461,7 +470,11 @@ public class UtilsFile {
     }
 
     public static boolean createImportDirectory() {
-        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(new StringBuilder().append(Environment.getExternalStorageDirectory()).append(SAIY_DIRECTORY).append(IMPORT_DIRECTORY).toString()).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY).mkdir();
+        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY + IMPORT_DIRECTORY).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY).mkdir();
+    }
+
+    public static File getImportDirectory() {
+        return new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY);
     }
 
     public static boolean isExportDirectoryExists() {
@@ -470,15 +483,11 @@ public class UtilsFile {
     }
 
     public static boolean createExportDirectory() {
-        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(new StringBuilder().append(Environment.getExternalStorageDirectory()).append(SAIY_DIRECTORY).append(EXPORT_DIRECTORY).toString()).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY).mkdir();
+        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY + EXPORT_DIRECTORY).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY).mkdir();
     }
 
-    private static boolean isQuickLaunchFileExists() {
-        return new File(saiyDirectory() + QUICK_LAUNCH_FILE).exists();
-    }
-
-    private static boolean isNoMediaFileExists() {
-        return new File(soundDirectory() + NO_MEDIA_FILE).exists();
+    public static File createExportFile(String str) {
+        return new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY + "/" + str);
     }
 
     public static boolean createDirs(Context context) {
@@ -606,5 +615,21 @@ public class UtilsFile {
             }
         }
         return true;
+    }
+
+    public static ArrayList<File> getImportFiles() {
+        return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(getImportDirectory(), importFileFilter(), null));
+    }
+
+    public static org.apache.commons.io.filefilter.IOFileFilter importFileFilter() {
+        return org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter(EXPORT_FILE_SUFFIX, IOCase.INSENSITIVE);
+    }
+
+    private static boolean isQuickLaunchFileExists() {
+        return new File(saiyDirectory() + QUICK_LAUNCH_FILE).exists();
+    }
+
+    private static boolean isNoMediaFileExists() {
+        return new File(soundDirectory() + NO_MEDIA_FILE).exists();
     }
 }

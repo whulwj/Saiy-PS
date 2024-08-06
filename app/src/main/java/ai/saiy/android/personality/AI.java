@@ -17,6 +17,21 @@
 
 package ai.saiy.android.personality;
 
+import android.content.Context;
+import android.util.Pair;
+
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
+import ai.saiy.android.R;
+import ai.saiy.android.algorithms.Algorithm;
+import ai.saiy.android.command.unknown.Unknown;
+import ai.saiy.android.user.SaiyAccount;
+import ai.saiy.android.user.SaiyAccountHelper;
+import ai.saiy.android.user.SaiyAccountList;
+import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsString;
+
 /**
  * The more features of the application that are interacted with, the more the 'AI Value' increases,
  * which is shown to the user in the permanent notification.
@@ -26,26 +41,143 @@ package ai.saiy.android.personality;
  * Created by benrandall76@gmail.com on 22/03/2016.
  */
 public class AI {
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = AI.class.getSimpleName();
 
     // Placeholder value
-    public static double AI_LEVEL = 0.25;
+    public static double AI_LEVEL = 0.24;
 
     /**
      * Get the current AI Level to display
      *
+     * @param context the application context
      * @return the AI Level
      */
-    public static String getAILevel() {
-        return String.valueOf(calculateAI());
+    public static String getAILevel(Context context) {
+        return new BigDecimal(Double.toString(calculateAI(context))).setScale(2, RoundingMode.HALF_UP).toString();
     }
 
     /**
      * Check how much of the application's functionality the user has used and is using. More = higher.
      *
+     * @param context the application context
      * @return the AI Level
      */
-    private static double calculateAI() {
-        // TODO
-        return AI_LEVEL;
+    private static double calculateAI(Context context) {
+        final long then = System.nanoTime();
+        final double aiLevel = AI_LEVEL + scoreOfUserName(context) + scoreOfPhrase(context) + scoreOfNickname(context) + scoreOfReplacement(context) + scoreOfCustomisation(context) + scoreOfTaskerVariables(context) + scoreOfCustomIntro(context) + scoreOfRunDiagnostics(context) + scoreOfDefaultTTSVoice(context) + scoreOfCommandUnknownAction(context) + scoreOfAccount(context) + scoreOfTwitter(context) + scoreOfTasker(context) + scoreOfUsage(context);
+        if (DEBUG) {
+            ai.saiy.android.utils.MyLog.i(CLS_NAME, "aiLevel: " + new BigDecimal(Double.toString(aiLevel)).setScale(2, RoundingMode.HALF_UP).toString());
+            ai.saiy.android.utils.MyLog.getElapsed(CLS_NAME, "calculateAI", then);
+        }
+        return aiLevel;
+    }
+
+    private static double scoreOfUserName(Context context) {
+        if (ai.saiy.android.utils.SPH.getUserName(context) == null || ai.saiy.android.utils.SPH.getUserName(context).matches(context.getString(R.string.master))) {
+            return Algorithm.LEV_MAX_THRESHOLD;
+        }
+        return 0.23d;
+    }
+
+    private static double scoreOfPhrase(Context context) {
+        if (ai.saiy.android.utils.SPH.hasPhrase(context)) {
+            return 0.23d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfNickname(Context context) {
+        if (ai.saiy.android.utils.SPH.hasNickname(context)) {
+            return 0.23d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfReplacement(Context context) {
+        if (ai.saiy.android.utils.SPH.hasReplacement(context)) {
+            return 0.23d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfCustomisation(Context context) {
+        if (ai.saiy.android.utils.SPH.hasCustomisation(context)) {
+            return 0.36d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfTaskerVariables(Context context) {
+        if (ai.saiy.android.utils.SPH.hasTaskerVariables(context)) {
+            return 0.3d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfCustomIntro(Context context) {
+        if (ai.saiy.android.utils.SPH.getCustomIntro(context) != null) {
+            return 0.23d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfRunDiagnostics(Context context) {
+        if (ai.saiy.android.utils.SPH.getRunDiagnostics(context)) {
+            return 0.23d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfDefaultTTSVoice(Context context) {
+        if (ai.saiy.android.utils.SPH.getDefaultTTSVoice(context) != null) {
+            return 0.23d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfCommandUnknownAction(Context context) {
+        if (ai.saiy.android.utils.SPH.getCommandUnknownAction(context) != Unknown.UNKNOWN_STATE) {
+            return 0.23d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfAccount(Context context) {
+        final SaiyAccountList saiyAccountList = SaiyAccountHelper.getAccounts(context);
+        if (saiyAccountList == null || saiyAccountList.size() <= 0) {
+            return Algorithm.LEV_MAX_THRESHOLD;
+        }
+        final SaiyAccount saiyAccount = saiyAccountList.getSaiyAccountList().get(0);
+        if (saiyAccount == null) {
+            return Algorithm.LEV_MAX_THRESHOLD;
+        }
+        final ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem profileItem = saiyAccount.getProfileItem();
+        if (profileItem == null || !UtilsString.notNaked(profileItem.getId())) {
+            return Algorithm.LEV_MAX_THRESHOLD;
+        }
+        return 0.39d;
+    }
+
+    private static double scoreOfTwitter(Context context) {
+        if (UtilsString.notNaked(ai.saiy.android.utils.SPH.getTwitterSecret(context)) && UtilsString.notNaked(ai.saiy.android.utils.SPH.getTwitterToken(context))) {
+            return 0.3d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfTasker(Context context) {
+        final Pair<Boolean, Boolean> taskerStatusPair = new ai.saiy.android.thirdparty.tasker.TaskerHelper().canInteract(context);
+        if (taskerStatusPair.first && taskerStatusPair.second) {
+            return 0.3d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
+    }
+
+    private static double scoreOfUsage(Context context) {
+        if (ai.saiy.android.utils.SPH.getUsedIncrement(context) > 250) {
+            return 0.99d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
     }
 }

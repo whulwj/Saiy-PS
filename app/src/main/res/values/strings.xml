@@ -1224,6 +1224,7 @@
         This is a known Android bug where the Tasker permissions are not detected, if you installed Tasker after me.
         You'll need to reinstall me, so the permissions are correctly applied. Click on the re-assimilate button"</string>
     <string name="error_tasker_broadcast" translatable="true">"Failed sending to Tasker"</string>
+    <string name="empty_tasker_value">empty tasker value</string>
 
     <!-- Command - Clipboard -->
     <string name="clipboard" translatable="true">"clipboard"</string>
@@ -1843,4 +1844,75 @@
     <string name="title_cast">Cast</string>
     <string name="title_automate_flow">Automate Flow</string>
     <string name="menu_custom_command">Custom Command</string>
+
+    <string name="menu_command_keyphrase">Command keyphrase</string>
+    <string name="menu_custom_commands">Custom Commands</string>
+    <string name="menu_custom_http">Custom HTTP</string>
+    <string name="menu_custom_intent">Custom Intent</string>
+    <string name="menu_custom_phrases">Custom Phrases</string>
+    <string name="menu_custom_url_hint">Enter url</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_edit_customisations">Edit Customisations</string>
+    <string name="menu_error_response">Error response</string>
+    <string name="menu_error_response_hint">This is what I\'ll say on error</string>
+    <string name="menu_existing_local_variable_name">Existing local variable name</string>
+    <string name="menu_export">Export Commands</string>
+    <string name="menu_get">Get</string>
+    <string name="menu_https">HTTPS</string>
+    <string name="menu_input">Input</string>
+    <string name="menu_input_hint">Who is the fairest of them all</string>
+    <string name="menu_keyphrase_hint">This is what you\'ll say</string>
+    <string name="menu_keyphrase_hint_searchable">Search %1$s for</string>
+    <string name="menu_nicknames">Nicknames</string>
+    <string name="menu_phrase">Phrase</string>
+    <string name="menu_phrase_hint">Drive me home</string>
+    <string name="menu_post">Post</string>
+    <string name="menu_put">Put</string>
+    <string name="menu_replace_words">Replace Words</string>
+    <string name="menu_replacement">Replacement</string>
+    <string name="menu_replacement_hint">Navigate to 221b Baker Street, London</string>
+    <string name="menu_response">Response</string>
+    <string name="menu_response_hint">Why you of course, good-looking</string>
+    <string name="menu_send_output_to_tasker">Send output to Tasker</string>
+    <string name="menu_speak_http_output">Speak HTTP output</string>
+    <string name="menu_success_exclamation">Success!</string>
+    <string name="menu_success_response">Success response</string>
+    <string name="menu_success_response_hint">This is what I\'ll say on success</string>
+    <string name="menu_task_name">Task name</string>
+    <string name="menu_tasker_task_not_found">Tasker task not found?</string>
+    <string name="menu_tasker_variable_not_found">Tasker variable not found?</string>
+    <string name="action_export">Export</string>
+    <string name="content_call_contact">Call contact %1$s on %2$s</string>
+    <string name="content_automate_flow">Automate Flow %1$s</string>
+    <string name="content_display_contact">Display contact %1$s</string>
+    <string name="content_execute_task">Execute task %1$s</string>
+    <string name="content_external_command">This is an external command which has been registered by the application %1$s.\n\nIt can not be edited, only deleted.\n\nIf you would like to prevent this application from registering future commands, you can Blacklist it in the Superuser Settings.</string>
+    <string name="content_launch_activity">Launch activity from package %1$s</string>
+    <string name="content_launch_app">Launch app %1$s</string>
+    <string name="content_run_shortcut">Run shortcut %1$s</string>
+    <string name="content_search_on">Search on %1$s</string>
+    <string name="delete">delete</string>
+    <string name="commands_exported_successfully">%1$s commands exported successfully</string>
+    <string name="commands_imported_successfully">%1$s commands imported successfully</string>
+    <string name="title_action_optional">Action (optional)</string>
+    <string name="title_category_optional">Category (optional)</string>
+    <string name="title_class_optional">Class (optional)</string>
+    <string name="title_data_optional">Data (optional)</string>
+    <string name="title_extras_optional">Extras (optional)</string>
+    <string name="title_mime_type_optional">Mime Type (optional)</string>
+    <string name="title_package_optional">Package (optional)</string>
+    <string name="title_enter_nickname_for">Enter nickname for</string>
+    <string name="title_export_failed">Export failed…</string>
+    <string name="title_target">Target</string>
+    <string name="input_digits">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'- </string>
+    <string name="custom_format_error">The keyphrase cannot contain special characters</string>
+    <string name="custom_naked_error">The keyphrase cannot be empty</string>
+    <string name="custom_phrase_format_error">The input or response cannot contain special characters</string>
+    <string name="custom_phrase_naked_error">The input or response cannot be empty</string>
+    <string name="custom_url_naked_error">The url cannot be empty</string>
+    <string name="error_edit_customisations">Something went wrong. Please contact the developer to help solve this issue</string>
+    <string name="nickname_format_error">The nickname cannot contain special characters</string>
+    <string name="nickname_naked_error">The nickname cannot be empty</string>
+    <string name="replace_words_format_error">The phrase or replacement cannot contain special characters</string>
+    <string name="replace_words_naked_error">The phrase or replacement cannot be empty</string>
 </resources>

@@ -59,7 +59,7 @@ volley = "1.2.1"
 
 java-aes-crypto = "1.1.0"
 twitter4j = "4.1.2"
-facebook-login ="17.0.0"
+facebook-sdk ="17.0.0"
 
 [libraries]
 google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
@@ -126,7 +126,7 @@ volley = { module = "com.android.volley:volley", version.ref = "volley" }
 
 java-aes-crypto = { group = "com.github.tozny", name = "java-aes-crypto", version.ref= "java-aes-crypto" }
 twitter4j = { group = "org.twitter4j", name = "twitter4j-core", version.ref= "twitter4j" }
-facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref= "facebook-login" }
+facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref= "facebook-sdk" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradlePlugin" }

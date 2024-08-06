@@ -49,6 +49,7 @@ public class CustomCommand implements Callable<Boolean> {
     private String regularExpression;
     private String extraText;
     private String extraText2;
+    private String actionOfIntent;
     private String serialised;
 
     /**
@@ -189,6 +190,14 @@ public class CustomCommand implements Callable<Boolean> {
 
     public void setExtraText2(@NonNull final String extraText2) {
         this.extraText2 = extraText2;
+    }
+
+    public String getActionOfIntent() {
+        return actionOfIntent;
+    }
+
+    public void setActionOfIntent(String actionOfIntent) {
+        this.actionOfIntent = actionOfIntent;
     }
 
     /**

@@ -198,9 +198,17 @@ public class SaiyTextToSpeech extends TextToSpeech {
      */
     public int speak(@NonNull CharSequence text, final int queueMode,
                      @NonNull final SelfAwareParameters params, @NonNull final String utteranceId) {
+        if (ai.saiy.android.thirdparty.tasker.TaskerHelper.pTask.matcher(text).matches()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "speak: have tasker variables");
+            }
+            text = ai.saiy.android.thirdparty.tasker.TaskerHelper.replaceTask(mContext, text);
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "speak: variable replace: " + text);
+            }
+        }
 
         if (SoundEffectHelper.pSOUND_EFFECT.matcher(text).matches()) {
-            //TODO tasker
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "speak: have sound effect");
             }

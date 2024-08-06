@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:icon="@drawable/ic_export_white"
+        android:id="@+id/action_export"
+        android:orderInCategory="100"
+        android:title="@string/action_export"
+        app:showAsAction="always"/>
+    <item
+        android:icon="@drawable/ic_select_all_white"
+        android:id="@+id/action_select_all"
+        android:orderInCategory="99"
+        android:title="@string/action_select_all"
+        app:showAsAction="ifRoom"/>
+</menu>

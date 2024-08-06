@@ -40,8 +40,12 @@ import java.util.concurrent.TimeUnit;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.database.callable.DBCustomCommandCallable;
+import ai.saiy.android.database.callable.DBCustomNicknameCallable;
+import ai.saiy.android.database.callable.DBCustomPhraseCallable;
+import ai.saiy.android.database.callable.DBCustomReplacementCallable;
 import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 
 /**
@@ -56,19 +60,21 @@ public class CustomHelper {
     private static final long THREADS_TIMEOUT = 1000L;
 
     public static final int CHEVRON_RESOURCE_ID = R.drawable.chevron;
-    public static final int CUSTOM_COMMAND_RESOURCE_ID = R.drawable.ic_account_switch;
+    public static final int CUSTOM_NICKNAME_RESOURCE_ID = R.drawable.ic_account_switch;
+    public static final int CUSTOM_PHRASE_RESOURCE_ID = R.drawable.ic_format_quote;
+    public static final int CUSTOM_COMMAND_RESOURCE_ID = R.drawable.ic_shape_plus;
+    public static final int CUSTOM_REPLACEMENT_RESOURCE_ID = R.drawable.ic_swap_horizontal;
 
     private static final Object lock = new Object();
 
     public CustomHelperHolder getCustomisationHolder(@NonNull final Context ctx) {
-
         synchronized (lock) {
-
             final long then = System.nanoTime();
-
             final List<Callable<ArrayList<Object>>> callableList = new ArrayList<>();
-
+            callableList.add(new DBCustomNicknameCallable(ctx));
+            callableList.add(new DBCustomPhraseCallable(ctx));
             callableList.add(new DBCustomCommandCallable(ctx));
+            callableList.add(new DBCustomReplacementCallable(ctx));
 
             final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             final ArrayList<Object> objectArray = new ArrayList<>();
@@ -124,45 +130,55 @@ public class CustomHelper {
     @SuppressWarnings("unchecked")
     private CustomHelperHolder completeCustomisationHolder(@NonNull final Context ctx,
                                                            @NonNull final ArrayList<Object> objectArray) {
-
         final CustomHelperHolder holder = new CustomHelperHolder();
 
+        boolean hasPhrase = false, hasCustomisation = false, hasReplacement = false, hasNickname = false;
         Object object;
         ArrayList<Object> tempArray;
         final int size = objectArray.size();
 
         for (int i = 0; i < size; i++) {
-
             tempArray = (ArrayList<Object>) objectArray.get(i);
-
             if (UtilsList.notNaked(tempArray)) {
-
                 object = tempArray.get(0);
 
-                if (object instanceof CustomCommandContainer) {
+                if (object instanceof CustomPhrase) {
+                    holder.setCustomPhraseArray((ArrayList) tempArray);
+                    hasPhrase = true;
+                } else if (object instanceof CustomCommandContainer) {
                     holder.setCustomCommandArray((ArrayList) tempArray);
-
+                    hasCustomisation = true;
+                } else if (object instanceof CustomReplacement) {
+                    holder.setCustomReplacementArray((ArrayList) tempArray);
+                    hasReplacement = true;
+                } else if (object instanceof CustomNickname) {
+                    holder.setCustomNicknameArray((ArrayList) tempArray);
+                    hasNickname = true;
                 } else {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "instanceof default");
                     }
                 }
             }
+
+            SPH.setHasPhrase(ctx, hasPhrase);
+            SPH.setHasCustomisation(ctx, hasCustomisation);
+            SPH.setHasReplacement(ctx, hasReplacement);
+            SPH.setHasNickname(ctx, hasNickname);
         }
 
         return holder;
     }
 
     public ArrayList<ContainerCustomisation> getCustomisations(@NonNull final Context ctx) {
-
         synchronized (lock) {
-
             final long then = System.nanoTime();
-
             final List<Callable<ArrayList<Object>>> callableList = new ArrayList<>();
             final ArrayList<ContainerCustomisation> containerCustomisationArray = new ArrayList<>();
-
+            callableList.add(new DBCustomNicknameCallable(ctx));
+            callableList.add(new DBCustomPhraseCallable(ctx));
             callableList.add(new DBCustomCommandCallable(ctx));
+            callableList.add(new DBCustomReplacementCallable(ctx));
 
             final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             final ArrayList<Object> objectArray = new ArrayList<>();
@@ -200,13 +216,15 @@ public class CustomHelper {
             }
 
             if (UtilsList.notNaked(objectArray)) {
-
                 final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
                 Object object;
                 ContainerCustomisation containerCustomisation;
                 CustomCommandContainer customCommandContainer;
+                CustomNickname customNickname;
+                CustomPhrase customPhrase;
                 CustomCommand customCommand;
+                CustomReplacement customReplacement;
                 String serialised;
                 String extra = null;
                 String label;
@@ -215,10 +233,15 @@ public class CustomHelper {
                 final int size = objectArray.size();
 
                 for (int i = 0; i < size; i++) {
-
                     object = objectArray.get(i);
 
-                    if (object instanceof CustomCommandContainer) {
+                    if (object instanceof CustomNickname) {
+                        customNickname = (CustomNickname) object;
+                        containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_NICKNAME, customNickname.getSerialised(), customNickname.getNickname(), customNickname.getContactName(), customNickname.getRowId(), CUSTOM_NICKNAME_RESOURCE_ID, CHEVRON_RESOURCE_ID));
+                    } else if (object instanceof CustomPhrase) {
+                        customPhrase = (CustomPhrase) object;
+                        containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_PHRASE, customPhrase.getSerialised(), customPhrase.getKeyphrase(), customPhrase.getResponse(), customPhrase.getRowId(), CUSTOM_PHRASE_RESOURCE_ID, CHEVRON_RESOURCE_ID));
+                    } else if (object instanceof CustomCommandContainer) {
 
                         customCommandContainer = (CustomCommandContainer) object;
 
@@ -258,10 +281,10 @@ public class CustomHelper {
                                 extra = ctx.getString(R.string.an_unknown_application);
                             }
 
-                            label = customCommand.getCustomAction().name();
+                            label = CCC.getReadableName(ctx, customCommand.getCustomAction(), extra);
 
                         } else {
-                            label = customCommand.getCustomAction().name();
+                            label = CCC.getReadableName(ctx, customCommand.getCustomAction(), extra);
                         }
 
                         containerCustomisation = new ContainerCustomisation(Custom.CUSTOM_COMMAND,
@@ -273,6 +296,9 @@ public class CustomHelper {
 
                         containerCustomisationArray.add(containerCustomisation);
 
+                    } else if (object instanceof CustomReplacement) {
+                        customReplacement = (CustomReplacement) object;
+                        containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_REPLACEMENT, customReplacement.getSerialised(), customReplacement.getKeyphrase(), customReplacement.getReplacement(), customReplacement.getRowId(), CUSTOM_REPLACEMENT_RESOURCE_ID, CHEVRON_RESOURCE_ID));
                     } else {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "instanceof default");
