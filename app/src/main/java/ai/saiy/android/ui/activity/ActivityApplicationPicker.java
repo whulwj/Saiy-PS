@@ -17,7 +17,7 @@ import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 
 public class ActivityApplicationPicker extends AppCompatActivity implements UserFirebaseListener {
-    public static final String EXTRA_APPLICATION = "extra_blocked_applications";
+    public static final String EXTRA_APPLICATION = "extra_application";
     public static final String EXTRA_TYPE = "extra_type";
     public static final int SEARCH_APPLICATION_TYPE = 1;
     public static final int ACCESSIBLE_APPLICATION_TYPE = 0;

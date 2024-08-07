@@ -19,6 +19,7 @@ package ai.saiy.android.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,14 +27,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
+import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentCustomisationHelper;
 import ai.saiy.android.utils.Global;
@@ -49,7 +54,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
     private final String CLS_NAME = FragmentCustomisation.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentCustomisationHelper helper;
 
@@ -105,7 +110,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }
@@ -117,6 +122,12 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        helper.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -133,11 +144,151 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
         }
 
         final int position = (int) view.getTag();
-
         switch (position) {
-
             case 0:
+                helper.showUserNameDialog();
+                break;
+            case 1:
                 helper.showCustomIntroDialog();
+                break;
+            case 2:
+                helper.showCustomCommandsDialog();
+                break;
+            case 3:
+                helper.showCustomPhrasesDialog();
+                break;
+            case 4:
+                helper.showContactPicker(FragmentCustomisationHelper.NICKNAME_REQ_CODE);
+                break;
+            case 5:
+                helper.showCustomReplacementDialog();
+                break;
+            case 6:
+                if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext());
+                        }
+                    }).start();
+                    helper.showSoundEffectDialog();
+                }
+                break;
+            case 7:
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showProgress(true);
+                        final ArrayList<ContainerCustomisation> containerCustomisations = new ai.saiy.android.custom.CustomHelper().getCustomisations(getApplicationContext());
+                        if (!ai.saiy.android.utils.UtilsList.notNaked(containerCustomisations)) {
+                            if (isActive()) {
+                                showProgress(false);
+                                getParentActivity().vibrate();
+                                toast(getString(R.string.no_customisations), Toast.LENGTH_SHORT);
+                            }
+                            return;
+                        }
+                        final Bundle args = new Bundle(1);
+                        args.putParcelableArrayList(FragmentEditCustomisation.EXTRA_KEY, containerCustomisations);
+                        if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_EDIT_CUSTOMISATION))) {
+                            getParentActivity().doFragmentAddTransaction(FragmentEditCustomisation.newInstance(args), String.valueOf(ActivityHome.INDEX_FRAGMENT_EDIT_CUSTOMISATION), ActivityHome.ANIMATION_FADE, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
+                        } else if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_EDIT_CUSTOMISATION being added");
+                        }
+                    }
+                }).start();
+                break;
+            case 8:
+                if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
+                    if (ai.saiy.android.utils.SPH.getImportWarning(getApplicationContext())) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showProgress(true);
+                                if (ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
+                                    final ai.saiy.android.custom.imports.ImportHelper importHelper = new ai.saiy.android.custom.imports.ImportHelper();
+                                    final ArrayList<File> importFiles = importHelper.getImportFiles();
+                                    if (ai.saiy.android.utils.UtilsList.notNaked(importFiles)) {
+                                        if (DEBUG) {
+                                            MyLog.w(CLS_NAME, "importFiles: size: " + importFiles.size());
+                                        }
+                                        final ArrayList<Object> objectArray = importHelper.runImport(importFiles);
+                                        if (ai.saiy.android.utils.UtilsList.notNaked(objectArray)) {
+                                            final int count = importHelper.insertCommands(getApplicationContext(), objectArray);
+                                            switch (count) {
+                                                case 0:
+                                                    toast(getString(R.string.command_import_failed), Toast.LENGTH_LONG);
+                                                    break;
+                                                case 1:
+                                                    toast(getString(R.string.command_imported_successfully), Toast.LENGTH_LONG);
+                                                    break;
+                                                default:
+                                                    toast(getString(R.string.commands_imported_successfully, String.valueOf(count)), Toast.LENGTH_LONG);
+                                                    break;
+                                            }
+                                        } else {
+                                            if (DEBUG) {
+                                                MyLog.w(CLS_NAME, "onClick: IMPORT: objectArray: naked");
+                                            }
+                                            toast(getString(R.string.command_import_failed), Toast.LENGTH_LONG);
+                                        }
+                                    } else {
+                                        if (DEBUG) {
+                                            MyLog.w(CLS_NAME, "onClick: IMPORT: importFiles: naked");
+                                        }
+                                        toast(getString(R.string.no_import_files_found), Toast.LENGTH_LONG);
+                                    }
+                                } else {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "onClick: IMPORT: createDirs failed");
+                                    }
+                                    toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
+                                }
+                                showProgress(false);
+                            }
+                        }).start();
+                    } else {
+                        ai.saiy.android.utils.SPH.markImportWarning(getApplicationContext());
+                        helper.showImportWarningDialog();
+                    }
+                }
+                break;
+            case 9:
+                if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
+                    if (ai.saiy.android.utils.SPH.getExportWarning(getApplicationContext())) {
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                showProgress(true);
+                                if (ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
+                                    final ArrayList<ContainerCustomisation> containerCustomisations = new ai.saiy.android.custom.CustomHelper().getCustomisations(getApplicationContext());
+                                    if (ai.saiy.android.utils.UtilsList.notNaked(containerCustomisations)) {
+                                        final Bundle args = new Bundle(1);
+                                        args.putParcelableArrayList(FragmentExportCustomisation.EXTRA_KEY, containerCustomisations);
+                                        if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_EXPORT_CUSTOMISATION))) {
+                                            getParentActivity().doFragmentAddTransaction(FragmentExportCustomisation.newInstance(args), String.valueOf(ActivityHome.INDEX_FRAGMENT_EXPORT_CUSTOMISATION), ActivityHome.ANIMATION_FADE, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
+                                        } else if (DEBUG) {
+                                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_EXPORT_CUSTOMISATION being added");
+                                        }
+                                    } else if (isActive()) {
+                                        showProgress(false);
+                                        getParentActivity().vibrate();
+                                        toast(getString(R.string.title_no_commands_to_export), Toast.LENGTH_SHORT);
+                                    }
+                                } else {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "onClick: EXPORT: createDirs failed");
+                                    }
+                                    toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
+                                }
+                                showProgress(false);
+                            }
+                        }).start();
+                    } else {
+                        ai.saiy.android.utils.SPH.markExportWarning(getApplicationContext());
+                        helper.showExportWarningDialog();
+                    }
+                }
                 break;
             default:
                 break;
@@ -162,11 +313,58 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
         final int position = (int) view.getTag();
 
         switch (position) {
+            case 0:
+                getParentActivity().speak(R.string.lp_custom_name, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 1:
+                getParentActivity().speak(R.string.lp_custom_intro, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 2:
+                getParentActivity().speak(R.string.lp_custom_commands, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 3:
+                getParentActivity().speak(R.string.lp_custom_phrases, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 4:
+                getParentActivity().speak(R.string.lp_nicknames, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 5:
+                getParentActivity().speak(R.string.lp_replacements, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 6:
+                getParentActivity().speak(R.string.lp_sound_effects_2, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 7:
+                getParentActivity().speak(R.string.lp_edit_customisations, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 8:
+                getParentActivity().speak(R.string.lp_import_commands, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 9:
+                getParentActivity().speak(R.string.lp_export_commands_2, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
             default:
                 break;
         }
 
         return true;
+    }
+
+    public void toast(String text, int duration) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "makeToast: " + text);
+        }
+        if (isActive()) {
+            getParentActivity().toast(text, duration);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "toast Fragment detached");
+        }
+    }
+
+    public void showProgress(boolean visible) {
+        if (isActive()) {
+            getParentActivity().showProgress(visible);
+        }
     }
 
     public boolean isActive() {
@@ -197,7 +395,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
      *
      * @return the current adapter
      */
-    public RecyclerView.Adapter getAdapter() {
+    public RecyclerView.Adapter<?> getAdapter() {
         return mAdapter;
     }
 

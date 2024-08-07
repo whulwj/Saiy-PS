@@ -354,6 +354,13 @@
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name="ai.saiy.android.ui.activity.ActivityShortcutPicker"
+            android:configChanges="screenSize|orientation|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTop"
+            android:theme="@style/AppTheme.ActivityDialogTheme" />
+        <activity
             android:name="ai.saiy.android.ui.activity.ActivityApplicationPickerMulti"
             android:configChanges="screenSize|orientation|keyboardHidden"
             android:excludeFromRecents="true"

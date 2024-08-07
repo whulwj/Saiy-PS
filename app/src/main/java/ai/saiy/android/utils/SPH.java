@@ -199,6 +199,8 @@ public class SPH {
     private static final String IGNORE_RESTRICTED_CONTENT = "ignore_restricted_content";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
     private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
+    private static final String IMPORT_WARNING = "import_warning";
+    private static final String EXPORT_WARNING = "export_warning";
     private static final String HEADSET_OVERVIEW_COUNT = "headset_overview_count";
     private static final String ACCESSIBILITY_CHANGE = "accessibility_change";
     private static final String DEFAULT_NOTE = "default_note";
@@ -2538,6 +2540,26 @@ public class SPH {
     public static boolean isFirstForMicroPhone(Context context) {
         final SharedPreferences pref = getPref(context);
         return pref.getBoolean(MIC_FIRST, true);
+    }
+
+    public static void markImportWarning(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(IMPORT_WARNING, true);
+        edit.apply();
+    }
+
+    public static boolean getImportWarning(Context context) {
+        return getPref(context).getBoolean(IMPORT_WARNING, false);
+    }
+
+    public static void markExportWarning(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(EXPORT_WARNING, true);
+        edit.apply();
+    }
+
+    public static boolean getExportWarning(Context context) {
+        return getPref(context).getBoolean(EXPORT_WARNING, false);
     }
 
     public static int getHeadsetOverviewCount(Context context) {

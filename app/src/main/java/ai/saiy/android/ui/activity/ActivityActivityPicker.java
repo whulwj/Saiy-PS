@@ -20,7 +20,7 @@ import ai.saiy.android.utils.UtilsString;
 import me.drakeet.support.toast.ToastCompat;
 
 public class ActivityActivityPicker extends AppCompatActivity implements UserFirebaseListener {
-    public static final String EXTRA_APPLICATION = "extra_blocked_applications";
+    public static final String EXTRA_APPLICATION = "extra_application";
     private ProgressBar progressBar;
 
     private static final boolean DEBUG = MyLog.DEBUG;

@@ -162,6 +162,7 @@
 
     <!-- UI Strings -->
     <string name="menu_tap_begin" translatable="true">tap to begin</string>
+    <string name="menu_tap_edit">tap to edit</string>
     <string name="menu_tap_view" translatable="true">tap to view</string>
     <string name="menu_tap_topics" translatable="true">tap for topics</string>
     <string name="menu_tap_contribute" translatable="true">tap to contribute</string>
@@ -175,6 +176,9 @@
     <string name="menu_tap_help" translatable="true">tap for help</string>
     <string name="menu_tap_create">tap to create</string>
     <string name="menu_tap_manage">tap to manage</string>
+    <string name="menu_tap_export">tap to export</string>
+    <string name="menu_tap_import">tap to import</string>
+    <string name="menu_tap_play">tap to play</string>
     <string name="menu_tap_reset">tap to reset</string>
     <string name="menu_tap_restore">tap to restore</string>
     <string name="menu_tap_run">tap to run</string>
@@ -1215,6 +1219,7 @@
     <!-- Command - Tasker | error -->
     <string name="error_tasker_install" translatable="true">"You need to install the Tasker application
         to use this command."</string>
+    <string name="error_tasker_install_order">Please first select \'Link Tasker\' in the Supported Applications Section</string>
     <string name="error_tasker_execute" translatable="true">"Something went wrong executing the task, %1$s"</string>
     <string name="error_tasker_no_tasks" translatable="true">"You don't appear to have any tasks to execute"</string>
     <string name="error_tasker_enable" translatable="true">"Please enable Tasker"</string>
@@ -1503,6 +1508,7 @@
     <string name="title_select_app_activity">Select app activity</string>
     <string name="title_select_application">Select application</string>
     <string name="title_select_applications">Select applications</string>
+    <string name="title_select_shortcut">Select the shortcut</string>
     <string name="_auto_play"> (Auto Play)</string>
     <string name="menu_intent_extras">Intent Extras</string>
     <string name="custom_extras_title">Comma separated extras, if required</string>
@@ -1849,6 +1855,7 @@
     <string name="menu_custom_commands">Custom Commands</string>
     <string name="menu_custom_http">Custom HTTP</string>
     <string name="menu_custom_intent">Custom Intent</string>
+    <string name="menu_custom_name">Custom Name</string>
     <string name="menu_custom_phrases">Custom Phrases</string>
     <string name="menu_custom_url_hint">Enter url</string>
     <string name="menu_delete">Delete</string>
@@ -1861,6 +1868,7 @@
     <string name="menu_https">HTTPS</string>
     <string name="menu_input">Input</string>
     <string name="menu_input_hint">Who is the fairest of them all</string>
+    <string name="menu_import">Import Commands</string>
     <string name="menu_keyphrase_hint">This is what you\'ll say</string>
     <string name="menu_keyphrase_hint_searchable">Search %1$s for</string>
     <string name="menu_nicknames">Nicknames</string>
@@ -1875,6 +1883,7 @@
     <string name="menu_response_hint">Why you of course, good-looking</string>
     <string name="menu_send_output_to_tasker">Send output to Tasker</string>
     <string name="menu_speak_http_output">Speak HTTP output</string>
+    <string name="menu_sound_effects">Sound Effects</string>
     <string name="menu_success_exclamation">Success!</string>
     <string name="menu_success_response">Success response</string>
     <string name="menu_success_response_hint">This is what I\'ll say on success</string>
@@ -1883,20 +1892,26 @@
     <string name="menu_tasker_variable_not_found">Tasker variable not found?</string>
     <string name="action_export">Export</string>
     <string name="content_call_contact">Call contact %1$s on %2$s</string>
+    <string name="content_custom_command">Select custom command action</string>
     <string name="content_automate_flow">Automate Flow %1$s</string>
     <string name="content_display_contact">Display contact %1$s</string>
     <string name="content_execute_task">Execute task %1$s</string>
     <string name="content_external_command">This is an external command which has been registered by the application %1$s.\n\nIt can not be edited, only deleted.\n\nIf you would like to prevent this application from registering future commands, you can Blacklist it in the Superuser Settings.</string>
+    <string name="content_export_warning">WARNING!\n\nCommands that you have created may contain personal information, such as contact numbers and addresses. Please do review the content of your commands before sharing them with others.\n\nThey are exported to your device storage Saiy/export/ and can be viewed as a simple text file.</string>
+    <string name="content_import_warning">WARNING!\n\nBefore importing commands that others have created, please use a text viewer to review the contents.\n\nIt is possible for commands to be malicious - perhaps attempting to call a premium phone number, when a certain word is detected in the voice data.\n\nOnce you are happy that the commands are safe, place them on your device storage Saiy/import/ so the application can detect them.</string>
     <string name="content_launch_activity">Launch activity from package %1$s</string>
     <string name="content_launch_app">Launch app %1$s</string>
     <string name="content_run_shortcut">Run shortcut %1$s</string>
     <string name="content_search_on">Search on %1$s</string>
+    <string name="content_sound_effect_2">I come with some inbuilt sound effects that you can make use of in your custom commands and phrases.\n        \nTo use a sound effect, you need to place the name of the effect inside square brackets, as demonstrated in the example input below.\n        \nThe included sound effects are:\n        \n• burp\n• cough\n• cry\n• fart\n• flush\n• giggle\n• pee\n• puke\n• sneeze\n\nYes, my developer really needs to grow up…\n        \nYou can include your own sounds effects by placing them on your device storage in the folder Saiy/Sounds. See the user guide for more information. Have fun!</string>
     <string name="delete">delete</string>
     <string name="commands_exported_successfully">%1$s commands exported successfully</string>
     <string name="commands_imported_successfully">%1$s commands imported successfully</string>
+    <string name="sound_effect_hint">I\'m so happy! [giggle][fart] Excuse me!</string>
     <string name="title_action_optional">Action (optional)</string>
     <string name="title_category_optional">Category (optional)</string>
     <string name="title_class_optional">Class (optional)</string>
+    <string name="title_cool">Cool</string>
     <string name="title_data_optional">Data (optional)</string>
     <string name="title_extras_optional">Extras (optional)</string>
     <string name="title_mime_type_optional">Mime Type (optional)</string>
@@ -1904,15 +1919,32 @@
     <string name="title_enter_nickname_for">Enter nickname for</string>
     <string name="title_export_failed">Export failed…</string>
     <string name="title_target">Target</string>
+    <string name="title_understood">Understood</string>
     <string name="input_digits">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'- </string>
     <string name="custom_format_error">The keyphrase cannot contain special characters</string>
     <string name="custom_naked_error">The keyphrase cannot be empty</string>
     <string name="custom_phrase_format_error">The input or response cannot contain special characters</string>
     <string name="custom_phrase_naked_error">The input or response cannot be empty</string>
     <string name="custom_url_naked_error">The url cannot be empty</string>
+    <string name="custom_user_name">Enter your phonetic name</string>
     <string name="error_edit_customisations">Something went wrong. Please contact the developer to help solve this issue</string>
     <string name="nickname_format_error">The nickname cannot contain special characters</string>
     <string name="nickname_naked_error">The nickname cannot be empty</string>
     <string name="replace_words_format_error">The phrase or replacement cannot contain special characters</string>
     <string name="replace_words_naked_error">The phrase or replacement cannot be empty</string>
+
+    <string name="lp_custom_commands">The custom command options allow me to map your chosen voice input to specific device actions. An example action could be something basic, such as setting the voice input. Call my B F F. To begin calling your best friend on their mobile. There are more advanced options here, such as opening a specific application activity, or activating a Tasker Task. In doing so, you can make a custom voice command do almost anything. There are further examples available in the user guide.</string>
+    <string name="lp_custom_intro">Should you wish me to address you in a certain way, you can enter it here. There is an option to use the introduction only randomly, or every time. You can also include sound effects if you like. The ability to add your own custom sound effects will be added in the next full release.</string>
+    <string name="lp_custom_name">If your default text to speech engine fails to pronounce your name correctly, you can enter its phonetic spelling in this option.</string>
+    <string name="lp_custom_phrases">This customisation allows you to set how I will respond to your designated voice input. You can chain these custom responses together by selecting the option to start the voice recognition. That way, we could go from one custom phrase to the next, giving the appearance that I am a very sophisticated conversationalist, to a listener who is unaware. Examples can be found in the user guide.</string>
+    <string name="lp_edit_customisations">Here you can modify or delete any of the customisations you have created.</string>
+    <string name="lp_export_commands_2">This option will allow you to share your customisations with the community of other users. They\'ll be able to directly import your creation with the option above. The commands will be exported to your device storage in the, say, export, folder.</string>
+    <string name="lp_import_commands">In a future release, this option will give you the ability to import advanced customisations that have been created by the community of other users.</string>
+    <string name="lp_nicknames">If you find that Google voice recognition struggles to correctly return the name of a contact, you can set them a nickname here. The nickname itself should be a term that Google always identifies correctly, and then I\'ll take over and map the name to the chosen contact.</string>
+    <string name="lp_replacements">This feature has two main functions. The first is to enter words or phrases that Google commonly returns incorrectly, when you were saying something different. Entering what Google should have heard as the replacement, and what it may have heard incorrectly as the phrase, will enable me to map the two together. The second function is to shorten commands that you use frequently. Let\'s say that you often use the command. Call my mum on her mobile. If you enter that as the replacement text, and then your chosen trigger word or keyphrase as the input, I\'ll be able to map the two together, and process your intended command. For more advanced usages, take a glance at the user guide.</string>
+    <string name="lp_sound_effects_2">In this option, I explain how you can use sound effects within your custom commands and phrases, along with the ability for you to use your own sound effects that you place on your device storage.</string>
+    <string name="no_customisations">No customisations to edit!</string>
+    <string name="no_import_files_found">No import files found in the Saiy/import/ directory</string>
+    <string name="storage_unavailable">Storage unavailable?</string>
+    <string name="title_no_commands_to_export">No commands to export?</string>
 </resources>

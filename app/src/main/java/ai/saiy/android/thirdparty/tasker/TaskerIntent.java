@@ -249,7 +249,7 @@ public class TaskerIntent extends Intent {
     }
 
     public static Intent getTaskSelectIntent() {
-        return new Intent( ACTION_TASK_SELECT ).
+        return new Intent(ACTION_TASK_SELECT).
                 setFlags(
                         Intent.FLAG_ACTIVITY_NO_USER_ACTION |
                                 Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS |

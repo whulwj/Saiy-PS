@@ -101,6 +101,9 @@ public class UIMainAdapter extends RecyclerView.Adapter<UIMainAdapter.ViewHolder
         holder.subtitle.setText(mObjects.get(position).getSubtitle());
         holder.iconMain.setImageResource(mObjects.get(position).getIconMain());
         holder.iconExtra.setImageResource(mObjects.get(position).getIconExtra());
+        if (mObjects.get(position).getIconExtra() != R.drawable.chevron) {
+            holder.iconExtra.setContentDescription(holder.itemView.getContext().getString(R.string.acs_ui_main_switch));
+        }
         holder.itemContainer.setOnClickListener(onClickListener);
         holder.itemContainer.setOnLongClickListener(onLongClickListener);
         holder.itemContainer.setTag(position);
