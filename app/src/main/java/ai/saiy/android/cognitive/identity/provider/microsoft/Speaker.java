@@ -31,6 +31,9 @@ public class Speaker {
 
     public static final String EXTRA_IDENTIFY_OUTCOME = "extra_identify_outcome";
     public static final String EXTRA_IDENTITY_OUTCOME = "extra_identity_outcome";
+    public static final String EXTRA_START_VR = "ai.saiy.android.extra.START_VR";
+    public static final String EXTRA_LOCALE = "ai.saiy.android.extra.LOCALE";
+    public static final String EXTRA_VALUE = "ai.saiy.android.extra.VALUE";
 
     public static final int ERROR_USER_CANCELLED = 1;
     public static final int ERROR_AUDIO = 2;

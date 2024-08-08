@@ -1229,7 +1229,35 @@
         This is a known Android bug where the Tasker permissions are not detected, if you installed Tasker after me.
         You'll need to reinstall me, so the permissions are correctly applied. Click on the re-assimilate button"</string>
     <string name="error_tasker_broadcast" translatable="true">"Failed sending to Tasker"</string>
+    <string name="empty_tasker_content">empty tasker content</string>
     <string name="empty_tasker_value">empty tasker value</string>
+
+    <string name="menu_activate">Activate</string>
+    <string name="menu_disable_driving_profile">Disable Driving Profile</string>
+    <string name="menu_disable_hotword">Disable Hotword</string>
+    <string name="menu_disable_notification_announcements">Disable Notification Announcements</string>
+    <string name="menu_discard_changes">Discard changes</string>
+    <string name="menu_enable_driving_profile">Enable Driving Profile</string>
+    <string name="menu_enable_hotword">Enable Hotword</string>
+    <string name="menu_enable_notification_announcements">Enable Notification Announcements</string>
+    <string name="menu_notification">Notification</string>
+    <string name="menu_send_value">Send values only</string>
+    <string name="menu_shutdown">Shutdown</string>
+    <string name="menu_speak">Speak</string>
+    <string name="ui_tasker_action_label">Action</string>
+    <string name="ui_tasker_speech_label">Speech</string>
+    <string name="variable_hint" formatted="false">%varname, %varname2</string>
+    <string name="variable_text_hint">Text &amp; variable names</string>
+    <string name="tasker_error_empty_input">Input cannot be empty!</string>
+    <string name="tasker_error_format">Format is %varname</string>
+    <string name="tasker_error_send_values">Send values error!</string>
+    <string name="tasker_notification_text">Tasker interaction - click for details</string>
+    <string name="tasker_notification_ticker">Tasker interaction</string>
+    <string name="tasker_prefix_action">Action: </string>
+    <string name="tasker_prefix_notify">Notify: </string>
+    <string name="tasker_prefix_send">Send: </string>
+    <string name="tasker_prefix_speak">Speak: </string>
+    <string name="tasker_subtitle">Tasker &gt; Saiy</string>
 
     <!-- Command - Clipboard -->
     <string name="clipboard" translatable="true">"clipboard"</string>

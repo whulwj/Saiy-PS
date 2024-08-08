@@ -21,4 +21,5 @@
     <integer name="animate_slow_offset">200</integer>
     <integer name="ime_go">99</integer>
     <integer name="hash_version">191925</integer>
+    <integer name="max_blurb_length">60</integer>
 </resources>

@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import java.util.Locale;
 import java.util.Set;
 
 import ai.saiy.android.R;
@@ -48,6 +49,7 @@ import ai.saiy.android.ui.service.FloatingCommandsService;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 import wei.mark.standout.StandOutWindow;
 
@@ -82,6 +84,7 @@ public class NotificationService extends IntentService {
     public static final int NOTIFICATION_TUTORIAL = 30;
     public static final int NOTIFICATION_FLOATING_WINDOW = 31;
     public static final int NOTIFICATION_DRIVING_PROFILE = 32;
+    public static final int NOTIFICATION_TASKER = 33;
     public static final int NOTIFICATION_BIRTHDAY = 35;
     public static final int NOTIFICATION_ALEXA = 36;
 
@@ -416,6 +419,16 @@ public class NotificationService extends IntentService {
                                 SPH.setDrivingCooldownTime(getApplicationContext(), System.currentTimeMillis());
                                 bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
                                 new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                                break;
+                            case NOTIFICATION_TASKER:
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_TASKER");
+                                }
+                                final Locale locale = UtilsLocale.stringToLocale(bundle.getString(Speaker.EXTRA_LOCALE));
+                                final SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(locale);
+                                final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
+                                localRequest.prepareDefault(bundle.getBoolean(Speaker.EXTRA_START_VR, false) ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY, SupportedLanguage.getSupportedLanguage(locale), locale, locale, bundle.getString(Speaker.EXTRA_VALUE, SaiyResourcesHelper.getStringResource(getApplicationContext(), supportedLanguage, R.string.empty_tasker_content)));
+                                localRequest.execute();
                                 break;
                             case NOTIFICATION_BIRTHDAY:
                                 bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);

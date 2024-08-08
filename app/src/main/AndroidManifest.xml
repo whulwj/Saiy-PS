@@ -368,6 +368,28 @@
             android:launchMode="singleTop"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/ui_tasker_speech_label"
+            android:icon="@mipmap/ic_launcher"
+            android:name="ai.saiy.android.ui.activity.ActivityTaskerPluginSpeech"
+            android:exported="true"
+            android:configChanges="screenSize|orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@string/ui_tasker_action_label"
+            android:icon="@mipmap/ic_launcher"
+            android:name="ai.saiy.android.ui.activity.ActivityTaskerPluginAction"
+            android:exported="true"
+            android:configChanges="screenSize|orientation|keyboardHidden">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING"/>
+            </intent-filter>
+        </activity>
 
         <service
             android:name="ai.saiy.android.service.SelfAware"
@@ -469,6 +491,13 @@
             android:permission="ai.saiy.android.permission.CONTROL_SAIY">
             <intent-filter android:priority="999">
                 <action android:name="ai.saiy.android.SAIY_REQUEST_RECEIVER"/>
+            </intent-filter>
+        </receiver>
+        <receiver
+            android:name="ai.saiy.android.broadcast.BRTaskerReceiver"
+            android:exported="true">
+            <intent-filter android:priority="999">
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING"/>
             </intent-filter>
         </receiver>
         <receiver

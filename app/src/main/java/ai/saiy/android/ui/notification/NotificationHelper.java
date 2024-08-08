@@ -32,6 +32,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.ContextCompat;
 
+import java.util.Locale;
+
 import ai.saiy.android.R;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.permissions.PermissionHelper;
@@ -274,6 +276,46 @@ public final class NotificationHelper {
         }
 
         return builder.build();
+    }
+
+    public static void createTaskerNotification(Context ctx, String str, Locale locale, boolean z) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "createTaskerNotification");
+        }
+        try {
+            final Intent actionIntent = new Intent(NotificationService.INTENT_CLICK);
+            actionIntent.setPackage(ctx.getPackageName());
+            actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_TASKER);
+            actionIntent.putExtra(Speaker.EXTRA_START_VR, z);
+            actionIntent.putExtra(Speaker.EXTRA_LOCALE, locale.toString());
+            actionIntent.putExtra(Speaker.EXTRA_VALUE, str);
+
+            final PendingIntent pendingIntent = PendingIntent.getService(ctx, NotificationService.NOTIFICATION_TASKER,
+                    actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+            final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
+
+            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_menu_info_details)
+                    .setTicker(ctx.getString(ai.saiy.android.R.string.tasker_notification_ticker)).setWhen(System.currentTimeMillis())
+                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentText(ctx.getString(ai.saiy.android.R.string.tasker_notification_text))
+                    .setAutoCancel(true);
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                builder.setColorized(false);
+                builder.setColor(Color.RED);
+            }
+
+            final Notification not = builder.build();
+            final NotificationManager notificationManager = (NotificationManager) ctx.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(NotificationService.NOTIFICATION_TASKER, not);
+
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "createTaskerNotification failure");
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
