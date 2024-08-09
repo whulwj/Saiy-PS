@@ -1,19 +1,20 @@
 [versions]
 gradlePlugin = "8.2.2"
-googleAuthLibraryOauth2Http = "1.24.0"
+googleAuthLibraryOauth2Http = "1.12.2"
 commonsIo = "2.16.1"
 commonsCollections4 = "4.4"
 commonsCodec = "1.17.0"
 commonsLang3 = "3.13.0"
 commonsFileUpload = "1.5"
-googleGoogleApiServicesTranslate = "v2-rev45-1.21.0"
-grpcAuth = "1.63.0"
-grpcJava = "1.63.0"
+googleGoogleApiServicesTranslate = "v2-rev51-1.25.0"
+grpcAuth = "1.55.3"
+grpcJava = "1.55.3"
+protobufJava = "3.25.4"
 javaxAnnotationApi = "1.3.2"
 licensesdialog = "2.2.0"
 javaWebsocket = "1.5.6"
-googleHttpClientGson = "1.44.2"
-gson = "2.10.1"
+googleHttpClientGson = "1.42.2"
+gson = "2.9.1" #Don't udgrade it unless there is no need to avoid java.lang.VerifyError on devices (API level < 19)
 guava = "32.1.3-android"
 googleServicesVersion = "4.4.1"
 playServicesAuth = "20.5.0"
@@ -42,8 +43,9 @@ transition = "1.4.1"
 multidex = "2.0.1"
 desugar_jdk_libs_version = "2.0.4"
 simpleXml = "2.7.1"
-libraries-bom = "26.37.0"
-cloud-dialogflow = "4.49.0"
+libraries-bom = "26.1.4"
+cloud-dialogflow = "4.11.0"
+proto-google-common = "2.39.1"
 firebase-bom = "28.4.2"
 firebase-analytics = "19.0.2"
 firebase-appcheck = "17.1.2"
@@ -73,6 +75,8 @@ grpc-auth = { module = "io.grpc:grpc-auth", version.ref = "grpcAuth" }
 grpc-okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "grpcJava" }
 grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpcJava" }
 grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpcJava" }
+protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobufJava" }
+protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util", version.ref = "protobufJava" }
 javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "javaxAnnotationApi" }
 java-web-socket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebsocket" }
 google-http-client-gson = { module = "com.google.http-client:google-http-client-gson", version.ref = "googleHttpClientGson" }
@@ -110,6 +114,7 @@ desugar_jdk_libs = { group = "com.android.tools", name = "desugar_jdk_libs", ver
 simple-xml = { module = "org.simpleframework:simple-xml", version.ref = "simpleXml" }
 libraries-bom = { module = "com.google.cloud:libraries-bom", version.ref = "libraries-bom" }
 cloud-dialogflow = { module = "com.google.cloud:google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
+proto-google-common = { group = "com.google.api.grpc", name = "proto-google-common-protos", version.ref = "proto-google-common" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-appcheck = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebase-appcheck" }
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebase-appcheck" }

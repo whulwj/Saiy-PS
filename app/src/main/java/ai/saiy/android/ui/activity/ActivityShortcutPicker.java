@@ -90,13 +90,12 @@ public class ActivityShortcutPicker extends AppCompatActivity {
             MyLog.i(CLS_NAME, "onCreate");
         }
         setFinishOnTouchOutside(false);
-        Intent newIntent;
+        final Intent createShortcutIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra(EXTRA_PACKAGE)) {
-            newIntent = new Intent(Intent.ACTION_CREATE_SHORTCUT);
-            newIntent.setPackage(intent.getStringExtra(EXTRA_PACKAGE));
+            createShortcutIntent.setPackage(intent.getStringExtra(EXTRA_PACKAGE));
             try {
-                startActivityForResult(newIntent, REQUEST_CREATE_SHORTCUT);
+                startActivityForResult(createShortcutIntent, REQUEST_CREATE_SHORTCUT);
                 overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
             } catch (SecurityException e) {
                 if (DEBUG) {
@@ -113,11 +112,11 @@ public class ActivityShortcutPicker extends AppCompatActivity {
             }
             return;
         }
-        newIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
-        newIntent.putExtra(Intent.EXTRA_INTENT, newIntent);
-        newIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.title_select_shortcut));
+        final Intent pickActivityIntent = new Intent(Intent.ACTION_PICK_ACTIVITY);
+        pickActivityIntent.putExtra(Intent.EXTRA_INTENT, createShortcutIntent);
+        pickActivityIntent.putExtra(Intent.EXTRA_TITLE, getString(R.string.title_select_shortcut));
         try {
-            startActivityForResult(newIntent, REQUEST_PICK_SHORTCUT);
+            startActivityForResult(pickActivityIntent, REQUEST_PICK_SHORTCUT);
             overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_left);
         } catch (SecurityException e) {
             if (DEBUG) {

@@ -1,211 +1,216 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:animateLayoutChanges="true">
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilKeyphrase"
+    android:fillViewport="true">
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:animateLayoutChanges="true">
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etKeyphrase"
+            android:id="@+id/tilKeyphrase"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/menu_keyphrase_hint"
-            android:ems="10"
-            android:digits="@string/input_digits"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilSuccessResponse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etKeyphrase"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/menu_keyphrase_hint"
+                android:ems="10"
+                android:digits="@string/input_digits"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etSuccessResponse"
+            android:id="@+id/tilSuccessResponse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/menu_success_response_hint"
-            android:ems="10"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilErrorResponse"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etSuccessResponse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/menu_success_response_hint"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etErrorResponse"
+            android:id="@+id/tilErrorResponse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/menu_error_response_hint"
-            android:ems="10"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <CheckBox
-        android:textColor="@color/colorPrimary"
-        android:id="@+id/cbVoiceRecognition"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/menu_start_voice_recognition"/>
-    <TextView
-        android:textColor="@color/colorPrimary"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tvIntentTarget"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/title_target"/>
-    <Spinner
-        android:textColor="@color/colorPrimary"
-        android:entries="@array/array_intent_target_options"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/spIntentTarget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:fontFamily="sans-serif-smallcaps"/>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilIntentAction"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etErrorResponse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/menu_error_response_hint"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <CheckBox
+            android:textColor="@color/colorPrimary"
+            android:id="@+id/cbVoiceRecognition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/menu_start_voice_recognition"/>
+        <TextView
+            android:textColor="@color/colorPrimary"
             android:layout_gravity="center_vertical"
-            android:id="@+id/etIntentAction"
+            android:id="@+id/tvIntentTarget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="@string/title_target"/>
+        <Spinner
+            android:textColor="@color/colorPrimary"
+            android:entries="@array/array_intent_target_options"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/spIntentTarget"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/title_action_optional"
-            android:ems="10"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilIntentCategory"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:fontFamily="sans-serif-smallcaps"/>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etIntentCategory"
+            android:id="@+id/tilIntentAction"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/title_category_optional"
-            android:ems="10"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilIntentPackage"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etIntentAction"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/title_action_optional"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etIntentPackage"
+            android:id="@+id/tilIntentCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/title_package_optional"
-            android:ems="10"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilIntentClass"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etIntentCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/title_category_optional"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etIntentClass"
+            android:id="@+id/tilIntentPackage"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/title_class_optional"
-            android:ems="10"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilIntentData"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etIntentPackage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/title_package_optional"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etIntentData"
+            android:id="@+id/tilIntentClass"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/title_data_optional"
-            android:ems="10"
-            android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <com.google.android.material.textfield.TextInputLayout
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tilIntentMimeType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        app:counterEnabled="false">
-        <EditText
-            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etIntentClass"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/title_class_optional"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
             android:layout_gravity="center_vertical"
-            android:id="@+id/etIntentMimeType"
+            android:id="@+id/tilIntentData"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/activity_horizontal_margin"
-            android:hint="@string/title_mime_type_optional"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etIntentData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/title_data_optional"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_gravity="center_vertical"
+            android:id="@+id/tilIntentMimeType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            app:counterEnabled="false">
+            <EditText
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:layout_gravity="center_vertical"
+                android:id="@+id/etIntentMimeType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/activity_horizontal_margin"
+                android:hint="@string/title_mime_type_optional"
+                android:ems="10"
+                android:inputType="text"/>
+        </com.google.android.material.textfield.TextInputLayout>
+        <TextView
+            android:textColor="@color/colorPrimary"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/tvIntentExtras"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:text="@string/title_extras_optional"/>
+        <EditText
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:layout_gravity="center_vertical"
+            android:id="@+id/etIntentExtras"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/activity_horizontal_margin"
+            android:hint="@string/custom_extras_hint"
             android:ems="10"
             android:inputType="text"/>
-    </com.google.android.material.textfield.TextInputLayout>
-    <TextView
-        android:textColor="@color/colorPrimary"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/tvIntentExtras"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/title_extras_optional"/>
-    <EditText
-        android:textAppearance="@style/TextAppearance.AppCompat.Small"
-        android:layout_gravity="center_vertical"
-        android:id="@+id/etIntentExtras"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:hint="@string/custom_extras_hint"
-        android:ems="10"
-        android:inputType="text"/>
-</LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -5,18 +5,16 @@ import android.os.Parcelable;
 
 import androidx.annotation.IntDef;
 
-import java.io.Serializable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class CustomIntent implements Serializable, Parcelable {
+public class CustomIntent implements Parcelable {
     public static final int TARGET_ACTIVITY = 0;
     public static final int TARGET_BROADCAST_RECEIVER = 1;
     public static final int TARGET_SERVICE = 2;
     @IntDef({TARGET_ACTIVITY, TARGET_BROADCAST_RECEIVER, TARGET_SERVICE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Target {}
-    private static final long serialVersionUID = 4339727986463695173L;
 
     private String action;
     private String category;
@@ -93,36 +91,36 @@ public class CustomIntent implements Serializable, Parcelable {
         return this.target;
     }
 
-    public void setAction(String str) {
-        this.action = str;
+    public void setAction(String action) {
+        this.action = action;
     }
 
-    public void setCategory(String str) {
-        this.category = str;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public void setClassName(String str) {
-        this.className = str;
+    public void setClassName(String className) {
+        this.className = className;
     }
 
-    public void setData(String str) {
-        this.data = str;
+    public void setData(String data) {
+        this.data = data;
     }
 
-    public void setExtras(String str) {
-        this.extras = str;
+    public void setExtras(String extras) {
+        this.extras = extras;
     }
 
-    public void setMimeType(String str) {
-        this.mimeType = str;
+    public void setMimeType(String mimeType) {
+        this.mimeType = mimeType;
     }
 
-    public void setPackageName(String str) {
-        this.packageName = str;
+    public void setPackageName(String packageName) {
+        this.packageName = packageName;
     }
 
-    public void setSerialised(String str) {
-        this.serialised = str;
+    public void setSerialised(String serialised) {
+        this.serialised = serialised;
     }
 
     public void setTarget(@Target int target) {

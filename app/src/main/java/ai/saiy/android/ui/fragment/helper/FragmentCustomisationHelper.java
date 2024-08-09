@@ -1661,8 +1661,7 @@ public class FragmentCustomisationHelper {
     public void showCustomCommandsDialog() {
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                 .setCancelable(false)
-                .setTitle(R.string.menu_custom_commands)
-                .setMessage(R.string.content_custom_command)
+                .setTitle(R.string.content_custom_command)
                 .setSingleChoiceItems(R.array.array_custom_commands, -1, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1699,15 +1698,15 @@ public class FragmentCustomisationHelper {
                                     MyLog.i(CLS_NAME, "showCustomCommandsDialog: CUSTOM_TASKER_TASK");
                                 }
                                 final ai.saiy.android.thirdparty.tasker.TaskerHelper taskerHelper = new ai.saiy.android.thirdparty.tasker.TaskerHelper();
-                                Pair<Boolean, String> d2 = taskerHelper.isTaskerInstalled(getApplicationContext());
-                                if (!d2.first) {
+                                final Pair<Boolean, String> taskerPair = taskerHelper.isTaskerInstalled(getApplicationContext());
+                                if (!taskerPair.first) {
                                     Install.showInstallLink(getApplicationContext(), Installed.PACKAGE_TASKER_MARKET);
                                 } else {
-                                    Pair<Boolean, Boolean> c2 = taskerHelper.canInteract(getApplicationContext());
-                                    if (!c2.first) {
-                                        ai.saiy.android.applications.UtilsApplication.launchAppFromPackageName(getApplicationContext(), (String) d2.second);
+                                    final Pair<Boolean, Boolean> taskerStatusPair = taskerHelper.canInteract(getApplicationContext());
+                                    if (!taskerStatusPair.first) {
+                                        ai.saiy.android.applications.UtilsApplication.launchAppFromPackageName(getApplicationContext(), (String) taskerPair.second);
                                         toast(getString(R.string.error_tasker_enable), Toast.LENGTH_LONG);
-                                    } else if (!c2.second) {
+                                    } else if (!taskerStatusPair.second) {
                                         taskerHelper.showTaskerExternalAccess(getApplicationContext());
                                         toast(getString(R.string.error_tasker_external_access), Toast.LENGTH_LONG);
                                     } else if (!taskerHelper.receiverExists(getApplicationContext())) {
