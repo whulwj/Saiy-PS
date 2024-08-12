@@ -19,7 +19,7 @@
     <string name="gcp_project_id" translatable="false">plucky-sound-315505</string>
     <!--Firebase Google Sign-In Authentication-->
     <string name="default_web_client_id" translatable="false">997068182928-rv7vtailtqrup3hdenre58gu5r56rim6.apps.googleusercontent.com</string>
-    <string name="facebook_application_id" translatable="false">todo-CHANGE-ME</string>
+    <string name="facebook_app_id" translatable="false">151121772049980</string>
 
     <!-- SPEECH STRINGS -->
 
@@ -1975,4 +1975,9 @@
     <string name="no_import_files_found">No import files found in the Saiy/import/ directory</string>
     <string name="storage_unavailable">Storage unavailable?</string>
     <string name="title_no_commands_to_export">No commands to export?</string>
+
+    <string name="facebook">facebook</string>
+    <string name="facebook_auth_request">You need to authorise my access to your Facebook wall,\n        so I can automatically post content for you.</string>
+    <string name="facebook_content_request">Please say the content of your Facebook status</string>
+    <string name="facebook_error">A Facebook error occurred</string>
 </resources>

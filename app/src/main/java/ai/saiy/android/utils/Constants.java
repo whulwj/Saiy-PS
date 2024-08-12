@@ -50,6 +50,7 @@ public final class Constants {
     public static final String DEFAULT_TEMP_FILE_SUFFIX = "txt";
     public static final String DEFAULT_TEMP_FILE_PREFIX = "default_temp_file";
     public static final String OGG_AUDIO_FILE_SUFFIX = "ogg";
+    public static final String MP3_AUDIO_FILE_SUFFIX = "mp3";
 
     public static final String ENCODING_UTF8 = "UTF-8";
     public static final String HTTP_DELETE = "DELETE";

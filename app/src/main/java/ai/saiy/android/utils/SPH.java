@@ -171,6 +171,7 @@ public class SPH {
     private static final String SOUNDEX_UPPER_THRESHOLD = "soundex_upper_threshold";
     private static final String REMOTE_COMMAND_VERBOSE = "remote_command_verbose";
     private static final String LAST_USED = "last_used";
+    private static final String FACEBOOK_COMMAND_VERBOSE = "facebook_command_verbose";
     private static final String TWITTER_TOKEN = "twitter_token";
     private static final String TWITTER_SECRET = "twitter_secret";
     private static final String USED_INCREMENT = "used_increment";
@@ -570,6 +571,16 @@ public class SPH {
         edit.apply();
 
         SPH.incrementUsed(ctx);
+    }
+
+    public static int getFacebookCommandVerbose(Context context) {
+        return getPref(context).getInt(FACEBOOK_COMMAND_VERBOSE, 0);
+    }
+
+    public static void setFacebookCommandVerbose(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(FACEBOOK_COMMAND_VERBOSE, getFacebookCommandVerbose(context) + 1);
+        edit.apply();
     }
 
     public static String getTwitterToken(Context context) {

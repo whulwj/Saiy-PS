@@ -443,6 +443,12 @@ public final class PersonalityResponse {
         return stringArray[new Random().nextInt(stringArray.length)];
     }
 
+    public static String getFacebookConfirmation(@NonNull final Context ctx, @NonNull final SupportedLanguage sl,
+                                                 @NonNull final String content) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_facebook_confirmation);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], content);
+    }
+
     /**
      * Get the standard song recognition response.
      *
@@ -910,6 +916,26 @@ public final class PersonalityResponse {
     public static String getSmsConfirmation(Context context, SupportedLanguage supportedLanguage, String contactName, String generic) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_sms_confirmation);
         return String.format(stringArray[new Random().nextInt(stringArray.length)], contactName, generic);
+    }
+
+    public static String FacebookConfirmationMisheard(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_facebook_confirmation_misheard);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getFacebookAcknowledge(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_facebook_acknowledge);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getFacebookPostError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_facebook_post_error);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getFacebookVerbose(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_facebook_verbose);
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getTwitterConfirmationMisheard(Context context, SupportedLanguage supportedLanguage) {

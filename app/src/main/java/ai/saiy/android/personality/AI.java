@@ -20,6 +20,8 @@ package ai.saiy.android.personality;
 import android.content.Context;
 import android.util.Pair;
 
+import com.facebook.share.model.ShareLinkContent;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
@@ -65,7 +67,7 @@ public class AI {
      */
     private static double calculateAI(Context context) {
         final long then = System.nanoTime();
-        final double aiLevel = AI_LEVEL + scoreOfUserName(context) + scoreOfPhrase(context) + scoreOfNickname(context) + scoreOfReplacement(context) + scoreOfCustomisation(context) + scoreOfTaskerVariables(context) + scoreOfCustomIntro(context) + scoreOfRunDiagnostics(context) + scoreOfDefaultTTSVoice(context) + scoreOfCommandUnknownAction(context) + scoreOfAccount(context) + scoreOfTwitter(context) + scoreOfTasker(context) + scoreOfUsage(context);
+        final double aiLevel = AI_LEVEL + scoreOfUserName(context) + scoreOfPhrase(context) + scoreOfNickname(context) + scoreOfReplacement(context) + scoreOfCustomisation(context) + scoreOfTaskerVariables(context) + scoreOfCustomIntro(context) + scoreOfRunDiagnostics(context) + scoreOfDefaultTTSVoice(context) + scoreOfCommandUnknownAction(context) + scoreOfAccount(context) + scoreOfFacebook() + scoreOfTwitter(context) + scoreOfTasker(context) + scoreOfUsage(context);
         if (DEBUG) {
             ai.saiy.android.utils.MyLog.i(CLS_NAME, "aiLevel: " + new BigDecimal(Double.toString(aiLevel)).setScale(2, RoundingMode.HALF_UP).toString());
             ai.saiy.android.utils.MyLog.getElapsed(CLS_NAME, "calculateAI", then);
@@ -157,6 +159,13 @@ public class AI {
             return Algorithm.LEV_MAX_THRESHOLD;
         }
         return 0.39d;
+    }
+
+    private static double scoreOfFacebook() {
+        if (new com.facebook.share.ShareApi(new ShareLinkContent.Builder().build()).canShare()) {
+            return 0.3d;
+        }
+        return Algorithm.LEV_MAX_THRESHOLD;
     }
 
     private static double scoreOfTwitter(Context context) {

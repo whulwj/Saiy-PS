@@ -26,7 +26,6 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
 public class ContactConfirm {
-    private static final String RETRY = ai.saiy.android.recognition.provider.nuance.RecognitionNuance.RETRY;
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ContactConfirm.class.getSimpleName();
 
@@ -126,12 +125,12 @@ public class ContactConfirm {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "UNRESOLVED");
                         }
-                        if (bundle.containsKey(RETRY)) {
+                        if (bundle.containsKey(LocalRequest.EXTRA_VR_RETRY)) {
                             localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext);
                             localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, PersonalityResponse.getCallConfirmationMisHeard(mContext, sl));
                             localRequest.execute();
                         } else {
-                            bundle.putBoolean(RETRY, true);
+                            bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, true);
                             localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext, bundle);
                             localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, sl, vrLocale, ttsLocale, PersonalityResponse.getCallConfirmationRepeat(mContext, sl));
                             localRequest.execute();
@@ -207,12 +206,12 @@ public class ContactConfirm {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "UNRESOLVED");
                         }
-                        if (bundle.containsKey(RETRY)) {
+                        if (bundle.containsKey(LocalRequest.EXTRA_VR_RETRY)) {
                             localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext);
                             localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, PersonalityResponse.getTextConfirmationMisHeard(mContext, sl));
                             localRequest.execute();
                         } else {
-                            bundle.putBoolean(RETRY, true);
+                            bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, true);
                             localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext, bundle);
                             localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, sl, vrLocale, ttsLocale, PersonalityResponse.getCallConfirmationRepeat(mContext, sl));
                             localRequest.execute();

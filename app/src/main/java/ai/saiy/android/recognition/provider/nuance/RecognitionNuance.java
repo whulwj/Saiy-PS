@@ -74,7 +74,7 @@ public class RecognitionNuance {
     private final String CLS_NAME = RecognitionNuance.class.getSimpleName();
 
     private static final String RECORDER = "recorder";
-    public static final String RETRY = "retry";
+    private static final String RETRY = "retry";
     private static final String CANCELLED = "cancelled";
 
     private final Session speechSession;

@@ -40,6 +40,7 @@ import ai.saiy.android.command.battery.CommandBattery;
 import ai.saiy.android.command.clipboard.ClipboardHelper;
 import ai.saiy.android.command.custom.CommandCustom;
 import ai.saiy.android.command.emotion.CommandEmotion;
+import ai.saiy.android.command.facebook.CommandFacebook;
 import ai.saiy.android.command.foursquare.CommandFoursquare;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
@@ -598,6 +599,26 @@ public class Quantum extends Tunnelling {
                         result = Outcome.SUCCESS;
                     }
                     break;
+                case COMMAND_FACEBOOK:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_FACEBOOK.name());
+                    }
+                    if (!secure) {
+                        final CommandFacebook commandFacebook = new CommandFacebook();
+                        outcome = commandFacebook.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        request.setCondition(outcome.getCondition());
+                        if (outcome.getExtra() instanceof Parcelable) {
+                            request.setParcelableObject((Parcelable) outcome.getExtra());
+                        }
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    }
+                    break;
                 case COMMAND_TWITTER:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TWITTER.name());
@@ -1124,6 +1145,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_DRIVING:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DRIVING.name());
+                    }
+                    break;
+                case COMMAND_FACEBOOK:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_FACEBOOK.name());
                     }
                     break;
                 case COMMAND_TWITTER:

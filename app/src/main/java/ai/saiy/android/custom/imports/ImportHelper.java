@@ -2,6 +2,8 @@ package ai.saiy.android.custom.imports;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
@@ -10,19 +12,21 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import ai.saiy.android.custom.CustomCommandHelper;
 import ai.saiy.android.custom.CustomNickname;
+import ai.saiy.android.custom.CustomNicknameHelper;
 import ai.saiy.android.custom.CustomPhrase;
+import ai.saiy.android.custom.CustomPhraseHelper;
 import ai.saiy.android.custom.CustomReplacement;
+import ai.saiy.android.custom.CustomReplacementHelper;
 import ai.saiy.android.custom.exports.CustomCommandExport;
 import ai.saiy.android.custom.exports.CustomNicknameExport;
 import ai.saiy.android.custom.exports.CustomPhraseExport;
 import ai.saiy.android.custom.exports.CustomReplacementExport;
 import ai.saiy.android.custom.exports.ExportConfiguration;
-import ai.saiy.android.custom.CustomNicknameHelper;
-import ai.saiy.android.custom.CustomPhraseHelper;
-import ai.saiy.android.custom.CustomReplacementHelper;
 import ai.saiy.android.utils.MyLog;
 
 public class ImportHelper {
@@ -105,12 +109,12 @@ public class ImportHelper {
         return i;
     }
 
-    public ArrayList<File> getImportFiles() {
+    public @NonNull List<File> getImportFiles() {
         final ArrayList<File> importFiles = ai.saiy.android.utils.UtilsFile.getImportFiles();
-        return ai.saiy.android.utils.UtilsList.notNaked(importFiles) ? ai.saiy.android.utils.UtilsFile.sortByLastModified(importFiles) : new ArrayList<>();
+        return ai.saiy.android.utils.UtilsList.notNaked(importFiles) ? ai.saiy.android.utils.UtilsFile.sortByLastModified(importFiles) : Collections.emptyList();
     }
 
-    public ArrayList<Object> runImport(ArrayList<File> files) {
+    public ArrayList<Object> runImport(@NonNull List<File> files) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "runImport");
         }

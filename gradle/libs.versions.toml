@@ -3,8 +3,8 @@ gradlePlugin = "8.2.2"
 googleAuthLibraryOauth2Http = "1.12.2"
 commonsIo = "2.16.1"
 commonsCollections4 = "4.4"
-commonsCodec = "1.17.0"
-commonsLang3 = "3.13.0"
+commonsCodec = "1.17.1"
+commonsLang3 = "3.14.0"
 commonsFileUpload = "1.5"
 googleGoogleApiServicesTranslate = "v2-rev51-1.25.0"
 grpcAuth = "1.55.3"
@@ -132,6 +132,7 @@ volley = { module = "com.android.volley:volley", version.ref = "volley" }
 java-aes-crypto = { group = "com.github.tozny", name = "java-aes-crypto", version.ref= "java-aes-crypto" }
 twitter4j = { group = "org.twitter4j", name = "twitter4j-core", version.ref= "twitter4j" }
 facebook-login = { group = "com.facebook.android", name = "facebook-login", version.ref= "facebook-sdk" }
+facebook-share = { group = "com.facebook.android", name = "facebook-share", version.ref= "facebook-sdk" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "gradlePlugin" }

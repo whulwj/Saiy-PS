@@ -24,10 +24,15 @@ import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_INTERIM;
 import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_LAST;
 import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_SINGLE;
 
+import android.content.Context;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -44,7 +49,7 @@ import ai.saiy.android.utils.UtilsString;
 public class SoundEffectHelper {
 
     private static final boolean DEBUG = MyLog.DEBUG;
-    private final String CLS_NAME = SoundEffectHelper.class.getSimpleName();
+    private static final String CLS_NAME = SoundEffectHelper.class.getSimpleName();
 
     public static final Pattern pSOUND_EFFECT = Pattern.compile(".*\\[[0-9A-Za-z\\s]+\\].*", Pattern.DOTALL);
     private static final Pattern pSOUND_EFFECT_CONTENT = Pattern.compile("(.*?)\\[(.*?)\\]", Pattern.DOTALL);
@@ -142,6 +147,47 @@ public class SoundEffectHelper {
      */
     public void sort() {
         extract(this.text.toString());
+    }
+
+    public static @NonNull List<File> getUserSoundEffects(Context context) {
+        if (!ai.saiy.android.permissions.PermissionHelper.checkFilePermissionsNR(context)) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getUserSoundEffects: no permission");
+            }
+            return Collections.emptyList();
+        }
+        if (!ai.saiy.android.utils.UtilsFile.isExternalStorageReadable()) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getUserSoundEffects: isExternalStorageReadable: false");
+            }
+            return Collections.emptyList();
+        }
+        if (!ai.saiy.android.utils.UtilsFile.isSoundDirectoryExists()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "getUserSoundEffects: soundDirExists: false");
+            }
+            if (!ai.saiy.android.utils.UtilsFile.isExternalStorageWritable()) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getUserSoundEffects: isExternalStorageWritable: false");
+                }
+                return Collections.emptyList();
+            }
+            if (!ai.saiy.android.utils.UtilsFile.createSoundDirectory()) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getUserSoundEffects: createSoundDir: false");
+                }
+                return Collections.emptyList();
+            }
+        }
+        final List<File> userSoundEffectArray = ai.saiy.android.utils.UtilsFile.getSoundFiles();
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getUserSoundEffects: userSoundEffectArray: size: " + userSoundEffectArray.size());
+            for (File file : userSoundEffectArray) {
+                MyLog.i(CLS_NAME, "getUserSoundEffects: file: getName: " + file.getName());
+                MyLog.i(CLS_NAME, "getUserSoundEffects: file: getAbsolutePath: " + file.getAbsolutePath());
+            }
+        }
+        return userSoundEffectArray;
     }
 
     /**

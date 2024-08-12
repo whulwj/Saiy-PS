@@ -26,6 +26,7 @@ import android.os.Environment;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
@@ -33,12 +34,16 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.comparator.LastModifiedFileComparator;
+import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 import ai.saiy.android.tts.helper.TTSDefaults;
 
@@ -422,6 +427,10 @@ public class UtilsFile {
         return new File(saiyDirectory() + QUICK_LAUNCH_FILE);
     }
 
+    public static boolean isExternalStorageReadable() {
+        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageDirectory().canRead();
+    }
+
     public static boolean isExternalStorageWritable() {
         return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageDirectory().canWrite();
     }
@@ -617,12 +626,60 @@ public class UtilsFile {
         return true;
     }
 
-    public static ArrayList<File> getImportFiles() {
-        return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(getImportDirectory(), importFileFilter(), null));
+    public static @NonNull List<File> getSoundFiles() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoClassDefFoundError: IOFileFilter
+                return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(soundDirectory(), soundFileFilter(), null));
+            } else {
+                final File[] fileArray = soundDirectory().listFiles((dir, name) -> {
+                    if (name != null) {
+                        return IOCase.INSENSITIVE.checkEndsWith(name, Constants.DEFAULT_AUDIO_FILE_SUFFIX) || IOCase.INSENSITIVE.checkEndsWith(name, Constants.OGG_AUDIO_FILE_SUFFIX) || IOCase.INSENSITIVE.checkEndsWith(name, Constants.MP3_AUDIO_FILE_SUFFIX);
+                    }
+                    return false;
+                });
+                if (fileArray == null|| fileArray.length == 0) {
+                    return Collections.emptyList();
+                }
+                return new ArrayList<>(Arrays.asList(fileArray));
+            }
+        } catch (Throwable t) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getSoundFiles " + t.getClass().getSimpleName() + "," + t.getMessage());
+            }
+        }
+        return Collections.emptyList();
     }
 
-    public static org.apache.commons.io.filefilter.IOFileFilter importFileFilter() {
-        return org.apache.commons.io.filefilter.FileFilterUtils.suffixFileFilter(EXPORT_FILE_SUFFIX, IOCase.INSENSITIVE);
+    public static @Nullable ArrayList<File> getImportFiles() {
+        try {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoClassDefFoundError: IOFileFilter
+                return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(getImportDirectory(), importFileFilter(), null));
+            } else {
+                final File[] fileArray = getImportDirectory().listFiles((dir, name) -> {
+                    if (name != null) {
+                        return IOCase.INSENSITIVE.checkEndsWith(name, EXPORT_FILE_SUFFIX);
+                    }
+                    return false;
+                });
+                if (fileArray == null|| fileArray.length == 0) {
+                    return null;
+                }
+                return new ArrayList<>(Arrays.asList(fileArray));
+            }
+        } catch (Throwable t) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getSoundFiles " + t.getClass().getSimpleName() + "," + t.getMessage());
+            }
+        }
+        return null;
+    }
+
+    private static org.apache.commons.io.filefilter.IOFileFilter importFileFilter() {
+        return FileFilterUtils.suffixFileFilter(EXPORT_FILE_SUFFIX, IOCase.INSENSITIVE);
+    }
+
+    private static org.apache.commons.io.filefilter.IOFileFilter soundFileFilter() {
+        return FileFilterUtils.or(FileFilterUtils.suffixFileFilter(Constants.DEFAULT_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE), FileFilterUtils.suffixFileFilter(Constants.OGG_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE), FileFilterUtils.suffixFileFilter(Constants.MP3_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE));
     }
 
     private static boolean isQuickLaunchFileExists() {

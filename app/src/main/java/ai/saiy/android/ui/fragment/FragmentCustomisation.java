@@ -34,6 +34,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import ai.saiy.android.R;
 import ai.saiy.android.service.helper.LocalRequest;
@@ -207,7 +208,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                                 showProgress(true);
                                 if (ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
                                     final ai.saiy.android.custom.imports.ImportHelper importHelper = new ai.saiy.android.custom.imports.ImportHelper();
-                                    final ArrayList<File> importFiles = importHelper.getImportFiles();
+                                    final List<File> importFiles = importHelper.getImportFiles();
                                     if (ai.saiy.android.utils.UtilsList.notNaked(importFiles)) {
                                         if (DEBUG) {
                                             MyLog.w(CLS_NAME, "importFiles: size: " + importFiles.size());

@@ -31,6 +31,8 @@ import java.util.Locale;
 import ai.saiy.android.command.contact.AnswerCallConfirm;
 import ai.saiy.android.command.contact.CommandContactValues;
 import ai.saiy.android.command.contact.ContactConfirm;
+import ai.saiy.android.command.facebook.CommandFacebookValues;
+import ai.saiy.android.command.facebook.FacebookConfirm;
 import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.command.note.NoteManager;
 import ai.saiy.android.command.twitter.CommandTwitterValues;
@@ -185,6 +187,12 @@ public class RecognitionAction {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_ANNOUNCE_CALLER");
                     }
                     new AnswerCallConfirm(mContext, bundle, AnswerCallConfirm.ConfirmType.ANSWER, vrLocale, ttsLocale).answer();
+                    break;
+                case Condition.CONDITION_FACEBOOK:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Condition.CONDITION_FACEBOOK");
+                    }
+                    new FacebookConfirm(mContext, bundle, ((CommandFacebookValues) bundle.getParcelable(LocalRequest.EXTRA_OBJECT)).getContentType(), vrLocale, ttsLocale).confirm();
                     break;
                 case Condition.CONDITION_TWITTER:
                     if (DEBUG) {

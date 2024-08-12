@@ -672,6 +672,22 @@ public class SaiyTextToSpeech extends TextToSpeech {
         }
 
         typedArray.recycle();
+        for (File file : SoundEffectHelper.getUserSoundEffects(mContext)) {
+            String userFileName = org.apache.commons.io.FilenameUtils.getBaseName(file.getName());
+            switch (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP ? addEarcon(userFileName, file) : addEarcon(userFileName, file.getPath())) {
+                case ERROR:
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "addSoundEffects: userFileName: ERROR: " + userFileName);
+                    }
+                    break;
+                case SUCCESS:
+                    if (DEBUG) {
+                        MyLog.v(CLS_NAME, "addSoundEffects: userFileName: SUCCESS: " + userFileName);
+                    }
+                    addedItems.add(userFileName);
+                    break;
+            }
+        }
         SoundEffectHelper.setAddedItems(addedItems);
     }
 

@@ -121,7 +121,7 @@ public class Tutorial {
         int nextTutorialStage;
         boolean conditionRetry = false;
         String utterance;
-        Bundle bundle = new Bundle();
+        Bundle actionBundle = new Bundle();
         switch (tutorialStage) {
             case STAGE_INTRO:
                 if (DEBUG) {
@@ -134,9 +134,9 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_INTRO_2");
                 }
-                bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
-                bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
-                ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
+                actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
+                actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+                ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_COMMANDS, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_2) + " [tick]", false);
                 break;
             case STAGE_COMMANDS:
@@ -434,9 +434,9 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_CUSTOMISATION");
                 }
-                bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
-                bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
-                ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
+                actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
+                actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+                ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_CUSTOMISATION_1, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_12), false);
                 break;
             case STAGE_CUSTOMISATION_1:
@@ -449,27 +449,27 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_SETTINGS");
                 }
-                bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SETTINGS);
-                bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
-                ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
+                actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SETTINGS);
+                actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+                ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_ADVANCED_SETTINGS, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_14), false);
                 break;
             case STAGE_ADVANCED_SETTINGS:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_ADVANCED_SETTINGS");
                 }
-                bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_ADVANCED_SETTINGS);
-                bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
-                ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
+                actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_ADVANCED_SETTINGS);
+                actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+                ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_APPLICATIONS, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_15), false);
                 break;
             case STAGE_APPLICATIONS:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_APPLICATIONS");
                 }
-                bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
-                bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
-                ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
+                actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
+                actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+                ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_DEVELOPMENT, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_16) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_17), false);
                 new Timer().schedule(new TimerTask() {
                     @Override
@@ -484,9 +484,9 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_DEVELOPMENT");
                 }
-                bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_DEVELOPMENT);
-                bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
-                ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
+                actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_DEVELOPMENT);
+                actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+                ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_FINAL, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_18), false);
                 break;
             case STAGE_FINAL:
@@ -508,9 +508,9 @@ public class Tutorial {
                 }
                 String str;
                 if (isUserNameUnknown || sErrorCount > 1) {
-                    bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
-                    bundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
-                    ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
+                    actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
+                    actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
+                    ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                     str = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20b) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20a);
                 } else {
                     str = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20a);
