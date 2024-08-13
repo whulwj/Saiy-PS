@@ -166,6 +166,7 @@
     <string name="menu_tap_view" translatable="true">tap to view</string>
     <string name="menu_tap_topics" translatable="true">tap for topics</string>
     <string name="menu_tap_contribute" translatable="true">tap to contribute</string>
+    <string name="menu_tap_create" translatable="true">tap to create</string>
     <string name="menu_tap_options" translatable="true">tap for options</string>
     <string name="menu_tap_toggle" translatable="true">tap to toggle</string>
     <string name="menu_tap_set" translatable="true">tap to set</string>
@@ -174,7 +175,6 @@
     <string name="menu_tap_legends" translatable="true">tap for legends</string>
     <string name="menu_tap_send" translatable="true">tap to send</string>
     <string name="menu_tap_help" translatable="true">tap for help</string>
-    <string name="menu_tap_create">tap to create</string>
     <string name="menu_tap_manage">tap to manage</string>
     <string name="menu_tap_export">tap to export</string>
     <string name="menu_tap_import">tap to import</string>
@@ -1267,8 +1267,8 @@
     <string name="name_that_tune" translatable="true">"name that tune"</string>
 
     <string name="sound_search" translatable="true">"sound search"</string>
-    <string name="google">google</string>
     <string name="google_capital" translatable="false">"Google"</string>
+    <string name="google" translatable="false">"google"</string>
     <string name="sound_hound" translatable="false">"Sound Hound"</string>
     <string name="sound_hound_premium" translatable="false">"Sound Hound Premium"</string>
     <string name="shazam" translatable="false">"Shazam"</string>
@@ -1980,4 +1980,92 @@
     <string name="facebook_auth_request">You need to authorise my access to your Facebook wall,\n        so I can automatically post content for you.</string>
     <string name="facebook_content_request">Please say the content of your Facebook status</string>
     <string name="facebook_error">A Facebook error occurred</string>
+
+    <string name="application_settings">application settings</string>
+    <string name="ABOUT_SETTING">about setting</string>
+    <string name="ABOUT_SETTINGS">about settings</string>
+    <string name="ACCESSIBILITY_SETTING">accessibility setting</string>
+    <string name="ACCESSIBILITY_SETTINGS">accessibility settings</string>
+    <string name="APN_SETTING">apn setting</string>
+    <string name="APN_SETTINGS">apn settings</string>
+    <string name="APPLICATION_SETTING">application setting</string>
+    <string name="APPLICATION_SETTINGS">application settings</string>
+    <string name="A_P_N_SETTING">a p n setting</string>
+    <string name="A_P_N_SETTINGS">a p n settings</string>
+    <string name="BATTERY_SETTING">battery setting</string>
+    <string name="BATTERY_SETTINGS">battery settings</string>
+    <string name="BLUETOOTH_SETTING">bluetooth setting</string>
+    <string name="BLUETOOTH_SETTINGS">bluetooth settings</string>
+    <string name="CLOCK_SETTING">clock setting</string>
+    <string name="CLOCK_SETTINGS">clock settings</string>
+    <string name="DATA_SETTING">data setting</string>
+    <string name="DATA_SETTINGS">data settings</string>
+    <string name="DATE_SETTING">date setting</string>
+    <string name="DATE_SETTINGS">date settings</string>
+    <string name="DEVICE_SETTING">device setting</string>
+    <string name="DEVICE_SETTINGS">device settings</string>
+    <string name="DICTIONARY_SETTING">dictionary setting</string>
+    <string name="DICTIONARY_SETTINGS">dictionary settings</string>
+    <string name="DISPLAY_SETTING">display setting</string>
+    <string name="DISPLAY_SETTINGS">display settings</string>
+    <string name="INPUT_SETTING">input setting</string>
+    <string name="INPUT_SETTINGS">input settings</string>
+    <string name="KEYBOARD_SETTING">keyboard setting</string>
+    <string name="KEYBOARD_SETTINGS">keyboard settings</string>
+    <string name="LOCALE_SETTING">locale setting</string>
+    <string name="LOCALE_SETTINGS">locale settings</string>
+    <string name="LOCATION_SETTING">location setting</string>
+    <string name="LOCATION_SETTINGS">location settings</string>
+    <string name="MEMORY_CARD_SETTING">memory card setting</string>
+    <string name="MEMORY_CARD_SETTINGS">memory card settings</string>
+    <string name="MEMORY_SETTING">memory setting</string>
+    <string name="MEMORY_SETTINGS">memory settings</string>
+    <string name="NETWORK_OPERATOR_SETTING">network operator setting</string>
+    <string name="NETWORK_OPERATOR_SETTINGS">network operator settings</string>
+    <string name="NFC_SETTING">nfc setting</string>
+    <string name="NFC_SETTINGS">nfc settings</string>
+    <string name="N_F_C_SETTING">n f c setting</string>
+    <string name="N_F_C_SETTINGS">n f c settings</string>
+    <string name="PRIVACY_SETTING">privacy setting</string>
+    <string name="PRIVACY_SETTINGS">privacy settings</string>
+    <string name="QUICK_LAUNCH_SETTING">quick launch setting</string>
+    <string name="QUICK_LAUNCH_SETTINGS">quick launch settings</string>
+    <string name="SD_CARD_SETTING">sd card setting</string>
+    <string name="SD_CARD_SETTINGS">sd card settings</string>
+    <string name="SEARCH_SETTING">search setting</string>
+    <string name="SEARCH_SETTINGS">search settings</string>
+    <string name="SECURITY_SETTING">security setting</string>
+    <string name="SECURITY_SETTINGS">security settings</string>
+    <string name="SETTING">setting</string>
+    <string name="SETTINGS">settings</string>
+    <string name="SINK_SETTING">sink setting</string>
+    <string name="SINK_SETTINGS">sink settings</string>
+    <string name="SOUNDS_SETTING">sounds setting</string>
+    <string name="SOUNDS_SETTINGS">sounds settings</string>
+    <string name="SOUND_SETTING">sound setting</string>
+    <string name="SOUND_SETTINGS">sound settings</string>
+    <string name="STORAGE_CARD_SETTING">storage card setting</string>
+    <string name="STORAGE_CARD_SETTINGS">storage card settings</string>
+    <string name="STORAGE_SETTING">storage setting</string>
+    <string name="STORAGE_SETTINGS">storage settings</string>
+    <string name="SYNC_SETTING">sync setting</string>
+    <string name="SYNC_SETTINGS">sync settings</string>
+    <string name="S_D_CARD_SETTING">s d card setting</string>
+    <string name="S_D_CARD_SETTINGS">s d card settings</string>
+    <string name="TEXT_TO_SPEECH_SETTING">text to speech setting</string>
+    <string name="TEXT_TO_SPEECH_SETTINGS">text to speech settings</string>
+    <string name="TIME_SETTING">time setting</string>
+    <string name="TIME_SETTINGS">time settings</string>
+    <string name="TTS_SETTING">tts setting</string>
+    <string name="TTS_SETTINGS">tts settings</string>
+    <string name="T_T_S_SETTING">t t s setting</string>
+    <string name="T_T_S_SETTINGS">t t s settings</string>
+    <string name="VOICE_SEARCH_SETTING">voice search setting</string>
+    <string name="VOICE_SEARCH_SETTINGS">voice search settings</string>
+    <string name="VOLUME_SETTING">volume setting</string>
+    <string name="VOLUME_SETTINGS">volume settings</string>
+    <string name="WIFI_SETTING">wifi setting</string>
+    <string name="WIFI_SETTINGS">wifi settings</string>
+    <string name="WI_FI_SETTING">wi-fi setting</string>
+    <string name="WI_FI_SETTINGS">wi-fi settings</string>
 </resources>

@@ -706,6 +706,24 @@ public final class PersonalityResponse {
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getApplicationListError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_application_list);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
+    public static String getApplicationUnknownError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_application_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
+    public static String getSettingsDisplayError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_settings_display);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
     public static String getHoroscopeError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
         final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_horoscope);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
@@ -904,6 +922,21 @@ public final class PersonalityResponse {
         return stringArray[new Random().nextInt(stringArray.length)];
     }
 
+    public static String getDisplayedApplicationSettings(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_displayed_application_settings);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getUnknownSettingsError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_unknown_settings);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getApplicationMatchError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_application_match);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getGenericAcknowledgement(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_generic_acknowledgement);
         return stringArray[new Random().nextInt(stringArray.length)];
@@ -994,8 +1027,18 @@ public final class PersonalityResponse {
         return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.sms_response_part_1a), date, time);
     }
 
+    public static String getDisplayedSettings(Context context, SupportedLanguage supportedLanguage, String settingsName) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_displayed_settings);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], settingsName);
+    }
+
     public static String getNavigationInstallError(Context context, SupportedLanguage supportedLanguage) {
         return SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.error_navigation_install);
+    }
+
+    public static String getDisplaySettingsError(Context context, SupportedLanguage supportedLanguage, String settingsName) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_display_settings);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], settingsName));
     }
 
     public static String getSkypeInstallError(Context context, SupportedLanguage supportedLanguage) {

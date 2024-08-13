@@ -53,6 +53,8 @@ import ai.saiy.android.command.hotword.Hotword;
 import ai.saiy.android.command.navigation.Navigation;
 import ai.saiy.android.command.note.Note;
 import ai.saiy.android.command.pardon.Pardon;
+import ai.saiy.android.command.settings.application.ApplicationSettings;
+import ai.saiy.android.command.settings.system.Settings;
 import ai.saiy.android.command.sms.Sms;
 import ai.saiy.android.command.songrecognition.SongRecognition;
 import ai.saiy.android.command.spell.Spell;
@@ -128,6 +130,8 @@ public final class Resolve {
         callableList.add(new Contact(sr, sl, voiceData, confidence));
         callableList.add(new Navigation(sr, sl, voiceData, confidence));
         callableList.add(new Time(sr, sl, voiceData, confidence));
+        callableList.add(new Settings(sr, sl, voiceData, confidence));
+        callableList.add(new ApplicationSettings(sr, sl, voiceData, confidence));
         callableList.add(new Redial(sr, sl, voiceData, confidence));
         callableList.add(new CallBack(sr, sl, voiceData, confidence));
         callableList.add(new Horoscope(sr, sl, voiceData, confidence));

@@ -344,14 +344,15 @@ public class UtilsApplication {
         return null;
     }
 
-    public static void openApplicationSpecificSettings(Context context, String packageName) {
+    public static boolean openApplicationSpecificSettings(Context context, String packageName) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "openApplicationSpecificSettings");
         }
-        Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + packageName));
+        final Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + packageName));
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
             context.startActivity(intent);
+            return true;
         } catch (ActivityNotFoundException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "openApplicationSpecificSettings: ActivityNotFoundException");
@@ -363,5 +364,6 @@ public class UtilsApplication {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 }

@@ -10,7 +10,6 @@
 
     <string name="navigation_drawer_open" translatable="true">打开导航栏</string>
     <string name="navigation_drawer_close" translatable="true">关闭导航栏</string>
-    <string name="app_name" translatable="false">Saiy</string>
     <string name="control_saiy_permission_label" translatable="true">Saiy 远程控制功能</string>
     <string name="control_saiy_permission_description" translatable="true">控制 Saiy 的某些功能。这些功能包括录制音频, 将此语音数据上传到远程应用程序, 更改使用的语音引擎类型。</string>
     <string name="error_missing_permissions" translatable="true">Your application is missing permission.CONTROL_SAIY</string>

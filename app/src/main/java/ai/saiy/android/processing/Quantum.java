@@ -45,6 +45,8 @@ import ai.saiy.android.command.foursquare.CommandFoursquare;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.command.note.CommandNote;
+import ai.saiy.android.command.settings.application.CommandApplicationSettings;
+import ai.saiy.android.command.settings.system.CommandSettings;
 import ai.saiy.android.command.songrecognition.CommandSongRecognition;
 import ai.saiy.android.command.spell.CommandSpell;
 import ai.saiy.android.command.tasker.CommandTasker;
@@ -474,6 +476,16 @@ public class Quantum extends Tunnelling {
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_SETTINGS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SETTINGS.name());
+                    }
+                    final CommandSettings commandSettings = new CommandSettings();
+                    outcome = commandSettings.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_REDIAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_REDIAL.name());
@@ -505,6 +517,16 @@ public class Quantum extends Tunnelling {
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
                         result = Outcome.SUCCESS;
                     }
+                    break;
+                case COMMAND_APPLICATION_SETTINGS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_APPLICATION_SETTINGS.name());
+                    }
+                    final CommandApplicationSettings commandApplicationSettings = new CommandApplicationSettings();
+                    outcome = commandApplicationSettings.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_HOROSCOPE:
                     if (DEBUG) {
@@ -1094,6 +1116,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TIME.name());
                     }
                     break;
+                case COMMAND_SETTINGS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SETTINGS.name());
+                    }
+                    break;
                 case COMMAND_REDIAL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_REDIAL.name());
@@ -1102,6 +1129,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_CALL_BACK:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALL_BACK.name());
+                    }
+                    break;
+                case COMMAND_APPLICATION_SETTINGS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_APPLICATION_SETTINGS.name());
                     }
                     break;
                 case COMMAND_HOROSCOPE:

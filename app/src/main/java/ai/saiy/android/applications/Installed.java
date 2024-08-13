@@ -172,6 +172,31 @@ public class Installed {
         return holdsPermission;
     }
 
+    public static ArrayList<Pair<String, String>> getInstalledApplications(Context context) {
+        final long startTime = System.nanoTime();
+        final ArrayList<Pair<String, String>> arrayList = new ai.saiy.android.database.DBApplication(context).getApplications();
+        if (!UtilsList.notNaked(arrayList)) {
+            final PackageManager packageManager = context.getPackageManager();
+            final List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(0);
+            CharSequence label;
+            String packageName;
+            for (ApplicationInfo applicationInfo : installedApplications) {
+                label = applicationInfo.loadLabel(packageManager);
+                packageName = applicationInfo.packageName;
+                if (label != null) {
+                    arrayList.add(new Pair<>(label.toString(), packageName));
+                }
+            }
+            if (UtilsList.notNaked(arrayList)) {
+                new ai.saiy.android.database.DBApplication(context).insertData(arrayList);
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, "getInstalledApplications", startTime);
+        }
+        return arrayList;
+    }
+
     public static ArrayList<Application> getInstalledApplications(Context context, boolean includeSystemApplication, boolean sortByName) {
         final long startTime = System.nanoTime();
         final ArrayList<Application> arrayList = new ArrayList<>();

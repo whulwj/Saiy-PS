@@ -24,6 +24,9 @@
         <intent>
             <action android:name="android.intent.action.TTS_SERVICE" />
         </intent>
+    </queries>
+    <queries>
+        <!-- In order to use the PackageManager API, if targeting Android 11 -->
         <package android:name="com.amazon.dee.app" />
         <package android:name="com.amazon.mShop.android.shopping" />
         <package android:name="com.amazon.windowshop" />
