@@ -7,6 +7,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Pair;
 
+import androidx.annotation.IntDef;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.firebase.database.reference.TwitterReference;
@@ -19,10 +24,11 @@ public class TwitterHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = TwitterHelper.class.getSimpleName();
 
-    public enum Type {
-        GENERIC,
-        HASHTAG
-    }
+    public static final int GENERIC = 0;
+    public static final int HASHTAG = 0b100;
+    @IntDef({GENERIC, HASHTAG})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface Type {}
 
     public static boolean isCredentialsValid(Context context) {
         final Pair<Boolean, Pair<String, String>> twitterPair = new TwitterReference().getCredentials(context);

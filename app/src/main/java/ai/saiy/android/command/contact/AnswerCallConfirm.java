@@ -9,7 +9,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
@@ -65,7 +64,7 @@ public class AnswerCallConfirm {
     }
 
     public void answer() {
-        if (Objects.requireNonNull(confirmType) == ConfirmType.ANSWER) {
+        if (ConfirmType.ANSWER == confirmType) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "ANSWER");
             }

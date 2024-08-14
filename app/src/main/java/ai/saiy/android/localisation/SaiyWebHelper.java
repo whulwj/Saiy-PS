@@ -15,9 +15,12 @@ public class SaiyWebHelper {
     private static final String UNITED_KINGDOM = "uk";
     private static final String NEW_ZEALAND = "nz";
     private static final String AUSTRALIA = "au";
+    public static final String HTTP_PROTOCOL = "http://";
+    public static final String GOOGLE_URL_PREFIX = HTTP_PROTOCOL + "google.";
 
     public static final int GOOGLE = 1;
     public static final int YAHOO = 2;
+    public static final int BING = 3;
 
     public static String extension(int searchEngine, SupportedLanguage supportedLanguage) {
         Locale locale = Locale.getDefault();
@@ -69,7 +72,7 @@ public class SaiyWebHelper {
                     return UNITED_KINGDOM + ".search.yahoo.com";
                 }
                 return "search.yahoo.com";
-            case 3:
+            case BING:
                 if (SupportedLanguage.ENGLISH_US == supportedLanguage) {
                     return "";
                 } else if (UtilsLocale.localesMatch(Locale.CANADA, locale)) {

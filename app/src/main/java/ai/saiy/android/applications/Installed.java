@@ -17,6 +17,7 @@
 
 package ai.saiy.android.applications;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -225,7 +226,7 @@ public class Installed {
     public static ArrayList<Application> getSearchApplications(@NonNull PackageManager packageManager) {
         final long startTime = System.nanoTime();
         final Intent intent = new Intent(Intent.ACTION_SEARCH);
-        intent.putExtra("query", "blah");
+        intent.putExtra(SearchManager.QUERY, "blah");
         final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
         Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
         final ArrayList<Application> arrayList = new ArrayList<>();
@@ -254,7 +255,7 @@ public class Installed {
     private static ArrayList<Application> insertPlayFromSearch(@NonNull ArrayList<Application> arrayList, @NonNull PackageManager packageManager) {
         final long startTime = System.nanoTime();
         final Intent intent = new Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
-        intent.putExtra("query", "blah");
+        intent.putExtra(SearchManager.QUERY, "blah");
         final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
         Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
         CharSequence label;
@@ -439,6 +440,20 @@ public class Installed {
                 return true;
             } catch (final PackageManager.NameNotFoundException ignored) {
                 return false;
+            }
+        }
+    }
+
+    public static String getAmazonPackage(@NonNull final Context ctx) {
+        try {
+            ctx.getApplicationContext().getPackageManager().getApplicationInfo(PACKAGE_AMAZON, 0);
+            return PACKAGE_AMAZON;
+        } catch (final PackageManager.NameNotFoundException e) {
+            try {
+                ctx.getApplicationContext().getPackageManager().getApplicationInfo(PACKAGE_AMAZON_WINDOW_SHOP, 0);
+                return PACKAGE_AMAZON_WINDOW_SHOP;
+            } catch (final PackageManager.NameNotFoundException ignored) {
+                return "";
             }
         }
     }

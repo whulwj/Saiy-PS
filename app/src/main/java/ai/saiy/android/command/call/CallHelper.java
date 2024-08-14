@@ -86,10 +86,10 @@ public class CallHelper {
                 MyLog.w(CLS_NAME, "callNumber ActivityNotFoundException");
                 e.printStackTrace();
             }
-        } catch (SecurityException e2) {
+        } catch (SecurityException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "callNumber SecurityException");
-                e2.printStackTrace();
+                e.printStackTrace();
             }
         }
         return false;

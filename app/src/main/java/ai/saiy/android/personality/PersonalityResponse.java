@@ -922,6 +922,11 @@ public final class PersonalityResponse {
         return stringArray[new Random().nextInt(stringArray.length)];
     }
 
+    public static String getSearchUnknownError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_search_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getDisplayedApplicationSettings(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_displayed_application_settings);
         return stringArray[new Random().nextInt(stringArray.length)];
@@ -1051,6 +1056,10 @@ public final class PersonalityResponse {
 
     public static String getSearchSuggestInstall(Context context, SupportedLanguage supportedLanguage, String str) {
         return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.search_suggest_install), str);
+    }
+
+    public static String getSearchRequireInstall(Context context, SupportedLanguage supportedLanguage, String str) {
+        return String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.search_require_install), str);
     }
 
     public static String getAlexaIntro(Context context, SupportedLanguage supportedLanguage) {

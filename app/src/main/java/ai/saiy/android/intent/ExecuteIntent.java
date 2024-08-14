@@ -37,6 +37,8 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
+
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -45,6 +47,7 @@ import ai.saiy.android.api.request.SaiyRequest;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.command.intent.CustomIntent;
+import ai.saiy.android.command.search.CommandSearchValues;
 import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.ui.activity.ActivityLauncherShortcut;
 import ai.saiy.android.utils.Constants;
@@ -676,7 +679,6 @@ public class ExecuteIntent {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         switch (intentConstant) {
-
             case IntentConstants.SETTINGS_ACCESSIBILITY:
                 intent.setAction(Settings.ACTION_ACCESSIBILITY_SETTINGS);
                 break;
@@ -724,6 +726,303 @@ public class ExecuteIntent {
             }
         }
 
+        return false;
+    }
+
+    public static boolean searchYouTube(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchYouTube");
+        }
+        final Intent intent = new Intent(android.provider.MediaStore.INTENT_ACTION_MEDIA_SEARCH);
+        intent.setPackage(Installed.PACKAGE_GOOGLE_YOUTUBE);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchSky(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchSky");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setClassName(Installed.PACKAGE_GOOGLE_SKY, Installed.PACKAGE_GOOGLE_SKY + ".activities.DynamicStarMapActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchEarth(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchEarth");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setClassName(Installed.PACKAGE_GOOGLE_EARTH, "com.google.android.apps.earth.EarthActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchEarthWeb");
+        }
+        final Intent webIntent = new Intent(Intent.ACTION_VIEW);
+        webIntent.setPackage(Installed.PACKAGE_GOOGLE_EARTH);
+        webIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            webIntent.setData(Uri.parse("https://earth.google.com/web/search/" + commandSearchValues.getQuery().replaceAll(XMLResultsHandler.SEP_SPACE, "+")));
+            context.startActivity(webIntent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchTwitter(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchTwitter");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setPackage(Installed.PACKAGE_TWITTER);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchFacebook(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchFacebook");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setPackage(Installed.PACKAGE_FACEBOOK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchFoursquare(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchFoursquare");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setClassName(Installed.PACKAGE_FOUR_SQUARED, Installed.PACKAGE_FOUR_SQUARED + ".ExploreResultsActivity");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchEbay(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchEbay");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setClassName(Installed.PACKAGE_EBAY, Installed.PACKAGE_EBAY + ".activities.QuickSearchHandler");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchAmazon(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchAmazon");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setPackage(Installed.getAmazonPackage(context));
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    public static boolean searchYelp(Context context, CommandSearchValues commandSearchValues) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "searchYelp");
+        }
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.setClassName(Installed.PACKAGE_YELP, Installed.PACKAGE_YELP + ".ui.activities.ActivityHome");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            intent.putExtra(SearchManager.QUERY, commandSearchValues.getQuery());
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
         return false;
     }
 

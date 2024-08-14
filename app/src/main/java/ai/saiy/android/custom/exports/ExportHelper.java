@@ -132,10 +132,10 @@ public class ExportHelper {
                 MyLog.w(CLS_NAME, "exportCustomCommand: JsonIOException");
                 e.printStackTrace();
             }
-        } catch (IOException e2) {
+        } catch (IOException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "exportCustomCommand: IOException");
-                e2.printStackTrace();
+                e.printStackTrace();
             }
         }
         return false;

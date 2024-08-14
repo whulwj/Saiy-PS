@@ -56,7 +56,6 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Objects;
 import java.util.Random;
 
 import ai.saiy.android.R;
@@ -383,7 +382,7 @@ public class FragmentCustomisationHelper {
     private void showCustomCommandInputDialog(final CCC ccc, String content, final String extraText, final String extraText2, final String actionOfIntent) {
         String keyphrase;
         String hintForKeyphrase;
-        if (Objects.requireNonNull(ccc) == CCC.CUSTOM_SEARCHABLE) {
+        if (CCC.CUSTOM_SEARCHABLE == ccc) {
             keyphrase = getApplicationContext().getString(R.string.menu_keyphrase_hint_searchable, extraText2);
             hintForKeyphrase = getApplicationContext().getString(R.string.menu_keyphrase_hint_searchable, extraText2);
         } else {

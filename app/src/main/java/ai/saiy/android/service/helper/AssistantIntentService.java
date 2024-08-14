@@ -18,6 +18,7 @@
 package ai.saiy.android.service.helper;
 
 import android.app.IntentService;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -67,7 +68,6 @@ public class AssistantIntentService extends IntentService {
     private final String CLS_NAME = AssistantIntentService.class.getSimpleName();
 
     private static final String EXTRA_ASSIST_CONTEXT = "android.intent.extra.ASSIST_CONTEXT";
-    private static final String EXTRA_QUERY = "query";
     private static final String ACTION_ASSIST_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
     public static final String ACTION_WIDGET_ASSIST = "ai.saiy.android.action.WIDGET_ASSIST";
     private static final String ACTION_QL_ASSIST = "ai.saiy.android.action.QL_ASSIST";
@@ -246,8 +246,8 @@ public class AssistantIntentService extends IntentService {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onHandleIntent: action: EXTRA_ASSIST_SEARCH");
                     }
-                    if (intent.hasExtra(EXTRA_QUERY)) {
-                        String stringExtra = intent.getStringExtra(EXTRA_QUERY);
+                    if (intent.hasExtra(SearchManager.QUERY)) {
+                        String stringExtra = intent.getStringExtra(SearchManager.QUERY);
                         if (!UtilsString.notNaked(stringExtra) || stringExtra.trim().matches("intro")) {
                             actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
                         } else {
