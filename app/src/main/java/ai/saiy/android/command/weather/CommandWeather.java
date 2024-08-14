@@ -24,6 +24,7 @@ import ai.saiy.android.firebase.database.reference.OpenWeatherMapReference;
 import ai.saiy.android.firebase.database.reference.WeatherOnlineReference;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
@@ -92,7 +93,7 @@ public class CommandWeather {
         return "http://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20").trim() + "&appid=";
     }
 
-    public Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
+    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
@@ -125,15 +126,16 @@ public class CommandWeather {
             outcome.setOutcome(Outcome.FAILURE);
             return returnOutcome(outcome);
         } else {
-            final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
             Location location;
-            if (SPH.getWeatherProvider(context) == WeatherProvider.OPEN_WEATHER_MAP) {
+            if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER) {
+                final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
                 location = locationHelper.getLastKnownLocation(context);
             } else {
                 final FusedLocationHelper fusedLocationHelper = new FusedLocationHelper();
                 fusedLocationHelper.prepare(context);
                 fusedLocationHelper.connect();
                 location = fusedLocationHelper.getLastLocation();
+                fusedLocationHelper.destroy();
             }
             if (location != null) {
                 urls.add(getUrl(context, location));

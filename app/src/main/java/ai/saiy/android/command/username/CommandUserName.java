@@ -53,7 +53,7 @@ public class CommandUserName {
      * @param cr        the {@link CommandRequest}
      * @return {@link Outcome} containing everything we need to respond to the command.
      */
-    public Outcome getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
+    public @NonNull Outcome getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
                                @NonNull final SupportedLanguage sl, @NonNull final CommandRequest cr) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());

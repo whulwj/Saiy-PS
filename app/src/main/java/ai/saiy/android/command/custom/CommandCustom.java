@@ -68,7 +68,7 @@ public class CommandCustom {
      * @param sl            the {@link SupportedLanguage}
      * @return the created {@link Outcome}
      */
-    public Outcome getResponse(@NonNull final Context ctx, @NonNull final CustomCommand customCommand,
+    public @NonNull Outcome getResponse(@NonNull final Context ctx, @NonNull final CustomCommand customCommand,
                                @NonNull final SupportedLanguage sl, @NonNull final CommandRequest cr) {
 
         final long then = System.nanoTime();

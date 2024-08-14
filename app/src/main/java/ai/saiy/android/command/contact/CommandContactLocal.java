@@ -2,6 +2,8 @@ package ai.saiy.android.command.contact;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -11,7 +13,7 @@ public class CommandContactLocal {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandContactLocal.class.getSimpleName();
 
-    public ai.saiy.android.processing.Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
+    public @NonNull ai.saiy.android.processing.Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }

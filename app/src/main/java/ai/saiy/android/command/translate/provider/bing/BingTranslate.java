@@ -149,7 +149,7 @@ public class BingTranslate {
      *
      * @return the created {@link Outcome}
      */
-    public Outcome getResponse() {
+    public @NonNull Outcome getResponse() {
 
         final CommandTranslateValues ctv = (CommandTranslateValues) cr.getVariableData();
         final TranslationLanguageBing language = resolveLanguage(ctv.getLanguage());

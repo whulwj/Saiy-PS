@@ -57,7 +57,7 @@ public class CommandSongRecognition {
      *                  multi-lingual and/or have set a custom recognition language in a launcher short-cut.
      * @return {@link Outcome} containing everything we need to respond to the command.
      */
-    public Outcome getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
+    public @NonNull Outcome getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
                                @NonNull final SupportedLanguage sl) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());

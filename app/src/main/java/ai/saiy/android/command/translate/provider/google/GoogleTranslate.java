@@ -143,7 +143,7 @@ public class GoogleTranslate {
      *
      * @return the created {@link Outcome}
      */
-    public Outcome getResponse() {
+    public @NonNull Outcome getResponse() {
 
         final CommandTranslateValues ctv = (CommandTranslateValues) cr.getVariableData();
         final TranslationLanguageGoogle language = resolveLanguage(ctv.getLanguage());

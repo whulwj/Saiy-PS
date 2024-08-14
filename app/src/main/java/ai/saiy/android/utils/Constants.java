@@ -86,4 +86,7 @@ public final class Constants {
     public static final String USER_COMING_SOON = "http://forum.xda-developers.com/showpost.php?p=25666528&postcount=755";
 
     public static final String PERMISSION_CONTROL_SAIY = "ai.saiy.android.permission.CONTROL_SAIY";
+
+    public static final int FUSED_LOCATION_PROVIDER = 1;
+    public static final int DEFAULT_LOCATION_PROVIDER = 2;
 }

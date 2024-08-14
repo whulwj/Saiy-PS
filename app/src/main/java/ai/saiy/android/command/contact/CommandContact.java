@@ -43,7 +43,7 @@ public class CommandContact {
         return choices.get(0);
     }
 
-    public Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, CommandRequest cr) {
+    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, CommandRequest cr) {
         final Outcome outcome = new Outcome();
         outcome.setAction(LocalRequest.ACTION_SPEAK_ONLY);
         outcome.setCondition(Condition.CONDITION_NONE);

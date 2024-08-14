@@ -45,6 +45,9 @@ import ai.saiy.android.command.facebook.CommandFacebook;
 import ai.saiy.android.command.foursquare.CommandFoursquare;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
+import ai.saiy.android.command.location.address.CommandLocation;
+import ai.saiy.android.command.location.vehicle.locate.CommandLocateVehicle;
+import ai.saiy.android.command.location.vehicle.parked.CommandParkedVehicle;
 import ai.saiy.android.command.note.CommandNote;
 import ai.saiy.android.command.search.CommandSearch;
 import ai.saiy.android.command.settings.application.CommandApplicationSettings;
@@ -542,6 +545,36 @@ public class Quantum extends Tunnelling {
                     }
                     final CommandApplicationSettings commandApplicationSettings = new CommandApplicationSettings();
                     outcome = commandApplicationSettings.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_LOCATION:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_LOCATION.name());
+                    }
+                    final CommandLocation commandLocation = new CommandLocation();
+                    outcome = commandLocation.getResponse(mContext, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_PARKED_VEHICLE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_PARKED_VEHICLE.name());
+                    }
+                    final CommandParkedVehicle commandParkedVehicle = new CommandParkedVehicle();
+                    outcome = commandParkedVehicle.getResponse(mContext, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_LOCATE_VEHICLE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_LOCATE_VEHICLE.name());
+                    }
+                    final CommandLocateVehicle commandLocateVehicle = new CommandLocateVehicle();
+                    outcome = commandLocateVehicle.getResponse(mContext, sl);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -1167,6 +1200,21 @@ public class Quantum extends Tunnelling {
                 case COMMAND_APPLICATION_SETTINGS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_APPLICATION_SETTINGS.name());
+                    }
+                    break;
+                case COMMAND_LOCATION:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_LOCATION.name());
+                    }
+                    break;
+                case COMMAND_PARKED_VEHICLE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_PARKED_VEHICLE.name());
+                    }
+                    break;
+                case COMMAND_LOCATE_VEHICLE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_LOCATE_VEHICLE.name());
                     }
                     break;
                 case COMMAND_HOROSCOPE:

@@ -56,7 +56,7 @@ public class CommandDriving {
         return false;
     }
 
-    public Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage sl, ai.saiy.android.command.helper.CommandRequest cr, Locale vrLocale, Locale ttsLocale) {
+    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage sl, ai.saiy.android.command.helper.CommandRequest cr, Locale vrLocale, Locale ttsLocale) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }

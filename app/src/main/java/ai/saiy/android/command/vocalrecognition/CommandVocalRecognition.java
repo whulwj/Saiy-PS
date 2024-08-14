@@ -56,7 +56,7 @@ public class CommandVocalRecognition {
      * @param sl  the {@link SupportedLanguage} we are using to analyse the voice data.
      * @return {@link Outcome} containing everything we need to respond to the command.
      */
-    public Outcome getResponse(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+    public @NonNull Outcome getResponse(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
 
         final long then = System.nanoTime();
 

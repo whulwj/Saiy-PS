@@ -20,7 +20,9 @@ package ai.saiy.android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.location.Location;
 import android.os.Build;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -119,6 +121,9 @@ public class SPH {
     private static final String TORCH_FIX = "torch_fix";
     private static final String UNKNOWN_CONTACT_VERBOSE = "unknown_contact_verbose";
     private static final String EMAIL_AUTO_VERBOSE = "email_auto_verbose";
+    private static final String LOCATION_PROVIDER = "location_provider";
+    private static final String VEHICLE_LOCATION_LAT = "vehicle_location_lat";
+    private static final String VEHICLE_LOCATION_LONG = "vehicle_location_long";
     private static final String STAR_SIGN = "star_sign";
     private static final String LAST_CONTACT_UPDATE = "last_contact_update";
     private static final String DOB_YEAR = "dob_year";
@@ -695,7 +700,7 @@ public class SPH {
      */
     public static double getSoundexUpper(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return Double.valueOf(pref.getString(SOUNDEX_UPPER_THRESHOLD,
+        return Double.parseDouble(pref.getString(SOUNDEX_UPPER_THRESHOLD,
                 String.valueOf(Algorithm.SOUNDEX_UPPER_THRESHOLD)));
     }
 
@@ -721,7 +726,7 @@ public class SPH {
      */
     public static double getNeedlemanWunschUpper(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return Double.valueOf(pref.getString(NW_UPPER_THRESHOLD, String.valueOf(Algorithm.NW_UPPER_THRESHOLD)));
+        return Double.parseDouble(pref.getString(NW_UPPER_THRESHOLD, String.valueOf(Algorithm.NW_UPPER_THRESHOLD)));
     }
 
     /**
@@ -746,7 +751,7 @@ public class SPH {
      */
     public static double getFuzzyMultiplier(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return Double.valueOf(pref.getString(FUZZY_MULTIPLIER,
+        return Double.parseDouble(pref.getString(FUZZY_MULTIPLIER,
                 String.valueOf(Algorithm.FUZZY_MULTIPLIER)));
     }
 
@@ -772,7 +777,7 @@ public class SPH {
      */
     public static double getMongeElkanUpper(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return Double.valueOf(pref.getString(ME_UPPER_THRESHOLD,
+        return Double.parseDouble(pref.getString(ME_UPPER_THRESHOLD,
                 String.valueOf(Algorithm.ME_UPPER_THRESHOLD)));
     }
 
@@ -799,7 +804,7 @@ public class SPH {
      */
     public static double getLevenshteinUpper(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return Double.valueOf(pref.getString(LEV_UPPER_THRESHOLD,
+        return Double.parseDouble(pref.getString(LEV_UPPER_THRESHOLD,
                 String.valueOf(Algorithm.LEV_UPPER_THRESHOLD)));
     }
 
@@ -825,7 +830,7 @@ public class SPH {
      */
     public static double getJaroWinklerUpper(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return Double.valueOf(pref.getString(JWD_UPPER_THRESHOLD,
+        return Double.parseDouble(pref.getString(JWD_UPPER_THRESHOLD,
                 String.valueOf(Algorithm.JWD_UPPER_THRESHOLD)));
     }
 
@@ -837,7 +842,7 @@ public class SPH {
      */
     public static double getJaroWinklerLower(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return Double.valueOf(pref.getString(JWD_LOWER_THRESHOLD,
+        return Double.parseDouble(pref.getString(JWD_LOWER_THRESHOLD,
                 String.valueOf(Algorithm.JWD_LOWER_THRESHOLD)));
     }
 
@@ -2320,6 +2325,30 @@ public class SPH {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(TORCH_FIX, condition);
         edit.apply();
+    }
+
+    public static int getLocationProvider(Context context) {
+        return getPref(context).getInt(LOCATION_PROVIDER, Constants.FUSED_LOCATION_PROVIDER);
+    }
+
+    public static void setLocation(Context context, @NonNull Location location) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(VEHICLE_LOCATION_LAT, String.valueOf(location.getLatitude()));
+        edit.putString(VEHICLE_LOCATION_LONG, String.valueOf(location.getLongitude()));
+        edit.apply();
+    }
+
+    public static @Nullable Pair<Double, Double> getLastLocation(Context context) {
+        final SharedPreferences pref = getPref(context);
+        final String latitudeString = pref.getString(VEHICLE_LOCATION_LAT, null);
+        final String longitudeString = pref.getString(VEHICLE_LOCATION_LONG, null);
+        if (ai.saiy.android.utils.UtilsString.notNaked(latitudeString) && ai.saiy.android.utils.UtilsString.notNaked(longitudeString)) {
+            try {
+                return new Pair<>(Double.parseDouble(latitudeString), Double.parseDouble(longitudeString));
+            } catch (NumberFormatException ignored) {
+            }
+        }
+        return null;
     }
 
     public static CommandHoroscopeValues.Sign getStarSign(Context context) {

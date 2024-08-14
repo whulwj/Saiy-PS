@@ -2,6 +2,8 @@ package ai.saiy.android.command.call;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -16,7 +18,7 @@ public class CommandCallBack {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CommandCallBack.class.getSimpleName();
 
-    public Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
+    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }

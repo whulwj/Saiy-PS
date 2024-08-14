@@ -20,7 +20,9 @@ import ai.saiy.android.processing.Condition;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityFoursquareOAuth;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 
@@ -43,7 +45,7 @@ public class CommandFoursquare {
         return outcome;
     }
 
-    public Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
+    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
@@ -84,11 +86,17 @@ public class CommandFoursquare {
             return returnOutcome(outcome);
         }
 
-        final FusedLocationHelper fusedLocationHelper = new FusedLocationHelper();
-        fusedLocationHelper.prepare(context);
-        fusedLocationHelper.connect();
-        final Location location = fusedLocationHelper.getLastLocation();
-        fusedLocationHelper.destroy();
+        Location location;
+        if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER) {
+            final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
+            location = locationHelper.getLastKnownLocation(context);
+        } else {
+            final FusedLocationHelper fusedLocationHelper = new FusedLocationHelper();
+            fusedLocationHelper.prepare(context);
+            fusedLocationHelper.connect();
+            location = fusedLocationHelper.getLastLocation();
+            fusedLocationHelper.destroy();
+        }
         if (location == null) {
             outcome.setUtterance(ai.saiy.android.personality.PersonalityResponse.getLocationAccessError(context, supportedLanguage));
             outcome.setOutcome(Outcome.FAILURE);

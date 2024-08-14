@@ -2131,4 +2131,19 @@
     <string name="yahoo">yahoo</string>
     <string name="yelp">yelp</string>
     <string name="youtube">youtube</string>
+
+    <string name="bicycle">bicycle</string>
+    <string name="bike">bike</string>
+    <string name="car">car</string>
+    <string name="current_location">current location</string>
+    <string name="find_my">find my</string>
+    <string name="locate_my">locate my</string>
+    <string name="park">park</string>
+    <string name="parked">parked</string>
+    <string name="vehicle">vehicle</string>
+    <string name="whats_my_current_location">what\'s my current location</string>
+    <string name="whats_my_location">what\'s my location</string>
+    <string name="where">where</string>
+    <string name="where_am_i">where am i</string>
+    <string name="wheres_my">where\'s my</string>
 </resources>
