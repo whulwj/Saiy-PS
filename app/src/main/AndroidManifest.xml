@@ -31,7 +31,9 @@
         <package android:name="com.amazon.mShop.android.shopping" />
         <package android:name="com.amazon.windowshop" />
         <package android:name="com.amazon.mp3" />
+        <package android:name="com.android.mms" />
         <package android:name="com.llamalab.automate" />
+        <package android:name="com.sygic.aura" />
         <package android:name="com.box.android" />
         <package android:name="deezer.android.app" />
         <package android:name="com.dropbox.android" />
@@ -39,9 +41,12 @@
         <package android:name="com.evernote" />
         <package android:name="com.facebook.katana" />
         <package android:name="com.joelapenna.foursquared" />
+        <package android:name="com.google.android.gm" />
         <package android:name="com.google.android.apps.docs" />
         <package android:name="com.google.earth" />
+        <package android:name="com.google.android.talk" />
         <package android:name="com.google.android.apps.maps" />
+        <package android:name="com.google.android.apps.messaging" />
         <package android:name="com.google.android.music" />
         <package android:name="com.google.android.keep" />
         <package android:name="com.google.android.stardroid" />
@@ -50,6 +55,7 @@
         <package android:name="com.google.android.youtube" />
         <package android:name="com.imdb.mobile" />
         <package android:name="com.linkedin.android" />
+        <package android:name="com.microsoft.cortana" />
         <package android:name="com.netflix.mediaclient" />
         <package android:name="com.twitter.android" />
         <package android:name="com.snapchat.android" />
@@ -61,6 +67,7 @@
         <package android:name="com.spotify.music" />
         <package android:name="com.melodis.midomiMusicIdentifier.freemium" />
         <package android:name="com.melodis.midomiMusicIdentifier" />
+        <package android:name="com.skype.raider" />
         <package android:name="com.sonyericsson.trackid" />
         <package android:name="com.google.android.ears" />
         <package android:name="com.google.android" />
@@ -68,8 +75,16 @@
         <package android:name="net.dinglisch.android.tasker" />
         <package android:name="net.dinglisch.android.taskerm" />
         <package android:name="com.ubercab" />
+        <package android:name="com.waze" />
         <package android:name="com.wolfram.android.alpha" />
         <package android:name="com.yelp.android" />
+
+        <package android:name="com.google.android.tts" />
+        <package android:name="com.ivona.tts" />
+        <package android:name="com.svox.pico" />
+        <package android:name="com.cereproc" />
+        <package android:name="com.svox.classic" />
+        <package android:name="es.codefactory.vocalizertts" />
     </queries>
 
     <permission

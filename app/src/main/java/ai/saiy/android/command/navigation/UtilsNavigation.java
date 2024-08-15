@@ -8,6 +8,7 @@ import android.net.Uri;
 
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
+import ai.saiy.android.applications.Installed;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -109,9 +110,9 @@ public class UtilsNavigation {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getDefaultNavigationApplication: resolveInfo: packageName: " + packageName);
         }
-        if (packageName.matches("com.waze")) {
+        if (packageName.matches(Installed.PACKAGE_WAZE)) {
             return WAZE;
         }
-        return packageName.matches("com.sygic.aura") ? AURA : UNKNOWN;
+        return packageName.matches(Installed.PACKAGE_AURA) ? AURA : UNKNOWN;
     }
 }

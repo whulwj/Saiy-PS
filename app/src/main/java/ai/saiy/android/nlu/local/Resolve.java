@@ -43,6 +43,7 @@ import ai.saiy.android.command.call.Redial;
 import ai.saiy.android.command.cancel.Cancel;
 import ai.saiy.android.command.clipboard.Clipboard;
 import ai.saiy.android.command.contact.Contact;
+import ai.saiy.android.command.definition.Define;
 import ai.saiy.android.command.driving.Driving;
 import ai.saiy.android.command.emotion.Emotion;
 import ai.saiy.android.command.facebook.Facebook;
@@ -137,6 +138,7 @@ public final class Resolve {
         callableList.add(new Time(sr, sl, voiceData, confidence));
         callableList.add(new Clipboard(sr, sl, voiceData, confidence));
         callableList.add(new Settings(sr, sl, voiceData, confidence));
+        callableList.add(new Define(sr, sl, voiceData, confidence));
         callableList.add(new ApplicationSettings(sr, sl, voiceData, confidence));
         callableList.add(new Redial(sr, sl, voiceData, confidence));
         callableList.add(new CallBack(sr, sl, voiceData, confidence));

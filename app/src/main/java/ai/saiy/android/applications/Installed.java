@@ -57,6 +57,7 @@ public class Installed {
     public static final String PACKAGE_AMAZON_MUSIC = "com.amazon.mp3";
     public static final String PACKAGE_ANDROID_MESSAGING = "com.android.mms";
     public static final String PACKAGE_AUTOMATE = "com.llamalab.automate";
+    public static final String PACKAGE_AURA = "com.sygic.aura";
     public static final String PACKAGE_BOX = "com.box.android";
     public static final String PACKAGE_DEEZER = "deezer.android.app";
     public static final String PACKAGE_DROPBOX = "com.dropbox.android";
@@ -100,6 +101,7 @@ public class Installed {
     public static final String PACKAGE_TASKER_DIRECT = "net.dinglisch.android.tasker";
     public static final String PACKAGE_TASKER_MARKET = PACKAGE_TASKER_DIRECT + "m";
     public static final String PACKAGE_UBER = "com.ubercab";
+    public static final String PACKAGE_WAZE = "com.waze";
     public static final String PACKAGE_WOLFRAM_ALPHA = "com.wolfram.android.alpha";
     public static final String PACKAGE_YELP = "com.yelp.android";
 

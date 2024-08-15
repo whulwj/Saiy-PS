@@ -48,6 +48,7 @@ import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.command.location.address.CommandLocation;
 import ai.saiy.android.command.location.vehicle.locate.CommandLocateVehicle;
 import ai.saiy.android.command.location.vehicle.parked.CommandParkedVehicle;
+import ai.saiy.android.command.definition.CommandDefine;
 import ai.saiy.android.command.note.CommandNote;
 import ai.saiy.android.command.search.CommandSearch;
 import ai.saiy.android.command.settings.application.CommandApplicationSettings;
@@ -538,6 +539,16 @@ public class Quantum extends Tunnelling {
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
                         result = Outcome.SUCCESS;
                     }
+                    break;
+                case COMMAND_DEFINE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_DEFINE.name());
+                    }
+                    final CommandDefine commandDefine = new CommandDefine();
+                    outcome = commandDefine.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_APPLICATION_SETTINGS:
                     if (DEBUG) {
@@ -1195,6 +1206,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_CALL_BACK:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALL_BACK.name());
+                    }
+                    break;
+                case COMMAND_DEFINE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DEFINE.name());
                     }
                     break;
                 case COMMAND_APPLICATION_SETTINGS:

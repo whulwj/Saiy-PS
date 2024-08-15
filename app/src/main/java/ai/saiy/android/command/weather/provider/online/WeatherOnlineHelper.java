@@ -23,7 +23,7 @@ import ai.saiy.android.utils.UtilsString;
 public class WeatherOnlineHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = WeatherOnlineHelper.class.getSimpleName();
-    public static final String CONTENT_TYPE = "Content-Type";
+    private static final String CONTENT_TYPE = "Content-Type";
     private static final String JSON_HEADER_ACCEPT = "accept";
     private static final String JSON_HEADER_VALUE_ACCEPT = "application/json";
 

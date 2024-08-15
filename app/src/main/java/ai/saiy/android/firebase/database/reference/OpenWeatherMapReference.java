@@ -43,26 +43,23 @@ public class OpenWeatherMapReference {
                 MyLog.w(CLS_NAME, "getRequestOpenWeatherMap: InterruptedException");
                 e.printStackTrace();
             }
-            return null;
         } catch (ExecutionException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getRequestOpenWeatherMap: ExecutionException");
                 e.printStackTrace();
             }
-            return null;
         } catch (TimeoutException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getRequestOpenWeatherMap: TimeoutException");
                 e.printStackTrace();
             }
-            return null;
         } catch (Exception e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getRequestOpenWeatherMap: Exception");
                 e.printStackTrace();
             }
-            return null;
         }
+        return null;
     }
 
     public Pair<Boolean, String> getAPIKey(Context context) {

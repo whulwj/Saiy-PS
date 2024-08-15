@@ -1435,6 +1435,8 @@
     <string name="error_battery_unknown" translatable="true">"Sorry %1$s, I'm not sure what specific
         battery information you required."</string>
 
+    <string name="define">define</string>
+
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->

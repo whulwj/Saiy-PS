@@ -957,6 +957,16 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getDefineError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_define);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getDefineUnknownError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_define_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getApplicationMatchError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_application_match);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
