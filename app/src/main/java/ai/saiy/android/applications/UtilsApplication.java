@@ -36,7 +36,10 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -187,6 +190,7 @@ public class UtilsApplication {
      * Get the package name of the current foreground application
      *
      * @param ctx the application context
+     * @param history how many milliseconds ago
      * @return the package name or null
      */
     @SuppressLint("InlinedApi")
@@ -209,6 +213,26 @@ public class UtilsApplication {
      * @param ctx the application context
      * @return the package name or null
      */
+    @SuppressLint("InlinedApi")
+    public static ArrayList<Pair<String, String>> getRunningApplications(@NonNull final Context ctx) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getForegroundPackage");
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            //noinspection NewApi
+            return getRunningApplications21(ctx);
+        } else {
+            return getRunningApplicationsDeprecated(ctx);
+        }
+    }
+
+    /**
+     * Get the package name of the current foreground application
+     *
+     * @param ctx the application context
+     * @return the package name or null
+     */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private static String getForegroundPackage21(@NonNull final Context ctx, final long history) {
         if (DEBUG) {
@@ -218,12 +242,12 @@ public class UtilsApplication {
         try {
 
             @SuppressWarnings("WrongConstant")
-            final UsageStatsManager mUsageStatsManager = (UsageStatsManager)
+            final UsageStatsManager usageStatsManager = (UsageStatsManager)
                     ctx.getSystemService(USAGE_STATS_SERVICE);
 
             final long currentTime = System.currentTimeMillis();
 
-            final List<UsageStats> statsList = mUsageStatsManager.queryUsageStats(
+            final List<UsageStats> statsList = usageStatsManager.queryUsageStats(
                     UsageStatsManager.INTERVAL_DAILY, currentTime - history, currentTime);
 
             if (UtilsList.notNaked(statsList)) {
@@ -269,6 +293,95 @@ public class UtilsApplication {
         return null;
     }
 
+    /**
+     * Get the package info of the current running applications
+     *
+     * @param ctx the application context
+     * @return the package name
+     */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private static ArrayList<Pair<String, String>>  getRunningApplications21(@NonNull final Context ctx) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getRunningApplications21");
+        }
+
+        final ArrayList<Pair<String, String>> toReturn = new ArrayList<>();
+        final PackageManager packageManager = ctx.getPackageManager();
+        try {
+            @SuppressWarnings("WrongConstant")
+            final UsageStatsManager usageStatsManager = (UsageStatsManager)
+                    ctx.getSystemService(USAGE_STATS_SERVICE);
+
+            final long currentTime = System.currentTimeMillis();
+
+            final List<UsageStats> statsList = usageStatsManager.queryUsageStats(
+                    UsageStatsManager.INTERVAL_DAILY, currentTime - 1000 * 1000, currentTime);
+
+            if (UtilsList.notNaked(statsList)) {
+
+                final SortedMap<Long, UsageStats> sortedMap = new TreeMap<>();
+
+                for (final UsageStats usageStats : statsList) {
+                    sortedMap.put(usageStats.getLastTimeUsed(), usageStats);
+                }
+
+                if (!sortedMap.isEmpty()) {
+                    final Locale locale = Locale.US;
+                    UsageStats usageStats;
+                    for (Map.Entry<Long, UsageStats> entry : sortedMap.entrySet()) {
+                        usageStats = entry.getValue();
+                        String processName = usageStats.getPackageName();
+                        if (!ai.saiy.android.utils.UtilsString.notNaked(processName)) {
+                            continue;
+                        }
+                        String nameLower = processName.toLowerCase(locale).trim();
+                        if (!nameLower.matches(Installed.PACKAGE_SYSTEM) && !nameLower.matches(Installed.PACKAGE_PHONE) && !nameLower.matches(Installed.PACKAGE_SYSTEM_UI)) {
+                            try {
+                                CharSequence applicationLabel = packageManager.getApplicationLabel(packageManager.getApplicationInfo(processName, 0));
+                                if (applicationLabel != null) {
+                                    toReturn.add(new Pair<>(applicationLabel.toString(), processName));
+                                }
+                            } catch (ActivityNotFoundException e) {
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "ActivityNotFoundException");
+                                }
+                            } catch (PackageManager.NameNotFoundException e) {
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "NameNotFoundException");
+                                }
+                            } catch (Exception e) {
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "Exception");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (final NullPointerException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getRunningApplications21 NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (final IndexOutOfBoundsException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getRunningApplications21 IndexOutOfBoundsException");
+                e.printStackTrace();
+            }
+        } catch (final SecurityException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getRunningApplications21 SecurityException");
+                e.printStackTrace();
+            }
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getRunningApplications21 Exception");
+                e.printStackTrace();
+            }
+        }
+
+        return toReturn;
+    }
 
     /**
      * Get the package name of the current foreground application
@@ -342,6 +455,60 @@ public class UtilsApplication {
         }
 
         return null;
+    }
+
+    /**
+     * Get the package info of the current running applications
+     *
+     * @param ctx the application context
+     * @return the package name
+     */
+    private static ArrayList<Pair<String, String>> getRunningApplicationsDeprecated(@NonNull final Context ctx) {
+        final long then = System.nanoTime();
+        final ArrayList<Pair<String, String>> toReturn = new ArrayList<>();
+        final List<ActivityManager.RunningAppProcessInfo> runningAppProcesses = ((ActivityManager) ctx.getSystemService(Context.ACTIVITY_SERVICE)).getRunningAppProcesses();
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "processInfo size: " + runningAppProcesses.size());
+        }
+        final PackageManager packageManager = ctx.getPackageManager();
+        final Locale locale = Locale.US;
+        for (ActivityManager.RunningAppProcessInfo runningAppProcessInfo : runningAppProcesses) {
+            if (runningAppProcessInfo != null) {
+                String processName = runningAppProcessInfo.processName;
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "processName: " + processName);
+                }
+                if (!ai.saiy.android.utils.UtilsString.notNaked(processName)) {
+                    continue;
+                }
+                String nameLower = processName.toLowerCase(locale).trim();
+                if (!nameLower.matches(Installed.PACKAGE_SYSTEM) && !nameLower.matches(Installed.PACKAGE_PHONE) && !nameLower.matches(Installed.PACKAGE_SYSTEM_UI)) {
+                    try {
+                        CharSequence applicationLabel = packageManager.getApplicationLabel(packageManager.getApplicationInfo(runningAppProcessInfo.processName, 0));
+                        if (applicationLabel != null) {
+                            toReturn.add(new Pair<>(applicationLabel.toString(), runningAppProcessInfo.processName));
+                        }
+                    } catch (ActivityNotFoundException e) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "ActivityNotFoundException");
+                        }
+                    } catch (PackageManager.NameNotFoundException e) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "NameNotFoundException");
+                        }
+                    } catch (Exception e) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "Exception");
+                        }
+                    }
+                }
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+
+        return toReturn;
     }
 
     public static boolean openApplicationSpecificSettings(Context context, String packageName) {

@@ -72,6 +72,9 @@
         <package android:name="com.google.android.ears" />
         <package android:name="com.google.android" />
         <package android:name="com.google.android.googlequicksearchbox" />
+        <package android:name="com.android.phone" />
+        <package android:name="system" />
+        <package android:name="com.android.systemui" />
         <package android:name="net.dinglisch.android.tasker" />
         <package android:name="net.dinglisch.android.taskerm" />
         <package android:name="com.ubercab" />

@@ -103,10 +103,10 @@ public class TutorialHelper {
             MyLog.i(CLS_NAME, "getAnswerOneResult");
         }
         if (UtilsList.notNaked(this.resultsRecognition)) {
-            for (String s : this.resultsRecognition) {
-                String lowerCase = s.toLowerCase(this.locale);
-                if (lowerCase.contains(sausage) || lowerCase.contains(bean_sic) || lowerCase.contains(bean) || lowerCase.contains(chip)) {
-                    return (lowerCase.contains(sausage) && (lowerCase.contains(bean_sic) || lowerCase.contains(bean)) && lowerCase.contains(chip)) ? new Pair<>(true, true) : new Pair<>(true, false);
+            for (String voiceDatum : this.resultsRecognition) {
+                String vdLower = voiceDatum.toLowerCase(this.locale);
+                if (vdLower.contains(sausage) || vdLower.contains(bean_sic) || vdLower.contains(bean) || vdLower.contains(chip)) {
+                    return (vdLower.contains(sausage) && (vdLower.contains(bean_sic) || vdLower.contains(bean)) && vdLower.contains(chip)) ? new Pair<>(true, true) : new Pair<>(true, false);
                 }
             }
         } else if (DEBUG) {
@@ -120,11 +120,11 @@ public class TutorialHelper {
             MyLog.i(CLS_NAME, "getAnswerTwoResult");
         }
         if (UtilsList.notNaked(this.resultsRecognition)) {
-            String trim = numeric_1_2_3_4_5.replaceAll("\\s", "").trim();
-            for (String s : this.resultsRecognition) {
-                String lowerCase = s.toLowerCase(this.locale);
-                if (lowerCase.contains(one) || lowerCase.contains(two) || lowerCase.contains(three) || lowerCase.contains(four) || lowerCase.contains(five) || lowerCase.contains(numeric_1_2_3_4_5) || lowerCase.contains(trim)) {
-                    return ((lowerCase.contains(one) && lowerCase.contains(two) && lowerCase.contains(three) && lowerCase.contains(four) && lowerCase.contains(five)) || lowerCase.contains(numeric_1_2_3_4_5) || lowerCase.contains(trim)) ? new Pair<>(true, true) : new Pair<>(true, false);
+            final String numeric = numeric_1_2_3_4_5.replaceAll("\\s", "").trim();
+            for (String voiceDatum : this.resultsRecognition) {
+                String vdLower = voiceDatum.toLowerCase(this.locale);
+                if (vdLower.contains(one) || vdLower.contains(two) || vdLower.contains(three) || vdLower.contains(four) || vdLower.contains(five) || vdLower.contains(numeric_1_2_3_4_5) || vdLower.contains(numeric)) {
+                    return ((vdLower.contains(one) && vdLower.contains(two) && vdLower.contains(three) && vdLower.contains(four) && vdLower.contains(five)) || vdLower.contains(numeric_1_2_3_4_5) || vdLower.contains(numeric)) ? new Pair<>(true, true) : new Pair<>(true, false);
                 }
             }
         } else if (DEBUG) {
@@ -138,15 +138,15 @@ public class TutorialHelper {
             MyLog.i(CLS_NAME, "getAnswerThreeResult");
         }
         if (UtilsList.notNaked(this.resultsRecognition)) {
-            for (String s : this.resultsRecognition) {
-                String lowerCase = s.toLowerCase(this.locale);
-                if (lowerCase.contains(hermaphrodite) || lowerCase.contains(ladyBoy) || lowerCase.contains(lady_boy) || lowerCase.contains(both)) {
+            for (String voiceDatum : this.resultsRecognition) {
+                String vdLower = voiceDatum.toLowerCase(this.locale);
+                if (vdLower.contains(hermaphrodite) || vdLower.contains(ladyBoy) || vdLower.contains(lady_boy) || vdLower.contains(both)) {
                     return new Pair<>(Gender.UNDEFINED, true);
                 }
-                if (lowerCase.contains(female) || lowerCase.contains(girl) || lowerCase.contains(lady) || lowerCase.contains(woman)) {
+                if (vdLower.contains(female) || vdLower.contains(girl) || vdLower.contains(lady) || vdLower.contains(woman)) {
                     return new Pair<>(Gender.FEMALE, false);
                 }
-                if (lowerCase.contains(male) || lowerCase.contains(male_sic) || lowerCase.contains(boy) || lowerCase.contains(gentleman) || lowerCase.contains(man)) {
+                if (vdLower.contains(male) || vdLower.contains(male_sic) || vdLower.contains(boy) || vdLower.contains(gentleman) || vdLower.contains(man)) {
                     return new Pair<>(Gender.MALE, false);
                 }
             }
@@ -158,37 +158,38 @@ public class TutorialHelper {
 
     public String detectCallable() {
         if (UtilsList.notNaked(this.resultsRecognition)) {
-            for (String s : this.resultsRecognition) {
-                String trim = s.toLowerCase(this.locale).trim();
-                if (trim.contains(call_me)) {
-                    String[] split = trim.split(call_me);
+            String[] split;
+            for (String voiceDatum : this.resultsRecognition) {
+                String vdLower = voiceDatum.toLowerCase(this.locale).trim();
+                if (vdLower.contains(call_me)) {
+                    split = vdLower.split(call_me);
                     if (split.length > 1) {
                         return split[1].trim();
                     }
-                } else if (trim.contains(address_me_as)) {
-                    String[] split2 = trim.split(address_me_as);
-                    if (split2.length > 1) {
-                        return split2[1].trim();
+                } else if (vdLower.contains(address_me_as)) {
+                    split = vdLower.split(address_me_as);
+                    if (split.length > 1) {
+                        return split[1].trim();
                     }
-                } else if (trim.contains(my_name_is)) {
-                    String[] split3 = trim.split(my_name_is);
-                    if (split3.length > 1) {
-                        return split3[1].trim();
+                } else if (vdLower.contains(my_name_is)) {
+                    split = vdLower.split(my_name_is);
+                    if (split.length > 1) {
+                        return split[1].trim();
                     }
-                } else if (trim.contains(addressed_as)) {
-                    String[] split4 = trim.split(addressed_as);
-                    if (split4.length > 1) {
-                        return split4[1].trim();
+                } else if (vdLower.contains(addressed_as)) {
+                    split = vdLower.split(addressed_as);
+                    if (split.length > 1) {
+                        return split[1].trim();
                     }
-                } else if (trim.contains(be_called)) {
-                    String[] split5 = trim.split(be_called);
-                    if (split5.length > 1) {
-                        return split5[1].trim();
+                } else if (vdLower.contains(be_called)) {
+                    split = vdLower.split(be_called);
+                    if (split.length > 1) {
+                        return split[1].trim();
                     }
-                } else if (trim.contains(be_known_as)) {
-                    String[] split6 = trim.split(be_known_as);
-                    if (split6.length > 1) {
-                        return split6[1].trim();
+                } else if (vdLower.contains(be_known_as)) {
+                    split = vdLower.split(be_known_as);
+                    if (split.length > 1) {
+                        return split[1].trim();
                     }
                 }
             }

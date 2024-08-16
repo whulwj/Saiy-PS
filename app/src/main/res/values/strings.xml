@@ -2148,4 +2148,19 @@
     <string name="where">where</string>
     <string name="where_am_i">where am i</string>
     <string name="wheres_my">where\'s my</string>
+
+    <string name="dice">dice</string>
+    <string name="dice_too_many">Actually, the thought of rolling that many dice makes my proverbial arm hurt. Let\'s just rely on probability and say you averaged three point five on each throw. And therefore the total was %1$s.</string>
+    <string name="dices">dices</string>
+    <string name="die">die</string>
+    <string name="roll">roll</string>
+    <string name="word_throw">throw</string>
+
+    <string name="foreground">foreground</string>
+    <string name="kill">kill</string>
+    <string name="killed">killed</string>
+    <string name="launch">launch</string>
+    <string name="open">open</string>
+    <string name="opened">opened</string>
+    <string name="using">using</string>
 </resources>

@@ -98,6 +98,9 @@ public class Installed {
     public static final String PACKAGE_NAME_GOOGLE = "com.google.android";
     public static final String PACKAGE_NAME_GOOGLE_NOW = "com.google.android.googlequicksearchbox";
     public static final String PACKAGE_NAME_GOOGLE_NOW_LAUNCHER = "com.google.android.googlequicksearchbox";
+    public static final String PACKAGE_PHONE = "com.android.phone";
+    public static final String PACKAGE_SYSTEM = "system";
+    public static final String PACKAGE_SYSTEM_UI = "com.android.systemui";
     public static final String PACKAGE_TASKER_DIRECT = "net.dinglisch.android.tasker";
     public static final String PACKAGE_TASKER_MARKET = PACKAGE_TASKER_DIRECT + "m";
     public static final String PACKAGE_UBER = "com.ubercab";

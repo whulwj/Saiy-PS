@@ -300,6 +300,11 @@ public final class PersonalityResponse {
         return SaiyResourcesHelper.getStringResource(ctx, sl, R.string.error_unknown_action);
     }
 
+    public static String getKillApplicationError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl, String str) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_kill_application);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(ctx), str));
+    }
+
     /**
      * Get the standard remote command failed response.
      *
@@ -367,6 +372,11 @@ public final class PersonalityResponse {
         return String.format(SaiyResourcesHelper.getStringResource(ctx, sl, R.string.remote_success), appName);
     }
 
+    public static String getLaunchApplicationError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl, String str) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_launch_application);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(ctx), str));
+    }
+
     /**
      * Get the standard no network connection response, adding the user's name if defined.
      *
@@ -378,6 +388,11 @@ public final class PersonalityResponse {
         final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_no_network);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
                 PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
+    public static String getForeground(@NonNull final Context ctx, @NonNull final SupportedLanguage sl, String str) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_foreground);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(ctx), str);
     }
 
     /**
@@ -917,6 +932,16 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getForegroundUnknownError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_foreground_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getForegroundSaiy(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_foreground_saiy);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
     public static String getCalendarAccessError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_calendar_access);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
@@ -969,6 +994,11 @@ public final class PersonalityResponse {
 
     public static String getApplicationMatchError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_application_match);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getRunningApplicationMatchError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_application_running_match);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
