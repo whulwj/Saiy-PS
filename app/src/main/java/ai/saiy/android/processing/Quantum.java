@@ -41,6 +41,7 @@ import ai.saiy.android.command.application.foreground.CommandForeground;
 import ai.saiy.android.command.application.kill.CommandKill;
 import ai.saiy.android.command.application.launch.CommandLaunch;
 import ai.saiy.android.command.battery.CommandBattery;
+import ai.saiy.android.command.chatbot.CommandChatBot;
 import ai.saiy.android.command.clipboard.ClipboardHelper;
 import ai.saiy.android.command.custom.CommandCustom;
 import ai.saiy.android.command.definition.CommandDefine;
@@ -732,6 +733,16 @@ public class Quantum extends Tunnelling {
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_CHAT_BOT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CHAT_BOT.name());
+                    }
+                    final CommandChatBot commandChatBot = new CommandChatBot();
+                    outcome = commandChatBot.getResponse(mContext, toResolve, sl, cr, vrLocale, ttsLocale);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_DRIVING:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_DRIVING.name());
@@ -1356,6 +1367,11 @@ public class Quantum extends Tunnelling {
                     Bundle bundle = new Bundle();
                     bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
                     ExecuteIntent.saiyActivity(mContext, ActivityHome.class, bundle, true);
+                    break;
+                case COMMAND_CHAT_BOT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CHAT_BOT.name());
+                    }
                     break;
                 case COMMAND_DRIVING:
                     if (DEBUG) {

@@ -32,6 +32,7 @@ import ai.saiy.android.command.calendar.Calendar;
 import ai.saiy.android.command.call.CallBack;
 import ai.saiy.android.command.call.Redial;
 import ai.saiy.android.command.cancel.Cancel;
+import ai.saiy.android.command.chatbot.ChatBot;
 import ai.saiy.android.command.clipboard.Clipboard;
 import ai.saiy.android.command.contact.Contact;
 import ai.saiy.android.command.definition.Define;
@@ -139,6 +140,7 @@ public final class InitStrings {
         callableList.add(new Calendar(sr, sl, voiceData, confidence));
         callableList.add(new Sms(sr, sl, voiceData, confidence));
         callableList.add(new Help(sr, sl, voiceData, confidence));
+        callableList.add(new ChatBot(sr, sl, voiceData, confidence));
         callableList.add(new Driving(sr, sl, voiceData, confidence));
         callableList.add(new Facebook(sr, sl, voiceData, confidence));
         callableList.add(new Twitter(sr, sl, voiceData, confidence));

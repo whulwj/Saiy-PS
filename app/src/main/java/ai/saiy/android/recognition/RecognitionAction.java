@@ -28,6 +28,7 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ai.saiy.android.command.chatbot.ChatBotHelper;
 import ai.saiy.android.command.contact.AnswerCallConfirm;
 import ai.saiy.android.command.contact.CommandContactValues;
 import ai.saiy.android.command.contact.ContactConfirm;
@@ -125,7 +126,12 @@ public class RecognitionAction {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_CONVERSATION");
                     }
-                    // TODO
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            new ChatBotHelper().validate(mContext, sl, vrLocale, ttsLocale, resultsRecognition.get(0), true, bundle.getString(LocalRequest.EXTRA_WEAR));
+                        }
+                    });
                     break;
                 case Condition.CONDITION_ROOT:
                     if (DEBUG) {

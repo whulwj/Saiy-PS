@@ -85,6 +85,7 @@ public class LocalRequest {
     public static final String EXTRA_VR_RETRY = "extra_vr_retry";
     public static final String EXTRA_OBJECT = "extra_object";
     public static final String EXTRA_RESOLVED = "extra_resolved";
+    public static final String EXTRA_WEAR = "extra_wear";
 
     private final ServiceConnector sc;
     private final WeakReference<Context> weakContext;
@@ -536,5 +537,9 @@ public class LocalRequest {
 
     public boolean shouldPreventRecognition() {
         return bundle != null && bundle.getBoolean(EXTRA_PREVENT_RECOGNITION, false);
+    }
+
+    public void setWear(String str) {
+        bundle.putString(EXTRA_WEAR, str);
     }
 }

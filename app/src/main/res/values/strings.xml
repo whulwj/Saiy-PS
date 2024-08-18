@@ -2163,4 +2163,9 @@
     <string name="open">open</string>
     <string name="opened">opened</string>
     <string name="using">using</string>
+
+    <string name="hello">hello</string>
+    <string name="how_are_you">how are you</string>
+    <string name="talk_to_me">talk to me</string>
+    <string name="whats_up">what\'s up</string>
 </resources>
