@@ -72,7 +72,7 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = Tunnelling.class.getSimpleName();
 
-    private static final long COMPUTING_DELAY = 1000L;
+    protected static final long COMPUTING_DELAY = 1000L;
     public static final long CLIPBOARD_DELAY = 175L;
 
     protected @Outcome.Result int result = Outcome.SUCCESS;

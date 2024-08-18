@@ -2690,7 +2690,6 @@ public class SelfAware extends Service {
         if (recogNative != null) {
 
             try {
-                // recogNative.cancel();
                 recogNative.destroy();
             } catch (final Exception e) {
                 if (DEBUG) {

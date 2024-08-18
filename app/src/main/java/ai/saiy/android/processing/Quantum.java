@@ -136,10 +136,10 @@ public class Quantum extends Tunnelling {
     /**
      * Constructor
      *
-     * @param mContext the application context
+     * @param context the application context
      */
-    public Quantum(@NonNull final Context mContext) {
-        super(mContext);
+    public Quantum(@NonNull final Context context) {
+        super(context);
     }
 
     @Override
@@ -499,7 +499,7 @@ public class Quantum extends Tunnelling {
                     final EntangledPair entangledPair = new EntangledPair(Position.CLIPBOARD, CC.COMMAND_CLIPBOARD);
                     publishProgress(entangledPair);
                     try {
-                        Thread.sleep(175);
+                        Thread.sleep(CLIPBOARD_DELAY);
                     } catch (Throwable ignored) {
                     }
                     final Pair<Boolean, String> clipboardPair = ClipboardHelper.getClipboardContentPair(mContext, sl);
@@ -949,7 +949,7 @@ public class Quantum extends Tunnelling {
                                         MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: sleeping");
                                     }
                                     try {
-                                        java.lang.Thread.sleep(1000);
+                                        java.lang.Thread.sleep(COMPUTING_DELAY);
                                     } catch (InterruptedException e) {
                                         if (DEBUG) {
                                             MyLog.w(CLS_NAME, "Unknown.UNKNOWN_ALEXA: InterruptedException");

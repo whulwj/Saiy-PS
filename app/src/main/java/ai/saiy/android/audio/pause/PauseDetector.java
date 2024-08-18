@@ -52,14 +52,14 @@ public class PauseDetector {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = PauseDetector.class.getSimpleName();
 
-    private final int PAUSE_THRESHOLD = 7;
+    private static final int PAUSE_THRESHOLD = 7;
     public static final long DEFAULT_PAUSE_IGNORE_TIME = 4000;
-    private final int MAX_RECORDING_LENGTH = 120;
+    private static final int MAX_RECORDING_LENGTH = 120;
 
     private long pauseCheck;
     private final long pauseIgnoreTime;
 
-    private final short RESOLUTION_IN_BYTES = 2;
+    private static final short RESOLUTION_IN_BYTES = 2;
     private final int mOneSec;
 
     // TODO: use: mRecording.length instead
@@ -117,6 +117,7 @@ public class PauseDetector {
                                 System.arraycopy(buffer, 0, mRecording, mRecordedLength, bufferReadResult);
                             } catch (IndexOutOfBoundsException e) {
                                 MyLog.e(CLS_NAME, "addLength: IndexOutOfBoundsException");
+                                hasDetected = true;
                             }
                         } else {
                             hasDetected = true;
