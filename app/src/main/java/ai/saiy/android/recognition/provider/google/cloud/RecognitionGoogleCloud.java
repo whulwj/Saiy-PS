@@ -32,6 +32,7 @@ import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.speech.v2.AutoDetectDecodingConfig;
 import com.google.cloud.speech.v2.RecognitionConfig;
+import com.google.cloud.speech.v2.RecognitionFeatures;
 import com.google.cloud.speech.v2.SpeechGrpc;
 import com.google.cloud.speech.v2.SpeechRecognitionAlternative;
 import com.google.cloud.speech.v2.StreamingRecognitionConfig;
@@ -55,6 +56,7 @@ import ai.saiy.android.api.language.vr.VRLanguageGoogle;
 import ai.saiy.android.audio.IMic;
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
+import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.utils.MyLog;
@@ -132,7 +134,8 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "refreshAccessToken");
                     }
-                    return accessToken;
+                    GoogleConfiguration.refreshAccessToken();
+                    return GoogleConfiguration.sAccessToken;
                 }
             }.createScoped(OAUTH2_SCOPES);
 
@@ -161,12 +164,12 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
                     StreamingRecognitionConfig.newBuilder()
                             .setConfig(RecognitionConfig.newBuilder()
                                     .setAutoDecodingConfig(AutoDetectDecodingConfig.newBuilder().build())
+                                    .setFeatures(RecognitionFeatures.newBuilder().setMaxAlternatives(10).setProfanityFilter(false).build())
                                     .addLanguageCodes(language.getLocaleString())
-                                    .setModel("long")
+                                    .setModel("latest_short") //Speech-to-Text will stop performing recognition once it detects an utterance has finished
                                     .build())
                             .setStreamingFeatures(StreamingRecognitionFeatures.newBuilder()
                                     .setInterimResults(true)
-                                    .setEnableVoiceActivityEvents(true)
                                     .build())
                             .build()).build();
 

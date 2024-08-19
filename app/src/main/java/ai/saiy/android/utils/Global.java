@@ -29,8 +29,10 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 
-import ai.saiy.android.R;
+import java.io.IOException;
+
 import ai.saiy.android.applications.Install;
+import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.recognition.provider.wit.RecognitionWitHybrid;
 import ai.saiy.android.service.helper.LocalRequest;
@@ -46,7 +48,6 @@ public class Global extends MultiDexApplication {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
     public static final Install.Location installLocation = PLAYSTORE;
-    public static String PROJECT_ID = "";
     private static boolean sIsInVoiceTutorial;
     private static String sGlobalAmazonID;
     private static volatile Bundle alexDirectiveBundle;
@@ -60,13 +61,13 @@ public class Global extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        // TODO
-        PROJECT_ID = getApplicationContext().getString(R.string.gcp_project_id);
-        setGlobalId();
         FirebaseApp.initializeApp(this);
         final FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
                 DebugAppCheckProviderFactory.getInstance());
+        // TODO
+        setGlobalId();
+        authenticateGoogleCloud();
     }
 
     public static boolean isInVoiceTutorial() {
@@ -118,6 +119,27 @@ public class Global extends MultiDexApplication {
                 } catch (Exception e) {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "setGlobalId: Exception");
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }).start();
+    }
+
+    private void authenticateGoogleCloud() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    GoogleConfiguration.authenticateExplicit();
+                } catch (IOException e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "authenticateGoogleCloud: IOException");
+                        e.printStackTrace();
+                    }
+                } catch (Exception e) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "authenticateGoogleCloud: Exception");
                         e.printStackTrace();
                     }
                 }

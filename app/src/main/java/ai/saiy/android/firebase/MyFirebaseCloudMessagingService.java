@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ai.saiy.android.nlu.apiai;
+package ai.saiy.android.firebase;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -37,7 +37,6 @@ import ai.saiy.android.service.NotificationService;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.utils.UtilsAuth;
 
 /**
  * NOTE: There can only be one service in each app that receives FCM messages. If multiple
@@ -74,13 +73,13 @@ public class MyFirebaseCloudMessagingService extends FirebaseMessagingService {
     @Override
     public void onNewToken(@NonNull String token) {
         super.onNewToken(token);
-        final String oldToken = UtilsAuth.token;
-        UtilsAuth.token = token;
+        final String oldToken = FirebaseInstallationsHelper.token;
+        FirebaseInstallationsHelper.token = token;
         if (TextUtils.equals(oldToken, token)) {
             MyLog.w(TAG, "onNewToken already get");
             return;
         }
-        UtilsAuth.getFirebaseInstanceToken();
+        FirebaseInstallationsHelper.getFirebaseInstanceToken();
     }
 
     /**

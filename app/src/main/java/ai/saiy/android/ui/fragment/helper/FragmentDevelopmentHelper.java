@@ -32,6 +32,7 @@ import java.util.Arrays;
 
 import ai.saiy.android.R;
 import ai.saiy.android.device.DeviceInfo;
+import ai.saiy.android.firebase.FirebaseInstallationsHelper;
 import ai.saiy.android.firebase.database.model.PremiumUser;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.ui.activity.ActivityHome;
@@ -41,7 +42,6 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.user.UserFirebaseHelper;
-import ai.saiy.android.utils.UtilsAuth;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -207,7 +207,7 @@ public class FragmentDevelopmentHelper {
                             if (task.isSuccessful()) {
                                 snack(getParent().getView(), getString(R.string.content_account_create_success), Snackbar.LENGTH_SHORT, null, null);
                                 handleSignInResult(idpResponse.isNewUser());
-                                UtilsAuth.getFirebaseInstanceId();
+                                FirebaseInstallationsHelper.getFirebaseInstanceId();
                             } else {
                                 snack(getParent().getView(), getString(R.string.content_account_disabled), Snackbar.LENGTH_SHORT, null, null);
                             }
@@ -236,7 +236,7 @@ public class FragmentDevelopmentHelper {
         }
         snack(getParent().getView(), getString(R.string.content_account_create_success), Snackbar.LENGTH_SHORT, null, null);
         handleSignInResult(idpResponse.isNewUser());
-        UtilsAuth.getFirebaseInstanceId();
+        FirebaseInstallationsHelper.getFirebaseInstanceId();
     }
 
     private void handleSignInResult(final boolean isNewUser) {

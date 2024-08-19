@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ai.saiy.android.utils;
+package ai.saiy.android.firebase;
 
 import android.text.TextUtils;
 
@@ -27,8 +27,10 @@ import com.google.firebase.installations.InstallationTokenResult;
 
 import java.util.concurrent.TimeUnit;
 
-public class UtilsAuth {
-    private static final String TAG = UtilsAuth.class.getSimpleName();
+import ai.saiy.android.utils.MyLog;
+
+public class FirebaseInstallationsHelper {
+    private static final String TAG = FirebaseInstallationsHelper.class.getSimpleName();
     private static String firebaseInstanceId = "";
     /** A new FIS Auth-Token, created for this Firebase Installation. */
     public static String token = "";
@@ -115,8 +117,8 @@ public class UtilsAuth {
      * @return  boolean :   indicates the status of the signin
      */
     public static boolean isTokenValid() {
-        return UtilsAuth.expiryTime != 0 && !TextUtils.isEmpty(UtilsAuth.token)
-                && UtilsAuth.expiryTime > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
+        return FirebaseInstallationsHelper.expiryTime != 0 && !TextUtils.isEmpty(FirebaseInstallationsHelper.token)
+                && FirebaseInstallationsHelper.expiryTime > TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
     }
 
 }

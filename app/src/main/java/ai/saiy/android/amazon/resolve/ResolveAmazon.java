@@ -74,14 +74,13 @@ public class ResolveAmazon {
                 MyLog.e(CLS_NAME, "readHeaders: FileUploadIOException");
                 e.printStackTrace();
             }
-            return null;
         } catch (MultipartStream.MalformedStreamException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "readHeaders: MalformedStreamException");
                 e.printStackTrace();
             }
-            return null;
         }
+        return null;
     }
 
     public DirectiveList parse() throws IOException, JSONException {

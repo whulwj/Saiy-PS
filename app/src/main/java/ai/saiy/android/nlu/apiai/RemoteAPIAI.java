@@ -18,17 +18,16 @@
 package ai.saiy.android.nlu.apiai;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.auth.oauth2.AccessToken;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
-
 import ai.saiy.android.api.language.nlu.NLULanguageAPIAI;
-import ai.saiy.android.utils.UtilsAuth;
+import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.utils.MyLog;
 
 /**
@@ -40,6 +39,8 @@ public class RemoteAPIAI {
     private final String CLS_NAME = RemoteAPIAI.class.getSimpleName();
 
     private final String utterance;
+    private final AccessToken accessToken;
+    private final NLULanguageAPIAI vrLocale;
     private final ApiRequest apiRequest;
 
     /**
@@ -47,28 +48,30 @@ public class RemoteAPIAI {
      *
      * @param context the application context
      * @param utterance the user utterance
-     * @param apiKey   the API AI api key
+     * @param accessToken the Google cloud access token
      * @param vrLocale the {@link NLULanguageAPIAI}
      */
     public RemoteAPIAI(@NonNull final Context context,
                        @NonNull final String utterance,
-                       @NonNull final String apiKey,
+                       @NonNull final AccessToken accessToken,
                        @NonNull final NLULanguageAPIAI vrLocale) {
         this.utterance = utterance;
+        this.accessToken = accessToken;
+        this.vrLocale = vrLocale;
 
-        apiRequest = new ApiRequest(context);
+        this.apiRequest = new ApiRequest(context);
     }
 
     public Pair<Boolean, DetectIntentResponse> fetch() {
         try {
             DetectIntentResponse response;
             // check if the token is received and expiry time is received and not expired
-            if (UtilsAuth.isTokenValid()) {
-                response = apiRequest.callAPI(UtilsAuth.token, new Date(TimeUnit.SECONDS.toMillis(UtilsAuth.expiryTime)), utterance, null, true, true, true);
+            if (!TextUtils.isEmpty(accessToken.getTokenValue()) && accessToken.getExpirationTime().getTime() > System.currentTimeMillis()) {
+                response = apiRequest.callAPI(accessToken.getTokenValue(), accessToken.getExpirationTime(), utterance, vrLocale, null, true, true, true);
             } else {
                 response = null;
                 // get new token if expired or not received
-                UtilsAuth.refreshFirebaseInstanceToken();
+                GoogleConfiguration.refreshAccessToken();
             }
 
             if (response != null) {

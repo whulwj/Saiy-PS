@@ -475,13 +475,13 @@ public final class Validation {
                     MyLog.i(CLS_NAME, "checkAPIKey: " + API_AI.name());
                 }
 
-                if (checkAPIAIConfig(parcel)) {
+                if (checkGoogleCloudConfig(parcel)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "checkAPIKey: API key present " + API_AI.name());
                     }
                     break;
                 } else {
-                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_api_ai_config));
+                    MyLog.e("Remote Saiy Request", ctx.getApplicationContext().getString(ai.saiy.android.api.R.string.error_api_google_cloud));
                     return false;
                 }
             case WIT:
@@ -540,23 +540,6 @@ public final class Validation {
                 && REMOTE_SERVER_URI != null
                 && UtilsString.notNaked(REMOTE_SERVER_URI.toString())
                 && !REMOTE_SERVER_URI.toString().startsWith(_YOUR_);
-    }
-
-    /**
-     * Check the API AI credentials are correctly defined
-     *
-     * @param parcel the {@link RequestParcel}
-     * @return true if the parameters are configured correctly.
-     */
-    private static boolean checkAPIAIConfig(@NonNull final RequestParcel parcel) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "checkAPIAIConfig");
-        }
-
-        final String API_AI_CLIENT_ACCESS_TOKEN = parcel.getAPI_AI_CLIENT_ACCESS_TOKEN();
-
-        return UtilsString.notNaked(API_AI_CLIENT_ACCESS_TOKEN)
-                && !API_AI_CLIENT_ACCESS_TOKEN.startsWith(_YOUR_);
     }
 
     /**

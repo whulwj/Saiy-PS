@@ -512,7 +512,7 @@
         </service>
 
         <service
-            android:name="ai.saiy.android.nlu.apiai.MyFirebaseCloudMessagingService"
+            android:name="ai.saiy.android.firebase.MyFirebaseCloudMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />

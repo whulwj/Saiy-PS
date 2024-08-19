@@ -58,6 +58,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
+import ai.saiy.android.configuration.GoogleConfiguration;
+import ai.saiy.android.firebase.FirebaseInstallationsHelper;
 import ai.saiy.android.firebase.UserFirebaseListener;
 import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.intent.ExecuteIntent;
@@ -77,7 +79,6 @@ import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
 import ai.saiy.android.user.UserFirebaseHelper;
-import ai.saiy.android.utils.UtilsAuth;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -351,11 +352,11 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         setupDrawer();
         setupNavigation();
 
-        if (Global.PROJECT_ID.equals("GCP_PROJECT_ID")) {
-            Toast.makeText(this, "Please update the GCP_PROJECT_ID in strings.xml",
+        if (GoogleConfiguration.CLOUD_PROJECT_ID.equals("GCP_PROJECT_ID")) {
+            Toast.makeText(this, "Please update the GCP_PROJECT_ID in GoogleConfiguration",
                     Toast.LENGTH_LONG).show();
-//            finish();
-            return;
+/*            finish();
+            return;*/
         }
         checkPermissions();
         helper.checkAppRestrictionsStatus(this);
@@ -1442,7 +1443,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 if (task.isSuccessful()) {
                     // Sign in success
                     ActivityHome.this.isUserSignedIn = true;
-                    UtilsAuth.getFirebaseInstanceId();
+                    FirebaseInstallationsHelper.getFirebaseInstanceId();
                     return;
                 }
                 if (DEBUG) {

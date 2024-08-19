@@ -10,11 +10,10 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.Executors;
 
-import ai.saiy.android.firebase.database.reference.TranslationProviderReference;
 import ai.saiy.android.firebase.database.model.TranslationProvider;
 import ai.saiy.android.firebase.database.model.WeatherProvider;
+import ai.saiy.android.firebase.database.reference.TranslationProviderReference;
 import ai.saiy.android.firebase.database.reference.WeatherProviderReference;
-import ai.saiy.android.utils.UtilsAuth;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -134,7 +133,7 @@ public class UtilsFirebase {
                                     } else {
                                         ai.saiy.android.utils.MyLog.w(CLS_NAME, "signInAnonymously: no user");
                                     }
-                                    UtilsAuth.getFirebaseInstanceId();
+                                    FirebaseInstallationsHelper.getFirebaseInstanceId();
                                     doPeriodicProviders(context);
                                 } catch (NullPointerException e) {
                                     if (DEBUG) {

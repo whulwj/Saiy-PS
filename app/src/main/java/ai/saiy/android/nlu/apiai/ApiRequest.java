@@ -53,7 +53,8 @@ import java.util.Date;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import ai.saiy.android.utils.Global;
+import ai.saiy.android.api.language.nlu.NLULanguageAPIAI;
+import ai.saiy.android.configuration.GoogleConfiguration;
 
 public class ApiRequest {
     public static final String SESSION_ID = UUID.randomUUID().toString();
@@ -73,33 +74,35 @@ public class ApiRequest {
     /**
      * function to call: detect Intent Sentiment Analysis | Detect Intent With TTS | KnowledgeBase
      *
-     * @param accessToken :   access token received from fcm
-     * @param expiryTime  :   expiry time received from fcm
+     * @param accessToken :   access token received from Google
+     * @param expiryTime  :   expiry time received from Google
      * @param msg         :   message sent by the user
+     * @param language    : the {@link NLULanguageAPIAI}
      * @param tts         :   send message to text to speech if true
      * @param sentiment   :   send message to sentiment analysis if true
      * @param knowledge   :   send message to knowledge base if true
      * @return :   response from the server
      */
-    public DetectIntentResponse callAPI(String accessToken, Date expiryTime, String msg, byte[] audioBytes, boolean tts,
+    public DetectIntentResponse callAPI(String accessToken, Date expiryTime, String msg, final NLULanguageAPIAI language, byte[] audioBytes, boolean tts,
                           boolean sentiment, boolean knowledge) {
         this.token = accessToken;
         this.tokenExpiration = expiryTime;
 
-        return detectIntent(msg, audioBytes, tts, sentiment, knowledge);
+        return detectIntent(msg, language.getLocaleString(), audioBytes, tts, sentiment, knowledge);
     }
 
     /**
      * function to getting the results from the dialogflow
      *
-     * @param msg        :   message sent by the user
-     * @param audioBytes :   audio sent by the user
-     * @param tts        :   send message to text to speech if true
-     * @param sentiment  :   send message to sentiment analysis if true
-     * @param knowledge  :   send message to knowledge base if true
+     * @param msg         :   message sent by the user
+     * @param languageCode:   voice recognition locale
+     * @param audioBytes  :   audio sent by the user
+     * @param tts         :   send message to text to speech if true
+     * @param sentiment   :   send message to sentiment analysis if true
+     * @param knowledge   :   send message to knowledge base if true
      * @return :   response from the server
      */
-    private DetectIntentResponse detectIntent(String msg, byte[] audioBytes, boolean tts, boolean sentiment,
+    private DetectIntentResponse detectIntent(String msg, final String languageCode, byte[] audioBytes, boolean tts, boolean sentiment,
                                 boolean knowledge) {
         try {
             AccessToken accessToken = new AccessToken(token, tokenExpiration);
@@ -109,14 +112,14 @@ public class ApiRequest {
             SessionsSettings sessionsSettings = SessionsSettings.newBuilder()
                     .setCredentialsProvider(fixedCredentialsProvider).build();
             SessionsClient sessionsClient = SessionsClient.create(sessionsSettings);
-            SessionName sessionName = SessionName.of(Global.PROJECT_ID, SESSION_ID);
+            SessionName sessionName = SessionName.of(GoogleConfiguration.CLOUD_PROJECT_ID, SESSION_ID);
 
             QueryInput queryInput;
             if (msg != null) {
-                // Set the text (hello) and language code (en-US) for the query
+                // Set the text (hello) and language code for the query
                 TextInput textInput = TextInput.newBuilder()
                         .setText(msg)
-                        .setLanguageCode("en-US")
+                        .setLanguageCode(languageCode)
                         .build();
 
                 // Build the query with the TextInput
@@ -125,7 +128,7 @@ public class ApiRequest {
                 // Instructs the speech recognizer how to process the audio content.
                 InputAudioConfig inputAudioConfig = InputAudioConfig.newBuilder()
                         .setAudioEncoding(AudioEncoding.AUDIO_ENCODING_AMR)
-                        .setLanguageCode("en-US")
+                        .setLanguageCode(languageCode)
                         .setSampleRateHertz(8000)
                         .build();
 
@@ -202,7 +205,7 @@ public class ApiRequest {
             KnowledgeBasesSettings knowledgeSessionsSettings = KnowledgeBasesSettings.newBuilder()
                     .setCredentialsProvider(fixedCredentialsProvider).build();
             ArrayList<String> knowledgeBaseNames =
-                    KnowledgeBaseUtils.listKnowledgeBases(Global.PROJECT_ID, knowledgeSessionsSettings);
+                    KnowledgeBaseUtils.listKnowledgeBases(GoogleConfiguration.CLOUD_PROJECT_ID, knowledgeSessionsSettings);
 
             if (!knowledgeBaseNames.isEmpty()) {
                 // As an example, we'll only grab the first Knowledge Base

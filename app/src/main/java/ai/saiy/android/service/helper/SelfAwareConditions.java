@@ -1917,7 +1917,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                     recogMic);
         } else {
             return new RecognitionGoogleCloud(mContext, recognitionListener,
-                    VRLanguageGoogle.getLanguage(getVRLocale()), GoogleConfiguration.ACCESS_TOKEN, recogMic);
+                    VRLanguageGoogle.getLanguage(getVRLocale()), GoogleConfiguration.sAccessToken, recogMic);
         }
     }
 
@@ -1993,7 +1993,9 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
 
         return new RemoteAPIAI(mContext, results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION).get(0),
-                getCallback().getParcel().getAPI_AI_CLIENT_ACCESS_TOKEN(),
+                servingRemote()? new AccessToken(getCallback().getParcel().getGOOGLE_CLOUD_ACCESS_TOKEN(),
+                        new Date(System.currentTimeMillis()
+                                + getCallback().getParcel().getGOOGLE_CLOUD_ACCESS_EXPIRY())) : GoogleConfiguration.sAccessToken,
                 getCallback().getParcel().getNLULanguageAPIAI()).fetch();
     }
 
