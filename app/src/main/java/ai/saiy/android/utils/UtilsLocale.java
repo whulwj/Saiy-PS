@@ -22,11 +22,15 @@ import android.os.Build;
 
 import androidx.annotation.Nullable;
 
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
+
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
+import ai.saiy.android.localisation.SupportedLanguage;
 
 /**
  * Created by benrandall76@gmail.com on 24/03/2016.
@@ -48,6 +52,23 @@ public class UtilsLocale {
 
     public static final Locale DEFAULT_LOCALE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? Locale.getDefault(Locale.Category.DISPLAY) : Locale.getDefault();
     public static final String DEFAULT_LOCALE_STRING = DEFAULT_LOCALE.toString();
+
+    public static String convertToIETF(Locale locale) {
+        if (locale != null) {
+            try {
+                return locale.toString().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+            } catch (NullPointerException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "convertToIETF: NullPointerException");
+                }
+            } catch (Exception e2) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "convertToIETF: Exception");
+                }
+            }
+        }
+        return SupportedLanguage.ENGLISH_US.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+    }
 
     /**
      * Utility method to convert a string to a {@link Locale}. If this process fails, the best

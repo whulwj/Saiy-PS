@@ -1475,7 +1475,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                     break;
             }
 
-            return SPH.getDefaultRecognition(mContext);
+            return isWearRequest()? SaiyDefaults.VR.WEAR : SPH.getDefaultRecognition(mContext);
         }
     }
 
@@ -2309,6 +2309,14 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
      */
     private void setSecure() {
         getBundle().putBoolean(RecognizerIntent.EXTRA_SECURE, isSecure());
+    }
+
+    public boolean isWearRequest() {
+        return bundle != null && bundle.containsKey(LocalRequest.EXTRA_WEAR);
+    }
+
+    public String getWearContent() {
+        return bundle != null? bundle.getString(LocalRequest.EXTRA_WEAR) : null;
     }
 
     /**

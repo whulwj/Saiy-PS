@@ -48,6 +48,7 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 /**
  * Created by benrandall76@gmail.com on 23/04/2016.
@@ -416,5 +417,24 @@ public class UtilsBundle {
             }
         }
         return true;
+    }
+
+    /**
+     * For debugging the intent extras
+     *
+     * @param bundle containing potential extras
+     */
+    public static void examineBundle(@Nullable final Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "examineBundle");
+
+            if (bundle != null) {
+                final Set<String> keys = bundle.keySet();
+                //noinspection Convert2streamapi
+                for (final String key : keys) {
+                    MyLog.v(CLS_NAME, "examineBundle: " + key + " ~ " + bundle.get(key));
+                }
+            }
+        }
     }
 }

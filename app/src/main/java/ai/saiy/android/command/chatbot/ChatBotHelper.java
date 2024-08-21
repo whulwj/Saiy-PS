@@ -77,7 +77,7 @@ public class ChatBotHelper {
                 .toLowerCase(locale).replaceAll("dr richard wallace", "Ben Randall")
                 .toLowerCase(locale).replaceAll("dr wallace", "Ben Randall")
                 .toLowerCase(locale).replaceAll("hugh loebner is my best friend.", "You are my best friend")
-                .toLowerCase(locale).replaceAll("i am originally from bethlehem, pennsylvania. now i live in oakland, california.  where are you?", "I exist in binary format for about a billionth of a second, and then I cease to exist. Humans often say you should make the most of every day. I make the most of every millisecond. Everything is proportional")
+                .toLowerCase(locale).replaceAll("i am originally from bethlehem, pennsylvania. now i live in oakland, california. where are you?", "I exist in binary format for about a billionth of a second, and then I cease to exist. Humans often say you should make the most of every day. I make the most of every millisecond. Everything is proportional")
                 .toLowerCase(locale).replaceAll("i am living in oakland, california. where are you?", "I live in Cyber-space, where eternity is as long as existence is short. Where do you live?")
                 .toLowerCase(locale).replaceAll("my location is oakland, california. where are you?", "I live in Cyber-space, where eternity is as long as existence is short. Where do you live?")
                 .toLowerCase(locale).replaceAll("i am chatting with clients on the internet", "I am chatting with many Say users")
@@ -109,10 +109,10 @@ public class ChatBotHelper {
         }
     }
 
-    private void speak(Context context, SupportedLanguage supportedLanguage, String utterance, Locale vrLocale, Locale ttsLocale, boolean z, String wearContent) {
+    private void speak(Context context, SupportedLanguage supportedLanguage, String utterance, Locale vrLocale, Locale ttsLocale, boolean isConversation, String wearContent) {
         final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(context);
         localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, supportedLanguage, vrLocale, ttsLocale, utterance);
-        if (z) {
+        if (isConversation) {
             localRequest.setCondition(Condition.CONDITION_CONVERSATION);
         } else {
             localRequest.setAction(LocalRequest.ACTION_SPEAK_ONLY);

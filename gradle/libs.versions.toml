@@ -20,6 +20,7 @@ googleServicesVersion = "4.4.1"
 playServicesAuth = "20.5.0"
 playServicesLocation = "21.0.1"
 playServicesAdsIdentifier = "18.0.1"
+playServicesWearable = "18.1.0"
 protobufGradlePlugin = "0.9.4"
 junit = "4.13.2"
 junitVersion = "1.1.5"
@@ -88,6 +89,7 @@ licensesdialog = { module = "de.psdev.licensesdialog:licensesdialog", version.re
 play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
 play-services-ads-identifier = { group = "com.google.android.gms", name = "play-services-ads-identifier", version.ref = "playServicesAdsIdentifier" }
+play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
 
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }

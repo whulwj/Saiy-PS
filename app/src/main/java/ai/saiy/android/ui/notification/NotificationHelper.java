@@ -136,7 +136,6 @@ public final class NotificationHelper {
      * @param ctx                  the application context
      * @param notificationConstant integer constant denoting if a notification action button should be displayed
      */
-    @SuppressWarnings("deprecation")
     public static Notification getForegroundNotification(@NonNull final Context ctx, final int notificationConstant) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getForegroundNotification");
@@ -278,7 +277,7 @@ public final class NotificationHelper {
         return builder.build();
     }
 
-    public static void createTaskerNotification(Context ctx, String str, Locale locale, boolean z) {
+    public static void createTaskerNotification(Context ctx, String str, Locale locale, boolean startListening) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "createTaskerNotification");
         }
@@ -286,7 +285,7 @@ public final class NotificationHelper {
             final Intent actionIntent = new Intent(NotificationService.INTENT_CLICK);
             actionIntent.setPackage(ctx.getPackageName());
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_TASKER);
-            actionIntent.putExtra(Speaker.EXTRA_START_VR, z);
+            actionIntent.putExtra(Speaker.EXTRA_START_VR, startListening);
             actionIntent.putExtra(Speaker.EXTRA_LOCALE, locale.toString());
             actionIntent.putExtra(Speaker.EXTRA_VALUE, str);
 

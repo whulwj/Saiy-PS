@@ -129,6 +129,7 @@ public class SaiyDefaults {
         IBM(Defaults.VR.IBM),
         REMOTE(Defaults.VR.REMOTE),
         ALEXA(null),
+        WEAR(null),
         MIC(null);
 
         private final Defaults.VR vr;

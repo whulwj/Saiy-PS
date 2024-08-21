@@ -112,6 +112,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
+import ai.saiy.android.wear.UtilsWearMessage;
 
 /**
  * This foreground service class will remain running unless the user deactivates it
@@ -664,6 +665,12 @@ public class SelfAware extends Service {
                             }
 
                             if (!conditions.isSilentUtterance()) {
+                                if (conditions.isWearRequest()) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "speak: isWearRequest");
+                                    }
+                                    UtilsWearMessage.sendMessage(getApplicationContext(), conditions.getUtterance(), conditions.getWearContent(), conditions.getVRLocale(false), ai.saiy.android.wear.containers.WearMessageEvent.EVENT_DISPLAY, null);
+                                }
 
                                 switch (conditions.getDefaultTTS()) {
 
@@ -1193,6 +1200,12 @@ public class SelfAware extends Service {
                                     conditions.manageCallback(CallbackType.CB_ERROR_BUSY, null);
                                     break;
                             }
+                            break;
+                        case WEAR:
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "WEAR");
+                            }
+                            UtilsWearMessage.sendMessage(getApplicationContext(), conditions.getUtterance(), conditions.getWearContent(), conditions.getVRLocale(false), ai.saiy.android.wear.containers.WearMessageEvent.EVENT_SPEECH, conditions.getBundle());
                             break;
                         case WIT_HYBRID:
                             if (DEBUG) {

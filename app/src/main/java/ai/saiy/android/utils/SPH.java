@@ -1793,9 +1793,9 @@ public class SPH {
         return getPref(context).getBoolean(ANNOUNCE_NOTIFICATIONS_WHATSAPP, false);
     }
 
-    public static void setAnnounceNotificationsWhatsapp(Context context, boolean z) {
+    public static void setAnnounceNotificationsWhatsapp(Context context, boolean condition) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
-        edit.putBoolean(ANNOUNCE_NOTIFICATIONS_WHATSAPP, z);
+        edit.putBoolean(ANNOUNCE_NOTIFICATIONS_WHATSAPP, condition);
         edit.apply();
     }
 
