@@ -1029,6 +1029,7 @@
     <string name="permission_sms_read">I require the, read SMS, permission in order to access your message inbox, and therefore be able to inform you who has messaged, and what they said.</string>
     <string name="permission_sms_send">I require the, send SMS, permission to enable me to send text messages on your behalf, without your physical interaction. When you are driving for example, or have your hands full with something else. I\'ll always double check the recipient and content with you prior to doing this, and it will of course, only ever be as a result of your direct instruction.</string>
     <string name="permission_phone_state">So I can access the number of your incoming calls, and search for the associated contact. I require the permission to read the phone state.</string>
+    <string name="permission_write_settings">To control your hardware, I need to be able to modify the device\'s system settings</string>
 
     <!-- Notification data -->
     <string name="is_typing">is typing</string>
@@ -2167,4 +2168,23 @@
     <string name="how_are_you">how are you</string>
     <string name="talk_to_me">talk to me</string>
     <string name="whats_up">what\'s up</string>
+
+    <string name="content_modify_system_settings">modify System settings</string>
+    <string name="landscape">landscape</string>
+    <string name="lock">lock</string>
+    <string name="locked">locked</string>
+    <string name="orientation">orientation</string>
+    <string name="port_rate">port rate</string>
+    <string name="portrait">portrait</string>
+    <string name="reverse">reverse</string>
+    <string name="rotate">rotate</string>
+    <string name="rotation">rotation</string>
+    <string name="screen">screen</string>
+    <string name="unlock">unlock</string>
+    <string name="unlocked">unlocked</string>
+
+    <string name="backward">backward</string>
+    <string name="forward">forward</string>
+    <string name="somersault">somersault</string>
+    <string name="word_do">do</string>
 </resources>

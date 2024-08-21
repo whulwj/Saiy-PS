@@ -55,9 +55,11 @@ import ai.saiy.android.command.location.address.CommandLocation;
 import ai.saiy.android.command.location.vehicle.locate.CommandLocateVehicle;
 import ai.saiy.android.command.location.vehicle.parked.CommandParkedVehicle;
 import ai.saiy.android.command.note.CommandNote;
+import ai.saiy.android.command.orientation.CommandOrientation;
 import ai.saiy.android.command.search.CommandSearch;
 import ai.saiy.android.command.settings.application.CommandApplicationSettings;
 import ai.saiy.android.command.settings.system.CommandSettings;
+import ai.saiy.android.command.somersault.CommandSomersault;
 import ai.saiy.android.command.songrecognition.CommandSongRecognition;
 import ai.saiy.android.command.spell.CommandSpell;
 import ai.saiy.android.command.tasker.CommandTasker;
@@ -515,6 +517,26 @@ public class Quantum extends Tunnelling {
                     }
                     final CommandSettings commandSettings = new CommandSettings();
                     outcome = commandSettings.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_SOMERSAULT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SOMERSAULT.name());
+                    }
+                    final CommandSomersault commandSomersault = new CommandSomersault();
+                    outcome = commandSomersault.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_ORIENTATION:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_ORIENTATION.name());
+                    }
+                    final CommandOrientation commandOrientation = new CommandOrientation();
+                    outcome = commandOrientation.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -1273,6 +1295,16 @@ public class Quantum extends Tunnelling {
                 case COMMAND_SETTINGS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SETTINGS.name());
+                    }
+                    break;
+                case COMMAND_SOMERSAULT:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SOMERSAULT.name());
+                    }
+                    break;
+                case COMMAND_ORIENTATION:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_ORIENTATION.name());
                     }
                     break;
                 case COMMAND_REDIAL:

@@ -289,6 +289,21 @@ public final class PersonalityResponse {
         return SaiyResourcesHelper.getStringResource(ctx, sl, R.string.error_empty_voice_data);
     }
 
+    public static String getOrientationLock(@NonNull final Context ctx, @NonNull final SupportedLanguage sl, String str) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_orientation_lock);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], str);
+    }
+
+    public static String getCurrentOrientation(@NonNull final Context ctx, @NonNull final SupportedLanguage sl, String str) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_orientation_current);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], str);
+    }
+
+    public static String getCurrentOrientationLock(@NonNull final Context ctx, @NonNull final SupportedLanguage sl, String str) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_orientation_lock_current);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(ctx), str));
+    }
+
     /**
      * Get the standard action unknown response.
      *
@@ -949,6 +964,26 @@ public final class PersonalityResponse {
 
     public static String getCalendarEventsError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_calendar_events);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getSomersault(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_somersault);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getSomersaultError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_somersault);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getOrientationError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_orientation);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getUnknownOrientationError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_unknown_orientation);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 

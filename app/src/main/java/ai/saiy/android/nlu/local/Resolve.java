@@ -62,11 +62,13 @@ import ai.saiy.android.command.location.vehicle.locate.LocateVehicle;
 import ai.saiy.android.command.location.vehicle.parked.ParkedVehicle;
 import ai.saiy.android.command.navigation.Navigation;
 import ai.saiy.android.command.note.Note;
+import ai.saiy.android.command.orientation.Orientation;
 import ai.saiy.android.command.pardon.Pardon;
 import ai.saiy.android.command.search.Search;
 import ai.saiy.android.command.settings.application.ApplicationSettings;
 import ai.saiy.android.command.settings.system.Settings;
 import ai.saiy.android.command.sms.Sms;
+import ai.saiy.android.command.somersault.Somersault;
 import ai.saiy.android.command.songrecognition.SongRecognition;
 import ai.saiy.android.command.spell.Spell;
 import ai.saiy.android.command.tasker.Tasker;
@@ -143,6 +145,8 @@ public final class Resolve {
         callableList.add(new Time(sr, sl, voiceData, confidence));
         callableList.add(new Clipboard(sr, sl, voiceData, confidence));
         callableList.add(new Settings(sr, sl, voiceData, confidence));
+        callableList.add(new Somersault(sr, sl, voiceData, confidence));
+        callableList.add(new Orientation(sr, sl, voiceData, confidence));
         callableList.add(new Redial(sr, sl, voiceData, confidence));
         callableList.add(new CallBack(sr, sl, voiceData, confidence));
         callableList.add(new Define(sr, sl, voiceData, confidence));
@@ -273,7 +277,7 @@ public final class Resolve {
 
             if (DEBUG) {
                 for (final Pair<CC, Float> pairs : toReturn) {
-                    MyLog.i(CLS_NAME, "command: " + pairs.first.name() + " ~ " + String.valueOf(pairs.second));
+                    MyLog.i(CLS_NAME, "command: " + pairs.first.name() + " ~ " + pairs.second);
                 }
             }
         }
