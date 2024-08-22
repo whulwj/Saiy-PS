@@ -9,7 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import ai.saiy.android.firebase.database.model.Foursquare;
+import ai.saiy.android.firebase.database.read.Foursquare;
 import ai.saiy.android.utils.MyLog;
 
 public class FoursquareReference {

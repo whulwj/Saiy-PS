@@ -10,8 +10,8 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.concurrent.Executors;
 
-import ai.saiy.android.firebase.database.model.TranslationProvider;
-import ai.saiy.android.firebase.database.model.WeatherProvider;
+import ai.saiy.android.firebase.database.read.TranslationProvider;
+import ai.saiy.android.firebase.database.read.WeatherProvider;
 import ai.saiy.android.firebase.database.reference.TranslationProviderReference;
 import ai.saiy.android.firebase.database.reference.WeatherProviderReference;
 import ai.saiy.android.utils.MyLog;

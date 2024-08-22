@@ -1102,7 +1102,6 @@ public class FragmentAdvancedSettingsHelper {
 
     public void showSignatureDialog() {
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
-                .setCancelable(false)
                 .setView(R.layout.text_input_dialog_layout)
                 .setTitle(R.string.menu_sms_email_signature)
                 .setIcon(R.drawable.ic_transcribe_close)

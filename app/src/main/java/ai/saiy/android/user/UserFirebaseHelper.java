@@ -17,7 +17,7 @@ import java.util.concurrent.TimeoutException;
 
 import ai.saiy.android.firebase.UserFirebaseListener;
 import ai.saiy.android.firebase.UtilsFirebase;
-import ai.saiy.android.firebase.database.model.PremiumUser;
+import ai.saiy.android.firebase.database.read.PremiumUser;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 

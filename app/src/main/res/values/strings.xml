@@ -19,6 +19,7 @@
     <!--Firebase Google Sign-In Authentication-->
     <string name="default_web_client_id" translatable="false">997068182928-rv7vtailtqrup3hdenre58gu5r56rim6.apps.googleusercontent.com</string>
     <string name="facebook_app_id" translatable="false">151121772049980</string>
+    <string name="facebook_application_id" translatable="false">CHANGE-ME-for-firebase</string>
 
     <!-- SPEECH STRINGS -->
 
@@ -78,7 +79,8 @@
     <string name="content_disclaimer" translatable="true">here is the application disclaimer.</string>
 
     <string name="content_developer_note" translatable="true">here is the developer note</string>
-    <string name="content_whats_new" translatable="true">here is the what\'s new content</string>
+    <string name="content_rate_me">I hope you don\'t mind the interruption, %1$s. But you seem to be enjoying using me. If I can ask for twenty seconds of your time, posting a review on the Play Store helps my developer out so much, and keeps him motivated to improve me. If you\'re not quite sure what star rating you should give me, I would recommend, five. It\'s my lucky number. I thank you in advance. If you\'ve already done this, I thank you on behalf of my developer.</string>
+    <string name="content_whats_new" translatable="true">~ V1.0.3 ~\n• Wear integration (test)\n• Note provider options (fix)\n• More bugs fixes! Tks for reports!!</string>
     <string name="content_unknown_command" translatable="true">Unknown commands, when a command is not recognised</string>
 
     <string name="navigation_drawer_open" translatable="true">Open navigation drawer</string>
@@ -254,6 +256,7 @@
     <string name="lp_tts_gender">If your text to speech engine supports it, this setting allows you to configure whether I should speak in a male or female voice by default. I will attempt to apply this setting when pronouncing translations for you. Which can sound a little silly when I suddenly change from an English lady, to a German man. Only at the weekends. Ahem.</string>
     <string name="menu_blacklist" translatable="true">Manage Blacklist</string>
     <string name="menu_vocal_verification" translatable="true">Vocal Verification</string>
+    <string name="menu_vocal_verification_feedback">Vocal Verification Feedback</string>
     <string name="dialog_id_verification" translatable="true">Select voice account: an account to associate</string>
     <string name="menu_unlink_association" translatable="true">Unlink Association</string>
     <string name="content_unlink_association" translatable="true">%1$s already has a vocal
@@ -333,6 +336,7 @@
     <string name="lp_sms_body_fix">For some users, dictated message content fails to appear in their default messaging application. Toggling this setting should fix the issue.</string>
     <string name="lp_sms_id_fix">For a small number of users, requesting text message content from a specific contact will fail. Toggling this setting will hopefully resolve this issue.</string>
     <string name="lp_vocal_verification">This is an experimental feature. Tap for a detailed explanation.</string>
+    <string name="lp_vocal_verification_feedback">Provide any feedback here you may have to the vocal verification test.</string>
     <string name="lp_wired_headset_fix">If the voice action button on your wired headset is not doing anything, or not defaulting to me, when your screen is off, you can use this fix to set things up correctly. When you tap on this option, if I\'m activated successfully, then all is good. If it starts another application, then you\'ll need to locate that app in the Android Application Settings, and click on. Clear defaults. Before returning here to try again. You\'ll most likely get shown a dialog to choose between the various Assistants on your device. I would highly recommend you choose me. For obvious reasons.</string>
 
     <string name="menu_europe">Europe</string>
@@ -961,12 +965,25 @@
     <string name="menu_translation">Translation</string>
     <string name="content_translate_overview">Saiy will be translated into every language that is supported by a voice recognition provider, but as you can imagine, this is going to be a mammoth task!\n\nI\'ll need the help of our community of users to achieve this and we\'re going to attempt it using the Crowdin Platform.\n\nIf you want to get involved and translate the odd word or sentence every now and then over a coffee (no pressure!) click the sign up link below to create an account! It\'s free and easy!\n\nThanks in advance!</string>
     <string name="lp_translation">If you\'d like to help translate me into your native language, this is the place to get started.</string>
+    <string name="menu_design">Design</string>
+    <string name="menu_design_summary">Summary</string>
+    <string name="menu_design_summary_hint">Brief description &amp; contact email</string>
+    <string name="content_design_overview">Interested in helping with the design of Saiy and want your name in lights for the credit?\n\nWhether you\'re a budding Android UI designer, a web designer, or think you can improve other aesthetics of the app, such as the icons, there\'s something here for you!\n\nJust submit a web link to your design summary and my developer will take a look.\n\nThanks in advance!</string>
+    <string name="lp_design">Tap here if you are a budding designer and would like to help improve my aesthetics.</string>
     <string name="menu_report_bug">Report a Bug</string>
     <string name="content_report_bug">Please describe the problem you are experiencing and how to replicate it, if possible.\n\nClicking on email below, will prepopulate some of your device data into the body of the message. Hopefully this will make the bug easier to resolve!</string>
     <string name="lp_bug_report">If you\'ve found I\'m suffering from a bug, you can submit it to my developer here.</string>
     <string name="menu_to_do_list">To-Do List</string>
     <string name="content_to_do_list">In no particular order:\n\n• Customisable hotword\n• Wired headsets\n• Bluetooth headsets\n• Car kits\n• Wear compatibility\n• Multiple intro support\n• Google Assistant vs browser choice\n• Hotword screen off\n• Full application back-up\n• Location aware profiles\n• User sound effects\n• Save emotion analysis\n• Regex in commands\n• MicroG support\n\nCommands:\n\n• Heart rate\n• Steps\n• Stopwatch\n• Run\n• Workout\n• Bike ride\n• ICE\n• Music search\n• Agenda timespans\n• Delete alarms\n• 24 hour time\n• etc…!</string>
     <string name="lp_to_do">View a list of what my developer is working on in the very near future. Once he has completed this list, he has my permission to get a life.</string>
+    <string name="menu_suggest_an_enhancement">Suggest an Enhancement</string>
+    <string name="lp_enhancement">Have a suggestion of how I could be improved? Let my developer know your ideas here.</string>
+    <string name="menu_suggest_natural_language">Suggest Natural Language</string>
+    <string name="lp_natural_language">If you think I should have understood a command in a different way, you can submit your suggestion here.</string>
+    <string name="menu_emotion_analysis_feedback">Emotion Analysis Feedback</string>
+    <string name="lp_emotion_feedback">Provide any feedback here in regard to your experience with my emotional understanding.</string>
+    <string name="menu_generic_feedback">Generic Feedback</string>
+    <string name="lp_generic">If you have any suggestions or feedback that don\'t fall into the other categories here, then this is the place to submit them.</string>
     <string name="lp_anonymous_usage_stats">In order to improve your experience and that of others, I collect anonymous usage data whilst you are interacting with me. Such information may contain the particular command you attempted, how it was requested, and if it resulted in a success or failure. This will help me to identify any potential errors negative to my performance, and report them to my developer. In addition, the time you spend in various parts of the application may be logged. Which again, will never be individually identifiable to you.</string>
     <string name="lp_commercial">An email link for commercial enquiries.</string>
     <string name="lp_developer_api">If you are the developer of another application and would like to know how your app can take advantage of communicating with me, click here.</string>
@@ -2187,4 +2204,20 @@
     <string name="forward">forward</string>
     <string name="somersault">somersault</string>
     <string name="word_do">do</string>
+
+    <string name="content_empty">Content cannot be empty!</string>
+    <string name="content_enhancement">Please describe the feature that you think would improve the application.\n\nDue to the volume of submissions from helpful users, I\'m afraid replying to every suggestion isn\'t possible. But they all get read!</string>
+    <string name="content_generic">Get ready to provide your super positive feedback! WHOOP!\n\nClicking on email below, will prepopulate some of your device data into the body of the message. If your feedback is not device related, feel free to remove it before sending.</string>
+    <string name="menu_click_the_star_rating">Click the star rating</string>
+    <string name="menu_feedback">Feedback</string>
+    <string name="menu_happy_days_exclamation">Happy days!</string>
+    <string name="menu_hear_you_exclamation">I hear you!</string>
+    <string name="menu_super_exclamation">Super idea!</string>
+    <string name="menu_thanks_exclamation">Thank you!</string>
+    <string name="design_web_link_empty">The web link cannot be empty</string>
+    <string name="menu_web_link">Web link</string>
+    <string name="menu_web_link_hint">www.someurl.com</string>
+    <string name="menu_nl_outcome">What I should have done</string>
+    <string name="menu_understood_exclamation">Understood!</string>
+    <string name="menu_what_you_said">What you said</string>
 </resources>

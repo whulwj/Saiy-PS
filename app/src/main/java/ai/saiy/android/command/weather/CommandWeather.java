@@ -19,7 +19,7 @@ import ai.saiy.android.command.weather.provider.map.OpenWeatherMapHelper;
 import ai.saiy.android.command.weather.provider.map.OpenWeatherMapResponse;
 import ai.saiy.android.command.weather.provider.online.WeatherOnlineHelper;
 import ai.saiy.android.command.weather.provider.online.WeatherOnlineResponse;
-import ai.saiy.android.firebase.database.model.WeatherProvider;
+import ai.saiy.android.firebase.database.read.WeatherProvider;
 import ai.saiy.android.firebase.database.reference.OpenWeatherMapReference;
 import ai.saiy.android.firebase.database.reference.WeatherOnlineReference;
 import ai.saiy.android.localisation.SupportedLanguage;

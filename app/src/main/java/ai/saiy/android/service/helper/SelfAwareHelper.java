@@ -506,6 +506,9 @@ public class SelfAwareHelper {
 
     public void doPeriodic() {
         ai.saiy.android.firebase.UtilsFirebase.doPeriodic(mContext);
+        if (SPH.getUsedIncrement(mContext) == SPH.getRateMe(mContext)) {
+            NotificationHelper.createRateMeNotification(mContext);
+        }
     }
 
     /**

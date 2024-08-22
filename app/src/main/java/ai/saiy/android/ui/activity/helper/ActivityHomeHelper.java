@@ -18,6 +18,7 @@
 package ai.saiy.android.ui.activity.helper;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -274,7 +275,7 @@ public class ActivityHomeHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showWhatsNew(@NonNull final Activity act) {
-
+        setUpRateMe(act.getApplicationContext());
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(act)
                 .setTitle(R.string.menu_whats_new)
                 .setMessage(R.string.content_whats_new)
@@ -306,6 +307,18 @@ public class ActivityHomeHelper {
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
+    }
+
+    private void setUpRateMe(Context context) {
+        final boolean isNewUser = SPH.isNewUser(context);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "setUpRateMe: newUser: " + isNewUser);
+        }
+        if (isNewUser) {
+            SPH.markOldUser(context);
+        } else {
+            SPH.setRateMe(context, SPH.getUsedIncrement(context) + 101);
+        }
     }
 
     /**

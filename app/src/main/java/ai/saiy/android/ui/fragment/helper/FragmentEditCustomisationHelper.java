@@ -770,7 +770,7 @@ public class FragmentEditCustomisationHelper {
         ((EditText) materialDialog.getWindow().findViewById(R.id.etKeyphrase)).setText(customCommand.getKeyphrase());
         ((EditText) materialDialog.getWindow().findViewById(R.id.etSuccessResponse)).setText(customCommand.getResponseSuccess());
         ((EditText) materialDialog.getWindow().findViewById(R.id.etErrorResponse)).setText(customCommand.getResponseError());
-        Spinner spinner = (Spinner) materialDialog.getWindow().findViewById(R.id.spIntentTarget);
+        Spinner spinner = materialDialog.getWindow().findViewById(R.id.spIntentTarget);
         switch (customIntent.getTarget()) {
             case CustomIntent.TARGET_BROADCAST_RECEIVER:
                 if (DEBUG) {
@@ -971,7 +971,6 @@ public class FragmentEditCustomisationHelper {
                     @Override
                     public void run() {
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
-                                .setCancelable(false)
                                 .setView(R.layout.text_input_dialog_layout)
                                 .setTitle(R.string.menu_nicknames)
                                 .setIcon(R.drawable.ic_account_switch)

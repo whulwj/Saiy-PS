@@ -17,8 +17,6 @@
 
 package ai.saiy.android.device;
 
-import ai.saiy.android.firebase.database.reference.IAPReference;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -51,7 +49,8 @@ import java.util.Locale;
 
 import ai.saiy.android.BuildConfig;
 import ai.saiy.android.R;
-import ai.saiy.android.firebase.database.model.IAP;
+import ai.saiy.android.firebase.database.read.IAP;
+import ai.saiy.android.firebase.database.reference.IAPReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;

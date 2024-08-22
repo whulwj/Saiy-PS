@@ -1,4 +1,4 @@
-package ai.saiy.android.firebase.database.model;
+package ai.saiy.android.firebase.database.read;
 
 @com.google.firebase.database.IgnoreExtraProperties
 public class PremiumUser {

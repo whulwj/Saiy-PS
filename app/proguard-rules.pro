@@ -207,6 +207,9 @@
 -dontwarn org.apache.commons.codec.binary.**
 
 # firebase database
--keepclassmembers class ai.saiy.android.firebase.database.model.** {
+-keepclassmembers class ai.saiy.android.firebase.database.read.** {
+    public *;
+}
+-keepclassmembers class ai.saiy.android.firebase.database.write.** {
     public *;
 }

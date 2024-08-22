@@ -4,8 +4,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.text.InputFilter;
+import android.text.InputType;
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.RatingBar;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,13 +33,20 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 
 import ai.saiy.android.R;
 import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.firebase.FirebaseInstallationsHelper;
-import ai.saiy.android.firebase.database.model.PremiumUser;
+import ai.saiy.android.firebase.database.read.PremiumUser;
+import ai.saiy.android.firebase.database.write.Design;
+import ai.saiy.android.firebase.database.write.EmotionAnalysis;
+import ai.saiy.android.firebase.database.write.Enhancement;
+import ai.saiy.android.firebase.database.write.NaturalLanguage;
+import ai.saiy.android.firebase.database.write.VocalVerification;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
@@ -45,6 +58,7 @@ import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsString;
 
 public class FragmentDevelopmentHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -79,6 +93,13 @@ public class FragmentDevelopmentHelper {
         containerUI.setIconMain(R.drawable.ic_translate);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_design));
+        containerUI.setSubtitle(getString(R.string.menu_tap_contribute));
+        containerUI.setIconMain(R.drawable.ic_palette);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        arrayList.add(containerUI);
  
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_report_bug));
@@ -91,6 +112,41 @@ public class FragmentDevelopmentHelper {
         containerUI.setTitle(getString(R.string.menu_to_do_list));
         containerUI.setSubtitle(getString(R.string.menu_tap_view));
         containerUI.setIconMain(R.drawable.ic_command_list);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        arrayList.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_suggest_natural_language));
+        containerUI.setSubtitle(getString(R.string.menu_tap_send));
+        containerUI.setIconMain(R.drawable.ic_routes);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        arrayList.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_suggest_an_enhancement));
+        containerUI.setSubtitle(getString(R.string.menu_tap_send));
+        containerUI.setIconMain(R.drawable.ic_auto_fix);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        arrayList.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_vocal_verification_feedback));
+        containerUI.setSubtitle(getString(R.string.menu_tap_send));
+        containerUI.setIconMain(R.drawable.ic_account_key);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        arrayList.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_emotion_analysis_feedback));
+        containerUI.setSubtitle(getString(R.string.menu_tap_send));
+        containerUI.setIconMain(R.drawable.ic_yin_yang);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        arrayList.add(containerUI);
+
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getString(R.string.menu_generic_feedback));
+        containerUI.setSubtitle(getString(R.string.menu_tap_send));
+        containerUI.setIconMain(R.drawable.ic_thumbs_up_down);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
         arrayList.add(containerUI);
  
@@ -465,6 +521,112 @@ public class FragmentDevelopmentHelper {
         materialDialog.show();
     }
 
+    public void showDesignOverviewDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showDesignOverviewDialog");
+        }
+        if (ai.saiy.android.utils.SPH.isDesignOverviewShown(getApplicationContext())) {
+            showDesignDialog();
+            return;
+        }
+        ai.saiy.android.utils.SPH.markDesignOverviewShown(getApplicationContext());
+        showProgress(false);
+        getParentActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                        .setTitle(R.string.menu_design)
+                        .setMessage(R.string.content_design_overview)
+                        .setIcon(R.drawable.ic_palette)
+                        .setPositiveButton(R.string.title_cool, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showDesignOverviewDialog: onPositive");
+                                }
+                                dialog.dismiss();
+                                showDesignDialog();
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showDesignOverviewDialog: onNegative");
+                                }
+                                dialog.dismiss();
+                                showDesignDialog();
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(final DialogInterface dialog) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showDesignOverviewDialog: onCancel");
+                                }
+                                dialog.dismiss();
+                                showDesignDialog();
+                            }
+                        }).create();
+                materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                materialDialog.show();
+            }
+        });
+    }
+
+    private void showDesignDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setCancelable(false)
+                .setView(R.layout.design_dialog_layout)
+                .setTitle(R.string.menu_design)
+                .setIcon(R.drawable.ic_palette)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showDesignDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editTextWebLink = ((AlertDialog) dialog).getWindow().findViewById(R.id.etWebLink);
+                            final EditText editTextSummary = ((AlertDialog) dialog).getWindow().findViewById(R.id.etDesignSummary);
+                            if (editTextWebLink.getText() == null || editTextSummary.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String webLink = editTextWebLink.getText().toString().trim();
+                            final String summary = editTextSummary.getText().toString().trim();
+                            if (!UtilsString.notNaked(webLink)) {
+                                toast(getString(R.string.design_web_link_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_thanks_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionDesign(new Design(Design.getType(((Spinner) ((AlertDialog) dialog).getWindow().findViewById(R.id.spDesign)).getSelectedItemPosition()), webLink, summary, DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showDesignDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showDesignDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+    }
+
     public void showReportBugDialog() {
         getParentActivity().runOnUiThread(new Runnable() {
             @Override
@@ -501,6 +663,243 @@ public class FragmentDevelopmentHelper {
                             public void onCancel(final DialogInterface dialog) {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showReportBugDialog: onCancel");
+                                }
+                                dialog.dismiss();
+                            }
+                        }).create();
+                materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                materialDialog.show();
+            }
+        });
+    }
+
+    public void showNaturalLanguageDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.natural_language_dialog_layout)
+                .setTitle(R.string.menu_suggest_natural_language)
+                .setIcon(R.drawable.ic_routes)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNaturalLanguageDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editTextNaturalLanguage = ((AlertDialog) dialog).getWindow().findViewById(R.id.etNaturalLanguage);
+                            final EditText editTextOutcome = ((AlertDialog) dialog).getWindow().findViewById(R.id.etOutcome);
+                            if (editTextNaturalLanguage.getText() == null || editTextOutcome.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String trim = editTextNaturalLanguage.getText().toString().trim();
+                            final String outcome = editTextOutcome.getText().toString().trim();
+                            if (!UtilsString.notNaked(trim) || !UtilsString.notNaked(outcome)) {
+                                toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_understood_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionNaturalLanguage(new NaturalLanguage(trim, outcome, DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNaturalLanguageDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNaturalLanguageDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+    }
+
+    public void showEnhancementDialog() {
+        final View customView = LayoutInflater.from(getParentActivity()).inflate(R.layout.md_dialog_input, null, false);
+        customView.findViewById(R.id.md_promptCheckbox).setVisibility(View.GONE);
+        final EditText editText = customView.findViewById(android.R.id.input);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT);
+        editText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(500) {}});
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(customView)
+                .setTitle(R.string.menu_suggest_an_enhancement)
+                .setMessage(R.string.content_enhancement)
+                .setIcon(R.drawable.ic_auto_fix)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        CharSequence charSequence = null;
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editText = ((AlertDialog) dialog).findViewById(android.R.id.input);
+                            charSequence = (editText == null) ? null : editText.getText();
+                        }
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showEnhancementDialog: input: " + charSequence);
+                        }
+
+                        if (charSequence == null) {
+                            return;
+                        }
+                        final String description = charSequence.toString().trim();
+                        if (!ai.saiy.android.utils.UtilsString.notNaked(description)) {
+                            toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
+                            return;
+                        }
+                        toast(getString(R.string.menu_super_exclamation), Toast.LENGTH_SHORT);
+                        sendSubmissionEnhancement(new Enhancement(description, DateFormat.getDateTimeInstance().format(new Date())));
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+    }
+
+    public void showVocalVerificationFeedbackDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.rating_dialog_layout)
+                .setTitle(R.string.menu_vocal_verification_feedback)
+                .setIcon(R.drawable.ic_account_key)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showVocalVerificationFeedbackDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etFeedback);
+                            if (editText.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String feedback = editText.getText().toString().trim();
+                            if (!UtilsString.notNaked(feedback)) {
+                                toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_hear_you_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionVocalVerification(new VocalVerification(feedback, Math.round(((RatingBar) ((AlertDialog) dialog).getWindow().findViewById(R.id.ratingBar)).getRating()), DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showVocalVerificationFeedbackDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showVocalVerificationFeedbackDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+    }
+
+    public void showEmotionAnalysisFeedbackDialog() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setView(R.layout.rating_dialog_layout)
+                .setTitle(R.string.menu_emotion_analysis_feedback)
+                .setIcon(R.drawable.ic_yin_yang)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showEmotionAnalysisFeedbackDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etFeedback);
+                            if (editText.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String feedback = editText.getText().toString().trim();
+                            if (!UtilsString.notNaked(feedback)) {
+                                toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_happy_days_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionEmotionAnalysis(new EmotionAnalysis(feedback, Math.round(((RatingBar) ((AlertDialog) dialog).getWindow().findViewById(R.id.ratingBar)).getRating()), DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showEmotionAnalysisFeedbackDialog: onNegative");
+                        }
+                        dialog.dismiss();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showEmotionAnalysisFeedbackDialog: onCancel");
+                        }
+                        dialog.dismiss();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+    }
+
+    public void showGenericDialog() {
+        getParentActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                        .setTitle(R.string.menu_generic_feedback)
+                        .setMessage(R.string.content_generic)
+                        .setIcon(R.drawable.ic_thumbs_up_down)
+                        .setPositiveButton(R.string.title_email, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showGenericDialog: onPositive");
+                                }
+                                dialog.dismiss();
+                                if (ExecuteIntent.sendEmail(getApplicationContext(), new String[]{Constants.SAIY_FEEDBACK_EMAIL},
+                                        getString(R.string.title_feedback), DeviceInfo.getDeviceInfo(getApplicationContext()))) {
+                                    return;
+                                }
+                                toast(getString(R.string.error_no_application), Toast.LENGTH_LONG);
+                            }
+                        })
+                        .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showGenericDialog: onNegative");
+                                }
+                                dialog.dismiss();
+                            }
+                        })
+                        .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                            @Override
+                            public void onCancel(final DialogInterface dialog) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showGenericDialog: onCancel");
                                 }
                                 dialog.dismiss();
                             }
@@ -619,6 +1018,97 @@ public class FragmentDevelopmentHelper {
                 }
             }
         });
+    }
+
+    private void sendSubmissionDesign(@NonNull Design design) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "sendSubmissionDesign: userSignedIn: " + getParentActivity().userSignedIn());
+        }
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("design").child(design.getType()).setValue(design).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "sendSubmissionDesign: task success: " + task.isSuccessful());
+                    if (!task.isSuccessful()) {
+                        task.getException().printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void sendSubmissionNaturalLanguage(@NonNull NaturalLanguage naturalLanguage) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "sendSubmissionNaturalLanguage: userSignedIn: " + getParentActivity().userSignedIn());
+        }
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("natural_language").getRef().setValue(naturalLanguage).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "sendSubmissionNaturalLanguage: task success: " + task.isSuccessful());
+                    if (!task.isSuccessful()) {
+                        task.getException().printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void sendSubmissionEnhancement(@NonNull Enhancement enhancement) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "sendSubmissionBug: userSignedIn: " + getParentActivity().userSignedIn());
+        }
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("enhancement").getRef().setValue(enhancement).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "sendSubmissionBug: task success: " + task.isSuccessful());
+                    if (!task.isSuccessful()) {
+                        task.getException().printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void sendSubmissionVocalVerification(@NonNull VocalVerification vocalVerification) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "sendSubmissionVocalVerification: userSignedIn: " + getParentActivity().userSignedIn());
+        }
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("vocal_verification").getRef().setValue(vocalVerification).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "sendSubmissionVocalVerification: task success: " + task.isSuccessful());
+                    if (!task.isSuccessful()) {
+                        task.getException().printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    private void sendSubmissionEmotionAnalysis(@NonNull EmotionAnalysis emotionAnalysis) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "sendSubmissionEmotionAnalysis: userSignedIn: " + getParentActivity().userSignedIn());
+        }
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("emotion_analysis").getRef().setValue(emotionAnalysis).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "sendSubmissionEmotionAnalysis: task success: " + task.isSuccessful());
+                    if (!task.isSuccessful()) {
+                        task.getException().printStackTrace();
+                    }
+                }
+            }
+        });
+    }
+
+    public void showProgress(boolean visible) {
+        if (getParent().isActive()) {
+            getParentActivity().showProgress(visible);
+        }
     }
 
     public ActivityHome getParentActivity() {

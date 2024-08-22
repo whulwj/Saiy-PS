@@ -373,7 +373,7 @@ public class FragmentAboutHelper {
     public void showReleaseNotes() {
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                 .setTitle(R.string.menu_release_notes)
-                .setMessage("~ V1.0.3 ~\n• Wear integration (test)\n• Note provider options (fix)\n• More bugs fixes! Tks for reports!!")
+                .setMessage(R.string.content_whats_new)
                 .setIcon(R.drawable.ic_info)
                 .setPositiveButton(R.string.menu_close, new DialogInterface.OnClickListener() {
                     @Override

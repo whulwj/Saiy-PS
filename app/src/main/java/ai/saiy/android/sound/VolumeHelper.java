@@ -24,6 +24,8 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import java.lang.reflect.InvocationTargetException;
+
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
@@ -84,6 +86,42 @@ public class VolumeHelper {
             }
         }
     };
+
+    public static void forceBehaviour() {
+        try {
+            Class.forName("android.media.AudioSystem").getMethod("setForceUse", Integer.TYPE, Integer.TYPE).invoke(null, 1/*AudioSystem.FOR_MEDIA*/, 0/*AudioSystem.FORCE_NONE*/);
+        } catch (final ClassNotFoundException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "forceBehaviour: ClassNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (final IllegalAccessException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "forceBehaviour: IllegalAccessException");
+                e.printStackTrace();
+            }
+        } catch (final NoSuchMethodException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "forceBehaviour: NoSuchMethodException");
+                e.printStackTrace();
+            }
+        } catch (final NullPointerException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "forceBehaviour: NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (final InvocationTargetException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "forceBehaviour: InvocationTargetException");
+                e.printStackTrace();
+            }
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "forceBehaviour: Exception");
+                e.printStackTrace();
+            }
+        }
+    }
 
     /**
      * Mute the ringtone during an incoming call. This method should be used with caution.

@@ -114,6 +114,14 @@ public final class PersonalityResponse {
                 R.string.error_beyond_verbal_connection), PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getRateMe(Context ctx, SupportedLanguage sl) {
+        return String.format(SaiyResourcesHelper.getStringResource(ctx, sl, R.string.content_rate_me), SPH.getUserName(ctx));
+    }
+
+    public static String getBirthday(Context ctx, SupportedLanguage sl) {
+        return String.format(SaiyResourcesHelper.getStringResource(ctx, sl, R.string.content_birthday), SPH.getUserName(ctx));
+    }
+
     public static String getTimeInError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
         final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl,
                 R.array.array_error_time_in);

@@ -62,15 +62,15 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
     }
 
     public Context getApplicationContext() {
-        return this.mContext;
+        return mContext;
     }
 
     public RecyclerView.Adapter<?> getAdapter() {
-        return this.mAdapter;
+        return mAdapter;
     }
 
     public ArrayList<ContainerUI> getObjects() {
-        return this.mObjects;
+        return mObjects;
     }
 
     @Override
@@ -115,18 +115,36 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
                 helper.showAccountOverviewDialog();
                 break;
             case 1:
-                this.helper.showTranslationDialog();
+                helper.showTranslationDialog();
                 break;
             case 2:
-                this.helper.showReportBugDialog();
+                helper.showDesignOverviewDialog();
                 break;
             case 3:
-                this.helper.showToDoListDialog();
+                helper.showReportBugDialog();
                 break;
             case 4:
-                ai.saiy.android.intent.ExecuteIntent.webSearch(getApplicationContext(), "https://github.com/brandall76/Saiy-PS");
+                helper.showToDoListDialog();
                 break;
             case 5:
+                helper.showNaturalLanguageDialog();
+                break;
+            case 6:
+                helper.showEnhancementDialog();
+                break;
+            case 7:
+                helper.showVocalVerificationFeedbackDialog();
+                break;
+            case 8:
+                helper.showEmotionAnalysisFeedbackDialog();
+                break;
+            case 9:
+                helper.showGenericDialog();
+                break;
+            case 10:
+                ai.saiy.android.intent.ExecuteIntent.webSearch(getApplicationContext(), "https://github.com/brandall76/Saiy-PS");
+                break;
+            case 11:
                 ai.saiy.android.intent.ExecuteIntent.webSearch(getApplicationContext(), "https://github.com/brandall76/API-Example-App");
                 break;
             default:
@@ -149,10 +167,10 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
             MyLog.i(CLS_NAME, "onCreateView");
         }
         View inflate = layoutInflater.inflate(R.layout.layout_common_fragment_parent, viewGroup, false);
-        this.mRecyclerView = this.helper.getRecyclerView(inflate);
+        this.mRecyclerView = helper.getRecyclerView(inflate);
         this.mObjects = new ArrayList<>();
-        this.mAdapter = this.helper.getAdapter(this.mObjects);
-        this.mRecyclerView.setAdapter(this.mAdapter);
+        this.mAdapter = helper.getAdapter(mObjects);
+        this.mRecyclerView.setAdapter(mAdapter);
         return inflate;
     }
 
@@ -185,15 +203,33 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
                 getParentActivity().speak(R.string.lp_translation, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 2:
-                getParentActivity().speak(R.string.lp_bug_report, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_design, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 3:
-                getParentActivity().speak(R.string.lp_to_do, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_bug_report, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 4:
-                getParentActivity().speak(R.string.lp_source_code, LocalRequest.ACTION_SPEAK_ONLY);
+                getParentActivity().speak(R.string.lp_to_do, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 5:
+                getParentActivity().speak(R.string.lp_natural_language, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 6:
+                getParentActivity().speak(R.string.lp_enhancement, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 7:
+                getParentActivity().speak(R.string.lp_vocal_verification_feedback, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 8:
+                getParentActivity().speak(R.string.lp_emotion_feedback, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 9:
+                getParentActivity().speak(R.string.lp_generic, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 10:
+                getParentActivity().speak(R.string.lp_source_code, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 11:
                 getParentActivity().speak(R.string.lp_developer_api, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
         }
@@ -238,9 +274,9 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
             MyLog.i(CLS_NAME, "onStart");
         }
         synchronized (lock) {
-            if (this.mObjects.isEmpty()) {
+            if (mObjects.isEmpty()) {
                 getParentActivity().setTitle(getString(R.string.menu_development));
-                this.helper.finaliseUI();
+                helper.finaliseUI();
             }
         }
     }

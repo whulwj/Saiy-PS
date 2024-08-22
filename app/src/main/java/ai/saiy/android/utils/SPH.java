@@ -49,7 +49,7 @@ import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
-import ai.saiy.android.firebase.database.model.WeatherProvider;
+import ai.saiy.android.firebase.database.read.WeatherProvider;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.memory.Memory;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
@@ -108,6 +108,7 @@ public class SPH {
     private static final String FIREBASE_MIGRATED_UID = "firebase_migrated_uid";
     private static final String BLOCKED_NOTIFICATION_APPLICATIONS = "blocked_notification_applications";
     private static final String RESET_SPEAKER = "reset_speaker";
+    private static final String DESIGN_OVERVIEW = "design_overview";
     private static final String USE_OFFLINE = "use_offline";
     private static final String PING_CHECK = "ping_check";
     private static final String NOTE_PROVIDER_VERBOSE = "note_provider_verbose";
@@ -158,6 +159,7 @@ public class SPH {
     private static final String BING_OAUTH_UPDATE = "bing_oauth_update";
     private static final String TRANSLATION_PROVIDER = "translation_provider";
     private static final String SAIY_ACCOUNTS = "saiy_accounts";
+    private static final String RATE_ME = "rate_me";
     private static final String MEMORY = "memory";
     private static final String EMOTION = "emotion";
     private static final String LAST_DRIVING_TIME = "last_driving_time";
@@ -205,6 +207,7 @@ public class SPH {
     private static final String IGNORE_RESTRICTED_CONTENT = "ignore_restricted_content";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
     private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
+    private static final String NEW_USER = "new_user";
     private static final String IMPORT_WARNING = "import_warning";
     private static final String EXPORT_WARNING = "export_warning";
     private static final String HEADSET_OVERVIEW_COUNT = "headset_overview_count";
@@ -1019,6 +1022,17 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(SAIY_ACCOUNTS, accountList);
+        edit.apply();
+    }
+
+    public static long getRateMe(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        return pref.getLong(RATE_ME, 101L);
+    }
+
+    public static void setRateMe(@NonNull final Context ctx, final long count) {
+        final SharedPreferences.Editor edit = getEditor(getPref(ctx));
+        edit.putLong(RATE_ME, count);
         edit.apply();
     }
 
@@ -2016,6 +2030,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean isDesignOverviewShown(Context context) {
+        return getPref(context).getBoolean(DESIGN_OVERVIEW, false);
+    }
+
+    public static void markDesignOverviewShown(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(DESIGN_OVERVIEW, true);
+        edit.apply();
+    }
+
     public static String getBlockedNotificationApplications(Context context) {
         return getPref(context).getString(BLOCKED_NOTIFICATION_APPLICATIONS, null);
     }
@@ -2574,6 +2598,16 @@ public class SPH {
     public static void setDoubleBeepFix(Context context, boolean condition) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(DOUBLE_BEEP_FIX, condition);
+        edit.apply();
+    }
+
+    public static boolean isNewUser(Context context) {
+        return getPref(context).getBoolean(NEW_USER, false);
+    }
+
+    public static void markOldUser(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(NEW_USER, false);
         edit.apply();
     }
 

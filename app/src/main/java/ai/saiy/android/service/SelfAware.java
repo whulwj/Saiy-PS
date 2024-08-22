@@ -2429,12 +2429,10 @@ public class SelfAware extends Service {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PhoneStateListener: not announcing calls or within quiet times");
                         }
-                        return;
                     } else if (!UtilsString.notNaked(incomingNumber) || !ai.saiy.android.permissions.PermissionHelper.checkAnnounceCallerPermissionsNR(SelfAware.this.getApplicationContext())) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PhoneStateListener: incoming number null or permission denied");
                         }
-                        return;
                     } else {
                         if (timerTask == null) {
                             timerTask = new TimerTask() {
@@ -2487,8 +2485,37 @@ public class SelfAware extends Service {
                         MyLog.i(CLS_NAME, "PhoneStateListener: TelephonyManager.CALL_STATE_IDLE");
                     }
 
-                    if (conditions.restartHotword()) {
-                        startHotwordDetection(conditions.getBundle());
+                    if (SPH.getResetSpeaker(getApplicationContext())) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "PhoneStateListener: TelephonyManager.CALL_STATE_IDLE: resetting");
+                        }
+                        SPH.setResetSpeaker(getApplicationContext(), false);
+                        new Timer().schedule(new TimerTask() {
+                            @Override
+                            public void run() {
+                                SelfAware.this.timerTask = null;
+                                final android.media.AudioManager audioManager = (android.media.AudioManager) SelfAware.this.getSystemService(Context.AUDIO_SERVICE);
+                                audioManager.setMode(android.media.AudioManager.MODE_NORMAL);
+                                audioManager.setSpeakerphoneOn(false);
+                                if (audioManager.isSpeakerphoneOn() || audioManager.getMode() != android.media.AudioManager.MODE_NORMAL) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "PhoneStateListener: TelephonyManager.CALL_STATE_IDLE: forcing");
+                                    }
+                                    ai.saiy.android.sound.VolumeHelper.forceBehaviour();
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "PhoneStateListener: post forced getMode: " + audioManager.getMode());
+                                        MyLog.w(CLS_NAME, "PhoneStateListener: post forced isSpeakerphoneOn: " + audioManager.isSpeakerphoneOn());
+                                    }
+                                }
+                                if (conditions.restartHotword()) {
+                                    startHotwordDetection(conditions.getBundle());
+                                }
+                            }
+                        }, 3500L);
+                    } else {
+                        if (conditions.restartHotword()) {
+                            startHotwordDetection(conditions.getBundle());
+                        }
                     }
 
                     conditions.removeInterrupted(params);

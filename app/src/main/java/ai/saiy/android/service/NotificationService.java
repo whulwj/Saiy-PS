@@ -32,6 +32,7 @@ import java.util.Set;
 import ai.saiy.android.R;
 import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.request.SaiyRequestParams;
+import ai.saiy.android.applications.Install;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.AnalysisResultHelper;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.command.helper.CC;
@@ -85,6 +86,7 @@ public class NotificationService extends IntentService {
     public static final int NOTIFICATION_FLOATING_WINDOW = 31;
     public static final int NOTIFICATION_DRIVING_PROFILE = 32;
     public static final int NOTIFICATION_TASKER = 33;
+    public static final int NOTIFICATION_RATE_ME = 34;
     public static final int NOTIFICATION_BIRTHDAY = 35;
     public static final int NOTIFICATION_ALEXA = 36;
 
@@ -420,22 +422,33 @@ public class NotificationService extends IntentService {
                                 bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
                                 new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
                                 break;
-                            case NOTIFICATION_TASKER:
+                            case NOTIFICATION_TASKER: {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_TASKER");
                                 }
                                 final Locale locale = UtilsLocale.stringToLocale(bundle.getString(Speaker.EXTRA_LOCALE));
                                 final SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(locale);
                                 final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
-                                localRequest.prepareDefault(bundle.getBoolean(Speaker.EXTRA_START_VR, false) ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY, SupportedLanguage.getSupportedLanguage(locale), locale, locale, bundle.getString(Speaker.EXTRA_VALUE, SaiyResourcesHelper.getStringResource(getApplicationContext(), supportedLanguage, R.string.empty_tasker_content)));
+                                localRequest.prepareDefault(bundle.getBoolean(Speaker.EXTRA_START_VR, false) ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, locale, locale, bundle.getString(Speaker.EXTRA_VALUE, SaiyResourcesHelper.getStringResource(getApplicationContext(), supportedLanguage, R.string.empty_tasker_content)));
                                 localRequest.execute();
+                            }
                                 break;
-                            case NOTIFICATION_BIRTHDAY:
-                                bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_SPEAK_ONLY);
-                                bundle.putString(LocalRequest.EXTRA_UTTERANCE, String.format(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.content_birthday), SPH.getUserName(getApplicationContext())));
-                                bundle.putString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE, SPH.getVRLocale(getApplicationContext()).toString());
-                                bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, SPH.getTTSLocale(getApplicationContext()).toString());
-                                new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                            case NOTIFICATION_RATE_ME: {
+                                final Locale locale = SPH.getVRLocale(getApplicationContext());
+                                final SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(locale);
+                                final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
+                                localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, locale, locale, PersonalityResponse.getRateMe(getApplicationContext(), supportedLanguage));
+                                localRequest.execute();
+                                Install.showInstallLink(getApplicationContext(), getPackageName());
+                            }
+                                break;
+                            case NOTIFICATION_BIRTHDAY: {
+                                final Locale locale = SPH.getVRLocale(getApplicationContext());
+                                final SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(locale);
+                                final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
+                                localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, locale, locale, PersonalityResponse.getBirthday(getApplicationContext(), supportedLanguage));
+                                localRequest.execute();
+                            }
                                 break;
                             case NOTIFICATION_ALEXA:
                                 if (DEBUG) {

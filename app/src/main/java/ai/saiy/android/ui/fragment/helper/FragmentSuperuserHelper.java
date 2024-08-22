@@ -591,7 +591,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showAccountPicker: onSelection: " + which + ": " + stringArray[which]);
+                                            MyLog.i(CLS_NAME, "showAlgorithmSelector: onSelection: " + which + ": " + stringArray[which]);
                                         }
                                     }
                                 })

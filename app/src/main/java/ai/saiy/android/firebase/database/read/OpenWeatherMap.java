@@ -1,7 +1,7 @@
-package ai.saiy.android.firebase.database.model;
+package ai.saiy.android.firebase.database.read;
 
 @com.google.firebase.database.IgnoreExtraProperties
-public class WeatherOnline {
+public class OpenWeatherMap {
     @com.google.firebase.database.PropertyName("api_key")
     public String apiKey;
 

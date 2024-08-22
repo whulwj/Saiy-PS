@@ -1487,7 +1487,6 @@ public class FragmentCustomisationHelper {
             userName = defaultName;
         }
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
-                .setCancelable(false)
                 .setView(R.layout.text_input_dialog_layout)
                 .setTitle(R.string.menu_custom_name)
                 .setMessage(R.string.custom_user_name)
