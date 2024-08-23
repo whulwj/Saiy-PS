@@ -47,30 +47,6 @@ android {
         incremental true
     }
 
-    flavorDimensions +="tier"
-    productFlavors {
-        x86 {
-            ndk {
-                abiFilter "x86"
-            }
-        }
-        x86_64 {
-            ndk {
-                abiFilter "x86_64"
-            }
-        }
-        arm7 {
-            ndk {
-                abiFilters "armeabi-v7a"
-            }
-        }
-        arm8 {
-            ndk {
-                abiFilters "arm64-v8a"
-            }
-        }
-    }
-
     buildTypes {
         release {
             minifyEnabled true

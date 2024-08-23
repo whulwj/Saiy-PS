@@ -61,7 +61,6 @@ public class RecognitionSphinx {
     private volatile SpeechRecognizer recognizer;
 
     private static String dirPath = null;
-    private static File assetsDir = null;
 
     /**
      * @param mContext the application context
@@ -98,54 +97,51 @@ public class RecognitionSphinx {
             MyLog.i(CLS_NAME, "setUp");
         }
 
+        final File destDirectory;
         if (dirPath == null) {
-            dirPath = UtilsFile.getPrivateDirPath(mContext);
+            destDirectory = UtilsFile.getPrivateDir(mContext);
+            dirPath = (destDirectory == null)? null : destDirectory.getAbsolutePath();
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "setUp: have path: " + dirPath);
             }
+            destDirectory = new File(dirPath);
         }
-
-        if (dirPath != null) {
-
-            try {
-
-                if (assetsDir == null) {
-                    assetsDir = new Assets(mContext, dirPath).syncAssets();
-                }
-
-                assetsDir = new Assets(mContext, dirPath).syncAssets();
-
-                recognizer = defaultSetup()
-                        .setAcousticModel(new File(assetsDir, ACOUSTIC_MODEL_EN))
-                        .setDictionary(new File(assetsDir, dictionary))
-                        .setBoolean(CONTEXT_INDEPENDENT, true)
-                        .setFloat(VOICE_ACTIVATION_THRESHOLD, VAD_THRESHOLD)
-                        .getRecognizer();
-
-                recognizer.addKeywordSearch(HOTWORD_SEARCH, new File(assetsDir, HOTWORD_FILE));
-                recognizer.addListener(listener);
-
-                listener.onHotwordInitialised(SPH.getHotwordOkayGoogle(mContext));
-
-            } catch (final NullPointerException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "setUp NullPointerException");
-                    e.printStackTrace();
-                }
-                onError(SaiyHotwordListener.ERROR_INITIALISE);
-            } catch (final Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "setUp Exception");
-                    e.printStackTrace();
-                }
-                onError(SaiyHotwordListener.ERROR_INITIALISE);
-            }
-        } else {
+        if (dirPath == null) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "setUp dirPath null");
             }
             onError(SaiyHotwordListener.ERROR_PERMISSIONS);
+            return;
+        }
+
+        try {
+            final File assetsDir = new Assets(mContext, destDirectory).syncAssets();
+
+            recognizer = defaultSetup()
+                    .setAcousticModel(new File(assetsDir, ACOUSTIC_MODEL_EN))
+                    .setDictionary(new File(assetsDir, dictionary))
+                    .setBoolean(CONTEXT_INDEPENDENT, true)
+                    .setFloat(VOICE_ACTIVATION_THRESHOLD, VAD_THRESHOLD)
+                    .getRecognizer();
+
+            recognizer.addKeywordSearch(HOTWORD_SEARCH, new File(assetsDir, HOTWORD_FILE));
+            recognizer.addListener(listener);
+
+            listener.onHotwordInitialised(SPH.getHotwordOkayGoogle(mContext));
+
+        } catch (final NullPointerException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "setUp NullPointerException");
+                e.printStackTrace();
+            }
+            onError(SaiyHotwordListener.ERROR_INITIALISE);
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "setUp Exception");
+                e.printStackTrace();
+            }
+            onError(SaiyHotwordListener.ERROR_INITIALISE);
         }
     }
 

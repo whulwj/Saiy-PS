@@ -146,7 +146,7 @@ public class NotificationService extends IntentService {
                                     bundle.putInt(LocalRequest.EXTRA_SPEECH_PRIORITY, SpeechPriority.PRIORITY_TUTORIAL);
                                     bundle.putBoolean(LocalRequest.EXTRA_PREVENT_RECOGNITION, true);
                                     bundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyRequestParams.SILENCE);
-                                    new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                                    new LocalRequest(getApplicationContext(), bundle).execute();
                                     return;
                                 }
 
@@ -406,7 +406,7 @@ public class NotificationService extends IntentService {
                                 bundle.putInt(LocalRequest.EXTRA_SPEECH_PRIORITY, SpeechPriority.PRIORITY_TUTORIAL);
                                 bundle.putBoolean(LocalRequest.EXTRA_PREVENT_RECOGNITION, true);
                                 bundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyRequestParams.SILENCE);
-                                new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                                new LocalRequest(getApplicationContext(), bundle).execute();
                                 break;
                             case NOTIFICATION_FLOATING_WINDOW:
                                 if (DEBUG) {
@@ -420,7 +420,7 @@ public class NotificationService extends IntentService {
                                 }
                                 SPH.setDrivingCooldownTime(getApplicationContext(), System.currentTimeMillis());
                                 bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
-                                new ai.saiy.android.service.helper.LocalRequest(getApplicationContext(), bundle).execute();
+                                new LocalRequest(getApplicationContext(), bundle).execute();
                                 break;
                             case NOTIFICATION_TASKER: {
                                 if (DEBUG) {
@@ -428,7 +428,7 @@ public class NotificationService extends IntentService {
                                 }
                                 final Locale locale = UtilsLocale.stringToLocale(bundle.getString(Speaker.EXTRA_LOCALE));
                                 final SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(locale);
-                                final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
+                                final LocalRequest localRequest = new LocalRequest(getApplicationContext());
                                 localRequest.prepareDefault(bundle.getBoolean(Speaker.EXTRA_START_VR, false) ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, locale, locale, bundle.getString(Speaker.EXTRA_VALUE, SaiyResourcesHelper.getStringResource(getApplicationContext(), supportedLanguage, R.string.empty_tasker_content)));
                                 localRequest.execute();
                             }
@@ -436,7 +436,7 @@ public class NotificationService extends IntentService {
                             case NOTIFICATION_RATE_ME: {
                                 final Locale locale = SPH.getVRLocale(getApplicationContext());
                                 final SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(locale);
-                                final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
+                                final LocalRequest localRequest = new LocalRequest(getApplicationContext());
                                 localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, locale, locale, PersonalityResponse.getRateMe(getApplicationContext(), supportedLanguage));
                                 localRequest.execute();
                                 Install.showInstallLink(getApplicationContext(), getPackageName());
@@ -445,7 +445,7 @@ public class NotificationService extends IntentService {
                             case NOTIFICATION_BIRTHDAY: {
                                 final Locale locale = SPH.getVRLocale(getApplicationContext());
                                 final SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(locale);
-                                final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
+                                final LocalRequest localRequest = new LocalRequest(getApplicationContext());
                                 localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, locale, locale, PersonalityResponse.getBirthday(getApplicationContext(), supportedLanguage));
                                 localRequest.execute();
                             }
