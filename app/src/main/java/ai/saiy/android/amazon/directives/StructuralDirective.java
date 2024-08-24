@@ -6,9 +6,10 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 public class StructuralDirective implements Parcelable {
+    @SerializedName("directiveType")
     private DirectiveType directiveType;
 
-    private String directiveParent;
+    private transient String directiveParent;
     @SerializedName("directive")
     private final Directive directive;
 

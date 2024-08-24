@@ -5,11 +5,12 @@ import android.os.Parcelable;
 
 import androidx.annotation.IntDef;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
-public class CustomHttp implements Serializable, Parcelable {
+public class CustomHttp implements Parcelable {
     public static final int ERROR_NONE = 0;
     public static final int ERROR_SPEAK = 1;
     public static final int ERROR_SPEAK_LISTEN = 2;
@@ -39,17 +40,24 @@ public class CustomHttp implements Serializable, Parcelable {
     @IntDef({TYPE_POST, TYPE_GET, TYPE_PUT, TYPE_DELETE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface Type {}
-    private static final long serialVersionUID = 2221570297080158471L;
 
+    @SerializedName("errorHandling")
     private @Error int errorHandling;
+    @SerializedName("https")
     private boolean https;
+    @SerializedName("outputType")
     private int outputType;
-    private String serialised;
+    @SerializedName("successHandling")
     private @Success int successHandling;
+    @SerializedName("tasker")
     private boolean tasker;
+    @SerializedName("taskerTaskName")
     private String taskerTaskName;
+    @SerializedName("taskerVariableName")
     private String taskerVariableName;
+    @SerializedName("type")
     private @Type int type;
+    @SerializedName("urlString")
     private String urlString;
 
     public CustomHttp() {
@@ -69,7 +77,6 @@ public class CustomHttp implements Serializable, Parcelable {
         public CustomHttp createFromParcel(Parcel in) {
             final CustomHttp customHttp = new CustomHttp(in.readString(), in.readByte() != 0, in.readInt(), in.readInt(),
                     in.readInt(), in.readInt());
-            customHttp.serialised = in.readString();
             customHttp.tasker = in.readByte() != 0;
             customHttp.taskerTaskName = in.readString();
             customHttp.taskerVariableName = in.readString();
@@ -88,10 +95,6 @@ public class CustomHttp implements Serializable, Parcelable {
 
     public @OutputType int getOutputType() {
         return this.outputType;
-    }
-
-    public String getSerialised() {
-        return this.serialised != null ? this.serialised : "";
     }
 
     public @Success int getSuccessHandling() {
@@ -134,10 +137,6 @@ public class CustomHttp implements Serializable, Parcelable {
         this.outputType = type;
     }
 
-    public void setSerialised(String str) {
-        this.serialised = str;
-    }
-
     public void setSuccessHandling(@Success int success) {
         this.successHandling = success;
     }
@@ -175,7 +174,6 @@ public class CustomHttp implements Serializable, Parcelable {
         dest.writeInt(outputType);
         dest.writeInt(successHandling);
         dest.writeInt(errorHandling);
-        dest.writeString(serialised);
         dest.writeByte((byte) (tasker? 1 : 0));
         dest.writeString(taskerTaskName);
         dest.writeString(taskerVariableName);

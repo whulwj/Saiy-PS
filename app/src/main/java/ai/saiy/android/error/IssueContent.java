@@ -17,9 +17,10 @@
 
 package ai.saiy.android.error;
 
-import androidx.annotation.NonNull;
+import android.os.Parcel;
+import android.os.Parcelable;
 
-import java.io.Serializable;
+import androidx.annotation.NonNull;
 
 import ai.saiy.android.ui.activity.ActivityIssue;
 
@@ -28,16 +29,27 @@ import ai.saiy.android.ui.activity.ActivityIssue;
  * <p/>
  * Created by benrandall76@gmail.com on 16/04/2016.
  */
-public class IssueContent implements Serializable {
-
-    private static final long serialVersionUID = -593683149969450529L;
-
+public class IssueContent implements Parcelable {
     private final int issueConstant;
     private String issueText;
 
     public IssueContent(final int issueConstant) {
         this.issueConstant = issueConstant;
     }
+
+    public static final Creator<IssueContent> CREATOR = new Creator<IssueContent>() {
+        @Override
+        public IssueContent createFromParcel(Parcel in) {
+            final IssueContent issueContent = new IssueContent(in.readInt());
+            issueContent.issueText = in.readString();
+            return issueContent;
+        }
+
+        @Override
+        public IssueContent[] newArray(int size) {
+            return new IssueContent[size];
+        }
+    };
 
     public void setIssueText(@NonNull final String issueText) {
         this.issueText = issueText;
@@ -49,5 +61,16 @@ public class IssueContent implements Serializable {
 
     public String getIssueText() {
         return issueText;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(issueConstant);
+        dest.writeString(issueText);
     }
 }

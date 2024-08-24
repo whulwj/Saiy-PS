@@ -1,13 +1,15 @@
 package ai.saiy.android.custom;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
-public class CustomNickname implements Serializable {
-    private static final long serialVersionUID = -1652757421630998048L;
+public class CustomNickname {
+    @SerializedName("contactName")
     private String contactName;
+    @SerializedName("nickname")
     private String nickname;
+    @SerializedName("rowId")
     private long rowId;
-    private String serialised;
+    private transient String serialised;
 
     public CustomNickname(String nickname, String contactName) {
         this.nickname = nickname;

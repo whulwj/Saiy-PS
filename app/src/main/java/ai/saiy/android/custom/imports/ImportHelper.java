@@ -52,7 +52,6 @@ public class ImportHelper {
         customCommand.setAlgorithm(customCommandExport.getAlgorithm());
         customCommand.setIntent(customCommandExport.getIntent());
         customCommand.setRegex(customCommandExport.getRegex());
-        customCommand.setSerialised(customCommandExport.getSerialised());
         return customCommand;
     }
 

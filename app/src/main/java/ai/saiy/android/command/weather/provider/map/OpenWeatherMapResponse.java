@@ -1,13 +1,15 @@
 package ai.saiy.android.command.weather.provider.map;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class OpenWeatherMapResponse {
-    @com.google.gson.annotations.SerializedName("weather")
+    @SerializedName("weather")
     private final List<Description> weather;
-    @com.google.gson.annotations.SerializedName("main")
+    @SerializedName("main")
     private final Temperature temperature;
-    @com.google.gson.annotations.SerializedName("name")
+    @SerializedName("name")
     private final String name;
 
     public OpenWeatherMapResponse(List<Description> weather, Temperature temperature, String name) {

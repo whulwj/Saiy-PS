@@ -11,17 +11,13 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
-
 import ai.saiy.android.custom.Custom;
 
 /**
  * Created by benrandall76@gmail.com on 27/01/2017.
  */
 
-public class ContainerCustomisation implements Parcelable, Serializable {
-
-    private static final long serialVersionUID = -630509878907795203L;
+public class ContainerCustomisation implements Parcelable {
 
     private final Custom custom;
     private String serialised;

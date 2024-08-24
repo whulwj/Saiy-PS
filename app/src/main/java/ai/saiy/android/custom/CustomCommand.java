@@ -19,6 +19,8 @@ package ai.saiy.android.custom;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.concurrent.Callable;
 
 import ai.saiy.android.algorithms.Algorithm;
@@ -31,26 +33,43 @@ import ai.saiy.android.service.helper.LocalRequest;
  */
 public class CustomCommand implements Callable<Boolean> {
 
+    @SerializedName("customAction")
     private final CCC customAction;
+    @SerializedName("commandConstant")
     private final CC commandConstant;
+    @SerializedName("keyphrase")
     private final String keyphrase;
+    @SerializedName("responseSuccess")
     private final String responseSuccess;
+    @SerializedName("responseError")
     private final String responseError;
+    @SerializedName("ttsLocale")
     private final String ttsLocale;
+    @SerializedName("vrLocale")
     private final String vrLocale;
+    @SerializedName("action")
     private final int action;
 
+    @SerializedName("intent")
     private String intent;
+    @SerializedName("exactMatch")
     private boolean exactMatch;
+    @SerializedName("score")
     private double score;
+    @SerializedName("utterance")
     private String utterance;
+    @SerializedName("algorithm")
     private Algorithm algorithm;
+    @SerializedName("regex")
     private Regex regex;
+    @SerializedName("regularExpression")
     private String regularExpression;
+    @SerializedName("extraText")
     private String extraText;
+    @SerializedName("extraText2")
     private String extraText2;
+    @SerializedName("actionOfIntent")
     private String actionOfIntent;
-    private String serialised;
 
     /**
      * Constructor
@@ -78,14 +97,6 @@ public class CustomCommand implements Callable<Boolean> {
         this.ttsLocale = ttsLocale;
         this.vrLocale = vrLocale;
         this.action = action;
-    }
-
-    public String getSerialised() {
-        return serialised;
-    }
-
-    public void setSerialised(@NonNull final String serialised) {
-        this.serialised = serialised;
     }
 
     public String getIntent() {

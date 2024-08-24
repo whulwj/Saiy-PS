@@ -84,8 +84,7 @@ public class RemoteAPIAI {
 
         } catch (Throwable t) {
             if (DEBUG) {
-                MyLog.e(CLS_NAME, "AIResponse AIServiceException");
-                t.printStackTrace();
+                MyLog.e(CLS_NAME, "DetectIntentResponse " + t.getClass().getSimpleName() + ", " + t.getMessage());
             }
         }
 

@@ -17,6 +17,8 @@
 
 package ai.saiy.android.user;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 import ai.saiy.android.utils.UtilsList;
@@ -26,7 +28,7 @@ import ai.saiy.android.utils.UtilsList;
  */
 
 public class SaiyAccountList {
-
+    @SerializedName("accountList")
     private final List<SaiyAccount> saiyAccountList;
 
     public SaiyAccountList(final List<SaiyAccount> saiyAccountList) {

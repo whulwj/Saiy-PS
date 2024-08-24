@@ -25,15 +25,13 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
     public static final String COLUMN_ID = "_id";
     public static final String COLUMN_NAME = "name";
     public static final String COLUMN_VALUE = "value";
-    public static final String COLUMN_SERIALISED = "serialised";
 
-    private static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_NAME, COLUMN_VALUE, COLUMN_SERIALISED};
+    private static final String[] ALL_COLUMNS = {COLUMN_ID, COLUMN_NAME, COLUMN_VALUE};
 
     private static final String DATABASE_CREATE = "create table " + "tasker_variable"
             + "(" + COLUMN_ID + " integer primary key autoincrement, "
             + COLUMN_NAME + " text not null, "
-            + COLUMN_VALUE + " text not null, "
-            + COLUMN_SERIALISED + " text not null);";
+            + COLUMN_VALUE + " text not null);";
 
     private final String databasePath;
     private SQLiteDatabase database;
@@ -84,12 +82,11 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
      *
      * @param name        the name
      * @param value       the value to be used
-     * @param serialised  the serialised class
      * @param isDuplicate true if a command is being replaced
      * @param rowId       the row id of the command to be replaced
      * @return true if the insertion was successful. False otherwise
      */
-    public Pair<Boolean, Long> insertPopulatedRow(String name, String value, String serialised, boolean isDuplicate, long rowId) {
+    public Pair<Boolean, Long> insertPopulatedRow(String name, String value, boolean isDuplicate, long rowId) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "insertPopulatedRow: duplicate: " + isDuplicate + " " + rowId);
         }
@@ -104,7 +101,6 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
                 final ContentValues values = new ContentValues();
                 values.put(COLUMN_NAME, name);
                 values.put(COLUMN_VALUE, value);
-                values.put(COLUMN_SERIALISED, serialised);
 
                 insertId = database.insert(TABLE_TASKER_VARIABLE, null, values);
                 final Cursor cursor = database.query(TABLE_TASKER_VARIABLE, ALL_COLUMNS,
@@ -301,7 +297,7 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
                 cursor = database.query(TABLE_TASKER_VARIABLE, ALL_COLUMNS, null, null, null, null, null);
                 cursor.moveToFirst();
                 while (!cursor.isAfterLast()) {
-                    variables.add(new TaskerVariable(cursor.getString(1), cursor.getString(2), cursor.getLong(0), cursor.getString(3)));
+                    variables.add(new TaskerVariable(cursor.getString(1), cursor.getString(2), cursor.getLong(0)));
                     cursor.moveToNext();
                 }
             }

@@ -2200,9 +2200,10 @@ public class SelfAware extends Service {
                             if (remoteAPIPair.first) {
 
                                 if (servingRemote) {
-                                    final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(remoteAPIPair.second);
+                                    final com.google.cloud.dialogflow.v2beta1.QueryResult queryResult = remoteAPIPair.second.getQueryResult();
+                                    final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(queryResult);
                                     if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "gsonString: " + ApiRequest.handleResults(remoteAPIPair.second));
+                                        MyLog.i(CLS_NAME, "gsonString: " + ApiRequest.handleResults(queryResult));
                                     }
 
                                     results.putString(Request.RESULTS_NLU, gsonString);

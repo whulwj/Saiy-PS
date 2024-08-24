@@ -26,8 +26,8 @@ public class FragmentCommandsHelper {
 
     private final FragmentCommands parentFragment;
 
-    public FragmentCommandsHelper(FragmentCommands gVar) {
-        this.parentFragment = gVar;
+    public FragmentCommandsHelper(FragmentCommands parentFragment) {
+        this.parentFragment = parentFragment;
     }
 
     private String getString(@StringRes int resId) {

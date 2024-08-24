@@ -70,7 +70,7 @@ public class Issue {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ISSUE_CONTENT, issueContent);
+        bundle.putParcelable(ISSUE_CONTENT, issueContent);
 
         intent.putExtras(bundle);
 

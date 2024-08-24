@@ -6,6 +6,8 @@ import android.provider.ContactsContract;
 
 import androidx.annotation.IntDef;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
@@ -23,9 +25,13 @@ public class Choice implements Parcelable {
     @Retention(RetentionPolicy.SOURCE)
     protected @interface CombinedType {}
 
+    @SerializedName("contactID")
     private final String contactID;
+    @SerializedName("type")
     private final int type;
+    @SerializedName("number")
     private final String number;
+    @SerializedName("isPrimary")
     private final boolean isPrimary;
 
     public Choice(String contactID, int type, String number, boolean isPrimary) {

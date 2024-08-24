@@ -19,14 +19,18 @@ package ai.saiy.android.cognitive.emotion.provider.beyondverbal;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by benrandall76@gmail.com on 14/08/2016.
  */
 
 public class AnalysisResult {
-
+    @SerializedName("analysisTime")
     private long analysisTime;
+    @SerializedName("recordingId")
     private String recordingId;
+    @SerializedName("description")
     private String description;
 
     public AnalysisResult() {

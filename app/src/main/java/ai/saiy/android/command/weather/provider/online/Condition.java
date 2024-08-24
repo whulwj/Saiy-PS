@@ -1,14 +1,15 @@
 package ai.saiy.android.command.weather.provider.online;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Condition {
-    @com.google.gson.annotations.SerializedName("temp_C")
+    @SerializedName("temp_C")
     private final String temperatureCelsius;
-    @com.google.gson.annotations.SerializedName("temp_F")
+    @SerializedName("temp_F")
     private final String temperatureFahrenheit;
-
-    @com.google.gson.annotations.SerializedName("weatherDesc")
+    @SerializedName("weatherDesc")
     private final List<Value> weatherDescription;
 
     public Condition(String temperatureCelsius, String temperatureFahrenheit, List<Value> weatherDescription) {

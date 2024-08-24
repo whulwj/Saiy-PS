@@ -1,29 +1,42 @@
 package ai.saiy.android.custom.exports;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
 import ai.saiy.android.algorithms.Algorithm;
 import ai.saiy.android.api.request.Regex;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.custom.CCC;
 
-public class CustomCommandExport implements Serializable {
-    private static final long serialVersionUID = 1439551944862823368L;
+public class CustomCommandExport {
+    @SerializedName("action")
     private final int action;
+    @SerializedName("algorithm")
     private Algorithm algorithm;
+    @SerializedName("commandConstant")
     private final CC commandConstant;
+    @SerializedName("customAction")
     private final CCC customAction;
+    @SerializedName("exportConfiguration")
     private ExportConfiguration exportConfiguration;
+    @SerializedName("extraText")
     private String extraText;
+    @SerializedName("extraText2")
     private String extraText2;
+    @SerializedName("intent")
     private String intent;
+    @SerializedName("keyphrase")
     private final String keyphrase;
+    @SerializedName("regex")
     private Regex regex;
+    @SerializedName("regularExpression")
     private String regularExpression;
+    @SerializedName("responseError")
     private final String responseError;
+    @SerializedName("responseSuccess")
     private final String responseSuccess;
-    private String serialised;
+    @SerializedName("ttsLocale")
     private final String ttsLocale;
+    @SerializedName("vrLocale")
     private final String vrLocale;
 
     public CustomCommandExport(CCC ccc, CC cc, String keyphrase, String responseSuccess, String responseError, String ttsLocale, String vrLocale, int action) {
@@ -89,10 +102,6 @@ public class CustomCommandExport implements Serializable {
         return this.responseSuccess;
     }
 
-    public String getSerialised() {
-        return this.serialised;
-    }
-
     public String getTTSLocale() {
         return this.ttsLocale;
     }
@@ -127,9 +136,5 @@ public class CustomCommandExport implements Serializable {
 
     public void setRegularExpression(String str) {
         this.regularExpression = str;
-    }
-
-    public void setSerialised(String str) {
-        this.serialised = str;
     }
 }

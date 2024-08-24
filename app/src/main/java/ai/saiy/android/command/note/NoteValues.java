@@ -3,9 +3,14 @@ package ai.saiy.android.command.note;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class NoteValues implements Parcelable {
+    @SerializedName("contentType")
     private NoteManager.ContentType contentType;
+    @SerializedName("body")
     private String noteBody;
+    @SerializedName("title")
     private String noteTitle;
 
     public static final Creator<NoteValues> CREATOR = new Creator<NoteValues>() {

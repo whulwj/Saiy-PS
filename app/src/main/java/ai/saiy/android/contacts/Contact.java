@@ -5,20 +5,36 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Contact implements Parcelable {
+    @SerializedName("id")
     private final String id;
+    @SerializedName("name")
     private final String name;
+    @SerializedName("phoneticName")
     private final String phoneticName;
+    @SerializedName("forename")
     private final String forename;
+    @SerializedName("surname")
     private final String surname;
+    @SerializedName("wordCount")
     private final int wordCount;
+    @SerializedName("frequency")
     private final int frequency;
+    @SerializedName("hasPhoneNumber")
     private boolean hasPhoneNumber;
+    @SerializedName("hasAddress")
     private boolean hasAddress;
+    @SerializedName("hasEmail")
     private boolean hasEmail;
+    @SerializedName("number")
     private String number;
+    @SerializedName("address")
     private String address;
+    @SerializedName("emailAddress")
     private String emailAddress;
+    @SerializedName("generic")
     private String generic;
 
     public enum Weighting {

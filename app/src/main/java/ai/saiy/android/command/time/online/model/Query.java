@@ -1,7 +1,9 @@
 package ai.saiy.android.command.time.online.model;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Query {
-    @com.google.gson.annotations.SerializedName("query")
+    @SerializedName("query")
     private final String query;
 
     public Query(String query) {

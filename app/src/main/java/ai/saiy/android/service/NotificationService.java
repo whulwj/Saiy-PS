@@ -284,7 +284,7 @@ public class NotificationService extends IntentService {
                                         SPH.getVRLocale(getApplicationContext()).toString());
                                 bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE,
                                         SPH.getTTSLocale(getApplicationContext()).toString());
-                                bundle.putSerializable(LocalRequest.EXTRA_COMMAND, CC.COMMAND_EMOTION);
+                                bundle.putParcelable(LocalRequest.EXTRA_COMMAND, CC.COMMAND_EMOTION);
 
                                 new LocalRequest(getApplicationContext(), bundle).execute();
                                 break;
@@ -320,7 +320,7 @@ public class NotificationService extends IntentService {
                                             MyLog.i(CLS_NAME, "onHandleIntent: CONDITION_IDENTIFY");
                                         }
 
-                                        final Speaker.Confidence confidence = (Speaker.Confidence) bundle.getSerializable(
+                                        final Speaker.Confidence confidence = bundle.getParcelable(
                                                 Speaker.EXTRA_IDENTIFY_OUTCOME);
 
                                         if (confidence != null) {

@@ -18,11 +18,10 @@ public class TaskerVariableHelper {
 
     public static Pair<Boolean, Long> setTaskerVariable(Context context, TaskerVariable taskerVariable, SupportedLanguage supportedLanguage, long j) {
         synchronized (lock) {
-            final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(taskerVariable);
             final DBTaskerVariable dbTaskerVariable = new DBTaskerVariable(context);
             final Pair<Boolean, Long> duplicatePair = j > -1 ? new Pair<>(true, j) : variableExists(context, dbTaskerVariable, taskerVariable, supportedLanguage);
 
-            return dbTaskerVariable.insertPopulatedRow(taskerVariable.getVariableName(), taskerVariable.getVariableValue(), gsonString, duplicatePair.first, duplicatePair.second);
+            return dbTaskerVariable.insertPopulatedRow(taskerVariable.getVariableName(), taskerVariable.getVariableValue(), duplicatePair.first, duplicatePair.second);
         }
     }
 

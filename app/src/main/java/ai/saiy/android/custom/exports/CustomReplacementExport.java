@@ -1,11 +1,13 @@
 package ai.saiy.android.custom.exports;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
-public class CustomReplacementExport implements Serializable {
-    private static final long serialVersionUID = -5926685237621915003L;
+public class CustomReplacementExport {
+    @SerializedName("exportConfiguration")
     private ExportConfiguration exportConfiguration;
+    @SerializedName("keyphrase")
     private String keyphrase;
+    @SerializedName("replacement")
     private String replacement;
 
     public CustomReplacementExport(String keyphrase, String replacement) {

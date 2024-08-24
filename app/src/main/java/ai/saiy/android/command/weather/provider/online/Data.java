@@ -1,11 +1,13 @@
 package ai.saiy.android.command.weather.provider.online;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Data {
-    @com.google.gson.annotations.SerializedName("current_condition")
+    @SerializedName("current_condition")
     private final List<Condition> currentCondition;
-    @com.google.gson.annotations.SerializedName("request")
+    @SerializedName("request")
     private final List<Query> request;
 
     public Data(List<Condition> currentCondition, List<Query> request) {

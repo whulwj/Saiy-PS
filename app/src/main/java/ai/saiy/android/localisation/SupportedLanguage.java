@@ -50,7 +50,13 @@ import ai.saiy.android.utils.UtilsString;
 public enum SupportedLanguage {
 
     ENGLISH("en", "", "", "eng", "", "", "English", "English", Locale.ENGLISH, null),
-    ENGLISH_US("en", "US", "en_US", "eng", "USA", "eng_USA", "English", "United States", Locale.US, SupportedLanguage.ENGLISH);
+    ENGLISH_UK("en", "GB", "en_GB", "eng", "GBR", "eng_GBR", "English", "United Kingdom", Locale.UK, ENGLISH),
+    ENGLISH_US("en", "US", "en_US", "eng", "USA", "eng_USA", "English", "United States", Locale.US, ENGLISH),
+    ENGLISH_CA("en", "CA", "en_CA", "eng", "CAN", "eng_CAN", "English", "Canada", Locale.CANADA, ENGLISH),
+    ENGLISH_NZ("en", "NZ", "en_NZ", "eng", "NZL", "eng_NZL", "English", "New Zealand", new Locale("en", "NZ"), ENGLISH),
+    ENGLISH_AU("en", "AU", "en_AU", "eng", "AUS", "eng_AUS", "English", "Australia", new Locale("en", "AU"), ENGLISH),
+    ENGLISH_IN("en", "IN", "en_IN", "eng", "IND", "eng_IND", "English", "India", new Locale("en", "IN"), ENGLISH),
+    ENGLISH_IE("en", "IE", "en_IE", "eng", "IRL", "eng_IRL", "English", "Ireland", new Locale("en", "IE"), ENGLISH);
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = SupportedLanguage.class.getSimpleName();
@@ -305,7 +311,7 @@ public enum SupportedLanguage {
 
         } else {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "getSupportedLanguage: language naked" + userLocale.toString());
+                MyLog.w(CLS_NAME, "getSupportedLanguage: language naked" + userLocale);
             }
         }
 

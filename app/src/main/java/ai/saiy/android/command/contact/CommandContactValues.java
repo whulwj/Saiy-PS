@@ -6,22 +6,36 @@ import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 import ai.saiy.android.contacts.Contact;
 
 public class CommandContactValues implements Parcelable {
+    @SerializedName("actionUtterance")
     private String actionUtterance;
+    @SerializedName("choiceArray")
     private ArrayList<Choice> choiceArray;
+    @SerializedName("confirmationUtterance")
     private String confirmationUtterance;
+    @SerializedName("contact")
     private Contact contact;
+    @SerializedName("requiredNumber")
     private String requiredNumber;
+    @SerializedName("voiceData")
     private ArrayList<String> voiceData;
+    @SerializedName("voiceDataTrimmed")
     private ArrayList<String> voiceDataTrimmed;
+    @SerializedName("type")
     private Type type = Type.UNKNOWN;
+    @SerializedName("callType")
     private CallType callType = CallType.UNKNOWN;
+    @SerializedName("imType")
     private IMType imType = IMType.UNKNOWN;
+    @SerializedName("navigationType")
     private NavigationType navigationType = NavigationType.UNKNOWN;
+    @SerializedName("confirmType")
     private ContactConfirm.ConfirmType confirmType = ContactConfirm.ConfirmType.CALL_CONFIRM;
 
     public enum CallType {

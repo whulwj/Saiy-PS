@@ -90,18 +90,7 @@ public class SaiyVoice extends Voice {
             final Voice voice = Voice.CREATOR.createFromParcel(parcel);
             final SaiyVoice saiyVoice = new SaiyVoice(voice);
             saiyVoice.engine = parcel.readString();
-            final ai.saiy.android.api.attributes.Gender gender = ai.saiy.android.api.attributes.Gender.getGender(parcel.readInt());
-            switch (gender) {
-                case FEMALE:
-                    saiyVoice.gender = Gender.FEMALE;
-                    break;
-                case MALE:
-                    saiyVoice.gender = Gender.MALE;
-                    break;
-                default:
-                    saiyVoice.gender = Gender.UNDEFINED;
-                    break;
-            }
+            saiyVoice.gender = parcel.readParcelable(Gender.class.getClassLoader());
             return saiyVoice;
         }
 
@@ -174,7 +163,7 @@ public class SaiyVoice extends Voice {
     public void writeToParcel(final Parcel dest, final int flags) {
         super.writeToParcel(dest, flags);
         dest.writeString(engine);
-        dest.writeInt(gender.getRemoteGender().ordinal());
+        dest.writeParcelable(gender, flags);
     }
 
     @Override

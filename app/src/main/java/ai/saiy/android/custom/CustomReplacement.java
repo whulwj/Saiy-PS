@@ -1,13 +1,15 @@
 package ai.saiy.android.custom;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
-public class CustomReplacement implements Serializable {
-    private static final long serialVersionUID = -8057631768538162174L;
+public class CustomReplacement {
+    @SerializedName("keyphrase")
     private String keyphrase;
+    @SerializedName("replacement")
     private String replacement;
+    @SerializedName("rowId")
     private long rowId;
-    private String serialised;
+    private transient String serialised;
 
     public CustomReplacement(String keyphrase, String replacement) {
         this.keyphrase = keyphrase;

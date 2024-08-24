@@ -1,14 +1,17 @@
 package ai.saiy.android.custom.exports;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
 import ai.saiy.android.custom.Custom;
 
-public class ExportConfiguration implements Serializable {
+public class ExportConfiguration {
     public static final double VERSION_1 = 1.0d;
-    private static final long serialVersionUID = -5244857537828479547L;
+
+    @SerializedName("custom")
     private final Custom custom;
+    @SerializedName("timestamp")
     private final long timestamp;
+    @SerializedName("version")
     private final double version;
 
     public ExportConfiguration(Custom custom, double version, long timeStamp) {

@@ -1,13 +1,16 @@
 package ai.saiy.android.custom;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
-public class CustomPhrase implements Serializable {
-    private static final long serialVersionUID = 7469183403427953340L;
+public class CustomPhrase {
+    @SerializedName("keyphrase")
     private String keyphrase;
+    @SerializedName("response")
     private String response;
+    @SerializedName("rowId")
     private long rowId;
-    private String serialised;
+    private transient String serialised;
+    @SerializedName("voiceRecognition")
     private boolean voiceRecognition;
 
     public CustomPhrase(String keyphrase, String response, boolean condition) {

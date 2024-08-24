@@ -1,7 +1,9 @@
 package ai.saiy.android.command.weather.provider.online;
 
+import com.google.gson.annotations.SerializedName;
+
 public class WeatherOnlineResponse {
-    @com.google.gson.annotations.SerializedName("data")
+    @SerializedName("data")
     private final Data data;
 
     public WeatherOnlineResponse(Data data) {

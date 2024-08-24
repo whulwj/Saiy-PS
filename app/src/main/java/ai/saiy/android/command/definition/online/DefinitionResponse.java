@@ -1,10 +1,12 @@
 package ai.saiy.android.command.definition.online;
 
+import com.google.gson.annotations.SerializedName;
+
 public class DefinitionResponse {
-    @com.google.gson.annotations.SerializedName("word")
+    @SerializedName("word")
     private final String word;
 
-    @com.google.gson.annotations.SerializedName("text")
+    @SerializedName("text")
     private final String text;
 
     public DefinitionResponse(String word, String text) {

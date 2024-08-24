@@ -1,12 +1,14 @@
 package ai.saiy.android.command.time.online.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 public class Data {
-    @com.google.gson.annotations.SerializedName("time_zone")
+    @SerializedName("time_zone")
     private final List<LocalTime> timeZone;
 
-    @com.google.gson.annotations.SerializedName("request")
+    @SerializedName("request")
     private final List<Query> request;
 
     public Data(List<LocalTime> timeZone, List<Query> request) {

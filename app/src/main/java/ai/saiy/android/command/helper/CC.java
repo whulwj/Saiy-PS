@@ -17,6 +17,9 @@
 
 package ai.saiy.android.command.helper;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 
 /**
@@ -29,7 +32,7 @@ import androidx.annotation.NonNull;
  * <p/>
  * Created by benrandall76@gmail.com on 09/02/2016.
  */
-public enum CC {
+public enum CC implements Parcelable {
 
     /*
      * Inbuilt
@@ -130,6 +133,24 @@ public enum CC {
         this.isSecure = isSecure;
     }
 
+    public static final Creator<CC> CREATOR = new Creator<CC>() {
+        @Override
+        public CC createFromParcel(Parcel in) {
+            final int index = in.readInt();
+            for (CC cc : CC.values()) {
+                if (index == cc.ordinal()) {
+                    return cc;
+                }
+            }
+            return COMMAND_SOMETHING_WEIRD;
+        }
+
+        @Override
+        public CC[] newArray(int size) {
+            return new CC[size];
+        }
+    };
+
     public boolean requiresNetwork() {
         return requiresNetwork;
     }
@@ -144,5 +165,15 @@ public enum CC {
 
     public static boolean requiresNetwork(@NonNull final CC cc) {
         return cc.requiresNetwork();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(ordinal());
     }
 }

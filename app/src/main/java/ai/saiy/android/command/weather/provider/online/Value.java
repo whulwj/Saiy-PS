@@ -1,7 +1,9 @@
 package ai.saiy.android.command.weather.provider.online;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Value {
-    @com.google.gson.annotations.SerializedName("value")
+    @SerializedName("value")
     private final String value;
 
     public Value(String value) {

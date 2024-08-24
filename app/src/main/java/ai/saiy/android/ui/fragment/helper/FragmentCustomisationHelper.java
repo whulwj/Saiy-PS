@@ -432,7 +432,6 @@ public class FragmentCustomisationHelper {
                                 case CUSTOM_CALL_CONTACT:
                                 case CUSTOM_LAUNCH_APPLICATION:
                                 case CUSTOM_LAUNCH_SHORTCUT:
-                                case CUSTOM_SEARCHABLE:
                                 case CUSTOM_AUTOMATE_FLOW:
                                     cc.setExtraText(extraText);
                                     cc.setExtraText2(extraText2);
@@ -441,7 +440,7 @@ public class FragmentCustomisationHelper {
                                     cc.setIntent(extraText);
                                     cc.setExtraText(extraText2);
                                     break;
-                                default:
+                                case CUSTOM_SEARCHABLE:
                                     cc.setExtraText(extraText);
                                     cc.setExtraText(extraText2);
                                     cc.setActionOfIntent(actionOfIntent);
@@ -729,7 +728,6 @@ public class FragmentCustomisationHelper {
                                 toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
                                 CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                                 String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
-                                customIntent.setSerialised(gsonString);
                                 cc.setExtraText(gsonString);
                                 setCommand(cc);
                                 return;
@@ -743,7 +741,6 @@ public class FragmentCustomisationHelper {
                             toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
                             CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                             String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
-                            customIntent.setSerialised(gsonString);
                             cc.setExtraText(gsonString);
                             setCommand(cc);
                         }
@@ -864,7 +861,6 @@ public class FragmentCustomisationHelper {
                                 dialog.dismiss();
                                 final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                                 final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
-                                customHttp.setSerialised(gsonString);
                                 cc.setExtraText(gsonString);
                                 setCommand(cc);
                                 return;
@@ -940,7 +936,6 @@ public class FragmentCustomisationHelper {
                             dialog.dismiss();
                             final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                             final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
-                            customHttp.setSerialised(gsonString);
                             cc.setExtraText(gsonString);
                             setCommand(cc);
                         }

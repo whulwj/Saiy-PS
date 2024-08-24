@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -730,7 +731,7 @@ public final class NotificationHelper {
             switch (condition) {
 
                 case Condition.CONDITION_IDENTIFY:
-                    actionIntent.putExtra(Speaker.EXTRA_IDENTIFY_OUTCOME, confidence);
+                    actionIntent.putExtra(Speaker.EXTRA_IDENTIFY_OUTCOME, (Parcelable) confidence);
                     break;
                 case Condition.CONDITION_IDENTITY:
                     actionIntent.putExtra(Speaker.EXTRA_IDENTITY_OUTCOME, success);

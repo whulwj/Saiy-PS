@@ -62,7 +62,7 @@ public class ActivityFacebook extends AppCompatActivity {
                     }
                     this.callbackManager = CallbackManager.Factory.create();
                     LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("publish_actions"));
-                    LoginManager.getInstance().registerCallback(callbackManager, new com.facebook.FacebookCallback<com.facebook.login.LoginResult>() { // from class: ai.saiy.android.ui.activity.ActivityFacebook.1
+                    LoginManager.getInstance().registerCallback(callbackManager, new com.facebook.FacebookCallback<com.facebook.login.LoginResult>() {
                         @Override
                         public void onError(@NonNull FacebookException facebookException) {
                             if (DEBUG) {

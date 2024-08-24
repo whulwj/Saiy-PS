@@ -130,13 +130,13 @@ public class FragmentEditCustomisationHelper {
             public void run() {
                 final Pair<Boolean, Long> duplicatePair = ai.saiy.android.custom.CustomPhraseHelper.setPhrase(getApplicationContext(), customPhrase, null, rowId);
                 if (duplicatePair.first) {
-                    final String b2 = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customPhrase);
-                    customPhrase.setSerialised(b2);
+                    final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customPhrase);
+                    customPhrase.setSerialised(gsonString);
                     getParentActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             final ContainerCustomisation containerCustomisation = getParent().getObjects().get(index);
-                            containerCustomisation.setSerialised(b2);
+                            containerCustomisation.setSerialised(gsonString);
                             containerCustomisation.setRowId(duplicatePair.second);
                             containerCustomisation.setTitle(customPhrase.getKeyphrase());
                             containerCustomisation.setSubtitle(customPhrase.getResponse());
@@ -172,21 +172,20 @@ public class FragmentEditCustomisationHelper {
         });
     }
 
-    private void setCommand(final ai.saiy.android.custom.CustomCommand bVar, final int index, final long rowId) {
+    private void setCommand(final ai.saiy.android.custom.CustomCommand customCommand, final int index, final long rowId) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                final Pair<Boolean, Long> duplicatePair = ai.saiy.android.custom.CustomCommandHelper.setCommand(getApplicationContext(), bVar, rowId);
+                final Pair<Boolean, Long> duplicatePair = ai.saiy.android.custom.CustomCommandHelper.setCommand(getApplicationContext(), customCommand, rowId);
                 if (duplicatePair.first) {
-                    final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(bVar);
-                    bVar.setSerialised(gsonString);
+                    final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customCommand);
                     getParentActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             final ContainerCustomisation containerCustomisation = getParent().getObjects().get(index);
                             containerCustomisation.setSerialised(gsonString);
                             containerCustomisation.setRowId(duplicatePair.second);
-                            containerCustomisation.setTitle(bVar.getKeyphrase());
+                            containerCustomisation.setTitle(customCommand.getKeyphrase());
                             getParent().getAdapter().notifyItemChanged(index);
                         }
                     });
@@ -409,7 +408,6 @@ public class FragmentEditCustomisationHelper {
                                 dialog.dismiss();
                                 final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                                 final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
-                                customHttp.setSerialised(gsonString);
                                 cc.setExtraText(gsonString);
                                 setCommand(cc, index, rowId);
                                 return;
@@ -485,7 +483,6 @@ public class FragmentEditCustomisationHelper {
                             dialog.dismiss();
                             final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                             final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
-                            customHttp.setSerialised(gsonString);
                             cc.setExtraText(gsonString);
                             setCommand(cc, index, rowId);
                         }
@@ -716,7 +713,6 @@ public class FragmentEditCustomisationHelper {
                                 toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
                                 final CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                                 final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
-                                customIntent.setSerialised(gsonString);
                                 cc.setExtraText(gsonString);
                                 setCommand(cc, index, rowId);
                                 return;
@@ -730,7 +726,6 @@ public class FragmentEditCustomisationHelper {
                             toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
                             final CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
                             final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
-                            customIntent.setSerialised(gsonString);
                             cc.setExtraText(gsonString);
                             setCommand(cc, index, rowId);
                         }
@@ -852,7 +847,6 @@ public class FragmentEditCustomisationHelper {
                                 case CUSTOM_CALL_CONTACT:
                                 case CUSTOM_LAUNCH_APPLICATION:
                                 case CUSTOM_LAUNCH_SHORTCUT:
-                                case CUSTOM_SEARCHABLE:
                                 case CUSTOM_AUTOMATE_FLOW:
                                     cc.setExtraText(extraText);
                                     cc.setExtraText2(extraText2);
@@ -861,7 +855,7 @@ public class FragmentEditCustomisationHelper {
                                     cc.setIntent(extraText);
                                     cc.setExtraText(extraText2);
                                     break;
-                                default:
+                                case CUSTOM_SEARCHABLE:
                                     cc.setExtraText(extraText);
                                     cc.setRegex(Regex.STARTS_WITH);
                                     break;

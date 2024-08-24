@@ -75,7 +75,7 @@ public class MemoryPrepare {
         }
 
         action = bundle.getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_UNKNOWN);
-        command = (CC) bundle.getSerializable(LocalRequest.EXTRA_COMMAND);
+        command = bundle.getParcelable(LocalRequest.EXTRA_COMMAND);
         condition = bundle.getInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_NONE);
         sl = (SupportedLanguage) bundle.getSerializable(LocalRequest.EXTRA_SUPPORTED_LANGUAGE);
     }

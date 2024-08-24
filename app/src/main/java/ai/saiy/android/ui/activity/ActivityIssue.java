@@ -48,7 +48,7 @@ public class ActivityIssue extends AppCompatActivity {
                     MyLog.i(CLS_NAME, "bundle contains: IssueContent.ISSUE_CONTENT");
                 }
 
-                final IssueContent issueContent = (IssueContent) bundle.getSerializable(Issue.ISSUE_CONTENT);
+                final IssueContent issueContent = bundle.getParcelable(Issue.ISSUE_CONTENT);
 
                 if (issueContent != null) {
                     if (DEBUG) {

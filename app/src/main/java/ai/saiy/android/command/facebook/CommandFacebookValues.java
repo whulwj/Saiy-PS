@@ -3,12 +3,20 @@ package ai.saiy.android.command.facebook;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class CommandFacebookValues implements Parcelable {
+    @SerializedName("contentType")
     private FacebookConfirm.ContentType contentType;
+    @SerializedName("endIndex")
     private long endIndex;
+    @SerializedName("isResolved")
     private boolean isResolved;
+    @SerializedName("ranges")
     private int[][] ranges;
+    @SerializedName("startIndex")
     private long startIndex;
+    @SerializedName("text")
     private String text;
 
     public static final Creator<CommandFacebookValues> CREATOR = new Creator<CommandFacebookValues>() {

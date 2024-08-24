@@ -19,6 +19,8 @@ package ai.saiy.android.memory;
 
 import androidx.annotation.NonNull;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 
 import ai.saiy.android.command.helper.CC;
@@ -34,14 +36,21 @@ import ai.saiy.android.service.helper.LocalRequest;
  * Created by benrandall76@gmail.com on 20/04/2016.
  */
 public class Memory {
-
+    @SerializedName("vrLanguage")
     private final String vrLanguage;
+    @SerializedName("ttsLanguage")
     private final String ttsLanguage;
+    @SerializedName("utterance")
     private final String utterance;
+    @SerializedName("utteranceArray")
     private final ArrayList<String> utteranceArray;
+    @SerializedName("action")
     private final int action;
+    @SerializedName("command")
     private final CC command;
+    @SerializedName("condition")
     private final int condition;
+    @SerializedName("sl")
     private final SupportedLanguage sl;
 
     /**

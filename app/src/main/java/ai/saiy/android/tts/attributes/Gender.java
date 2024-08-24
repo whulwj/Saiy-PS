@@ -17,6 +17,9 @@
 
 package ai.saiy.android.tts.attributes;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -28,7 +31,7 @@ import ai.saiy.android.utils.MyLog;
  * Created by benrandall76@gmail.com on 19/08/2016.
  */
 
-public enum Gender {
+public enum Gender implements Parcelable {
 
     MALE(ai.saiy.android.api.attributes.Gender.MALE),
     FEMALE(ai.saiy.android.api.attributes.Gender.FEMALE),
@@ -48,6 +51,24 @@ public enum Gender {
     Gender(final ai.saiy.android.api.attributes.Gender gender) {
         this.gender = gender;
     }
+
+    public static final Creator<Gender> CREATOR = new Creator<Gender>() {
+        @Override
+        public Gender createFromParcel(Parcel in) {
+            final byte index = in.readByte();
+            for (Gender gender : Gender.values()) {
+                if (index == gender.ordinal()) {
+                    return gender;
+                }
+            }
+            return UNDEFINED;
+        }
+
+        @Override
+        public Gender[] newArray(int size) {
+            return new Gender[size];
+        }
+    };
 
     public ai.saiy.android.api.attributes.Gender getRemoteGender() {
         return this.gender;
@@ -116,5 +137,15 @@ public enum Gender {
 //        } else {
 //            return UNDEFINED;
 //        }
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeByte((byte) gender.ordinal());
     }
 }

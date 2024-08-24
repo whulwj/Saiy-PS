@@ -222,12 +222,11 @@ public class ApiRequest {
     /**
      * function to handle the results
      *
-     * @param detectIntentResponse :   detectIntentResponse object
+     * @param queryResult :   QueryResult object
      * @return :   String response
      */
-     public static String handleResults(DetectIntentResponse detectIntentResponse) {
-        QueryResult queryResult = detectIntentResponse.getQueryResult();
-        StringBuilder response = new StringBuilder();
+     public static String handleResults(QueryResult queryResult) {
+        final StringBuilder response = new StringBuilder();
 
         KnowledgeAnswers knowledgeAnswers = queryResult.getKnowledgeAnswers();
         for (KnowledgeAnswers.Answer answer : knowledgeAnswers.getAnswersList()) {

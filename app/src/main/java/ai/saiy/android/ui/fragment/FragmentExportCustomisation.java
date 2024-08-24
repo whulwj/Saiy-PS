@@ -86,7 +86,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
             }
             switch (containerCustomisation.getCustom()) {
                 case CUSTOM_PHRASE:
-                    final CustomPhrase customPhrase = gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomPhrase>() { // from class: ai.saiy.android.ui.b.l.3
+                    final CustomPhrase customPhrase = gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomPhrase>() {
                     }.getType());
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "customPhrase: " + customPhrase.getKeyphrase());
@@ -94,7 +94,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
                     exportHelper.exportCustomPhrase(customPhrase);
                     break;
                 case CUSTOM_NICKNAME:
-                    final CustomNickname customNickname = gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomNickname>() { // from class: ai.saiy.android.ui.b.l.4
+                    final CustomNickname customNickname = gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomNickname>() {
                     }.getType());
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "customNickname: " + customNickname.getNickname());
@@ -102,7 +102,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
                     exportHelper.exportCustomNickname(customNickname);
                     break;
                 case CUSTOM_REPLACEMENT:
-                    final CustomReplacement customReplacement = (CustomReplacement) gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomReplacement>() { // from class: ai.saiy.android.ui.b.l.5
+                    final CustomReplacement customReplacement = (CustomReplacement) gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomReplacement>() {
                     }.getType());
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "customReplacement: " + customReplacement.getKeyphrase());

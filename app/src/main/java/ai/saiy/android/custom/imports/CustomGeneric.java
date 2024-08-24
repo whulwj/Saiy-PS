@@ -1,11 +1,11 @@
 package ai.saiy.android.custom.imports;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
 import ai.saiy.android.custom.exports.ExportConfiguration;
 
-public class CustomGeneric implements Serializable {
-    private static final long serialVersionUID = -4038692259311840903L;
+public class CustomGeneric {
+    @SerializedName("exportConfiguration")
     private final ExportConfiguration exportConfiguration;
 
     public CustomGeneric(ExportConfiguration exportConfiguration) {

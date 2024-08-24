@@ -1984,7 +1984,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
     /**
      * Utility method to construct the {@link RemoteAPIAI} instance
      *
-     * @return the {@link Pair} with the first parameter denoting success and the second the JSON response
+     * @return the {@link Pair} with the first parameter denoting success and the second the response object
      */
     @SuppressWarnings("ConstantConditions")
     public Pair<Boolean, DetectIntentResponse> getAPIAIRemote(@NonNull final Bundle results) {
@@ -2365,7 +2365,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                 != Condition.CONDITION_IGNORE
                 && getBundle().getInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_UNKNOWN)
                 == LocalRequest.ACTION_SPEAK_ONLY
-                && getBundle().getSerializable(LocalRequest.EXTRA_COMMAND) != null) {
+                && getBundle().getParcelable(LocalRequest.EXTRA_COMMAND) != null) {
             new MemoryPrepare(mContext, getBundle()).save();
         }
     }

@@ -1,7 +1,9 @@
 package ai.saiy.android.command.weather.provider.map;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Description {
-    @com.google.gson.annotations.SerializedName("description")
+    @SerializedName("description")
     private final String description;
 
     public Description(String description) {

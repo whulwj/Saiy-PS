@@ -1,11 +1,13 @@
 package ai.saiy.android.custom.exports;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
-public class CustomNicknameExport implements Serializable {
-    private static final long serialVersionUID = 7099509969388343880L;
+public class CustomNicknameExport {
+    @SerializedName("contactName")
     private String contactName;
+    @SerializedName("exportConfiguration")
     private ExportConfiguration exportConfiguration;
+    @SerializedName("nickname")
     private String nickname;
 
     public CustomNicknameExport(String nickname, String contactName) {

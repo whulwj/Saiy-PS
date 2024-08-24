@@ -38,9 +38,8 @@ import ai.saiy.android.utils.SPH;
  * Created by benrandall76@gmail.com on 09/06/2016.
  */
 public class BVCredentials {
-
-    private transient static final boolean DEBUG = MyLog.DEBUG;
-    private transient static final String CLS_NAME = BVCredentials.class.getSimpleName();
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = BVCredentials.class.getSimpleName();
 
     @SerializedName("access_token")
     private final String accessToken;

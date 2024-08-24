@@ -345,7 +345,7 @@ public class LocalRequest {
      * @param command one of {@link CC}
      */
     public void setCommand(final CC command) {
-        bundle.putSerializable(EXTRA_COMMAND, command);
+        bundle.putParcelable(EXTRA_COMMAND, command);
     }
 
     /**
@@ -357,7 +357,7 @@ public class LocalRequest {
     public CC getCommand() {
         if (bundle != null) {
             if (bundle.containsKey(EXTRA_COMMAND)) {
-                return (CC) bundle.getSerializable(EXTRA_COMMAND);
+                return bundle.getParcelable(EXTRA_COMMAND);
             }
         }
 

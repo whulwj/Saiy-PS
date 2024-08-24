@@ -17,6 +17,9 @@
 
 package ai.saiy.android.cognitive.identity.provider.microsoft;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.Nullable;
 
 import org.apache.commons.lang3.StringUtils;
@@ -40,13 +43,31 @@ public class Speaker {
     public static final int ERROR_NETWORK = 3;
     public static final int ERROR_FILE = 4;
 
-    public enum Confidence {
+    public enum Confidence implements Parcelable {
 
         HIGH,
         NORMAL,
         LOW,
         UNDEFINED,
         ERROR;
+
+        public static final Creator<Confidence> CREATOR = new Creator<Confidence>() {
+            @Override
+            public Confidence createFromParcel(Parcel in) {
+                final byte index = in.readByte();
+                for (Confidence confidence : Confidence.values()) {
+                    if (index == confidence.ordinal()) {
+                        return confidence;
+                    }
+                }
+                return UNDEFINED;
+            }
+
+            @Override
+            public Confidence[] newArray(int size) {
+                return new Confidence[size];
+            }
+        };
 
         /**
          * Get the {@link Confidence} from the string equivalent
@@ -68,6 +89,16 @@ public class Speaker {
             }
 
             return UNDEFINED;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel dest, int flags) {
+            dest.writeByte((byte) ordinal());
         }
     }
 

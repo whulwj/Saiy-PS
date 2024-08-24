@@ -25,6 +25,7 @@ import androidx.annotation.NonNull;
 import com.google.android.gms.ads.identifier.AdvertisingIdClient;
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
 import java.util.Locale;
@@ -47,11 +48,17 @@ public class SaiyAccount {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = SaiyAccount.class.getSimpleName();
 
+    @SerializedName("name")
     private String accountName;
+    @SerializedName("id")
     private volatile String accountId;
+    @SerializedName("pseudonym")
     private String pseudonym;
+    @SerializedName("profile")
     private volatile ProfileItem profileItem;
+    @SerializedName("pseudonymLinked")
     private boolean pseudonymLinked;
+    @SerializedName("autoEnroll")
     private final boolean autoEnroll;
 
     /**

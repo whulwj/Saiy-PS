@@ -5,6 +5,8 @@ import android.os.Parcelable;
 
 import androidx.annotation.IntDef;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
@@ -16,14 +18,21 @@ public class CustomIntent implements Parcelable {
     @Retention(RetentionPolicy.SOURCE)
     public @interface Target {}
 
+    @SerializedName("action")
     private String action;
+    @SerializedName("category")
     private String category;
+    @SerializedName("className")
     private String className;
+    @SerializedName("data")
     private String data;
+    @SerializedName("extras")
     private String extras;
+    @SerializedName("mimeType")
     private String mimeType;
+    @SerializedName("packageName")
     private String packageName;
-    private String serialised;
+    @SerializedName("target")
     private @Target int target;
 
     public CustomIntent() {
@@ -43,10 +52,8 @@ public class CustomIntent implements Parcelable {
     public static final Creator<CustomIntent> CREATOR = new Creator<CustomIntent>() {
         @Override
         public CustomIntent createFromParcel(Parcel in) {
-            final CustomIntent customIntent = new CustomIntent(in.readInt(), in.readString(), in.readString(),
+            return new CustomIntent(in.readInt(), in.readString(), in.readString(),
             in.readString(), in.readString(), in.readString(), in.readString(), in.readString());
-            customIntent.setSerialised(in.readString());
-            return customIntent;
         }
 
         @Override
@@ -83,10 +90,6 @@ public class CustomIntent implements Parcelable {
         return this.packageName != null ? this.packageName : "";
     }
 
-    public String getSerialised() {
-        return this.serialised;
-    }
-
     public @Target int getTarget() {
         return this.target;
     }
@@ -119,10 +122,6 @@ public class CustomIntent implements Parcelable {
         this.packageName = packageName;
     }
 
-    public void setSerialised(String serialised) {
-        this.serialised = serialised;
-    }
-
     public void setTarget(@Target int target) {
         this.target = target;
     }
@@ -142,6 +141,5 @@ public class CustomIntent implements Parcelable {
         dest.writeString(data);
         dest.writeString(extras);
         dest.writeString(mimeType);
-        dest.writeString(serialised);
     }
 }

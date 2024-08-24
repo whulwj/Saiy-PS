@@ -1,12 +1,15 @@
 package ai.saiy.android.custom.exports;
 
-import java.io.Serializable;
+import com.google.gson.annotations.SerializedName;
 
-public class CustomPhraseExport implements Serializable {
-    private static final long serialVersionUID = 1432642933816444252L;
+public class CustomPhraseExport {
+    @SerializedName("exportConfiguration")
     private ExportConfiguration exportConfiguration;
+    @SerializedName("keyphrase")
     private String keyphrase;
+    @SerializedName("response")
     private String response;
+    @SerializedName("voiceRecognition")
     private boolean voiceRecognition;
 
     public CustomPhraseExport(String keyphrase, String response, boolean condition) {
