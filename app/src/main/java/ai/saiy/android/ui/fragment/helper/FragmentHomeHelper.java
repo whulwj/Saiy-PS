@@ -226,7 +226,6 @@ public class FragmentHomeHelper {
                                 MyLog.i(CLS_NAME, "onClick: tutorialActive");
                             }
                             getParentActivity().toast(getParent().getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
-                            dialog.dismiss();
                             return;
                         }
                         switch (which) {
@@ -273,7 +272,6 @@ public class FragmentHomeHelper {
                                 ExecuteIntent.webSearch(getApplicationContext(), Constants.USER_COMING_SOON);
                                 break;
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -282,7 +280,6 @@ public class FragmentHomeHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showUnknownCommandSelector: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;

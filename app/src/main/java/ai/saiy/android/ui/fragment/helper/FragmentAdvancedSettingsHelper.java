@@ -25,11 +25,14 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -51,6 +54,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -374,7 +378,6 @@ public class FragmentAdvancedSettingsHelper {
                                         }
                                     }
                                 })
-
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -397,28 +400,22 @@ public class FragmentAdvancedSettingsHelper {
 
                                             }
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
-
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showGenderSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
-
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showGenderSelector: onCancel");
                                         }
-
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
@@ -464,9 +461,13 @@ public class FragmentAdvancedSettingsHelper {
                 FragmentAdvancedSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        boolean[] checkedItems = new boolean[hotwordActions.length];
+                        final boolean[] checkedItems = new boolean[hotwordActions.length];
+                        final boolean[] enabledItems = new boolean[hotwordActions.length];
                         for (int i = 0; i < selectedList.size(); i++) {
                             checkedItems[selectedList.get(i)] = true;
+                        }
+                        for (int i = 0; i < hotwordActions.length; i++) {
+                            enabledItems[i] = !(4 == i || 6 == i);
                         }
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(FragmentAdvancedSettingsHelper.this.getParentActivity())
                                 .setCancelable(false)
@@ -475,28 +476,20 @@ public class FragmentAdvancedSettingsHelper {
                                 .setMultiChoiceItems(hotwordActions, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showHotwordSelector: onSelection: " + which + ", " + isChecked);
-                                        }
-                                        checkedItems[which] = isChecked;
-                                    }
-                                })
-                                .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (dialog instanceof AlertDialog) {
-                                            final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
-                                            if (adapter instanceof BaseAdapter) {
-                                                for (int i = checkedItems.length - 1; i >= 0; --i) {
-                                                    checkedItems[i] = (4 == i || 6 == i);
-                                                }
-                                                ((BaseAdapter) adapter).notifyDataSetChanged();
-                                            } else {
-                                                MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                        if (enabledItems[which]) {
+                                            checkedItems[which] = isChecked;
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showHotwordSelector: onSelection: " + which + ", " + isChecked);
+                                            }
+                                        } else {
+                                            checkedItems[which] = true;
+                                            if (dialogInterface instanceof AlertDialog) {
+                                                ((AlertDialog) dialogInterface).getListView().setItemChecked(which, true);
                                             }
                                         }
                                     }
                                 })
+                                .setNeutralButton(R.string.clear, null)
                                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -506,7 +499,7 @@ public class FragmentAdvancedSettingsHelper {
 
                                         final List<Integer> selectedIndices = new ArrayList<>();
                                         for (int i = 0; i < checkedItems.length; ++i) {
-                                            if (checkedItems[i] || (4 == i || 6 == i)) {
+                                            if (checkedItems[i]) {
                                                 selectedIndices.add(i);
                                             }
                                         }
@@ -535,34 +528,64 @@ public class FragmentAdvancedSettingsHelper {
                                             toast(getString(R.string.menu_requires_hotword_restart), Toast.LENGTH_LONG);
                                         }
                                         SPH.setHotwordOkayGoogle(getApplicationContext(), hotwordOkayGoogle);
-                                        dialog.dismiss();
                                         SelfAwareHelper.restartService(getApplicationContext());
                                     }
                                 })
-
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showHotwordSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
-
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showHotwordSelector: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
 
+                        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final ListView listView = materialDialog.getListView();
+                                final ListAdapter adapter = listView.getAdapter();
+                                if (adapter instanceof BaseAdapter) {
+                                    boolean isItemChecked;
+                                    for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                        isItemChecked = checkedItems[i];
+                                        checkedItems[i] = !enabledItems[i];
+                                        if (isItemChecked ^ checkedItems[i]) {
+                                            listView.setItemChecked(i, checkedItems[i]);
+                                        }
+                                    }
+                                    ((BaseAdapter) adapter).notifyDataSetChanged();
+                                } else {
+                                    MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                }
+                            }
+                        });
+                        materialDialog.getListView().setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                            @Override
+                            public void onChildViewAdded(View parent, View child) {
+                                if (child instanceof CheckedTextView) {
+                                    final int itemIndex = Arrays.asList(hotwordActions).indexOf(((TextView) child).getText().toString());
+                                    child.setEnabled(enabledItems[itemIndex]);
+                                } else if (DEBUG) {
+                                    MyLog.d(CLS_NAME, "onChildViewAdded: " + child.getClass().getSimpleName());
+                                }
+                            }
+
+                            @Override
+                            public void onChildViewRemoved(View parent, View child) {
+                            }
+                        });
                     }
                 });
             }
@@ -611,110 +634,14 @@ public class FragmentAdvancedSettingsHelper {
                                         checkedItems[which] = isChecked;
                                     }
                                 })
-                                .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (dialog instanceof AlertDialog) {
-                                            final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
-                                            if (adapter instanceof BaseAdapter) {
-                                                for (int i = checkedItems.length - 1; i >= 0; --i) {
-                                                    checkedItems[i] = false;
-                                                }
-                                                ((BaseAdapter) adapter).notifyDataSetChanged();
-                                            } else {
-                                                MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
-                                            }
-                                        }
-                                    }
-                                })
-                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive");
-                                        }
-
-                                        final List<Integer> selectedIndices = new ArrayList<>();
-                                        for (int i = 0; i < checkedItems.length; ++i) {
-                                            if (checkedItems[i]) {
-                                                selectedIndices.add(i);
-                                            }
-                                        }
-                                        final Integer[] selected = selectedIndices.toArray(new Integer[0]);
-
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive: length: " + selected.length);
-                                            for (final Integer aSelected : selected) {
-                                                MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive: " + aSelected);
-                                            }
-                                        }
-                                        drivingProfile.setStartAutomatically(ArrayUtils.contains(selected, 0));
-                                        drivingProfile.setStopAutomatically(ArrayUtils.contains(selected, 1));
-                                        drivingProfile.setStartHotword(ArrayUtils.contains(selected, 2));
-                                        final boolean announceNotifications = ArrayUtils.contains(selected, 3);
-                                        drivingProfile.setAnnounceNotifications(announceNotifications);
-
-                                        boolean checkAnnounceCallerId;
-                                        if (!announceNotifications) {
-                                            checkAnnounceCallerId = true;
-                                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                                            boolean isNotificationListenerRunning = false;
-                                            for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
-                                                if (packageName.equals(getApplicationContext().getPackageName())) {
-                                                    isNotificationListenerRunning = true;
-                                                    break;
-                                                }
-                                            }
-                                            if (isNotificationListenerRunning) {
-                                                checkAnnounceCallerId = true;
-                                            } else {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "notification listener service not running");
-                                                }
-                                                if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
-                                                    getParentActivity().speak(R.string.notifications_enable, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
-                                                    checkAnnounceCallerId = false;
-                                                } else {
-                                                    if (DEBUG) {
-                                                        MyLog.w(CLS_NAME, "notification listener: settings location unknown");
-                                                    }
-                                                    getParentActivity().speak(getParent().getString(R.string.settings_missing, getString(R.string.notification_access)), LocalRequest.ACTION_SPEAK_ONLY);
-                                                    checkAnnounceCallerId = false;
-                                                }
-                                            }
-                                        } else if (ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
-                                            ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
-                                            checkAnnounceCallerId = true;
-                                        } else {
-                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
-                                            getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
-                                            checkAnnounceCallerId = false;
-                                        }
-                                        if (!checkAnnounceCallerId) {
-                                            if (DEBUG) {
-                                                MyLog.w(CLS_NAME, "showDrivingProfileSelector: proceed: false");
-                                            }
-                                            return;
-                                        }
-                                        final boolean announceCallerId = ArrayUtils.contains(selected, 4);
-                                        if (announceCallerId && !ai.saiy.android.permissions.PermissionHelper.checkNotificationPolicyPermission(getApplicationContext())) {
-                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.NOTIFICATION_POLICY_ACCESS_SETTINGS);
-                                            getParentActivity().speak(R.string.app_speech_notification_policy, LocalRequest.ACTION_SPEAK_ONLY);
-                                        } else if (ai.saiy.android.permissions.PermissionHelper.checkReadCallerPermissions(getApplicationContext())) {
-                                            drivingProfile.setAnnounceCallerId(announceCallerId);
-                                            DrivingProfileHelper.save(getApplicationContext(), drivingProfile);
-                                            dialog.dismiss();
-                                            ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
-                                        }
-                                    }
-                                })
+                                .setNeutralButton(R.string.clear, null)
+                                .setPositiveButton(R.string.save, null)
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showDrivingProfileSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -723,12 +650,113 @@ public class FragmentAdvancedSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showDrivingProfileSelector: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
+
+                        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final ListView listView = materialDialog.getListView();
+                                final ListAdapter adapter = listView.getAdapter();
+                                if (adapter instanceof BaseAdapter) {
+                                    boolean isItemChecked;
+                                    for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                        isItemChecked = checkedItems[i];
+                                        checkedItems[i] = false;
+                                        if (isItemChecked) {
+                                            listView.setItemChecked(i, false);
+                                        }
+                                    }
+                                    ((BaseAdapter) adapter).notifyDataSetChanged();
+                                } else {
+                                    MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                }
+                            }
+                        });
+                        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive");
+                                }
+
+                                final List<Integer> selectedIndices = new ArrayList<>();
+                                for (int i = 0; i < checkedItems.length; ++i) {
+                                    if (checkedItems[i]) {
+                                        selectedIndices.add(i);
+                                    }
+                                }
+                                final Integer[] selected = selectedIndices.toArray(new Integer[0]);
+
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive: length: " + selected.length);
+                                    for (final Integer aSelected : selected) {
+                                        MyLog.i(CLS_NAME, "showDrivingProfileSelector: onPositive: " + aSelected);
+                                    }
+                                }
+                                drivingProfile.setStartAutomatically(ArrayUtils.contains(selected, 0));
+                                drivingProfile.setStopAutomatically(ArrayUtils.contains(selected, 1));
+                                drivingProfile.setStartHotword(ArrayUtils.contains(selected, 2));
+                                final boolean announceNotifications = ArrayUtils.contains(selected, 3);
+                                drivingProfile.setAnnounceNotifications(announceNotifications);
+
+                                boolean checkAnnounceCallerId;
+                                if (!announceNotifications) {
+                                    checkAnnounceCallerId = true;
+                                } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                    boolean isNotificationListenerRunning = false;
+                                    for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
+                                        if (packageName.equals(getApplicationContext().getPackageName())) {
+                                            isNotificationListenerRunning = true;
+                                            break;
+                                        }
+                                    }
+                                    if (isNotificationListenerRunning) {
+                                        checkAnnounceCallerId = true;
+                                    } else {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "notification listener service not running");
+                                        }
+                                        if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
+                                            getParentActivity().speak(R.string.notifications_enable, LocalRequest.ACTION_TOGGLE_DRIVING_PROFILE);
+                                            checkAnnounceCallerId = false;
+                                        } else {
+                                            if (DEBUG) {
+                                                MyLog.w(CLS_NAME, "notification listener: settings location unknown");
+                                            }
+                                            getParentActivity().speak(getParent().getString(R.string.settings_missing, getString(R.string.notification_access)), LocalRequest.ACTION_SPEAK_ONLY);
+                                            checkAnnounceCallerId = false;
+                                        }
+                                    }
+                                } else if (ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
+                                    ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
+                                    checkAnnounceCallerId = true;
+                                } else {
+                                    ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
+                                    getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
+                                    checkAnnounceCallerId = false;
+                                }
+                                if (!checkAnnounceCallerId) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "showDrivingProfileSelector: proceed: false");
+                                    }
+                                    return;
+                                }
+                                final boolean announceCallerId = ArrayUtils.contains(selected, 4);
+                                if (announceCallerId && !ai.saiy.android.permissions.PermissionHelper.checkNotificationPolicyPermission(getApplicationContext())) {
+                                    ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.NOTIFICATION_POLICY_ACCESS_SETTINGS);
+                                    getParentActivity().speak(R.string.app_speech_notification_policy, LocalRequest.ACTION_SPEAK_ONLY);
+                                } else if (ai.saiy.android.permissions.PermissionHelper.checkReadCallerPermissions(getApplicationContext())) {
+                                    drivingProfile.setAnnounceCallerId(announceCallerId);
+                                    DrivingProfileHelper.save(getApplicationContext(), drivingProfile);
+                                    materialDialog.dismiss();
+                                    ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -755,7 +783,6 @@ public class FragmentAdvancedSettingsHelper {
                         } else {
                             ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -764,7 +791,6 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAccessibilityChangeDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
@@ -797,61 +823,13 @@ public class FragmentAdvancedSettingsHelper {
                         }
                     }
                 })
-                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onPositive");
-                        }
-                        if (dialog instanceof AlertDialog) {
-                            EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etBlockedContent);
-                            final CheckBox cbEnabled = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbEnabled);
-                            final CheckBox cbDeviceLocked = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbDeviceLocked);
-                            final CheckBox cbRestricted = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbRestricted);
-                            final CheckBox cbSMSContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbSMSContent);
-                            final CheckBox cbHangoutContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbHangoutContent);
-                            final CheckBox cbWhatsAppContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbWhatsAppContent);
-                            if (editText.getText() != null) {
-                                String str = editText.getText().toString().trim();
-                                if (ai.saiy.android.utils.UtilsString.notNaked(str) &&
-                                        !ai.saiy.android.utils.UtilsString.regexCheck(str)) {
-                                    toast(getString(R.string.input_format_error), Toast.LENGTH_SHORT);
-                                    return;
-                                }
-                            }
-                            AsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    BlockedApplications blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
-                                    blockedApplications.setText(null);
-                                    BlockedApplicationsHelper.save(getApplicationContext(), blockedApplications);
-                                    SPH.setAnnounceNotifications(getApplicationContext(), cbEnabled.isChecked());
-                                    SPH.setAnnounceNotificationsSecure(getApplicationContext(), cbDeviceLocked.isChecked());
-                                    SPH.setIgnoreRestrictedContent(getApplicationContext(), cbRestricted.isChecked());
-                                    SPH.setAnnounceNotificationsSMS(getApplicationContext(), cbSMSContent.isChecked());
-                                    SPH.setAnnounceNotificationsHangouts(getApplicationContext(), cbHangoutContent.isChecked());
-                                    SPH.setAnnounceNotificationsWhatsapp(getApplicationContext(), cbWhatsAppContent.isChecked());
-                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                                        if (SPH.getAnnounceNotifications(getApplicationContext()) && !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
-                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
-                                            getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
-                                        } else if (SPH.getAnnounceNotifications(getApplicationContext())) {
-                                            ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.save, null)
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -860,12 +838,57 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
+        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "showAnnounceNotificationsDialog: onPositive");
+                }
+                EditText editText = materialDialog.getWindow().findViewById(R.id.etBlockedContent);
+                final CheckBox cbEnabled = materialDialog.getWindow().findViewById(R.id.cbEnabled);
+                final CheckBox cbDeviceLocked = materialDialog.getWindow().findViewById(R.id.cbDeviceLocked);
+                final CheckBox cbRestricted = materialDialog.getWindow().findViewById(R.id.cbRestricted);
+                final CheckBox cbSMSContent = materialDialog.getWindow().findViewById(R.id.cbSMSContent);
+                final CheckBox cbHangoutContent = materialDialog.getWindow().findViewById(R.id.cbHangoutContent);
+                final CheckBox cbWhatsAppContent = materialDialog.getWindow().findViewById(R.id.cbWhatsAppContent);
+                if (editText.getText() != null) {
+                    String str = editText.getText().toString().trim();
+                    if (ai.saiy.android.utils.UtilsString.notNaked(str) &&
+                            !ai.saiy.android.utils.UtilsString.regexCheck(str)) {
+                        toast(getString(R.string.input_format_error), Toast.LENGTH_SHORT);
+                        return;
+                    }
+                }
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        BlockedApplications blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
+                        blockedApplications.setText(null);
+                        BlockedApplicationsHelper.save(getApplicationContext(), blockedApplications);
+                        SPH.setAnnounceNotifications(getApplicationContext(), cbEnabled.isChecked());
+                        SPH.setAnnounceNotificationsSecure(getApplicationContext(), cbDeviceLocked.isChecked());
+                        SPH.setIgnoreRestrictedContent(getApplicationContext(), cbRestricted.isChecked());
+                        SPH.setAnnounceNotificationsSMS(getApplicationContext(), cbSMSContent.isChecked());
+                        SPH.setAnnounceNotificationsHangouts(getApplicationContext(), cbHangoutContent.isChecked());
+                        SPH.setAnnounceNotificationsWhatsapp(getApplicationContext(), cbWhatsAppContent.isChecked());
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
+                            if (SPH.getAnnounceNotifications(getApplicationContext()) && !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
+                                ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
+                                getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
+                            } else if (SPH.getAnnounceNotifications(getApplicationContext())) {
+                                ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
+                            }
+                        }
+                    }
+                });
+                materialDialog.dismiss();
+            }
+        });
         BlockedApplications blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
         if (ai.saiy.android.utils.UtilsString.notNaked(blockedApplications.getText())) {
             ((EditText) view.findViewById(R.id.etBlockedContent)).setText(blockedApplications.getText());
@@ -912,7 +935,6 @@ public class FragmentAdvancedSettingsHelper {
                         quietTime.setEndHour(endTimePicker.getCurrentHour());
                         quietTime.setEndMinute(endTimePicker.getCurrentMinute());
                         ai.saiy.android.quiet.QuietTimeHelper.save(getApplicationContext(), quietTime);
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -921,7 +943,6 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showQuietTimesDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -930,7 +951,6 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showQuietTimesDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
 
@@ -954,16 +974,7 @@ public class FragmentAdvancedSettingsHelper {
                 .setCancelable(false)
                 .setTitle(R.string.menu_pause)
                 .setIcon(R.drawable.ic_pause_circle_outline)
-                .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (dialog instanceof AlertDialog) {
-                            ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.pauseSeekBar))
-                                    .setProgress((int) (RecognitionNative.PAUSE_TIMEOUT / 1000));
-                        }
-                    }
-                })
-
+                .setNeutralButton(R.string.text_default, null)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -976,32 +987,34 @@ public class FragmentAdvancedSettingsHelper {
                                     (long) ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.pauseSeekBar))
                                             .getProgress() * 1000);
                         }
-                        dialog.dismiss();
                     }
                 })
-
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showPauseDetectionSlider: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
-
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showPauseDetectionSlider: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
+        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SeekBar) materialDialog.findViewById(R.id.pauseSeekBar))
+                        .setProgress((int) (RecognitionNative.PAUSE_TIMEOUT / 1000));
+            }
+        });
         final int currentTimeout = (int) (SPH.getPauseTimeout(getApplicationContext()) / 1000);
         final TextView seekText = (TextView) materialDialog.findViewById(R.id.pauseSeekBarText);
 
@@ -1070,7 +1083,6 @@ public class FragmentAdvancedSettingsHelper {
                             DatePicker datePicker = ((AlertDialog) dialog).getWindow().findViewById(R.id.dobDatePicker);
                             HoroscopeHelper.calculateHoroscope(getApplicationContext(), datePicker.getDayOfMonth(), datePicker.getMonth(), datePicker.getYear());
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -1079,7 +1091,6 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showDOBDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -1088,7 +1099,6 @@ public class FragmentAdvancedSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showDOBDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
@@ -1125,19 +1135,16 @@ public class FragmentAdvancedSettingsHelper {
                                 }
                             }
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                     @Override
                     public void onCancel(final DialogInterface dialog) {
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;

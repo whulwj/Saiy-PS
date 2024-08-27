@@ -40,7 +40,6 @@ public class ActivityShowDialog extends AppCompatActivity {
                             DatePicker datePicker = ((AlertDialog) dialog).getWindow().findViewById(R.id.dobDatePicker);
                             HoroscopeHelper.calculateHoroscope(getApplicationContext(), datePicker.getDayOfMonth(), datePicker.getMonth(), datePicker.getYear());
                         }
-                        dialog.dismiss();
                         ActivityShowDialog.this.finish();
                     }
                 })
@@ -50,7 +49,6 @@ public class ActivityShowDialog extends AppCompatActivity {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showDOBDialog: onNegative");
                         }
-                        dialog.dismiss();
                         ActivityShowDialog.this.finish();
                     }
                 })
@@ -60,7 +58,6 @@ public class ActivityShowDialog extends AppCompatActivity {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showDOBDialog: onCancel");
                         }
-                        dialog.dismiss();
                         ActivityShowDialog.this.finish();
                     }
                 }).create();

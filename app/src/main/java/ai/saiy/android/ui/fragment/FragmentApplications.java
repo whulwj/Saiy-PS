@@ -133,7 +133,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     public void onClick(DialogInterface dialog, int which) {
                         ExecuteIntent.settingsIntent(getParentActivity().getApplicationContext(),
                                 IntentConstants.SETTINGS_ADD_ACCOUNT);
-                        dialog.dismiss();
                     }
                 })
                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
@@ -147,7 +146,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                             ai.saiy.android.utils.SPH.setAlexaRegion(getApplicationContext(), position);
                             showAlexaOverviewDialog();
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -156,7 +154,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAlexaRegionDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -165,7 +162,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAlexaRegionDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
 
@@ -194,7 +190,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAlexaOverviewDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -203,7 +198,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showAlexaOverviewDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
 

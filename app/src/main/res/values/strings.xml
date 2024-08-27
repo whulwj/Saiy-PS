@@ -240,9 +240,8 @@
     <string name="menu_lock_security" translatable="true">"Secure info when locked"</string>
     <string name="menu_algorithms" translatable="true">Algorithms</string>
     <string name="menu_supported_languages" translatable="true">Supported Languages</string>
-    <string name="menu_tts_voice">Text to Speech Voice</string>
+    <string name="menu_tts_voice">Text to Speech Voice: Test &amp; select one</string>
     <string name="menu_synthesised_voice" translatable="true">Google Synthesised Voice</string>
-    <string name="menu_network_synthesis">Network Synthesis</string>
     <string name="synthesis_intro_text">Configure network synthesis</string>
     <string name="menu_user_guide" translatable="true">User Guide</string>
     <string name="lp_user_guide">A user guide, that will teach you in more detail how elements of the application work.</string>

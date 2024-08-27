@@ -24,6 +24,10 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.text.Html;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.CheckedTextView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,6 +37,8 @@ import androidx.core.content.IntentCompat;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.apache.commons.lang3.StringUtils;
+
+import java.util.Arrays;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
@@ -67,7 +73,6 @@ public class ActivityHomeHelper {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showStartTutorialDialog: onPositive");
                                 }
-                                dialog.dismiss();
                                 ((ActivityHome) activity).startTutorial();
                             }
                         }
@@ -78,7 +83,6 @@ public class ActivityHomeHelper {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showStartTutorialDialog: onNegative");
                                 }
-                                dialog.dismiss();
                             }
                         }
                 )
@@ -88,7 +92,6 @@ public class ActivityHomeHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showStartTutorialDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
@@ -107,7 +110,6 @@ public class ActivityHomeHelper {
                                 MyLog.i(CLS_NAME, "onClick: tutorialActive");
                             }
                             activity.toast(activity.getApplicationContext().getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
-                            dialog.dismiss();
                             return;
                         }
                         switch (which) {
@@ -154,16 +156,14 @@ public class ActivityHomeHelper {
                                 ExecuteIntent.webSearch(activity.getApplicationContext(), Constants.USER_COMING_SOON);
                                 break;
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showUnknownCommandSelector: onNegative");
+                            MyLog.i(CLS_NAME, "showUserGuideDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
@@ -192,7 +192,6 @@ public class ActivityHomeHelper {
                         }
 
                         SPH.setAcceptedDisclaimer(act.getApplicationContext());
-                        dialog.dismiss();
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 })
@@ -205,7 +204,6 @@ public class ActivityHomeHelper {
 
                         SelfAwareHelper.stopService(act.getApplicationContext());
                         ExecuteIntent.uninstallApp(act.getApplicationContext(), act.getPackageName());
-                        dialog.dismiss();
                         act.finish();
                     }
                 })
@@ -218,7 +216,6 @@ public class ActivityHomeHelper {
 
                         SelfAwareHelper.stopService(act.getApplicationContext());
                         ExecuteIntent.uninstallApp(act.getApplicationContext(), act.getPackageName());
-                        dialog.dismiss();
                         act.finish();
                     }
                 }).create();
@@ -247,7 +244,6 @@ public class ActivityHomeHelper {
                         }
 
                         SPH.setDeveloperNote(act.getApplicationContext());
-                        dialog.dismiss();
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 })
@@ -259,7 +255,6 @@ public class ActivityHomeHelper {
                         }
 
                         SPH.setDeveloperNote(act.getApplicationContext());
-                        dialog.dismiss();
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 }).create();
@@ -288,7 +283,6 @@ public class ActivityHomeHelper {
                         }
 
                         SPH.setWhatsNew(act.getApplicationContext());
-                        dialog.dismiss();
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 })
@@ -300,7 +294,6 @@ public class ActivityHomeHelper {
                         }
 
                         SPH.setWhatsNew(act.getApplicationContext());
-                        dialog.dismiss();
                         ((ActivityHome) act).runStartConfiguration();
                     }
                 }).create();
@@ -332,10 +325,7 @@ public class ActivityHomeHelper {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-
                 final String[] languages = act.getResources().getStringArray(R.array.array_supported_languages);
-
-                //TODO
                 for (int i = 0; i < languages.length; i++) {
                     languages[i] = StringUtils.capitalize(languages[i]);
                 }
@@ -343,14 +333,17 @@ public class ActivityHomeHelper {
                 act.runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(act)
                                 .setCancelable(false)
                                 .setTitle(R.string.menu_supported_languages)
-                                .setSingleChoiceItems((CharSequence[]) languages, 0, new DialogInterface.OnClickListener() {
+                                .setSingleChoiceItems(languages, 0, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        if (DEBUG) {
+                                        if (0 != which) {
+                                            if (dialog instanceof AlertDialog) {
+                                                ((AlertDialog) dialog).getListView().setItemChecked(0, true);
+                                            }
+                                        } else if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showLanguageSelector: onSelection: " + which + ": " + languages[which]);
                                         }
                                     }
@@ -362,8 +355,6 @@ public class ActivityHomeHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showLanguageSelector: " + which);
                                         }
-
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -372,13 +363,27 @@ public class ActivityHomeHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showLanguageSelector: onCancel");
                                         }
-
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
+
+                        materialDialog.getListView().setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                            @Override
+                            public void onChildViewAdded(View parent, View child) {
+                                if (child instanceof CheckedTextView) {
+                                    final int itemIndex = Arrays.asList(languages).indexOf(((TextView) child).getText().toString());
+                                    child.setEnabled(itemIndex == 0);
+                                } else if (DEBUG) {
+                                    MyLog.d(CLS_NAME, "onChildViewAdded: " + child.getClass().getSimpleName());
+                                }
+                            }
+
+                            @Override
+                            public void onChildViewRemoved(View parent, View child) {
+                            }
+                        });
                     }
                 });
             }
@@ -399,7 +404,6 @@ public class ActivityHomeHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showNoTTSDialog: onPositive");
                         }
-                        dialog.dismiss();
                         Install.showInstallLink(activity.getApplicationContext(), TTSDefaults.TTS_PKG_NAME_GOOGLE);
                     }
                 })
@@ -409,7 +413,6 @@ public class ActivityHomeHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showNoTTSDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -418,7 +421,6 @@ public class ActivityHomeHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showNoTTSDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;

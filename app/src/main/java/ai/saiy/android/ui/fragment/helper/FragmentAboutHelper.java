@@ -18,7 +18,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.os.AsyncTask;
 import android.view.View;
 
@@ -375,12 +374,7 @@ public class FragmentAboutHelper {
                 .setTitle(R.string.menu_release_notes)
                 .setMessage(R.string.content_whats_new)
                 .setIcon(R.drawable.ic_info)
-                .setPositiveButton(R.string.menu_close, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.menu_close, null)
                 .create();
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
@@ -392,12 +386,7 @@ public class FragmentAboutHelper {
                 .setTitle(R.string.menu_special_thanks)
                 .setMessage(R.string.content_legends)
                 .setIcon(R.drawable.ic_xda)
-                .setPositiveButton(R.string.menu_legen_dary, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                })
+                .setPositiveButton(R.string.menu_legen_dary, null)
                 .create();
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;

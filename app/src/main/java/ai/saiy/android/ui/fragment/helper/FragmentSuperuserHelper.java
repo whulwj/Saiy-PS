@@ -28,6 +28,7 @@ import android.util.Pair;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -389,22 +390,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 checkedItems[which] = isChecked;
                             }
                         })
-                        .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                if (dialog instanceof AlertDialog) {
-                                    final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
-                                    if (adapter instanceof BaseAdapter) {
-                                        for (int i = checkedItems.length - 1; i >= 0; --i) {
-                                            checkedItems[i] = false;
-                                        }
-                                        ((BaseAdapter) adapter).notifyDataSetChanged();
-                                    } else {
-                                        MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
-                                    }
-                                }
-                            }
-                        })
+                        .setNeutralButton(R.string.clear, null)
                         .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -419,7 +405,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                     }
                                 }
                                 final Integer[] selected = selectedIndices.toArray(new Integer[0]);
-                                assert selected != null;
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onPositive: " + selected.length);
                                 }
@@ -439,7 +424,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 }
 
                                 blackListHelper.save(getApplicationContext(), userBlackListed);
-                                dialog.dismiss();
                             }
                         })
                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -448,7 +432,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onNegative");
                                 }
-                                dialog.dismiss();
                             }
                         })
                         .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -457,12 +440,32 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showBlackListSelector: onCancel");
                                 }
-                                dialog.dismiss();
                             }
                         }).create();
 
                 materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                 materialDialog.show();
+
+                materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final ListView listView = materialDialog.getListView();
+                        final ListAdapter adapter = listView.getAdapter();
+                        if (adapter instanceof BaseAdapter) {
+                            boolean isItemChecked;
+                            for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                isItemChecked = checkedItems[i];
+                                checkedItems[i] = false;
+                                if (isItemChecked) {
+                                    listView.setItemChecked(i, false);
+                                }
+                            }
+                            ((BaseAdapter) adapter).notifyDataSetChanged();
+                        } else {
+                            MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                        }
+                    }
+                });
             }
         });
 
@@ -502,7 +505,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
                             SPH.setInactivityTimeout(FragmentSuperuserHelper.this.getApplicationContext(), timeout);
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -511,7 +513,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showMemorySlider: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -520,7 +521,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showMemorySlider: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
@@ -606,7 +606,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                             }
                                             SPH.setJwdUpperThresholdForContact(getApplicationContext(), 0 == selected);
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -615,7 +614,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showAlgorithmSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -624,7 +622,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showAlgorithmSelector: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
@@ -657,26 +654,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         }
                                     }
                                 })
-                                .setNeutralButton(R.string.menu_test, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (dialog instanceof AlertDialog) {
-                                            final int selected = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "showNoteProviderSelector: onNeutral: " + selected);
-                                            }
-                                            final NoteValues noteValues = new NoteValues();
-                                            noteValues.setNoteBody(getString(R.string.test_note_content));
-                                            noteValues.setNoteTitle(getString(R.string.test_note_title));
-                                            if (NoteProvider.publishNoteTest(getApplicationContext(), noteValues, selected)) {
-                                                return;
-                                            }
-                                            toast(getString(R.string.title_no_note_response), Toast.LENGTH_SHORT);
-                                        }
-                                        dialog.dismiss();
-                                    }
-                                })
+                                .setNeutralButton(R.string.menu_test, null)
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -688,7 +666,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                             }
                                             SPH.setDefaultNote(getApplicationContext(), selected);
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -697,7 +674,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showNoteProviderSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -706,12 +682,29 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showNoteProviderSelector: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
+
+                        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final int selected = materialDialog.getListView().getCheckedItemPosition();
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showNoteProviderSelector: onNeutral: " + selected);
+                                }
+                                final NoteValues noteValues = new NoteValues();
+                                noteValues.setNoteBody(getString(R.string.test_note_content));
+                                noteValues.setNoteTitle(getString(R.string.test_note_title));
+                                if (NoteProvider.publishNoteTest(getApplicationContext(), noteValues, selected)) {
+                                    return;
+                                }
+                                toast(getString(R.string.title_no_note_response), Toast.LENGTH_SHORT);
+                                materialDialog.dismiss();
+                            }
+                        });
                     }
                 });
             }
@@ -782,7 +775,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                             public void onClick(DialogInterface dialog, int which) {
                                                 ExecuteIntent.settingsIntent(FragmentSuperuserHelper.this.getApplicationContext(),
                                                         IntentConstants.SETTINGS_ADD_ACCOUNT);
-                                                dialog.dismiss();
                                             }
                                         })
                                         .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
@@ -803,7 +795,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                                     }
                                                     FragmentSuperuserHelper.this.startEnrollment(account.name);
                                                 }
-                                                dialog.dismiss();
                                             }
                                         })
                                         .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -812,7 +803,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                                 if (DEBUG) {
                                                     MyLog.i(CLS_NAME, "showAccountPicker: onNegative");
                                                 }
-                                                dialog.dismiss();
                                             }
                                         })
                                         .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -821,7 +811,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                                 if (DEBUG) {
                                                     MyLog.i(CLS_NAME, "showAccountPicker: onCancel");
                                                 }
-                                                dialog.dismiss();
                                             }
                                         }).create();
 
@@ -884,8 +873,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                             if (SaiyAccountHelper.deleteAccount(FragmentSuperuserHelper.this.getApplicationContext(), accountName, null)) {
                                 FragmentSuperuserHelper.this.proceedEnrollment(accountName);
                             }
-
-                            dialog.dismiss();
                         }
                     })
                     .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -894,7 +881,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "startEnrollment: onNegative");
                             }
-                            dialog.dismiss();
                         }
                     })
                     .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -903,7 +889,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "startEnrollment: onCancel");
                             }
-                            dialog.dismiss();
                         }
                     }).create();
 
@@ -1188,7 +1173,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 });
                             }
                         }.start();
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -1197,7 +1181,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showResetDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -1206,7 +1189,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showResetDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
 
@@ -1222,7 +1204,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                 .setPositiveButton(R.string.configure, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
                         showOverrideSecureSelector();
                     }
                 })
@@ -1232,7 +1213,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showOverrideSecureConfirmation: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -1241,7 +1221,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showOverrideSecureConfirmation: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
 
@@ -1287,22 +1266,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         checkedItems[which] = isChecked;
                                     }
                                 })
-                                .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        if (dialog instanceof AlertDialog) {
-                                            final ListAdapter adapter = ((AlertDialog) dialog).getListView().getAdapter();
-                                            if (adapter instanceof BaseAdapter) {
-                                                for (int i = checkedItems.length - 1; i >= 0; --i) {
-                                                    checkedItems[i] = false;
-                                                }
-                                                ((BaseAdapter) adapter).notifyDataSetChanged();
-                                            } else {
-                                                MyLog.e(CLS_NAME, "onNegative:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
-                                            }
-                                        }
-                                    }
-                                })
+                                .setNeutralButton(R.string.clear, null)
                                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1317,7 +1281,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                             }
                                         }
                                         final Integer[] selected = selectedIndices.toArray(new Integer[0]);
-                                        assert selected != null;
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showOverrideSecureSelector: onPositive: " + selected.length);
                                             for (Integer num : selected) {
@@ -1328,7 +1291,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         SPH.setOverrideSecureDriving(getApplicationContext(), org.apache.commons.lang3.ArrayUtils.contains(selected, 1));
                                         SPH.setOverrideSecureHeadset(getApplicationContext(), org.apache.commons.lang3.ArrayUtils.contains(selected, 2));
 
-                                        dialog.dismiss();
                                         ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
                                     }
                                 })
@@ -1338,7 +1300,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showOverrideSecureSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -1347,12 +1308,32 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showOverrideSecureSelector: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
+
+                        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                final ListView listView = materialDialog.getListView();
+                                final ListAdapter adapter = listView.getAdapter();
+                                if (adapter instanceof BaseAdapter) {
+                                    boolean isItemChecked;
+                                    for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                        isItemChecked = checkedItems[i];
+                                        checkedItems[i] = false;
+                                        if (isItemChecked) {
+                                            listView.setItemChecked(i, false);
+                                        }
+                                    }
+                                    ((BaseAdapter) adapter).notifyDataSetChanged();
+                                } else {
+                                    MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                }
+                            }
+                        });
                     }
                 });
             }

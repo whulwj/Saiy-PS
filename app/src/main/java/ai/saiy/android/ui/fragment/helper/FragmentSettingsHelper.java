@@ -31,9 +31,10 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
-import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.CheckBox;
+import android.widget.CheckedTextView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -53,6 +54,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -95,6 +97,7 @@ public class FragmentSettingsHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentSettingsHelper.class.getSimpleName();
 
+    private static final int CACHE_SPEECH_INDEX = 3;
     private final FragmentSettings parentFragment;
     private TextToSpeech tts;
     private String defaultTTSPackage;
@@ -320,7 +323,6 @@ public class FragmentSettingsHelper {
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                                 .setCancelable(false)
                                 .setTitle(R.string.menu_tts_voice)
-                                .setMessage("Test & select a voice")
                                 .setIcon(R.drawable.ic_voice_over)
                                 .setSingleChoiceItems(namesOfVoice.toArray(new String[0]), finalCheckedIndex, new DialogInterface.OnClickListener() {
                                     @Override
@@ -379,7 +381,6 @@ public class FragmentSettingsHelper {
                                             }).start();
                                             shutdownTTS();
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -388,7 +389,6 @@ public class FragmentSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showVoiceSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                         shutdownTTS();
                                     }
                                 })
@@ -398,7 +398,6 @@ public class FragmentSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showVoiceSelector: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
@@ -609,7 +608,6 @@ public class FragmentSettingsHelper {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "showVoicesDialog: onNeutral");
                 }
-                dialog.dismiss();
                 if (getParent().isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_DIAGNOSTICS))) {
                     getParentActivity().doFragmentAddTransaction(FragmentDiagnostics.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_DIAGNOSTICS), ActivityHome.ANIMATION_FADE, ActivityHome.MENU_INDEX_SETTINGS);
                 } else if (DEBUG) {
@@ -623,7 +621,6 @@ public class FragmentSettingsHelper {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "showVoicesDialog: onPositive");
                 }
-                dialog.dismiss();
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     getVoices();
                 }
@@ -645,7 +642,6 @@ public class FragmentSettingsHelper {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "showVoicesDialog: onNegative");
                     }
-                    dialog.dismiss();
                     if (needDiagnostics) {
                         SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.DEVICE);
                     }
@@ -688,7 +684,6 @@ public class FragmentSettingsHelper {
                                         }
                                     }
                                 })
-
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -712,7 +707,6 @@ public class FragmentSettingsHelper {
 
                                             }
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -721,7 +715,6 @@ public class FragmentSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -730,7 +723,6 @@ public class FragmentSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showTemperatureUnitsSelector: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
@@ -756,7 +748,6 @@ public class FragmentSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showHeadsetOverviewDialog: onPositive");
                         }
-                        dialog.dismiss();
                         showHeadsetDialog();
                     }
                 })
@@ -766,7 +757,6 @@ public class FragmentSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showHeadsetOverviewDialog: onNegative");
                         }
-                        dialog.dismiss();
                         showHeadsetDialog();
                     }
                 })
@@ -776,7 +766,6 @@ public class FragmentSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showHeadsetOverviewDialog: onCancel");
                         }
-                        dialog.dismiss();
                         showHeadsetDialog();
                     }
                 })
@@ -822,7 +811,6 @@ public class FragmentSettingsHelper {
                             }
                             SPH.setAutoConnectHeadset(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbAutoConnect)).isChecked());
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -831,7 +819,6 @@ public class FragmentSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showHeadsetDialog: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -840,7 +827,6 @@ public class FragmentSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showHeadsetDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
@@ -931,47 +917,36 @@ public class FragmentSettingsHelper {
                     @Override
                     public void run() {
                         final int defaultIndex = SPH.getCommandUnknownAction(getApplicationContext());
-                        int checkedItem = INVALID_POSITION;
-                        final List<String> items = new ArrayList<>();
-                        for (int i = 0, j = 0; i < actions.length; i++, j++) {
-                            if (disabledIndicesList.contains(i)) {
-                                continue;
-                            }
-                            items.add(actions[i]);
-                            if (Unknown.UNKNOWN_ALEXA == i && !ai.saiy.android.amazon.TokenHelper.hasToken(getApplicationContext())) {
-                                continue;
-                            }
-                            if (i == defaultIndex) {
-                                checkedItem = j;
-                            }
-                        }
+                        final int checkedItem = (defaultIndex != Unknown.UNKNOWN_ALEXA || ai.saiy.android.amazon.TokenHelper.hasToken(getApplicationContext()))? defaultIndex : 0;
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                                 .setCancelable(false)
                                 .setTitle(R.string.content_unknown_command)
                                 .setIcon(R.drawable.ic_help_circle)
-                                .setSingleChoiceItems(items.toArray(new String[0]), checkedItem, new DialogInterface.OnClickListener() {
+                                .setSingleChoiceItems(actions, checkedItem, new DialogInterface.OnClickListener() {
+                                    private int lastCheckedIndex = checkedItem;
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showUnknownCommandSelector: onSelection: " + which + ": " + items.get(which));
+                                        if (disabledIndicesList.contains(which)) {
+                                            if (dialog instanceof AlertDialog) {
+                                                if (INVALID_POSITION != lastCheckedIndex) {
+                                                    ((AlertDialog) dialog).getListView().setItemChecked(lastCheckedIndex, true);
+                                                } else {
+                                                    ((AlertDialog) dialog).getListView().setItemChecked(which, false);
+                                                }
+                                            }
+                                        } else {
+                                            lastCheckedIndex = which;
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showUnknownCommandSelector: onSelection: " + which + ": " + actions[which]);
+                                            }
                                         }
                                     }
                                 })
-
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (dialog instanceof AlertDialog) {
-                                            final int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
-                                            int selectedIndex = INVALID_POSITION;
-                                            if (position != INVALID_POSITION) {
-                                                for (int i = 0; i < actions.length; i++) {
-                                                    if (TextUtils.equals(actions[i], items.get(position))) {
-                                                        selectedIndex = i;
-                                                        break;
-                                                    }
-                                                }
-                                            }
+                                            final int selectedIndex = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "showUnknownCommandSelector: onPositive: " + selectedIndex);
                                             }
@@ -992,33 +967,43 @@ public class FragmentSettingsHelper {
                                                 }
                                             }
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
-
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showUnknownCommandSelector: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
-
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
                                     @Override
                                     public void onCancel(final DialogInterface dialog) {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showUnknownCommandSelector: onCancel");
                                         }
-
-                                        dialog.dismiss();
                                     }
                                 }).create();
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
+
+                        materialDialog.getListView().setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                            @Override
+                            public void onChildViewAdded(View parent, View child) {
+                                if (child instanceof CheckedTextView) {
+                                    final int itemIndex = Arrays.asList(actions).indexOf(((TextView) child).getText().toString());
+                                    child.setEnabled(!disabledIndicesList.contains(itemIndex));
+                                } else if (DEBUG) {
+                                    MyLog.d(CLS_NAME, "onChildViewAdded: " + child.getClass().getSimpleName());
+                                }
+                            }
+
+                            @Override
+                            public void onChildViewRemoved(View parent, View child) {
+                            }
+                        });
                     }
                 });
             }
@@ -1035,18 +1020,7 @@ public class FragmentSettingsHelper {
                 .setCancelable(false)
                 .setTitle(R.string.menu_volume_settings)
                 .setIcon(R.drawable.ic_volume_high)
-                .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (dialog instanceof AlertDialog) {
-                            ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.volumeSeekBar))
-                                    .setProgress(4);
-                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbSystemManagedVolume)).setChecked(true);
-                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbGlobalVolume)).setChecked(true);
-                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbToastVolume)).setChecked(true);
-                        }
-                    }
-                })
+                .setNeutralButton(R.string.text_default, null)
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1063,7 +1037,6 @@ public class FragmentSettingsHelper {
                             SPH.setToastVolumeWarnings(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbToastVolume)).isChecked());
                             SPH.setSystemManagedVolume(getApplicationContext(), ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbSystemManagedVolume)).isChecked());
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -1072,7 +1045,6 @@ public class FragmentSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showVolumeSettingsSlider: onNegative");
                         }
-                        dialog.dismiss();
                     }
                 })
                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -1081,12 +1053,21 @@ public class FragmentSettingsHelper {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showVolumeSettingsSlider: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
+        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ((SeekBar) materialDialog.findViewById(R.id.volumeSeekBar))
+                        .setProgress(4);
+                ((CheckBox) materialDialog.findViewById(R.id.cbSystemManagedVolume)).setChecked(true);
+                ((CheckBox) materialDialog.findViewById(R.id.cbGlobalVolume)).setChecked(true);
+                ((CheckBox) materialDialog.findViewById(R.id.cbToastVolume)).setChecked(true);
+            }
+        });
         final int userVolume = SPH.getTTSVolume(getApplicationContext());
         final TextView seekText = materialDialog.findViewById(R.id.volumeSeekBarText);
         final SeekBar seekbar = materialDialog.findViewById(R.id.volumeSeekBar);
@@ -1200,14 +1181,7 @@ public class FragmentSettingsHelper {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                final String[] stringArray = getParent().getResources().getStringArray(R.array.array_google_synthesised_voice);
-                String[] networkSynthesis;
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) { // The last one not available
-                    networkSynthesis = new String[stringArray.length - 1];
-                    System.arraycopy(stringArray, 0, networkSynthesis, 0, stringArray.length - 1);
-                } else {
-                    networkSynthesis = stringArray;
-                }
+                final String[] networkSynthesis = getParent().getResources().getStringArray(R.array.array_google_synthesised_voice);
                 final boolean[] checkedItems = new boolean[networkSynthesis.length];
                 if (SPH.getNetworkSynthesis(getApplicationContext())) {
                     checkedItems[0] = true;
@@ -1219,23 +1193,29 @@ public class FragmentSettingsHelper {
                     checkedItems[2] = true;
                 }
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && SPH.isCacheSpeech(getApplicationContext())) {
-                    checkedItems[3] = true;
+                    checkedItems[CACHE_SPEECH_INDEX] = true;
                 }
                 getParentActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                                 .setCancelable(false)
-                                .setTitle(R.string.menu_network_synthesis)
-                                .setMessage(R.string.synthesis_intro_text)
+                                .setTitle(R.string.synthesis_intro_text)
                                 .setIcon(R.drawable.ic_google)
-                                .setMultiChoiceItems(stringArray, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
+                                .setMultiChoiceItems(networkSynthesis, checkedItems, new DialogInterface.OnMultiChoiceClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onSelection: " + which + ", " + isChecked);
+                                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP && CACHE_SPEECH_INDEX == which) {
+                                            checkedItems[which] = false;
+                                            if (dialogInterface instanceof AlertDialog) {
+                                                ((AlertDialog) dialogInterface).getListView().setItemChecked(which, false);
+                                            }
+                                        } else {
+                                            checkedItems[which] = isChecked;
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onSelection: " + which + ", " + isChecked);
+                                            }
                                         }
-                                        checkedItems[which] = isChecked;
                                     }
                                 })
                                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
@@ -1262,10 +1242,9 @@ public class FragmentSettingsHelper {
                                             SPH.setNetworkSynthesisWifi(getApplicationContext(), ArrayUtils.contains(selected, 1) || ArrayUtils.contains(selected, 2));
                                             SPH.setNetworkSynthesis4g(getApplicationContext(), ArrayUtils.contains(selected, 2));
                                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                                SPH.setCacheSpeech(getApplicationContext(), ArrayUtils.contains(selected, 3));
+                                                SPH.setCacheSpeech(getApplicationContext(), ArrayUtils.contains(selected, CACHE_SPEECH_INDEX));
                                             }
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
@@ -1274,7 +1253,6 @@ public class FragmentSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onNegative");
                                         }
-                                        dialog.dismiss();
                                     }
                                 })
                                 .setOnCancelListener(new DialogInterface.OnCancelListener() {
@@ -1283,11 +1261,28 @@ public class FragmentSettingsHelper {
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "showNetworkSynthesisDialog: onCancel");
                                         }
-                                        dialog.dismiss();
                                     }
                                 }).create();
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
+
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                            materialDialog.getListView().setOnHierarchyChangeListener(new ViewGroup.OnHierarchyChangeListener() {
+                                @Override
+                                public void onChildViewAdded(View parent, View child) {
+                                    if (child instanceof CheckedTextView) {
+                                        final int itemIndex = Arrays.asList(networkSynthesis).indexOf(((TextView) child).getText().toString());
+                                        child.setEnabled(itemIndex != CACHE_SPEECH_INDEX);
+                                    } else if (DEBUG) {
+                                        MyLog.d(CLS_NAME, "onChildViewAdded: " + child.getClass().getSimpleName());
+                                    }
+                                }
+
+                                @Override
+                                public void onChildViewRemoved(View parent, View child) {
+                                }
+                            });
+                        }
                     }
                 });
             }
@@ -1321,7 +1316,6 @@ public class FragmentSettingsHelper {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showVoiceSelector: onPositive");
                                 }
-                                dialog.dismiss();
                                 SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.TTS);
                             }
                         })
@@ -1331,7 +1325,6 @@ public class FragmentSettingsHelper {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showVoiceSelector: onNegative");
                                 }
-                                dialog.dismiss();
                             }
                         })
                         .create();
@@ -1359,7 +1352,6 @@ public class FragmentSettingsHelper {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showOnlyGoogleSupportedDialog: onPositive");
                                 }
-                                dialog.dismiss();
                                 Install.showInstallLink(getApplicationContext(), TTSDefaults.TTS_PKG_NAME_GOOGLE);
                             }
                         })
@@ -1369,7 +1361,6 @@ public class FragmentSettingsHelper {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "showOnlyGoogleSupportedDialog: onNegative");
                                 }
-                                dialog.dismiss();
                             }
                         })
                         .create();

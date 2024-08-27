@@ -55,39 +55,13 @@ public class FragmentActivityPicker extends Fragment implements AdapterView.OnIt
                 .setView(R.layout.text_input_dialog_layout)
                 .setTitle(R.string.menu_intent_extras)
                 .setIcon(R.drawable.ic_memory)
-                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        CharSequence charSequence = "";
-                        if (dialog instanceof AlertDialog) {
-                            final EditText editText = ((AlertDialog) dialog).findViewById(android.R.id.input);
-                            charSequence = (editText == null) ? null : editText.getText();
-                        }
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showIntentExtrasDialog: onInput: " + charSequence);
-                        }
-                        if (charSequence == null || !ai.saiy.android.utils.UtilsString.notNaked(charSequence.toString())) {
-                            dialog.dismiss();
-                            applicationActivityBasic.setIntentExtras(null);
-                            getParentActivity().setResult(applicationActivityBasic);
-                        } else {
-                            if (!ai.saiy.android.utils.UtilsBundle.stringExtrasToBundle(charSequence.toString())) {
-                                toast(getString(R.string.content_extras_format_incorrect), Toast.LENGTH_SHORT);
-                                return;
-                            }
-                            dialog.dismiss();
-                            applicationActivityBasic.setIntentExtras(charSequence.toString().trim());
-                            getParentActivity().setResult(applicationActivityBasic);
-                        }
-                    }
-                })
+                .setPositiveButton(R.string.save, null)
                 .setNegativeButton(R.string.title_none, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showIntentExtrasDialog: onNegative");
                         }
-                        dialog.dismiss();
                         getParentActivity().setResult(applicationActivityBasic);
                     }
                 })
@@ -97,12 +71,34 @@ public class FragmentActivityPicker extends Fragment implements AdapterView.OnIt
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "showIntentExtrasDialog: onCancel");
                         }
-                        dialog.dismiss();
                     }
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
+        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final EditText editText = materialDialog.findViewById(android.R.id.input);
+                CharSequence charSequence = (editText == null) ? null : editText.getText();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "showIntentExtrasDialog: onInput: " + charSequence);
+                }
+                if (charSequence == null || !ai.saiy.android.utils.UtilsString.notNaked(charSequence.toString())) {
+                    materialDialog.dismiss();
+                    applicationActivityBasic.setIntentExtras(null);
+                    getParentActivity().setResult(applicationActivityBasic);
+                } else {
+                    if (!ai.saiy.android.utils.UtilsBundle.stringExtrasToBundle(charSequence.toString())) {
+                        toast(getString(R.string.content_extras_format_incorrect), Toast.LENGTH_SHORT);
+                        return;
+                    }
+                    materialDialog.dismiss();
+                    applicationActivityBasic.setIntentExtras(charSequence.toString().trim());
+                    getParentActivity().setResult(applicationActivityBasic);
+                }
+            }
+        });
         final TextInputLayout textInputLayout = materialDialog.getWindow().findViewById(android.R.id.inputArea);
         textInputLayout.setHint(R.string.custom_extras_title);
         final EditText editText = textInputLayout.findViewById(android.R.id.input);

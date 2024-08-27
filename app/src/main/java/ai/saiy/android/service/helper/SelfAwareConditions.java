@@ -1387,7 +1387,11 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
             if (UtilsBundle.notNaked(startCommandBundle)) {
 
                 switch (startCommandBundle.getInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_NONE)) {
-
+                    case Condition.CONDITION_TUTORIAL:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "checkNotificationInstruction: CONDITION_TUTORIAL");
+                        }
+                        return Condition.CONDITION_TUTORIAL;
                     case Condition.CONDITION_SELF_AWARE:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "checkNotificationInstruction: CONDITION_SELF_AWARE");
