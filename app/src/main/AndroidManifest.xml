@@ -222,9 +222,22 @@
         tools:ignore="GoogleAppIndexingWarning"
         tools:replace="android:supportsRtl">
 
+        <!-- The Application ID for the app. The UMP requires an app ID. -->
+        <!-- See this guide for more details: https://developers.google.com/interactive-media-ads/ump/android/quick-start#add_app_id_to -->
         <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version"/>
+            tools:replace="android:value"
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-2988542829837428~3315435888" />
+        <!-- Delay app measurement until MobileAds.initialize() is called. -->
+        <meta-data
+            android:name="com.google.android.gms.ads.DELAY_APP_MEASUREMENT_INIT"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_INITIALIZATION"
+            android:value="true" />
+        <meta-data
+            android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
+            android:value="true" />
 
         <activity
             android:name="ai.saiy.android.ui.activity.ActivityHome"
@@ -421,6 +434,13 @@
             android:launchMode="singleTop"
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:name="ai.saiy.android.ui.activity.ActivityDonate"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:launchMode="singleTask"
+            android:configChanges="screenSize|orientation|keyboardHidden"/>
         <activity
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/ui_tasker_speech_label"

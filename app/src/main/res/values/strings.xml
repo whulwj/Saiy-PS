@@ -870,6 +870,7 @@
     <string name="diagnostics_wait_6">I AM SO BORED!!!!</string>
     <string name="diagnostics_wait_7">Might have to give up…</string>
     <string name="menu_errors_detected">Errors Detected</string>
+    <string name="menu_voice_recognition">Voice Recognition</string>
     <string name="menu_voice_recognition_providers">Voice Recognition Providers</string>
     <string name="menu_tts_providers">Text to Speech Providers</string>
     <string name="menu_tests_passed">Tests Passed</string>
@@ -1005,6 +1006,7 @@
     <string name="title_email">Email</string>
     <string name="title_bug_report">Bug Report</string>
     <string name="title_good_luck">Good luck!</string>
+    <string name="title_watch_now">Watch now</string>
 
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 
@@ -2219,4 +2221,12 @@
     <string name="menu_nl_outcome">What I should have done</string>
     <string name="menu_understood_exclamation">Understood!</string>
     <string name="menu_what_you_said">What you said</string>
+
+    <string name="ad_error_playback">An ad playback error occurred :(</string>
+    <string name="donate">donate</string>
+    <string name="donate_credit_addition">Thank you. You\'ve been awarded %1$s credits and the in app ads have been removed for an additional %2$s hours.</string>
+    <string name="donate_credit_verbose">Please be aware, if you would like these credits and your ad free status to be shared across multiple devices, you\'ll need to log in from the Development Section.</string>
+    <string name="menu_donate">Donate &amp; Remove Ads</string>
+    <string name="content_ad_overview">If I\'ve done something you\'re particularly impressed with, or you\'re just enjoying using me and feeling generous, you can give a little back and contribute to my development by using the, donate command, which will display a video advert.\n\nSometimes these can be a couple of minutes long and need to run through to the end in order to be of benefit - So do make sure you\'re in a patient mood!\n\nEach time you use this command, you\'ll be rid of the pesky ads elsewhere in the application for 24 hours, and I\'ll award you an amount of credits, that will be redeemable against future premium content.</string>
+    <string name="thank_you">thank you</string>
 </resources>

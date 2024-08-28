@@ -109,6 +109,7 @@ public class SPH {
     private static final String BLOCKED_NOTIFICATION_APPLICATIONS = "blocked_notification_applications";
     private static final String RESET_SPEAKER = "reset_speaker";
     private static final String DESIGN_OVERVIEW = "design_overview";
+    private static final String SHOWN_UNKNOWN = "shown_unknown";
     private static final String USE_OFFLINE = "use_offline";
     private static final String PING_CHECK = "ping_check";
     private static final String NOTE_PROVIDER_VERBOSE = "note_provider_verbose";
@@ -196,6 +197,8 @@ public class SPH {
     private static final String HEADSET_STREAM_TYPE = "headset_stream_type";
     private static final String HEADSET_CONNECTION_TYPE = "headset_connection_type";
     private static final String ACCOUNT_OVERVIEW = "account_overview";
+    private static final String AD_OVERVIEW = "ad_overview";
+    private static final String CREDITS_VERBOSE = "credits_verbose";
     private static final String PREMIUM_CONTENT_VERBOSE = "premium_content_verbose";
     private static final String HOROSCOPE_INCREMENT = "horoscope_increment";
     private static final String CACHE_SPEECH = "cache_speech";
@@ -2040,6 +2043,16 @@ public class SPH {
         edit.apply();
     }
 
+    public static boolean isUnknownShown(Context context) {
+        return getPref(context).getBoolean(SHOWN_UNKNOWN, false);
+    }
+
+    public static void markUnknownShown(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(SHOWN_UNKNOWN, true);
+        edit.apply();
+    }
+
     public static String getBlockedNotificationApplications(Context context) {
         return getPref(context).getString(BLOCKED_NOTIFICATION_APPLICATIONS, null);
     }
@@ -2452,6 +2465,29 @@ public class SPH {
     public static void markAccountOverview(Context context) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ACCOUNT_OVERVIEW, true);
+        edit.apply();
+    }
+
+    public static boolean getAdvertisementOverview(Context context) {
+        return getPref(context).getBoolean(AD_OVERVIEW, false);
+    }
+
+    public static void markAdvertisementOverview(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(AD_OVERVIEW, true);
+        edit.apply();
+    }
+
+    public static int getCreditsVerbose(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        return pref.getInt(CREDITS_VERBOSE, ZERO);
+    }
+
+    public static void incrementCreditsVerbose(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putInt(CREDITS_VERBOSE, (getCreditsVerbose(ctx) + 1));
         edit.apply();
     }
 

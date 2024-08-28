@@ -877,13 +877,9 @@ public class FragmentSettingsHelper {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-
                 final String[] actions = getParent().getResources().getStringArray(R.array.array_unknown_action);
-
                 for (int i = 0; i < actions.length; i++) {
-
                     switch (i) {
-
                         case Unknown.UNKNOWN_STATE:
                         case Unknown.UNKNOWN_REPEAT:
                             break;

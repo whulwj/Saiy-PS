@@ -1,6 +1,7 @@
 package ai.saiy.android.command.horoscope;
 
 import android.content.Context;
+import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 
@@ -58,7 +59,9 @@ public class CommandHoroscope {
         }
         CommandHoroscopeValues.Sign sign = commandHoroscopeValues.getSign();
         if (sign == CommandHoroscopeValues.Sign.UNKNOWN && (sign = SPH.getStarSign(context)) == CommandHoroscopeValues.Sign.UNKNOWN) {
-            ai.saiy.android.intent.ExecuteIntent.saiyActivity(context, ActivityShowDialog.class, null, true);
+            final Bundle bundle = new Bundle();
+            bundle.putInt(ActivityShowDialog.SHOW_DIALOG, ActivityShowDialog.DIALOG_DOB);
+            ai.saiy.android.intent.ExecuteIntent.saiyActivity(context, ActivityShowDialog.class, bundle, true);
             outcome.setUtterance(context.getString(R.string.horoscope_dob_request));
             outcome.setOutcome(Outcome.SUCCESS);
             return returnOutcome(outcome);

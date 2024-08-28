@@ -17,19 +17,26 @@
 
 package ai.saiy.android.ui.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
+import ai.saiy.android.R;
+import ai.saiy.android.applications.Install;
+import ai.saiy.android.applications.Installed;
 import ai.saiy.android.error.Issue;
 import ai.saiy.android.error.IssueContent;
+import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.utils.MyLog;
 
 /**
  * Created by benrandall76@gmail.com on 16/04/2016.
  */
 public class ActivityIssue extends AppCompatActivity {
-
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityIssue.class.getSimpleName();
 
@@ -56,17 +63,18 @@ public class ActivityIssue extends AppCompatActivity {
                     }
 
                     switch (issueContent.getIssueConstant()) {
-
                         case Issue.ISSUE_NO_VR:
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "ISSUE_NO_VR");
                             }
-                            break;
+                            showNoVRDialog(issueContent.getIssueText());
+                            return;
                         case Issue.ISSUE_NO_TTS_ENGINE:
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "ISSUE_NO_TTS_ENGINE");
                             }
-                            break;
+                            showNoTTSDialog(issueContent.getIssueText());
+                            return;
                         case Issue.ISSUE_NO_TTS_LANGUAGE:
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "ISSUE_NO_TTS_LANGUAGE");
@@ -98,12 +106,93 @@ public class ActivityIssue extends AppCompatActivity {
         finish();
     }
 
-
     @Override
     protected void onDestroy() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onDestroy");
         }
         super.onDestroy();
+    }
+
+    private void showNoVRDialog(String message) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showNoVRDialog");
+        }
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.menu_voice_recognition)
+                .setMessage(message)
+                .setIcon(R.drawable.ic_info)
+                .setNeutralButton(R.string.title_install, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoVRDialog: onNeutral");
+                        }
+
+                        Install.showInstallLink(ActivityIssue.this.getApplicationContext(), Installed.PACKAGE_NAME_GOOGLE_NOW);
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoVRDialog: onNegative");
+                        }
+                        finish();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoVRDialog: onCancel");
+                        }
+                        finish();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
+    private void showNoTTSDialog(String message) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showNoTTSDialog");
+        }
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(this)
+                .setTitle(R.string.menu_tts)
+                .setMessage(message)
+                .setIcon(R.drawable.ic_info)
+                .setNeutralButton(R.string.title_install, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoTTSDialog: onNeutral");
+                        }
+
+                        Install.showInstallLink(ActivityIssue.this.getApplicationContext(), TTSDefaults.TTS_PKG_NAME_GOOGLE);
+                        finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoTTSDialog: onNegative");
+                        }
+                        finish();
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNoTTSDialog: onCancel");
+                        }
+                        finish();
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
     }
 }

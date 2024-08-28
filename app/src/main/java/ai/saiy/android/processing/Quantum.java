@@ -36,6 +36,7 @@ import java.util.ArrayList;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.SaiyDefaults;
+import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.command.alexa.CommandAlexa;
 import ai.saiy.android.command.application.foreground.CommandForeground;
 import ai.saiy.android.command.application.kill.CommandKill;
@@ -860,13 +861,29 @@ public class Quantum extends Tunnelling {
                 case COMMAND_DICE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_DICE.name());
-                        break;
                     }
                     final CommandDice commandDice = new CommandDice();
                     outcome = commandDice.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
+                    break;
+                case COMMAND_DONATE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_DONATE.name());
+                    }
+                    if (SPH.getAdvertisementOverview(mContext)) {
+                        ExecuteIntent.saiyActivity(mContext, ai.saiy.android.ui.activity.ActivityDonate.class, null, true);
+                        request.setUtterance(SaiyResourcesHelper.getStringResource(mContext, sl, R.string.thank_you));
+                    } else {
+                        SPH.markAdvertisementOverview(mContext);
+                        request.setUtterance(SaiyRequestParams.SILENCE);
+                        final Bundle extra = new Bundle();
+                        extra.putInt(ai.saiy.android.ui.activity.ActivityShowDialog.SHOW_DIALOG, ai.saiy.android.ui.activity.ActivityShowDialog.DIALOG_AD);
+                        ExecuteIntent.saiyActivity(mContext, ai.saiy.android.ui.activity.ActivityShowDialog.class, extra, true);
+                    }
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = Outcome.SUCCESS;
                     break;
                 case COMMAND_ALEXA:
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -931,11 +948,19 @@ public class Quantum extends Tunnelling {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "Unknown.UNKNOWN_STATE");
                             }
-                            request.setUtterance(PersonalityResponse.getNoComprende(mContext, sl));
+                            if (SPH.isUnknownShown(mContext)) {
+                                request.setUtterance(PersonalityResponse.getNoComprende(mContext, sl));
+                            } else {
+                                SPH.markUnknownShown(mContext);
+                                request.setUtterance(SaiyResourcesHelper.getStringResource(mContext, sl, R.string.content_unknown_command));
+                                final Bundle extra = new Bundle();
+                                extra.putInt(ai.saiy.android.ui.activity.ActivityShowDialog.SHOW_DIALOG, ai.saiy.android.ui.activity.ActivityShowDialog.DIALOG_UNKNOWN_COMMANDS);
+                                ExecuteIntent.saiyActivity(mContext, ai.saiy.android.ui.activity.ActivityShowDialog.class, extra, true);
+                            }
                             break;
                         case Unknown.UNKNOWN_REPEAT:
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_STATE");
+                                MyLog.i(CLS_NAME, "Unknown.UNKNOWN_REPEAT");
                             }
                             request.setUtterance(PersonalityResponse.getRepeatCommand(mContext, sl));
                             request.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
@@ -1433,7 +1458,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_DICE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DICE.name());
-                        break;
+                    }
+                    break;
+                case COMMAND_DONATE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DONATE.name());
                     }
                     break;
                 case COMMAND_ALEXA:

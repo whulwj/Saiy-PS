@@ -114,6 +114,7 @@ dependencies {
     implementation libs.recyclerview
     implementation libs.print
     implementation libs.transition
+    implementation libs.work.runtime
 
     implementation(libs.google.google.api.services.translate) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
@@ -122,6 +123,7 @@ dependencies {
     implementation libs.play.services.location
     implementation libs.play.services.auth
     implementation libs.play.services.ads.identifier
+    implementation libs.play.services.ads
     implementation libs.play.services.wearable
     implementation libs.speechkit
     implementation libs.guava

@@ -49,6 +49,7 @@ import ai.saiy.android.command.clipboard.Clipboard;
 import ai.saiy.android.command.contact.Contact;
 import ai.saiy.android.command.definition.Define;
 import ai.saiy.android.command.dice.Dice;
+import ai.saiy.android.command.donate.Donate;
 import ai.saiy.android.command.driving.Driving;
 import ai.saiy.android.command.emotion.Emotion;
 import ai.saiy.android.command.facebook.Facebook;
@@ -171,6 +172,7 @@ public final class Resolve {
         callableList.add(new Twitter(sr, sl, voiceData, confidence));
         callableList.add(new Foursquare(sr, sl, voiceData, confidence));
         callableList.add(new Dice(sr, sl, voiceData, confidence));
+        callableList.add(new Donate(sr, sl, voiceData, confidence));
         callableList.add(new Alexa(sr, sl, voiceData, confidence));
         sr.reset();
     }
