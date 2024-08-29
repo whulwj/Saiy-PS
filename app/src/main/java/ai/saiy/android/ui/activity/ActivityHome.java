@@ -30,6 +30,7 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -45,15 +46,28 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.FullScreenContentCallback;
+import com.google.android.gms.ads.LoadAdError;
+import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.interstitial.InterstitialAd;
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
+import com.google.android.gms.ads.rewarded.RewardItem;
+import com.google.android.gms.ads.rewarded.RewardedAd;
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.R;
@@ -95,7 +109,7 @@ import me.drakeet.support.toast.ToastCompat;
 
 public class ActivityHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FragmentManager.OnBackStackChangedListener,
-        UserFirebaseListener {
+        UserFirebaseListener, OnUserEarnedRewardListener {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityHome.class.getSimpleName();
@@ -140,12 +154,85 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     private ProgressBar progressBar;
     private NavigationView navigationView;
     private Menu menu;
+    private AdView adView;
+    private InterstitialAd interstitialAd;
+    private ProgressBar adProgress;
+    private RewardedAd rewardedAd;
 
     private final ActivityHomeHelper helper = new ActivityHomeHelper();
+    private boolean isAdLoaded;
     private FirebaseAuth firebaseAuth;
     private volatile boolean isUserSignedIn;
+    private volatile boolean isAddFree;
     private volatile boolean havePersisted;
+    private final AtomicInteger retryCount = new AtomicInteger();
     private final AtomicInteger signInCount = new AtomicInteger();
+    private final AtomicBoolean isRewardLoading = new AtomicBoolean();
+    private final AdListener adListener = new AdListener() {
+        @Override
+        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+            super.onAdFailedToLoad(loadAdError);
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onAdFailedToLoad");
+            }
+            if (isAdLoaded) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onAdFailedToLoad: ad is displaying, leaving");
+                }
+            } else if (retryCount.incrementAndGet() < 6) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onAdFailedToLoad: retrying");
+                }
+                new Timer().schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        if (!isActive()) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "onAdFailedToLoadisFinishing");
+                            }
+                            return;
+                        }
+                        if (isAddFree) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "userAdFree true");
+                            }
+                            return;
+                        }
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    final AdRequest adRequest = new AdRequest.Builder().build();
+                                    adView.loadAd(adRequest);
+                                } catch (Throwable t) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "onAdFailedToLoad retrying " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                                    }
+                                    destroyAd();
+                                }
+                            }
+                        });
+                    }
+                }, 5000L);
+            } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onAdFailedToLoad max retries");
+                }
+                destroyAd();
+            }
+        }
+
+        @Override
+        public void onAdLoaded() {
+            super.onAdLoaded();
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onAdLoaded");
+            }
+            ActivityHome.this.isAdLoaded = true;
+            adProgress.setVisibility(View.GONE);
+            super.onAdLoaded();
+        }
+    };
     private final FirebaseAuth.AuthStateListener mAuth = new FirebaseAuth.AuthStateListener() {
         @Override
         public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
@@ -154,7 +241,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser null");
                 }
-                ActivityHome.this.signInAnonymously();
+                signInAnonymously();
                 return;
             }
             if (DEBUG) {
@@ -167,11 +254,11 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             } else {
                 SPH.setFirebaseUid(getApplicationContext(), firebaseUser.getUid());
             }
-            if (ActivityHome.this.havePersisted) {
+            if (havePersisted) {
                 return;
             }
             ActivityHome.this.havePersisted = true;
-            ActivityHome.this.persistFirebase();
+            persistFirebase();
         }
     };
 
@@ -260,6 +347,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                         }
 
                         checkTTSInstallation();
+                        initialiseReward();
                     } else {
                         showWhatsNew();
                     }
@@ -351,6 +439,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         setupToolbar();
         setupDrawer();
         setupNavigation();
+        setupAdView();
 
         if (GoogleConfiguration.CLOUD_PROJECT_ID.equals("GCP_PROJECT_ID")) {
             Toast.makeText(this, "Please update the GCP_PROJECT_ID in GoogleConfiguration",
@@ -440,6 +529,80 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setupAdView() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "setupAdView");
+        }
+        this.adView = (AdView) findViewById(R.id.adViewMain);
+        adView.setAdListener(adListener);
+        this.adProgress = (ProgressBar) findViewById(R.id.adProgress);
+        final AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
+    }
+
+    private void runInterstitial() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "runInterstitial");
+        }
+        if (isAddFree) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "runInterstitial: userAdFree: true");
+            }
+            return;
+        }
+
+        final AdRequest adRequest = new AdRequest.Builder().build();
+        InterstitialAd.load(getApplicationContext(), getString(R.string.interstitial_fragment_id), adRequest, new InterstitialAdLoadCallback() {
+            @Override
+            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
+                super.onAdLoaded(interstitialAd);
+                ActivityHome.this.interstitialAd = interstitialAd;
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onAdLoaded: interstitial");
+                }
+                if (interstitialAd != null) {
+                    if (!isAddFree) {
+                        try {
+                            interstitialAd.show(ActivityHome.this);
+                        } catch (Throwable t) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "interstitial " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                            }
+
+                        }
+                    } else if (DEBUG) {
+                        MyLog.w(CLS_NAME, "runInterstitial: userAdFree: true");
+                    }
+                }
+            }
+        });
+    }
+
+    private void initialiseReward() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "initialiseReward");
+        }
+        loadReward();
+    }
+
+    public void showReward() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showReward");
+        }
+        if (rewardedAd != null) {
+            rewardedAd.show(this, this);
+            return;
+        }
+        if (isRewardLoading.get()) {
+            return;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "showReward: ad not loaded");
+        }
+        toast(getString(R.string.ad_error_playback), Toast.LENGTH_LONG);
+        loadReward();
     }
 
     private void checkPermissions() {
@@ -722,7 +885,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             @Override
             public void run() {
 
-                final int currentTag = Integer.parseInt(ActivityHome.this.getSupportFragmentManager().findFragmentById(
+                final int currentTag = Integer.parseInt(getSupportFragmentManager().findFragmentById(
                         R.id.fragmentContent).getTag());
                 final int id = item.getItemId();
                 boolean proceed;
@@ -850,13 +1013,13 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                                 final int navId = getNavIdFromTag(backStackTag);
                                 updateNavigationView(navId);
 
-                                ActivityHome.this.runOnUiThread(new Runnable() {
+                                runOnUiThread(new Runnable() {
                                     @Override
                                     public void run() {
-                                        ActivityHome.this.getSupportFragmentManager().beginTransaction().remove(ActivityHome.this.getSupportFragmentManager()
+                                        getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager()
                                                 .findFragmentById(R.id.fragmentContent)).commit();
 
-                                        ActivityHome.this.getSupportFragmentManager().popBackStack(backStackTag,
+                                        getSupportFragmentManager().popBackStack(backStackTag,
                                                 FragmentManager.POP_BACK_STACK_INCLUSIVE);
                                     }
                                 });
@@ -876,7 +1039,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                                 MyLog.i(CLS_NAME, "onNavigationItemSelected: backStackCount 0");
                             }
 
-                            ActivityHome.this.doFragmentReplaceTransaction(fragment, tag, ANIMATION_FADE_DELAYED);
+                            doFragmentReplaceTransaction(fragment, tag, ANIMATION_FADE_DELAYED);
                         }
                     }
                 }
@@ -900,12 +1063,18 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             public void run() {
 
                 final int navId = getNavIdFromTag(tag);
-
-                ActivityHome.this.runOnUiThread(new Runnable() {
+                if (R.id.nav_home != navId) {
+                    SPH.autoIncreaseFragment(getApplicationContext());
+                }
+                final long fragmentTransactionCount = SPH.getFragmentIncrement(getApplicationContext());
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "doFragmentReplaceTransaction: fragmentIncrement: " + fragmentTransactionCount);
+                }
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        ActivityHome.this.updateNavigationView(navId);
+                        updateNavigationView(navId);
 
                         if (menu != null) {
                             menu.findItem(R.id.action_power).setVisible(Integer.parseInt(tag) == INDEX_FRAGMENT_HOME);
@@ -915,20 +1084,24 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                         switch (fade) {
 
                             case ANIMATION_NONE:
-                                ActivityHome.this.getSupportFragmentManager().beginTransaction()
+                                getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.fragmentContent, fragment, tag).commit();
                                 break;
                             case ANIMATION_FADE:
-                                ActivityHome.this.getSupportFragmentManager().beginTransaction()
+                                getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow, R.anim.none)
                                         .replace(R.id.fragmentContent, fragment, tag).commit();
                                 break;
                             case ANIMATION_FADE_DELAYED:
-                                ActivityHome.this.getSupportFragmentManager().beginTransaction()
+                                getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow_delayed, R.anim.none)
                                         .replace(R.id.fragmentContent, fragment, tag).commit();
                                 break;
                         }
+                        if (fragmentTransactionCount == 0 || fragmentTransactionCount % 12 != 0 || Global.isInVoiceTutorial() || R.id.nav_home == navId) {
+                            return;
+                        }
+                        runInterstitial();
                     }
                 });
             }
@@ -948,13 +1121,13 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             @Override
             public void run() {
 
-                final int navId = ActivityHome.this.getNavIdFromTag(tag);
+                final int navId = getNavIdFromTag(tag);
 
-                ActivityHome.this.runOnUiThread(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
 
-                        ActivityHome.this.updateNavigationView(navId);
+                        updateNavigationView(navId);
 
                         if (menu != null) {
                             menu.findItem(R.id.action_power).setVisible(Integer.parseInt(tag) == INDEX_FRAGMENT_HOME);
@@ -964,18 +1137,18 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                         switch (fade) {
 
                             case ANIMATION_NONE:
-                                ActivityHome.this.getSupportFragmentManager().beginTransaction()
+                                getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.fragmentContent, fragment, tag)
                                         .addToBackStack(String.valueOf(backStackTag)).commit();
                                 break;
                             case ANIMATION_FADE:
-                                ActivityHome.this.getSupportFragmentManager().beginTransaction()
+                                getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow, R.anim.none)
                                         .replace(R.id.fragmentContent, fragment, tag)
                                         .addToBackStack(String.valueOf(backStackTag)).commit();
                                 break;
                             case ANIMATION_FADE_DELAYED:
-                                ActivityHome.this.getSupportFragmentManager().beginTransaction()
+                                getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow_delayed, R.anim.none)
                                         .replace(R.id.fragmentContent, fragment, tag)
                                         .addToBackStack(String.valueOf(backStackTag)).commit();
@@ -997,7 +1170,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    final Fragment fragment = ActivityHome.this.getSupportFragmentManager().findFragmentById(R.id.fragmentContent);
+                    final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContent);
                     if (navId == MENU_INDEX_HOME) {
                         if (fragment == null) {
                             navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(false);
@@ -1094,7 +1267,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @return the layout
      */
     public DrawerLayout getDrawer() {
-        return this.drawer;
+        return drawer;
     }
 
     public void startTutorial() {
@@ -1136,8 +1309,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(ActivityHome.this.getApplicationContext()));
-                ActivityHome.this.speak(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, resId), action);
+                final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext()));
+                speak(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, resId), action);
             }
         }).start();
     }
@@ -1152,7 +1325,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         new Thread(new Runnable() {
             @Override
             public void run() {
-                final LocalRequest request = new LocalRequest(ActivityHome.this.getApplicationContext());
+                final LocalRequest request = new LocalRequest(getApplicationContext());
                 request.prepareDefault(action, utterance);
                 request.execute();
             }
@@ -1174,7 +1347,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ToastCompat.makeText(ActivityHome.this.getApplicationContext(), text, duration).show();
+                    ToastCompat.makeText(getApplicationContext(), text, duration).show();
                 }
             });
         }
@@ -1327,21 +1500,24 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onPause");
         }
+        if (adView != null) {
+            adView.pause();
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (this.firebaseAuth != null) {
-            this.firebaseAuth.removeAuthStateListener(mAuth);
+        if (firebaseAuth != null) {
+            firebaseAuth.removeAuthStateListener(mAuth);
         }
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        if (this.firebaseAuth != null) {
-            this.firebaseAuth.addAuthStateListener(mAuth);
+        if (firebaseAuth != null) {
+            firebaseAuth.addAuthStateListener(mAuth);
         } else if (DEBUG) {
             MyLog.e(CLS_NAME, "mAuth null");
         }
@@ -1352,6 +1528,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         super.onResume();
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onResume");
+        }
+        if (adView != null) {
+            adView.resume();
         }
     }
 
@@ -1389,7 +1568,111 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             SelfAwareHelper.stopService(getApplicationContext());
         }
 
-        System.gc();
+        destroyAd();
+        destroyInterstitial();
+    }
+
+    private void destroyAd() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "destroyAd");
+        }
+        if (adProgress != null) {
+            adProgress.setVisibility(View.GONE);
+        }
+        if (adView != null) {
+            try {
+                adView.setAdListener(null);
+                adView.removeAllViews();
+                final ViewGroup viewGroup = ((ViewGroup) adView.getParent());
+                viewGroup.removeView(adView);
+                viewGroup.removeView(adProgress);
+                adView.destroyDrawingCache();
+                adView.invalidate();
+                adView.destroy();
+                this.adView = null;
+            } catch (Throwable t) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "destroyAd " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                }
+            }
+        }
+    }
+
+    private void destroyInterstitial() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "destroyInterstitial");
+        }
+        if (interstitialAd != null) {
+            interstitialAd = null;
+        }
+    }
+
+    private void loadReward() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "loadReward");
+        }
+        final AdRequest adRequest = new AdRequest.Builder().build();
+        isRewardLoading.set(true);
+        RewardedAd.load(this, getString(R.string.reward_id),
+                adRequest, rewardedAdLoadCallback);
+    }
+
+    private final RewardedAdLoadCallback rewardedAdLoadCallback = new RewardedAdLoadCallback() {
+        @Override
+        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
+            isRewardLoading.set(false);
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onAdFailedToLoad:" + loadAdError);
+            }
+            ActivityHome.this.rewardedAd = null;
+        }
+
+        @Override
+        public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
+            isRewardLoading.set(false);
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onAdLoaded");
+            }
+            ActivityHome.this.rewardedAd = rewardedAd;
+            rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
+                @Override
+                public void onAdDismissedFullScreenContent() {
+                    super.onAdDismissedFullScreenContent();
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onAdDismissedFullScreenContent");
+                    }
+                    if (isRewardLoading.get()) {
+                        return;
+                    }
+                    loadReward();
+                }
+            });
+        }
+    };
+
+    @Override
+    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onUserEarnedReward: " + rewardItem.getType() + ", " + rewardItem.getAmount());
+        }
+        if (!isActive()) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onUserEarnedReward: no longer active");
+            }
+            return;
+        }
+        String format;
+        final ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(getApplicationContext(), SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext())));
+        if (SPH.getCreditsVerbose(getApplicationContext()) < 2) {
+            SPH.incrementCreditsVerbose(getApplicationContext());
+            format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24") + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.donate_credit_verbose);
+        } else {
+            format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24");
+        }
+        sr.reset();
+        speak(format, LocalRequest.ACTION_SPEAK_ONLY);
+        updateFirebase();
+        onDetermineAdFree(true);
     }
 
     private final ActivityResultLauncher<String[]> mChatPermissionRequest = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
@@ -1430,6 +1713,13 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         }).start();
     }
 
+    private void updateFirebase() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "updateFirebase");
+        }
+        new UserFirebaseHelper().updateUser(getApplicationContext(), 5L, 86400000L);
+    }
+
     /**
      * function to sign in to Firebase Anonymously
      */
@@ -1450,9 +1740,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     task.getException().printStackTrace();
                 }
                 // If sign in fails, try it again later.
-                if (ActivityHome.this.signInCount.incrementAndGet() < 4) {
+                if (signInCount.incrementAndGet() < 4) {
                     try {
-                        Thread.sleep(ActivityHome.this.signInCount.get() * 5000);
+                        Thread.sleep(signInCount.get() * 5000);
                     } catch (InterruptedException e) {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "signInAnonymously InterruptedException");
@@ -1465,13 +1755,25 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     public boolean userSignedIn() {
-        return this.isUserSignedIn;
+        return isUserSignedIn;
     }
 
     @Override
     public void onDetermineAdFree(boolean isAddFree) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onDetermineAdFree: " + isAddFree);
+        }
+        if (isActive()) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ActivityHome.this.isAddFree = isAddFree;
+                    if (isAddFree) {
+                        destroyAd();
+                        destroyInterstitial();
+                    }
+                }
+            });
         }
     }
 }

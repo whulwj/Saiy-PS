@@ -38,7 +38,7 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
             MyLog.i(CLS_NAME, "onCreate");
         }
         final AdRequest adRequest = new AdRequest.Builder().build();
-        RewardedAd.load(this, "ca-app-pub-3940256099942544/5224354917",
+        RewardedAd.load(this, getString(R.string.reward_id),
                 adRequest, rewardedAdLoadCallback);
     }
 

@@ -109,6 +109,7 @@ public class SPH {
     private static final String BLOCKED_NOTIFICATION_APPLICATIONS = "blocked_notification_applications";
     private static final String RESET_SPEAKER = "reset_speaker";
     private static final String DESIGN_OVERVIEW = "design_overview";
+    private static final String FRAGMENT_INCREMENT = "fragment_increment";
     private static final String SHOWN_UNKNOWN = "shown_unknown";
     private static final String USE_OFFLINE = "use_offline";
     private static final String PING_CHECK = "ping_check";
@@ -2040,6 +2041,16 @@ public class SPH {
     public static void markDesignOverviewShown(Context context) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(DESIGN_OVERVIEW, true);
+        edit.apply();
+    }
+
+    public static long getFragmentIncrement(Context context) {
+        return getPref(context).getLong(FRAGMENT_INCREMENT, 1L);
+    }
+
+    public static void autoIncreaseFragment(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putLong(FRAGMENT_INCREMENT, 1 + getFragmentIncrement(context));
         edit.apply();
     }
 

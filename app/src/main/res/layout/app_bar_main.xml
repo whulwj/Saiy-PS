@@ -55,4 +55,13 @@
         android:layout_height="match_parent"
         android:paddingTop="?attr/actionBarSize"/>
 
+    <include
+        android:id="@+id/ad_layout"
+        layout="@layout/adview_float_bottom_main"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_anchor="@+id/fragmentContent"
+        app:layout_anchorGravity="bottom"
+        android:layout_gravity="bottom"/>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
