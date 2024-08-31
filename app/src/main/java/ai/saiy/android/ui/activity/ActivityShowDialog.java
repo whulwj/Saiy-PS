@@ -50,7 +50,7 @@ public class ActivityShowDialog extends AppCompatActivity {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                final String[] actions = getParent().getResources().getStringArray(R.array.array_unknown_action);
+                final String[] actions = getResources().getStringArray(R.array.array_unknown_action);
                 for (int i = 0; i < actions.length; i++) {
                     switch (i) {
                         case Unknown.UNKNOWN_STATE:
@@ -61,7 +61,7 @@ public class ActivityShowDialog extends AppCompatActivity {
                         case Unknown.UNKNOWN_MICROSOFT_CORTANA:
                         case Unknown.UNKNOWN_WOLFRAM_ALPHA:
                         case Unknown.UNKNOWN_TASKER:
-                            actions[i] = getParent().getString(R.string.menu_send_to) + " " + actions[i];
+                            actions[i] = getString(R.string.menu_send_to) + " " + actions[i];
                             break;
                     }
                 }

@@ -99,6 +99,7 @@ import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
+import ai.saiy.android.utils.UtilsToast;
 
 /**
  * This is the main class for resolving and actioning a spoken command. Regardless or not as to whether
@@ -993,7 +994,7 @@ public class Quantum extends Tunnelling {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA");
                             }
-                            if (Network.isConnected(mContext)) {
+                            if (Network.isNetworkAvailable(mContext)) {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: isAlexaTTS: " + cr.isAlexaTTS());
                                 }
@@ -1524,7 +1525,7 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "Position " + entangledPair.getCC().name());
                         MyLog.i(CLS_NAME, "Position getToastContent: " + entangledPair.getToastContent());
                     }
-                    Toast.makeText(mContext, entangledPair.getToastContent(), Toast.LENGTH_SHORT).show();
+                    UtilsToast.showToast(mContext, entangledPair.getToastContent(), Toast.LENGTH_SHORT);
                     break;
                 case TOAST_LONG:
                     if (DEBUG) {
@@ -1532,7 +1533,7 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "Position " + entangledPair.getCC().name());
                         MyLog.i(CLS_NAME, "Position getToastContent: " + entangledPair.getToastContent());
                     }
-                    Toast.makeText(mContext, entangledPair.getToastContent(), Toast.LENGTH_LONG).show();
+                    UtilsToast.showToast(mContext, entangledPair.getToastContent(), Toast.LENGTH_LONG);
                     break;
                 case SPEAK:
                     if (DEBUG) {

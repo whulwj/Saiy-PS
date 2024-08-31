@@ -71,6 +71,12 @@ public final class Network {
         throw new IllegalArgumentException(Resources.getSystem().getString(android.R.string.no));
     }
 
+    /**
+     * Check if there is any connectivity
+     *
+     * @param ctx the application Context
+     * @return true if the device currently has a connection
+     */
     public static boolean isNetworkAvailable(final Context ctx) {
         final NetworkInfo activeNetworkInfo = getActiveNetworkInfo(ctx);
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
@@ -263,17 +269,6 @@ public final class Network {
     public static NetworkInfo getActiveNetworkInfo(final Context ctx) {
         final ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
         return cm.getActiveNetworkInfo();
-    }
-
-    /**
-     * Check if there is any connectivity
-     *
-     * @param ctx the application Context
-     * @return true if the device currently has a connection
-     */
-    public static boolean isConnected(final Context ctx) {
-        final NetworkInfo info = getActiveNetworkInfo(ctx);
-        return (info != null && info.isConnected());
     }
 
     /**

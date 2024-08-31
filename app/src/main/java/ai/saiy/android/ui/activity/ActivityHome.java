@@ -45,6 +45,8 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
@@ -92,6 +94,7 @@ import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
+import ai.saiy.android.ui.viewmodel.BillingViewModel;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
@@ -99,7 +102,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
-import me.drakeet.support.toast.ToastCompat;
+import ai.saiy.android.utils.UtilsToast;
 
 /**
  * Main activity class that handles the fragment management
@@ -165,6 +168,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     private volatile boolean isUserSignedIn;
     private volatile boolean isAddFree;
     private volatile boolean havePersisted;
+    private BillingViewModel billingViewModel;
+
     private final AtomicInteger retryCount = new AtomicInteger();
     private final AtomicInteger signInCount = new AtomicInteger();
     private final AtomicBoolean isRewardLoading = new AtomicBoolean();
@@ -265,6 +270,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        final ViewModelProvider viewModelProvider = new ViewModelProvider(this);
+        this.billingViewModel = viewModelProvider.get(BillingViewModel.class);
         setContentView(R.layout.activity_home_layout);
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
@@ -316,6 +323,21 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 }
             }
         }, ARBITRARY_WAIT);
+
+        billingViewModel.mIsBillingSuccessful().observe(this, new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean isSuccessful) {
+                if (isSuccessful == null) {
+                    return;
+                }
+                if (isSuccessful) {
+                    helper.showBillingSuccessDialog(ActivityHome.this);
+                } else {
+                    helper.showBillingErrorDialog(ActivityHome.this);
+                }
+                billingViewModel.mIsBillingSuccessful().setValue(null);
+            }
+        });
     }
 
     /**
@@ -442,8 +464,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         setupAdView();
 
         if (GoogleConfiguration.CLOUD_PROJECT_ID.equals("GCP_PROJECT_ID")) {
-            Toast.makeText(this, "Please update the GCP_PROJECT_ID in GoogleConfiguration",
-                    Toast.LENGTH_LONG).show();
+            UtilsToast.showToast(this, "Please update the GCP_PROJECT_ID in GoogleConfiguration",
+                    Toast.LENGTH_LONG);
 /*            finish();
             return;*/
         }
@@ -1347,7 +1369,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ToastCompat.makeText(getApplicationContext(), text, duration).show();
+                    UtilsToast.showToast(getApplicationContext(), text, duration);
                 }
             });
         }
@@ -1521,6 +1543,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         } else if (DEBUG) {
             MyLog.e(CLS_NAME, "mAuth null");
         }
+        billingViewModel.start();
     }
 
     @Override
@@ -1532,6 +1555,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         if (adView != null) {
             adView.resume();
         }
+        billingViewModel.resume();
     }
 
     @Override
@@ -1774,6 +1798,22 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     }
                 }
             });
+        }
+    }
+
+    public void startPurchaseFlow(@NonNull com.android.billingclient.api.SkuDetails skuDetails) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "startPurchaseFlow");
+        }
+        if (!isActive()) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "startPurchaseFlow: no longer active");
+            }
+            return;
+        }
+        final int resId = billingViewModel.startPurchaseFlow(this, skuDetails);
+        if (resId != 0) {
+            toast(getString(resId), Toast.LENGTH_SHORT);
         }
     }
 }

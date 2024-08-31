@@ -216,6 +216,7 @@ public class SPH {
     private static final String EXPORT_WARNING = "export_warning";
     private static final String HEADSET_OVERVIEW_COUNT = "headset_overview_count";
     private static final String ACCESSIBILITY_CHANGE = "accessibility_change";
+    private static final String DEBUG_BILLING = "debug_billing";
     private static final String DEFAULT_NOTE = "default_note";
     private static final String ALEXA_CODE_VERIFIER = "alexa_code_verifier";
     private static final String ALEXA_ACCESS_TOKEN = "alexa_access_token";
@@ -2357,6 +2358,11 @@ public class SPH {
         edit.apply();
     }
 
+    public static String getUserAccount(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        return pref.getString(USER_ACCOUNT, null);
+    }
+
     public static void setUserAccount(@NonNull final Context ctx, @NonNull final String account) {
         final SharedPreferences pref = getPref(ctx);
         final SharedPreferences.Editor edit = getEditor(pref);
@@ -2701,6 +2707,16 @@ public class SPH {
 
     public static boolean getAccessibilityChange(Context context) {
         return getPref(context).getBoolean(ACCESSIBILITY_CHANGE, false);
+    }
+
+    public static void setDebugBilling(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(DEBUG_BILLING, condition);
+        edit.apply();
+    }
+
+    public static boolean getDebugBilling(Context context) {
+        return getPref(context).getBoolean(DEBUG_BILLING, false);
     }
 
     public static int getDefaultNote(Context context) {

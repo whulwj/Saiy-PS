@@ -20,7 +20,11 @@ package ai.saiy.android.ui.fragment.helper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,17 +33,23 @@ import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.auth.GoogleAuthUtil;
+import com.google.android.gms.common.AccountPicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import ai.saiy.android.R;
+import ai.saiy.android.firebase.database.reference.IAPCodeReference;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
 import ai.saiy.android.ui.components.UIMainAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentHome;
+import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -134,6 +144,13 @@ public class FragmentHomeHelper {
         containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 
+        containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_donate));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_contribute));
+        containerUI.setIconMain(R.drawable.ic_gift);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
         return mObjects;
     }
 
@@ -214,6 +231,253 @@ public class FragmentHomeHelper {
         });
     }
 
+    public void showPremiumDialog(List<com.android.billingclient.api.SkuDetails> skuDetailsList) {
+        showProgress(false);
+        final View view = LayoutInflater.from(getParentActivity()).inflate(R.layout.premium_dialog_layout, null);
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setCancelable(false)
+                .setTitle(R.string.menu_donate)
+                .setIcon(R.drawable.ic_gift)
+                .setView(view)
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showPremiumDialog: onNegative");
+                        }
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showPremiumDialog: onCancel");
+                        }
+                    }
+                }).create();
+
+        com.android.billingclient.api.SkuDetails skuDetailsStarter = null, skuDetailsBronze = null, skuDetailsSilver = null, skuDetailsGold = null, skuDetailsPlatinum = null;
+        try {
+            String sku;
+            for (com.android.billingclient.api.SkuDetails skuDetails : skuDetailsList) {
+                sku = skuDetails.getSku();
+                if (UserFirebaseHelper.SKU_LEVEL_1.matches(sku)) {
+                    skuDetailsStarter = skuDetails;
+                } else if (UserFirebaseHelper.SKU_LEVEL_2.matches(sku)) {
+                    skuDetailsBronze = skuDetails;
+                } else if (UserFirebaseHelper.SKU_LEVEL_3.matches(sku)) {
+                    skuDetailsSilver = skuDetails;
+                } else if (UserFirebaseHelper.SKU_LEVEL_4.matches(sku)) {
+                    skuDetailsGold = skuDetails;
+                } else if (UserFirebaseHelper.SKU_LEVEL_5.matches(sku)) {
+                    skuDetailsPlatinum = skuDetails;
+                }
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "showPremiumDialog: NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "showPremiumDialog: Exception");
+                e.printStackTrace();
+            }
+        }
+
+        LinearLayout linearLayout = view.findViewById(R.id.linPlatinum);
+        if (skuDetailsPlatinum != null) {
+            final TextView textViewPlatinum = linearLayout.findViewById(R.id.tvPlatinumCost);
+            final com.android.billingclient.api.SkuDetails finalSkuDetailsPlatinum = skuDetailsPlatinum;
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_5: onClick");
+                    }
+                    materialDialog.dismiss();
+                    getParentActivity().startPurchaseFlow(finalSkuDetailsPlatinum);
+                }
+            });
+            textViewPlatinum.setText(skuDetailsPlatinum.getPrice());
+        } else {
+            linearLayout.setVisibility(View.GONE);
+        }
+        linearLayout = view.findViewById(R.id.linGold);
+        if (skuDetailsGold != null) {
+            final TextView textViewGold = linearLayout.findViewById(R.id.tvGoldCost);
+            final com.android.billingclient.api.SkuDetails finalSkuDetailsGold = skuDetailsGold;
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_4: onClick");
+                    }
+                    materialDialog.dismiss();
+                    getParentActivity().startPurchaseFlow(finalSkuDetailsGold);
+                }
+            });
+            textViewGold.setText(skuDetailsGold.getPrice());
+        } else {
+            linearLayout.setVisibility(View.GONE);
+        }
+        linearLayout = view.findViewById(R.id.linSilver);
+        if (skuDetailsSilver != null) {
+            final TextView textViewSilver = linearLayout.findViewById(R.id.tvSilverCost);
+            final com.android.billingclient.api.SkuDetails finalSkuDetailsSilver = skuDetailsSilver;
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_3: onClick");
+                    }
+                    materialDialog.dismiss();
+                    getParentActivity().startPurchaseFlow(finalSkuDetailsSilver);
+                }
+            });
+            textViewSilver.setText(skuDetailsSilver.getPrice());
+        } else {
+            linearLayout.setVisibility(View.GONE);
+        }
+        linearLayout = view.findViewById(R.id.linBronze);
+        if (skuDetailsBronze != null) {
+            final TextView textViewBronze = linearLayout.findViewById(R.id.tvBronzeCost);
+            final com.android.billingclient.api.SkuDetails finalSkuDetailsBronze = skuDetailsBronze;
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_2: onClick");
+                    }
+                    materialDialog.dismiss();
+                    getParentActivity().startPurchaseFlow(finalSkuDetailsBronze);
+                }
+            });
+            textViewBronze.setText(skuDetailsBronze.getPrice());
+        } else {
+            linearLayout.setVisibility(View.GONE);
+        }
+
+        linearLayout = view.findViewById(R.id.linAdvert);
+        final TextView textViewAdvert = linearLayout.findViewById(R.id.tvAdvertCost);
+        textViewAdvert.setText(R.string.iap_no_cost);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "showPremiumDialog: Ad onClick");
+                }
+                materialDialog.dismiss();
+                if (ai.saiy.android.utils.SPH.getAdvertisementOverview(getApplicationContext())) {
+                    showAd();
+                } else {
+                    ai.saiy.android.utils.SPH.markAdvertisementOverview(getApplicationContext());
+                    showAdOverviewDialog();
+                }
+            }
+        });
+        linearLayout = view.findViewById(R.id.linStarter);
+        if (skuDetailsStarter != null) {
+            final TextView textViewStarter = linearLayout.findViewById(R.id.tvStarterCost);
+            final com.android.billingclient.api.SkuDetails finalSkuDetailsStarter = skuDetailsStarter;
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_1: onClick");
+                    }
+                    materialDialog.dismiss();
+                    getParentActivity().startPurchaseFlow(finalSkuDetailsStarter);
+                }
+            });
+            textViewStarter.setText(skuDetailsStarter.getPrice());
+            textViewAdvert.setText(skuDetailsStarter.getPrice().charAt(0) + getApplicationContext().getString(R.string.iap_no_cost));
+        } else {
+            linearLayout.setVisibility(View.GONE);
+        }
+
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
+    }
+
+    public void showAccountPicker() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                final Pair<Boolean, String> iapKeyPair = new IAPCodeReference().getKey(getApplicationContext());
+                if (!iapKeyPair.first) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "showAccountPicker unable to fetch iapKey");
+                    }
+                    if (getParent().isActive()) {
+                        showProgress(false);
+                        getParent().toast(getApplicationContext().getString(R.string.network_error), Toast.LENGTH_SHORT);
+                    }
+                    return;
+                }
+                getParent().getBillingViewModel().setIapKey(iapKeyPair.second);
+                if (getParent().isActive()) {
+                    getParentActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            getParent().startActivityForResult(AccountPicker.newChooseAccountIntent(new AccountPicker.AccountChooserOptions.Builder().setAllowableAccountsTypes(Collections.singletonList(GoogleAuthUtil.GOOGLE_ACCOUNT_TYPE)).build()), FragmentHome.ACCOUNT_PICKER_REQUEST_CODE);
+                        }
+                    });
+                } else if (DEBUG) {
+                    MyLog.w(CLS_NAME, "showAccountPicker Fragment detached");
+                }
+            }
+        }).start();
+    }
+
+    private void showAdOverviewDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showAdOverviewDialog");
+        }
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_donate)
+                .setMessage(R.string.content_ad_overview)
+                .setIcon(R.drawable.ic_gift)
+                .setNeutralButton(R.string.title_watch_now, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAdOverviewDialog: onNeutral");
+                        }
+                        showAd();
+                    }
+                })
+                .setNegativeButton(R.string.title_maybe_later, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAdOverviewDialog: onNegative");
+                        }
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showAdOverviewDialog: onCancel");
+                        }
+                    }
+                }).create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
+    private void showAd() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showAd");
+        }
+        if (getParent().isActive()) {
+            getParentActivity().showReward();
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "showAd: finishing");
+        }
+    }
+
     public void showUserGuideDialog() {
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
                 .setTitle(R.string.menu_user_guide)
@@ -225,7 +489,7 @@ public class FragmentHomeHelper {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "onClick: tutorialActive");
                             }
-                            getParentActivity().toast(getParent().getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
+                            getParent().toast(getParent().getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
                             return;
                         }
                         switch (which) {
@@ -293,6 +557,12 @@ public class FragmentHomeHelper {
      */
     private Context getApplicationContext() {
         return parentFragment.getApplicationContext();
+    }
+
+    public void showProgress(boolean visible) {
+        if (getParent().isActive()) {
+            getParentActivity().showProgress(visible);
+        }
     }
 
     /**

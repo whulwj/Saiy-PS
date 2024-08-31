@@ -130,6 +130,7 @@ dependencies {
     implementation libs.gson
     implementation libs.google.http.client.gson
     implementation libs.speechrecognition
+    implementation libs.billing
     implementation libs.commons.lang3
     implementation libs.commons.codec
     implementation libs.commons.collections4

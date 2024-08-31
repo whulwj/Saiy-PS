@@ -269,7 +269,7 @@ public class AssistantIntentService extends IntentService {
                         actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
                         actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.amazon_notification_auth_request));
                         ai.saiy.android.intent.ExecuteIntent.saiyActivity(getApplicationContext(), ActivityHome.class, bundle, true);
-                    } else if (!ai.saiy.android.utils.Conditions.Network.isConnected(getApplicationContext())) {
+                    } else if (!ai.saiy.android.utils.Conditions.Network.isNetworkAvailable(getApplicationContext())) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "onHandleIntent: ACTION_ALEXA: no network");
                         }

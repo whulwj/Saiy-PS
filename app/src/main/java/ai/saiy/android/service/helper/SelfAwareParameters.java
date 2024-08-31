@@ -40,6 +40,7 @@ import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
+import ai.saiy.android.utils.UtilsToast;
 
 /**
  * Helper class to manage the ({@link SaiyTextToSpeech} parameters.
@@ -119,8 +120,8 @@ public class SelfAwareParameters extends HashMap<String, String> {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(mContext,
-                                    mContext.getString(R.string.error_tts_volume), Toast.LENGTH_SHORT).show();
+                            UtilsToast.showToast(mContext,
+                                    mContext.getString(R.string.error_tts_volume), Toast.LENGTH_SHORT);
                         }
                     });
             }
@@ -130,8 +131,8 @@ public class SelfAwareParameters extends HashMap<String, String> {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(mContext,
-                                mContext.getString(R.string.error_tts_volume), Toast.LENGTH_SHORT).show();
+                        UtilsToast.showToast(mContext,
+                                mContext.getString(R.string.error_tts_volume), Toast.LENGTH_SHORT);
                     }
                 });
         }

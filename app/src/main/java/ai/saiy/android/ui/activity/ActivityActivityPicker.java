@@ -17,7 +17,7 @@ import ai.saiy.android.ui.fragment.FragmentActivityPicker;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
-import me.drakeet.support.toast.ToastCompat;
+import ai.saiy.android.utils.UtilsToast;
 
 public class ActivityActivityPicker extends AppCompatActivity implements UserFirebaseListener {
     public static final String EXTRA_APPLICATION = "extra_application";
@@ -65,7 +65,7 @@ public class ActivityActivityPicker extends AppCompatActivity implements UserFir
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ToastCompat.makeText(getApplicationContext(), text, duration).show();
+                    UtilsToast.showToast(getApplicationContext(), text, duration);
                 }
             });
         }

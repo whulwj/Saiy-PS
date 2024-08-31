@@ -51,6 +51,9 @@ public class DebugAction {
     public static final int DEBUG_VALIDATE_SIGNATURE = 1;
     public static final int DEBUG_CLEAR_SYNTHESIS = 2;
     public static final int DEBUG_CLEAR_CUSTOM_COMMANDS = 3;
+    public static final int DEBUG_AUTHENTICATION = 5;
+    public static final int REPORT_BILLING = 8;
+    public static final int DEBUG_BILLING = 10;
 
     /**
      * Remotely validate the signatures

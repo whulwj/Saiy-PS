@@ -2233,6 +2233,26 @@
     <string name="donate_credit_addition">Thank you. You\'ve been awarded %1$s credits and the in app ads have been removed for an additional %2$s hours.</string>
     <string name="donate_credit_verbose">Please be aware, if you would like these credits and your ad free status to be shared across multiple devices, you\'ll need to log in from the Development Section.</string>
     <string name="menu_donate">Donate &amp; Remove Ads</string>
+    <string name="lp_donate">If you want to donate to my development, remove the annoying ads, or buy my developer a present, then this is the place to go.</string>
     <string name="content_ad_overview">If I\'ve done something you\'re particularly impressed with, or you\'re just enjoying using me and feeling generous, you can give a little back and contribute to my development by using the, donate command, which will display a video advert.\n\nSometimes these can be a couple of minutes long and need to run through to the end in order to be of benefit - So do make sure you\'re in a patient mood!\n\nEach time you use this command, you\'ll be rid of the pesky ads elsewhere in the application for 24 hours, and I\'ll award you an amount of credits, that will be redeemable against future premium content.</string>
     <string name="thank_you">thank you</string>
+
+    <string name="iap_error_generic">A billing error occurred</string>
+    <string name="iap_item_unavailable">Item unavailable</string>
+    <string name="iap_owned">You already own this item! :)</string>
+    <string name="iap_purchase_cancelled">Purchase cancelled</string>
+    <string name="iap_advert">Watch an advert</string>
+    <string name="iap_bronze">Buy me a beer</string>
+    <string name="iap_gold">Buy me dinner</string>
+    <string name="iap_no_cost">0.00</string>
+    <string name="iap_platinum">Buy me a 10 coffees</string>
+    <string name="iap_silver">Buy me lunch</string>
+    <string name="iap_starter">Buy me milk</string>
+    <string name="iap_unknown_cost">$?</string>
+    <string name="content_billing_error">A problem occurred when attempting to verify your purchase.\n\nEach time the application starts, it will automatically attempt to resolve this issue over the next 48 hour period. If however, after this time, you believe your purchase still has not been correctly applied, please email me directly via %1$s\n\nPlease accept my apologies for any inconvenience caused. I greatly appreciate your donation.</string>
+    <string name="content_billing_success">Thank you for your donation!\n\nIn order to get rid of the pesky ads, you may need to kill the application and open it again.\n\nPlease be aware, evey time the application starts, it checks if you are a Premium User. Sometimes, due to weird and wonderful billing responses from Google, it may incorrectly report the status of a donation and therefore ads will appear once again. This issue is normally short-lived…\n\nThank you once again.\n\nBen</string>
+    <string name="menu_billing_error">Billing Error</string>
+    <string name="menu_billing_success">Donation Processed</string>
+    <string name="network_error">A network error occurred</string>
+    <string name="title_debugging">Debugging</string>
 </resources>

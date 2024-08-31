@@ -1,6 +1,7 @@
 [versions]
 gradlePlugin = "8.2.2"
 googleAuthLibraryOauth2Http = "1.12.2"
+billing = "6.0.1"
 commonsIo = "2.16.1"
 commonsCollections4 = "4.4"
 commonsCodec = "1.17.1"
@@ -68,6 +69,7 @@ facebook-sdk ="17.0.0"
 
 [libraries]
 google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
+billing = { group = "com.android.billingclient", name = "billing", version.ref = "billing" }
 commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
 commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4" }
 commons-codec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }

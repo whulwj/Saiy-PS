@@ -44,6 +44,7 @@
         <package android:name="com.ebay.mobile"/>
         <package android:name="com.evernote"/>
         <package android:name="com.facebook.katana"/>
+        <package android:name="cc.cz.madkite.freedom"/>
         <package android:name="com.joelapenna.foursquared"/>
         <package android:name="com.google.android.gm"/>
         <package android:name="com.google.android.apps.docs"/>

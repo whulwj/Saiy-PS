@@ -1,7 +1,7 @@
 package ai.saiy.android.firebase.database.read;
 
 @com.google.firebase.database.IgnoreExtraProperties
-public class IAP {
+public class IAPVersion {
     @com.google.firebase.database.PropertyName("version_code")
     public String versionCode;
 

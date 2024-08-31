@@ -17,6 +17,7 @@
 
 package ai.saiy.android.ui.fragment;
 
+import android.accounts.AccountManager;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -40,16 +41,25 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.SkuDetailsParams;
+import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.settings.SettingsIntent;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Condition;
@@ -60,17 +70,17 @@ import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentHomeHelper;
 import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.ui.viewmodel.BillingViewModel;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
-import ai.saiy.android.firebase.helper.UtilsAnalytic;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
  */
 
-public class FragmentHome extends Fragment implements View.OnClickListener, View.OnLongClickListener {
+public class FragmentHome extends Fragment implements View.OnClickListener, View.OnLongClickListener, SkuDetailsResponseListener {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentHome.class.getSimpleName();
@@ -88,12 +98,14 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     public static final int CHEVRON = R.drawable.chevron;
     private static final int SYSTEM_OVERLAY_REQUEST_CODE = 132;
     private static final int RC_REQUEST = 1287;
+    public static final int ACCOUNT_PICKER_REQUEST_CODE = 3773;
     private static final int REQUEST_AUDIO = 1;
 
     private RecyclerView mRecyclerView;
     private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentHomeHelper helper;
+    private BillingViewModel billingViewModel;
 
     private static final Object lock = new Object();
 
@@ -158,6 +170,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }
+        final ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+        this.billingViewModel = viewModelProvider.get(BillingViewModel.class);
 
         final View rootView = inflater.inflate(R.layout.layout_common_fragment_parent, container, false);
         mRecyclerView = helper.getRecyclerView(rootView);
@@ -259,6 +273,42 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                     }
                 }
                 break;
+            case 8:
+                if (isActive()) {
+                    showProgress(true);
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onClick: fragment detached");
+                }
+                final com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
+                final int connectionResult = googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext());
+                if (connectionResult == ConnectionResult.SUCCESS) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "GoogleApiAvailability: SUCCESS");
+                    }
+                    if (Network.isNetworkAvailable(getApplicationContext())) {
+                        helper.showAccountPicker();
+                        return;
+                    }
+                    if (isActive()) {
+                        toast(getString(R.string.network_error), Toast.LENGTH_SHORT);
+                        showProgress(false);
+                    } else {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onClick: fragment detached");
+                        }
+                    }
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "GoogleApiAvailability: play services unavailable");
+                }
+                if (isActive()) {
+                    showProgress(false);
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onClick: fragment detached");
+                }
+                googleApiAvailability.showErrorNotification(getApplicationContext(), connectionResult);
+                break;
             default:
                 break;
         }
@@ -304,6 +354,9 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 break;
             case 7:
                 getParentActivity().speak(R.string.lp_bugs, LocalRequest.ACTION_SPEAK_ONLY);
+                break;
+            case 8:
+                getParentActivity().speak(R.string.lp_donate, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             default:
                 break;
@@ -444,6 +497,26 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         }
     }
 
+    private void startPurchaseFlow() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "startPurchaseFlow");
+        }
+        final com.android.billingclient.api.BillingClient billingClient = billingViewModel.getBillingClient();
+        if (billingClient != null) {
+            final SkuDetailsParams.Builder builder = SkuDetailsParams.newBuilder();
+            builder.setSkusList(ai.saiy.android.user.UserFirebaseHelper.skuLevels()).setType(BillingClient.ProductType.INAPP);
+            billingClient.querySkuDetailsAsync(builder.build(), this);
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "startPurchaseFlow: mBillingClient null");
+            }
+            if (isActive()) {
+                showProgress(false);
+                toast(getString(R.string.iap_error_generic), Toast.LENGTH_LONG);
+            }
+        }
+    }
+
     private void showSystemAlertRational() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showSystemAlertRational");
@@ -497,16 +570,57 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onActivityResult: RC_REQUEST");
                 }
-                return;
+                break;
+            case ACCOUNT_PICKER_REQUEST_CODE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onActivityResult: ACCOUNT_PICKER_REQUEST_CODE");
+                }
+                if (!isActive()) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onActivityResult: ACCOUNT_PICKER_REQUEST_CODE: user exiting");
+                    }
+                    showProgress(false);
+                    return;
+                }
+                if (intent == null || !intent.hasExtra(AccountManager.KEY_ACCOUNT_NAME)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onActivityResult: accountName missing");
+                    }
+                    showProgress(false);
+                    return;
+                }
+                final String accountName = intent.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+                if (!ai.saiy.android.utils.UtilsString.notNaked(accountName)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onActivityResult: accountName null");
+                    }
+                    showProgress(false);
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onActivityResult: accountName " + accountName);
+                }
+                SPH.setUserAccount(getApplicationContext(), accountName);
+                if (billingViewModel.canBillingProceed()) {
+                    startPurchaseFlow();
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onActivityResult: canBillingProceed: false");
+                }
+                showProgress(false);
+                toast(getString(R.string.iap_error_generic), Toast.LENGTH_LONG);
+                break;
             default:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "onActivityResult: DEFAULT");
                 }
+                break;
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onRequestPermissionsResult");
         }
@@ -532,6 +646,60 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "onRequestPermissionsResult: Unknown request?");
                 }
+        }
+    }
+
+    @Override
+    public void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onSkuDetailsResponse");
+        }
+        if (!isActive()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onSkuDetailsResponse: !isActive()");
+            }
+            return;
+        }
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onSkuDetailsResponse: BillingResponse.OK");
+            }
+            if (!ai.saiy.android.utils.UtilsList.notNaked(list)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetailsList naked");
+                }
+                if (isActive()) {
+                    showProgress(false);
+                    toast(getString(R.string.iap_error_generic), Toast.LENGTH_LONG);
+                }
+                return;
+            }
+
+            if (DEBUG) {
+                for (SkuDetails skuDetails : list) {
+                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetails.getSku():" + skuDetails.getSku());
+                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetails.getTitle():" + skuDetails.getTitle());
+                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetails.getPrice():" + skuDetails.getPrice());
+                }
+            }
+            helper.showPremiumDialog(list);
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onSkuDetailsResponse: BillingResponse.DEFAULT");
+            }
+            showProgress(false);
+            toast(getString(R.string.iap_error_generic), Toast.LENGTH_LONG);
+        }
+    }
+
+    public void toast(String text, int duration) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "makeToast: " + text);
+        }
+        if (isActive()) {
+            getParentActivity().toast(text, duration);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "toast Fragment detached");
         }
     }
 
@@ -580,6 +748,10 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
      */
     public ArrayList<ContainerUI> getObjects() {
         return mObjects;
+    }
+
+    public BillingViewModel getBillingViewModel() {
+        return billingViewModel;
     }
 
     @Override

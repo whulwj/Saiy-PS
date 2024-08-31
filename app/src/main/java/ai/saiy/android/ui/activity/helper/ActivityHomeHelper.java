@@ -46,6 +46,7 @@ import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -425,6 +426,105 @@ public class ActivityHomeHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
         materialDialog.show();
+    }
+
+    public void showBillingErrorDialog(@NonNull ActivityHome activity) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showBillingErrorDialog");
+        }
+        if (activity.isActive()) {
+            activity.showProgress(false);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final AlertDialog materialDialog = new MaterialAlertDialogBuilder(activity)
+                            .setTitle(R.string.menu_billing_error)
+                            .setMessage(activity.getString(R.string.content_billing_error, Constants.SAIY_BILLING_EMAIL))
+                            .setIcon(R.drawable.ic_security)
+                            .setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showBillingErrorDialog: onPositive");
+                                    }
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showBillingErrorDialog: onNegative");
+                                    }
+                                }
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(final DialogInterface dialog) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showBillingErrorDialog: onCancel");
+                                    }
+                                }
+                            }).create();
+                    materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                    materialDialog.show();
+                }
+            });
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "showBillingErrorDialog: parent no longer active");
+        }
+    }
+
+    public void showBillingSuccessDialog(@NonNull ActivityHome activity) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showBillingSuccessDialog");
+        }
+        if (activity.isActive()) {
+            activity.showProgress(false);
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    final AlertDialog materialDialog = new MaterialAlertDialogBuilder(activity)
+                            .setTitle(R.string.menu_billing_success)
+                            .setMessage(R.string.content_billing_success)
+                            .setIcon(R.drawable.ic_gift)
+                            .setPositiveButton(R.string.title_cool, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showBillingSuccessDialog: onPositive");
+                                    }
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showBillingSuccessDialog: onNegative");
+                                    }
+                                }
+                            })
+                            .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                                @Override
+                                public void onCancel(final DialogInterface dialog) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showBillingSuccessDialog: onCancel");
+                                    }
+                                }
+                            }).create();
+                    materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+                    materialDialog.show();
+                }
+            });
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "showBillingErrorDialog: parent no longer active");
+        }
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                    new UserFirebaseHelper().isAdFree(activity.getApplication(), activity);
+            }
+        }).start();
     }
 
     public void checkAppRestrictionsStatus(Activity context) {

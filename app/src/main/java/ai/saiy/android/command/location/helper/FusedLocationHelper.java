@@ -37,14 +37,14 @@ public class FusedLocationHelper implements GoogleApiClient.ConnectionCallbacks,
 
     public void prepare(Context context) {
         final GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
-        final int playServicesAvailable = googleApiAvailability.isGooglePlayServicesAvailable(context);
-        if (playServicesAvailable == ConnectionResult.SUCCESS) {
+        final int connectionResult = googleApiAvailability.isGooglePlayServicesAvailable(context);
+        if (connectionResult == ConnectionResult.SUCCESS) {
             this.googleApiClient = new GoogleApiClient.Builder(context).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "prepare: play services unavailable");
             }
-            googleApiAvailability.showErrorNotification(context, playServicesAvailable);
+            googleApiAvailability.showErrorNotification(context, connectionResult);
         }
     }
 

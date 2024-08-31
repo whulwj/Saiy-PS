@@ -24,14 +24,19 @@ import ai.saiy.android.utils.UtilsString;
 public class UserFirebaseHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = UserFirebaseHelper.class.getSimpleName();
+    public static final String SKU_LEVEL_1 = "saiy_level_one";
+    public static final String SKU_LEVEL_2 = "saiy_level_two";
+    public static final String SKU_LEVEL_3 = "saiy_level_three";
+    public static final String SKU_LEVEL_4 = "saiy_level_four";
+    public static final String SKU_LEVEL_5 = "saiy_level_five";
 
-    public static List<String> userLevels() {
-        ArrayList<String> arrayList = new ArrayList<>();
-        arrayList.add("saiy_level_five");
-        arrayList.add("saiy_level_four");
-        arrayList.add("saiy_level_three");
-        arrayList.add("saiy_level_two");
-        arrayList.add("saiy_level_one");
+    public static List<String> skuLevels() {
+        ArrayList<String> arrayList = new ArrayList<>(5);
+        arrayList.add(UserFirebaseHelper.SKU_LEVEL_5);
+        arrayList.add(UserFirebaseHelper.SKU_LEVEL_4);
+        arrayList.add(UserFirebaseHelper.SKU_LEVEL_3);
+        arrayList.add(UserFirebaseHelper.SKU_LEVEL_2);
+        arrayList.add(UserFirebaseHelper.SKU_LEVEL_1);
         return arrayList;
     }
 

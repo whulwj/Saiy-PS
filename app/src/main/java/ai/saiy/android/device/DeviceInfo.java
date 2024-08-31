@@ -49,8 +49,8 @@ import java.util.Locale;
 
 import ai.saiy.android.BuildConfig;
 import ai.saiy.android.R;
-import ai.saiy.android.firebase.database.read.IAP;
-import ai.saiy.android.firebase.database.reference.IAPReference;
+import ai.saiy.android.firebase.database.read.IAPVersion;
+import ai.saiy.android.firebase.database.reference.IAPVersionReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
@@ -167,13 +167,13 @@ public class DeviceInfo {
 
     public String createKeys(Context context, String str) {
         try {
-            final IAP iap = new IAPReference().getRequestIAP();
-            if (iap == null || !UtilsString.notNaked(iap.getVersionCode())) {
+            final IAPVersion iapVersion = new IAPVersionReference().getRequestIAP();
+            if (iapVersion == null || !UtilsString.notNaked(iapVersion.getVersionCode())) {
                 return null;
             }
             final AesCbcWithIntegrity.CipherTextIvMac cipherTextIvMac = new AesCbcWithIntegrity.CipherTextIvMac(str);
             final Pair<String, Integer> keys = createKeys(context);
-            return (keys == null || keys.first == null) ? null : AesCbcWithIntegrity.decryptString(cipherTextIvMac, AesCbcWithIntegrity.generateKeyFromPassword(Base64.encodeToString((keys.first + keys.second).getBytes(StandardCharsets.UTF_8), Base64.DEFAULT), Base64.encodeToString(iap.getVersionCode().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT)));
+            return (keys == null || keys.first == null) ? null : AesCbcWithIntegrity.decryptString(cipherTextIvMac, AesCbcWithIntegrity.generateKeyFromPassword(Base64.encodeToString((keys.first + keys.second).getBytes(StandardCharsets.UTF_8), Base64.DEFAULT), Base64.encodeToString(iapVersion.getVersionCode().getBytes(StandardCharsets.UTF_8), Base64.DEFAULT)));
         } catch (NullPointerException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "createKeys: NullPointerException");
@@ -208,13 +208,13 @@ public class DeviceInfo {
         return null;
     }
 
-    private Pair<String, Integer> createKeys(Context context) {
+    public Pair<String, Integer> createKeys(Context context) {
         try {
            final Signature[] signatures = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES).signatures;
             if (signatures != null && signatures.length > 0) {
                 final X509Certificate x509Certificate = (X509Certificate) CertificateFactory.getInstance("X.509").generateCertificate(new ByteArrayInputStream(signatures[0].toByteArray()));
-                final int hashCode = ((RSAPublicKey) x509Certificate.getPublicKey()).getModulus().hashCode();
-                return new Pair<>(BaseEncoding.base16().ignoreCase().encode(MessageDigest.getInstance("SHA1").digest(x509Certificate.getEncoded())), hashCode);
+                final int modulusHash = ((RSAPublicKey) x509Certificate.getPublicKey()).getModulus().hashCode();
+                return new Pair<>(BaseEncoding.base16().ignoreCase().encode(MessageDigest.getInstance("SHA1").digest(x509Certificate.getEncoded())), modulusHash);
             }
         } catch (PackageManager.NameNotFoundException e) {
             if (DEBUG) {

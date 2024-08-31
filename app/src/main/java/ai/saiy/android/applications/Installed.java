@@ -64,6 +64,7 @@ public class Installed {
     public static final String PACKAGE_EBAY = "com.ebay.mobile";
     public static final String PACKAGE_EVERNOTE = "com.evernote";
     public static final String PACKAGE_FACEBOOK = "com.facebook.katana";
+    public static final String PACKAGE_FREEDOM = "cc.cz.madkite.freedom";
     public static final String PACKAGE_FOUR_SQUARED = "com.joelapenna.foursquared";
     public static final String PACKAGE_GMAIL = "com.google.android.gm";
     public static final String PACKAGE_GOOGLE_DOCS = "com.google.android.apps.docs";

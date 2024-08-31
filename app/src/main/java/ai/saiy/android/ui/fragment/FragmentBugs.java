@@ -32,8 +32,10 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -45,6 +47,7 @@ import ai.saiy.android.recognition.TestRecognitionAction;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentBugsHelper;
+import ai.saiy.android.ui.viewmodel.BillingViewModel;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
@@ -67,6 +70,7 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
     private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentBugsHelper helper;
+    private BillingViewModel billingViewModel;
 
     private static final Object lock = new Object();
 
@@ -90,14 +94,14 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
     }
 
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         this.mContext = context.getApplicationContext();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(final Activity activity) {
+    public void onAttach(@NonNull final Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.mContext = activity.getApplicationContext();
@@ -128,10 +132,12 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }
+        final ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
+        this.billingViewModel = viewModelProvider.get(BillingViewModel.class);
 
         final View rootView = inflater.inflate(R.layout.fragment_bugs_layout, container, false);
         editText = helper.getEditText(rootView);
@@ -278,7 +284,7 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
 
                 hideIME();
 
-                new TestRecognitionAction(getApplicationContext(), commandText.trim());
+                new TestRecognitionAction(getApplicationContext(), billingViewModel, commandText.trim());
 
             } else {
                 if (DEBUG) {
@@ -333,7 +339,7 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
      *
      * @return the current adapter
      */
-    public RecyclerView.Adapter getAdapter() {
+    public RecyclerView.Adapter<?> getAdapter() {
         return mAdapter;
     }
 

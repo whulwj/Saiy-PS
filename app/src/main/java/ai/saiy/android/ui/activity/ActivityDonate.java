@@ -23,7 +23,7 @@ import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
-import me.drakeet.support.toast.ToastCompat;
+import ai.saiy.android.utils.UtilsToast;
 
 public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRewardListener {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -65,7 +65,7 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    ToastCompat.makeText(getApplicationContext(), text, duration).show();
+                    UtilsToast.showToast(getApplicationContext(), text, duration);
                 }
             });
         }

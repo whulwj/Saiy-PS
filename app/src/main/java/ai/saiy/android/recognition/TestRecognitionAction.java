@@ -34,8 +34,11 @@ import ai.saiy.android.custom.CustomCommandHelper;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Quantum;
+import ai.saiy.android.ui.viewmodel.BillingViewModel;
+import ai.saiy.android.user.BillingReporter;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsToast;
 import ai.saiy.android.utils.debug.DebugAction;
 
 /**
@@ -54,14 +57,15 @@ public class TestRecognitionAction {
      * Handle the test command text input by the user. This can either be an attempt to test a command, or
      * an instruction to perform debugging of some sort.
      *
-     * @param mContext    the application context
-     * @param commandText the command text to test
+     * @param ctx              the application context
+     * @param billingViewModel the {@link BillingViewModel}
+     * @param commandText      the command text to test
      */
-    public TestRecognitionAction(@NonNull final Context mContext, @NonNull final String commandText) {
+    public TestRecognitionAction(@NonNull final Context ctx, BillingViewModel billingViewModel, @NonNull final String commandText) {
 
         if (!commandText.startsWith(MyLog.DO_DEBUG)) {
 
-            final Locale vrLocale = SPH.getVRLocale(mContext);
+            final Locale vrLocale = SPH.getVRLocale(ctx);
 
             final ArrayList<String> mocCommands = new ArrayList<>(1);
             mocCommands.add(commandText);
@@ -69,24 +73,25 @@ public class TestRecognitionAction {
             final float[] mocConfidence = new float[1];
             mocConfidence[0] = 1F;
 
-            final CommandRequest cr = new CommandRequest(vrLocale, SPH.getTTSLocale(mContext),
+            final CommandRequest cr = new CommandRequest(vrLocale, SPH.getTTSLocale(ctx),
                     SupportedLanguage.getSupportedLanguage(vrLocale));
             cr.setResultsArray(mocCommands);
             cr.setConfidenceArray(mocConfidence);
 
-            new Quantum(mContext).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cr);
+            new Quantum(ctx).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cr);
         } else {
-            runDebug(mContext, commandText);
+            runDebug(ctx, billingViewModel, commandText);
         }
     }
 
     /**
      * The command text was a debugging instruction, handle here
      *
-     * @param ctx         the application context
-     * @param commandText the debug instruction
+     * @param ctx              the application context
+     * @param billingViewModel the {@link BillingViewModel}
+     * @param commandText      the command text to test
      */
-    private void runDebug(@NonNull final Context ctx, @NonNull final String commandText) {
+    private void runDebug(@NonNull final Context ctx, BillingViewModel billingViewModel, @NonNull final String commandText) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "runDebug: " + commandText);
         }
@@ -122,6 +127,32 @@ public class TestRecognitionAction {
                         }
                         toast(ctx, CustomCommandHelper.deleteAllCommands(ctx) ? ctx.getString(R.string.success)
                                 : ctx.getString(R.string.failed));
+                        break;
+                    case DebugAction.DEBUG_AUTHENTICATION:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "runDebug: DEBUG_AUTHENTICATION");
+                        }
+                        toast(ctx, "IAP: " + ai.saiy.android.utils.SPH.getPremiumContentVerbose(ctx) + " - Auth: " + (ai.saiy.android.utils.SPH.getFirebaseAnonymousUid(ctx) != null));
+                        break;
+                    case DebugAction.REPORT_BILLING:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "runDebug: REPORT_BILLING");
+                        }
+                        if (billingViewModel.canBillingProceed()) {
+                            toast(ctx, "Billing test running");
+                            new BillingReporter(ctx, billingViewModel.getBillingClient()).report();
+                        } else {
+                            toast(ctx, "Billing Client is in error");
+                        }
+                        break;
+                    case DebugAction.DEBUG_BILLING:
+                        if (ai.saiy.android.utils.SPH.getDebugBilling(ctx)) {
+                            ai.saiy.android.utils.SPH.setDebugBilling(ctx, false);
+                            toast(ctx, ctx.getString(R.string.disabled));
+                        } else {
+                            ai.saiy.android.utils.SPH.setDebugBilling(ctx, true);
+                            toast(ctx, ctx.getString(R.string.enabled));
+                        }
                         break;
                     default:
                         if (DEBUG) {
@@ -174,8 +205,7 @@ public class TestRecognitionAction {
         new Handler(Looper.getMainLooper()).post(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(ctx, toastWords,
-                        Toast.LENGTH_SHORT).show();
+                UtilsToast.showToast(ctx, toastWords, Toast.LENGTH_SHORT);
             }
         });
     }

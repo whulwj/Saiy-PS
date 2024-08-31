@@ -68,7 +68,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
-
+import ai.saiy.android.utils.UtilsToast;
 import wei.mark.standout.StandOutWindow;
 
 /**
@@ -1090,7 +1090,7 @@ public class SelfAwareHelper {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    Toast.makeText(mContext, toastWords, length).show();
+                    UtilsToast.showToast(mContext, toastWords, length);
                 }
             });
         } else {
