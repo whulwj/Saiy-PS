@@ -29,7 +29,10 @@ import androidx.annotation.NonNull;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Locale;
 
 import ai.saiy.android.cache.speech.SpeechCachePrepare;
@@ -207,7 +210,18 @@ public class SelfAwareCache extends SaiyProgressListener {
         }
 
         try {
-            scp.setUncompressedAudio(FileUtils.readFileToByteArray(tempFile));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoMethodException: File#toPath()
+                scp.setUncompressedAudio(FileUtils.readFileToByteArray(tempFile));
+            } else {
+                try (InputStream inputStream = new FileInputStream(tempFile)) {
+                    scp.setUncompressedAudio(org.apache.commons.io.IOUtils.toByteArray(inputStream));
+                }
+            }
+        } catch (final FileNotFoundException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onDone: FileNotFoundException");
+                e.printStackTrace();
+            }
         } catch (final IOException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "onDone: IOException");

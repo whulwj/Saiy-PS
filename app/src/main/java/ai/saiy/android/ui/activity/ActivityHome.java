@@ -103,13 +103,14 @@ import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsToast;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Main activity class that handles the fragment management
  * <p>
  * Created by benrandall76@gmail.com on 23/08/2016.
  */
-
+@AndroidEntryPoint
 public class ActivityHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
         FragmentManager.OnBackStackChangedListener,
         UserFirebaseListener, OnUserEarnedRewardListener {

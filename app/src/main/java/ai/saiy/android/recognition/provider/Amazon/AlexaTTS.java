@@ -1,6 +1,7 @@
 package ai.saiy.android.recognition.provider.Amazon;
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -13,7 +14,10 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -346,7 +350,18 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             MyLog.getElapsed(CLS_NAME, "onDone", responseTime);
         }
         try {
-            this.fileBytes = org.apache.commons.io.FileUtils.readFileToByteArray(audioCacheFile);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoMethodException: File#toPath()
+                this.fileBytes = org.apache.commons.io.FileUtils.readFileToByteArray(audioCacheFile);
+            } else {
+                try (InputStream inputStream = new FileInputStream(audioCacheFile)) {
+                    this.fileBytes = org.apache.commons.io.IOUtils.toByteArray(inputStream);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onDone: FileNotFoundException");
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "onDone: IOException");

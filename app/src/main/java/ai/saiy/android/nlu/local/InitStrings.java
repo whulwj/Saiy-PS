@@ -60,6 +60,7 @@ import ai.saiy.android.command.sms.Sms;
 import ai.saiy.android.command.somersault.Somersault;
 import ai.saiy.android.command.songrecognition.SongRecognition;
 import ai.saiy.android.command.spell.Spell;
+import ai.saiy.android.command.superuser.Superuser;
 import ai.saiy.android.command.tasker.Tasker;
 import ai.saiy.android.command.time.Time;
 import ai.saiy.android.command.translate.Translate;
@@ -143,6 +144,7 @@ public final class InitStrings {
         callableList.add(new Search(sr, sl, voiceData, confidence));
         callableList.add(new Alarm(sr, sl, voiceData, confidence));
         callableList.add(new Calendar(sr, sl, voiceData, confidence));
+        callableList.add(new Superuser(sr, sl, voiceData, confidence));
         callableList.add(new Sms(sr, sl, voiceData, confidence));
         callableList.add(new Help(sr, sl, voiceData, confidence));
         callableList.add(new ChatBot(sr, sl, voiceData, confidence));

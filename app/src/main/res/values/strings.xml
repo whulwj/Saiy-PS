@@ -2255,4 +2255,21 @@
     <string name="menu_billing_success">Donation Processed</string>
     <string name="network_error">A network error occurred</string>
     <string name="title_debugging">Debugging</string>
+
+    <string name="boot_loader">boot loader</string>
+    <string name="bootloader">bootloader</string>
+    <string name="cpu">cpu</string>
+    <string name="fastboot">fastboot</string>
+    <string name="governor">governor</string>
+    <string name="hot_reboot">hot reboot</string>
+    <string name="power">power</string>
+    <string name="reboot">reboot</string>
+    <string name="recovery">recovery</string>
+    <string name="screen_shot">screen shot</string>
+    <string name="screenshot">screenshot</string>
+    <string name="shut_down">shut down</string>
+    <string name="shutdown">shutdown</string>
+    <string name="super_user">super user</string>
+    <string name="superuser">superuser</string>
+    <string name="superuser_disabled">All super user commands are currently disabled. They\'ll be made available again in a coming release</string>
 </resources>

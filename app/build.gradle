@@ -17,6 +17,7 @@
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.protobuf.gradle.plugin)
+    alias(libs.plugins.hilt)
     alias(libs.plugins.googleServices)
 }
 
@@ -115,6 +116,12 @@ dependencies {
     implementation libs.print
     implementation libs.transition
     implementation libs.work.runtime
+    implementation(libs.hilt.android) {
+        exclude group: 'androidx.fragment', module: 'fragment'
+        exclude group: 'androidx.fragment', module: 'fragment-ktx'
+        exclude group: 'androidx.activity', module: 'activity'
+        exclude group: 'androidx.activity', module: 'activity-ktx'
+    }
 
     implementation(libs.google.google.api.services.translate) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
@@ -213,6 +220,8 @@ dependencies {
     implementation project(':pocketsphinx-android-5prealpha-nolib')
     implementation project(':ToastCompat')
     implementation project(':StandOut')
+
+    annotationProcessor libs.hilt.compiler
     testImplementation libs.junit
     androidTestImplementation libs.junit
     androidTestImplementation libs.ext.junit

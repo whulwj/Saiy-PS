@@ -226,7 +226,6 @@
         <!-- The Application ID for the app. The UMP requires an app ID. -->
         <!-- See this guide for more details: https://developers.google.com/interactive-media-ads/ump/android/quick-start#add_app_id_to -->
         <meta-data
-            tools:replace="android:value"
             android:name="com.google.android.gms.ads.APPLICATION_ID"
             android:value="ca-app-pub-2988542829837428~3315435888" />
         <!-- Delay app measurement until MobileAds.initialize() is called. -->

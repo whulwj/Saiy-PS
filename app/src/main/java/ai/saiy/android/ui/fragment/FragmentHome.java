@@ -75,11 +75,12 @@ import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
  */
-
+@AndroidEntryPoint
 public class FragmentHome extends Fragment implements View.OnClickListener, View.OnLongClickListener, SkuDetailsResponseListener {
 
     private static final boolean DEBUG = MyLog.DEBUG;

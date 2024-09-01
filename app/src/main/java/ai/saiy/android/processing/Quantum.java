@@ -730,6 +730,22 @@ public class Quantum extends Tunnelling {
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_SUPERUSER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SUPERUSER.name());
+                    }
+                    if (!secure) {
+                        final ai.saiy.android.command.superuser.CommandSuperuser commandSuperuser = new ai.saiy.android.command.superuser.CommandSuperuser();
+                        outcome = commandSuperuser.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    }
+                    break;
                 case COMMAND_SMS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SMS.name());
@@ -1411,6 +1427,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_CALENDAR:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALENDAR.name());
+                    }
+                    break;
+                case COMMAND_SUPERUSER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SUPERUSER.name());
                     }
                     break;
                 case COMMAND_SMS:

@@ -51,11 +51,12 @@ import ai.saiy.android.ui.viewmodel.BillingViewModel;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
  */
-
+@AndroidEntryPoint
 public class FragmentBugs extends Fragment implements View.OnClickListener, View.OnLongClickListener,
         TextView.OnEditorActionListener {
 

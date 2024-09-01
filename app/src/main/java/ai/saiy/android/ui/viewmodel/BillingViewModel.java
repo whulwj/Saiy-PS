@@ -2,6 +2,7 @@ package ai.saiy.android.ui.viewmodel;
 
 import android.app.Activity;
 import android.app.Application;
+import android.os.Build;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -24,18 +25,22 @@ import com.android.billingclient.api.QueryPurchaseHistoryParams;
 import com.android.billingclient.api.QueryPurchasesParams;
 import com.google.android.gms.tasks.Task;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import ai.saiy.android.IABUtil.Security;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.firebase.database.write.IAPPurchase;
+import ai.saiy.android.ui.activity.CurrentActivityProvider;
 import ai.saiy.android.user.BillingValidator;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import dagger.hilt.android.lifecycle.HiltViewModel;
 
+@HiltViewModel
 public final class BillingViewModel extends AndroidViewModel implements BillingClientStateListener,
         PurchasesResponseListener,
         PurchaseHistoryResponseListener,
@@ -48,9 +53,11 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
     private volatile boolean isConnectionRetrying = false;
     private volatile boolean isBillingFlowOK = false;
     private volatile String iapKey = "";
+    private final CurrentActivityProvider mActivityProvider;
 
-    public BillingViewModel(@NonNull Application application) {
+    public @Inject BillingViewModel(@NonNull Application application, CurrentActivityProvider activityProvider) {
         super(application);
+        this.mActivityProvider = activityProvider;
         this.mBillingClient = BillingClient.newBuilder(application).setListener(this).enablePendingPurchases().build();
     }
 
@@ -326,11 +333,11 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
         return mIsBillingSuccessful;
     }
 
-    public void sendSubmissionIAP(@NonNull Purchase purchase) {
+    private void sendSubmissionIAP(@NonNull Purchase purchase) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendSubmissionIAP");
         }
-        final Pair<String, Integer> signaturePair = new ai.saiy.android.device.DeviceInfo().createKeys(getApplication());
+        final Pair<String, Integer> signaturePair = new DeviceInfo().createKeys(getApplication());
         int hashCode = 0;
         String hexCertificate = "";
         if (signaturePair != null) {
@@ -339,20 +346,27 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
         } else if (DEBUG) {
             MyLog.w(CLS_NAME, "sendSubmissionIAP: signaturePair null");
         }
-        final boolean isFreedomInstalled = ai.saiy.android.applications.Installed.isPackageInstalled(getApplication(), Installed.PACKAGE_FREEDOM);
+        final boolean isFreedomInstalled = Installed.isPackageInstalled(getApplication(), Installed.PACKAGE_FREEDOM);
         final IAPPurchase userIap = new IAPPurchase(purchase.getOrderId(), purchase.getOriginalJson(), purchase.getPackageName(), purchase.getPurchaseTime(), purchase.getSignature(), purchase.getProducts(), purchase.getPurchaseToken(), isFreedomInstalled, hashCode, hexCertificate);
-        //TODO activity
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("user_iap").getRef().setValue(userIap).addOnCompleteListener(new com.google.android.gms.tasks.OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                if (DEBUG) {
+        final Task<Void> task = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("user_iap").getRef().setValue(userIap);
+        if (DEBUG) {
+            final com.google.android.gms.tasks.OnCompleteListener<Void> onCompleteListener = new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
                     MyLog.i(CLS_NAME, "sendSubmissionIAP: task success: " + task.isSuccessful());
                     if (!task.isSuccessful()) {
                         task.getException().printStackTrace();
                     }
                 }
-            }
-        });
+            };
+            mActivityProvider.withActivity(activity -> {
+                if (activity == null || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) || activity.isFinishing() || activity.isChangingConfigurations()) {
+                    task.addOnCompleteListener(onCompleteListener);
+                    return;
+                }
+                task.addOnCompleteListener(activity, onCompleteListener);
+            });
+        }
     }
 
     private void queryPurchasesAsync() {

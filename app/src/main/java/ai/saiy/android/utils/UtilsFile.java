@@ -33,7 +33,6 @@ import androidx.core.content.FileProvider;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.io.comparator.LastModifiedFileComparator;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 
 import java.io.File;
@@ -43,6 +42,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ai.saiy.android.tts.helper.TTSDefaults;
@@ -157,21 +157,6 @@ public class UtilsFile {
         }
 
         return null;
-    }
-
-    @Deprecated
-    private static File copyFileToGoogleTTSDir(File file) {
-        File targetFile = new File(Environment.getExternalStorageDirectory() + TTS_GOOGLE_DIRECTORY + file.getName());
-        try {
-            org.apache.commons.io.FileUtils.copyFile(file, new File(Environment.getExternalStorageDirectory() + TTS_GOOGLE_DIRECTORY + file.getName()));
-            return targetFile;
-        } catch (IOException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "copyFileToGoogleTTSDir IOException");
-                e.printStackTrace();
-            }
-            return file;
-        }
     }
 
     /**
@@ -419,7 +404,32 @@ public class UtilsFile {
     }
 
     public static ArrayList<File> sortByLastModified(ArrayList<File> files) {
-        files.sort(LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoMethodException: File#toPath()
+            files.sort(org.apache.commons.io.comparator.LastModifiedFileComparator.LASTMODIFIED_COMPARATOR);
+        } else {
+            files.sort(new Comparator<File>() {
+                /**
+                 * Compares the last the last modified date/time of two files.
+                 *
+                 * @param file1 The first file to compare.
+                 * @param file2 The second file to compare.
+                 * @return a negative value if the first file's last modified date/time is less than the second, zero if the last
+                 *         modified date/time are the same and a positive value if the first files last modified date/time is
+                 *         greater than the second file.
+                 */
+                @Override
+                public int compare(final File file1, final File file2) {
+                    final long result = file1.lastModified() - file2.lastModified();
+                    if (result < 0) {
+                        return -1;
+                    } else if (result > 0) {
+                        return 1;
+                    } else {
+                        return 0;
+                    }
+                }
+            });
+        }
         return files;
     }
 
@@ -457,7 +467,7 @@ public class UtilsFile {
         if (isSaiyDirectoryExists()) {
             return new File(Environment.getExternalStorageDirectory() + RELATIVE_SOUND_DIRECTORY).mkdir();
         }
-        boolean result = createSaiyDirectory() && new File(new StringBuilder().append(Environment.getExternalStorageDirectory()).append(SAIY_DIRECTORY).append(SOUND_DIRECTORY).toString()).mkdir();
+        boolean result = createSaiyDirectory() && new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY + SOUND_DIRECTORY).mkdir();
         if (result) {
             createNewFile(soundDirectory() + NO_MEDIA_FILE);
         }
@@ -626,7 +636,7 @@ public class UtilsFile {
         return true;
     }
 
-    public static @NonNull List<File> getSoundFiles() {
+    public static @NonNull List<File> getSoundFiles() { //TODO Manifest.permission#READ_MEDIA_AUDIO
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoClassDefFoundError: IOFileFilter
                 return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(soundDirectory(), soundFileFilter(), null));

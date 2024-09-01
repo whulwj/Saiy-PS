@@ -19,9 +19,13 @@ package ai.saiy.android.utils;
 
 import static ai.saiy.android.applications.Install.Location.PLAYSTORE;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
@@ -36,6 +40,8 @@ import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.recognition.provider.wit.RecognitionWitHybrid;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.ui.activity.CurrentActivityProvider;
+import dagger.hilt.android.HiltAndroidApp;
 
 /**
  * Helper Class to deal with application wide variables. Use with caution as the expected persistent
@@ -43,14 +49,16 @@ import ai.saiy.android.service.helper.LocalRequest;
  * <p/>
  * Created by benrandall76@gmail.com on 23/02/2016.
  */
-public class Global extends MultiDexApplication {
-
+@HiltAndroidApp
+public class Global extends MultiDexApplication implements Application.ActivityLifecycleCallbacks {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
     public static final Install.Location installLocation = PLAYSTORE;
     private static boolean sIsInVoiceTutorial;
     private static String sGlobalAmazonID;
     private static volatile Bundle alexDirectiveBundle;
+
+    private int mStartedCounter = 0;
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -65,9 +73,46 @@ public class Global extends MultiDexApplication {
         final FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
                 DebugAppCheckProviderFactory.getInstance());
+        registerActivityLifecycleCallbacks(this);
         // TODO
         setGlobalId();
         authenticateGoogleCloud();
+    }
+
+    @Override
+    public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
+        CurrentActivityProvider.onActivityCreated(activity);
+    }
+
+    @Override
+    public void onActivityStarted(@NonNull Activity activity) {
+        mStartedCounter++;
+    }
+
+    @Override
+    public void onActivityResumed(@NonNull Activity activity) {
+    }
+
+    @Override
+    public void onActivityPaused(@NonNull Activity activity) {
+    }
+
+    @Override
+    public void onActivityStopped(@NonNull Activity activity) {
+        mStartedCounter--;
+    }
+
+    @Override
+    public void onActivitySaveInstanceState(@NonNull Activity activity, @NonNull Bundle bundle) {
+    }
+
+    @Override
+    public void onActivityDestroyed(@NonNull Activity activity) {
+        CurrentActivityProvider.onActivityDestroyed(activity);
+    }
+
+    public boolean isForeground() {
+        return mStartedCounter > 0;
     }
 
     public static boolean isInVoiceTutorial() {

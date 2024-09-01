@@ -6,7 +6,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.fileupload.FileUploadBase;
 import org.apache.commons.fileupload.MultipartStream;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
@@ -16,6 +15,7 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -51,7 +51,7 @@ public class ResolveAmazon {
     }
 
     private String getBoundaryIdentifier() {
-        String boundaryIdentifier = StringUtils.substringBetween(this.response.headers().get(UtilsNetwork.CONTENT_TYPE), "boundary=", ";");
+        String boundaryIdentifier = StringUtils.substringBetween(response.headers().get(UtilsNetwork.CONTENT_TYPE), "boundary=", ";");
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getBoundaryIdentifier: " + boundaryIdentifier);
         }
@@ -69,15 +69,13 @@ public class ResolveAmazon {
     private String readHeaders(MultipartStream multipartStream) {
         try {
             return multipartStream.readHeaders();
-        } catch (FileUploadBase.FileUploadIOException e) {
-            if (DEBUG) {
-                MyLog.e(CLS_NAME, "readHeaders: FileUploadIOException");
-                e.printStackTrace();
-            }
         } catch (MultipartStream.MalformedStreamException e) {
             if (DEBUG) {
-                MyLog.e(CLS_NAME, "readHeaders: MalformedStreamException");
-                e.printStackTrace();
+                MyLog.e(CLS_NAME, "readHeaders: MalformedStreamException" + ", " + e.getMessage());
+            }
+        } catch (IOException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "readHeaders: " + e.getClass().getSimpleName() + ", " + e.getMessage());
             }
         }
         return null;
@@ -92,12 +90,12 @@ public class ResolveAmazon {
         ArrayList<StructuralDirective> arrayList = new ArrayList<>();
         ArrayList<Pair<String, byte[]>> multiPartList = new ArrayList<>();
         try {
-            byte[] bytes = org.apache.commons.io.IOUtils.toByteArray(this.inputStream);
+            byte[] bytes = org.apache.commons.io.IOUtils.toByteArray(inputStream);
             final String responseString = getString(bytes);
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "parse: responseToString: " + responseString);
             }
-            MultipartStream multipartStream = new MultipartStream(new ByteArrayInputStream(bytes), this.boundaryIdentifier.getBytes(), 512, null);
+            MultipartStream multipartStream = new MultipartStream(new ByteArrayInputStream(bytes), boundaryIdentifier.getBytes(), 512, null);
             Gson gson = new GsonBuilder().disableHtmlEscaping().create();
             if (multipartStream.skipPreamble()) {
                 if (DEBUG) {
@@ -209,25 +207,30 @@ public class ResolveAmazon {
                 } else if (DEBUG) {
                     MyLog.i(CLS_NAME, "parse: no audio but have directives");
                 }
-            } else if (this.file != null) {
-                BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(this.file));
-                bufferedOutputStream.write(multiPartList.get(0).second);
-                bufferedOutputStream.flush();
-                bufferedOutputStream.close();
-                directiveList.setFile(this.file);
+            } else if (file != null) {
+                try (BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(new FileOutputStream(file))) {
+                    bufferedOutputStream.write(multiPartList.get(0).second);
+                    bufferedOutputStream.flush();
+                }
+                directiveList.setFile(file);
                 directiveList.setAction(directiveAction);
             } else {
                 directiveList.setAction(directiveAction);
             }
             return directiveList;
+        } catch (FileNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "parse: FileNotFoundException: missing file");
+                e.printStackTrace();
+            }
         } catch (IOException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "parse: IOException: missing bytes");
                 e.printStackTrace();
             }
-            directiveList.setErrorCode(DirectiveList.MISSING_BYTES);
-            return directiveList;
         }
+        directiveList.setErrorCode(DirectiveList.MISSING_BYTES);
+        return directiveList;
     }
 
     private String getString(byte[] bytes) {
