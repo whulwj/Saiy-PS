@@ -598,7 +598,7 @@ public class TwitterOAuthView extends WebView {
 
         // Convert the boolean parameter to a Boolean object to pass it
         // as an argument of AsyncTask.execute().
-        Boolean dummy = Boolean.valueOf(dummyCallbackUrl);
+        Boolean dummy = dummyCallbackUrl;
 
         TwitterOAuthTask oldTask;
         TwitterOAuthTask newTask;

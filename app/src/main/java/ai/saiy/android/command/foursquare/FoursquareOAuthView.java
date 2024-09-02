@@ -266,7 +266,7 @@ public class FoursquareOAuthView extends WebView {
             }
             this.clientId = (String) args[0];
             this.callbackUrl = (String) args[1];
-            this.dummyCallbackUrl = ((Boolean) args[2]).booleanValue();
+            this.dummyCallbackUrl = (Boolean) args[2];
             this.listener = (Listener) args[3];
 
             // Access Foursquare's authorization page. After the user's
@@ -496,7 +496,7 @@ public class FoursquareOAuthView extends WebView {
         cancelTask(oldTask);
 
         // Execute the new task.
-        newTask.execute(clientId, callbackUrl, Boolean.valueOf(dummyCallbackUrl), listener);
+        newTask.execute(clientId, callbackUrl, dummyCallbackUrl, listener);
     }
 
     /**

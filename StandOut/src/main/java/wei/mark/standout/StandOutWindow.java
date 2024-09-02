@@ -914,8 +914,8 @@ public abstract class StandOutWindow extends Service {
 	 * 
 	 * @param id
 	 *            The id of the view, provided as a courtesy.
-	 * @param view
-	 *            The view about to be shown.
+	 * @param window
+	 *            The window about to be shown.
 	 * @return Return true to cancel the view from being shown, or false to
 	 *         continue.
 	 * @see #show(int)
@@ -932,8 +932,8 @@ public abstract class StandOutWindow extends Service {
 	 * 
 	 * @param id
 	 *            The id of the view, provided as a courtesy.
-	 * @param view
-	 *            The view about to be hidden.
+	 * @param window
+	 *            The window about to be hidden.
 	 * @return Return true to cancel the view from being hidden, or false to
 	 *         continue.
 	 * @see #hide(int)
@@ -949,8 +949,8 @@ public abstract class StandOutWindow extends Service {
 	 * 
 	 * @param id
 	 *            The id of the view, provided as a courtesy.
-	 * @param view
-	 *            The view about to be closed.
+	 * @param window
+	 *            The window about to be closed.
 	 * @return Return true to cancel the view from being closed, or false to
 	 *         continue.
 	 * @see #close(int)
@@ -1004,7 +1004,7 @@ public abstract class StandOutWindow extends Service {
 	 * 
 	 * @param id
 	 *            The id of the window, provided as a courtesy.
-	 * @param view
+	 * @param window
 	 *            The window about to be updated.
 	 * @param params
 	 *            The updated layout params.
@@ -1023,7 +1023,7 @@ public abstract class StandOutWindow extends Service {
 	 * 
 	 * @param id
 	 *            The id of the window, provided as a courtesy.
-	 * @param view
+	 * @param window
 	 *            The window about to be brought to the front.
 	 * @return Return true to cancel the window from being brought to the front,
 	 *         or false to continue.
@@ -1040,7 +1040,7 @@ public abstract class StandOutWindow extends Service {
 	 * 
 	 * @param id
 	 *            The id of the window, provided as a courtesy.
-	 * @param view
+	 * @param window
 	 *            The window about to be brought to the front.
 	 * @param focus
 	 *            Whether the window is gaining or losing focus.
@@ -1059,7 +1059,7 @@ public abstract class StandOutWindow extends Service {
 	 * 
 	 * @param id
 	 *            The id of the window, provided as a courtesy.
-	 * @param view
+	 * @param window
 	 *            The window about to receive the key event.
 	 * @param event
 	 *            The key event.
@@ -1991,7 +1991,7 @@ public abstract class StandOutWindow extends Service {
 		}
 	}
 
-	protected class DropDownListItem {
+	protected static class DropDownListItem {
 		public int icon;
 		public String description;
 		public Runnable action;

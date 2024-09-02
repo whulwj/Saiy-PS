@@ -1,64 +1,47 @@
 package ai.saiy.android.command.location.helper;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Location;
-import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.PermissionChecker;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+
+import java.util.concurrent.ExecutionException;
 
 import ai.saiy.android.utils.MyLog;
 
-public class FusedLocationHelper implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, ResultCallback<Status> {
+/**
+ * Native location helper of google location API
+ */
+public class FusedLocationHelper implements ResultCallback<Status> {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FusedLocationHelper.class.getSimpleName();
 
-    private GoogleApiClient googleApiClient;
-
-    public void connect() {
-        if (googleApiClient != null) {
-            googleApiClient.connect();
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onConnectionSuspended");
-        }
-    }
+    private Context mContext;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     public void prepare(Context context) {
+        this.mContext = context;
         final GoogleApiAvailability googleApiAvailability = GoogleApiAvailability.getInstance();
         final int connectionResult = googleApiAvailability.isGooglePlayServicesAvailable(context);
         if (connectionResult == ConnectionResult.SUCCESS) {
-            this.googleApiClient = new GoogleApiClient.Builder(context).addConnectionCallbacks(this).addOnConnectionFailedListener(this).addApi(LocationServices.API).build();
+            this.mFusedLocationClient = LocationServices.getFusedLocationProviderClient(context);
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "prepare: play services unavailable");
             }
             googleApiAvailability.showErrorNotification(context, connectionResult);
-        }
-    }
-
-    @Override
-    public void onConnected(Bundle bundle) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onConnected");
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onConnectionFailed");
         }
     }
 
@@ -70,46 +53,45 @@ public class FusedLocationHelper implements GoogleApiClient.ConnectionCallbacks,
     }
 
     public @Nullable Location getLastLocation() {
-        if (googleApiClient == null) {
+        if (mFusedLocationClient == null) {
             return null;
         }
-        if (googleApiClient.isConnecting()) {
+        if (PermissionChecker.checkSelfPermission(mContext, Manifest.permission.ACCESS_FINE_LOCATION) != PermissionChecker.PERMISSION_GRANTED && PermissionChecker.checkSelfPermission(mContext, Manifest.permission.ACCESS_COARSE_LOCATION) != PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "apiClient.isConnecting");
+                MyLog.w(CLS_NAME, "no location permission");
             }
-            try {
-                Thread.sleep(1500L);
-            } catch (InterruptedException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "InterruptedException");
-                }
-            }
+            return null;
         }
+        final Task<Location> task = mFusedLocationClient.getLastLocation();
         try {
-            return LocationServices.FusedLocationApi.getLastLocation(googleApiClient);
-        } catch (SecurityException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "SecurityException");
-                e.printStackTrace();
+            // Block on a task and get the result synchronously. This is generally done
+            // when executing a task inside a separately managed background thread. Doing this
+            // on the main (UI) thread can cause your application to become unresponsive.
+            final Location lastLocation = Tasks.await(task);
+            if (lastLocation != null) {
+                return lastLocation;
+            } else if (DEBUG) {
+                MyLog.d(CLS_NAME, "no location");
             }
-        } catch (Exception e) {
+        } catch (ExecutionException e) {
+            // The Task failed, this is the same exception you'd get in a non-blocking failure handler.
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "Exception");
-                e.printStackTrace();
+                MyLog.w(CLS_NAME, "getLastLocation:" + e.getClass().getSimpleName() + ", " + e.getMessage());
+            }
+        } catch (InterruptedException e) {
+            // An interrupt occurred while waiting for the task to complete.
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getLastLocation:" + e.getClass().getSimpleName() + ", " + e.getMessage());
             }
         }
         return null;
     }
 
     public void destroy() {
-        if (googleApiClient != null) {
-            try {
-                googleApiClient.disconnect();
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "destroy: Exception");
-                    e.printStackTrace();
-                }
+        if (mFusedLocationClient != null) {
+            mFusedLocationClient = null;
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "destroy");
             }
         }
     }

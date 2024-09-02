@@ -24,19 +24,19 @@ import ai.saiy.android.utils.UtilsString;
 public class UserFirebaseHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = UserFirebaseHelper.class.getSimpleName();
-    public static final String SKU_LEVEL_1 = "saiy_level_one";
-    public static final String SKU_LEVEL_2 = "saiy_level_two";
-    public static final String SKU_LEVEL_3 = "saiy_level_three";
-    public static final String SKU_LEVEL_4 = "saiy_level_four";
-    public static final String SKU_LEVEL_5 = "saiy_level_five";
+    public static final String LEVEL_1 = "saiy_level_one";
+    public static final String LEVEL_2 = "saiy_level_two";
+    public static final String LEVEL_3 = "saiy_level_three";
+    public static final String LEVEL_4 = "saiy_level_four";
+    public static final String LEVEL_5 = "saiy_level_five";
 
-    public static List<String> skuLevels() {
+    public static List<String> productIds() {
         ArrayList<String> arrayList = new ArrayList<>(5);
-        arrayList.add(UserFirebaseHelper.SKU_LEVEL_5);
-        arrayList.add(UserFirebaseHelper.SKU_LEVEL_4);
-        arrayList.add(UserFirebaseHelper.SKU_LEVEL_3);
-        arrayList.add(UserFirebaseHelper.SKU_LEVEL_2);
-        arrayList.add(UserFirebaseHelper.SKU_LEVEL_1);
+        arrayList.add(UserFirebaseHelper.LEVEL_5);
+        arrayList.add(UserFirebaseHelper.LEVEL_4);
+        arrayList.add(UserFirebaseHelper.LEVEL_3);
+        arrayList.add(UserFirebaseHelper.LEVEL_2);
+        arrayList.add(UserFirebaseHelper.LEVEL_1);
         return arrayList;
     }
 
@@ -135,7 +135,7 @@ public class UserFirebaseHelper {
                 premiumUser.setCredits(submissionTimeout);
                 com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(userFirebase.getUid()).setValue(premiumUser).addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
                     @Override
-                    public void onComplete(com.google.android.gms.tasks.Task<Void> task) {
+                    public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "addCredits: task success: " + task.isSuccessful());
                         }

@@ -74,8 +74,8 @@ public class WeatherResponse {
         try {
             final WeatherResponse weatherResponse = new WeatherResponse();
             final Condition condition = weatherOnlineResponse.getData().getCurrentCondition().get(0);
-            final int temperatureCelsius = BigDecimal.valueOf(Double.valueOf(condition.getTemperatureCelsius()).doubleValue()).setScale(0, RoundingMode.HALF_UP).intValue();
-            final int temperatureFahrenheit = BigDecimal.valueOf(Double.valueOf(condition.getTemperatureFahrenheit()).doubleValue()).setScale(0, RoundingMode.HALF_UP).intValue();
+            final int temperatureCelsius = BigDecimal.valueOf(Double.parseDouble(condition.getTemperatureCelsius())).setScale(0, RoundingMode.HALF_UP).intValue();
+            final int temperatureFahrenheit = BigDecimal.valueOf(Double.parseDouble(condition.getTemperatureFahrenheit())).setScale(0, RoundingMode.HALF_UP).intValue();
             weatherResponse.setTemperatureCelsius(temperatureCelsius);
             weatherResponse.setTemperatureFahrenheit(temperatureFahrenheit);
             final String description = condition.getWeatherDescription().get(0).getValue();

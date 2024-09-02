@@ -137,7 +137,7 @@ public class SaiyResources {
     /**
      * Only here in case of future functionality requirements.
      */
-    private final class ResourceManager extends Resources {
+    private static class ResourceManager extends Resources {
         public ResourceManager(final AssetManager assets, final DisplayMetrics metrics, final Configuration config) {
             super(assets, metrics, config);
         }

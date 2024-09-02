@@ -27,7 +27,6 @@ public class CommandParkedVehicle {
             } else {
                 final ai.saiy.android.command.location.helper.FusedLocationHelper fusedLocationHelper = new ai.saiy.android.command.location.helper.FusedLocationHelper();
                 fusedLocationHelper.prepare(context);
-                fusedLocationHelper.connect();
                 location = fusedLocationHelper.getLastLocation();
                 fusedLocationHelper.destroy();
             }

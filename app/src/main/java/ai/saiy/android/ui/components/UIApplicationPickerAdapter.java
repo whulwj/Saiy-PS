@@ -21,7 +21,7 @@ public class UIApplicationPickerAdapter extends RecyclerView.Adapter<UIApplicati
     private final View.OnClickListener onClickListener;
     private final String autoPlay;
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final LinearLayout itemContainer;
         private final TextView appName;
         private final ImageView appIcon;

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1049797034767",
+    "firebase_url": "https://saiy-b755b-default-rtdb.firebaseio.com",
     "project_id": "saiy-b755b",
     "storage_bucket": "saiy-b755b.appspot.com"
   },
@@ -12,7 +13,12 @@
           "package_name": "ai.saiy.android"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "1049797034767-5glr6797ooduloqhkvbt4u6ou1essi89.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyAwGevpWznNFKhTEwfz20EoNi6RsMvS1nk"
@@ -20,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1049797034767-5glr6797ooduloqhkvbt4u6ou1essi89.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -28,17 +28,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.billingclient.api.ProductDetails;
 import com.google.android.gms.auth.GoogleAuthUtil;
 import com.google.android.gms.common.AccountPicker;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ai.saiy.android.R;
@@ -231,7 +234,7 @@ public class FragmentHomeHelper {
         });
     }
 
-    public void showPremiumDialog(List<com.android.billingclient.api.SkuDetails> skuDetailsList) {
+    public void showPremiumDialog(List<com.android.billingclient.api.ProductDetails> productDetailsList) {
         showProgress(false);
         final View view = LayoutInflater.from(getParentActivity()).inflate(R.layout.premium_dialog_layout, null);
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
@@ -256,21 +259,21 @@ public class FragmentHomeHelper {
                     }
                 }).create();
 
-        com.android.billingclient.api.SkuDetails skuDetailsStarter = null, skuDetailsBronze = null, skuDetailsSilver = null, skuDetailsGold = null, skuDetailsPlatinum = null;
+        com.android.billingclient.api.ProductDetails productDetailsStarter = null, productDetailsBronze = null, productDetailsSilver = null, productDetailsGold = null, productDetailsPlatinum = null;
         try {
-            String sku;
-            for (com.android.billingclient.api.SkuDetails skuDetails : skuDetailsList) {
-                sku = skuDetails.getSku();
-                if (UserFirebaseHelper.SKU_LEVEL_1.matches(sku)) {
-                    skuDetailsStarter = skuDetails;
-                } else if (UserFirebaseHelper.SKU_LEVEL_2.matches(sku)) {
-                    skuDetailsBronze = skuDetails;
-                } else if (UserFirebaseHelper.SKU_LEVEL_3.matches(sku)) {
-                    skuDetailsSilver = skuDetails;
-                } else if (UserFirebaseHelper.SKU_LEVEL_4.matches(sku)) {
-                    skuDetailsGold = skuDetails;
-                } else if (UserFirebaseHelper.SKU_LEVEL_5.matches(sku)) {
-                    skuDetailsPlatinum = skuDetails;
+            String productId;
+            for (com.android.billingclient.api.ProductDetails productDetails : productDetailsList) {
+                productId = productDetails.getProductId();
+                if (UserFirebaseHelper.LEVEL_1.matches(productId)) {
+                    productDetailsStarter = productDetails;
+                } else if (UserFirebaseHelper.LEVEL_2.matches(productId)) {
+                    productDetailsBronze = productDetails;
+                } else if (UserFirebaseHelper.LEVEL_3.matches(productId)) {
+                    productDetailsSilver = productDetails;
+                } else if (UserFirebaseHelper.LEVEL_4.matches(productId)) {
+                    productDetailsGold = productDetails;
+                } else if (UserFirebaseHelper.LEVEL_5.matches(productId)) {
+                    productDetailsPlatinum = productDetails;
                 }
             }
         } catch (NullPointerException e) {
@@ -286,9 +289,9 @@ public class FragmentHomeHelper {
         }
 
         LinearLayout linearLayout = view.findViewById(R.id.linPlatinum);
-        if (skuDetailsPlatinum != null) {
+        if (productDetailsPlatinum != null) {
             final TextView textViewPlatinum = linearLayout.findViewById(R.id.tvPlatinumCost);
-            final com.android.billingclient.api.SkuDetails finalSkuDetailsPlatinum = skuDetailsPlatinum;
+            final com.android.billingclient.api.ProductDetails finalProductDetailsPlatinum = productDetailsPlatinum;
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -296,17 +299,17 @@ public class FragmentHomeHelper {
                         MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_5: onClick");
                     }
                     materialDialog.dismiss();
-                    getParentActivity().startPurchaseFlow(finalSkuDetailsPlatinum);
+                    getParentActivity().startPurchaseFlow(finalProductDetailsPlatinum);
                 }
             });
-            textViewPlatinum.setText(skuDetailsPlatinum.getPrice());
+            showPrice(productDetailsPlatinum, textViewPlatinum, null);
         } else {
             linearLayout.setVisibility(View.GONE);
         }
         linearLayout = view.findViewById(R.id.linGold);
-        if (skuDetailsGold != null) {
+        if (productDetailsGold != null) {
             final TextView textViewGold = linearLayout.findViewById(R.id.tvGoldCost);
-            final com.android.billingclient.api.SkuDetails finalSkuDetailsGold = skuDetailsGold;
+            final com.android.billingclient.api.ProductDetails finalProductDetailsGold = productDetailsGold;
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -314,17 +317,17 @@ public class FragmentHomeHelper {
                         MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_4: onClick");
                     }
                     materialDialog.dismiss();
-                    getParentActivity().startPurchaseFlow(finalSkuDetailsGold);
+                    getParentActivity().startPurchaseFlow(finalProductDetailsGold);
                 }
             });
-            textViewGold.setText(skuDetailsGold.getPrice());
+            showPrice(productDetailsGold, textViewGold, null);
         } else {
             linearLayout.setVisibility(View.GONE);
         }
         linearLayout = view.findViewById(R.id.linSilver);
-        if (skuDetailsSilver != null) {
+        if (productDetailsSilver != null) {
             final TextView textViewSilver = linearLayout.findViewById(R.id.tvSilverCost);
-            final com.android.billingclient.api.SkuDetails finalSkuDetailsSilver = skuDetailsSilver;
+            final com.android.billingclient.api.ProductDetails finalProductDetailsSilver = productDetailsSilver;
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -332,17 +335,17 @@ public class FragmentHomeHelper {
                         MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_3: onClick");
                     }
                     materialDialog.dismiss();
-                    getParentActivity().startPurchaseFlow(finalSkuDetailsSilver);
+                    getParentActivity().startPurchaseFlow(finalProductDetailsSilver);
                 }
             });
-            textViewSilver.setText(skuDetailsSilver.getPrice());
+            showPrice(productDetailsSilver, textViewSilver, null);
         } else {
             linearLayout.setVisibility(View.GONE);
         }
         linearLayout = view.findViewById(R.id.linBronze);
-        if (skuDetailsBronze != null) {
+        if (productDetailsBronze != null) {
             final TextView textViewBronze = linearLayout.findViewById(R.id.tvBronzeCost);
-            final com.android.billingclient.api.SkuDetails finalSkuDetailsBronze = skuDetailsBronze;
+            final com.android.billingclient.api.ProductDetails finalProductDetailsBronze = productDetailsBronze;
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -350,10 +353,10 @@ public class FragmentHomeHelper {
                         MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_2: onClick");
                     }
                     materialDialog.dismiss();
-                    getParentActivity().startPurchaseFlow(finalSkuDetailsBronze);
+                    getParentActivity().startPurchaseFlow(finalProductDetailsBronze);
                 }
             });
-            textViewBronze.setText(skuDetailsBronze.getPrice());
+            showPrice(productDetailsBronze, textViewBronze, null);
         } else {
             linearLayout.setVisibility(View.GONE);
         }
@@ -377,9 +380,9 @@ public class FragmentHomeHelper {
             }
         });
         linearLayout = view.findViewById(R.id.linStarter);
-        if (skuDetailsStarter != null) {
+        if (productDetailsStarter != null) {
             final TextView textViewStarter = linearLayout.findViewById(R.id.tvStarterCost);
-            final com.android.billingclient.api.SkuDetails finalSkuDetailsStarter = skuDetailsStarter;
+            final com.android.billingclient.api.ProductDetails finalProductDetailsStarter = productDetailsStarter;
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -387,17 +390,49 @@ public class FragmentHomeHelper {
                         MyLog.i(CLS_NAME, "showPremiumDialog: LEVEL_1: onClick");
                     }
                     materialDialog.dismiss();
-                    getParentActivity().startPurchaseFlow(finalSkuDetailsStarter);
+                    getParentActivity().startPurchaseFlow(finalProductDetailsStarter);
                 }
             });
-            textViewStarter.setText(skuDetailsStarter.getPrice());
-            textViewAdvert.setText(skuDetailsStarter.getPrice().charAt(0) + getApplicationContext().getString(R.string.iap_no_cost));
+            showPrice(productDetailsStarter, textViewStarter, textViewAdvert);
         } else {
             linearLayout.setVisibility(View.GONE);
         }
 
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
+    }
+
+    private void showPrice(@NonNull ProductDetails productDetails, @NonNull TextView textViewPrice, @Nullable TextView textViewAdvert) {
+        final com.android.billingclient.api.ProductDetails.OneTimePurchaseOfferDetails oneTimePurchaseOfferDetails = productDetails.getOneTimePurchaseOfferDetails();
+        if (oneTimePurchaseOfferDetails != null) {
+            textViewPrice.setText(oneTimePurchaseOfferDetails.getFormattedPrice());
+            if (textViewAdvert != null) {
+                textViewAdvert.setText(oneTimePurchaseOfferDetails.getPriceCurrencyCode() + getApplicationContext().getString(R.string.iap_no_cost));
+            }
+            return;
+        }
+        final List<com.android.billingclient.api.ProductDetails.SubscriptionOfferDetails> subscriptionOfferDetails = productDetails.getSubscriptionOfferDetails();
+        if (subscriptionOfferDetails == null) {
+            return;
+        }
+        final List<ProductDetails.PricingPhase> pricingPhases = new ArrayList<>();
+        for (ProductDetails.SubscriptionOfferDetails subscriptionOffer : subscriptionOfferDetails) {
+            pricingPhases.addAll(subscriptionOffer.getPricingPhases().getPricingPhaseList());
+        }
+        if (pricingPhases.isEmpty()) {
+            return;
+        }
+        pricingPhases.sort(new Comparator<ProductDetails.PricingPhase>() {
+            @Override
+            public int compare(ProductDetails.PricingPhase pricingPhase1, ProductDetails.PricingPhase pricingPhase2) {
+                return Long.compare(pricingPhase1.getPriceAmountMicros(), pricingPhase2.getPriceAmountMicros());
+            }
+        });
+        final ProductDetails.PricingPhase pricingPhase = pricingPhases.get(0);
+        textViewPrice.setText(pricingPhase.getFormattedPrice());
+        if (textViewAdvert != null) {
+            textViewAdvert.setText(pricingPhase.getPriceCurrencyCode() + getApplicationContext().getString(R.string.iap_no_cost));
+        }
     }
 
     public void showAccountPicker() {

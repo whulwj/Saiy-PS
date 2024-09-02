@@ -21,20 +21,25 @@ import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Bundle;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.ActivityRecognition;
+import com.google.android.gms.location.ActivityRecognitionClient;
+import com.google.android.gms.location.ActivityTransition;
+import com.google.android.gms.location.ActivityTransitionRequest;
+import com.google.android.gms.location.DetectedActivity;
 import com.google.android.gms.security.ProviderInstaller;
+import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import ai.saiy.android.utils.MyLog;
 
@@ -47,14 +52,14 @@ import ai.saiy.android.utils.MyLog;
  * Created by benrandall76@gmail.com on 06/07/2016.
  */
 
-public class MotionRecognition implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,
-        ResultCallback<Status> {
+public class MotionRecognition implements ResultCallback<Status> {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = MotionRecognition.class.getSimpleName();
 
+    private Context mContext;
     private PendingIntent pendingIntent;
-    private GoogleApiClient activityClient;
+    private ActivityRecognitionClient activityRecognitionClient;
 
     /**
      * Prepare the Activity Recognition API for use.
@@ -62,104 +67,91 @@ public class MotionRecognition implements GoogleApiClient.ConnectionCallbacks, G
      * @param ctx the application context
      */
     public void prepare(@NonNull final Context ctx) {
-
+        this.mContext = ctx;
         final GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
         final int connectionResult = apiAvailability.isGooglePlayServicesAvailable(ctx);
 
-        switch (connectionResult) {
+        if (connectionResult == ConnectionResult.SUCCESS) {
+            activityRecognitionClient = ActivityRecognition.getClient(ctx);
+            pendingIntent = PendingIntent.getService(ctx, MotionIntentService.REQUEST_CODE,
+                    new Intent(ctx, MotionIntentService.class),
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
-            case ConnectionResult.SUCCESS:
+            try {
 
-                activityClient = new GoogleApiClient.Builder(ctx).addConnectionCallbacks(this)
-                        .addOnConnectionFailedListener(this).addApi(ActivityRecognition.API).build();
+                ProviderInstaller.installIfNeededAsync(ctx, new ProviderInstaller.ProviderInstallListener() {
+                    @Override
+                    public void onProviderInstalled() {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "prepare: play services onProviderInstalled");
+                        }
+                    }
 
-                pendingIntent = PendingIntent.getService(ctx, MotionIntentService.REQUEST_CODE,
-                        new Intent(ctx, MotionIntentService.class),
-                        PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-
-                try {
-
-                    ProviderInstaller.installIfNeededAsync(ctx, new ProviderInstaller.ProviderInstallListener() {
-                        @Override
-                        public void onProviderInstalled() {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "prepare: play services onProviderInstalled");
-                            }
+                    @Override
+                    public void onProviderInstallFailed(final int errorCode, final Intent intent) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "prepare: play services onProviderInstallFailed");
                         }
 
-                        @Override
-                        public void onProviderInstallFailed(final int errorCode, final Intent intent) {
+                        if (apiAvailability.isUserResolvableError(errorCode)) {
                             if (DEBUG) {
                                 MyLog.w(CLS_NAME, "prepare: play services onProviderInstallFailed");
                             }
 
-                            if (apiAvailability.isUserResolvableError(errorCode)) {
-                                if (DEBUG) {
-                                    MyLog.w(CLS_NAME, "prepare: play services onProviderInstallFailed");
-                                }
+                            apiAvailability.showErrorNotification(ctx, errorCode);
 
-                                apiAvailability.showErrorNotification(ctx, errorCode);
-
-                            } else {
-                                // TODO - unrecoverable
-                            }
+                        } else {
+                            // TODO - unrecoverable
                         }
-                    });
-                } catch (final Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "prepare: play services unavailable");
-                        e.printStackTrace();
                     }
-                }
-
-                break;
-
-            default:
+                });
+            } catch (final Exception e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "prepare: play services unavailable");
+                    e.printStackTrace();
                 }
-                apiAvailability.showErrorNotification(ctx, connectionResult);
-                break;
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "prepare: play services unavailable");
+            }
+            apiAvailability.showErrorNotification(ctx, connectionResult);
         }
     }
 
-    /**
-     * Connect to receive activity recognition callbacks
-     */
     public void connect() {
-
-        if (activityClient != null) {
-            activityClient.connect();
-        }
-    }
-
-    @Override
-    public void onConnected(@Nullable final Bundle bundle) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onConnected");
-        }
-
-        if (activityClient != null && pendingIntent != null) {
-            if (ContextCompat.checkSelfPermission(activityClient.getContext(), Manifest.permission.ACTIVITY_RECOGNITION) == PackageManager.PERMISSION_GRANTED) {
-                ActivityRecognition.ActivityRecognitionApi.requestActivityUpdates(activityClient,
-                        MotionIntentService.UPDATE_INTERVAL, pendingIntent).setResultCallback(this);
+        if (activityRecognitionClient != null && pendingIntent != null) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q || PermissionChecker.checkSelfPermission(mContext, Manifest.permission.ACTIVITY_RECOGNITION) == PermissionChecker.PERMISSION_GRANTED) {
+                // List of activity transitions to track
+                final List<ActivityTransition> transitions = new ArrayList<>();
+                transitions.add(new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.WALKING)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+                transitions.add(new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.IN_VEHICLE)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+                transitions.add(new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.ON_BICYCLE)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .build());
+                transitions.add(new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.ON_FOOT)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .build());
+                transitions.add(new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.RUNNING)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+                transitions.add(new ActivityTransition.Builder()
+                        .setActivityType(DetectedActivity.STILL)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
+                        .build());
+                activityRecognitionClient.requestActivityTransitionUpdates(new ActivityTransitionRequest(transitions), pendingIntent);
             } else if (DEBUG) {
                 MyLog.i(CLS_NAME, "onConnected: no permission");
             }
-        }
-    }
-
-    @Override
-    public void onConnectionSuspended(final int i) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onConnectionSuspended");
-        }
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull final ConnectionResult connectionResult) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onConnectionFailed");
         }
     }
 
@@ -174,12 +166,17 @@ public class MotionRecognition implements GoogleApiClient.ConnectionCallbacks, G
      * Cancel any future callbacks and disconnect the client.
      */
     public void destroy() {
-
-        if (activityClient != null && pendingIntent != null) {
-
+        if (activityRecognitionClient != null && pendingIntent != null) {
             try {
-                ActivityRecognition.ActivityRecognitionApi.removeActivityUpdates(activityClient, pendingIntent);
-                activityClient.disconnect();
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && PermissionChecker.checkSelfPermission(mContext, Manifest.permission.ACTIVITY_RECOGNITION) != PermissionChecker.PERMISSION_GRANTED) {
+                    return;
+                }
+                activityRecognitionClient.removeActivityTransitionUpdates(pendingIntent).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        pendingIntent.cancel();
+                    }
+                });
             } catch (final Exception e) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "destroy: Exception");

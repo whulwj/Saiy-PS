@@ -643,7 +643,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             permissions[4] = Manifest.permission.ACTIVITY_RECOGNITION;
         }
         if (isAcceptableToRequestNotificationPermission) {
-            permissions[5] = "android.permission.POST_NOTIFICATIONS"/*android.Manifest.permission.POST_NOTIFICATIONS*/;
+            permissions[permissionsCount - 1] = "android.permission.POST_NOTIFICATIONS"/*android.Manifest.permission.POST_NOTIFICATIONS*/;
         }
 
         mChatPermissionRequest.launch(permissions);
@@ -757,7 +757,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
                 try {
 
-                    switch (Integer.valueOf(getSupportFragmentManager().findFragmentById(R.id.fragmentContent).getTag())) {
+                    switch (Integer.parseInt(getSupportFragmentManager().findFragmentById(R.id.fragmentContent).getTag())) {
 
                         case INDEX_FRAGMENT_HOME:
                             if (DEBUG) {
@@ -1199,7 +1199,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                             navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(false);
                             return;
                         }
-                        switch (Integer.valueOf(fragment.getTag())) {
+                        switch (Integer.parseInt(fragment.getTag())) {
 
                             case INDEX_FRAGMENT_HOME:
                                 navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(false);
@@ -1433,7 +1433,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         }
 
         if (count > 0) {
-            switch (Integer.valueOf(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName())) {
+            switch (Integer.parseInt(getSupportFragmentManager().getBackStackEntryAt(count - 1).getName())) {
 
                 case INDEX_FRAGMENT_HOME:
                     if (DEBUG) {
@@ -1802,7 +1802,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         }
     }
 
-    public void startPurchaseFlow(@NonNull com.android.billingclient.api.SkuDetails skuDetails) {
+    public void startPurchaseFlow(@NonNull com.android.billingclient.api.ProductDetails productDetails) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startPurchaseFlow");
         }
@@ -1812,7 +1812,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             }
             return;
         }
-        final int resId = billingViewModel.startPurchaseFlow(this, skuDetails);
+        final int resId = billingViewModel.startPurchaseFlow(this, productDetails);
         if (resId != 0) {
             toast(getString(resId), Toast.LENGTH_SHORT);
         }

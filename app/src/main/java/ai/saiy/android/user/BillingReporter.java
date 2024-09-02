@@ -1,6 +1,7 @@
 package ai.saiy.android.user;
 
 import android.content.Context;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 import androidx.core.os.EnvironmentCompat;
@@ -30,7 +31,7 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = BillingReporter.class.getSimpleName();
 
-    private String content = "";
+    private final StringBuilder content = new StringBuilder();
     private final Context context;
     private final BillingClient billingClient;
 
@@ -39,13 +40,15 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
         this.billingClient = billingClient;
     }
 
-    private void sendOutput(String content) {
+    private void sendOutput() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendOutput: " + content);
         }
-        if (!UtilsString.notNaked(content)) {
-            content = "Operation Failed :(";
+        if (content.length() <= 0) {
+            content.append("Operation Failed :(");
         }
+        final String content = BillingReporter.this.content.toString();
+        BillingReporter.this.content.setLength(0);
         String accountName = SPH.getUserAccount(context);
         if (!UtilsString.notNaked(accountName)) {
             accountName = EnvironmentCompat.MEDIA_UNKNOWN;
@@ -68,13 +71,14 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "validate: GoogleApiAvailability: SUCCESS");
                     }
-                    BillingReporter.this.content = "GoogleApiAvailability: SUCCESS";
+                    content.setLength(0);
+                    content.append("GoogleApiAvailability: SUCCESS");
                     if (! new IAPCodeReference().getKey(context).first) {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "validate: unable to fetch iapKey");
                         }
-                        content += "\nValidate: unable to fetch iapKey";
-                        sendOutput(content);
+                        content.append("\nValidate: unable to fetch iapKey");
+                        sendOutput();
                         return;
                     }
 
@@ -83,8 +87,8 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "validate: GoogleApiAvailability: play services unavailable");
                     }
-                    content += "\nValidate: GoogleApiAvailability: play services unavailable";
-                    sendOutput(content);
+                    content.append("\nValidate: GoogleApiAvailability: play services unavailable");
+                    sendOutput();
                 }
             }
         }).start();
@@ -97,60 +101,67 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
                 MyLog.i(CLS_NAME, "onPurchaseHistoryResponse: BillingResponse.OK");
             }
             if (UtilsList.notNaked(list)) {
-                boolean isSkuLevel5 = false;
-                boolean isSkuLevel4 = false;
-                boolean isSkuLevel3 = false;
-                boolean isSkuLevel2 = false;
-                boolean isSkuLevel1 = false;
-                List<String> skus;
+                boolean isLevel5 = false;
+                boolean isLevel4 = false;
+                boolean isLevel3 = false;
+                boolean isLevel2 = false;
+                boolean isLevel1 = false;
+                List<String> productIds;
                 for (PurchaseHistoryRecord purchaseHistoryRecord : list) {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "validate: purchase getSkus:" + purchaseHistoryRecord.getSkus());
+                        MyLog.i(CLS_NAME, "validate: purchase getProducts:" + purchaseHistoryRecord.getProducts());
                     }
-                    skus = purchaseHistoryRecord.getSkus();
-                    if (UtilsList.notNaked(skus)) {
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_1)) {
-                            isSkuLevel1 = true;
+                    if (!TextUtils.equals(Constants.SAIY, purchaseHistoryRecord.getDeveloperPayload())) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "validate: purchase payload:" + purchaseHistoryRecord.getDeveloperPayload() + ", " + purchaseHistoryRecord.getPurchaseTime());
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_2)) {
-                            isSkuLevel2 = true;
+                        content.append("\nHistory payload: ").append(purchaseHistoryRecord.getDeveloperPayload());
+                        continue;
+                    }
+                    productIds = purchaseHistoryRecord.getProducts();
+                    if (UtilsList.notNaked(productIds)) {
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_1)) {
+                            isLevel1 = true;
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_3)) {
-                            isSkuLevel3 = true;
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_2)) {
+                            isLevel2 = true;
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_4)) {
-                            isSkuLevel4 = true;
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_3)) {
+                            isLevel3 = true;
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_5)) {
-                            isSkuLevel5 = true;
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_4)) {
+                            isLevel4 = true;
+                        }
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_5)) {
+                            isLevel5 = true;
                         }
                     }
                 }
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "History user: SKU_LEVEL_1: " + isSkuLevel1);
-                    MyLog.d(CLS_NAME, "History user: SKU_LEVEL_2: " + isSkuLevel2);
-                    MyLog.d(CLS_NAME, "History user: SKU_LEVEL_3: " + isSkuLevel3);
-                    MyLog.d(CLS_NAME, "History user: SKU_LEVEL_4: " + isSkuLevel4);
-                    MyLog.d(CLS_NAME, "History user: SKU_LEVEL_5: " + isSkuLevel5);
+                    MyLog.d(CLS_NAME, "History user: LEVEL_1: " + isLevel1);
+                    MyLog.d(CLS_NAME, "History user: LEVEL_2: " + isLevel2);
+                    MyLog.d(CLS_NAME, "History user: LEVEL_3: " + isLevel3);
+                    MyLog.d(CLS_NAME, "History user: LEVEL_4: " + isLevel4);
+                    MyLog.d(CLS_NAME, "History user: LEVEL_5: " + isLevel5);
                 }
-                content += "\nHistory user: SKU_LEVEL_1: " + isSkuLevel1;
-                content += "\nHistory user: SKU_LEVEL_2: " + isSkuLevel2;
-                content += "\nHistory user: SKU_LEVEL_3: " + isSkuLevel3;
-                content += "\nHistory user: SKU_LEVEL_4: " + isSkuLevel4;
-                content += "\nHistory user: SKU_LEVEL_5: " + isSkuLevel5;
+                content.append("\nHistory user: LEVEL_1: ").append(isLevel1);
+                content.append("\nHistory user: LEVEL_2: ").append(isLevel2);
+                content.append("\nHistory user: LEVEL_3: ").append(isLevel3);
+                content.append("\nHistory user: LEVEL_4: ").append(isLevel4);
+                content.append("\nHistory user: LEVEL_5: ").append(isLevel5);
             } else {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onPurchaseHistoryResponse: purchaseList naked");
                 }
-                content += "\nHistory: purchaseList: EMPTY";
+                content.append("\nHistory: purchaseList: EMPTY");
             }
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onPurchaseHistoryResponse: BillingResponse.DEFAULT");
             }
-            content += "\nHistory: BillingResponse: BAD";
+            content.append("\nHistory: BillingResponse: BAD");
         }
-        sendOutput(content);
+        sendOutput();
     }
 
     @Override
@@ -163,58 +174,64 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
                 MyLog.i(CLS_NAME, "queryPurchasesSynchronous: BillingResponse.OK");
             }
             if (UtilsList.notNaked(list)) {
-                boolean isSkuLevel5 = false;
-                boolean isSkuLevel4 = false;
-                boolean isSkuLevel3 = false;
-                boolean isSkuLevel2 = false;
-                boolean isSkuLevel1 = false;
-                List<String> skus;
+                boolean isLevel5 = false;
+                boolean isLevel4 = false;
+                boolean isLevel3 = false;
+                boolean isLevel2 = false;
+                boolean isLevel1 = false;
+                List<String> productIds;
                 for (Purchase purchase : list) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "validate: purchase getSkus:" + purchase.getSkus());
+                    if (purchase.getPurchaseState() != Purchase.PurchaseState.PURCHASED) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "validate: purchase state:" + purchase.getPurchaseState());
+                        }
+                        continue;
                     }
-                    skus = purchase.getSkus();
-                    if (UtilsList.notNaked(skus)) {
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_1)) {
-                            isSkuLevel1 = true;
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "validate: purchase getProducts:" + purchase.getProducts());
+                    }
+                    productIds = purchase.getProducts();
+                    if (UtilsList.notNaked(productIds)) {
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_1)) {
+                            isLevel1 = true;
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_2)) {
-                            isSkuLevel2 = true;
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_2)) {
+                            isLevel2 = true;
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_3)) {
-                            isSkuLevel3 = true;
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_3)) {
+                            isLevel3 = true;
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_4)) {
-                            isSkuLevel4 = true;
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_4)) {
+                            isLevel4 = true;
                         }
-                        if (skus.contains(UserFirebaseHelper.SKU_LEVEL_5)) {
-                            isSkuLevel5 = true;
+                        if (productIds.contains(UserFirebaseHelper.LEVEL_5)) {
+                            isLevel5 = true;
                         }
                     }
                 }
                 if (DEBUG) {
-                    MyLog.d(CLS_NAME, "user: SKU_LEVEL_1: " + isSkuLevel1);
-                    MyLog.d(CLS_NAME, "user: SKU_LEVEL_2: " + isSkuLevel2);
-                    MyLog.d(CLS_NAME, "user: SKU_LEVEL_3: " + isSkuLevel3);
-                    MyLog.d(CLS_NAME, "user: SKU_LEVEL_4: " + isSkuLevel4);
-                    MyLog.d(CLS_NAME, "user: SKU_LEVEL_5: " + isSkuLevel5);
+                    MyLog.d(CLS_NAME, "user: LEVEL_1: " + isLevel1);
+                    MyLog.d(CLS_NAME, "user: LEVEL_2: " + isLevel2);
+                    MyLog.d(CLS_NAME, "user: LEVEL_3: " + isLevel3);
+                    MyLog.d(CLS_NAME, "user: LEVEL_4: " + isLevel4);
+                    MyLog.d(CLS_NAME, "user: LEVEL_5: " + isLevel5);
                 }
-                content += "\nuser: SKU_LEVEL_1: " + isSkuLevel1;
-                content += "\nuser: SKU_LEVEL_2: " + isSkuLevel2;
-                content += "\nuser: SKU_LEVEL_3: " + isSkuLevel3;
-                content += "\nuser: SKU_LEVEL_4: " + isSkuLevel4;
-                content += "\nuser: SKU_LEVEL_5: " + isSkuLevel5;
+                content.append("\nuser: LEVEL_1: ").append(isLevel1);
+                content.append("\nuser: LEVEL_2: ").append(isLevel2);
+                content.append("\nuser: LEVEL_3: ").append(isLevel3);
+                content.append("\nuser: LEVEL_4: ").append(isLevel4);
+                content.append("\nuser: LEVEL_5: ").append(isLevel5);
             } else {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onQueryPurchasesResponse: purchaseList naked");
                 }
-                content += "\npurchaseList: EMPTY";
+                content.append("\npurchaseList: EMPTY");
             }
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onQueryPurchasesResponse: BillingResponse.DEFAULT");
             }
-            content += "\nBillingResponse: BAD";
+            content.append("\nBillingResponse: BAD");
         }
 
         queryPurchaseHistoryAsync();

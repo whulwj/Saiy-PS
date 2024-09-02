@@ -93,7 +93,6 @@ public class CommandFoursquare {
         } else {
             final FusedLocationHelper fusedLocationHelper = new FusedLocationHelper();
             fusedLocationHelper.prepare(context);
-            fusedLocationHelper.connect();
             location = fusedLocationHelper.getLastLocation();
             fusedLocationHelper.destroy();
         }

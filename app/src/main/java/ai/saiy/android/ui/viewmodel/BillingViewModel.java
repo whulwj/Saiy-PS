@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.android.billingclient.api.BillingClient;
@@ -16,15 +17,20 @@ import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.PurchaseHistoryRecord;
 import com.android.billingclient.api.PurchaseHistoryResponseListener;
 import com.android.billingclient.api.PurchasesResponseListener;
 import com.android.billingclient.api.PurchasesUpdatedListener;
+import com.android.billingclient.api.QueryProductDetailsParams;
 import com.android.billingclient.api.QueryPurchaseHistoryParams;
 import com.android.billingclient.api.QueryPurchasesParams;
 import com.google.android.gms.tasks.Task;
+import com.google.common.collect.ImmutableList;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -36,12 +42,14 @@ import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.firebase.database.write.IAPPurchase;
 import ai.saiy.android.ui.activity.CurrentActivityProvider;
 import ai.saiy.android.user.BillingValidator;
+import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
 public final class BillingViewModel extends AndroidViewModel implements BillingClientStateListener,
+        ProductDetailsResponseListener,
         PurchasesResponseListener,
         PurchaseHistoryResponseListener,
         PurchasesUpdatedListener {
@@ -49,7 +57,10 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
     private final String CLS_NAME = BillingViewModel.class.getSimpleName();
 
     private final MutableLiveData<Boolean> mIsBillingSuccessful = new MutableLiveData<>();
+    private final MutableLiveData<BillingResult> productDetailsResult = new MutableLiveData<>();
+    private final MutableLiveData<List<ProductDetails>> productDetailsList = new MutableLiveData<>();
     private BillingClient mBillingClient;
+    private volatile BillingValidator billingValidator;
     private volatile boolean isConnectionRetrying = false;
     private volatile boolean isBillingFlowOK = false;
     private volatile String iapKey = "";
@@ -96,6 +107,43 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
     }
 
     @Override
+    public void onProductDetailsResponse(@NonNull BillingResult billingResult, @NonNull List<ProductDetails> list) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onProductDetailsResponse");
+        }
+        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onProductDetailsResponse: BillingResponse.OK");
+            }
+            if (!ai.saiy.android.utils.UtilsList.notNaked(list)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onProductDetailsResponse: productDetailsList naked");
+                }
+            } else if (DEBUG) {
+                for (ProductDetails productDetails : list) {
+                    MyLog.i(CLS_NAME, "productDetails.getProductId():" + productDetails.getProductId());
+                    MyLog.i(CLS_NAME, "productDetails.getTitle():" + productDetails.getTitle());
+                    final com.android.billingclient.api.ProductDetails.OneTimePurchaseOfferDetails oneTimePurchaseOfferDetails = productDetails.getOneTimePurchaseOfferDetails();
+                    if (oneTimePurchaseOfferDetails != null) {
+                        MyLog.i(CLS_NAME, "productDetails.getPrice():" + oneTimePurchaseOfferDetails.getFormattedPrice());
+                    }
+                    final List<com.android.billingclient.api.ProductDetails.SubscriptionOfferDetails> subscriptionOfferDetails = productDetails.getSubscriptionOfferDetails();
+                    if (subscriptionOfferDetails != null) {
+                        for (com.android.billingclient.api.ProductDetails.SubscriptionOfferDetails subscriptionOffer : subscriptionOfferDetails) {
+                            MyLog.i(CLS_NAME, "productDetails.getOfferTags():" + subscriptionOffer.getOfferTags());
+                            MyLog.i(CLS_NAME, "productDetails.getPricingPhases():" + subscriptionOffer.getPricingPhases());
+                        }
+                    }
+                }
+            }
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "onProductDetailsResponse: BillingResponse.DEFAULT");
+        }
+        productDetailsList.setValue(list);
+        productDetailsResult.setValue(billingResult);
+    }
+
+    @Override
     public void onQueryPurchasesResponse(@NonNull BillingResult billingResult, @NonNull List<Purchase> list) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onQueryPurchasesResponse: " + billingResult);
@@ -105,7 +153,7 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onQueryPurchasesResponse: BillingResponse.OK");
             }
-            new BillingValidator(getApplication()).validate(list, BillingValidator.ASYNCHRONOUS);
+            getBillingValidator().validate(list, BillingValidator.ASYNCHRONOUS);
             if (SPH.getDebugBilling(getApplication())) {
                 queryPurchaseHistoryAsync();
             }
@@ -124,7 +172,7 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onPurchaseHistoryResponse: BillingResponse.OK");
             }
-            new BillingValidator(getApplication()).validate(list);
+            getBillingValidator().validate(list);
         }
     }
 
@@ -138,7 +186,7 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onPurchasesUpdated: BillingResponse.OK");
             }
-            new BillingValidator(getApplication()).validate(list, isBillingFlowOK ? BillingValidator.FLOW : BillingValidator.AUTOMATIC);
+            getBillingValidator().validate(list, isBillingFlowOK ? BillingValidator.FLOW : BillingValidator.AUTOMATIC);
             if (isBillingFlowOK) {
                 final boolean isPending = verifyPurchase(list);
                 if (!isPending) {
@@ -236,7 +284,7 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
         return false;
     }
 
-    public @StringRes int startPurchaseFlow(@NonNull Activity activity, @NonNull com.android.billingclient.api.SkuDetails skuDetails) {
+    public @StringRes int startPurchaseFlow(@NonNull Activity activity, @NonNull com.android.billingclient.api.ProductDetails productDetails) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startPurchaseFlow");
         }
@@ -246,7 +294,8 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
             }
             return R.string.iap_error_generic;
         }
-        final BillingResult billingResult = mBillingClient.launchBillingFlow(activity, BillingFlowParams.newBuilder().setSkuDetails(skuDetails).build());
+        final BillingResult billingResult = mBillingClient.launchBillingFlow(activity, BillingFlowParams.newBuilder().setProductDetailsParamsList(
+                Collections.singletonList(BillingFlowParams.ProductDetailsParams.newBuilder().setProductDetails(productDetails).build())).build());
         switch (billingResult.getResponseCode()) {
             case BillingClient.BillingResponseCode.FEATURE_NOT_SUPPORTED:
                 if (DEBUG) {
@@ -331,6 +380,31 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
 
     public @NonNull MutableLiveData<Boolean> mIsBillingSuccessful() {
         return mIsBillingSuccessful;
+    }
+
+    public boolean queryProductDetails() {
+        if (mBillingClient == null) {
+            return false;
+        }
+        final List<QueryProductDetailsParams.Product> products = new ArrayList<>();
+        for (String productId : UserFirebaseHelper.productIds()) {
+            products.add(QueryProductDetailsParams.Product.newBuilder()
+                    .setProductId(productId)
+                    .setProductType(BillingClient.ProductType.INAPP).build());
+        }
+        final QueryProductDetailsParams queryProductDetailsParams = QueryProductDetailsParams.newBuilder()
+                .setProductList(ImmutableList.copyOf(products))
+                .build();
+        mBillingClient.queryProductDetailsAsync(queryProductDetailsParams, this);
+        return true;
+    }
+
+    public @NonNull LiveData<BillingResult> getProductDetailsResult() {
+        return productDetailsResult;
+    }
+
+    public @NonNull LiveData<List<ProductDetails>> getProductDetailsList() {
+        return productDetailsList;
     }
 
     private void sendSubmissionIAP(@NonNull Purchase purchase) {
@@ -435,6 +509,17 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
             MyLog.w(CLS_NAME, "canBillingProceed mBillingClient not ready");
         }
         return false;
+    }
+
+    private @NonNull BillingValidator getBillingValidator() {
+        if (billingValidator == null) {
+            synchronized (this) {
+                if (billingValidator == null) {
+                    billingValidator = new BillingValidator(getApplication(), mBillingClient);
+                }
+            }
+        }
+        return billingValidator;
     }
 
     @Override

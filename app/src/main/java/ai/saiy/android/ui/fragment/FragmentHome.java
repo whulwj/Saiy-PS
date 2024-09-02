@@ -41,14 +41,13 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsParams;
-import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.android.billingclient.api.ProductDetails;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.analytics.FirebaseAnalytics;
@@ -81,7 +80,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  * Created by benrandall76@gmail.com on 18/07/2016.
  */
 @AndroidEntryPoint
-public class FragmentHome extends Fragment implements View.OnClickListener, View.OnLongClickListener, SkuDetailsResponseListener {
+public class FragmentHome extends Fragment implements View.OnClickListener, View.OnLongClickListener, Observer<BillingResult> {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentHome.class.getSimpleName();
@@ -181,6 +180,12 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        billingViewModel.getProductDetailsResult().observe(getViewLifecycleOwner(), this);
     }
 
     @Override
@@ -502,12 +507,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startPurchaseFlow");
         }
-        final com.android.billingclient.api.BillingClient billingClient = billingViewModel.getBillingClient();
-        if (billingClient != null) {
-            final SkuDetailsParams.Builder builder = SkuDetailsParams.newBuilder();
-            builder.setSkusList(ai.saiy.android.user.UserFirebaseHelper.skuLevels()).setType(BillingClient.ProductType.INAPP);
-            billingClient.querySkuDetailsAsync(builder.build(), this);
-        } else {
+        if (!billingViewModel.queryProductDetails()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startPurchaseFlow: mBillingClient null");
             }
@@ -651,24 +651,16 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     }
 
     @Override
-    public void onSkuDetailsResponse(@NonNull BillingResult billingResult, @Nullable List<SkuDetails> list) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onSkuDetailsResponse");
-        }
+    public void onChanged(BillingResult billingResult) {
         if (!isActive()) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "onSkuDetailsResponse: !isActive()");
+                MyLog.i(CLS_NAME, "onProductDetailsResponse: !isActive()");
             }
             return;
         }
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onSkuDetailsResponse: BillingResponse.OK");
-            }
+            final @Nullable List<ProductDetails> list = billingViewModel.getProductDetailsList().getValue();
             if (!ai.saiy.android.utils.UtilsList.notNaked(list)) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetailsList naked");
-                }
                 if (isActive()) {
                     showProgress(false);
                     toast(getString(R.string.iap_error_generic), Toast.LENGTH_LONG);
@@ -676,18 +668,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 return;
             }
 
-            if (DEBUG) {
-                for (SkuDetails skuDetails : list) {
-                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetails.getSku():" + skuDetails.getSku());
-                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetails.getTitle():" + skuDetails.getTitle());
-                    MyLog.i(CLS_NAME, "onSkuDetailsResponse: skuDetails.getPrice():" + skuDetails.getPrice());
-                }
-            }
             helper.showPremiumDialog(list);
         } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onSkuDetailsResponse: BillingResponse.DEFAULT");
-            }
             showProgress(false);
             toast(getString(R.string.iap_error_generic), Toast.LENGTH_LONG);
         }

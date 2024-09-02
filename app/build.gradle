@@ -148,6 +148,8 @@ dependencies {
     // https://github.com/dialogflow/dialogflow-android-client
     // https://github.com/googleapis/google-cloud-java/tree/main/java-dialogflow
     implementation (libs.cloud.dialogflow) {
+        //noinspection DuplicatePlatformClasses, it's OK to be excluded
+        exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'io.grpc', module: 'grpc-protobuf'
         exclude group: 'com.google.protobuf', module: 'protobuf-java-lite'
 //        exclude group: 'com.google.protobuf', module: 'protobuf-java'

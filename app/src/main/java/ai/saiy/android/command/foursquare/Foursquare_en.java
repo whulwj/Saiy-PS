@@ -6,7 +6,6 @@ import android.util.Pair;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 
 import ai.saiy.android.R;
