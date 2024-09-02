@@ -87,6 +87,14 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onClick: tutorialActive");
+            }
+            toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_LONG);
+            return;
+        }
+
         int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
         if (view != null && RecyclerView.NO_POSITION == position) {
             final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
@@ -96,13 +104,6 @@ public class FragmentCommands extends Fragment implements View.OnClickListener {
         }
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: " + position);
-        }
-        if (Global.isInVoiceTutorial()) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onClick: tutorialActive");
-            }
-            toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_LONG);
-            return;
         }
         switch (position) {
             case 0:

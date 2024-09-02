@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,7 +20,6 @@ public class UIApplicationsAdapter extends RecyclerView.Adapter<UIApplicationsAd
     private final View.OnLongClickListener onLongClickListener;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final LinearLayout itemContainer;
         private final TextView title;
         private final TextView subtitle;
         private final ImageView iconMain;
@@ -30,7 +28,6 @@ public class UIApplicationsAdapter extends RecyclerView.Adapter<UIApplicationsAd
 
         private ViewHolder(View view) {
             super(view);
-            this.itemContainer = view.findViewById(R.id.itemContainer);
             this.title = view.findViewById(R.id.title);
             this.subtitle = view.findViewById(R.id.subtitle);
             this.iconMain = view.findViewById(R.id.iconMain);
@@ -68,8 +65,8 @@ public class UIApplicationsAdapter extends RecyclerView.Adapter<UIApplicationsAd
             viewHolder.iconExtra.setContentDescription(viewHolder.itemView.getContext().getString(R.string.acs_ui_main_switch));
         }
         viewHolder.setBoundPosition(position);
-        viewHolder.itemContainer.setOnClickListener(this.onClickListener);
-        viewHolder.itemContainer.setOnLongClickListener(this.onLongClickListener);
+        viewHolder.itemView.setOnClickListener(this.onClickListener);
+        viewHolder.itemView.setOnLongClickListener(this.onLongClickListener);
     }
 
     @Override

@@ -248,9 +248,6 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
 
     @Override
     public void onClick(View view) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: " + view.getTag());
-        }
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onClick: tutorialActive");
@@ -258,7 +255,21 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
-        final int position = (Integer) view.getTag();
+
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIExportCustomisationAdapter.ViewHolder) {
+                position = ((UIExportCustomisationAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClick: " + position);
+        }
+        if (RecyclerView.NO_POSITION == position) {
+            return;
+        }
+
         boolean isChecked = ((UIExportCustomisationAdapter) getAdapter()).getCheckedArray().get(position);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: isChecked; " + isChecked);

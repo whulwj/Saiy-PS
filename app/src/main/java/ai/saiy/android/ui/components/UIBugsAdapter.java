@@ -24,7 +24,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -62,14 +61,12 @@ public class UIBugsAdapter extends RecyclerView.Adapter<UIBugsAdapter.ViewHolder
     /**
      * Set the contents of the view holder
      */
-    @SuppressWarnings("WeakerAccess")
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private CardView itemContainer;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private TextView title;
         private TextView subtitle;
         private ImageView iconMain;
         private ImageView iconExtra;
+        private int boundPosition = RecyclerView.NO_POSITION;
 
         /**
          * Constructor
@@ -78,12 +75,18 @@ public class UIBugsAdapter extends RecyclerView.Adapter<UIBugsAdapter.ViewHolder
          */
         private ViewHolder(@NonNull final View view) {
             super(view);
-
-            itemContainer = (CardView) view.findViewById(R.id.cardView);
             title = (TextView) view.findViewById(R.id.title);
             subtitle = (TextView) view.findViewById(R.id.subtitle);
             iconMain = (ImageView) view.findViewById(R.id.iconMain);
             iconExtra = (ImageView) view.findViewById(R.id.iconExtra);
+        }
+
+        public int getBoundPosition() {
+            return boundPosition;
+        }
+
+        protected void setBoundPosition(int position) {
+            boundPosition = position;
         }
     }
 
@@ -96,14 +99,14 @@ public class UIBugsAdapter extends RecyclerView.Adapter<UIBugsAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
         holder.title.setText(mObjects.get(position).getTitle());
         holder.subtitle.setText(mObjects.get(position).getSubtitle());
         holder.iconMain.setImageResource(mObjects.get(position).getIconMain());
         holder.iconExtra.setImageResource(mObjects.get(position).getIconExtra());
-        holder.itemContainer.setOnClickListener(onClickListener);
-        holder.itemContainer.setOnLongClickListener(onLongClickListener);
-        holder.itemContainer.setTag(position);
+
+        holder.setBoundPosition(position);
+        holder.itemView.setOnClickListener(onClickListener);
+        holder.itemView.setOnLongClickListener(onLongClickListener);
     }
 
     @Override

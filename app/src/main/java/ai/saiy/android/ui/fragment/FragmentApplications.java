@@ -340,9 +340,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
 
     @Override
     public void onClick(View view) {
-        if (DEBUG) {
-            MyLog.d(CLS_NAME, "onClick: " + view.getTag());
-        }
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "onClick: tutorialActive");
@@ -350,7 +347,12 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
-        switch (getPosition(view)) {
+
+        final int position = getPosition(view);
+        if (DEBUG) {
+            MyLog.d(CLS_NAME, "onClick: " + position);
+        }
+        switch (position) {
             case 0:
                 Install.showInstallLink(getApplicationContext(), Installed.PACKAGE_FACEBOOK);
                 return;

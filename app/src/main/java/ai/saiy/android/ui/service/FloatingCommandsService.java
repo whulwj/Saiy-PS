@@ -40,7 +40,7 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
     private FloatingCommandsHelper helper;
 
     public RecyclerView.Adapter<?> getAdapter() {
-        return this.mAdapter;
+        return mAdapter;
     }
 
     @Override
@@ -61,13 +61,13 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
         if (DEBUG) {
             MyLog.i(CLS_NAME, "createAndAttachView id: " + id);
         }
-        this.mRecyclerView = this.helper.getRecyclerView(((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_floating_commands, frameLayout, true));
+        this.mRecyclerView = helper.getRecyclerView(((LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.layout_floating_commands, frameLayout, true));
         this.mObjects = new ArrayList<>();
-        this.mAdapter = this.helper.getAdapter(this.mObjects);
-        this.mRecyclerView.setAdapter(this.mAdapter);
+        this.mAdapter = helper.getAdapter(mObjects);
+        this.mRecyclerView.setAdapter(mAdapter);
         synchronized (lock) {
-            if (this.mObjects.isEmpty()) {
-                this.helper.finaliseUI();
+            if (mObjects.isEmpty()) {
+                helper.finaliseUI();
             }
         }
     }
@@ -77,7 +77,7 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
-                    UtilsToast.showToast(FloatingCommandsService.this.getApplicationContext(), str, Toast.LENGTH_SHORT);
+                    UtilsToast.showToast(getApplicationContext(), str, Toast.LENGTH_SHORT);
                 }
             });
         } else if (DEBUG) {
@@ -91,7 +91,7 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
     }
 
     public ArrayList<SimpleContainerUI> getObjects() {
-        return this.mObjects;
+        return mObjects;
     }
 
     private void speak(String utterance) {
@@ -182,6 +182,14 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
     @Override
     public void onClick(View view) {
+        if (Global.isInVoiceTutorial()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onClick: tutorialActive");
+            }
+            showToast(getString(R.string.tutorial_content_disabled));
+            return;
+        }
+
         int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
         if (view != null && RecyclerView.NO_POSITION == position) {
             final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
@@ -192,13 +200,6 @@ public class FloatingCommandsService extends StandOutWindow implements View.OnCl
 
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: " + position);
-        }
-        if (Global.isInVoiceTutorial()) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onClick: tutorialActive");
-            }
-            showToast(getString(R.string.tutorial_content_disabled));
-            return;
         }
         switch (position) {
             case 0:

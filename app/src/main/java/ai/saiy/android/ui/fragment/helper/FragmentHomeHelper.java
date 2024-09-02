@@ -527,6 +527,7 @@ public class FragmentHomeHelper {
                             getParent().toast(getParent().getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
                             return;
                         }
+
                         switch (which) {
                             case 0:
                                 if (DEBUG) {

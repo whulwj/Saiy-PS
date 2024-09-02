@@ -82,10 +82,20 @@ public class FragmentAppPickerMulti extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: " + view.getTag());
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIAppPickerMultiAdapter.ViewHolder) {
+                position = ((UIAppPickerMultiAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
         }
-        final int position = (Integer) view.getTag();
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClick: " + position);
+        }
+        if (RecyclerView.NO_POSITION == position) {
+            return;
+        }
+
         final boolean isChecked = ((UIAppPickerMultiAdapter) getAdapter()).getCheckedArray().get(position);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: isChecked; " + isChecked);

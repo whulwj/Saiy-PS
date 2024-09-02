@@ -21,7 +21,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -62,14 +61,12 @@ public class UIMainAdapter extends RecyclerView.Adapter<UIMainAdapter.ViewHolder
     /**
      * Set the contents of the view holder
      */
-    @SuppressWarnings("WeakerAccess")
-    protected static class ViewHolder extends RecyclerView.ViewHolder {
-
-        private final LinearLayout itemContainer;
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView subtitle;
         private final ImageView iconMain;
         private final ImageView iconExtra;
+        private int boundPosition = RecyclerView.NO_POSITION;
 
         /**
          * Constructor
@@ -78,12 +75,18 @@ public class UIMainAdapter extends RecyclerView.Adapter<UIMainAdapter.ViewHolder
          */
         private ViewHolder(@NonNull final View view) {
             super(view);
-
-            itemContainer = (LinearLayout) view.findViewById(R.id.itemContainer);
             title = (TextView) view.findViewById(R.id.title);
             subtitle = (TextView) view.findViewById(R.id.subtitle);
             iconMain = (ImageView) view.findViewById(R.id.iconMain);
             iconExtra = (ImageView) view.findViewById(R.id.iconExtra);
+        }
+
+        public int getBoundPosition() {
+            return boundPosition;
+        }
+
+        protected void setBoundPosition(int position) {
+            boundPosition = position;
         }
     }
 
@@ -96,7 +99,6 @@ public class UIMainAdapter extends RecyclerView.Adapter<UIMainAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-
         holder.title.setText(mObjects.get(position).getTitle());
         holder.subtitle.setText(mObjects.get(position).getSubtitle());
         holder.iconMain.setImageResource(mObjects.get(position).getIconMain());
@@ -104,10 +106,10 @@ public class UIMainAdapter extends RecyclerView.Adapter<UIMainAdapter.ViewHolder
         if (mObjects.get(position).getIconExtra() != R.drawable.chevron) {
             holder.iconExtra.setContentDescription(holder.itemView.getContext().getString(R.string.acs_ui_main_switch));
         }
-        holder.itemContainer.setOnClickListener(onClickListener);
-        holder.itemContainer.setOnLongClickListener(onLongClickListener);
-        holder.itemContainer.setTag(position);
 
+        holder.setBoundPosition(position);
+        holder.itemView.setOnClickListener(onClickListener);
+        holder.itemView.setOnLongClickListener(onLongClickListener);
     }
 
     @Override

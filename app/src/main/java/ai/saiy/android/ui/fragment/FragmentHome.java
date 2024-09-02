@@ -66,6 +66,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.sound.VolumeHelper;
 import ai.saiy.android.tutorial.Tutorial;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.components.UIMainAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentHomeHelper;
 import ai.saiy.android.ui.notification.NotificationHelper;
@@ -188,6 +189,17 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         billingViewModel.getProductDetailsResult().observe(getViewLifecycleOwner(), this);
     }
 
+    private int getPosition(View view) {
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIMainAdapter.ViewHolder) {
+                position = ((UIMainAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
+        }
+        return position;
+    }
+
     @Override
     public void onClick(final View view) {
         if (Global.isInVoiceTutorial()) {
@@ -197,7 +209,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
-        final int position = (view == null) ? 0 : (int) view.getTag();
+
+        final int position = getPosition(view);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onClick: " + position);
         }
@@ -329,13 +342,13 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return true;
         }
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
-        }
 
+        final int position = getPosition(view);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onLongClick: " + position);
+        }
         getParentActivity().toast("long press!", Toast.LENGTH_SHORT);
 
-        final int position = (int) view.getTag();
         switch (position) {
             case 0:
                 getParentActivity().speak(R.string.lp_tutorial, LocalRequest.ACTION_SPEAK_ONLY);

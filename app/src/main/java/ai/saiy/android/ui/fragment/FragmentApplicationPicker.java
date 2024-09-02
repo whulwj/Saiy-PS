@@ -18,6 +18,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.applications.Application;
 import ai.saiy.android.applications.ApplicationBasic;
 import ai.saiy.android.ui.activity.ActivityApplicationPicker;
+import ai.saiy.android.ui.components.UIApplicationPickerAdapter;
 import ai.saiy.android.ui.fragment.helper.FragmentApplicationPickerHelper;
 import ai.saiy.android.utils.MyLog;
 
@@ -80,10 +81,21 @@ public class FragmentApplicationPicker extends Fragment implements View.OnClickL
 
     @Override
     public void onClick(View view) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: " + view.getTag());
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIApplicationPickerAdapter.ViewHolder) {
+                position = ((UIApplicationPickerAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
         }
-        final Application application = mObjects.get((Integer) view.getTag());
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClick: " + position);
+        }
+        if (RecyclerView.NO_POSITION == position) {
+            return;
+        }
+
+        final Application application = mObjects.get(position);
         final ApplicationBasic applicationBasic = new ApplicationBasic(application.getLabel().toString(), application.getPackageName());
         applicationBasic.setAction(application.getAction());
         getParentActivity().setResult(applicationBasic);
@@ -93,7 +105,7 @@ public class FragmentApplicationPicker extends Fragment implements View.OnClickL
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "onCreate: savedInstanceState: " + String.valueOf(bundle != null));
+            MyLog.i(CLS_NAME, "onCreate: savedInstanceState: " + (bundle != null));
         }
         this.helper = new FragmentApplicationPickerHelper(this);
     }

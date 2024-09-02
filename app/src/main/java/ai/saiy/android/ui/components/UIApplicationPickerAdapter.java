@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,15 +21,22 @@ public class UIApplicationPickerAdapter extends RecyclerView.Adapter<UIApplicati
     private final String autoPlay;
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final LinearLayout itemContainer;
         private final TextView appName;
         private final ImageView appIcon;
+        private int boundPosition = RecyclerView.NO_POSITION;
 
         private ViewHolder(View view) {
             super(view);
-            this.itemContainer = view.findViewById(R.id.itemContainer);
             this.appName = view.findViewById(R.id.appName);
             this.appIcon = view.findViewById(R.id.appIcon);
+        }
+
+        public int getBoundPosition() {
+            return boundPosition;
+        }
+
+        protected void setBoundPosition(int position) {
+            boundPosition = position;
         }
     }
 
@@ -55,8 +61,8 @@ public class UIApplicationPickerAdapter extends RecyclerView.Adapter<UIApplicati
             viewHolder.appName.setText(String.format("%s%s", application.getLabel(), autoPlay));
         }
         viewHolder.appIcon.setImageDrawable(application.getIcon());
-        viewHolder.itemContainer.setOnClickListener(onClickListener);
-        viewHolder.itemContainer.setTag(position);
+        viewHolder.setBoundPosition(position);
+        viewHolder.itemView.setOnClickListener(onClickListener);
     }
 
     @Override

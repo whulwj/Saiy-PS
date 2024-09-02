@@ -4,7 +4,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -20,35 +19,27 @@ public class UIEditCustomisationAdapter extends RecyclerView.Adapter<UIEditCusto
     private final View.OnClickListener onClickListener;
     private final View.OnLongClickListener onLongClickListener;
 
-    protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnLongClickListener {
-        private final LinearLayout itemContainer;
-
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView subtitle;
         private final ImageView iconMain;
         private final ImageView iconExtra;
+        private int boundPosition = RecyclerView.NO_POSITION;
 
         private ViewHolder(View view) {
             super(view);
-            this.itemContainer = view.findViewById(R.id.itemContainer);
             this.title = view.findViewById(R.id.title);
             this.subtitle = view.findViewById(R.id.subtitle);
             this.iconMain = view.findViewById(R.id.iconMain);
             this.iconExtra = view.findViewById(R.id.iconExtra);
-            this.itemContainer.setOnClickListener(this);
-            this.itemContainer.setOnLongClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            view.setTag(getAdapterPosition());
-            UIEditCustomisationAdapter.this.onClickListener.onClick(view);
+        public int getBoundPosition() {
+            return boundPosition;
         }
 
-        @Override
-        public boolean onLongClick(View view) {
-            view.setTag(getAdapterPosition());
-            return UIEditCustomisationAdapter.this.onLongClickListener.onLongClick(view);
+        protected void setBoundPosition(int position) {
+            boundPosition = position;
         }
     }
 
@@ -64,12 +55,15 @@ public class UIEditCustomisationAdapter extends RecyclerView.Adapter<UIEditCusto
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder aVar, int position) {
-        aVar.title.setText(this.mObjects.get(position).getTitle());
-        aVar.subtitle.setText(this.mObjects.get(position).getSubtitle());
-        aVar.iconMain.setImageResource(this.mObjects.get(position).getIconMain());
-        aVar.iconExtra.setImageResource(this.mObjects.get(position).getIconExtra());
-        aVar.itemContainer.setTag(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.title.setText(this.mObjects.get(position).getTitle());
+        holder.subtitle.setText(this.mObjects.get(position).getSubtitle());
+        holder.iconMain.setImageResource(this.mObjects.get(position).getIconMain());
+        holder.iconExtra.setImageResource(this.mObjects.get(position).getIconExtra());
+
+        holder.setBoundPosition(position);
+        holder.itemView.setOnClickListener(onClickListener);
+        holder.itemView.setOnLongClickListener(onLongClickListener);
     }
 
     @Override

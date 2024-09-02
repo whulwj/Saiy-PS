@@ -30,6 +30,7 @@ import ai.saiy.android.custom.CustomPhrase;
 import ai.saiy.android.custom.CustomReplacement;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.components.UIEditCustomisationAdapter;
 import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.ui.fragment.helper.FragmentEditCustomisationHelper;
 import ai.saiy.android.utils.Global;
@@ -108,6 +109,17 @@ public class FragmentEditCustomisation extends Fragment implements View.OnClickL
         this.mContext = context.getApplicationContext();
     }
 
+    private int getPosition(View view) {
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIEditCustomisationAdapter.ViewHolder) {
+                position = ((UIEditCustomisationAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
+        }
+        return position;
+    }
+
     @Override
     public void onClick(View view) {
         if (Global.isInVoiceTutorial()) {
@@ -117,10 +129,15 @@ public class FragmentEditCustomisation extends Fragment implements View.OnClickL
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
+
+        final int position = getPosition(view);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: " + view.getTag());
+            MyLog.i(CLS_NAME, "onClick: " + position);
         }
-        final int position = (Integer) view.getTag();
+        if (RecyclerView.NO_POSITION == position) {
+            return;
+        }
+
         final ContainerCustomisation containerCustomisation = mObjects.get(position);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getCustom: " + containerCustomisation.getCustom().name());
@@ -281,8 +298,10 @@ public class FragmentEditCustomisation extends Fragment implements View.OnClickL
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return true;
         }
+
+        final int position = getPosition(view);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
+            MyLog.i(CLS_NAME, "onLongClick: " + position);
         }
         return true;
     }

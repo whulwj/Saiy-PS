@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,28 +21,27 @@ public class UIExportCustomisationAdapter extends RecyclerView.Adapter<UIExportC
     private final View.OnClickListener onClickListener;
     private final SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
 
-    protected class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final LinearLayout itemContainer;
-
+    public static class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView title;
         private final TextView subtitle;
         private final ImageView iconMain;
         private final CheckBox cbExport;
+        private int boundPosition = RecyclerView.NO_POSITION;
 
         private ViewHolder(View view) {
             super(view);
-            this.itemContainer = view.findViewById(R.id.itemContainer);
             this.title = view.findViewById(R.id.title);
             this.subtitle = view.findViewById(R.id.subtitle);
             this.iconMain = view.findViewById(R.id.iconMain);
             this.cbExport = view.findViewById(R.id.cbExport);
-            this.itemContainer.setOnClickListener(this);
         }
 
-        @Override
-        public void onClick(View view) {
-            view.setTag(getAdapterPosition());
-            UIExportCustomisationAdapter.this.onClickListener.onClick(view);
+        public int getBoundPosition() {
+            return boundPosition;
+        }
+
+        protected void setBoundPosition(int position) {
+            boundPosition = position;
         }
     }
 
@@ -62,12 +60,13 @@ public class UIExportCustomisationAdapter extends RecyclerView.Adapter<UIExportC
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder aVar, int position) {
-        aVar.title.setText(this.mObjects.get(position).getTitle());
-        aVar.subtitle.setText(this.mObjects.get(position).getSubtitle());
-        aVar.iconMain.setImageResource(this.mObjects.get(position).getIconMain());
-        aVar.cbExport.setChecked(this.sparseBooleanArray.get(position));
-        aVar.itemContainer.setTag(position);
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        holder.title.setText(this.mObjects.get(position).getTitle());
+        holder.subtitle.setText(this.mObjects.get(position).getSubtitle());
+        holder.iconMain.setImageResource(this.mObjects.get(position).getIconMain());
+        holder.cbExport.setChecked(this.sparseBooleanArray.get(position));
+        holder.setBoundPosition(position);
+        holder.itemView.setOnClickListener(onClickListener);
     }
 
     @Override

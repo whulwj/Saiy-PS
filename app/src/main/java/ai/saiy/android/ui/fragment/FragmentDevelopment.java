@@ -100,9 +100,6 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
 
     @Override
     public void onClick(View view) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: " + view.getTag());
-        }
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onClick: tutorialActive");
@@ -110,7 +107,12 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
-        switch (getPosition(view)) {
+
+        final int position = getPosition(view);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClick: " + position);
+        }
+        switch (position) {
             case 0:
                 helper.showAccountOverviewDialog();
                 break;
@@ -184,9 +186,6 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
 
     @Override
     public boolean onLongClick(View view) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
-        }
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onLongClick: tutorialActive");
@@ -195,7 +194,11 @@ public class FragmentDevelopment extends Fragment implements View.OnClickListene
             return true;
         }
 
-        switch (getPosition(view)) {
+        final int position = getPosition(view);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onLongClick: " + position);
+        }
+        switch (position) {
             case 0:
                 getParentActivity().speak(R.string.content_account_overview, LocalRequest.ACTION_SPEAK_ONLY);
                 break;

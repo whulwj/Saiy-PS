@@ -520,15 +520,15 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
 
     @Override
     public void onClick(View view) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick");
-        }
         if (Global.isInVoiceTutorial()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onClick: tutorialActive");
             }
             toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onClick");
         }
         if (helper != null && !helper.isCompleted() && !helper.isCancelled()) {
             setFABImage(R.drawable.ic_media_play);

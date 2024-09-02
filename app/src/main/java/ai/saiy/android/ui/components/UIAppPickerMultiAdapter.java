@@ -6,7 +6,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckedTextView;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,16 +21,22 @@ public class UIAppPickerMultiAdapter extends RecyclerView.Adapter<UIAppPickerMul
     private final SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        private final LinearLayout itemContainer;
-
         private final CheckedTextView appName;
         private final ImageView appIcon;
+        private int boundPosition = RecyclerView.NO_POSITION;
 
         private ViewHolder(View view) {
             super(view);
-            this.itemContainer = view.findViewById(R.id.itemContainer);
             this.appName = view.findViewById(R.id.appName);
             this.appIcon = view.findViewById(R.id.appIcon);
+        }
+
+        public int getBoundPosition() {
+            return boundPosition;
+        }
+
+        protected void setBoundPosition(int position) {
+            boundPosition = position;
         }
     }
 
@@ -55,8 +60,8 @@ public class UIAppPickerMultiAdapter extends RecyclerView.Adapter<UIAppPickerMul
         viewHolder.appName.setText(application.getLabel());
         viewHolder.appName.setChecked(sparseBooleanArray.get(position));
         viewHolder.appIcon.setImageDrawable(application.getIcon());
-        viewHolder.itemContainer.setOnClickListener(onClickListener);
-        viewHolder.itemContainer.setTag(position);
+        viewHolder.setBoundPosition(position);
+        viewHolder.itemView.setOnClickListener(onClickListener);
     }
 
     @Override

@@ -45,6 +45,7 @@ import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.recognition.TestRecognitionAction;
 import ai.saiy.android.ui.activity.ActivityHome;
+import ai.saiy.android.ui.components.UIBugsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentBugsHelper;
 import ai.saiy.android.ui.viewmodel.BillingViewModel;
@@ -151,6 +152,17 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
         return rootView;
     }
 
+    private int getPosition(View view) {
+        int position = (view == null) ? 0 : mRecyclerView.getChildAdapterPosition(view);
+        if (view != null && RecyclerView.NO_POSITION == position) {
+            final RecyclerView.ViewHolder viewHolder = mRecyclerView.getChildViewHolder(view);
+            if (viewHolder instanceof UIBugsAdapter.ViewHolder) {
+                position = ((UIBugsAdapter.ViewHolder) viewHolder).getBoundPosition();
+            }
+        }
+        return position;
+    }
+
     @Override
     public void onClick(final View view) {
         if (Global.isInVoiceTutorial()) {
@@ -160,15 +172,15 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
             getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return;
         }
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onClick: " + view.getTag());
-        }
 
-        if (R.id.ibRun == view.getId()) {
+        if (view != null && R.id.ibRun == view.getId()) {
             testCommand();
         } else {
-            switch ((int) view.getTag()) {
-
+            final int position = getPosition(view);
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onClick: " + position);
+            }
+            switch (position) {
                 case 0:
                     if (!ExecuteIntent.settingsIntent(getApplicationContext(),
                             IntentConstants.SETTINGS_VOICE_SEARCH)) {
@@ -203,12 +215,12 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
             getParentActivity().toast(getString(R.string.tutorial_content_disabled), Toast.LENGTH_SHORT);
             return true;
         }
+
+        final int position = getPosition(view);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "onLongClick: " + view.getTag());
+            MyLog.i(CLS_NAME, "onLongClick: " + position);
         }
-
-        switch ((int) view.getTag()) {
-
+        switch (position) {
             case 0:
                 return false;
             case 1:
