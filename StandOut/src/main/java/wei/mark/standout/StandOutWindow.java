@@ -1303,7 +1303,7 @@ public abstract class StandOutWindow extends Service {
 								StandOutWindow.this.getClass());
 
 						// if we just released the last window, quit
-						if (getExistingIds().size() == 0) {
+						if (getExistingIds().isEmpty()) {
 							// tell Android to remove the persistent
 							// notification
 							// the Service will be shutdown by the system on low
@@ -1345,10 +1345,7 @@ public abstract class StandOutWindow extends Service {
 		}
 
 		// add ids to temporary set to avoid concurrent modification
-		LinkedList<Integer> ids = new LinkedList<Integer>();
-		for (int id : getExistingIds()) {
-			ids.add(id);
-		}
+        final LinkedList<Integer> ids = new LinkedList<>(getExistingIds());
 
 		// close each window
 		for (int id : ids) {

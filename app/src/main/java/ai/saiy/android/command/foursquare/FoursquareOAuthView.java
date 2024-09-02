@@ -4,11 +4,9 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.net.http.SslError;
 import android.os.AsyncTask;
 import android.util.AttributeSet;
 import android.view.View;
-import android.webkit.SslErrorHandler;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -122,11 +120,6 @@ public class FoursquareOAuthView extends WebView {
 
                 // Stop the authorization step.
                 notifyAuthorization();
-            }
-
-            @Override
-            public void onReceivedSslError(WebView webView, SslErrorHandler handler, SslError sslError) {
-                handler.cancel();
             }
 
             @Override

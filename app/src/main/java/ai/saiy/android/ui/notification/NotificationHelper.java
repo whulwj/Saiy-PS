@@ -190,18 +190,10 @@ public final class NotificationHelper {
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, channel);
 
-        final String contentTitle;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            contentTitle = ctx.getString(R.string.app_name);
-        } else {
-            contentTitle = ctx.getString(R.string.app_name);
-        }
-
         builder.setContentIntent(pendingIntent).setSmallIcon(R.mipmap.ic_launcher)
                 .setTicker(ctx.getString(ai.saiy.android.R.string.notification_ticker))
                 .setWhen(System.currentTimeMillis())
-                .setContentTitle(contentTitle)
+                .setContentTitle(ctx.getString(R.string.app_name))
                 .setOngoing(true)
                 .setContentText(String.format(ctx.getString(ai.saiy.android.R.string.notification_ai_level),
                         AI.getAILevel(ctx)));

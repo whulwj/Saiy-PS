@@ -35,7 +35,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
 /**
- * <a href="https://docs.foursquare.com/developer/reference/place-search" />
+ * <a href="https://docs.foursquare.com/developer/reference/place-search"/>
  */
 public class FoursquareHelper {
     private static final boolean DEBUG = MyLog.DEBUG;

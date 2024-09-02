@@ -51,7 +51,7 @@ public class CommandBattery {
     public @NonNull Outcome getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
                                @NonNull final SupportedLanguage sl, @NonNull final CommandRequest cr) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());
+            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
 
         final long then = System.nanoTime();

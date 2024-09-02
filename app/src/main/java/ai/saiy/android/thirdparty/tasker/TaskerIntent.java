@@ -17,11 +17,6 @@
 
 package ai.saiy.android.thirdparty.tasker;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -33,6 +28,12 @@ import android.os.Bundle;
 import android.os.PatternMatcher;
 import android.os.Process;
 import android.util.Log;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import ai.saiy.android.utils.MyLog;
 
 // Version 1.3.3
 
@@ -52,71 +53,60 @@ import android.util.Log;
  */
 
 public class TaskerIntent extends Intent {
+    private static final boolean DEBUG = MyLog.DEBUG;
+    private static final String CLS_NAME = TaskerIntent.class.getSimpleName();
 
     // 3 Tasker versions
     public final static String TASKER_PACKAGE = "net.dinglisch.android.tasker";
     public final static String TASKER_PACKAGE_MARKET = TASKER_PACKAGE + "m";
-    public final static String TASKER_PACKAGE_CUPCAKE = TASKER_PACKAGE + "cupcake";
-
-    // Play Store download URLs
-    public final static String MARKET_DOWNLOAD_URL_PREFIX = "market://details?id=";
-    private final static String TASKER_MARKET_URL =  MARKET_DOWNLOAD_URL_PREFIX + TASKER_PACKAGE_MARKET;
-    private final static String TASKER_MARKET_URL_CUPCAKE = MARKET_DOWNLOAD_URL_PREFIX + TASKER_PACKAGE_CUPCAKE;
-
-    // Direct-purchase version
-    private final static String TASKER_DOWNLOAD_URL = "http://tasker.dinglisch.net/download.html";
 
     // Intent actions
-    public final static String 	ACTION_TASK = TASKER_PACKAGE + ".ACTION_TASK";
-    public final static String 	ACTION_TASK_COMPLETE = TASKER_PACKAGE + ".ACTION_TASK_COMPLETE";
-    public final static String 	ACTION_TASK_SELECT = TASKER_PACKAGE + ".ACTION_TASK_SELECT";
+    public final static String ACTION_TASK = TASKER_PACKAGE + ".ACTION_TASK";
+    public final static String ACTION_TASK_COMPLETE = TASKER_PACKAGE + ".ACTION_TASK_COMPLETE";
+    public final static String ACTION_TASK_SELECT = TASKER_PACKAGE + ".ACTION_TASK_SELECT";
 
     // Intent parameters
-    public final static String	EXTRA_ACTION_INDEX_PREFIX = "action";
-    public final static String	TASK_NAME_DATA_SCHEME = "task";
-    public final static String	EXTRA_TASK_NAME  = "task_name";
-    public final static String	EXTRA_TASK_PRIORITY  = "task_priority";
-    public final static String	EXTRA_SUCCESS_FLAG = "success";
-    public final static String	EXTRA_VAR_NAMES_LIST = "varNames";
-    public final static String	EXTRA_VAR_VALUES_LIST = "varValues";
-    public final static String	EXTRA_TASK_OUTPUT = "output";
+    public final static String EXTRA_ACTION_INDEX_PREFIX = "action";
+    public final static String TASK_NAME_DATA_SCHEME = "task";
+    public final static String EXTRA_TASK_NAME = "task_name";
+    public final static String EXTRA_TASK_PRIORITY = "task_priority";
+    public final static String EXTRA_SUCCESS_FLAG = "success";
+    public final static String EXTRA_VAR_NAMES_LIST = "varNames";
+    public final static String EXTRA_VAR_VALUES_LIST = "varValues";
+    public final static String EXTRA_TASK_OUTPUT = "output";
 
     // Content provider columns
-    public static final String	PROVIDER_COL_NAME_EXTERNAL_ACCESS = "ext_access";
-    public static final String	PROVIDER_COL_NAME_ENABLED = "enabled";
-
-    // DEPRECATED, use EXTRA_VAR_NAMES_LIST, EXTRA_VAR_VALUES_LIST
-    public final static String	EXTRA_PARAM_LIST = "params";
+    public static final String PROVIDER_COL_NAME_EXTERNAL_ACCESS = "ext_access";
+    public static final String PROVIDER_COL_NAME_ENABLED = "enabled";
 
     // Intent data
 
-    public final static String	TASK_ID_SCHEME = "id";
+    public final static String TASK_ID_SCHEME = "id";
 
     // For particular actions
 
-    public final static String	DEFAULT_ENCRYPTION_KEY= "default";
-    public final static String	ENCRYPTED_AFFIX = "tec";
-    public final static int		MAX_NO_ARGS = 10;
+    public final static String DEFAULT_ENCRYPTION_KEY = "default";
+    public final static String ENCRYPTED_AFFIX = "tec";
+    public final static int MAX_NO_ARGS = 10;
 
     // Bundle keys
     // Only useful for Tasker
-    public final static String	ACTION_CODE = "action";
-    public final static String	APP_ARG_PREFIX = "app:";
-    public final static String	ICON_ARG_PREFIX = "icn:";
-    public final static String	ARG_INDEX_PREFIX = "arg:";
-    public static final String	PARAM_VAR_NAME_PREFIX = "par";
+    public final static String ACTION_CODE = "action";
+    public final static String APP_ARG_PREFIX = "app:";
+    public final static String ICON_ARG_PREFIX = "icn:";
+    public final static String ARG_INDEX_PREFIX = "arg:";
+    public static final String PARAM_VAR_NAME_PREFIX = "par";
 
     // Misc
     private final static String PERMISSION_RUN_TASKS = TASKER_PACKAGE + ".PERMISSION_RUN_TASKS";
 
     private final static String ACTION_OPEN_PREFS = TASKER_PACKAGE + ".ACTION_OPEN_PREFS";
-    public  final static String EXTRA_OPEN_PREFS_TAB_NO = "tno";
-    private final static int	MISC_PREFS_TAB_NO = 3;  // 0 based
+    public final static String EXTRA_OPEN_PREFS_TAB_NO = "tno";
+    private final static int MISC_PREFS_TAB_NO = 3;  // 0 based
 
     // To query whether Tasker is enabled and external access is enabled
     private final static String TASKER_PREFS_URI = "content://" + TASKER_PACKAGE + "/prefs";
 
-    private final static int	CUPCAKE_SDK_VERSION = 3;
 
     // result values for TestSend
 
@@ -128,25 +118,25 @@ public class TaskerIntent extends Intent {
     // OK: you should be able to send a task to run. Still need to listen for result
     //     for e.g. task not found
 
-    public enum Status { NotInstalled, NoPermission, NotEnabled, AccessBlocked, NoReceiver, OK }
+    public enum Status {NotInstalled, NoPermission, NotEnabled, AccessBlocked, NoReceiver, OK}
 
     // -------------------------- PRIVATE VARS ---------------------------- //
 
     private final static String TAG = "TaskerIntent";
 
-    private final static String	EXTRA_INTENT_VERSION_NUMBER = "version_number";
-    private final static String	INTENT_VERSION_NUMBER = "1.1";
+    private final static String EXTRA_INTENT_VERSION_NUMBER = "version_number";
+    private final static String INTENT_VERSION_NUMBER = "1.1";
 
     // Inclusive values
-    private final static int	MIN_PRIORITY = 0;
-    private final static int	MAX_PRIORITY = 10;
+    private final static int MIN_PRIORITY = 0;
+    private final static int MAX_PRIORITY = 10;
 
     // For generating random names
-    private static Random       rand = new Random();
+    private static Random rand = new Random();
 
     // Tracking state
-    private int 				actionCount = 0;
-    private int 				argCount;
+    private int actionCount = 0;
+    private int argCount;
 
     // -------------------------- PUBLIC METHODS ---------------------------- //
 
@@ -154,32 +144,36 @@ public class TaskerIntent extends Intent {
         return MAX_PRIORITY;
     }
 
-    public static boolean validatePriority( int pri ) {
+    public static boolean validatePriority(int pri) {
         return (
-                ( pri >= MIN_PRIORITY ) ||
-                        ( pri <= MAX_PRIORITY )
+                (pri >= MIN_PRIORITY) ||
+                        (pri <= MAX_PRIORITY)
         );
     }
 
     // Tasker has different package names for Play Store and non- versions
     // for historical reasons
 
-    public static String getInstalledTaskerPackage( Context context ) {
+    public static String getInstalledTaskerPackage(Context context) {
 
         String foundPackage = null;
 
         try {
-            context.getPackageManager().getPackageInfo( TASKER_PACKAGE, 0 );
+            context.getPackageManager().getPackageInfo(TASKER_PACKAGE, 0);
             foundPackage = TASKER_PACKAGE;
-        }
-        catch ( PackageManager.NameNotFoundException e ) {
+        } catch (PackageManager.NameNotFoundException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "executeCustomIntent startService: Exception, " + e.getMessage());
+            }
         }
 
         try {
-            context.getPackageManager().getPackageInfo( TASKER_PACKAGE_MARKET, 0 );
+            context.getPackageManager().getPackageInfo(TASKER_PACKAGE_MARKET, 0);
             foundPackage = TASKER_PACKAGE_MARKET;
-        }
-        catch ( PackageManager.NameNotFoundException e ) {
+        } catch (PackageManager.NameNotFoundException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "executeCustomIntent startService: Exception, " + e.getMessage());
+            }
         }
 
         return foundPackage;
@@ -189,19 +183,19 @@ public class TaskerIntent extends Intent {
     // use *before* sending an intent
     // still need to test the *result after* sending intent
 
-    public static Status testStatus( Context c ) {
+    public static Status testStatus(Context c) {
 
         Status result;
 
-        if ( ! taskerInstalled( c ) )
+        if (!taskerInstalled(c))
             result = Status.NotInstalled;
-        else if ( ! havePermission( c ) )
+        else if (!havePermission(c))
             result = Status.NoPermission;
-        else if ( ! TaskerIntent.prefSet( c, PROVIDER_COL_NAME_ENABLED ) )
+        else if (!TaskerIntent.prefSet(c, PROVIDER_COL_NAME_ENABLED))
             result = Status.NotEnabled;
-        else if ( ! TaskerIntent.prefSet( c, PROVIDER_COL_NAME_EXTERNAL_ACCESS ) )
+        else if (!TaskerIntent.prefSet(c, PROVIDER_COL_NAME_EXTERNAL_ACCESS))
             result = Status.AccessBlocked;
-        else if ( ! new TaskerIntent( "" ).receiverExists( c ) )
+        else if (!new TaskerIntent("").receiverExists(c))
             result = Status.NoReceiver;
         else
             result = Status.OK;
@@ -211,39 +205,16 @@ public class TaskerIntent extends Intent {
 
     // Check if Tasker installed
 
-    public static boolean taskerInstalled( Context context ) {
-        return ( getInstalledTaskerPackage( context ) != null );
+    public static boolean taskerInstalled(Context context) {
+        return (getInstalledTaskerPackage(context) != null);
     }
 
-    // Use with startActivity to retrieve Tasker from Android market
-    public static Intent getTaskerInstallIntent( boolean marketFlag ) {
+    public static IntentFilter getCompletionFilter(String taskName) {
 
-        return new Intent(
-                Intent.ACTION_VIEW,
-                Uri.parse(
-                        marketFlag ?
-                                ( ( SDKVersion() == CUPCAKE_SDK_VERSION ) ? TASKER_MARKET_URL_CUPCAKE : TASKER_MARKET_URL ) :
-                                TASKER_DOWNLOAD_URL
-                )
-        );
-    }
+        IntentFilter filter = new IntentFilter(TaskerIntent.ACTION_TASK_COMPLETE);
 
-    public static int SDKVersion() {
-        try {
-            Field f = android.os.Build.VERSION.class.getField( "SDK_INT" );
-            return f.getInt( null );
-        }
-        catch ( Exception e ) {
-            return CUPCAKE_SDK_VERSION;
-        }
-    }
-
-    public static IntentFilter getCompletionFilter( String taskName ) {
-
-        IntentFilter filter = new IntentFilter( TaskerIntent.ACTION_TASK_COMPLETE );
-
-        filter.addDataScheme( TASK_NAME_DATA_SCHEME );
-        filter.addDataPath( taskName, PatternMatcher.PATTERN_LITERAL );
+        filter.addDataScheme(TASK_NAME_DATA_SCHEME);
+        filter.addDataPath(taskName, PatternMatcher.PATTERN_LITERAL);
 
         return filter;
     }
@@ -259,8 +230,8 @@ public class TaskerIntent extends Intent {
 
     // public access deprecated, use TaskerIntent.testSend() instead
 
-    public static boolean havePermission( Context c ) {
-        return c.checkPermission( PERMISSION_RUN_TASKS, Process.myPid(), Process.myUid() ) ==
+    public static boolean havePermission(Context c) {
+        return c.checkPermission(PERMISSION_RUN_TASKS, Process.myPid(), Process.myUid()) ==
                 PackageManager.PERMISSION_GRANTED;
     }
 
@@ -268,198 +239,195 @@ public class TaskerIntent extends Intent {
     // Probably you want to use startActivity or startActivityForResult with it
 
     public static Intent getExternalAccessPrefsIntent() {
-        return new Intent( ACTION_OPEN_PREFS ).putExtra( EXTRA_OPEN_PREFS_TAB_NO, MISC_PREFS_TAB_NO );
+        return new Intent(ACTION_OPEN_PREFS).putExtra(EXTRA_OPEN_PREFS_TAB_NO, MISC_PREFS_TAB_NO);
     }
 
     // ------------------------------------- INSTANCE METHODS ----------------------------- //
 
     public TaskerIntent() {
-        super( ACTION_TASK );
+        super(ACTION_TASK);
         setRandomData();
-        putMetaExtras( getRandomString() );
+        putMetaExtras(getRandomString());
     }
 
-    public TaskerIntent( String taskName ) {
-        super( ACTION_TASK );
+    public TaskerIntent(String taskName) {
+        super(ACTION_TASK);
         setRandomData();
-        putMetaExtras( taskName );
+        putMetaExtras(taskName);
     }
 
-    public TaskerIntent setTaskPriority( int priority ) {
+    public TaskerIntent setTaskPriority(int priority) {
 
-        if ( validatePriority( priority ) )
-            putExtra( EXTRA_TASK_PRIORITY, priority );
-        else
-            Log.e( TAG, "priority out of range: " + MIN_PRIORITY + ":" + MAX_PRIORITY );
-
+        if (validatePriority(priority)) {
+            putExtra(EXTRA_TASK_PRIORITY, priority);
+        } else {
+            Log.e(TAG, "priority out of range: " + MIN_PRIORITY + ":" + MAX_PRIORITY);
+        }
         return this;
     }
 
     // Sets subsequently %par1, %par2 etc
-    public TaskerIntent addParameter( String value ) {
+    public TaskerIntent addParameter(String value) {
 
         int index = 1;
 
-        if ( getExtras().containsKey( EXTRA_VAR_NAMES_LIST ) )
-            index = getExtras().getStringArrayList( EXTRA_VAR_NAMES_LIST ).size() + 1;
+        if (getExtras().containsKey(EXTRA_VAR_NAMES_LIST))
+            index = getExtras().getStringArrayList(EXTRA_VAR_NAMES_LIST).size() + 1;
 
-        Log.d(TAG, "index: " + index );
+        Log.d(TAG, "index: " + index);
 
-        addLocalVariable( "%" + PARAM_VAR_NAME_PREFIX + index, value );
+        addLocalVariable("%" + PARAM_VAR_NAME_PREFIX + index, value);
 
         return this;
     }
 
     // Arbitrary specification of (local) variable names and values
-    public TaskerIntent addLocalVariable( String name, String value ) {
+    public TaskerIntent addLocalVariable(String name, String value) {
 
         ArrayList<String> names, values;
 
-        if ( hasExtra( EXTRA_VAR_NAMES_LIST ) ) {
-            names = getStringArrayListExtra( EXTRA_VAR_NAMES_LIST );
-            values = getStringArrayListExtra( EXTRA_VAR_VALUES_LIST );
-        }
-        else {
+        if (hasExtra(EXTRA_VAR_NAMES_LIST)) {
+            names = getStringArrayListExtra(EXTRA_VAR_NAMES_LIST);
+            values = getStringArrayListExtra(EXTRA_VAR_VALUES_LIST);
+        } else {
             names = new ArrayList<>();
             values = new ArrayList<>();
 
-            putStringArrayListExtra( EXTRA_VAR_NAMES_LIST, names );
-            putStringArrayListExtra( EXTRA_VAR_VALUES_LIST, values );
+            putStringArrayListExtra(EXTRA_VAR_NAMES_LIST, names);
+            putStringArrayListExtra(EXTRA_VAR_VALUES_LIST, values);
         }
 
-        names.add( name );
-        values.add( value );
+        names.add(name);
+        values.add(value);
 
         return this;
     }
 
-    public TaskerIntent addAction( int code ) {
+    public TaskerIntent addAction(int code) {
 
         actionCount++;
         argCount = 1;
 
         Bundle actionBundle = new Bundle();
 
-        actionBundle.putInt( ACTION_CODE, code );
+        actionBundle.putInt(ACTION_CODE, code);
 
         // Add action bundle to intent
-        putExtra( EXTRA_ACTION_INDEX_PREFIX + Integer.toString( actionCount ), actionBundle );
+        putExtra(EXTRA_ACTION_INDEX_PREFIX + actionCount, actionBundle);
 
         return this;
     }
 
     // string arg
-    public TaskerIntent addArg( String arg ) {
+    public TaskerIntent addArg(String arg) {
 
         Bundle b = getActionBundle();
 
-        if ( b != null )
-            b.putString( ARG_INDEX_PREFIX + Integer.toString( argCount++ ), arg );
+        if (b != null)
+            b.putString(ARG_INDEX_PREFIX + argCount++, arg);
 
         return this;
     }
 
     // int arg
-    public TaskerIntent addArg( int arg ) {
+    public TaskerIntent addArg(int arg) {
         Bundle b = getActionBundle();
 
-        if ( b != null )
-            b.putInt( ARG_INDEX_PREFIX + Integer.toString( argCount++ ), arg );
+        if (b != null)
+            b.putInt(ARG_INDEX_PREFIX + argCount++, arg);
 
         return this;
     }
 
     // boolean arg
-    public TaskerIntent addArg( boolean arg ) {
+    public TaskerIntent addArg(boolean arg) {
         Bundle b = getActionBundle();
 
-        if ( b != null )
-            b.putBoolean( ARG_INDEX_PREFIX + Integer.toString( argCount++ ), arg );
+        if (b != null)
+            b.putBoolean(ARG_INDEX_PREFIX + argCount++, arg);
 
         return this;
     }
 
     // Application arg
-    public TaskerIntent addArg( String pkg, String cls ) {
+    public TaskerIntent addArg(String pkg, String cls) {
         Bundle b = getActionBundle();
 
-        if ( b != null ) {
+        if (b != null) {
             StringBuilder builder = new StringBuilder();
-            builder.append( APP_ARG_PREFIX ).
-                    append( pkg ). append( "," ). append( cls );
-            b.putString( ARG_INDEX_PREFIX + Integer.toString( argCount++ ), builder.toString() );
+            builder.append(APP_ARG_PREFIX).
+                    append(pkg).append(",").append(cls);
+            b.putString(ARG_INDEX_PREFIX + argCount++, builder.toString());
         }
 
         return this;
     }
 
     public IntentFilter getCompletionFilter() {
-        return getCompletionFilter( getTaskName() );
+        return getCompletionFilter(getTaskName());
     }
 
     public String getTaskName() {
-        return getStringExtra( EXTRA_TASK_NAME );
+        return getStringExtra(EXTRA_TASK_NAME);
     }
 
-    public boolean receiverExists( Context context ) {
-        List<ResolveInfo> recs = context.getPackageManager().queryBroadcastReceivers( this, 0 );
-        return (
-                ( recs != null ) &&
-                        ( recs.size() > 0 )
-        );
+    public boolean receiverExists(Context context) {
+        List<ResolveInfo> recs = context.getPackageManager().queryBroadcastReceivers(this, 0);
+        return (recs != null) && !recs.isEmpty();
     }
 
     // -------------------- PRIVATE METHODS -------------------- //
 
     private String getRandomString() {
-        return Long.toString( rand.nextLong() );
+        return Long.toString(rand.nextLong());
     }
 
     // so that if multiple TaskerIntents are used in PendingIntents there's virtually no
     // clash chance
     private void setRandomData() {
-        setData( Uri.parse( TASK_ID_SCHEME + ":" + getRandomString() ) );
+        setData(Uri.parse(TASK_ID_SCHEME + ":" + getRandomString()));
     }
 
     private Bundle getActionBundle() {
 
         Bundle toReturn = null;
 
-        if ( argCount > MAX_NO_ARGS )
-            Log.e( TAG, "maximum number of arguments exceeded (" + MAX_NO_ARGS + ")" );
-        else {
-            String key = EXTRA_ACTION_INDEX_PREFIX + Integer.toString( actionCount );
+        if (argCount > MAX_NO_ARGS) {
+            Log.e(TAG, "maximum number of arguments exceeded (" + MAX_NO_ARGS + ")");
+        } else {
+            String key = EXTRA_ACTION_INDEX_PREFIX + actionCount;
 
-            if ( this.hasExtra( key ) )
-                toReturn = getBundleExtra( key );
-            else
-                Log.e( TAG, "no actions added yet" );
+            if (this.hasExtra(key)) {
+                toReturn = getBundleExtra(key);
+            } else {
+                Log.e(TAG, "no actions added yet");
+            }
         }
 
         return toReturn;
     }
 
-    private void putMetaExtras( String taskName ) {
-        putExtra( EXTRA_INTENT_VERSION_NUMBER, INTENT_VERSION_NUMBER );
-        putExtra( EXTRA_TASK_NAME, taskName );
+    private void putMetaExtras(String taskName) {
+        putExtra(EXTRA_INTENT_VERSION_NUMBER, INTENT_VERSION_NUMBER);
+        putExtra(EXTRA_TASK_NAME, taskName);
     }
 
     // for testing that Tasker is enabled and external access is allowed
 
-    private static boolean prefSet( Context context, String col ) {
+    private static boolean prefSet(Context context, String col) {
 
-        String [] proj = new String [] { col };
+        String[] proj = new String[]{col};
 
-        Cursor c = context.getContentResolver().query( Uri.parse( TASKER_PREFS_URI ), proj, null, null, null );
+        Cursor c = context.getContentResolver().query(Uri.parse(TASKER_PREFS_URI), proj, null, null, null);
 
         boolean acceptingFlag = false;
 
-        if ( c == null )
-            Log.w( TAG, "no cursor for " + TASKER_PREFS_URI );
-        else {
+        if (c == null) {
+            Log.w(TAG, "no cursor for " + TASKER_PREFS_URI);
+        } else {
             c.moveToFirst();
 
-            if ( Boolean.TRUE.toString().equals( c.getString( 0 ) ) )
+            if (Boolean.TRUE.toString().equals(c.getString(0)))
                 acceptingFlag = true;
 
             c.close();

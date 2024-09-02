@@ -39,19 +39,16 @@ public class OrientationHelper {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
-                    waitForUserRotation();
                 } else {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
-                    waitForUserRotation();
                 }
+                waitForUserRotation();
+                Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
+                waitForUserRotation();
                 thawAutoRotation(context);
                 return true;
             case Surface.ROTATION_180:
@@ -64,19 +61,16 @@ public class OrientationHelper {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
-                    waitForUserRotation();
                 } else {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
-                    waitForUserRotation();
                 }
+                waitForUserRotation();
+                Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
+                waitForUserRotation();
                 thawAutoRotation(context);
                 return true;
             case Surface.ROTATION_90:
@@ -89,19 +83,16 @@ public class OrientationHelper {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
-                    waitForUserRotation();
                 } else {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
-                    waitForUserRotation();
                 }
+                waitForUserRotation();
+                Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
+                waitForUserRotation();
                 thawAutoRotation(context);
                 return true;
             case Surface.ROTATION_0:
@@ -115,19 +106,16 @@ public class OrientationHelper {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
-                    waitForUserRotation();
                 } else {
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_270);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_180);
                     waitForUserRotation();
                     Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_90);
-                    waitForUserRotation();
-                    Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
-                    waitForUserRotation();
                 }
+                waitForUserRotation();
+                Settings.System.putInt(context.getContentResolver(), Settings.System.USER_ROTATION, Surface.ROTATION_0);
+                waitForUserRotation();
                 thawAutoRotation(context);
                 return true;
         }

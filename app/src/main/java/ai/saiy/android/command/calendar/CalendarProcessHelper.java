@@ -1,5 +1,7 @@
 package ai.saiy.android.command.calendar;
 
+import static ai.saiy.android.command.calendar.CalendarProcess.MONTH_OFFSET;
+
 import android.content.Context;
 
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
@@ -221,6 +223,11 @@ public class CalendarProcessHelper {
     private static final Pattern p2027 = Pattern.compile(".*\\b2027\\b.*");
     private static final Pattern p2028 = Pattern.compile(".*\\b2028\\b.*");
     private static final Pattern p2029 = Pattern.compile(".*\\b2029\\b.*");
+    private static final Pattern p2030 = Pattern.compile(".*\\b2030\\b.*");
+    private static final Pattern p2031 = Pattern.compile(".*\\b2031\\b.*");
+    private static final Pattern p2032 = Pattern.compile(".*\\b2032\\b.*");
+    private static final Pattern p2033 = Pattern.compile(".*\\b2033\\b.*");
+    private static final Pattern p2034 = Pattern.compile(".*\\b2034\\b.*");
 
     public static CalendarProcess resolve(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage) {
         final long then = System.nanoTime();
@@ -303,9 +310,8 @@ public class CalendarProcessHelper {
             MyLog.d(CLS_NAME, "endTime: " + (calendarProcess.hourOfDay + 1) + ":" + calendarProcess.minute);
         }
         if (!calendarProcess.extraWeekdayDescription.isEmpty()) {
-            String str3 = calendarProcess.dayOfMonth + "/" + calendarProcess.month + "/" + calendarProcess.year + calendarProcess.extraWeekdayDescription;
             if (DEBUG) {
-                MyLog.d(CLS_NAME, "result: " + str3);
+                MyLog.d(CLS_NAME, "result: " + calendarProcess.dayOfMonth + "/" + calendarProcess.month + "/" + calendarProcess.year + calendarProcess.extraWeekdayDescription);
             }
             calendarProcess.outcome = Outcome.FAILURE;
             calendarProcess.utterance = context.getString(R.string.that_date_is) + calendarProcess.extraWeekdayDescription;
@@ -315,7 +321,7 @@ public class CalendarProcessHelper {
             return calendarProcess;
         }
         if (calendarProcess.allDay) {
-            if (CalendarHelper.setEvent(context, calendarProcess.year, calendarProcess.month - 1, calendarProcess.dayOfMonth, calendarProcess.hourOfDay, calendarProcess.minute, getName(structuredString, supportedLanguage.getLocale()), true)) {
+            if (CalendarHelper.setEvent(context, calendarProcess.year, calendarProcess.month - MONTH_OFFSET, calendarProcess.dayOfMonth, calendarProcess.hourOfDay, calendarProcess.minute, getName(structuredString, supportedLanguage.getLocale()), true)) {
                 if (DEBUG) {
                     MyLog.d(CLS_NAME, "result: " + calendarProcess.dayOfMonth + "/" + calendarProcess.month + "/" + calendarProcess.year + " : All Day : " + getName(structuredString, supportedLanguage.getLocale()));
                 }
@@ -324,7 +330,7 @@ public class CalendarProcessHelper {
                 calendarProcess.outcome = Outcome.FAILURE;
                 calendarProcess.utterance = context.getString(R.string.calendar_error_insert);
             }
-        } else if (CalendarHelper.setEvent(context, calendarProcess.year, calendarProcess.month - 1, calendarProcess.dayOfMonth, calendarProcess.hourOfDay, calendarProcess.minute, getName(structuredString, supportedLanguage.getLocale()), false)) {
+        } else if (CalendarHelper.setEvent(context, calendarProcess.year, calendarProcess.month - MONTH_OFFSET, calendarProcess.dayOfMonth, calendarProcess.hourOfDay, calendarProcess.minute, getName(structuredString, supportedLanguage.getLocale()), false)) {
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "result: " + calendarProcess.dayOfMonth + "/" + calendarProcess.month + "/" + calendarProcess.year + " : " + calendarProcess.hourOfDay + ":" + minuteString + " : " + getName(structuredString, supportedLanguage.getLocale()));
             }
@@ -380,7 +386,7 @@ public class CalendarProcessHelper {
                 MyLog.d(CLS_NAME, "compareTime: calendarProcess.hourInt < thisHour: TOMORROW");
             }
             calendar.add(Calendar.DAY_OF_YEAR, 7);
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveDate = true;
@@ -392,7 +398,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "compareTime: calendarProcess.hourInt < thisHour: TODAY");
             }
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveDate = true;
@@ -406,7 +412,7 @@ public class CalendarProcessHelper {
                 MyLog.d(CLS_NAME, "compareTime: calendarProcess.minuteInt < thisMinute: TOMORROW");
             }
             calendar.add(Calendar.DAY_OF_YEAR, 1);
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveDate = true;
@@ -418,7 +424,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "compareTime: calendarProcess.minuteInt > thisMinute: TODAY");
             }
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveDate = true;
@@ -434,8 +440,8 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "getWeekday: dotw < weekday");
             }
-            calendar.add(Calendar.DAY_OF_YEAR, (7 - thisWeekday) + weekday);
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendar.add(Calendar.DAY_OF_YEAR, (Calendar.SATURDAY - thisWeekday) + weekday);
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveDate = true;
@@ -452,7 +458,7 @@ public class CalendarProcessHelper {
                 MyLog.d(CLS_NAME, "getWeekday: dotw > weekday");
             }
             calendar.add(Calendar.DAY_OF_YEAR, weekday - thisWeekday);
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveDate = true;
@@ -889,7 +895,7 @@ public class CalendarProcessHelper {
     private static void getCurrentDate() {
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+        calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
         calendarProcess.year = calendar.get(Calendar.YEAR);
         if (DEBUG) {
             MyLog.d(CLS_NAME, "getCurrentDate: calendarProcess.dateInt: " + calendarProcess.dayOfMonth);
@@ -903,7 +909,7 @@ public class CalendarProcessHelper {
             MyLog.i(CLS_NAME, "getYear: moty: " + month);
         }
         final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        final int thisMonth = calendar.get(Calendar.MONTH) + 1;
+        final int thisMonth = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getYear: thisMonth: " + thisMonth);
         }
@@ -995,7 +1001,7 @@ public class CalendarProcessHelper {
             yearString = String.valueOf(calendarProcess.year);
         }
         if (calendarProcess.month == 0) {
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             monthString = String.valueOf(calendarProcess.month);
         }
         if (calendarProcess.dayOfMonth == 0) {
@@ -1013,7 +1019,7 @@ public class CalendarProcessHelper {
             MyLog.d(CLS_NAME, "validateDate: " + dateString);
         }
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddmmyyyy", Locale.US);
+            final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("ddMMyyyy", Locale.US);
             simpleDateFormat.setLenient(false);
             simpleDateFormat.parse(dateString);
             if (calendarProcess.haveWeekday) {
@@ -1720,7 +1726,7 @@ public class CalendarProcessHelper {
         final int thisDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         if (dayOfMonth < thisDayOfMonth) {
             calendar.add(Calendar.MONTH, 1);
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveYear = true;
             calendarProcess.haveMonth = true;
@@ -1731,7 +1737,7 @@ public class CalendarProcessHelper {
             return;
         }
         if (dayOfMonth > thisDayOfMonth) {
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveYear = true;
             calendarProcess.haveMonth = true;
@@ -1746,7 +1752,7 @@ public class CalendarProcessHelper {
         }
         final int hour = calendar.get(Calendar.HOUR);
         if (calendarProcess.hourOfDay > hour) {
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveYear = true;
             calendarProcess.haveMonth = true;
@@ -1754,7 +1760,7 @@ public class CalendarProcessHelper {
         }
         if (calendarProcess.hourOfDay < hour) {
             calendar.add(Calendar.MONTH, 1);
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveYear = true;
             calendarProcess.haveMonth = true;
@@ -1762,7 +1768,7 @@ public class CalendarProcessHelper {
         }
         final int minute = calendar.get(Calendar.MINUTE);
         if (calendarProcess.minute > minute) {
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveYear = true;
             calendarProcess.haveMonth = true;
@@ -1770,7 +1776,7 @@ public class CalendarProcessHelper {
         }
         if (calendarProcess.minute < minute) {
             calendar.add(Calendar.MONTH, 1);
-            calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+            calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
             calendarProcess.year = calendar.get(Calendar.YEAR);
             calendarProcess.haveYear = true;
             calendarProcess.haveMonth = true;
@@ -1786,161 +1792,161 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pJanuary");
             }
-            calendarProcess.month = 1 + Calendar.JANUARY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.JANUARY;
             return true;
         }
         if (pFEBRUARY.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pFebruary");
             }
-            calendarProcess.month = 1 + Calendar.FEBRUARY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.FEBRUARY;
             return true;
         }
         if (pMARCH.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pMarch");
             }
-            calendarProcess.month = 1 + Calendar.MARCH;
+            calendarProcess.month = MONTH_OFFSET + Calendar.MARCH;
             return true;
         }
         if (pAPRIL.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pApril");
             }
-            calendarProcess.month = 1 + Calendar.APRIL;
+            calendarProcess.month = MONTH_OFFSET + Calendar.APRIL;
             return true;
         }
         if (pMAY.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pMay");
             }
-            calendarProcess.month = 1 + Calendar.MAY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.MAY;
             return true;
         }
         if (pJUNE.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pJune");
             }
-            calendarProcess.month = 1 + Calendar.JUNE;
+            calendarProcess.month = MONTH_OFFSET + Calendar.JUNE;
             return true;
         }
         if (pJULY.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pJuly");
             }
-            calendarProcess.month = 1 + Calendar.JULY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.JULY;
             return true;
         }
         if (pAUGUST.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pAugust");
             }
-            calendarProcess.month = 1 + Calendar.AUGUST;
+            calendarProcess.month = MONTH_OFFSET + Calendar.AUGUST;
             return true;
         }
         if (pSEPTEMBER.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pSeptember");
             }
-            calendarProcess.month = 1 + Calendar.SEPTEMBER;
+            calendarProcess.month = MONTH_OFFSET + Calendar.SEPTEMBER;
             return true;
         }
         if (pOCTOBER.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pOctober");
             }
-            calendarProcess.month = 1 + Calendar.OCTOBER;
+            calendarProcess.month = MONTH_OFFSET + Calendar.OCTOBER;
             return true;
         }
         if (pNOVEMBER.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pNovember");
             }
-            calendarProcess.month = 1 + Calendar.NOVEMBER;
+            calendarProcess.month = MONTH_OFFSET + Calendar.NOVEMBER;
             return true;
         }
         if (pDECEMBER.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: pDecember");
             }
-            calendarProcess.month = 1 + Calendar.DECEMBER;
+            calendarProcess.month = MONTH_OFFSET + Calendar.DECEMBER;
             return true;
         }
         if (str.contains(OF_THE_ + "1st") || str.contains(OF_THE_ + FIRST)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 1st");
             }
-            calendarProcess.month = 1 + Calendar.JANUARY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.JANUARY;
             return true;
         }
         if (str.contains(OF_THE_ + "2nd") || str.contains(OF_THE_ + SECOND)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 2nd");
             }
-            calendarProcess.month = 1 + Calendar.FEBRUARY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.FEBRUARY;
             return true;
         }
         if (str.contains(OF_THE_ + "3rd") || str.contains(OF_THE_ + THIRD)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 3rd");
             }
-            calendarProcess.month = 1 + Calendar.MARCH;
+            calendarProcess.month = MONTH_OFFSET + Calendar.MARCH;
             return true;
         }
         if (str.contains(OF_THE_ + "4th") || str.contains(OF_THE_ + FOURTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 4th");
             }
-            calendarProcess.month = 1 + Calendar.APRIL;
+            calendarProcess.month = MONTH_OFFSET + Calendar.APRIL;
             return true;
         }
         if (str.contains(OF_THE_ + "5th") || str.contains(OF_THE_ + FIFTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 5th");
             }
-            calendarProcess.month = 1 + Calendar.MAY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.MAY;
             return true;
         }
         if (str.contains(OF_THE_ + "6th") || str.contains(OF_THE_ + SIXTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 6th");
             }
-            calendarProcess.month = 1 + Calendar.JUNE;
+            calendarProcess.month = MONTH_OFFSET + Calendar.JUNE;
             return true;
         }
         if (str.contains(OF_THE_ + "7th") || str.contains(OF_THE_ + SEVENTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 7th");
             }
-            calendarProcess.month = 1 + Calendar.JULY;
+            calendarProcess.month = MONTH_OFFSET + Calendar.JULY;
             return true;
         }
         if (str.contains(OF_THE_ + "8th") || str.contains(OF_THE_ + EIGHTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 8th");
             }
-            calendarProcess.month = 1 + Calendar.AUGUST;
+            calendarProcess.month = MONTH_OFFSET + Calendar.AUGUST;
             return true;
         }
         if (str.contains(OF_THE_ + "9th") || str.contains(OF_THE_ + NINTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 9th");
             }
-            calendarProcess.month = 1 + Calendar.SEPTEMBER;
+            calendarProcess.month = MONTH_OFFSET + Calendar.SEPTEMBER;
             return true;
         }
         if (str.contains(OF_THE_ + "10th") || str.contains(OF_THE_ + TENTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 10th");
             }
-            calendarProcess.month = 1 + Calendar.OCTOBER;
+            calendarProcess.month = MONTH_OFFSET + Calendar.OCTOBER;
             return true;
         }
         if (str.contains(OF_THE_ + "11th") || str.contains(OF_THE_ + ELEVENTH)) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isMonth: of the 11th");
             }
-            calendarProcess.month = 1 + Calendar.NOVEMBER;
+            calendarProcess.month = MONTH_OFFSET + Calendar.NOVEMBER;
             return true;
         }
         if (!str.contains(OF_THE_ + "12th") && !str.contains(OF_THE_ + TWELFTH)) {
@@ -1949,7 +1955,7 @@ public class CalendarProcessHelper {
         if (DEBUG) {
             MyLog.v(CLS_NAME, "isMonth: of the 12th");
         }
-        calendarProcess.month = 1 + Calendar.DECEMBER;
+        calendarProcess.month = MONTH_OFFSET + Calendar.DECEMBER;
         return true;
     }
 
@@ -2035,7 +2041,8 @@ public class CalendarProcessHelper {
                 MyLog.v(CLS_NAME, "isWeekday: pTomorrow");
             }
             Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-            calendarProcess.weekday = calendar.get(Calendar.DAY_OF_WEEK) + 1;
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            calendarProcess.weekday = calendar.get(Calendar.DAY_OF_WEEK);
             getWeekday(calendarProcess.weekday);
             return true;
         }
@@ -2044,7 +2051,7 @@ public class CalendarProcessHelper {
         }
         Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         calendarProcess.weekday = calendar.get(Calendar.DAY_OF_WEEK);
-        calendarProcess.month = calendar.get(Calendar.MONTH) + 1;
+        calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
         calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         calendarProcess.year = calendar.get(Calendar.YEAR);
         calendarProcess.haveDate = true;
@@ -2210,6 +2217,41 @@ public class CalendarProcessHelper {
             calendarProcess.year = 2029;
             return true;
         }
+        if (p2030.matcher(str).matches()) {
+            if (DEBUG) {
+                MyLog.v(CLS_NAME, "isYear: p2030");
+            }
+            calendarProcess.year = 2030;
+            return true;
+        }
+        if (p2031.matcher(str).matches()) {
+            if (DEBUG) {
+                MyLog.v(CLS_NAME, "isYear: p2031");
+            }
+            calendarProcess.year = 2031;
+            return true;
+        }
+        if (p2032.matcher(str).matches()) {
+            if (DEBUG) {
+                MyLog.v(CLS_NAME, "isYear: p2032");
+            }
+            calendarProcess.year = 2032;
+            return true;
+        }
+        if (p2033.matcher(str).matches()) {
+            if (DEBUG) {
+                MyLog.v(CLS_NAME, "isYear: p2033");
+            }
+            calendarProcess.year = 2033;
+            return true;
+        }
+        if (p2034.matcher(str).matches()) {
+            if (DEBUG) {
+                MyLog.v(CLS_NAME, "isYear: p2034");
+            }
+            calendarProcess.year = 2034;
+            return true;
+        }
         return false;
     }
 
@@ -2235,15 +2277,14 @@ public class CalendarProcessHelper {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "Number of hours not numeric");
                         }
-                        return false;
                     }
                 } catch (Exception e) {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "dissectH: -1");
                         e.printStackTrace();
                     }
-                    return false;
                 }
+                return false;
             }
             if (separated[i].contains(minute)) {
                 try {

@@ -106,7 +106,7 @@ public class JaroWinklerDistance implements EditDistance<Double> {
                 .length();
 
         // Limit the result to 4.
-        return result > PREFIX_LENGTH_LIMIT ? PREFIX_LENGTH_LIMIT : result;
+        return Math.min(result, PREFIX_LENGTH_LIMIT);
     }
 
     /**
@@ -198,7 +198,7 @@ public class JaroWinklerDistance implements EditDistance<Double> {
 
         // If one or both of the sets of common characters is empty, then
         // there is no similarity between the two strings.
-        if (m1.length() == 0 || m2.length() == 0) {
+        if (m1.isEmpty() || m2.isEmpty()) {
             return 0.0;
         }
 

@@ -33,7 +33,7 @@ public class CommandNavigation {
 
     public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());
+            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
         final long then = System.nanoTime();
         if (!UtilsNavigation.haveSupportedApplication(context)) {

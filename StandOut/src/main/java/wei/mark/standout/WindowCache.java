@@ -93,7 +93,7 @@ public class WindowCache {
 	/**
 	 * Returns the size of the {@link #sWindows} cache.
 	 * 
-	 * @return True if the cache corresponding to this class is empty, false if
+	 * @return 0 if the cache corresponding to this class is empty, its size if
 	 *         it is not empty.
 	 * @param cls
 	 *            The class of the implementation of the window.

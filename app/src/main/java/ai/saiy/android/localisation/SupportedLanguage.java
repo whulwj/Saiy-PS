@@ -204,7 +204,7 @@ public enum SupportedLanguage {
     /**
      * Get all supported languages
      *
-     * @return a list of supported languages
+     * @return an array of supported languages
      */
     public static SupportedLanguage[] getLanguages() {
         return SupportedLanguage.values();
@@ -218,12 +218,12 @@ public enum SupportedLanguage {
      */
     public static SupportedLanguage getSupportedLanguage(@NonNull final Locale userLocale) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "getSupportedLanguage: " + userLocale.toString());
+            MyLog.i(CLS_NAME, "getSupportedLanguage: " + userLocale);
         }
 
         for (final SupportedLanguage sl : getLanguages()) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "getSupportedLanguage: comparing: " + sl.getLocale().toString() + " ~ " + userLocale.toString());
+                MyLog.i(CLS_NAME, "getSupportedLanguage: comparing: " + sl.getLocale() + " ~ " + userLocale);
             }
 
             if (sl.getLocale().equals(userLocale)) {
@@ -387,7 +387,7 @@ public enum SupportedLanguage {
                 return arrayList.get(0).hasParent() ? arrayList.get(0).getParent().getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN) : ((SupportedLanguage) arrayList.get(0)).getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
             }
         } else if (DEBUG) {
-            MyLog.w(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: language naked" + locale.toString());
+            MyLog.w(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: language naked" + locale);
         }
         return ENGLISH_US.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
     }

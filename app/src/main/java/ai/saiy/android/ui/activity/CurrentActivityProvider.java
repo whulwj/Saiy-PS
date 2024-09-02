@@ -15,7 +15,7 @@ import dagger.hilt.android.scopes.ActivityRetainedScoped;
 import dagger.hilt.internal.GeneratedComponentManagerHolder;
 
 /**
- * <a href="https://blog.p-y.wtf/using-an-activity-from-a-hilt-viewmodel" />
+ * <a href="https://blog.p-y.wtf/using-an-activity-from-a-hilt-viewmodel"/>
  */
 @ActivityRetainedScoped
 public final class CurrentActivityProvider {

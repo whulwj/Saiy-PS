@@ -42,7 +42,7 @@ import ai.saiy.android.utils.SPH;
  * <p>
  * Created by benrandall76@gmail.com on 20/03/2016.
  *
- * @author emil http://stackoverflow.com/users/220710/emil
+ * @author emil <a href="http://stackoverflow.com/users/220710/emil">...</a>
  */
 public final class Network {
 

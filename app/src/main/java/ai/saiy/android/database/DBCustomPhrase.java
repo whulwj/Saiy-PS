@@ -90,7 +90,7 @@ public class DBCustomPhrase extends SQLiteOpenHelper {
      * @param serialised         the serialised class
      * @param isDuplicate        true if a command is being replaced
      * @param rowId              the row id of the command to be replaced
-     * @return true if the insertion was successful. False otherwise
+     * @return a {@link Pair}, which #first field will be true if the insertion was successful. False otherwise
      */
     public Pair<Boolean, Long> insertPopulatedRow(String keyphrase, String response, boolean isVoiceRecognition, String serialised, boolean isDuplicate, long rowId) {
         if (DEBUG) {

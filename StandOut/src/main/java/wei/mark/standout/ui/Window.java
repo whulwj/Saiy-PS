@@ -613,7 +613,7 @@ public class Window extends FrameLayout {
 		 * <p>
 		 * {@link #setSize(float, float)}, {@link #setSize(int, int)},
 		 * {@link #setPosition(int, int)}, {@link #setPosition(int, int)}.
-		 * 
+		 * <p>
 		 * The window will move, expand, or shrink around the anchor point.
 		 * 
 		 * <p>
@@ -644,7 +644,7 @@ public class Window extends FrameLayout {
 		 * window will expand and shrink around the top-left corner, unless
 		 * you've set a different anchor point with
 		 * {@link #setAnchorPoint(float, float)}.
-		 * 
+		 * <p>
 		 * Changes will not applied until you {@link #commit()}.
 		 * 
 		 * @param percentWidth
@@ -660,7 +660,7 @@ public class Window extends FrameLayout {
 		 * Set the size of this window in absolute pixels. The window will
 		 * expand and shrink around the top-left corner, unless you've set a
 		 * different anchor point with {@link #setAnchorPoint(float, float)}.
-		 * 
+		 * <p>
 		 * Changes will not applied until you {@link #commit()}.
 		 * 
 		 * @param width
@@ -675,7 +675,7 @@ public class Window extends FrameLayout {
 		 * Set the size of this window in absolute pixels. The window will
 		 * expand and shrink around the top-left corner, unless you've set a
 		 * different anchor point with {@link #setAnchorPoint(float, float)}.
-		 * 
+		 * <p>
 		 * Changes will not applied until you {@link #commit()}.
 		 * 
 		 * @param width
@@ -748,7 +748,7 @@ public class Window extends FrameLayout {
 		 * The window's top-left corner will be positioned at the given x and y,
 		 * unless you've set a different anchor point with
 		 * {@link #setAnchorPoint(float, float)}.
-		 * 
+		 * <p>
 		 * Changes will not applied until you {@link #commit()}.
 		 * 
 		 * @param percentWidth
@@ -765,7 +765,7 @@ public class Window extends FrameLayout {
 		 * top-left corner will be positioned at the given x and y, unless
 		 * you've set a different anchor point with
 		 * {@link #setAnchorPoint(float, float)}.
-		 * 
+		 * <p>
 		 * Changes will not applied until you {@link #commit()}.
 		 * 
 		 * @param x
@@ -781,7 +781,7 @@ public class Window extends FrameLayout {
 		 * top-left corner will be positioned at the given x and y, unless
 		 * you've set a different anchor point with
 		 * {@link #setAnchorPoint(float, float)}.
-		 * 
+		 * <p>
 		 * Changes will not applied until you {@link #commit()}.
 		 * 
 		 * @param x

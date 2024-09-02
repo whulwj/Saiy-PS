@@ -48,7 +48,7 @@ public class CommandWolframAlphaLocal {
     public String getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
                               @NonNull final SupportedLanguage sl) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());
+            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
 
         final ArrayList<String> nameData = new WolframAlpha(sl).sort(ctx, voiceData);

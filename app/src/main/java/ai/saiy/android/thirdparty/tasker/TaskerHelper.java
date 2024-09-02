@@ -376,7 +376,7 @@ public class TaskerHelper {
         try {
             final List<ResolveInfo> receivers = ctx.getPackageManager().queryBroadcastReceivers(
                     new TaskerIntent(""), 0);
-            return receivers != null && receivers.size() > 0;
+            return receivers != null && !receivers.isEmpty();
         } catch (final Exception e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "receiverExists Exception");
@@ -390,7 +390,7 @@ public class TaskerHelper {
     /**
      * Determines whether installing Android apks from unknown sources is allowed.
      *
-     * @param ctx
+     * @param ctx the application context
      * @return true can install from an unknown source
      */
     public static boolean isUnknownSourceInstallAllowed(@NonNull final Context ctx) {

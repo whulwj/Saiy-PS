@@ -40,7 +40,7 @@ public class FirebaseInstallationsHelper {
     public static long expiryTime;
 
     /**
-     * <a href="https://medium.com/@akkic2229/handling-firebase-cloud-messagings-expired-token-cleanup-90552e9d2656" />
+     * <a href="https://medium.com/@akkic2229/handling-firebase-cloud-messagings-expired-token-cleanup-90552e9d2656"/>
      * function to manually trigger a token refresh
      */
     public static void refreshFirebaseInstanceToken() {

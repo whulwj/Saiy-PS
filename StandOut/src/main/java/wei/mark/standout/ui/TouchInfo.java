@@ -29,6 +29,6 @@ public class TouchInfo {
 		return String
 				.format(Locale.US,
 						"WindowTouchInfo { firstX=%d, firstY=%d,lastX=%d, lastY=%d, firstWidth=%d, firstHeight=%d }",
-						firstX, firstY, lastX, lastY, firstWidth, firstHeight);
+						firstX, firstY, lastX, lastY, (int) firstWidth, (int) firstHeight);
 	}
 }

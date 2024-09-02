@@ -502,7 +502,7 @@ public class TTSDefaults {
         /**
          * Get all Google voices
          *
-         * @return a list of google voices
+         * @return an array of google voices
          */
         private static Google[] getEngines() {
             return Google.values();

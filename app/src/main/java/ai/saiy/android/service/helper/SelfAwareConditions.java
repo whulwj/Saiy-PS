@@ -460,7 +460,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
     /**
      * Check if the Text to Speech engine is currently in use. Try/catch due to misbehaving engines
      *
-     * @return true if the engine is speaking
+     * @return a {@link Pair}, which #first field will be true if the engine is speaking
      */
     public Pair<Boolean, Integer> isSpeaking(final SaiyTextToSpeech tts) {
         if (DEBUG) {

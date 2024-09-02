@@ -158,7 +158,7 @@ public class FetchIDOperation {
 
         if (response != null) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "response: " + response.toString());
+                MyLog.i(CLS_NAME, "response: " + response);
             }
 
             final Gson gson = new GsonBuilder().disableHtmlEscaping().create();

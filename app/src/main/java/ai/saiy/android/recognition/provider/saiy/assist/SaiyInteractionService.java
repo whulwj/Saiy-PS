@@ -17,10 +17,6 @@
 
 package ai.saiy.android.recognition.provider.saiy.assist;
 
-/**
- * Created by benrandall76@gmail.com on 22/08/2016.
- */
-
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
@@ -44,6 +40,9 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 
+/**
+ * Created by benrandall76@gmail.com on 22/08/2016.
+ */
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class SaiyInteractionService extends VoiceInteractionService {
 

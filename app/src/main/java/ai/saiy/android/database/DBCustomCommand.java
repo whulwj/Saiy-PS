@@ -196,7 +196,7 @@ public class DBCustomCommand extends SQLiteOpenHelper {
      * @param serialised  the serialised class
      * @param isDuplicate true if a command is being replaced
      * @param rowId       the row id of the command to be replaced
-     * @return true if the insertion was successful. False otherwise
+     * @return a {@link Pair}, which #first field will be if the insertion was successful. False otherwise
      */
     public Pair<Boolean, Long> insertPopulatedRow(@NonNull final String keyphrase, @NonNull final Regex regex,
                                                   @NonNull final String serialised, final boolean isDuplicate,

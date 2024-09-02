@@ -12,11 +12,6 @@ public class ContentObserverAdapter extends ContentObserver {
     }
 
     @Override
-    public boolean deliverSelfNotifications() {
-        return false;
-    }
-
-    @Override
     public void onChange(boolean selfChange) {
         super.onChange(selfChange);
     }

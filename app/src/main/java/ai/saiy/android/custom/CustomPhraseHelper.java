@@ -26,7 +26,7 @@ public class CustomPhraseHelper {
      * @param context      the application context
      * @param customPhrase to be set
      * @param rowId        the row id of the command to be replaced
-     * @return true if the insertion was successful
+     * @return a {@link Pair}, which #first field will be if the insertion was successful
      */
     public static Pair<Boolean, Long> setPhrase(Context context, CustomPhrase customPhrase, SupportedLanguage supportedLanguage, long rowId) {
         synchronized (lock) {

@@ -401,7 +401,7 @@ public class UtilsApplication {
 
             final List<ActivityManager.RunningTaskInfo> taskInfo = am.getRunningTasks(1);
 
-            if (taskInfo != null && taskInfo.size() > 0) {
+            if (taskInfo != null && !taskInfo.isEmpty()) {
 
                 final ActivityManager.RunningTaskInfo ti = taskInfo.get(0);
 

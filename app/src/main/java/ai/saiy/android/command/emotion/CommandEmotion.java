@@ -17,10 +17,6 @@
 
 package ai.saiy.android.command.emotion;
 
-/**
- * Created by benrandall76@gmail.com on 13/08/2016.
- */
-
 import android.content.Context;
 
 import androidx.annotation.NonNull;

@@ -161,7 +161,7 @@ public class UtilsFile {
 
     /**
      * Attempt to get a directory that does not require permission to read/write. This should be
-     * simple but @see https://code.google.com/p/android/issues/detail?id=81357
+     * simple but @see <a href="https://code.google.com/p/android/issues/detail?id=81357"/>
      *
      * @param ctx the application context
      * @return the directory or null if all efforts fail.

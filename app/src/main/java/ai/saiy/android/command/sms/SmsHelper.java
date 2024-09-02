@@ -61,7 +61,7 @@ public class SmsHelper {
         if (exclamation_mark == null) {
             initStrings(context);
         }
-        String replaceAll = str.replaceAll("\\b " + exclamation_mark + "\\b", "\\!").replaceAll("\\b " + exclamation_point + "\\b", "\\!").replaceAll("\\b " + question_mark + "\\b", "\\?").replaceAll("\\b" + kiss_kiss_kiss + "\\b", "xxx").replaceAll("\\b" + kiss_kiss + "\\b", "xx");
+        String replaceAll = str.replaceAll("\\b " + exclamation_mark + "\\b", "!").replaceAll("\\b " + exclamation_point + "\\b", "!").replaceAll("\\b " + question_mark + "\\b", "?").replaceAll("\\b" + kiss_kiss_kiss + "\\b", "xxx").replaceAll("\\b" + kiss_kiss + "\\b", "xx");
         return replaceAll.endsWith(kiss) ? ai.saiy.android.utils.UtilsString.replaceLast(replaceAll, kiss, "x") : replaceAll;
     }
 

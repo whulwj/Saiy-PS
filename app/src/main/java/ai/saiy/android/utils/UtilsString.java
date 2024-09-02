@@ -169,7 +169,7 @@ public class UtilsString {
             return false;
         }
         try {
-            "testsdVVasdasdas".matches(str);
+            "testsdVVasdasdas".matches(str); //todo
             return true;
         } catch (PatternSyntaxException e) {
             if (DEBUG) {

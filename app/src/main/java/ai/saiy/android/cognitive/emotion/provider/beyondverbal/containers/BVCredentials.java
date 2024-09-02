@@ -95,7 +95,7 @@ public class BVCredentials {
     /**
      * Method to get the most recent access token stored in the user {@link SPH )
      * shared preferences.
-     *
+     * <p>
      * @param ctx the application context
      * @return the most recent {@link BVCredentials} object
      */

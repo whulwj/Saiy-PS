@@ -48,8 +48,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 /**
- * Class adapted from https://gist.github.com/zokipirlo/82336d89249e05bba5aa originally taken from
- * https://android.googlesource.com/platform/development/+/master/samples/Support7Demos/src/com/example/android/supportv7/widget/decorator/DividerItemDecoration.java
+ * Class adapted from <a href="https://gist.github.com/zokipirlo/82336d89249e05bba5aa"/> originally taken from
+ * <a href=https://android.googlesource.com/platform/development/+/master/samples/Support7Demos/src/com/example/android/supportv7/widget/decorator/DividerItemDecoration.java/>
  *
  * @author @zokipirlo
  *         Created by benrandall76@gmail.com on 25/07/2016.

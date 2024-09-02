@@ -60,7 +60,7 @@ public class CommandSongRecognition {
     public @NonNull Outcome getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
                                @NonNull final SupportedLanguage sl) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());
+            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
 
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);

@@ -266,7 +266,7 @@ public class Translate_en {
             } else if (utterance.endsWith(to + " " + language)) {
                 utterance = utterance.replace(to + " " + language, "").trim();
             } else {
-                utterance = utterance.replaceFirst("(?s)(.*)" + language, "$1" + "");
+                utterance = utterance.replaceFirst("(?s)(.*)" + language, "$1");
             }
 
             if (DEBUG) {

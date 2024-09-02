@@ -1767,7 +1767,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 // If sign in fails, try it again later.
                 if (signInCount.incrementAndGet() < 4) {
                     try {
-                        Thread.sleep(signInCount.get() * 5000);
+                        Thread.sleep(signInCount.get() * 5000L);
                     } catch (InterruptedException e) {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "signInAnonymously InterruptedException");

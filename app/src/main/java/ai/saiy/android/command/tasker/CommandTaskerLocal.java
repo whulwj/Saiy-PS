@@ -48,13 +48,13 @@ public class CommandTaskerLocal {
     public ArrayList<String> getResponse(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
                                          @NonNull final SupportedLanguage sl) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());
+            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
 
         final ArrayList<String> nameData = new Tasker(sl).sort(ctx, voiceData);
         if (UtilsList.notNaked(nameData)) {
             if (DEBUG) {
-                MyLog.d(CLS_NAME, "nameData: " + nameData.size() + " : " + nameData.toString());
+                MyLog.d(CLS_NAME, "nameData: " + nameData.size() + " : " + nameData);
             }
             return nameData;
         } else {

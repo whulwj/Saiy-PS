@@ -104,7 +104,7 @@ public class CustomCommandHelper {
     public boolean isCustomCommand(@NonNull final Context ctx, @NonNull final ArrayList<String> voiceData,
                                    @NonNull final SupportedLanguage sl, @NonNull final ArrayList<CustomCommandContainer> cccArray) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData.toString());
+            MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
 
         final long then = System.nanoTime();
@@ -384,7 +384,7 @@ public class CustomCommandHelper {
      * an array of {@link CustomCommandContainer}
      *
      * @param ctx the application context
-     * @return an array of {@link CustomCommandContainer}
+     * @return a list of {@link CustomCommandContainer}
      */
     public ArrayList<CustomCommandContainer> getCustomCommands(@NonNull final Context ctx) {
 

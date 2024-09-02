@@ -101,9 +101,9 @@ public class FragmentApplicationsHelper {
 
         containerUI = new ContainerUI();
         containerUI.setTitle(getString(R.string.menu_tasker));
-        boolean b2 = TaskerIntent.taskerInstalled(getApplicationContext());
-        containerUI.setSubtitle(b2 ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
-        containerUI.setIconExtra(b2 ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
+        final boolean isTaskerInstalled = TaskerIntent.taskerInstalled(getApplicationContext());
+        containerUI.setSubtitle(isTaskerInstalled ? getString(R.string.title_installed) : getString(R.string.menu_tap_install));
+        containerUI.setIconExtra(isTaskerInstalled ? FragmentApplicationsHelper.CHECK : FragmentHome.CHEVRON);
         containerUI.setIconMain(R.drawable.ic_tasker);
         arrayList.add(containerUI);
 

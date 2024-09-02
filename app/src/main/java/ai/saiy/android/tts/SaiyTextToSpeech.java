@@ -1223,7 +1223,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
 
         if (voicePair.first != null) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "setDefaultVoice: Setting Voice: " + voicePair.first.toString());
+                MyLog.i(CLS_NAME, "setDefaultVoice: Setting Voice: " + voicePair.first);
             }
 
             final SaiyVoice saiyVoice = new SaiyVoice(voicePair.first);
@@ -1287,7 +1287,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                         });
                     } else {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice: " + userDefaultSaiyVoice.toString());
+                            MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice: " + userDefaultSaiyVoice);
                         }
 
                         boolean exists = false;
@@ -1329,7 +1329,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 return setVoiceDeprecated(language, region, conditions);
             } else {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice: " + boundSaiyVoice.toString());
+                    MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice: " + boundSaiyVoice);
                     MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice matches default: " + boundSaiyVoice.equals(userDefaultSaiyVoice));
                     MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice Locale: " + boundSaiyVoice.getLocale().toString());
                     MyLog.i(CLS_NAME, "setVoice21: Required Locale: " + language + " ~ " + region);
@@ -1532,7 +1532,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
 
         if (voicePair.first != null) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "resolveVoice: Setting Voice: " + voicePair.first.toString());
+                MyLog.i(CLS_NAME, "resolveVoice: Setting Voice: " + voicePair.first);
                 MyLog.i(CLS_NAME, "resolveVoice: Setting Voice loc: " + voicePair.first.getLocale());
                 try {
                     MyLog.i(CLS_NAME, "resolveVoice: Setting Voice: isLanguageAvailable: "
@@ -1890,7 +1890,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                         final SaiyVoice userDefaultSaiyVoice = SaiyTextToSpeech.this.getUserDefaultSaiyVoice();
 
                         if (userDefaultSaiyVoice != null) {
-                            MyLog.v(CLS_NAME, "userDefaultSaiyVoice: " + userDefaultSaiyVoice.toString());
+                            MyLog.v(CLS_NAME, "userDefaultSaiyVoice: " + userDefaultSaiyVoice);
                         }
 
                     } catch (final NullPointerException e) {
@@ -2190,7 +2190,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                         for (final SaiyVoice v : voices) {
                             if (UtilsLocale.localesMatch(v.getLocale(), requiredLocale)) {
                                 if (DEBUG) {
-                                    MyLog.v(CLS_NAME, "v : " + v.toString());
+                                    MyLog.v(CLS_NAME, "v : " + v);
                                 }
                                 voiceArray.add(v);
                             }
@@ -2268,7 +2268,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                                             && !v.getFeatures().contains(TTSDefaults.EMBEDDED_TTS_FIELD))
                                             || v.getFeatures().contains(Engine.KEY_FEATURE_NOT_INSTALLED)) {
                                         if (DEBUG) {
-                                            MyLog.v(CLS_NAME, "Removing networked voice: " + v.toString());
+                                            MyLog.v(CLS_NAME, "Removing networked voice: " + v);
                                         }
                                         itr.remove();
                                     }

@@ -93,7 +93,7 @@ public class DebugAction {
             PublicKey key;
             String mhString;
             int modulusHash;
-            if (signatures != null && signatures.length > 0) {
+            if (signatures != null) {
 
                 for (final Signature signature : signatures) {
 

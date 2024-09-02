@@ -36,10 +36,6 @@
 package ai.saiy.android.algorithms.distance;
 
 /**
- * Created by benrandall76@gmail.com on 21/04/2016.
- */
-
-/**
  * Interface for <a href="http://en.wikipedia.org/wiki/Edit_distance">Edit Distances</a>.
  * <p/>
  * A edit distance measures the similarity between two character sequences. Closer strings
@@ -52,6 +48,7 @@ package ai.saiy.android.algorithms.distance;
  * </p>
  *
  * @param <R> The type of similarity score unit used by this EditDistance.
+ * Created by benrandall76@gmail.com on 21/04/2016.
  */
 public interface EditDistance<R> {
 

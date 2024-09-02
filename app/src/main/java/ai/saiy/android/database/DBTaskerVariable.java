@@ -84,7 +84,7 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
      * @param value       the value to be used
      * @param isDuplicate true if a command is being replaced
      * @param rowId       the row id of the command to be replaced
-     * @return true if the insertion was successful. False otherwise
+     * @return a {@link Pair}, which #first field will be true if the insertion was successful. False otherwise
      */
     public Pair<Boolean, Long> insertPopulatedRow(String name, String value, boolean isDuplicate, long rowId) {
         if (DEBUG) {

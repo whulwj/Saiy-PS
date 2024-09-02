@@ -86,7 +86,7 @@ public enum Algorithm {
      *
      * @param ctx the application context
      * @param sl  the {@link SupportedLanguage}
-     * @return a list of {@link Algorithm}
+     * @return an array of {@link Algorithm}
      */
     public static Algorithm[] getAlgorithms(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
 

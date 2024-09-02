@@ -393,7 +393,7 @@ public class SelfAware extends Service {
     /**
      * Check if the tts engine is currently in use
      *
-     * @return true if the engine is speaking
+     * @return a {@link Pair}, which #first field will be true if the engine is speaking
      */
     protected Pair<Boolean, Integer> isSpeaking() {
         return conditions.isSpeaking(tts);

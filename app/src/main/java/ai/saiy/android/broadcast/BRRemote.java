@@ -93,7 +93,7 @@ public class BRRemote extends BroadcastReceiver {
             return;
         }
 
-        if (!intent.getAction().equals(SaiyKeyphrase.SAIY_REQUEST_RECEIVER)) {
+        if (!SaiyKeyphrase.SAIY_REQUEST_RECEIVER.equals(intent.getAction())) {
             Log.e("Saiy Remote Request", "Incorrect ACTION: rejecting");
             return;
         }

@@ -27,8 +27,7 @@ import androidx.annotation.NonNull;
  */
 
 public class Motion implements Parcelable {
-
-    protected transient static final int CONFIDENCE_THRESHOLD = 75;
+    protected static final int CONFIDENCE_THRESHOLD = 75;
 
     private final int type;
     private final int confidence;

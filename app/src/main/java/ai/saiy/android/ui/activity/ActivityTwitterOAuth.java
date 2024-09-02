@@ -20,7 +20,7 @@ import ai.saiy.android.utils.SPH;
 import twitter4j.AccessToken;
 
 /**
- * <a href="https://twitter4j.org/code-examples" />
+ * <a href="https://twitter4j.org/code-examples"/>
  */
 public class ActivityTwitterOAuth extends AppCompatActivity implements TwitterOAuthView.Listener {
     private TwitterOAuthView twitterOAuthView;

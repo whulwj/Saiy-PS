@@ -66,7 +66,7 @@ import ai.saiy.android.utils.UtilsString;
  * <p>
  * Created by benrandall76@gmail.com on 12/02/2016.
  * <p>
- * Adapted from posts originating from https://mikepultz.com/2013/07/google-speech-api-full-duplex-php-version
+ * Adapted from posts originating from <a href="https://mikepultz.com/2013/07/google-speech-api-full-duplex-php-version"/>
  */
 public class RecognitionGoogleChromium implements PauseListener {
 

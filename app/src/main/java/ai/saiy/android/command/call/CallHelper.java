@@ -40,7 +40,7 @@ public class CallHelper {
             return true;
         }
         try {
-            telephonyManager.getClass().getMethod("answerRingingCall", new Class[0]).invoke(telephonyManager, new Object[0]);
+            telephonyManager.getClass().getMethod("answerRingingCall", new Class[0]).invoke(telephonyManager);
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "answerCall1: success");
             }
@@ -102,7 +102,7 @@ public class CallHelper {
 
     private static boolean rejectCall1(TelephonyManager telephonyManager) {
         try {
-            Method declaredMethod = Class.forName(telephonyManager.getClass().getName()).getDeclaredMethod("getITelephony", new Class[0]);
+            final Method declaredMethod = Class.forName(telephonyManager.getClass().getName()).getDeclaredMethod("getITelephony");
             declaredMethod.setAccessible(true);
             ((ITelephony) declaredMethod.invoke(telephonyManager, new Object[0])).endCall();
             if (DEBUG) {
@@ -170,7 +170,7 @@ public class CallHelper {
 
     private static boolean answerCall2(Context context, TelephonyManager telephonyManager) {
         try {
-            final Method declaredMethod = Class.forName(telephonyManager.getClass().getName()).getDeclaredMethod("getITelephony", new Class[0]);
+            final Method declaredMethod = Class.forName(telephonyManager.getClass().getName()).getDeclaredMethod("getITelephony");
             declaredMethod.setAccessible(true);
             final ITelephony iTelephony = (ITelephony) declaredMethod.invoke(telephonyManager, new Object[0]);
             iTelephony.silenceRinger();
