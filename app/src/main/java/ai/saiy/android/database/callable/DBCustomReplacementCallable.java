@@ -5,9 +5,10 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import ai.saiy.android.custom.CustomReplacement;
 import ai.saiy.android.custom.CustomReplacementHelper;
 
-public class DBCustomReplacementCallable implements Callable<ArrayList<Object>> {
+public class DBCustomReplacementCallable implements Callable<ArrayList<CustomReplacement>> {
     private final Context mContext;
 
     public DBCustomReplacementCallable(Context context) {
@@ -15,7 +16,7 @@ public class DBCustomReplacementCallable implements Callable<ArrayList<Object>> 
     }
 
     @Override
-    public ArrayList<Object> call() throws Exception {
-        return (ArrayList) new CustomReplacementHelper().getCustomReplacements(mContext);
+    public ArrayList<CustomReplacement> call() {
+        return new CustomReplacementHelper().getCustomReplacements(mContext);
     }
 }

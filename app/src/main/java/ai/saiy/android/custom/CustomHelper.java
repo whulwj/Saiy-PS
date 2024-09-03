@@ -22,20 +22,18 @@ import android.content.Intent;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.UtilsApplication;
@@ -57,8 +55,6 @@ public class CustomHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CustomHelper.class.getSimpleName();
 
-    private static final long THREADS_TIMEOUT = 1000L;
-
     public static final int CHEVRON_RESOURCE_ID = R.drawable.chevron;
     public static final int CUSTOM_NICKNAME_RESOURCE_ID = R.drawable.ic_account_switch;
     public static final int CUSTOM_PHRASE_RESOURCE_ID = R.drawable.ic_format_quote;
@@ -70,24 +66,21 @@ public class CustomHelper {
     public CustomHelperHolder getCustomisationHolder(@NonNull final Context ctx) {
         synchronized (lock) {
             final long then = System.nanoTime();
-            final List<Callable<ArrayList<Object>>> callableList = new ArrayList<>();
-            callableList.add(new DBCustomNicknameCallable(ctx));
-            callableList.add(new DBCustomPhraseCallable(ctx));
-            callableList.add(new DBCustomCommandCallable(ctx));
-            callableList.add(new DBCustomReplacementCallable(ctx));
+            ArrayList<CustomNickname> customNicknameArray = null;
+            ArrayList<CustomPhrase> customPhraseArray = null;
+            ArrayList<CustomCommandContainer> customCommandContainerArray = null;
+            ArrayList<CustomReplacement> customReplacementArray = null;
 
             final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-            final ArrayList<Object> objectArray = new ArrayList<>();
-
             try {
-
-                final List<Future<ArrayList<Object>>> futures = executorService.invokeAll(callableList,
-                        THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
-
-                for (final Future<ArrayList<Object>> future : futures) {
-                    objectArray.add(future.get());
-                }
-
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = executorService.submit(new DBCustomNicknameCallable(ctx));
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = executorService.submit(new DBCustomPhraseCallable(ctx));
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = executorService.submit(new DBCustomCommandCallable(ctx));
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = executorService.submit(new DBCustomReplacementCallable(ctx));
+                customNicknameArray = customNicknameFuture.get();
+                customPhraseArray = customPhraseFuture.get();
+                customCommandContainerArray = customCommandContainerFuture.get();
+                customReplacementArray = customReplacementFuture.get();
             } catch (final ExecutionException e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "future: ExecutionException");
@@ -111,13 +104,11 @@ public class CustomHelper {
                 MyLog.getElapsed(CLS_NAME, "callables", then);
             }
 
-            final CustomHelperHolder holder;
-
-            if (UtilsList.notNaked(objectArray)) {
-                holder = completeCustomisationHolder(ctx, objectArray);
-            } else {
-                holder = new CustomHelperHolder();
-            }
+            final CustomHelperHolder holder = new CustomHelperHolder();;
+            setCustomNickname(holder, ctx, customNicknameArray);
+            setCustomPhrase(holder, ctx, customPhraseArray);
+            setCustomCommandContainer(holder, ctx, customCommandContainerArray);
+            setCustomReplacementArray(holder, ctx, customReplacementArray);
 
             if (DEBUG) {
                 MyLog.getElapsed(CLS_NAME, then);
@@ -127,71 +118,65 @@ public class CustomHelper {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    private CustomHelperHolder completeCustomisationHolder(@NonNull final Context ctx,
-                                                           @NonNull final ArrayList<Object> objectArray) {
-        final CustomHelperHolder holder = new CustomHelperHolder();
-
-        boolean hasPhrase = false, hasCustomisation = false, hasReplacement = false, hasNickname = false;
-        Object object;
-        ArrayList<Object> tempArray;
-        final int size = objectArray.size();
-
-        for (int i = 0; i < size; i++) {
-            tempArray = (ArrayList<Object>) objectArray.get(i);
-            if (UtilsList.notNaked(tempArray)) {
-                object = tempArray.get(0);
-
-                if (object instanceof CustomPhrase) {
-                    holder.setCustomPhraseArray((ArrayList) tempArray);
-                    hasPhrase = true;
-                } else if (object instanceof CustomCommandContainer) {
-                    holder.setCustomCommandArray((ArrayList) tempArray);
-                    hasCustomisation = true;
-                } else if (object instanceof CustomReplacement) {
-                    holder.setCustomReplacementArray((ArrayList) tempArray);
-                    hasReplacement = true;
-                } else if (object instanceof CustomNickname) {
-                    holder.setCustomNicknameArray((ArrayList) tempArray);
-                    hasNickname = true;
-                } else {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "instanceof default");
-                    }
-                }
-            }
-
-            SPH.setHasPhrase(ctx, hasPhrase);
-            SPH.setHasCustomisation(ctx, hasCustomisation);
-            SPH.setHasReplacement(ctx, hasReplacement);
-            SPH.setHasNickname(ctx, hasNickname);
+    private void setCustomPhrase(@NonNull CustomHelperHolder holder, @NonNull final Context ctx,
+                                 @Nullable final ArrayList<CustomPhrase> objectArray) {
+        boolean hasPhrase = false;
+        if (objectArray != null) {
+            holder.setCustomPhraseArray(objectArray);
+            hasPhrase = true;
         }
+        SPH.setHasPhrase(ctx, hasPhrase);
+    }
 
-        return holder;
+    private void setCustomCommandContainer(@NonNull CustomHelperHolder holder, @NonNull final Context ctx,
+                                           @Nullable final ArrayList<CustomCommandContainer> objectArray) {
+        boolean hasCustomisation = false;
+        if (objectArray != null) {
+            holder.setCustomCommandArray(objectArray);
+            hasCustomisation = true;
+        }
+        SPH.setHasCustomisation(ctx, hasCustomisation);
+    }
+
+    private void setCustomReplacementArray(@NonNull CustomHelperHolder holder, @NonNull final Context ctx,
+                                           @Nullable final ArrayList<CustomReplacement> objectArray) {
+        boolean hasReplacement = false;
+        if (objectArray != null) {
+            holder.setCustomReplacementArray(objectArray);
+            hasReplacement = true;
+        }
+        SPH.setHasReplacement(ctx, hasReplacement);
+    }
+
+    private void setCustomNickname(@NonNull CustomHelperHolder holder, @NonNull final Context ctx,
+                                   @Nullable final ArrayList<CustomNickname> objectArray) {
+        boolean hasNickname = false;
+        if (objectArray != null) {
+            holder.setCustomNicknameArray(objectArray);
+            hasNickname = true;
+        }
+        SPH.setHasNickname(ctx, hasNickname);
     }
 
     public ArrayList<ContainerCustomisation> getCustomisations(@NonNull final Context ctx) {
         synchronized (lock) {
             final long then = System.nanoTime();
-            final List<Callable<ArrayList<Object>>> callableList = new ArrayList<>();
             final ArrayList<ContainerCustomisation> containerCustomisationArray = new ArrayList<>();
-            callableList.add(new DBCustomNicknameCallable(ctx));
-            callableList.add(new DBCustomPhraseCallable(ctx));
-            callableList.add(new DBCustomCommandCallable(ctx));
-            callableList.add(new DBCustomReplacementCallable(ctx));
+            final ArrayList<CustomNickname> customNicknameArray = new ArrayList<>();
+            final ArrayList<CustomPhrase> customPhraseArray = new ArrayList<>();
+            final ArrayList<CustomCommandContainer> customCommandContainerArray = new ArrayList<>();
+            final ArrayList<CustomReplacement> customReplacementArray = new ArrayList<>();
 
             final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-            final ArrayList<Object> objectArray = new ArrayList<>();
-
             try {
-
-                final List<Future<ArrayList<Object>>> futures = executorService.invokeAll(callableList,
-                        THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
-
-                for (final Future<ArrayList<Object>> future : futures) {
-                    objectArray.addAll(future.get());
-                }
-
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = executorService.submit(new DBCustomNicknameCallable(ctx));
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = executorService.submit(new DBCustomPhraseCallable(ctx));
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = executorService.submit(new DBCustomCommandCallable(ctx));
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = executorService.submit(new DBCustomReplacementCallable(ctx));
+                customNicknameArray.addAll(customNicknameFuture.get());
+                customPhraseArray.addAll(customPhraseFuture.get());
+                customCommandContainerArray.addAll(customCommandContainerFuture.get());
+                customReplacementArray.addAll(customReplacementFuture.get());
             } catch (final ExecutionException e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "future: ExecutionException");
@@ -215,105 +200,89 @@ public class CustomHelper {
                 MyLog.getElapsed(CLS_NAME, "callables", then);
             }
 
-            if (UtilsList.notNaked(objectArray)) {
+            for (CustomNickname customNickname : customNicknameArray) {
+                containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_NICKNAME, customNickname.getSerialised(), customNickname.getNickname(), customNickname.getContactName(), customNickname.getRowId(), CUSTOM_NICKNAME_RESOURCE_ID, CHEVRON_RESOURCE_ID));
+            }
+            for (CustomPhrase customPhrase : customPhraseArray) {
+                containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_PHRASE, customPhrase.getSerialised(), customPhrase.getKeyphrase(), customPhrase.getResponse(), customPhrase.getRowId(), CUSTOM_PHRASE_RESOURCE_ID, CHEVRON_RESOURCE_ID));
+            }
+            if (UtilsList.notNaked(customCommandContainerArray)) {
                 final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
-                Object object;
                 ContainerCustomisation containerCustomisation;
                 CustomCommandContainer customCommandContainer;
-                CustomNickname customNickname;
-                CustomPhrase customPhrase;
                 CustomCommand customCommand;
-                CustomReplacement customReplacement;
                 String serialised;
                 String extra = null;
                 String label;
                 Intent remoteIntent = null;
 
-                final int size = objectArray.size();
+                final int size = customCommandContainerArray.size();
 
                 for (int i = 0; i < size; i++) {
-                    object = objectArray.get(i);
+                    customCommandContainer = customCommandContainerArray.get(i);
 
-                    if (object instanceof CustomNickname) {
-                        customNickname = (CustomNickname) object;
-                        containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_NICKNAME, customNickname.getSerialised(), customNickname.getNickname(), customNickname.getContactName(), customNickname.getRowId(), CUSTOM_NICKNAME_RESOURCE_ID, CHEVRON_RESOURCE_ID));
-                    } else if (object instanceof CustomPhrase) {
-                        customPhrase = (CustomPhrase) object;
-                        containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_PHRASE, customPhrase.getSerialised(), customPhrase.getKeyphrase(), customPhrase.getResponse(), customPhrase.getRowId(), CUSTOM_PHRASE_RESOURCE_ID, CHEVRON_RESOURCE_ID));
-                    } else if (object instanceof CustomCommandContainer) {
+                    serialised = customCommandContainer.getSerialised();
+                    customCommand = gson.fromJson(serialised, CustomCommand.class);
 
-                        customCommandContainer = (CustomCommandContainer) object;
+                    if (customCommand.getCustomAction() == CCC.CUSTOM_INTENT_SERVICE) {
 
-                        serialised = customCommandContainer.getSerialised();
-                        customCommand = gson.fromJson(serialised, CustomCommand.class);
-
-                        if (customCommand.getCustomAction() == CCC.CUSTOM_INTENT_SERVICE) {
-
-                            try {
-                                remoteIntent = Intent.parseUri(customCommand.getIntent(), 0);
-                            } catch (final URISyntaxException e) {
-                                if (DEBUG) {
-                                    MyLog.w(CLS_NAME, "remoteIntent.parseUri: URISyntaxException");
-                                    e.printStackTrace();
-                                }
-                            } catch (final NullPointerException e) {
-                                if (DEBUG) {
-                                    MyLog.w(CLS_NAME, "remoteIntent.parseUri: NullPointerException");
-                                    e.printStackTrace();
-                                }
+                        try {
+                            remoteIntent = Intent.parseUri(customCommand.getIntent(), 0);
+                        } catch (final URISyntaxException e) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "remoteIntent.parseUri: URISyntaxException");
+                                e.printStackTrace();
                             }
+                        } catch (final NullPointerException e) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "remoteIntent.parseUri: NullPointerException");
+                                e.printStackTrace();
+                            }
+                        }
 
-                            if (remoteIntent != null) {
+                        if (remoteIntent != null) {
 
-                                final Pair<Boolean, String> pair = UtilsApplication.getAppNameFromPackage(ctx,
-                                        remoteIntent.getPackage());
+                            final Pair<Boolean, String> pair = UtilsApplication.getAppNameFromPackage(ctx,
+                                    remoteIntent.getPackage());
 
-                                if (pair.first) {
-                                    extra = pair.second;
-                                } else {
-                                    extra = remoteIntent.getPackage();
-                                }
+                            if (pair.first) {
+                                extra = pair.second;
                             } else {
-                                if (DEBUG) {
-                                    MyLog.w(CLS_NAME, "remoteIntent null");
-                                }
-                                extra = ctx.getString(R.string.an_unknown_application);
+                                extra = remoteIntent.getPackage();
                             }
-
-                            label = CCC.getReadableName(ctx, customCommand.getCustomAction(), extra);
-
                         } else {
-                            label = CCC.getReadableName(ctx, customCommand.getCustomAction(), extra);
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "remoteIntent null");
+                            }
+                            extra = ctx.getString(R.string.an_unknown_application);
                         }
 
-                        containerCustomisation = new ContainerCustomisation(Custom.CUSTOM_COMMAND,
-                                serialised,
-                                customCommandContainer.getKeyphrase(),
-                                label,
-                                customCommandContainer.getRowId(),
-                                CUSTOM_COMMAND_RESOURCE_ID, CHEVRON_RESOURCE_ID);
+                        label = CCC.getReadableName(ctx, customCommand.getCustomAction(), extra);
 
-                        containerCustomisationArray.add(containerCustomisation);
-
-                    } else if (object instanceof CustomReplacement) {
-                        customReplacement = (CustomReplacement) object;
-                        containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_REPLACEMENT, customReplacement.getSerialised(), customReplacement.getKeyphrase(), customReplacement.getReplacement(), customReplacement.getRowId(), CUSTOM_REPLACEMENT_RESOURCE_ID, CHEVRON_RESOURCE_ID));
                     } else {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "instanceof default");
-                        }
+                        label = CCC.getReadableName(ctx, customCommand.getCustomAction(), extra);
                     }
+
+                    containerCustomisation = new ContainerCustomisation(Custom.CUSTOM_COMMAND,
+                            serialised,
+                            customCommandContainer.getKeyphrase(),
+                            label,
+                            customCommandContainer.getRowId(),
+                            CUSTOM_COMMAND_RESOURCE_ID, CHEVRON_RESOURCE_ID);
+
+                    containerCustomisationArray.add(containerCustomisation);
                 }
             }
-
+            for (CustomReplacement customReplacement : customReplacementArray) {
+                containerCustomisationArray.add(new ContainerCustomisation(Custom.CUSTOM_REPLACEMENT, customReplacement.getSerialised(), customReplacement.getKeyphrase(), customReplacement.getReplacement(), customReplacement.getRowId(), CUSTOM_REPLACEMENT_RESOURCE_ID, CHEVRON_RESOURCE_ID));
+            }
 
             if (DEBUG) {
                 MyLog.getElapsed(CLS_NAME, then);
             }
 
             return containerCustomisationArray;
-
         }
     }
 }

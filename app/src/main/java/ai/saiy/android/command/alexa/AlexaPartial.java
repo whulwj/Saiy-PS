@@ -44,7 +44,7 @@ public class AlexaPartial implements Callable<Pair<Boolean, Integer>> {
     }
 
     @Override
-    public Pair<Boolean, Integer> call() throws Exception {
+    public Pair<Boolean, Integer> call() {
         return detectPartial();
     }
 }

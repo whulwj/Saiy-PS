@@ -39,7 +39,7 @@ public class ParkedVehicle implements Callable<ArrayList<Pair<CC, Float>>> {
     }
 
     @Override
-    public ArrayList<Pair<CC, Float>> call() throws Exception {
+    public ArrayList<Pair<CC, Float>> call() {
         return detectCallable();
     }
 }

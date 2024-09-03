@@ -5,9 +5,10 @@ import android.content.Context;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import ai.saiy.android.custom.CustomNickname;
 import ai.saiy.android.custom.CustomNicknameHelper;
 
-public class DBCustomNicknameCallable implements Callable<ArrayList<Object>> {
+public class DBCustomNicknameCallable implements Callable<ArrayList<CustomNickname>> {
 
     private final Context mContext;
 
@@ -16,7 +17,7 @@ public class DBCustomNicknameCallable implements Callable<ArrayList<Object>> {
     }
 
     @Override
-    public ArrayList<Object> call() throws Exception {
-        return (ArrayList) new CustomNicknameHelper().getCustomNicknames(mContext);
+    public ArrayList<CustomNickname> call() {
+        return new CustomNicknameHelper().getCustomNicknames(mContext);
     }
 }

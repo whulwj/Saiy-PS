@@ -81,7 +81,7 @@ public class ResolveAmazon {
         return null;
     }
 
-    public DirectiveList parse() throws IOException, JSONException {
+    public DirectiveList parse() throws JSONException {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "parse");
         }

@@ -130,7 +130,7 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
 
             final GoogleCredentials googleCredentials = new GoogleCredentials(accessToken) {
                 @Override
-                public AccessToken refreshAccessToken() throws IOException {
+                public AccessToken refreshAccessToken() {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "refreshAccessToken");
                     }

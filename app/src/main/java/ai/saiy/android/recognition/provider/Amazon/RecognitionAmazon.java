@@ -63,7 +63,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         }
 
         @Override
-        public void writeTo(@NonNull BufferedSink sink) throws IOException {
+        public void writeTo(@NonNull BufferedSink sink) {
             try {
                 int bufferSize = saiyRecorder.getBufferSize();
                 if (DEBUG) {

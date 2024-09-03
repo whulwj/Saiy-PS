@@ -13,13 +13,14 @@ import androidx.annotation.NonNull;
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
+import ai.saiy.android.custom.CustomCommandContainer;
 import ai.saiy.android.custom.CustomCommandHelper;
 
 /**
  * Created by benrandall76@gmail.com on 27/01/2017.
  */
 
-public class DBCustomCommandCallable implements Callable<ArrayList<Object>> {
+public class DBCustomCommandCallable implements Callable<ArrayList<CustomCommandContainer>> {
 
     private final Context mContext;
 
@@ -27,9 +28,8 @@ public class DBCustomCommandCallable implements Callable<ArrayList<Object>> {
         this.mContext = mContext;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
-    public ArrayList<Object> call() throws Exception {
-        return (ArrayList) new CustomCommandHelper().getCustomCommands(mContext);
+    public ArrayList<CustomCommandContainer> call() {
+        return new CustomCommandHelper().getCustomCommands(mContext);
     }
 }
