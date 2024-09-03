@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
@@ -196,7 +197,7 @@ public class SongRecognitionChooser implements Parcelable {
 
                 if (!UtilsString.notNaked(applicationName)) {
                     src.setApplicationName(applicationName);
-                    packageName = list.get(i).activityInfo.packageName;
+                    packageName = UtilsApplication.getPackageName(list.get(i));
 
                     if (UtilsString.notNaked(packageName)) {
                         src.setPackageName(packageName);

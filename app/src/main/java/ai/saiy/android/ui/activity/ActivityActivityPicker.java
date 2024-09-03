@@ -40,7 +40,7 @@ public class ActivityActivityPicker extends AppCompatActivity implements UserFir
         if (DEBUG) {
             MyLog.i(CLS_NAME, "setResult");
         }
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         if (applicationActivityBasic == null) {
             resultCode = Activity.RESULT_CANCELED;
         } else {

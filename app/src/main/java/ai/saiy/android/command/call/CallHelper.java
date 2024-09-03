@@ -15,6 +15,8 @@ import android.telecom.TelecomManager;
 import android.telephony.TelephonyManager;
 import android.view.KeyEvent;
 
+import androidx.core.content.PermissionChecker;
+
 import com.android.internal.telephony.ITelephony;
 
 import java.io.IOException;
@@ -36,11 +38,16 @@ public class CallHelper {
 
     private static boolean answerCall1(Context context, TelephonyManager telephonyManager) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            if (PermissionChecker.checkSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) != PermissionChecker.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                return answerCall2(context, telephonyManager);
+            }
             ((TelecomManager) context.getSystemService(Context.TELECOM_SERVICE)).acceptRingingCall();
             return true;
         }
         try {
-            telephonyManager.getClass().getMethod("answerRingingCall", new Class[0]).invoke(telephonyManager);
+            telephonyManager.getClass().getMethod("answerRingingCall").invoke(telephonyManager);
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "answerCall1: success");
             }
@@ -390,7 +397,7 @@ public class CallHelper {
                 if (needBroadcast) {
                     broadcastHeadsetConnected(context, false);
                 }
-                return answerCall4(context);
+                return answerCall4();
             }
         } catch (Throwable th) {
             if (needBroadcast) {
@@ -400,7 +407,7 @@ public class CallHelper {
         }
     }
 
-    private static boolean answerCall4(Context context) {
+    private static boolean answerCall4() {
         try {
             Runtime.getRuntime().exec("input keyevent " + KeyEvent.KEYCODE_HEADSETHOOK);
             if (DEBUG) {
@@ -412,7 +419,7 @@ public class CallHelper {
                 MyLog.w(CLS_NAME, "answerCall4: IOException");
                 e.printStackTrace();
             }
-            return answerCall4(context);
+            return answerCall4();
         }
     }
 }

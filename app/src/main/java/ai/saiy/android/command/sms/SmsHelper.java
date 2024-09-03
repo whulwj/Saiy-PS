@@ -20,6 +20,7 @@ import java.util.List;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.contacts.ContactHelper;
 import ai.saiy.android.utils.MyLog;
 
@@ -151,10 +152,11 @@ public class SmsHelper {
         }
         final List<ResolveInfo> queryIntentActivities = context.getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_VIEW).addCategory(Intent.CATEGORY_DEFAULT).setType(VND_ANDROID_DIR_MMS_SMS), PackageManager.MATCH_DEFAULT_ONLY);
         if (ai.saiy.android.utils.UtilsList.notNaked(queryIntentActivities)) {
+            final String packageName = UtilsApplication.getPackageName(queryIntentActivities.get(0));
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "getDefaultSMSPackage: resolveInfoList: " + queryIntentActivities.get(0).activityInfo.packageName);
+                MyLog.i(CLS_NAME, "getDefaultSMSPackage: resolveInfoList: " + packageName);
             }
-            return queryIntentActivities.get(0).activityInfo.packageName;
+            return packageName;
         }
         if (DEBUG) {
             MyLog.w(CLS_NAME, "getDefaultSMSPackage: not resolved");

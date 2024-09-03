@@ -28,9 +28,11 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.Settings;
+import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -532,5 +534,20 @@ public class UtilsApplication {
             }
         }
         return false;
+    }
+
+    public static String getPackageName(@NonNull ResolveInfo resolveInfo) {
+        if (resolveInfo.activityInfo != null && !TextUtils.isEmpty(resolveInfo.activityInfo.packageName)) {
+            return resolveInfo.activityInfo.packageName;
+        }
+        if (resolveInfo.serviceInfo != null && !TextUtils.isEmpty(resolveInfo.serviceInfo.packageName)) {
+            return resolveInfo.serviceInfo.packageName;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            if (resolveInfo.providerInfo != null && !TextUtils.isEmpty(resolveInfo.providerInfo.packageName)) {
+                return resolveInfo.providerInfo.packageName;
+            }
+        }
+        return resolveInfo.resolvePackageName;
     }
 }

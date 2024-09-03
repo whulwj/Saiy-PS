@@ -1027,7 +1027,7 @@ public class ExecuteIntent {
     }
 
     public static void showInstallOfflineVoiceFiles(Context context) {
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         intent.setComponent(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, "com.google.android.voicesearch.greco3.languagepack.InstallActivity"));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
         try {

@@ -25,7 +25,7 @@ import ai.saiy.android.utils.MyLog;
  */
 public class Security {
     private static final boolean DEBUG = MyLog.DEBUG;
-    private static final String CLS_NAME = "IABUtil/Security";
+    private static final String CLS_NAME = "Security";
 
     public static PublicKey parsePublicKey(@NonNull String encodedPublicKey) throws IOException {
         EncodedKeySpec keySpec;

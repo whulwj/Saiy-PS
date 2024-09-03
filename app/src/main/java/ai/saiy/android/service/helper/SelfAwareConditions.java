@@ -76,6 +76,7 @@ import ai.saiy.android.api.language.vr.VRLanguageMicrosoft;
 import ai.saiy.android.api.language.vr.VRLanguageNuance;
 import ai.saiy.android.api.language.vr.VRLanguageWit;
 import ai.saiy.android.api.request.SaiyRequestParams;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.audio.AudioParameters;
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.audio.SaiySoundPool;
@@ -2158,7 +2159,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
             for (final ResolveInfo info : recognitionServices) {
 
                 serviceInfo = info.serviceInfo;
-                packageName = serviceInfo.packageName;
+                packageName = UtilsApplication.getPackageName(info);
                 serviceName = serviceInfo.name;
 
                 if (packageName != null && serviceName != null) {

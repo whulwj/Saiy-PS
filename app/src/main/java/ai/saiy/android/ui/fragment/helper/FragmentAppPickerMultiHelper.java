@@ -77,7 +77,7 @@ public class FragmentAppPickerMultiHelper {
             AsyncTask.execute(new Runnable() {
                 @Override
                 public void run() {
-                    final ArrayList<Application> tempArray = ai.saiy.android.applications.Installed.getInstalledApplications(getApplicationContext(), true, true);
+                    final ArrayList<Application> tempArray = ai.saiy.android.applications.Installed.getInstalledApplications(getApplicationContext(), true);
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "tempArray: size: " + tempArray.size());
                     }

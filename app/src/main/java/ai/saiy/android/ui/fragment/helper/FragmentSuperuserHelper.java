@@ -22,6 +22,7 @@ import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Process;
 import android.speech.tts.TextToSpeech;
 import android.util.Pair;
@@ -348,8 +349,8 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showBlackListSelector: blackListArray: " + blackListArray.size());
         }
-        final ArrayList<Pair<String, String>> installedPackages = Installed.declaresSaiyPermission(
-                getApplicationContext());
+        final ArrayList<Pair<String, String>> installedPackages = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2)?
+                Installed.declaresSaiyPermission(getApplicationContext()) : Installed.declaresSaiyPermissionLegacy(getApplicationContext());
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showBlackListSelector: installedPackages: " + installedPackages.size());
         }

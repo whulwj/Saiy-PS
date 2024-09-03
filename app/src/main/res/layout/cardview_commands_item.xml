@@ -1,67 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:card_view="http://schemas.android.com/apk/res-auto"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android" xmlns:card_view="http://schemas.android.com/apk/res-auto"
     android:orientation="horizontal"
+    android:focusable="true"
+    android:clickable="true"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_weight="1"
-    style="@style/card_view_item_command">
-    <androidx.cardview.widget.CardView
+    android:paddingStart="@dimen/activity_horizontal_margin"
+    android:paddingEnd="@dimen/activity_horizontal_margin"
+    android:foreground="?android:attr/selectableItemBackground"
+    android:minHeight="?android:attr/listPreferredItemHeightLarge"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    card_view:cardPreventCornerOverlap="false"
+    card_view:cardUseCompatPadding="true">
+    <LinearLayout
         android:layout_gravity="center_vertical"
-        android:orientation="horizontal"
-        android:focusable="true"
-        android:clickable="true"
-        android:layout_width="0dp"
+        android:orientation="vertical"
+        android:duplicateParentState="true"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
-        android:foreground="?android:attr/selectableItemBackground"
-        android:minHeight="?android:attr/listPreferredItemHeightLarge"
-        android:layout_weight="1"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp"
-        card_view:cardPreventCornerOverlap="false"
-        card_view:cardUseCompatPadding="true"
-        card_view:contentPaddingBottom="-3dp"
-        card_view:contentPaddingLeft="-3dp"
-        card_view:contentPaddingRight="-3dp"
-        card_view:contentPaddingTop="-3dp">
-        <LinearLayout
-            android:orientation="horizontal"
+        android:layout_marginBottom="@dimen/activity_horizontal_margin">
+        <TextView
+            android:textStyle="bold"
+            android:textColor="@color/colorPrimaryDark"
+            android:id="@+id/tvCommandTitle"
             android:duplicateParentState="true"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:baselineAligned="false"
-            android:layout_weight="1">
-            <LinearLayout
-                android:layout_gravity="center_vertical"
-                android:orientation="vertical"
-                android:duplicateParentState="true"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                android:layout_marginTop="@dimen/activity_horizontal_margin"
-                android:layout_marginRight="@dimen/activity_horizontal_margin"
-                android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                android:layout_weight="1">
-                <TextView
-                    android:textStyle="bold"
-                    android:textColor="@color/colorPrimaryDark"
-                    android:id="@+id/tvCommandTitle"
-                    android:duplicateParentState="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/activity_horizontal_margin"
-                    android:textAppearance="?attr/textAppearanceSubtitle1"/>
-                <TextView
-                    android:textStyle="italic"
-                    android:textAppearance="?attr/textAppearanceSubtitle2"
-                    android:id="@+id/tvCommandContent"
-                    android:visibility="visible"
-                    android:duplicateParentState="true"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="sans-serif-light"/>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+            android:layout_marginBottom="@dimen/activity_horizontal_margin"
+            android:textAppearance="?attr/textAppearanceSubtitle1"/>
+        <TextView
+            android:textStyle="italic"
+            android:textAppearance="?attr/textAppearanceSubtitle2"
+            android:id="@+id/tvCommandContent"
+            android:visibility="visible"
+            android:duplicateParentState="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"/>
+    </LinearLayout>
+</androidx.cardview.widget.CardView>

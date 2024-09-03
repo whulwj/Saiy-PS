@@ -45,7 +45,7 @@ public class ActivityApplicationPicker extends AppCompatActivity implements User
                 MyLog.i(CLS_NAME, "setResult: getAction: " + applicationBasic.getAction());
             }
         }
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         if (applicationBasic == null) {
             resultCode = Activity.RESULT_CANCELED;
         } else {

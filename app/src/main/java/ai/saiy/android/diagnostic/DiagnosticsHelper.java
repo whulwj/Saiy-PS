@@ -32,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -484,7 +485,7 @@ public class DiagnosticsHelper {
                     e.printStackTrace();
                 }
                 diagnosticInfoListener.appendDiagnosticInfo("\n" + providers.get(i).loadLabel(packageManager).toString());
-                diagnosticInfoListener.appendDiagnosticInfo(providers.get(i).activityInfo.packageName);
+                diagnosticInfoListener.appendDiagnosticInfo(UtilsApplication.getPackageName(providers.get(i)));
                 diagnosticInfoListener.setTTSCount(String.valueOf(i + 1));
                 diagnosticsInfo.setTTSCount(i + 1);
             }
@@ -670,7 +671,7 @@ public class DiagnosticsHelper {
             return;
         }
 
-        String string = Settings.Secure.getString(mContext.getContentResolver(), "voice_recognition_service");
+        String string = Settings.Secure.getString(mContext.getContentResolver(), "voice_recognition_service"/*Settings.Secure.VOICE_RECOGNITION_SERVICE*/);
         String recognizerPackageName;
         if (string != null) {
             String[] split = string.split("/", 2);
@@ -687,7 +688,7 @@ public class DiagnosticsHelper {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            String packageName = asrProviders.get(i).serviceInfo.packageName;
+            String packageName = UtilsApplication.getPackageName(asrProviders.get(i));
             String applicationName = asrProviders.get(i).loadLabel(packageManager).toString();
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "populateASRCount: packageName: " + packageName);

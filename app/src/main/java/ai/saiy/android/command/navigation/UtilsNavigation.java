@@ -9,6 +9,7 @@ import android.net.Uri;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -90,17 +91,17 @@ public class UtilsNavigation {
     public static int getDefaultNavigationApplication(Context context) {
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse("google.navigation:q=test&mode=d"));
-        ResolveInfo resolveActivity = context.getPackageManager().resolveActivity(intent, 0);
-        if (resolveActivity == null) {
+        final ResolveInfo resolveInfo = context.getPackageManager().resolveActivity(intent, 0);
+        if (resolveInfo == null) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getDefaultNavigationApplication: resolveInfo: null");
             }
             return UNKNOWN;
         }
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "getDefaultNavigationApplication: resolveInfo: " + resolveActivity);
+            MyLog.i(CLS_NAME, "getDefaultNavigationApplication: resolveInfo: " + resolveInfo);
         }
-        final String packageName = resolveActivity.activityInfo.packageName;
+        final String packageName = UtilsApplication.getPackageName(resolveInfo);
         if (!UtilsString.notNaked(packageName)) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getDefaultNavigationApplication: resolveInfo: packageName naked");

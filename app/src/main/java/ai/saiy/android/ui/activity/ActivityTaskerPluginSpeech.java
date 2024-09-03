@@ -130,7 +130,7 @@ public class ActivityTaskerPluginSpeech extends AppCompatActivity implements Rad
 
         bundle.putBoolean(Speaker.EXTRA_START_VR, cbTaskerStartListening.isChecked());
         bundle.putString(Speaker.EXTRA_LOCALE, Locale.getDefault().toString());
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         intent.putExtra(BRTaskerReceiver.EXTRA_BUNDLE, bundle);
         setResult(Activity.RESULT_OK, intent);
         super.finish();

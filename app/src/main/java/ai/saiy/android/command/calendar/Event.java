@@ -9,14 +9,13 @@ public class Event {
     private Date startDate;
     private Date endDate;
     private boolean isAllDay;
-    private ArrayList<String> attendees;
+    private final ArrayList<String> attendees;
 
     public Event() {
         this.attendees = new ArrayList<>();
     }
 
     public Event(String title, Date startDate, Date endDate, boolean isAllDay, ArrayList<String> attendees, String location) {
-        this.attendees = new ArrayList<>();
         this.title = title;
         this.startDate = startDate;
         this.endDate = endDate;

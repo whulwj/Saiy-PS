@@ -49,6 +49,7 @@ import java.util.Locale;
 
 import ai.saiy.android.BuildConfig;
 import ai.saiy.android.R;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.firebase.database.read.IAPVersion;
 import ai.saiy.android.firebase.database.reference.IAPVersionReference;
 import ai.saiy.android.utils.MyLog;
@@ -141,15 +142,15 @@ public class DeviceInfo {
     public static String getDefaultVRProvider(@NonNull final Context ctx) {
         final List<ResolveInfo> services = ctx.getPackageManager().queryIntentServices(
                 new Intent(RecognitionService.SERVICE_INTERFACE), 0);
-        return UtilsList.notNaked(services) ? services.get(0).serviceInfo.packageName : "";
+        return UtilsList.notNaked(services) ? UtilsApplication.getPackageName(services.get(0)) : "";
     }
 
     private static String getDefaultTTSProviderIntent(Context context) {
-        Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        List<ResolveInfo> queryIntentActivities = context.getPackageManager().queryIntentActivities(intent, PackageManager.GET_META_DATA);
+        final Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        final List<ResolveInfo> queryIntentActivities = context.getPackageManager().queryIntentActivities(intent, PackageManager.GET_META_DATA);
         if (UtilsList.notNaked(queryIntentActivities)) {
             try {
-                return queryIntentActivities.get(0).activityInfo.applicationInfo.packageName;
+                return UtilsApplication.getPackageName(queryIntentActivities.get(0));
             } catch (NullPointerException e) {
                 if (DEBUG) {
                     MyLog.e(CLS_NAME, "getDefaultTTSProviderIntent: NullPointerException");

@@ -31,6 +31,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.Voice;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -65,6 +66,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.command.battery.BatteryInformation;
 import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.command.unknown.Unknown;
@@ -1372,15 +1374,15 @@ public class FragmentSettingsHelper {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-                List<ResolveInfo> queryIntentActivities = getParentActivity().getPackageManager().queryIntentActivities(intent, PackageManager.GET_META_DATA);
+                final Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+                final List<ResolveInfo> queryIntentActivities = getParentActivity().getPackageManager().queryIntentActivities(intent, PackageManager.GET_META_DATA);
                 if (!ai.saiy.android.utils.UtilsList.notNaked(queryIntentActivities)) {
                     showNoEnginesToast();
                     return;
                 }
                 boolean haveGoogleTTS = false;
                 for (ResolveInfo resolveInfo: queryIntentActivities) {
-                    if (resolveInfo.activityInfo.applicationInfo.packageName.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
+                    if (TextUtils.equals(UtilsApplication.getPackageName(resolveInfo), TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
                         haveGoogleTTS = true;
                         break;
                     }

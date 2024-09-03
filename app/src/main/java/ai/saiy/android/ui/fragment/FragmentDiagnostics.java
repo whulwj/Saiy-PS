@@ -37,15 +37,16 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
+import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.diagnostic.DiagnosticInfoListener;
 import ai.saiy.android.diagnostic.DiagnosticsHelper;
-import ai.saiy.android.diagnostic.RecommendationHelper;
 import ai.saiy.android.diagnostic.DiagnosticsInfo;
+import ai.saiy.android.diagnostic.RecommendationHelper;
 import ai.saiy.android.diagnostic.VoiceEngine;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.firebase.helper.UtilsAnalytic;
 
 public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListener, View.OnClickListener {
     private static final Object lock = new Object();
@@ -158,7 +159,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
         for (int i = 0; i < queryIntentActivities.size(); i++) {
             VoiceEngine voiceEngine = new VoiceEngine();
             voiceEngine.setApplicationName(queryIntentActivities.get(i).loadLabel(packageManager).toString());
-            voiceEngine.setPackageName(queryIntentActivities.get(i).activityInfo.applicationInfo.packageName);
+            voiceEngine.setPackageName(UtilsApplication.getPackageName(queryIntentActivities.get(i)));
             Intent checkVoiceDataIntent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
             checkVoiceDataIntent.setPackage(voiceEngine.getPackageName());
             checkVoiceDataIntent.getStringArrayListExtra(TextToSpeech.Engine.EXTRA_AVAILABLE_VOICES);

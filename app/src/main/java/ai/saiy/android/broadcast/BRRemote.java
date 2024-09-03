@@ -143,8 +143,9 @@ public class BRRemote extends BroadcastReceiver {
                                             SPH.getTTSLocale(context.getApplicationContext()).toString(),
                                             vrLocale.toString(), LocalRequest.ACTION_SPEAK_ONLY);
 
-                                    final Regex regex = (Regex) intent.getSerializableExtra(
+                                    final Regex remoteRegex = intent.getParcelableExtra(
                                             SaiyKeyphrase.KEYPHRASE_REGEX);
+                                    final Regex regex = (remoteRegex == null)? Regex.MATCHES : remoteRegex;
 
                                     switch (regex) {
 

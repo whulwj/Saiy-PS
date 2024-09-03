@@ -64,7 +64,7 @@ public class SettingsIntent {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "settingsIntent");
         }
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (type) {
             case NFC:
@@ -179,7 +179,7 @@ public class SettingsIntent {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceSearchSettings");
         }
-        Intent intent = new Intent();
+        final Intent intent = new Intent();
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ArrayList<ComponentName> arrayList = new ArrayList<>();
         arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, IntentConstants.COMPONENT_VOICE_SEARCH_PREFERENCES_VELVET));

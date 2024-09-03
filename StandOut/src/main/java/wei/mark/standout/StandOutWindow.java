@@ -39,6 +39,7 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.res.ResourcesCompat;
 
 /**
  * Extend this class to easily create and manage floating StandOut windows.
@@ -49,6 +50,11 @@ import androidx.core.app.NotificationCompat;
  * 
  */
 public abstract class StandOutWindow extends Service {
+	private static final String FROM_ID = "fromId";
+	private static final String ID = "id";
+	private static final String REQUEST_CODE = "requestCode";
+	private static final String WEI_MARK_STANDOUT_FROM_CLASS = "wei.mark.standout.fromCls";
+	private static final String WEI_MARK_STANDOUT_DATA = "wei.mark.standout.data";
 	static final String TAG = "StandOutWindow";
 
 	/**
@@ -236,7 +242,7 @@ public abstract class StandOutWindow extends Service {
 		boolean cached = sWindowCache.isCached(id, cls);
 		String action = cached ? ACTION_RESTORE : ACTION_SHOW;
 		Uri uri = cached ? Uri.parse("standout://" + cls + '/' + id) : null;
-		return new Intent(context, cls).putExtra("id", id).setAction(action)
+		return new Intent(context, cls).putExtra(ID, id).setAction(action)
 				.setData(uri);
 	}
 
@@ -257,7 +263,7 @@ public abstract class StandOutWindow extends Service {
 	 */
 	public static Intent getHideIntent(Context context,
 			Class<? extends StandOutWindow> cls, int id) {
-		return new Intent(context, cls).putExtra("id", id).setAction(
+		return new Intent(context, cls).putExtra(ID, id).setAction(
 				ACTION_HIDE);
 	}
 
@@ -278,7 +284,7 @@ public abstract class StandOutWindow extends Service {
 	 */
 	public static Intent getCloseIntent(Context context,
 			Class<? extends StandOutWindow> cls, int id) {
-		return new Intent(context, cls).putExtra("id", id).setAction(
+		return new Intent(context, cls).putExtra(ID, id).setAction(
 				ACTION_CLOSE);
 	}
 
@@ -327,11 +333,11 @@ public abstract class StandOutWindow extends Service {
 	public static Intent getSendDataIntent(Context context,
 			Class<? extends StandOutWindow> toCls, int toId, int requestCode,
 			Bundle data, Class<? extends StandOutWindow> fromCls, int fromId) {
-		return new Intent(context, toCls).putExtra("id", toId)
-				.putExtra("requestCode", requestCode)
-				.putExtra("wei.mark.standout.data", data)
-				.putExtra("wei.mark.standout.fromCls", fromCls)
-				.putExtra("fromId", fromId).setAction(ACTION_SEND_DATA);
+		return new Intent(context, toCls).putExtra(ID, toId)
+				.putExtra(REQUEST_CODE, requestCode)
+				.putExtra(WEI_MARK_STANDOUT_DATA, data)
+				.putExtra(WEI_MARK_STANDOUT_FROM_CLASS, fromCls)
+				.putExtra(FROM_ID, fromId).setAction(ACTION_SEND_DATA);
 	}
 
 	// internal map of ids to shown/hidden views
@@ -376,7 +382,7 @@ public abstract class StandOutWindow extends Service {
 		// getShowIntent(), getHideIntent(), getCloseIntent()
 		if (intent != null) {
 			String action = intent.getAction();
-			int id = intent.getIntExtra("id", DEFAULT_ID);
+			int id = intent.getIntExtra(ID, DEFAULT_ID);
 
 			// this will interfere with getPersistentNotification()
 			if (id == ONGOING_NOTIFICATION_ID) {
@@ -397,12 +403,12 @@ public abstract class StandOutWindow extends Service {
 					Log.w(TAG,
 							"Sending data to non-existant window. If this is not intended, make sure toId is either an existing window's id or DISREGARD_ID.");
 				}
-				Bundle data = intent.getBundleExtra("wei.mark.standout.data");
-				int requestCode = intent.getIntExtra("requestCode", 0);
+				Bundle data = intent.getBundleExtra(WEI_MARK_STANDOUT_DATA);
+				int requestCode = intent.getIntExtra(REQUEST_CODE, 0);
 				@SuppressWarnings("unchecked")
 				Class<? extends StandOutWindow> fromCls = (Class<? extends StandOutWindow>) intent
-						.getSerializableExtra("wei.mark.standout.fromCls");
-				int fromId = intent.getIntExtra("fromId", DEFAULT_ID);
+						.getSerializableExtra(WEI_MARK_STANDOUT_FROM_CLASS);
+				int fromId = intent.getIntExtra(FROM_ID, DEFAULT_ID);
 				onReceiveData(id, requestCode, data, fromCls, fromId);
 			}
 		} else {
@@ -830,8 +836,8 @@ public abstract class StandOutWindow extends Service {
 			});
 		}
 
-		Drawable background = getResources().getDrawable(
-				android.R.drawable.editbox_dropdown_dark_frame);
+		final Drawable background = ResourcesCompat.getDrawable(getResources(),
+				android.R.drawable.editbox_dropdown_dark_frame, getTheme());
 		dropDown.setBackgroundDrawable(background);
 		return dropDown;
 	}

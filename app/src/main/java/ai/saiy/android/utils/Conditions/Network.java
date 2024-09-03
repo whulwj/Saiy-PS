@@ -17,6 +17,7 @@
 
 package ai.saiy.android.utils.Conditions;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
@@ -25,6 +26,7 @@ import android.telephony.TelephonyManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
+import androidx.core.content.PermissionChecker;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
@@ -182,6 +184,14 @@ public final class Network {
             case ConnectivityManager.TYPE_MOBILE:
 
                 final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
+                if (PermissionChecker.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PermissionChecker.PERMISSION_GRANTED) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    if (DEBUG) {
+                        MyLog.e(CLS_NAME, "getConnectionType: CONNECTION_TYPE_UNKNOWN");
+                    }
+                    return CONNECTION_TYPE_UNKNOWN;
+                }
                 final int networkType = tm.getNetworkType();
 
                 switch (networkType) {
@@ -291,7 +301,18 @@ public final class Network {
     public static boolean isConnectionFast(final Context ctx) {
         final NetworkInfo info = getActiveNetworkInfo(ctx);
         final TelephonyManager tm = (TelephonyManager) ctx.getSystemService(Context.TELEPHONY_SERVICE);
-        return (info != null && info.isConnected() && isConnectionFast(info.getType(), tm.getNetworkType()));
+        if (info != null && info.isConnected()) {
+            if (PermissionChecker.checkSelfPermission(ctx, Manifest.permission.READ_PHONE_STATE) != PermissionChecker.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                if (DEBUG) {
+                    MyLog.e(CLS_NAME, "getConnectionType: CONNECTION_TYPE_UNKNOWN");
+                }
+                return false;
+            }
+            return isConnectionFast(info.getType(), tm.getNetworkType());
+        }
+        return false;
     }
 
     /**

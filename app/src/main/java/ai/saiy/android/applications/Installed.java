@@ -17,21 +17,24 @@
 
 package ai.saiy.android.applications;
 
+import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.provider.MediaStore;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -116,31 +119,198 @@ public class Installed {
      * Get a list of all of the installed applications that hold the {@link Constants#PERMISSION_CONTROL_SAIY},
      * regardless of whether or not the permission has been explicitly granted. The results exclude our own
      * package.
+     *
+     * @param ctx the application context
+     * @return an ArrayList containing a {@link Pair} with the first parameter containing the application name
+     * and the second the package name.
+     */
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    public static ArrayList<Pair<String, String>> declaresSaiyPermission(@NonNull final Context ctx) {
+        final long then = System.nanoTime();
+        final ArrayList<Pair<String, String>> holdsPermission = new ArrayList<>();
+        final PackageManager pm = ctx.getPackageManager();
+        final List<PackageInfo> apps = pm.getPackagesHoldingPermissions(new String[]{Constants.PERMISSION_CONTROL_SAIY}, 0);
+
+        CharSequence appNameChar;
+        String appName;
+        for (final PackageInfo packageInfo : apps) {
+            appNameChar = packageInfo.applicationInfo.loadLabel(pm);
+
+            if (appNameChar != null) {
+                appName = appNameChar.toString();
+
+                if (!UtilsString.notNaked(appName)) {
+                    continue;
+                }
+                if (pSAIY_PACKAGE.matcher(packageInfo.packageName).matches()) {
+                    continue;
+                }
+                holdsPermission.add(new Pair<>(appName, packageInfo.packageName));
+            }
+
+            holdsPermission.add(new Pair<>(packageInfo.packageName, packageInfo.packageName));
+        }
+
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+
+        return holdsPermission;
+    }
+
+    public static ArrayList<Pair<String, String>> getInstalledApplications(Context context) {
+        final long then = System.nanoTime();
+        final ArrayList<Pair<String, String>> arrayList = new ai.saiy.android.database.DBApplication(context).getApplications();
+        if (!UtilsList.notNaked(arrayList)) {
+            final PackageManager packageManager = context.getPackageManager();
+            final Intent intent = new Intent(Intent.ACTION_MAIN);
+            intent.addCategory(Intent.CATEGORY_LAUNCHER);
+            final List<ResolveInfo> installedApplications = packageManager.queryIntentActivities(intent, 0);
+            CharSequence label;
+            String packageName;
+            for (ResolveInfo resolveInfo : installedApplications) {
+                label = resolveInfo.loadLabel(packageManager);
+                packageName = UtilsApplication.getPackageName(resolveInfo);
+                if (label != null) {
+                    arrayList.add(new Pair<>(label.toString(), packageName));
+                }
+            }
+            if (UtilsList.notNaked(arrayList)) {
+                new ai.saiy.android.database.DBApplication(context).insertData(arrayList);
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, "getInstalledApplications", then);
+        }
+        return arrayList;
+    }
+
+    public static ArrayList<Application> getInstalledApplications(Context context, boolean sortByName) {
+        final long then = System.nanoTime();
+        final ArrayList<Application> arrayList = new ArrayList<>();
+        final PackageManager packageManager = context.getPackageManager();
+        final Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        final List<ResolveInfo> installedApplications = packageManager.queryIntentActivities(intent, 0);
+        if (sortByName) {
+            Collections.sort(installedApplications, new Comparator<ResolveInfo>() {
+                private final PackageManager mPM = packageManager;
+                private final Collator collator = Collator.getInstance();
+                @Override
+                public int compare(ResolveInfo ra, ResolveInfo rb) {
+                    CharSequence sa = ra.loadLabel(mPM);
+                    if (sa == null) {
+                        sa = UtilsApplication.getPackageName(ra);
+                    }
+                    CharSequence sb = rb.loadLabel(mPM);
+                    if (sb == null) {
+                        sb = UtilsApplication.getPackageName(rb);
+                    }
+
+                    return collator.compare(sa.toString(), sb.toString());
+                }
+            });
+        }
+
+        CharSequence label;
+        String packageName;
+        for (ResolveInfo resolveInfo : installedApplications) {
+            label = resolveInfo.loadLabel(packageManager);
+            packageName = UtilsApplication.getPackageName(resolveInfo);
+            if (packageName != null) {
+                arrayList.add(new Application(label, packageName, resolveInfo.loadIcon(packageManager)));
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+        return arrayList;
+    }
+
+    public static ArrayList<Application> getSearchApplications(@NonNull PackageManager packageManager) {
+        final long then = System.nanoTime();
+        final Intent intent = new Intent(Intent.ACTION_SEARCH);
+        intent.putExtra(SearchManager.QUERY, "blah");
+        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
+        Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
+        final ArrayList<Application> arrayList = new ArrayList<>();
+        CharSequence label;
+        String packageName;
+        Drawable icon;
+        Application application;
+        for (ResolveInfo resolveInfo : queryIntentActivities) {
+            if (resolveInfo.activityInfo.exported) {
+                label = resolveInfo.loadLabel(packageManager);
+                packageName = UtilsApplication.getPackageName(resolveInfo);
+                icon = resolveInfo.loadIcon(packageManager);
+                if (packageName != null && label != null && icon != null) {
+                    application = new Application(label, packageName, icon);
+                    application.setAction(Intent.ACTION_SEARCH);
+                    arrayList.add(application);
+                }
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+        return insertPlayFromSearch(arrayList, packageManager);
+    }
+
+    private static ArrayList<Application> insertPlayFromSearch(@NonNull ArrayList<Application> arrayList, @NonNull PackageManager packageManager) {
+        final long then = System.nanoTime();
+        final Intent intent = new Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
+        intent.putExtra(SearchManager.QUERY, "blah");
+        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
+        Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
+        CharSequence label;
+        String packageName;
+        Drawable icon;
+        Application application;
+        for (ResolveInfo resolveInfo : queryIntentActivities) {
+            if (resolveInfo.activityInfo.exported) {
+                label = resolveInfo.loadLabel(packageManager);
+                packageName = UtilsApplication.getPackageName(resolveInfo);
+                icon = resolveInfo.loadIcon(packageManager);
+                if (packageName != null && label != null && icon != null) {
+                    application = new Application(label, packageName, icon);
+                    application.setAction(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
+                    arrayList.add(0, application);
+                }
+            }
+        }
+        if (DEBUG) {
+            MyLog.getElapsed(CLS_NAME, then);
+        }
+        return arrayList;
+    }
+
+    /**
+     * Get a list of all of the installed applications that hold the {@link Constants#PERMISSION_CONTROL_SAIY},
+     * regardless of whether or not the permission has been explicitly granted. The results exclude our own
+     * package.
      * <p>
-     * This method is slower than {@link #declaresSaiyPermissionLegacy(Context)} but avoids the 'transaction
+     * This method is slower than {@link #declaresSaiyPermission(Context)} but avoids the 'transaction
      * too large' errors.
      *
      * @param ctx the application context
      * @return an ArrayList containing a {@link Pair} with the first parameter containing the application name
      * and the second the package name.
      */
-    public static ArrayList<Pair<String, String>> declaresSaiyPermission(@NonNull final Context ctx) {
-
+    public static ArrayList<Pair<String, String>> declaresSaiyPermissionLegacy(@NonNull final Context ctx) {
         final long then = System.nanoTime();
-
         final ArrayList<Pair<String, String>> holdsPermission = new ArrayList<>();
         final PackageManager pm = ctx.getPackageManager();
-        final List<ApplicationInfo> apps = pm.getInstalledApplications(0);
+        final Intent intent = new Intent(Intent.ACTION_MAIN);
+        intent.addCategory(Intent.CATEGORY_LAUNCHER);
+        final List<ResolveInfo> apps = pm.queryIntentActivities(intent, 0);
 
         CharSequence appNameChar;
         String appName;
         String[] permissions;
         PackageInfo packageInfo;
-        for (final ApplicationInfo applicationInfo : apps) {
-
+        for (final ResolveInfo resolveInfo : apps) {
             try {
-
-                packageInfo = pm.getPackageInfo(applicationInfo.packageName, PackageManager.GET_PERMISSIONS);
+                packageInfo = pm.getPackageInfo(UtilsApplication.getPackageName(resolveInfo), PackageManager.GET_PERMISSIONS);
 
                 permissions = packageInfo.requestedPermissions;
                 if (permissions != null) {
@@ -167,168 +337,13 @@ public class Installed {
                 }
             } catch (final PackageManager.NameNotFoundException e) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "isPackageInstalled: NameNotFoundException");
+                    MyLog.w(CLS_NAME, "declaresSaiyPermissionLegacy: NameNotFoundException");
                 }
             }
         }
 
         if (DEBUG) {
-            MyLog.getElapsed(Installed.class.getSimpleName(), then);
-        }
-
-        return holdsPermission;
-    }
-
-    public static ArrayList<Pair<String, String>> getInstalledApplications(Context context) {
-        final long startTime = System.nanoTime();
-        final ArrayList<Pair<String, String>> arrayList = new ai.saiy.android.database.DBApplication(context).getApplications();
-        if (!UtilsList.notNaked(arrayList)) {
-            final PackageManager packageManager = context.getPackageManager();
-            final List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(0);
-            CharSequence label;
-            String packageName;
-            for (ApplicationInfo applicationInfo : installedApplications) {
-                label = applicationInfo.loadLabel(packageManager);
-                packageName = applicationInfo.packageName;
-                if (label != null) {
-                    arrayList.add(new Pair<>(label.toString(), packageName));
-                }
-            }
-            if (UtilsList.notNaked(arrayList)) {
-                new ai.saiy.android.database.DBApplication(context).insertData(arrayList);
-            }
-        }
-        if (DEBUG) {
-            MyLog.getElapsed(CLS_NAME, "getInstalledApplications", startTime);
-        }
-        return arrayList;
-    }
-
-    public static ArrayList<Application> getInstalledApplications(Context context, boolean includeSystemApplication, boolean sortByName) {
-        final long startTime = System.nanoTime();
-        final ArrayList<Application> arrayList = new ArrayList<>();
-        final PackageManager packageManager = context.getPackageManager();
-        final List<ApplicationInfo> installedApplications = packageManager.getInstalledApplications(0);
-        if (sortByName) {
-            Collections.sort(installedApplications, new ApplicationInfo.DisplayNameComparator(packageManager));
-        }
-        CharSequence label;
-        String packageName;
-        for (ApplicationInfo applicationInfo : installedApplications) {
-            if (includeSystemApplication || applicationInfo.flags != ApplicationInfo.FLAG_SYSTEM) {
-                label = applicationInfo.loadLabel(packageManager);
-                packageName = applicationInfo.packageName;
-                if (packageName != null) {
-                    arrayList.add(new Application(label, packageName, applicationInfo.loadIcon(packageManager)));
-                }
-            }
-        }
-        if (DEBUG) {
-            MyLog.getElapsed(CLS_NAME, startTime);
-        }
-        return arrayList;
-    }
-
-    public static ArrayList<Application> getSearchApplications(@NonNull PackageManager packageManager) {
-        final long startTime = System.nanoTime();
-        final Intent intent = new Intent(Intent.ACTION_SEARCH);
-        intent.putExtra(SearchManager.QUERY, "blah");
-        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
-        Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
-        final ArrayList<Application> arrayList = new ArrayList<>();
-        CharSequence label;
-        String packageName;
-        Drawable icon;
-        Application application;
-        for (ResolveInfo resolveInfo : queryIntentActivities) {
-            if (resolveInfo.activityInfo.exported) {
-                label = resolveInfo.loadLabel(packageManager);
-                packageName = resolveInfo.activityInfo.packageName;
-                icon = resolveInfo.loadIcon(packageManager);
-                if (packageName != null && label != null && icon != null) {
-                    application = new Application(label, packageName, icon);
-                    application.setAction(Intent.ACTION_SEARCH);
-                    arrayList.add(application);
-                }
-            }
-        }
-        if (DEBUG) {
-            MyLog.getElapsed(CLS_NAME, startTime);
-        }
-        return insertPlayFromSearch(arrayList, packageManager);
-    }
-
-    private static ArrayList<Application> insertPlayFromSearch(@NonNull ArrayList<Application> arrayList, @NonNull PackageManager packageManager) {
-        final long startTime = System.nanoTime();
-        final Intent intent = new Intent(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
-        intent.putExtra(SearchManager.QUERY, "blah");
-        final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
-        Collections.sort(queryIntentActivities, new ResolveInfo.DisplayNameComparator(packageManager));
-        CharSequence label;
-        String packageName;
-        Drawable icon;
-        Application application;
-        for (ResolveInfo resolveInfo : queryIntentActivities) {
-            if (resolveInfo.activityInfo.exported) {
-                label = resolveInfo.loadLabel(packageManager);
-                packageName = resolveInfo.activityInfo.packageName;
-                icon = resolveInfo.loadIcon(packageManager);
-                if (packageName != null && label != null && icon != null) {
-                    application = new Application(label, packageName, icon);
-                    application.setAction(MediaStore.INTENT_ACTION_MEDIA_PLAY_FROM_SEARCH);
-                    arrayList.add(0, application);
-                }
-            }
-        }
-        if (DEBUG) {
-            MyLog.getElapsed(CLS_NAME, startTime);
-        }
-        return arrayList;
-    }
-
-    /**
-     * Get a list of all of the installed applications that hold the {@link Constants#PERMISSION_CONTROL_SAIY},
-     * regardless of whether or not the permission has been explicitly granted. The results exclude our own
-     * package.
-     *
-     * @param ctx the application context
-     * @return an ArrayList containing a {@link Pair} with the first parameter containing the application name
-     * and the second the package name.
-     */
-    public static ArrayList<Pair<String, String>> declaresSaiyPermissionLegacy(@NonNull final Context ctx) {
-
-        final ArrayList<Pair<String, String>> holdsPermission = new ArrayList<>();
-        final PackageManager pm = ctx.getPackageManager();
-        final List<PackageInfo> apps = pm.getInstalledPackages(PackageManager.GET_PERMISSIONS);
-
-        CharSequence appNameChar;
-        String appName;
-        String[] permissions;
-        for (final PackageInfo packageInfo : apps) {
-
-            permissions = packageInfo.requestedPermissions;
-            if (permissions != null) {
-
-                for (final String permission : permissions) {
-                    if (pCONTROL_SAIY.matcher(permission).matches()) {
-
-                        appNameChar = packageInfo.applicationInfo.loadLabel(pm);
-
-                        if (appNameChar != null) {
-                            appName = packageInfo.applicationInfo.loadLabel(pm).toString();
-
-                            if (UtilsString.notNaked(appName)) {
-                                if (!pSAIY_PACKAGE.matcher(packageInfo.packageName).matches()) {
-                                    holdsPermission.add(new Pair<>(appName, packageInfo.packageName));
-                                }
-                                break;
-                            }
-                        }
-
-                        holdsPermission.add(new Pair<>(packageInfo.packageName, packageInfo.packageName));
-                    }
-                }
-            }
+            MyLog.getElapsed(CLS_NAME, then);
         }
 
         return holdsPermission;
@@ -367,7 +382,7 @@ public class Installed {
     }
 
     public static ArrayList<Application> getAccessibleApplications(@NonNull PackageManager packageManager) {
-        final long startTime = System.nanoTime();
+        final long then = System.nanoTime();
         final Intent intent = new Intent(Intent.ACTION_MAIN);
         intent.addCategory(Intent.CATEGORY_LAUNCHER);
         final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, 0);
@@ -378,14 +393,14 @@ public class Installed {
         Drawable icon;
         for (ResolveInfo resolveInfo : queryIntentActivities) {
             label = resolveInfo.loadLabel(packageManager);
-            packageName = resolveInfo.activityInfo.packageName;
+            packageName = UtilsApplication.getPackageName(resolveInfo);
             icon = resolveInfo.loadIcon(packageManager);
             if (packageName != null && label != null && icon != null) {
                 arrayList.add(new Application(label, packageName, icon));
             }
         }
         if (DEBUG) {
-            MyLog.getElapsed(CLS_NAME, startTime);
+            MyLog.getElapsed(CLS_NAME, then);
         }
         return arrayList;
     }
@@ -573,7 +588,8 @@ public class Installed {
         final PackageManager packageManager = context.getPackageManager();
         final List<ResolveInfo> queryIntentActivities = packageManager.queryIntentActivities(intent, PackageManager.GET_META_DATA);
         if (UtilsList.notNaked(queryIntentActivities)) {
-            return new Pair<>(queryIntentActivities.get(0).activityInfo.packageName, queryIntentActivities.get(0).loadLabel(packageManager).toString());
+            final ResolveInfo resolveInfo = queryIntentActivities.get(0);
+            return new Pair<>(UtilsApplication.getPackageName(resolveInfo), resolveInfo.loadLabel(packageManager).toString());
         }
         return null;
     }
@@ -592,7 +608,7 @@ public class Installed {
         final ResolveInfo resolveInfo = ctx.getPackageManager().resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY);
 
         if (resolveInfo != null) {
-            return resolveInfo.activityInfo.packageName;
+            return UtilsApplication.getPackageName(resolveInfo);
         } else {
             return null;
         }
