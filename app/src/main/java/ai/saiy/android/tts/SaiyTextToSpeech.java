@@ -41,9 +41,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -80,6 +77,7 @@ import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsParcelable;
+import ai.saiy.android.utils.UtilsReflection;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -180,10 +178,8 @@ public class SaiyTextToSpeech extends TextToSpeech {
         if (audioTrack == null || audioTrack.getState() != AudioTrack.STATE_INITIALIZED) {
             audioTrack = SaiyAudioTrack.getSaiyAudioTrack();
             audioTrack.setListener(listener);
-            return audioTrack;
-        } else {
-            return audioTrack;
         }
+        return audioTrack;
     }
 
     /**
@@ -1765,8 +1761,8 @@ public class SaiyTextToSpeech extends TextToSpeech {
         String reflectEngine;
 
         try {
-            final Method method = this.getClass().getSuperclass().getMethod(TTSDefaults.BOUND_ENGINE_METHOD);
-            reflectEngine = (String) method.invoke(this);
+            final Object object = UtilsReflection.invokeMethod(this, TextToSpeech.class, TTSDefaults.BOUND_ENGINE_METHOD);
+            reflectEngine = (object instanceof String)? (String) object : null;
 
             if (UtilsString.notNaked(reflectEngine)) {
                 if (DEBUG) {
@@ -1776,32 +1772,16 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 this.initEngine = reflectEngine;
                 return;
             }
-        } catch (final NoSuchMethodException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "NoSuchMethodException");
-                e.printStackTrace();
-            }
-        } catch (final IllegalAccessException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "IllegalAccessException");
-                e.printStackTrace();
-            }
         } catch (final NullPointerException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "NullPointerException");
                 e.printStackTrace();
             }
-        } catch (InvocationTargetException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "InvocationTargetException");
-                e.printStackTrace();
-            }
         }
 
         try {
-            final Field f = this.getClass().getSuperclass().getDeclaredField(TTSDefaults.BOUND_ENGINE_FIELD);
-            f.setAccessible(true);
-            reflectEngine = (String) f.get(this);
+            final Object object = UtilsReflection.getFieldObj(this, TextToSpeech.class, TTSDefaults.BOUND_ENGINE_FIELD, null);
+            reflectEngine = (object instanceof String)? (String) object : null;
 
             if (UtilsString.notNaked(reflectEngine)) {
                 if (DEBUG) {
@@ -1812,16 +1792,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 return;
             }
 
-        } catch (final NoSuchFieldException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "NoSuchFieldException");
-                e.printStackTrace();
-            }
-        } catch (final IllegalAccessException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "IllegalAccessException");
-                e.printStackTrace();
-            }
         } catch (final NullPointerException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "NullPointerException");
@@ -1884,7 +1854,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                     try {
-                        MyLog.v(CLS_NAME, "getEngineDefaultSaiyVoice: " + SaiyTextToSpeech.this.getEngineDefaultSaiyVoice().toString());
+                        MyLog.v(CLS_NAME, "getEngineDefaultSaiyVoice: " + SaiyTextToSpeech.this.getEngineDefaultSaiyVoice());
                         MyLog.v(CLS_NAME, "getBoundSaiyVoice: " + SaiyTextToSpeech.this.getBoundSaiyVoice().toString());
 
                         final SaiyVoice userDefaultSaiyVoice = SaiyTextToSpeech.this.getUserDefaultSaiyVoice();

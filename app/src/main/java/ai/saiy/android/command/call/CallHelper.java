@@ -26,6 +26,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsReflection;
 import ai.saiy.android.utils.UtilsString;
 
 public class CallHelper {
@@ -47,36 +48,31 @@ public class CallHelper {
             return true;
         }
         try {
-            telephonyManager.getClass().getMethod("answerRingingCall").invoke(telephonyManager);
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "answerCall1: success");
+            final Method method = UtilsReflection.getMethod(TelephonyManager.class, "answerRingingCall");
+            if (method != null) {
+                method.invoke(telephonyManager);
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "answerCall1: success");
+                }
+                return true;
             }
-            return true;
         } catch (IllegalAccessException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "answerCall1: IllegalAccessException");
                 e.printStackTrace();
             }
-            return answerCall2(context, telephonyManager);
-        } catch (NoSuchMethodException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "answerCall1: NoSuchMethodException");
-                e.printStackTrace();
-            }
-            return answerCall2(context, telephonyManager);
         } catch (SecurityException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "answerCall1: SecurityException");
                 e.printStackTrace();
             }
-            return answerCall2(context, telephonyManager);
         } catch (InvocationTargetException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "answerCall1: InvocationTargetException");
                 e.printStackTrace();
             }
-            return answerCall2(context, telephonyManager);
         }
+        return answerCall2(context, telephonyManager);
     }
 
     public static boolean callNumber(Context context, String str) {
@@ -109,41 +105,22 @@ public class CallHelper {
 
     private static boolean rejectCall1(TelephonyManager telephonyManager) {
         try {
-            final Method declaredMethod = Class.forName(telephonyManager.getClass().getName()).getDeclaredMethod("getITelephony");
-            declaredMethod.setAccessible(true);
-            ((ITelephony) declaredMethod.invoke(telephonyManager, new Object[0])).endCall();
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "rejectCall1: success");
+            final Object object = UtilsReflection.invokeMethod(telephonyManager, TelephonyManager.class, "getITelephony");
+            if (object instanceof ITelephony) {
+                ((ITelephony) object).endCall();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "rejectCall1: success");
+                }
+                return true;
             }
-            return true;
         } catch (RemoteException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "rejectCall1: RemoteException");
                 e.printStackTrace();
             }
-        } catch (ClassNotFoundException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "rejectCall1: ClassNotFoundException");
-                e.printStackTrace();
-            }
-        } catch (IllegalAccessException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "rejectCall1: IllegalAccessException");
-                e.printStackTrace();
-            }
-        } catch (NoSuchMethodException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "rejectCall1: NoSuchMethodException");
-                e.printStackTrace();
-            }
         } catch (SecurityException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "rejectCall1: SecurityException");
-                e.printStackTrace();
-            }
-        } catch (InvocationTargetException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "rejectCall1: InvocationTargetException");
                 e.printStackTrace();
             }
         }
@@ -177,43 +154,24 @@ public class CallHelper {
 
     private static boolean answerCall2(Context context, TelephonyManager telephonyManager) {
         try {
-            final Method declaredMethod = Class.forName(telephonyManager.getClass().getName()).getDeclaredMethod("getITelephony");
-            declaredMethod.setAccessible(true);
-            final ITelephony iTelephony = (ITelephony) declaredMethod.invoke(telephonyManager, new Object[0]);
-            iTelephony.silenceRinger();
-            iTelephony.answerRingingCall();
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "answerCall2: success");
+            final Object object = UtilsReflection.invokeMethod(telephonyManager, TelephonyManager.class, "getITelephony");
+            if (object instanceof ITelephony) {
+                final ITelephony iTelephony = ((ITelephony) object);
+                iTelephony.silenceRinger();
+                iTelephony.answerRingingCall();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "answerCall2: success");
+                }
+                return true;
             }
-            return true;
         } catch (RemoteException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "answerCall2: RemoteException");
                 e.printStackTrace();
             }
-        } catch (ClassNotFoundException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "answerCall2: ClassNotFoundException");
-                e.printStackTrace();
-            }
-        } catch (IllegalAccessException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "answerCall2: IllegalAccessException");
-                e.printStackTrace();
-            }
-        } catch (NoSuchMethodException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "answerCall2: NoSuchMethodException");
-                e.printStackTrace();
-            }
         } catch (SecurityException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "answerCall2: SecurityException");
-                e.printStackTrace();
-            }
-        } catch (InvocationTargetException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "answerCall2: InvocationTargetException");
                 e.printStackTrace();
             }
         }

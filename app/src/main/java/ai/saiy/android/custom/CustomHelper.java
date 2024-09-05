@@ -104,7 +104,7 @@ public class CustomHelper {
                 MyLog.getElapsed(CLS_NAME, "callables", then);
             }
 
-            final CustomHelperHolder holder = new CustomHelperHolder();;
+            final CustomHelperHolder holder = new CustomHelperHolder();
             setCustomNickname(holder, ctx, customNicknameArray);
             setCustomPhrase(holder, ctx, customPhraseArray);
             setCustomCommandContainer(holder, ctx, customCommandContainerArray);

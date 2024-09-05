@@ -3,6 +3,8 @@ package ai.saiy.android.command.driving;
 import android.content.Context;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
@@ -13,11 +15,11 @@ public class Driving implements Callable<ArrayList<Pair<CC, Float>>> {
     private final SupportedLanguage sl;
     private Object driving;
 
-    public Driving(SupportedLanguage supportedLanguage) {
+    public Driving(@NonNull SupportedLanguage supportedLanguage) {
         this.sl = supportedLanguage;
     }
 
-    public Driving(ai.saiy.android.localisation.SaiyResources sr, SupportedLanguage supportedLanguage, ArrayList<String> voiceData, float[] confidence) {
+    public Driving(@NonNull ai.saiy.android.localisation.SaiyResources sr, @NonNull SupportedLanguage supportedLanguage, @NonNull ArrayList<String> voiceData, @NonNull float[] confidence) {
         this.sl = supportedLanguage;
         switch (supportedLanguage) {
             case ENGLISH:
@@ -32,7 +34,7 @@ public class Driving implements Callable<ArrayList<Pair<CC, Float>>> {
         }
     }
 
-    public CommandDrivingValues fetch(Context context, ArrayList<String> voiceData) {
+    public CommandDrivingValues fetch(@NonNull Context context, @NonNull ArrayList<String> voiceData) {
         switch (sl) {
             case ENGLISH:
                 return Driving_en.sortDriving(context, voiceData, sl);

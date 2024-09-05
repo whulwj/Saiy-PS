@@ -35,13 +35,13 @@ public class CommandDriving {
         return outcome;
     }
 
-    public static void openAdvancedSettings(Context context) {
+    public static void openAdvancedSettings(@NonNull Context context) {
         Bundle bundle = new Bundle();
         bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_ADVANCED_SETTINGS);
         ai.saiy.android.intent.ExecuteIntent.saiyActivity(context, ActivityHome.class, bundle, true);
     }
 
-    public static boolean haveDrivingProfilePermissions(Context context, DrivingProfile drivingProfile) {
+    public static boolean haveDrivingProfilePermissions(@NonNull Context context, @NonNull DrivingProfile drivingProfile) {
         final boolean announceNotifications = drivingProfile.getAnnounceNotifications();
         if (announceNotifications && !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(context)) {
             return false;
@@ -56,7 +56,7 @@ public class CommandDriving {
         return false;
     }
 
-    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage sl, ai.saiy.android.command.helper.CommandRequest cr, Locale vrLocale, Locale ttsLocale) {
+    public @NonNull Outcome getResponse(@NonNull Context context, @NonNull ArrayList<String> voiceData, @NonNull SupportedLanguage sl, ai.saiy.android.command.helper.CommandRequest cr, Locale vrLocale, Locale ttsLocale) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }

@@ -712,11 +712,50 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         });
     }
 
+    public void showVocalVerificationDialog() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "showVocalVerificationDialog");
+        }
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setCancelable(false)
+                .setTitle(R.string.menu_vocal_verification)
+                .setMessage(R.string.content_vocal_verification)
+                .setIcon(R.drawable.ic_account_key)
+                .setPositiveButton(R.string.menu_lets_do_it, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "startEnrollment: onPositive");
+                        }
+                        showAccountPicker();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "startEnrollment: onNegative");
+                        }
+                    }
+                })
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(final DialogInterface dialog) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "startEnrollment: onCancel");
+                        }
+                    }
+                }).create();
+
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
+        materialDialog.show();
+    }
+
     /**
      * Show the account picker dialog
      */
     @SuppressWarnings("MissingPermission, ConstantConditions")
-    public void showAccountPicker() {
+    private void showAccountPicker() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showAccountPicker");
         }

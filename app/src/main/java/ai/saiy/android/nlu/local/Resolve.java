@@ -54,6 +54,7 @@ import ai.saiy.android.command.driving.Driving;
 import ai.saiy.android.command.emotion.Emotion;
 import ai.saiy.android.command.facebook.Facebook;
 import ai.saiy.android.command.foursquare.Foursquare;
+import ai.saiy.android.command.hardware.Hardware;
 import ai.saiy.android.command.help.Help;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.horoscope.Horoscope;
@@ -145,6 +146,7 @@ public final class Resolve {
         callableList.add(new Contact(sr, sl, voiceData, confidence));
         callableList.add(new Navigation(sr, sl, voiceData, confidence));
         callableList.add(new Time(sr, sl, voiceData, confidence));
+        callableList.add(new Hardware(sr, sl, voiceData, confidence));
         callableList.add(new Clipboard(sr, sl, voiceData, confidence));
         callableList.add(new Settings(sr, sl, voiceData, confidence));
         callableList.add(new Somersault(sr, sl, voiceData, confidence));

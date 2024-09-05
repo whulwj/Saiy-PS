@@ -262,6 +262,7 @@
     <string name="menu_blacklist" translatable="true">Manage Blacklist</string>
     <string name="menu_vocal_verification" translatable="true">Vocal Verification</string>
     <string name="menu_vocal_verification_feedback">Vocal Verification Feedback</string>
+    <string name="content_vocal_verification">This is an experimental feature with limited initial user access, which once perfected, could be used to identify you and enable you to use commands that involve private data.\n\nTo begin with, this may be rolled out to allow certain commands to be performed if the device is locked - further ahead, well, who knows…\n\nOnce you have successfully enrolled a voice footprint, you can say the command \'Who am I?\' and after following the instructions, you will receive a result that informs you of how confident I was that you are the user who enrolled the footprint. In other words, if it\'s you!\n\nYou can of course ask your friends to speak instead, to test the accuracy of the detection.\n\nIn the Development Section, you can provide feedback as to your experience of this feature. Just a simple click on a star rating is all you need to do!\n\nFinally, if you suffer access errors when attempting this process, please accept my developer\'s apologies, but this feature is not cheap to test and he may already be on the run from debt collectors! #HelpHideHim</string>
     <string name="dialog_id_verification" translatable="true">Select voice account: an account to associate</string>
     <string name="menu_unlink_association" translatable="true">Unlink Association</string>
     <string name="content_unlink_association" translatable="true">%1$s already has a vocal
@@ -1050,6 +1051,7 @@
     <string name="permission_group_telephony">I require the, telephony and call log, permissions to do many things. To assist you with making and receiving calls. To announce who is calling you or who you may have missed a call from.</string>
     <string name="permission_location">I require the, location, permissions to do many things. To assist you with navigation and appointment commands, determine locations for your car or bike, or even just you, if you are ever lost.</string>
     <string name="permission_calendar">I require the, calendar, permissions in order to check your agenda, navigate to appointments, announce their content and attendees.</string>
+    <string name="permission_camera">I require the, camera, permissions in order to control the flashlight and in a future release, take a picture on your command.</string>
     <string name="permission_sms_read">I require the, read SMS, permission in order to access your message inbox, and therefore be able to inform you who has messaged, and what they said.</string>
     <string name="permission_sms_send">I require the, send SMS, permission to enable me to send text messages on your behalf, without your physical interaction. When you are driving for example, or have your hands full with something else. I\'ll always double check the recipient and content with you prior to doing this, and it will of course, only ever be as a result of your direct instruction.</string>
     <string name="permission_phone_state">So I can access the number of your incoming calls, and search for the associated contact. I require the permission to read the phone state.</string>
@@ -2272,4 +2274,23 @@
     <string name="super_user">super user</string>
     <string name="superuser">superuser</string>
     <string name="superuser_disabled">All super user commands are currently disabled. They\'ll be made available again in a coming release</string>
+
+    <string name="bluetooth">bluetooth</string>
+    <string name="data">data</string>
+    <string name="wi_fi">wi-fi</string>
+    <string name="wifi">wifi</string>
+    <string name="g_p_s">g p s</string>
+    <string name="gps">gps</string>
+    <string name="n_f_c">n f c</string>
+    <string name="nfc">nfc</string>
+    <string name="hot_spot">hot spot</string>
+    <string name="hotspot">hotspot</string>
+    <string name="aeroplane">aeroplane</string>
+    <string name="airplane">airplane</string>
+    <string name="connection">connection</string>
+    <string name="flash_light">flash light</string>
+    <string name="flashlight">flashlight</string>
+    <string name="flight">flight</string>
+    <string name="torch">torch</string>
+    <string name="mode">mode</string>
 </resources>

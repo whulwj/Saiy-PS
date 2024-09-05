@@ -53,7 +53,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -87,6 +86,7 @@ import ai.saiy.android.utils.BluetoothConstants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsParcelable;
+import ai.saiy.android.utils.UtilsReflection;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -1415,28 +1415,15 @@ public class FragmentSettingsHelper {
 
     private String reflectEngine() {
         try {
-            Field declaredField = this.tts.getClass().getSuperclass().getDeclaredField("mCurrentEngine");
-            declaredField.setAccessible(true);
-            return (String) declaredField.get(this.tts);
-        } catch (IllegalAccessException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "IllegalAccessException");
-                e.printStackTrace();
-            }
-            return null;
-        } catch (NoSuchFieldException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "NoSuchFieldException");
-                e.printStackTrace();
-            }
-            return null;
+            final Object object = UtilsReflection.getFieldObj(this.tts, TextToSpeech.class, TTSDefaults.BOUND_ENGINE_FIELD, null);
+            return (object instanceof String)? (String) object : null;
         } catch (NullPointerException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "NullPointerException");
                 e.printStackTrace();
             }
-            return null;
         }
+        return null;
     }
 
     private void shutdownTTS() {

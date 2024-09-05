@@ -227,6 +227,12 @@ public class NotificationService extends IntentService {
                                         }
                                         permissionContent = getString(ai.saiy.android.R.string.permission_group_telephony);
                                         break;
+                                    case PermissionHelper.REQUEST_CAMERA:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_CAMERA");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_camera);
+                                        break;
                                     case PermissionHelper.REQUEST_LOCATION:
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_LOCATION");

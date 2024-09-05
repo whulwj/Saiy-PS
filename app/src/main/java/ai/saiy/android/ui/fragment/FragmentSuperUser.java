@@ -197,7 +197,7 @@ public class FragmentSuperUser extends Fragment implements View.OnClickListener,
                 mAdapter.notifyItemChanged(position);
                 break;
             case 3:
-                helper.showAccountPicker();
+                helper.showVocalVerificationDialog();
                 break;
             case 4:
                 getParentActivity().vibrate();

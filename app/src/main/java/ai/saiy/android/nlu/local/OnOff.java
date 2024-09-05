@@ -1,5 +1,7 @@
 package ai.saiy.android.nlu.local;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -70,7 +72,7 @@ public class OnOff {
         return this.confidence;
     }
 
-    public Result resolve(ArrayList<String> voiceData, SupportedLanguage supportedLanguage) { //resolve
+    public Result resolve(@NonNull ArrayList<String> voiceData, SupportedLanguage supportedLanguage) { //resolve
         final Locale locale = supportedLanguage.getLocale();
         int toggleCount = 0;
         int offCount = 0;
@@ -92,7 +94,7 @@ public class OnOff {
         return (onCount <= offCount || onCount <= toggleCount) ? (offCount <= onCount || offCount <= toggleCount) ? (toggleCount <= onCount || toggleCount <= offCount) ? Result.UNRESOLVED : Result.TOGGLE : Result.OFF : Result.ON;
     }
 
-    public Result resolve(ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.localisation.SaiyResources sr) {
+    public Result resolve(@NonNull ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.localisation.SaiyResources sr) {
         if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, sr, true).detectCancel(voiceData)) {
             return Result.CANCEL;
         }

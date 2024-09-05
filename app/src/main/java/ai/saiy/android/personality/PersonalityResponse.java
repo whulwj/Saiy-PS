@@ -920,9 +920,36 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getHardwareUnknownError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_hardware_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getHardwareUnsupportedError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_hardware_unsupported);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getHardwareCameraError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_hardware_camera);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getConnectionEnabled(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_connection_enabled);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String ConnectionDisabled(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_connection_disabled);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getHardwareToggle(Context context, SupportedLanguage supportedLanguage, String str, String str2) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_hardware_toggle);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], str, str2);
     }
 
     public static String getCalculateWolframAlpha(Context context, SupportedLanguage supportedLanguage) {

@@ -50,6 +50,7 @@ import ai.saiy.android.command.dice.CommandDice;
 import ai.saiy.android.command.emotion.CommandEmotion;
 import ai.saiy.android.command.facebook.CommandFacebook;
 import ai.saiy.android.command.foursquare.CommandFoursquare;
+import ai.saiy.android.command.hardware.CommandHardware;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.command.location.address.CommandLocation;
@@ -493,6 +494,16 @@ public class Quantum extends Tunnelling {
                     }
                     final ai.saiy.android.command.time.CommandTime commandTime = new ai.saiy.android.command.time.CommandTime();
                     outcome = commandTime.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_HARDWARE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HARDWARE.name());
+                    }
+                    final CommandHardware commandHardware = new CommandHardware();
+                    outcome = commandHardware.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -1327,6 +1338,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_TIME:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TIME.name());
+                    }
+                    break;
+                case COMMAND_HARDWARE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HARDWARE.name());
                     }
                     break;
                 case COMMAND_CLIPBOARD:

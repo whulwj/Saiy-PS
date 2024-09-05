@@ -3,6 +3,8 @@ package ai.saiy.android.command.driving;
 import android.content.Context;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -27,7 +29,7 @@ public class Driving_en {
     private final ArrayList<String> voiceData;
     private final float[] confidence;
 
-    public Driving_en(ai.saiy.android.localisation.SaiyResources sr, SupportedLanguage supportedLanguage, ArrayList<String> voiceData, float[] confidence) {
+    public Driving_en(@NonNull ai.saiy.android.localisation.SaiyResources sr, @NonNull SupportedLanguage supportedLanguage, @NonNull ArrayList<String> voiceData, @NonNull float[] confidence) {
         this.sl = supportedLanguage;
         this.voiceData = voiceData;
         this.confidence = confidence;
@@ -41,7 +43,7 @@ public class Driving_en {
         }
     }
 
-    public static CommandDrivingValues sortDriving(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage) {
+    public static CommandDrivingValues sortDriving(@NonNull Context context, @NonNull ArrayList<String> voiceData, @NonNull SupportedLanguage supportedLanguage) {
         final long startTime = System.nanoTime();
         final Locale locale = supportedLanguage.getLocale();
         final CommandDrivingValues commandDrivingValues = new CommandDrivingValues();
@@ -80,7 +82,7 @@ public class Driving_en {
         return commandDrivingValues;
     }
 
-    private static void initStrings(ai.saiy.android.localisation.SaiyResources sr) {
+    private static void initStrings(@NonNull ai.saiy.android.localisation.SaiyResources sr) {
         driving = sr.getString(R.string.driving);
         profile = sr.getString(R.string.profile);
         i_m_driving = sr.getString(R.string.i_m_driving);
@@ -89,23 +91,23 @@ public class Driving_en {
         onOff = new OnOff(sr);
     }
 
-    public ArrayList<Pair<CC, Float>> detectCallable() {
+    public @NonNull ArrayList<Pair<CC, Float>> detectCallable() {
         final long startTime = System.nanoTime();
         final ArrayList<Pair<CC, Float>> toReturn = new ArrayList<>();
-        if (UtilsList.notNaked(this.voiceData) && UtilsList.notNaked(this.confidence) && this.voiceData.size() == this.confidence.length) {
-            final OnOff.Result result = onOff.resolve(this.voiceData, this.sl);
-            final Locale locale = this.sl.getLocale();
+        if (UtilsList.notNaked(voiceData) && UtilsList.notNaked(confidence) && voiceData.size() == confidence.length) {
+            final OnOff.Result result = onOff.resolve(voiceData, sl);
+            final Locale locale = sl.getLocale();
             String vdLower;
-            final int size = this.voiceData.size();
+            final int size = voiceData.size();
             for (int i = 0; i < size; i++) {
-                vdLower = this.voiceData.get(i).toLowerCase(locale).trim();
+                vdLower = voiceData.get(i).toLowerCase(locale).trim();
                 if (!vdLower.contains(driving) || !vdLower.contains(profile) || result == OnOff.Result.UNRESOLVED) {
                     if (vdLower.startsWith(i_m_driving) || vdLower.startsWith(i_am_driving) || vdLower.startsWith(i_ve_started_driving)) {
                         toReturn.add(new Pair<>(CC.COMMAND_DRIVING, 1.0f));
                         break;
                     }
                 } else {
-                    toReturn.add(new Pair<>(CC.COMMAND_DRIVING, this.confidence[i]));
+                    toReturn.add(new Pair<>(CC.COMMAND_DRIVING, confidence[i]));
                 }
             }
         }
