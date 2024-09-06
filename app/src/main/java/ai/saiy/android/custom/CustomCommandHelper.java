@@ -175,7 +175,7 @@ public class CustomCommandHelper {
                     + cccArrayContains.size() + cccArrayCustom.size();
         }
 
-        final List<Callable<Object>> callableList = new ArrayList<>(callableListSize);
+        final List<Callable<CustomCommand>> callableList = new ArrayList<>(callableListSize);
 
         if (UtilsList.notNaked(cccArrayStartWith)) {
             if (DEBUG) {
@@ -217,63 +217,63 @@ public class CustomCommandHelper {
                             MyLog.i(CLS_NAME, "Running: JARO_WINKLER");
                         }
 
-                        callableList.add(new JaroWinklerHelper(ctx, cccArray, voiceData, loc, null));
+                        callableList.add(new JaroWinklerHelper<>(ctx, cccArray, voiceData, loc, null).customCommandCallable());
                         break;
                     case LEVENSHTEIN:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: LEVENSHTEIN");
                         }
 
-                        callableList.add(new LevenshteinHelper(ctx, cccArray,
-                                voiceData, loc));
+                        callableList.add(new LevenshteinHelper<>(ctx, cccArray,
+                                voiceData, loc).customCommandCallable());
                         break;
                     case SOUNDEX:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: SOUNDEX");
                         }
 
-                        callableList.add(new SoundexHelper(ctx, cccArray,
-                                voiceData, loc, null));
+                        callableList.add(new SoundexHelper<>(ctx, cccArray,
+                                voiceData, loc, null).customCommandCallable());
                         break;
                     case METAPHONE:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: METAPHONE");
                         }
 
-                        callableList.add(new MetaphoneHelper(ctx, cccArray,
-                                voiceData, loc, null));
+                        callableList.add(new MetaphoneHelper<>(ctx, cccArray,
+                                voiceData, loc, null).customCommandCallable());
                         break;
                     case DOUBLE_METAPHONE:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: DOUBLE_METAPHONE");
                         }
 
-                        callableList.add(new DoubleMetaphoneHelper(ctx, cccArray,
-                                voiceData, loc, null));
+                        callableList.add(new DoubleMetaphoneHelper<>(ctx, cccArray,
+                                voiceData, loc, null).customCommandCallable());
                         break;
                     case FUZZY:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: FUZZY");
                         }
 
-                        callableList.add(new FuzzyHelper(ctx, cccArray,
-                                voiceData, loc));
+                        callableList.add(new FuzzyHelper<>(ctx, cccArray,
+                                voiceData, loc).customCommandCallable());
                         break;
                     case NEEDLEMAN_WUNCH:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: NEEDLEMAN_WUNCH");
                         }
 
-                        callableList.add(new NeedlemanWunschHelper(ctx, cccArray,
-                                voiceData, loc));
+                        callableList.add(new NeedlemanWunschHelper<>(ctx, cccArray,
+                                voiceData, loc).customCommandCallable());
                         break;
                     case MONGE_ELKAN:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Running: MONGE_ELKAN");
                         }
 
-                        callableList.add(new MongeElkanHelper(ctx, cccArray,
-                                voiceData, loc));
+                        callableList.add(new MongeElkanHelper<>(ctx, cccArray,
+                                voiceData, loc).customCommandCallable());
                         break;
                 }
             }
@@ -284,11 +284,15 @@ public class CustomCommandHelper {
 
         try {
 
-            final List<Future<Object>> futures = executorService.invokeAll(callableList,
+            final List<Future<CustomCommand>> futures = executorService.invokeAll(callableList,
                     THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
 
-            for (final Future<Object> future : futures) {
-                customCommandArray.add((CustomCommand) future.get());
+            CustomCommand customCommand;
+            for (final Future<CustomCommand> future : futures) {
+                customCommand = future.get();
+                if (customCommand != null) {
+                    customCommandArray.add(customCommand);
+                }
             }
 
         } catch (final ExecutionException e) {
@@ -311,7 +315,6 @@ public class CustomCommandHelper {
         }
 
         if (!customCommandArray.isEmpty()) {
-            customCommandArray.removeAll(Collections.<CustomCommand>singleton(null));
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "algorithms returned " + customCommandArray.size() + " matches");
                 for (final CustomCommand c : customCommandArray) {

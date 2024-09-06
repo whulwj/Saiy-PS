@@ -177,6 +177,7 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                 break;
             case 2:
                 getParentActivity().vibrate();
+                // https://stackoverflow.com/questions/42972155/offline-speechrecognizer-on-android-is-not-working
                 SPH.setUseOffline(getApplicationContext(), !SPH.getUseOffline(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getUseOffline(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);

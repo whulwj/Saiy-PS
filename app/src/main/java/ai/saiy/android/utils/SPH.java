@@ -1584,7 +1584,7 @@ public class SPH {
         if (UtilsString.notNaked(localeString)) {
             return UtilsLocale.stringToLocale(localeString);
         }
-        Locale locale = UtilsLocale.stringToLocale(SupportedLanguage.getGoogleNativeVRSupportedLanguageString());
+        final Locale locale = UtilsLocale.stringToLocale(SupportedLanguage.getGoogleNativeVRSupportedLanguageString());
         setVRLocale(ctx, locale);
         return locale;
     }

@@ -41,14 +41,14 @@ import ai.saiy.android.utils.UtilsList;
  * Created by benrandall76@gmail.com on 03/10/2016.
  */
 
-public class CustomHelper implements Callable<Object> {
+public class CustomHelper implements Callable<CustomCommand> {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = CustomHelper.class.getSimpleName();
 
     private final ArrayList<String> inputData;
     private final Locale loc;
-    private final ArrayList<?> genericData;
+    private final ArrayList<CustomCommandContainer> genericData;
 
     /**
      * Constructor
@@ -57,7 +57,7 @@ public class CustomHelper implements Callable<Object> {
      * @param inputData   an array of Strings containing the input comparison data
      * @param loc         the {@link Locale} extracted from the {@link SupportedLanguage}
      */
-    public CustomHelper(@NonNull final ArrayList<?> genericData,
+    public CustomHelper(@NonNull final ArrayList<CustomCommandContainer> genericData,
                         @NonNull final ArrayList<String> inputData, @NonNull final Locale loc) {
         this.genericData = genericData;
         this.inputData = inputData;
@@ -87,7 +87,7 @@ public class CustomHelper implements Callable<Object> {
 
         outer:
         for (int i = 0; i < size; i++) {
-            container = (CustomCommandContainer) genericData.get(i);
+            container = genericData.get(i);
             phrase = container.getKeyphrase().toLowerCase(loc).trim();
             pattern = Pattern.compile(gson.fromJson(container.getSerialised(), CustomCommand.class)
                     .getRegularExpression());
@@ -130,7 +130,7 @@ public class CustomHelper implements Callable<Object> {
      * @return computed result
      */
     @Override
-    public Object call() {
+    public CustomCommand call() {
         if (UtilsList.notNaked(genericData)) {
             return executeCustomCommand();
         }

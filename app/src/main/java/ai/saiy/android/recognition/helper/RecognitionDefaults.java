@@ -17,6 +17,9 @@
 
 package ai.saiy.android.recognition.helper;
 
+import android.os.Build;
+import android.speech.RecognizerIntent;
+
 /**
  * Created by benrandall76@gmail.com on 03/08/2016.
  */
@@ -27,8 +30,7 @@ public class RecognitionDefaults {
     public static final String GOOGLE_NOW_FINAL_FIELD = "com.google.android.apps.gsa.searchplate.SearchPlate";
     public static final String GOOGLE_NOW_FINAL_EDIT_TEXT = "android.widget.EditText";
 
-    public static final String PREFER_OFFLINE = "android.speech.extra.PREFER_OFFLINE";
-    public static final String EXTRA_SECURE = "android.speech.extras.EXTRA_SECURE";
+    public static final String PREFER_OFFLINE = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)? RecognizerIntent.EXTRA_PREFER_OFFLINE : "android.speech.extra.PREFER_OFFLINE";
     public static final String EXTRA_CONTINUOUS = "android.speech.extra.DICTATION_MODE";
     public static final String EXTRA_GET_AUDIO_FORMAT = "android.speech.extra.GET_AUDIO_FORMAT";
     public static final String EXTRA_GET_AUDIO = "android.speech.extra.GET_AUDIO";

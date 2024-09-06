@@ -143,6 +143,7 @@ dependencies {
     implementation libs.commons.collections4
     implementation libs.commons.io
     implementation libs.commons.fileupload
+    implementation libs.commons.text
     implementation libs.simmetrics.core
     implementation platform(libs.libraries.bom)
     // https://github.com/dialogflow/dialogflow-android-client

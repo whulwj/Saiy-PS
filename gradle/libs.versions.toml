@@ -7,6 +7,7 @@ commonsCollections4 = "4.4"
 commonsCodec = "1.17.1"
 commonsLang3 = "3.14.0"
 commonsFileUpload = "1.5"
+commonsText = "1.12.0"
 googleGoogleApiServicesTranslate = "v2-rev51-1.25.0"
 grpcAuth = "1.55.3"
 grpcJava = "1.55.3"
@@ -69,30 +70,31 @@ twitter4j = "4.1.2"
 facebook-sdk ="17.0.0"
 
 [libraries]
-google-auth-library-oauth2-http = { module = "com.google.auth:google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
+google-auth-library-oauth2-http = { group = "com.google.auth", name = "google-auth-library-oauth2-http", version.ref = "googleAuthLibraryOauth2Http" }
 billing = { group = "com.android.billingclient", name = "billing", version.ref = "billing" }
-commons-io = { module = "commons-io:commons-io", version.ref = "commonsIo" }
-commons-collections4 = { module = "org.apache.commons:commons-collections4", version.ref = "commonsCollections4" }
-commons-codec = { module = "commons-codec:commons-codec", version.ref = "commonsCodec" }
-commons-lang3 = { module = "org.apache.commons:commons-lang3", version.ref = "commonsLang3" }
-commons-fileupload = { module = "commons-fileupload:commons-fileupload", version.ref = "commonsFileUpload" }
-google-google-api-services-translate = { module = "com.google.apis:google-api-services-translate", version.ref = "googleGoogleApiServicesTranslate" }
-grpc-auth = { module = "io.grpc:grpc-auth", version.ref = "grpcAuth" }
-grpc-okhttp = { module = "io.grpc:grpc-okhttp", version.ref = "grpcJava" }
-grpc-protobuf = { module = "io.grpc:grpc-protobuf", version.ref = "grpcJava" }
-grpc-stub = { module = "io.grpc:grpc-stub", version.ref = "grpcJava" }
+commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIo" }
+commons-collections4 = { group = "org.apache.commons", name = "commons-collections4", version.ref = "commonsCollections4" }
+commons-codec = { group = "commons-codec", name = "commons-codec", version.ref = "commonsCodec" }
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commonsLang3" }
+commons-fileupload = { group = "commons-fileupload", name = "commons-fileupload", version.ref = "commonsFileUpload" }
+commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commonsText" }
+google-google-api-services-translate = { group = "com.google.apis", name = "google-api-services-translate", version.ref = "googleGoogleApiServicesTranslate" }
+grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpcAuth" }
+grpc-okhttp = { group = "io.grpc", name = "grpc-okhttp", version.ref = "grpcJava" }
+grpc-protobuf = { group = "io.grpc", name = "grpc-protobuf", version.ref = "grpcJava" }
+grpc-stub = { group = "io.grpc", name = "grpc-stub", version.ref = "grpcJava" }
 protobuf-java = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobufJava" }
 protobuf-java-util = { group = "com.google.protobuf", name = "protobuf-java-util", version.ref = "protobufJava" }
-javax-annotation-api = { module = "javax.annotation:javax.annotation-api", version.ref = "javaxAnnotationApi" }
-java-web-socket = { module = "org.java-websocket:Java-WebSocket", version.ref = "javaWebsocket" }
-google-http-client-gson = { module = "com.google.http-client:google-http-client-gson", version.ref = "googleHttpClientGson" }
-gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
-guava = { module = "com.google.guava:guava", version.ref = "guava" }
+javax-annotation-api = { group = "javax.annotation", name = "javax.annotation-api", version.ref = "javaxAnnotationApi" }
+java-web-socket = { group = "org.java-websocket", name = "Java-WebSocket", version.ref = "javaWebsocket" }
+google-http-client-gson = { group = "com.google.http-client", name = "google-http-client-gson", version.ref = "googleHttpClientGson" }
+gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
+guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
-licensesdialog = { module = "de.psdev.licensesdialog:licensesdialog", version.ref = "licensesdialog" }
-play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
-play-services-location = { module = "com.google.android.gms:play-services-location", version.ref = "playServicesLocation" }
+licensesdialog = { group = "de.psdev.licensesdialog", name = "licensesdialog", version.ref = "licensesdialog" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }
 play-services-ads-identifier = { group = "com.google.android.gms", name = "play-services-ads-identifier", version.ref = "playServicesAdsIdentifier" }
 play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
 play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
@@ -122,23 +124,23 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 
 multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 desugar_jdk_libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar_jdk_libs_version" }
-simple-xml = { module = "org.simpleframework:simple-xml", version.ref = "simpleXml" }
-libraries-bom = { module = "com.google.cloud:libraries-bom", version.ref = "libraries-bom" }
-cloud-dialogflow = { module = "com.google.cloud:google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
+simple-xml = { group = "org.simpleframework", name = "simple-xml", version.ref = "simpleXml" }
+libraries-bom = { group = "com.google.cloud", name = "libraries-bom", version.ref = "libraries-bom" }
+cloud-dialogflow = { group = "com.google.cloud", name = "google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
 proto-google-common = { group = "com.google.api.grpc", name = "proto-google-common-protos", version.ref = "proto-google-common" }
 firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-appcheck = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebase-appcheck" }
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebase-appcheck" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
-firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebase-bom" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
 firebase-functions = { group = "com.google.firebase", name = "firebase-functions", version.ref = "firebase-functions" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
 firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUI" }
-simmetrics-core = { module = "com.github.mpkorstanje:simmetrics-core", version.ref = "simmetricsCore" }
-speechkit = { module = "com.nuance:speechkit", version.ref = "speechkit" }
-speechrecognition = { module = "com.microsoft.projectoxford:speechrecognition", version.ref = "speechrecognition" }
-volley = { module = "com.android.volley:volley", version.ref = "volley" }
+simmetrics-core = { group = "com.github.mpkorstanje", name = "simmetrics-core", version.ref = "simmetricsCore" }
+speechkit = { group = "com.nuance", name = "speechkit", version.ref = "speechkit" }
+speechrecognition = { group = "com.microsoft.projectoxford", name = "speechrecognition", version.ref = "speechrecognition" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
 java-aes-crypto = { group = "com.github.tozny", name = "java-aes-crypto", version.ref= "java-aes-crypto" }
 twitter4j = { group = "org.twitter4j", name = "twitter4j-core", version.ref= "twitter4j" }

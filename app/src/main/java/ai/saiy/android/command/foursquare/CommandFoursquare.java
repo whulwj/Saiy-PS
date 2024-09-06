@@ -45,7 +45,7 @@ public class CommandFoursquare {
         return outcome;
     }
 
-    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
+    public @NonNull Outcome getResponse(@NonNull Context context, @NonNull ArrayList<String> voiceData, @NonNull SupportedLanguage supportedLanguage, @NonNull ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
@@ -119,7 +119,7 @@ public class CommandFoursquare {
         for (Venue venue : venues) {
             venueNames.add(venue.getName());
         }
-        final ai.saiy.android.nlu.local.AlgorithmicContainer algorithmicContainer = new ai.saiy.android.nlu.local.AlgorithmicResolver(context, new Algorithm[]{Algorithm.JARO_WINKLER, Algorithm.SOUNDEX, Algorithm.METAPHONE, Algorithm.DOUBLE_METAPHONE}, supportedLanguage.getLocale(), voiceDataTrimmed, venueNames, 500L, false).resolve();
+        final ai.saiy.android.nlu.local.AlgorithmicContainer algorithmicContainer = new ai.saiy.android.nlu.local.AlgorithmicResolver<>(context, new Algorithm[]{Algorithm.JARO_WINKLER, Algorithm.SOUNDEX, Algorithm.METAPHONE, Algorithm.DOUBLE_METAPHONE}, supportedLanguage.getLocale(), voiceDataTrimmed, venueNames, 500L, false).resolve();
         if (algorithmicContainer == null) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "failed to find a match");

@@ -135,7 +135,7 @@ public class CommandTasker {
                                     taskNameList.add(taskerTask.getTaskName());
                                 }
 
-                                final AlgorithmicResolver resolver = new AlgorithmicResolver(ctx,
+                                final AlgorithmicResolver<?> resolver = new AlgorithmicResolver<>(ctx,
                                         Algorithm.getAlgorithms(ctx, sl), sl.getLocale(), taskNames,
                                         taskNameList, AlgorithmicResolver.THREADS_TIMEOUT_500, false);
 

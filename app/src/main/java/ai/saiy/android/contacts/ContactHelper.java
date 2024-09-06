@@ -102,16 +102,16 @@ public class ContactHelper {
     }
 
     private ArrayList<Contact> getContactAlgorithmically(Context context, Locale locale, ArrayList<Contact> contacts, ArrayList<String> inputData, boolean precision) {
-        ai.saiy.android.nlu.local.AlgorithmicResolver algorithmicResolver;
+        ai.saiy.android.nlu.local.AlgorithmicResolver<?> algorithmicResolver;
         final long then = System.nanoTime();
         final ArrayList<Contact> toReturn = new ArrayList<>();
         if (useLegacy(context)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "getContactAlgorithmically: legacy");
             }
-            algorithmicResolver = new ai.saiy.android.nlu.local.AlgorithmicResolver(context, new Algorithm[]{Algorithm.JARO_WINKLER}, locale, inputData, contacts, AlgorithmicResolver.THREADS_TIMEOUT_2000, precision);
+            algorithmicResolver = new ai.saiy.android.nlu.local.AlgorithmicResolver<>(context, new Algorithm[]{Algorithm.JARO_WINKLER}, locale, inputData, contacts, AlgorithmicResolver.THREADS_TIMEOUT_2000, precision);
         } else {
-            algorithmicResolver = new ai.saiy.android.nlu.local.AlgorithmicResolver(context, new Algorithm[]{Algorithm.JARO_WINKLER, Algorithm.SOUNDEX, Algorithm.METAPHONE, Algorithm.DOUBLE_METAPHONE}, locale, inputData, contacts, AlgorithmicResolver.THREADS_TIMEOUT_2000, precision);
+            algorithmicResolver = new ai.saiy.android.nlu.local.AlgorithmicResolver<>(context, new Algorithm[]{Algorithm.JARO_WINKLER, Algorithm.SOUNDEX, Algorithm.METAPHONE, Algorithm.DOUBLE_METAPHONE}, locale, inputData, contacts, AlgorithmicResolver.THREADS_TIMEOUT_2000, precision);
         }
         final ArrayList<ai.saiy.android.nlu.local.AlgorithmicContainer> algorithmicContainers = algorithmicResolver.fetch();
         if (UtilsList.notNaked(algorithmicContainers)) {

@@ -354,7 +354,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
         return super.speak(text, queueMode, params.getBundle(), utteranceId);
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public int speak(final String text, final int queueMode, final HashMap<String, String> map) {
 

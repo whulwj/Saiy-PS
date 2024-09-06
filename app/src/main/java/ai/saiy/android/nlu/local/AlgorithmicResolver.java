@@ -51,7 +51,7 @@ import ai.saiy.android.utils.MyLog;
  * Created by benrandall76@gmail.com on 11/08/2016.
  */
 
-public class AlgorithmicResolver {
+public class AlgorithmicResolver<T> {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = AlgorithmicResolver.class.getSimpleName();
@@ -62,17 +62,16 @@ public class AlgorithmicResolver {
 
     private final Context mContext;
     private final ArrayList<String> inputData;
-    private final ArrayList<?> genericData;
+    private final ArrayList<T> genericData;
     private final Algorithm[] algorithms;
     private final Locale loc;
     private final ExecutorService executorService;
-    private final List<Callable<Object>> callableList;
     private AlgorithmicContainer algorithmicContainer = null;
     private final boolean precision;
 
     public AlgorithmicResolver(@NonNull final Context context, @NonNull final Algorithm[] algorithms,
                                @NonNull final Locale loc, @NonNull final ArrayList<String> inputData,
-                               @NonNull final ArrayList<?> genericData, final long timeout, final boolean precision) {
+                               @NonNull final ArrayList<T> genericData, final long timeout, final boolean precision) {
         this.mContext = context;
         this.genericData = genericData;
         this.inputData = inputData;
@@ -82,11 +81,11 @@ public class AlgorithmicResolver {
         this.precision = precision;
 
         executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-        callableList = new ArrayList<>(this.algorithms.length);
     }
 
     public AlgorithmicContainer resolve() {
         final long then = System.nanoTime();
+        final List<Callable<AlgorithmicContainer>> callableList = new ArrayList<>(algorithms.length);
         for (final Algorithm algorithm : algorithms) {
             switch (algorithm) {
                 case JARO_WINKLER:
@@ -94,56 +93,56 @@ public class AlgorithmicResolver {
                         MyLog.i(CLS_NAME, "Running: JARO_WINKLER");
                     }
 
-                    callableList.add(new JaroWinklerHelper(mContext, genericData, inputData, loc, null));
+                    callableList.add(new JaroWinklerHelper<>(mContext, genericData, inputData, loc, null).genericCallable());
                     break;
                 case LEVENSHTEIN:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: LEVENSHTEIN");
                     }
 
-                    callableList.add(new LevenshteinHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new LevenshteinHelper<>(mContext, genericData, inputData, loc).genericCallable());
                     break;
                 case SOUNDEX:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: SOUNDEX");
                     }
 
-                    callableList.add(new SoundexHelper(mContext, genericData, inputData, loc, null));
+                    callableList.add(new SoundexHelper<>(mContext, genericData, inputData, loc, null).genericCallable());
                     break;
                 case METAPHONE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: METAPHONE");
                     }
 
-                    callableList.add(new MetaphoneHelper(mContext, genericData, inputData, loc, null));
+                    callableList.add(new MetaphoneHelper<>(mContext, genericData, inputData, loc, null).genericCallable());
                     break;
                 case DOUBLE_METAPHONE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: DOUBLE_METAPHONE");
                     }
 
-                    callableList.add(new DoubleMetaphoneHelper(mContext, genericData, inputData, loc, null));
+                    callableList.add(new DoubleMetaphoneHelper<>(mContext, genericData, inputData, loc, null).genericCallable());
                     break;
                 case FUZZY:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: FUZZY");
                     }
 
-                    callableList.add(new FuzzyHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new FuzzyHelper<>(mContext, genericData, inputData, loc).genericCallable());
                     break;
                 case NEEDLEMAN_WUNCH:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: NEEDLEMAN_WUNCH");
                     }
 
-                    callableList.add(new NeedlemanWunschHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new NeedlemanWunschHelper<>(mContext, genericData, inputData, loc).genericCallable());
                     break;
                 case MONGE_ELKAN:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: MONGE_ELKAN");
                     }
 
-                    callableList.add(new MongeElkanHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new MongeElkanHelper<>(mContext, genericData, inputData, loc).genericCallable());
                     break;
 
             }
@@ -153,13 +152,16 @@ public class AlgorithmicResolver {
 
         try {
 
-            final List<Future<Object>> futures = executorService.invokeAll(callableList,
+            final List<Future<AlgorithmicContainer>> futures = executorService.invokeAll(callableList,
                     THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
 
-            for (final Future<Object> future : futures) {
-                algorithmicContainerArray.add((AlgorithmicContainer) future.get());
+            AlgorithmicContainer algorithmicContainer;
+            for (final Future<AlgorithmicContainer> future : futures) {
+                algorithmicContainer = future.get();
+                if (algorithmicContainer != null) {
+                    algorithmicContainerArray.add(algorithmicContainer);
+                }
             }
-
         } catch (final ExecutionException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "future: ExecutionException");
@@ -180,7 +182,6 @@ public class AlgorithmicResolver {
         }
 
         if (!algorithmicContainerArray.isEmpty()) {
-            algorithmicContainerArray.removeAll(Collections.<AlgorithmicContainer>singleton(null));
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "algorithms returned " + algorithmicContainerArray.size() + " matches");
                 for (final AlgorithmicContainer a : algorithmicContainerArray) {
@@ -258,6 +259,7 @@ public class AlgorithmicResolver {
         }
         final long then = System.nanoTime();
 
+        final List<Callable<List<AlgorithmicContainer>>> callableList = new ArrayList<>(algorithms.length);
         for (final Algorithm algorithm : algorithms) {
             switch (algorithm) {
                 case JARO_WINKLER:
@@ -265,73 +267,72 @@ public class AlgorithmicResolver {
                         MyLog.i(CLS_NAME, "Running: JARO_WINKLER");
                     }
 
-                    callableList.add(new JaroWinklerHelper(mContext, genericData, inputData, loc, contactNameHelper));
+                    callableList.add(new JaroWinklerHelper<>(mContext, genericData, inputData, loc, contactNameHelper).contactCallable());
                     break;
                 case LEVENSHTEIN:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: LEVENSHTEIN");
                     }
 
-                    callableList.add(new LevenshteinHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new LevenshteinHelper<>(mContext, genericData, inputData, loc).contactCallable());
                     break;
                 case SOUNDEX:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: SOUNDEX");
                     }
 
-                    callableList.add(new SoundexHelper(mContext, genericData, inputData, loc, contactNameHelper));
+                    callableList.add(new SoundexHelper<>(mContext, genericData, inputData, loc, contactNameHelper).contactCallable());
                     break;
                 case METAPHONE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: METAPHONE");
                     }
 
-                    callableList.add(new MetaphoneHelper(mContext, genericData, inputData, loc, contactNameHelper));
+                    callableList.add(new MetaphoneHelper<>(mContext, genericData, inputData, loc, contactNameHelper).contactCallable());
                     break;
                 case DOUBLE_METAPHONE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: DOUBLE_METAPHONE");
                     }
 
-                    callableList.add(new DoubleMetaphoneHelper(mContext, genericData, inputData, loc, contactNameHelper));
+                    callableList.add(new DoubleMetaphoneHelper<>(mContext, genericData, inputData, loc, contactNameHelper).contactCallable());
                     break;
                 case FUZZY:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: FUZZY");
                     }
 
-                    callableList.add(new FuzzyHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new FuzzyHelper<>(mContext, genericData, inputData, loc).contactCallable());
                     break;
                 case NEEDLEMAN_WUNCH:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: NEEDLEMAN_WUNCH");
                     }
 
-                    callableList.add(new NeedlemanWunschHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new NeedlemanWunschHelper<>(mContext, genericData, inputData, loc).contactCallable());
                     break;
                 case MONGE_ELKAN:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Running: MONGE_ELKAN");
                     }
 
-                    callableList.add(new MongeElkanHelper(mContext, genericData, inputData, loc));
+                    callableList.add(new MongeElkanHelper<>(mContext, genericData, inputData, loc).contactCallable());
                     break;
             }
         }
 
         final ArrayList<AlgorithmicContainer> algorithmicContainerArray = new ArrayList<>();
         try {
-            final List<Future<Object>> futures = executorService.invokeAll(callableList,
+            final List<Future<List<AlgorithmicContainer>>> futures = executorService.invokeAll(callableList,
                     THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
 
-            Object object;
-            for (final Future<Object> future : futures) {
-                object = future.get();
-                if (future instanceof AlgorithmicContainer) {
-                    algorithmicContainerArray.add((AlgorithmicContainer) object);
-                } else if (future instanceof List) {
-                    algorithmicContainerArray.addAll((List<AlgorithmicContainer>) object);
+            List<AlgorithmicContainer> algorithmicContainers;
+            for (final Future<List<AlgorithmicContainer>> future : futures) {
+                algorithmicContainers = future.get();
+                if (algorithmicContainers == null || algorithmicContainers.isEmpty()) {
+                    continue;
                 }
+                algorithmicContainerArray.addAll(algorithmicContainers);
             }
         } catch (final ExecutionException e) {
             if (DEBUG) {
@@ -353,7 +354,6 @@ public class AlgorithmicResolver {
         }
 
         if (!algorithmicContainerArray.isEmpty()) {
-            algorithmicContainerArray.removeAll(Collections.<AlgorithmicContainer>singleton(null));
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "Have " + algorithmicContainerArray.size() + " potentials");
                 for (final AlgorithmicContainer a : algorithmicContainerArray) {

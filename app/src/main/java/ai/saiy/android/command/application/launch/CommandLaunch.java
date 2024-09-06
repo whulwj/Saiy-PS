@@ -32,7 +32,7 @@ public class CommandLaunch {
      * @param deleteList true if need to delete the local application list
      * @return the constructed {@link Outcome}
      */
-    private Outcome returnOutcome(Context context, @NonNull Outcome outcome, boolean deleteList) {
+    private Outcome returnOutcome(@NonNull Context context, @NonNull Outcome outcome, boolean deleteList) {
         if (DEBUG) {
             MyLog.getElapsed(CLS_NAME, then);
         }
@@ -42,7 +42,7 @@ public class CommandLaunch {
         return outcome;
     }
 
-    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest aVar) {
+    public @NonNull Outcome getResponse(@NonNull Context context, @NonNull ArrayList<String> voiceData, @NonNull SupportedLanguage supportedLanguage, @NonNull ai.saiy.android.command.helper.CommandRequest aVar) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
@@ -90,7 +90,7 @@ public class CommandLaunch {
         for (Pair<String, String> stringStringPair : runningApplications) {
             runningApplicationNames.add(stringStringPair.first);
         }
-        final ai.saiy.android.nlu.local.AlgorithmicContainer container = new ai.saiy.android.nlu.local.AlgorithmicResolver(context, new Algorithm[]{Algorithm.JARO_WINKLER, Algorithm.SOUNDEX, Algorithm.METAPHONE, Algorithm.DOUBLE_METAPHONE}, supportedLanguage.getLocale(), applicationNames, runningApplicationNames, 500L, false).resolve();
+        final ai.saiy.android.nlu.local.AlgorithmicContainer container = new ai.saiy.android.nlu.local.AlgorithmicResolver<>(context, new Algorithm[]{Algorithm.JARO_WINKLER, Algorithm.SOUNDEX, Algorithm.METAPHONE, Algorithm.DOUBLE_METAPHONE}, supportedLanguage.getLocale(), applicationNames, runningApplicationNames, 500L, false).resolve();
         if (container == null) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "failed to find a match");

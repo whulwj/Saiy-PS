@@ -660,7 +660,7 @@ public class DiagnosticsHelper {
             return;
         }
         diagnosticInfoListener.setPassedCount(String.valueOf(diagnosticsInfo.getPassedCount() + 1));
-        List<ResolveInfo> asrProviders = getASRProviders();
+        final List<ResolveInfo> asrProviders = getASRProviders();
         int size = asrProviders.size();
         if (DEBUG) {
             MyLog.d(CLS_NAME, "populateASRCount: providers: " + size);
@@ -835,12 +835,25 @@ public class DiagnosticsHelper {
         return SpeechRecognizer.isRecognitionAvailable(mContext);
     }
 
+    /**
+     * collects language details
+     */
     private void checkSpeechRecognizer() {
         Intent recognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
         recognizerIntent.addFlags(Intent.FLAG_INCLUDE_STOPPED_PACKAGES);
         if (!packageManager.queryIntentActivities(recognizerIntent, PackageManager.GET_META_DATA).isEmpty() && !isCancelled.get()) {
-            Intent detailsIntent = new Intent(RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS);
-            detailsIntent.setPackage(Installed.PACKAGE_NAME_GOOGLE_NOW);
+            Intent detailsIntent = RecognizerIntent.getVoiceDetailsIntent(mContext);
+            if (detailsIntent == null) {
+                final Intent voiceSearchIntent = new Intent(RecognizerIntent.ACTION_WEB_SEARCH);
+                final ResolveInfo resolveInfo = mContext.getPackageManager().resolveActivity(
+                        voiceSearchIntent, 0);
+                detailsIntent = new Intent(RecognizerIntent.ACTION_GET_LANGUAGE_DETAILS);
+                if (resolveInfo != null) {
+                    detailsIntent.setPackage(UtilsApplication.getPackageName(resolveInfo));
+                } else {
+                    detailsIntent.setPackage(Installed.PACKAGE_NAME_GOOGLE_NOW);
+                }
+            }
             mContext.sendOrderedBroadcast(detailsIntent, null, new BroadcastReceiver() {
                 @Override
                 public void onReceive(Context context, Intent intent) {

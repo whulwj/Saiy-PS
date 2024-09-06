@@ -329,13 +329,13 @@ public class FlashlightController {
             }
             try {
                 mCameraManager.setTorchMode(mCameraId, enabled);
+                retryCount.set(0);
             } catch (CameraAccessException | IllegalStateException e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "updateFlashlight M:" + e.getClass().getSimpleName() + ", " + e.getMessage());
                 }
                 handleError();
             }
-            retryCount.set(0);
         }
     }
 

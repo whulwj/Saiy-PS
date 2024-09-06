@@ -34,6 +34,7 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 
 import ai.saiy.android.algorithms.Algorithm;
+import ai.saiy.android.algorithms.Resolvable;
 import ai.saiy.android.algorithms.needlemanwunch.simmetrics.NeedlemanWunch;
 import ai.saiy.android.custom.CustomCommand;
 import ai.saiy.android.custom.CustomCommandContainer;
@@ -49,7 +50,7 @@ import ai.saiy.android.utils.UtilsList;
  * <p/>
  * Created by benrandall76@gmail.com on 22/04/2016.
  */
-public class NeedlemanWunschHelper implements Callable<Object> {
+public class NeedlemanWunschHelper<T> implements Resolvable {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = NeedlemanWunschHelper.class.getSimpleName();
@@ -57,7 +58,7 @@ public class NeedlemanWunschHelper implements Callable<Object> {
     private final Context mContext;
     private final ArrayList<String> inputData;
     private final Locale loc;
-    private final ArrayList<?> genericData;
+    private final ArrayList<T> genericData;
 
 
     /**
@@ -68,7 +69,7 @@ public class NeedlemanWunschHelper implements Callable<Object> {
      * @param inputData   an array of Strings containing the input comparison data
      * @param loc         the {@link Locale} extracted from the {@link SupportedLanguage}
      */
-    public NeedlemanWunschHelper(@NonNull final Context mContext, @NonNull final ArrayList<?> genericData,
+    public NeedlemanWunschHelper(@NonNull final Context mContext, @NonNull final ArrayList<T> genericData,
                                  @NonNull final ArrayList<String> inputData, @NonNull final Locale loc) {
         this.mContext = mContext;
         this.genericData = genericData;
@@ -268,6 +269,31 @@ public class NeedlemanWunschHelper implements Callable<Object> {
         return container;
     }
 
+    /**
+     * Computes a result, or throws an exception if unable to do so.
+     *
+     * @return computed result
+     */
+    @Override
+    public @NonNull Callable<AlgorithmicContainer> genericCallable() {
+        if (UtilsList.notNaked(genericData)) {
+            final Object object = genericData.get(0);
+            if (object instanceof String) {
+                return new Callable<AlgorithmicContainer>() {
+                    @Override
+                    public AlgorithmicContainer call() {
+                        return executeGeneric();
+                    }
+                };
+            }
+        }
+        return new Callable<AlgorithmicContainer>() {
+            @Override
+            public AlgorithmicContainer call() {
+                return null;
+            }
+        };
+    }
 
     /**
      * Computes a result, or throws an exception if unable to do so.
@@ -275,16 +301,23 @@ public class NeedlemanWunschHelper implements Callable<Object> {
      * @return computed result
      */
     @Override
-    public Object call() {
-
+    public @NonNull Callable<CustomCommand> customCommandCallable() {
         if (UtilsList.notNaked(genericData)) {
-            if (genericData.get(0) instanceof String) {
-                return executeGeneric();
-            } else {
-                return executeCustomCommand();
+            final Object object = genericData.get(0);
+            if (object instanceof CustomCommandContainer) {
+                return new Callable<CustomCommand>() {
+                    @Override
+                    public CustomCommand call() {
+                        return executeCustomCommand();
+                    }
+                };
             }
         }
-
-        return null;
+        return new Callable<CustomCommand>() {
+            @Override
+            public CustomCommand call() {
+                return null;
+            }
+        };
     }
 }

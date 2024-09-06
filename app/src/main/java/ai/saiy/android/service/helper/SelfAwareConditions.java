@@ -2214,7 +2214,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         intent.putExtra(RecognizerIntent.EXTRA_PROMPT, mContext.getString(R.string.app_name));
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, RecognitionNative.MAX_RESULTS);
         intent.putExtra(RecognitionDefaults.PREFER_OFFLINE, SPH.getUseOffline(mContext));
-        intent.putExtra(RecognitionDefaults.EXTRA_SECURE,
+        intent.putExtra(RecognizerIntent.EXTRA_SECURE,
                 (getBundle().getInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_NONE) == Condition.CONDITION_SECURE));
 
         final Long timeout = SPH.getPauseTimeout(mContext);
@@ -2226,7 +2226,11 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getCallback().getParcel()
                     .getVRLanguageGoogle().getLocaleString());
         } else {
-            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getVRLocale().toString());
+            final String languageId = ai.saiy.android.utils.UtilsLocale.convertToIETF(getVRLocale());
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "getNativeIntent: setting locale: " + languageId);
+            }
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, languageId);
         }
 
         return intent;

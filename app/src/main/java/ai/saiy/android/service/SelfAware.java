@@ -150,7 +150,6 @@ public class SelfAware extends Service {
     private static final long WARM_UP_SLEEP = 500L;
     private static final int WARM_UP_LOOP = 4;
 
-    public static final int JB_TIMEOUT_ERROR = 134;
     private static final long OKAY_GOOGLE_DELAY = 500L;
 
     private static final long MONITOR_ENGINE = 10000L;
@@ -1996,15 +1995,9 @@ public class SelfAware extends Service {
                         }
                         conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
                         break;
-                    case JB_TIMEOUT_ERROR:
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: JB_TIMEOUT_ERROR");
-                        }
-                        conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
-                        break;
                     default:
                         if (DEBUG) {
-                            MyLog.w(CLS_NAME, "recognitionListener: onError: ERROR_UNKNOWN");
+                            MyLog.w(CLS_NAME, "recognitionListener: onError: " + SaiyRecognitionListener.getDescription(error));
                         }
                         conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
                         break;

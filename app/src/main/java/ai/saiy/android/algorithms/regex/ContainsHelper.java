@@ -39,14 +39,14 @@ import ai.saiy.android.utils.UtilsList;
  * Created by benrandall76@gmail.com on 03/10/2016.
  */
 
-public class ContainsHelper implements Callable<Object> {
+public class ContainsHelper implements Callable<CustomCommand> {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ContainsHelper.class.getSimpleName();
 
     private final ArrayList<String> inputData;
     private final Locale loc;
-    private final ArrayList<?> genericData;
+    private final ArrayList<CustomCommandContainer> genericData;
 
     /**
      * Constructor
@@ -55,7 +55,7 @@ public class ContainsHelper implements Callable<Object> {
      * @param inputData   an array of Strings containing the input comparison data
      * @param loc         the {@link Locale} extracted from the {@link SupportedLanguage}
      */
-    public ContainsHelper(@NonNull final ArrayList<?> genericData,
+    public ContainsHelper(@NonNull final ArrayList<CustomCommandContainer> genericData,
                           @NonNull final ArrayList<String> inputData, @NonNull final Locale loc) {
         this.genericData = genericData;
         this.inputData = inputData;
@@ -81,7 +81,7 @@ public class ContainsHelper implements Callable<Object> {
 
         outer:
         for (int i = 0; i < size; i++) {
-            container = (CustomCommandContainer) genericData.get(i);
+            container = genericData.get(i);
             phrase = container.getKeyphrase().toLowerCase(loc).trim();
 
             for (String vd : inputData) {
@@ -119,7 +119,7 @@ public class ContainsHelper implements Callable<Object> {
      * @return computed result
      */
     @Override
-    public Object call() {
+    public CustomCommand call() {
         if (UtilsList.notNaked(genericData)) {
             return executeCustomCommand();
         }

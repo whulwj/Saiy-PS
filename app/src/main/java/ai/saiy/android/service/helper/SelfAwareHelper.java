@@ -487,17 +487,12 @@ public class SelfAwareHelper {
                         }
                         showToast("SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS", Toast.LENGTH_SHORT);
                         break;
-                    case SelfAware.JB_TIMEOUT_ERROR:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "handleRecognitionError: JB_TIMEOUT_ERROR");
-                        }
-                        showToast("SpeechRecognizer.JB_TIMEOUT_ERROR", Toast.LENGTH_SHORT);
-                        break;
                     default:
+                        final String description = ai.saiy.android.recognition.SaiyRecognitionListener.getDescription(error);
                         if (DEBUG) {
-                            MyLog.w(CLS_NAME, "handleRecognitionError: ERROR_UNKNOWN");
+                            MyLog.w(CLS_NAME, "handleRecognitionError: " + description);
                         }
-                        showToast("SpeechRecognizer.ERROR_UNKNOWN", Toast.LENGTH_SHORT);
+                        showToast("SpeechRecognizer." + description, Toast.LENGTH_SHORT);
                         break;
                 }
                 break;
