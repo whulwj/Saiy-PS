@@ -42,6 +42,7 @@ import java.util.Arrays;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
+import ai.saiy.android.firebase.UserFirebaseListener;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.tts.helper.TTSDefaults;
@@ -474,7 +475,7 @@ public class ActivityHomeHelper {
         }
     }
 
-    public void showBillingSuccessDialog(@NonNull ActivityHome activity) {
+    public void showBillingSuccessDialog(@NonNull ActivityHome activity, @NonNull UserFirebaseListener listener) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "showBillingSuccessDialog");
         }
@@ -522,7 +523,7 @@ public class ActivityHomeHelper {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                    new UserFirebaseHelper().isAdFree(activity.getApplication(), activity);
+                new UserFirebaseHelper().isAdFree(activity.getApplication(), listener);
             }
         }).start();
     }

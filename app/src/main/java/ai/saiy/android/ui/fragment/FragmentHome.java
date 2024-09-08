@@ -70,7 +70,7 @@ import ai.saiy.android.ui.components.UIMainAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentHomeHelper;
 import ai.saiy.android.ui.notification.NotificationHelper;
-import ai.saiy.android.ui.viewmodel.BillingViewModel;
+import ai.saiy.android.ui.viewmodel.ViewModelBilling;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -106,7 +106,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentHomeHelper helper;
-    private BillingViewModel billingViewModel;
+    private ViewModelBilling viewModelBilling;
 
     private static final Object lock = new Object();
 
@@ -172,7 +172,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             MyLog.i(CLS_NAME, "onCreateView");
         }
         final ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
-        this.billingViewModel = viewModelProvider.get(BillingViewModel.class);
+        this.viewModelBilling = viewModelProvider.get(ViewModelBilling.class);
 
         final View rootView = inflater.inflate(R.layout.layout_common_fragment_parent, container, false);
         mRecyclerView = helper.getRecyclerView(rootView);
@@ -186,7 +186,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        billingViewModel.getProductDetailsResult().observe(getViewLifecycleOwner(), this);
+        viewModelBilling.getProductDetailsResult().observe(getViewLifecycleOwner(), this);
     }
 
     private int getPosition(View view) {
@@ -520,7 +520,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startPurchaseFlow");
         }
-        if (!billingViewModel.queryProductDetails()) {
+        if (!viewModelBilling.queryProductDetails()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startPurchaseFlow: mBillingClient null");
             }
@@ -615,7 +615,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                     MyLog.i(CLS_NAME, "onActivityResult: accountName " + accountName);
                 }
                 SPH.setUserAccount(getApplicationContext(), accountName);
-                if (billingViewModel.canBillingProceed()) {
+                if (viewModelBilling.canBillingProceed()) {
                     startPurchaseFlow();
                     return;
                 }
@@ -672,7 +672,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
             return;
         }
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-            final @Nullable List<ProductDetails> list = billingViewModel.getProductDetailsList().getValue();
+            final @Nullable List<ProductDetails> list = viewModelBilling.getProductDetailsList().getValue();
             if (!ai.saiy.android.utils.UtilsList.notNaked(list)) {
                 if (isActive()) {
                     showProgress(false);
@@ -746,8 +746,8 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         return mObjects;
     }
 
-    public BillingViewModel getBillingViewModel() {
-        return billingViewModel;
+    public ViewModelBilling getBillingViewModel() {
+        return viewModelBilling;
     }
 
     @Override

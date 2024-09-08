@@ -34,7 +34,7 @@ import ai.saiy.android.custom.CustomCommandHelper;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Quantum;
-import ai.saiy.android.ui.viewmodel.BillingViewModel;
+import ai.saiy.android.ui.viewmodel.ViewModelBilling;
 import ai.saiy.android.user.BillingReporter;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -58,10 +58,10 @@ public class TestRecognitionAction {
      * an instruction to perform debugging of some sort.
      *
      * @param ctx              the application context
-     * @param billingViewModel the {@link BillingViewModel}
+     * @param viewModelBilling the {@link ViewModelBilling}
      * @param commandText      the command text to test
      */
-    public TestRecognitionAction(@NonNull final Context ctx, BillingViewModel billingViewModel, @NonNull final String commandText) {
+    public TestRecognitionAction(@NonNull final Context ctx, ViewModelBilling viewModelBilling, @NonNull final String commandText) {
 
         if (!commandText.startsWith(MyLog.DO_DEBUG)) {
 
@@ -80,7 +80,7 @@ public class TestRecognitionAction {
 
             new Quantum(ctx).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, cr);
         } else {
-            runDebug(ctx, billingViewModel, commandText);
+            runDebug(ctx, viewModelBilling, commandText);
         }
     }
 
@@ -88,10 +88,10 @@ public class TestRecognitionAction {
      * The command text was a debugging instruction, handle here
      *
      * @param ctx              the application context
-     * @param billingViewModel the {@link BillingViewModel}
+     * @param viewModelBilling the {@link ViewModelBilling}
      * @param commandText      the command text to test
      */
-    private void runDebug(@NonNull final Context ctx, BillingViewModel billingViewModel, @NonNull final String commandText) {
+    private void runDebug(@NonNull final Context ctx, ViewModelBilling viewModelBilling, @NonNull final String commandText) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "runDebug: " + commandText);
         }
@@ -138,9 +138,9 @@ public class TestRecognitionAction {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "runDebug: REPORT_BILLING");
                         }
-                        if (billingViewModel.canBillingProceed()) {
+                        if (viewModelBilling.canBillingProceed()) {
                             toast(ctx, "Billing test running");
-                            new BillingReporter(ctx, billingViewModel.getBillingClient()).report();
+                            new BillingReporter(ctx, viewModelBilling.getBillingClient()).report();
                         } else {
                             toast(ctx, "Billing Client is in error");
                         }

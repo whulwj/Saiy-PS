@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleEventObserver;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
@@ -48,13 +51,14 @@ import ai.saiy.android.utils.SPH;
 import dagger.hilt.android.lifecycle.HiltViewModel;
 
 @HiltViewModel
-public final class BillingViewModel extends AndroidViewModel implements BillingClientStateListener,
+public final class ViewModelBilling extends AndroidViewModel implements LifecycleEventObserver,
+        BillingClientStateListener,
         ProductDetailsResponseListener,
         PurchasesResponseListener,
         PurchaseHistoryResponseListener,
         PurchasesUpdatedListener {
     private static final boolean DEBUG = MyLog.DEBUG;
-    private final String CLS_NAME = BillingViewModel.class.getSimpleName();
+    private final String CLS_NAME = ViewModelBilling.class.getSimpleName();
 
     private final MutableLiveData<Boolean> mIsBillingSuccessful = new MutableLiveData<>();
     private final MutableLiveData<BillingResult> productDetailsResult = new MutableLiveData<>();
@@ -66,7 +70,7 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
     private volatile String iapKey = "";
     private final CurrentActivityProvider mActivityProvider;
 
-    public @Inject BillingViewModel(@NonNull Application application, CurrentActivityProvider activityProvider) {
+    public @Inject ViewModelBilling(@NonNull Application application, CurrentActivityProvider activityProvider) {
         super(application);
         this.mActivityProvider = activityProvider;
         this.mBillingClient = BillingClient.newBuilder(application).setListener(this).enablePendingPurchases().build();
@@ -366,19 +370,20 @@ public final class BillingViewModel extends AndroidViewModel implements BillingC
         return mBillingClient;
     }
 
-    public void start() {
-        if (mBillingClient != null) {
-            startBillingConnection();
-        } if (DEBUG) {
-            MyLog.e(CLS_NAME, "mBillingClient null");
+    @Override
+    public void onStateChanged(@NonNull LifecycleOwner lifecycleOwner, @NonNull Lifecycle.Event event) {
+        if (Lifecycle.Event.ON_START == event) {
+            if (mBillingClient != null) {
+                startBillingConnection();
+            } if (DEBUG) {
+                MyLog.e(CLS_NAME, "mBillingClient null");
+            }
+        } else if (Lifecycle.Event.ON_RESUME == event) {
+            this.isConnectionRetrying = false;
         }
     }
 
-    public void resume() {
-        this.isConnectionRetrying = false;
-    }
-
-    public @NonNull MutableLiveData<Boolean> mIsBillingSuccessful() {
+    public @NonNull MutableLiveData<Boolean> isBillingSuccessful() {
         return mIsBillingSuccessful;
     }
 

@@ -48,7 +48,7 @@ import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.UIBugsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentBugsHelper;
-import ai.saiy.android.ui.viewmodel.BillingViewModel;
+import ai.saiy.android.ui.viewmodel.ViewModelBilling;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
@@ -72,7 +72,7 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
     private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentBugsHelper helper;
-    private BillingViewModel billingViewModel;
+    private ViewModelBilling viewModelBilling;
 
     private static final Object lock = new Object();
 
@@ -139,7 +139,7 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
             MyLog.i(CLS_NAME, "onCreateView");
         }
         final ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
-        this.billingViewModel = viewModelProvider.get(BillingViewModel.class);
+        this.viewModelBilling = viewModelProvider.get(ViewModelBilling.class);
 
         final View rootView = inflater.inflate(R.layout.fragment_bugs_layout, container, false);
         editText = helper.getEditText(rootView);
@@ -297,7 +297,7 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
 
                 hideIME();
 
-                new TestRecognitionAction(getApplicationContext(), billingViewModel, commandText.trim());
+                new TestRecognitionAction(getApplicationContext(), viewModelBilling, commandText.trim());
 
             } else {
                 if (DEBUG) {

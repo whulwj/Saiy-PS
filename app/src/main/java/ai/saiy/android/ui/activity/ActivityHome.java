@@ -30,7 +30,6 @@ import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -45,39 +44,19 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.FullScreenContentCallback;
-import com.google.android.gms.ads.LoadAdError;
-import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.interstitial.InterstitialAd;
-import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
-import com.google.android.gms.ads.rewarded.RewardItem;
-import com.google.android.gms.ads.rewarded.RewardedAd;
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Executors;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.configuration.GoogleConfiguration;
-import ai.saiy.android.firebase.FirebaseInstallationsHelper;
-import ai.saiy.android.firebase.UserFirebaseListener;
-import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -87,6 +66,7 @@ import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.ui.activity.helper.ActivityHomeHelper;
 import ai.saiy.android.ui.fragment.FragmentAbout;
 import ai.saiy.android.ui.fragment.FragmentAdvancedSettings;
+import ai.saiy.android.ui.fragment.FragmentAdvertisement;
 import ai.saiy.android.ui.fragment.FragmentApplications;
 import ai.saiy.android.ui.fragment.FragmentCommands;
 import ai.saiy.android.ui.fragment.FragmentCustomisation;
@@ -94,8 +74,8 @@ import ai.saiy.android.ui.fragment.FragmentDevelopment;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.ui.fragment.FragmentSettings;
 import ai.saiy.android.ui.fragment.FragmentSuperUser;
-import ai.saiy.android.ui.viewmodel.BillingViewModel;
-import ai.saiy.android.user.UserFirebaseHelper;
+import ai.saiy.android.ui.viewmodel.ViewModelBilling;
+import ai.saiy.android.ui.viewmodel.ViewModelFirebaseAuth;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
@@ -112,8 +92,7 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 public class ActivityHome extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener,
-        FragmentManager.OnBackStackChangedListener,
-        UserFirebaseListener, OnUserEarnedRewardListener {
+        FragmentManager.OnBackStackChangedListener {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityHome.class.getSimpleName();
@@ -158,121 +137,21 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     private ProgressBar progressBar;
     private NavigationView navigationView;
     private Menu menu;
-    private AdView adView;
-    private InterstitialAd interstitialAd;
-    private ProgressBar adProgress;
-    private RewardedAd rewardedAd;
+    private FragmentAdvertisement fragmentAdvertisement;
 
     private final ActivityHomeHelper helper = new ActivityHomeHelper();
-    private boolean isAdLoaded;
-    private FirebaseAuth firebaseAuth;
-    private volatile boolean isUserSignedIn;
-    private volatile boolean isAddFree;
-    private volatile boolean havePersisted;
-    private BillingViewModel billingViewModel;
-
-    private final AtomicInteger retryCount = new AtomicInteger();
-    private final AtomicInteger signInCount = new AtomicInteger();
-    private final AtomicBoolean isRewardLoading = new AtomicBoolean();
-    private final AdListener adListener = new AdListener() {
-        @Override
-        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-            super.onAdFailedToLoad(loadAdError);
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onAdFailedToLoad");
-            }
-            if (isAdLoaded) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onAdFailedToLoad: ad is displaying, leaving");
-                }
-            } else if (retryCount.incrementAndGet() < 6) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onAdFailedToLoad: retrying");
-                }
-                new Timer().schedule(new TimerTask() {
-                    @Override
-                    public void run() {
-                        if (!isActive()) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "onAdFailedToLoadisFinishing");
-                            }
-                            return;
-                        }
-                        if (isAddFree) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "userAdFree true");
-                            }
-                            return;
-                        }
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                try {
-                                    final AdRequest adRequest = new AdRequest.Builder().build();
-                                    adView.loadAd(adRequest);
-                                } catch (Throwable t) {
-                                    if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "onAdFailedToLoad retrying " + t.getClass().getSimpleName() + ", " + t.getMessage());
-                                    }
-                                    destroyAd();
-                                }
-                            }
-                        });
-                    }
-                }, 5000L);
-            } else {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onAdFailedToLoad max retries");
-                }
-                destroyAd();
-            }
-        }
-
-        @Override
-        public void onAdLoaded() {
-            super.onAdLoaded();
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onAdLoaded");
-            }
-            ActivityHome.this.isAdLoaded = true;
-            adProgress.setVisibility(View.GONE);
-            super.onAdLoaded();
-        }
-    };
-    private final FirebaseAuth.AuthStateListener mAuth = new FirebaseAuth.AuthStateListener() {
-        @Override
-        public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-            final com.google.firebase.auth.FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
-            if (firebaseUser == null) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser null");
-                }
-                signInAnonymously();
-                return;
-            }
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser signed in: " + firebaseUser.getUid());
-                MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser anonymous: " + firebaseUser.isAnonymous());
-            }
-            ActivityHome.this.isUserSignedIn = true;
-            if (firebaseUser.isAnonymous()) {
-                SPH.setFirebaseAnonymousUid(getApplicationContext(), firebaseUser.getUid());
-            } else {
-                SPH.setFirebaseUid(getApplicationContext(), firebaseUser.getUid());
-            }
-            if (havePersisted) {
-                return;
-            }
-            ActivityHome.this.havePersisted = true;
-            persistFirebase();
-        }
-    };
+    private ViewModelFirebaseAuth viewModelFirebaseAuth;
+    private ViewModelBilling viewModelBilling;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         final ViewModelProvider viewModelProvider = new ViewModelProvider(this);
-        this.billingViewModel = viewModelProvider.get(BillingViewModel.class);
+        this.viewModelFirebaseAuth = viewModelProvider.get(ViewModelFirebaseAuth.class);
+        this.viewModelBilling = viewModelProvider.get(ViewModelBilling.class);
+        final Lifecycle lifecycle = getLifecycle();
+        lifecycle.addObserver(viewModelFirebaseAuth);
+        lifecycle.addObserver(viewModelBilling);
         setContentView(R.layout.activity_home_layout);
 
         getSupportFragmentManager().addOnBackStackChangedListener(this);
@@ -288,7 +167,6 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         }
 
         setupUI();
-        this.firebaseAuth = FirebaseAuth.getInstance();
     }
 
     /**
@@ -325,18 +203,18 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             }
         }, ARBITRARY_WAIT);
 
-        billingViewModel.mIsBillingSuccessful().observe(this, new Observer<Boolean>() {
+        viewModelBilling.isBillingSuccessful().observe(this, new Observer<Boolean>() {
             @Override
             public void onChanged(Boolean isSuccessful) {
                 if (isSuccessful == null) {
                     return;
                 }
                 if (isSuccessful) {
-                    helper.showBillingSuccessDialog(ActivityHome.this);
+                    helper.showBillingSuccessDialog(ActivityHome.this, viewModelFirebaseAuth);
                 } else {
                     helper.showBillingErrorDialog(ActivityHome.this);
                 }
-                billingViewModel.mIsBillingSuccessful().setValue(null);
+                viewModelBilling.isBillingSuccessful().setValue(null);
             }
         });
     }
@@ -558,74 +436,36 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         if (DEBUG) {
             MyLog.i(CLS_NAME, "setupAdView");
         }
-        this.adView = (AdView) findViewById(R.id.adViewMain);
-        adView.setAdListener(adListener);
-        this.adProgress = (ProgressBar) findViewById(R.id.adProgress);
-        final AdRequest adRequest = new AdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        this.fragmentAdvertisement = (FragmentAdvertisement) getSupportFragmentManager().findFragmentById(R.id.ad_layout);
+        if (fragmentAdvertisement != null) {
+            fragmentAdvertisement.setupAdView();
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "setupAdView");
+        }
     }
 
     private void runInterstitial() {
-        if (DEBUG) {
+        if (fragmentAdvertisement != null) {
+            fragmentAdvertisement.runInterstitial();
+        } else if (DEBUG) {
             MyLog.i(CLS_NAME, "runInterstitial");
         }
-        if (isAddFree) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "runInterstitial: userAdFree: true");
-            }
-            return;
-        }
-
-        final AdRequest adRequest = new AdRequest.Builder().build();
-        InterstitialAd.load(getApplicationContext(), getString(R.string.interstitial_fragment_id), adRequest, new InterstitialAdLoadCallback() {
-            @Override
-            public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
-                super.onAdLoaded(interstitialAd);
-                ActivityHome.this.interstitialAd = interstitialAd;
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onAdLoaded: interstitial");
-                }
-                if (interstitialAd != null) {
-                    if (!isAddFree) {
-                        try {
-                            interstitialAd.show(ActivityHome.this);
-                        } catch (Throwable t) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "interstitial " + t.getClass().getSimpleName() + ", " + t.getMessage());
-                            }
-
-                        }
-                    } else if (DEBUG) {
-                        MyLog.w(CLS_NAME, "runInterstitial: userAdFree: true");
-                    }
-                }
-            }
-        });
     }
 
     private void initialiseReward() {
-        if (DEBUG) {
+        if (fragmentAdvertisement != null) {
+            fragmentAdvertisement.initialiseReward();
+        } else if (DEBUG) {
             MyLog.i(CLS_NAME, "initialiseReward");
         }
-        loadReward();
     }
 
     public void showReward() {
-        if (DEBUG) {
+        if (fragmentAdvertisement != null) {
+            fragmentAdvertisement.showReward();
+        } else if (DEBUG) {
             MyLog.i(CLS_NAME, "showReward");
         }
-        if (rewardedAd != null) {
-            rewardedAd.show(this, this);
-            return;
-        }
-        if (isRewardLoading.get()) {
-            return;
-        }
-        if (DEBUG) {
-            MyLog.w(CLS_NAME, "showReward: ad not loaded");
-        }
-        toast(getString(R.string.ad_error_playback), Toast.LENGTH_LONG);
-        loadReward();
     }
 
     private void checkPermissions() {
@@ -742,7 +582,6 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         }
     }
 
-
     @Override
     public void onBackPressed() {
         if (DEBUG) {
@@ -805,7 +644,6 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             }
         }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
@@ -1518,48 +1356,6 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onPause() {
-        super.onPause();
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onPause");
-        }
-        if (adView != null) {
-            adView.pause();
-        }
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        if (firebaseAuth != null) {
-            firebaseAuth.removeAuthStateListener(mAuth);
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        if (firebaseAuth != null) {
-            firebaseAuth.addAuthStateListener(mAuth);
-        } else if (DEBUG) {
-            MyLog.e(CLS_NAME, "mAuth null");
-        }
-        billingViewModel.start();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onResume");
-        }
-        if (adView != null) {
-            adView.resume();
-        }
-        billingViewModel.resume();
-    }
-
-    @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (DEBUG) {
@@ -1578,6 +1374,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             MyLog.i(CLS_NAME, "onDestroy");
         }
 
+        final Lifecycle lifecycle = getLifecycle();
+        lifecycle.removeObserver(viewModelFirebaseAuth);
+        lifecycle.removeObserver(viewModelBilling);
         if (Global.isInVoiceTutorial()) {
             Global.setVoiceTutorialState(getApplicationContext(), false);
             Bundle bundle = new Bundle();
@@ -1592,214 +1391,13 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             }
             SelfAwareHelper.stopService(getApplicationContext());
         }
-
-        destroyAd();
-        destroyInterstitial();
-    }
-
-    private void destroyAd() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "destroyAd");
-        }
-        if (adProgress != null) {
-            adProgress.setVisibility(View.GONE);
-        }
-        if (adView != null) {
-            try {
-                adView.setAdListener(null);
-                adView.removeAllViews();
-                final ViewGroup viewGroup = ((ViewGroup) adView.getParent());
-                viewGroup.removeView(adView);
-                viewGroup.removeView(adProgress);
-                adView.destroyDrawingCache();
-                adView.invalidate();
-                adView.destroy();
-                this.adView = null;
-            } catch (Throwable t) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "destroyAd " + t.getClass().getSimpleName() + ", " + t.getMessage());
-                }
-            }
-        }
-    }
-
-    private void destroyInterstitial() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "destroyInterstitial");
-        }
-        if (interstitialAd != null) {
-            interstitialAd = null;
-        }
-    }
-
-    private void loadReward() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "loadReward");
-        }
-        final AdRequest adRequest = new AdRequest.Builder().build();
-        isRewardLoading.set(true);
-        RewardedAd.load(this, getString(R.string.reward_id),
-                adRequest, rewardedAdLoadCallback);
-    }
-
-    private final RewardedAdLoadCallback rewardedAdLoadCallback = new RewardedAdLoadCallback() {
-        @Override
-        public void onAdFailedToLoad(@NonNull LoadAdError loadAdError) {
-            isRewardLoading.set(false);
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onAdFailedToLoad:" + loadAdError);
-            }
-            ActivityHome.this.rewardedAd = null;
-        }
-
-        @Override
-        public void onAdLoaded(@NonNull RewardedAd rewardedAd) {
-            isRewardLoading.set(false);
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onAdLoaded");
-            }
-            ActivityHome.this.rewardedAd = rewardedAd;
-            rewardedAd.setFullScreenContentCallback(new FullScreenContentCallback() {
-                @Override
-                public void onAdDismissedFullScreenContent() {
-                    super.onAdDismissedFullScreenContent();
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onAdDismissedFullScreenContent");
-                    }
-                    if (isRewardLoading.get()) {
-                        return;
-                    }
-                    loadReward();
-                }
-            });
-        }
-    };
-
-    @Override
-    public void onUserEarnedReward(@NonNull RewardItem rewardItem) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onUserEarnedReward: " + rewardItem.getType() + ", " + rewardItem.getAmount());
-        }
-        if (!isActive()) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "onUserEarnedReward: no longer active");
-            }
-            return;
-        }
-        String format;
-        final ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(getApplicationContext(), SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext())));
-        if (SPH.getCreditsVerbose(getApplicationContext()) < 2) {
-            SPH.incrementCreditsVerbose(getApplicationContext());
-            format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24") + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.donate_credit_verbose);
-        } else {
-            format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24");
-        }
-        sr.reset();
-        speak(format, LocalRequest.ACTION_SPEAK_ONLY);
-        updateFirebase();
-        onDetermineAdFree(true);
     }
 
     private final ActivityResultLauncher<String[]> mChatPermissionRequest = registerForActivityResult(new ActivityResultContracts.RequestMultiplePermissions(), permissions -> {
     });
 
-    private void persistFirebase() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "persistFirebase");
-        }
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                com.google.firebase.database.FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-/*                final com.google.firebase.database.DatabaseReference databaseReference = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read");
-                databaseReference.child("bing").child("translate").keepSynced(true);
-                databaseReference.child("bing").child("speaker_recognition").keepSynced(true);
-                databaseReference.child("provider").child("translation").keepSynced(true);
-                databaseReference.child("provider").child("weather").keepSynced(true);
-                databaseReference.child("bugs").child("known_bugs").keepSynced(true);
-                databaseReference.child("google").child("translate").keepSynced(true);
-                databaseReference.child("google").child("geo").keepSynced(true);
-                databaseReference.child("open_weather_map").keepSynced(true);
-                databaseReference.child("twitter").keepSynced(true);
-                databaseReference.child("weather_online").keepSynced(true);
-                databaseReference.child("wordnik").keepSynced(true);
-                databaseReference.child("beyond_verbal").keepSynced(true);
-                databaseReference.child("foursquare").keepSynced(true);
-                databaseReference.child("version").keepSynced(true);
-                databaseReference.child("iap").keepSynced(true);*/
-                final ai.saiy.android.firebase.UserFirebase userFirebase = UtilsFirebase.getUserFirebase(getApplicationContext());
-                if (userFirebase != null) {
-                    com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(userFirebase.getUid()).keepSynced(true);
-                } else if (DEBUG) {
-                    MyLog.i(CLS_NAME, "persistFirebase: userFirebase null");
-                }
-                new UserFirebaseHelper().isAdFree(getApplication(), ActivityHome.this);
-            }
-        }).start();
-    }
-
-    private void updateFirebase() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "updateFirebase");
-        }
-        new UserFirebaseHelper().updateUser(getApplicationContext(), 5L, 86400000L);
-    }
-
-    /**
-     * function to sign in to Firebase Anonymously
-     */
-    private void signInAnonymously() {
-        firebaseAuth.signInAnonymously().addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<com.google.firebase.auth.AuthResult>() {
-            @Override
-            public void onComplete(@NonNull Task<AuthResult> task) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "signInAnonymously: onComplete: " + task.isSuccessful());
-                }
-                if (task.isSuccessful()) {
-                    // Sign in success
-                    ActivityHome.this.isUserSignedIn = true;
-                    FirebaseInstallationsHelper.getFirebaseInstanceId();
-                    return;
-                }
-                if (DEBUG) {
-                    task.getException().printStackTrace();
-                }
-                // If sign in fails, try it again later.
-                if (signInCount.incrementAndGet() < 4) {
-                    try {
-                        Thread.sleep(signInCount.get() * 5000L);
-                    } catch (InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "signInAnonymously InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        });
-    }
-
     public boolean userSignedIn() {
-        return isUserSignedIn;
-    }
-
-    @Override
-    public void onDetermineAdFree(boolean isAddFree) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "onDetermineAdFree: " + isAddFree);
-        }
-        if (isActive()) {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    ActivityHome.this.isAddFree = isAddFree;
-                    if (isAddFree) {
-                        destroyAd();
-                        destroyInterstitial();
-                    }
-                }
-            });
-        }
+        return viewModelFirebaseAuth.userSignedIn();
     }
 
     public void startPurchaseFlow(@NonNull com.android.billingclient.api.ProductDetails productDetails) {
@@ -1812,10 +1410,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             }
             return;
         }
-        final int resId = billingViewModel.startPurchaseFlow(this, productDetails);
+        final int resId = viewModelBilling.startPurchaseFlow(this, productDetails);
         if (resId != 0) {
             toast(getString(resId), Toast.LENGTH_SHORT);
         }
     }
 }
-
