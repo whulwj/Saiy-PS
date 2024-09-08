@@ -41,11 +41,9 @@ import com.google.cloud.speech.v2.StreamingRecognitionResult;
 import com.google.cloud.speech.v2.StreamingRecognizeRequest;
 import com.google.cloud.speech.v2.StreamingRecognizeResponse;
 import com.google.protobuf.ByteString;
-import com.google.protobuf.TextFormat;
 
 import org.apache.commons.lang3.ArrayUtils;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -463,7 +461,7 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
     @Override
     public void onNext(final StreamingRecognizeResponse value) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "onNext: " + TextFormat.printToString(value));
+            MyLog.i(CLS_NAME, "onNext: " + value);
         }
 
         final StreamingRecognizeResponse.SpeechEventType endpointerType = value.getSpeechEventType();

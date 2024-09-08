@@ -145,10 +145,13 @@ dependencies {
     implementation libs.commons.fileupload
     implementation libs.commons.text
     implementation libs.simmetrics.core
-    implementation platform(libs.libraries.bom)
+    implementation(platform(libs.libraries.bom)) {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
+    }
     // https://github.com/dialogflow/dialogflow-android-client
     // https://github.com/googleapis/google-cloud-java/tree/main/java-dialogflow
-    implementation (libs.cloud.dialogflow) {
+    implementation(libs.cloud.dialogflow) {
         //noinspection DuplicatePlatformClasses, it's OK to be excluded
         exclude group: 'commons-logging', module: 'commons-logging'
         exclude group: 'io.grpc', module: 'grpc-protobuf'
@@ -156,7 +159,9 @@ dependencies {
 //        exclude group: 'com.google.protobuf', module: 'protobuf-java'
 //        exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
     }
-    implementation libs.proto.google.common
+    implementation(libs.proto.google.common) {
+        exclude group: 'com.google.protobuf', module: 'protobuf-java'
+    }
     // Add the dependency for the Firebase Authentication library
     implementation(platform(libs.firebase.bom)) {
         exclude group: 'com.google.firebase', module: 'firebase-common-ktx'
@@ -234,7 +239,7 @@ dependencies {
 // https://github.com/grpc/grpc-java
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.25.3'
+        artifact = 'com.google.protobuf:protoc:3.25.4'
     }
     plugins {
         grpc {
