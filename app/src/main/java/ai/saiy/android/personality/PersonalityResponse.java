@@ -855,6 +855,34 @@ public final class PersonalityResponse {
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getAudioConfirm(Context context, SupportedLanguage supportedLanguage, String str) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_audio_confirm);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], str);
+    }
+
+    public static String getAudioError(Context context, SupportedLanguage supportedLanguage, String str) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_audio);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(context), str));
+    }
+
+    public static String getAudioAlready(Context context, SupportedLanguage supportedLanguage, String str) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_audio_already);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], str);
+    }
+
+    public static String getAudioUnknownError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_audio_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getMusicUnknownError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_music_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getAlexaUnreachable(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_alexa_unreachable);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
@@ -1069,6 +1097,11 @@ public final class PersonalityResponse {
 
     public static String getRunningApplicationMatchError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_application_running_match);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getNoAppError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_no_app);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 

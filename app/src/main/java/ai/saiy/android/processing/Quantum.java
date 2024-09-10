@@ -41,6 +41,7 @@ import ai.saiy.android.command.alexa.CommandAlexa;
 import ai.saiy.android.command.application.foreground.CommandForeground;
 import ai.saiy.android.command.application.kill.CommandKill;
 import ai.saiy.android.command.application.launch.CommandLaunch;
+import ai.saiy.android.command.audio.CommandAudio;
 import ai.saiy.android.command.battery.CommandBattery;
 import ai.saiy.android.command.chatbot.CommandChatBot;
 import ai.saiy.android.command.clipboard.ClipboardHelper;
@@ -56,6 +57,7 @@ import ai.saiy.android.command.helper.CommandRequest;
 import ai.saiy.android.command.location.address.CommandLocation;
 import ai.saiy.android.command.location.vehicle.locate.CommandLocateVehicle;
 import ai.saiy.android.command.location.vehicle.parked.CommandParkedVehicle;
+import ai.saiy.android.command.music.CommandMusic;
 import ai.saiy.android.command.note.CommandNote;
 import ai.saiy.android.command.orientation.CommandOrientation;
 import ai.saiy.android.command.search.CommandSearch;
@@ -534,6 +536,16 @@ public class Quantum extends Tunnelling {
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_MUSIC:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_MUSIC.name());
+                    }
+                    final CommandMusic commandMusic = new CommandMusic();
+                    outcome = commandMusic.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_SOMERSAULT:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SOMERSAULT.name());
@@ -674,6 +686,16 @@ public class Quantum extends Tunnelling {
                     }
                     final CommandForeground commandForeground = new CommandForeground();
                     outcome = commandForeground.getResponse(mContext, sl);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_AUDIO:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_AUDIO.name());
+                    }
+                    final CommandAudio commandAudio = new CommandAudio();
+                    outcome = commandAudio.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -1355,6 +1377,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SETTINGS.name());
                     }
                     break;
+                case COMMAND_MUSIC:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_MUSIC.name());
+                    }
+                    break;
                 case COMMAND_SOMERSAULT:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SOMERSAULT.name());
@@ -1413,6 +1440,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_FOREGROUND:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_FOREGROUND.name());
+                    }
+                    break;
+                case COMMAND_AUDIO:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_AUDIO.name());
                     }
                     break;
                 case COMMAND_HOROSCOPE:

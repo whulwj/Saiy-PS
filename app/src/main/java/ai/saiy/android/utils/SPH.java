@@ -180,6 +180,8 @@ public class SPH {
     private static final String SOUNDEX_UPPER_THRESHOLD = "soundex_upper_threshold";
     private static final String REMOTE_COMMAND_VERBOSE = "remote_command_verbose";
     private static final String LAST_USED = "last_used";
+    private static final String PLAYLIST_VERBOSE ="playlist_verbose";
+    private static final String RADIO_VERBOSE ="radio_verbose";
     private static final String FACEBOOK_COMMAND_VERBOSE = "facebook_command_verbose";
     private static final String TWITTER_TOKEN = "twitter_token";
     private static final String TWITTER_SECRET = "twitter_secret";
@@ -584,6 +586,26 @@ public class SPH {
         edit.apply();
 
         SPH.incrementUsed(ctx);
+    }
+
+    public static int getPlaylistVerbose(Context context) {
+        return getPref(context).getInt(PLAYLIST_VERBOSE, 0);
+    }
+
+    public static void setPlaylistVerbose(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(PLAYLIST_VERBOSE, getPlaylistVerbose(context) + 1);
+        edit.apply();
+    }
+
+    public static int getRadioVerbose(Context context) {
+        return getPref(context).getInt(RADIO_VERBOSE, 0);
+    }
+
+    public static void setRadioVerbose(Context context) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(RADIO_VERBOSE, getRadioVerbose(context) + 1);
+        edit.apply();
     }
 
     public static int getFacebookCommandVerbose(Context context) {

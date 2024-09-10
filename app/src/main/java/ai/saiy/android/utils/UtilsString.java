@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Locale;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
@@ -85,7 +86,7 @@ public class UtilsString {
         }
         final String[] separated = str.trim().split("");
         final Pattern question_mark = Pattern.compile("\\?");
-        final Pattern exclamation_mark = Pattern.compile("\\!");
+        final Pattern exclamation_mark = Pattern.compile("!");
         final Pattern period = Pattern.compile("\\.");
         final Pattern space = Pattern.compile(XMLResultsHandler.SEP_SPACE);
         final int length = separated.length - 2;
@@ -113,6 +114,41 @@ public class UtilsString {
      */
     public static boolean notNaked(@Nullable final String toCheck) {
         return toCheck != null && !toCheck.trim().isEmpty();
+    }
+
+    public static boolean occursInLastNWords(String prefix, String input, int wordsCount) {
+        final Matcher matcher = Pattern.compile(".*\\b" + prefix + "\\b(.*)").matcher(input);
+        try {
+            if (matcher.find()) {
+                final String remaining = matcher.group(1);
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "remaining: " + matcher.group(1));
+                }
+                if (notNaked(remaining)) {
+                    final int remainingCount = stripSpace(remaining);
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "remainingCount: " + remainingCount);
+                    }
+                    return remainingCount < wordsCount;
+                }
+            }
+        } catch (IndexOutOfBoundsException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "occursInLastNWords: IndexOutOfBoundsException");
+                e.printStackTrace();
+            }
+        } catch (RuntimeException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "occursInLastNWords: RuntimeException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "occursInLastNWords: Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
     }
 
     /**
