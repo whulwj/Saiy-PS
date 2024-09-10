@@ -26,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
+import android.text.TextUtils;
 import android.util.Pair;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -495,7 +496,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @param fragmentIndex the fragment index constant
      * @return an {@link Pair} with the first parameter containing the {@link Fragment} and the second the tag
      */
-    private Pair<Fragment, String> getFragmentAndTag(final int fragmentIndex) {
+    private @NonNull Pair<Fragment, String> getFragmentAndTag(final int fragmentIndex) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getFragmentAndTag");
         }
@@ -540,7 +541,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @param intent the intent to examine
      * @return a {@link Pair} with the first parameter denoting success and the second the fragment index constant
      */
-    private Pair<Boolean, Integer> startFragment(@Nullable final Intent intent) {
+    private @NonNull Pair<Boolean, Integer> startFragment(@Nullable final Intent intent) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startFragment");
         }
@@ -660,7 +661,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onPrepareOptionsMenu");
         }
-        if ((SPH.getSelfAwareEnabled(getApplicationContext()))) {
+        if (SPH.getSelfAwareEnabled(getApplicationContext())) {
             menu.findItem(R.id.action_power).setIcon(R.drawable.ic_power);
         } else {
             menu.findItem(R.id.action_power).setIcon(R.drawable.ic_power_rt);
@@ -678,7 +679,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public boolean onOptionsItemSelected(final MenuItem item) {
+    public boolean onOptionsItemSelected(@NonNull final MenuItem item) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onOptionsItemSelected");
         }
@@ -708,20 +709,17 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onOptionsItemSelected: run tutorial: false: but usage ok");
                     }
-                    final LocalRequest localRequest = new LocalRequest(getApplicationContext());
-                    localRequest.prepareIntro();
-                    localRequest.execute();
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onOptionsItemSelected: suggesting tutorial");
+                    }
+                    helper.showStartTutorialDialog(this);
                     return true;
                 }
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onOptionsItemSelected: suggesting tutorial");
-                }
-                helper.showStartTutorialDialog(this);
-                return true;
-            }
-            if (DEBUG) {
+            } else if (DEBUG) {
                 MyLog.i(CLS_NAME, "onOptionsItemSelected: run tutorial");
             }
+
             final LocalRequest localRequest = new LocalRequest(getApplicationContext());
             localRequest.prepareIntro();
             localRequest.execute();
@@ -731,7 +729,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     public boolean isFragmentLoading(@NonNull final String tag) {
-        return getSupportFragmentManager().findFragmentById(R.id.fragmentContent).getTag().matches(tag);
+        return TextUtils.equals(getSupportFragmentManager().findFragmentById(R.id.fragmentContent).getTag(), tag);
     }
 
     @Override
@@ -802,33 +800,23 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 }
 
                 if (proceed) {
-
-                    String tag = null;
-                    Fragment fragment = null;
+                    int fragmentIndex = (INDEX_FRAGMENT_HOME - 1);
                     if (R.id.nav_home == id) {
-                        fragment = FragmentHome.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_HOME);
+                        fragmentIndex = INDEX_FRAGMENT_HOME;
                     } else if (R.id.nav_settings == id) {
-                        fragment = FragmentSettings.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_SETTINGS);
+                        fragmentIndex = INDEX_FRAGMENT_SETTINGS;
                     } else if (R.id.nav_customisation == id) {
-                        fragment = FragmentCustomisation.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_CUSTOMISATION);
+                        fragmentIndex = INDEX_FRAGMENT_CUSTOMISATION;
                     } else if (R.id.nav_advanced_settings == id) {
-                        fragment = FragmentAdvancedSettings.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_ADVANCED_SETTINGS);
+                        fragmentIndex = INDEX_FRAGMENT_ADVANCED_SETTINGS;
                     } else if (R.id.nav_super_user == id) {
-                        fragment = FragmentSuperUser.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_SUPER_USER);
+                        fragmentIndex = INDEX_FRAGMENT_SUPER_USER;
                     } else if (R.id.nav_development == id) {
-                        fragment = FragmentDevelopment.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_DEVELOPMENT);
+                        fragmentIndex = INDEX_FRAGMENT_DEVELOPMENT;
                     } else if (R.id.nav_supported_apps == id) {
-                        fragment = FragmentApplications.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_SUPPORTED_APPS);
+                        fragmentIndex = INDEX_FRAGMENT_SUPPORTED_APPS;
                     } else if (R.id.nav_about == id) {
-                        fragment = FragmentAbout.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_ABOUT);
+                        fragmentIndex = INDEX_FRAGMENT_ABOUT;
                     } else if (R.id.nav_share == id) {
                         if (!ExecuteIntent.shareIntent(getApplicationContext(),
                                 Install.getSaiyInstallLink(getApplicationContext()))) {
@@ -845,11 +833,10 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     } else if (R.id.nav_forum == id) {
                         ExecuteIntent.webSearch(getApplicationContext(), Constants.SAIY_XDA_URL);
                     } else {
-                        fragment = FragmentHome.newInstance(null);
-                        tag = String.valueOf(INDEX_FRAGMENT_HOME);
+                        fragmentIndex = INDEX_FRAGMENT_HOME;
                     }
 
-                    if (fragment != null) {
+                    if (fragmentIndex >= INDEX_FRAGMENT_HOME) {
 
                         final int backStackCount = getSupportFragmentManager().getBackStackEntryCount();
 
@@ -860,13 +847,13 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
                             final String backStackTag = getSupportFragmentManager()
                                     .getBackStackEntryAt(backStackCount - 1).getName();
-
+                            final String tag = String.valueOf(fragmentIndex);
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "onNavigationItemSelected: comparing backStackTag: " + backStackTag
                                         + " ~ tag: " + tag);
                             }
 
-                            if (backStackTag.matches(tag)) {
+                            if (TextUtils.equals(backStackTag, tag)) {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "onNavigationItemSelected: tags match");
                                 }
@@ -878,7 +865,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                                     @Override
                                     public void run() {
                                         getSupportFragmentManager().beginTransaction().remove(getSupportFragmentManager()
-                                                .findFragmentById(R.id.fragmentContent)).commit();
+                                                .findFragmentById(R.id.fragmentContent)).commitAllowingStateLoss();
 
                                         getSupportFragmentManager().popBackStack(backStackTag,
                                                 FragmentManager.POP_BACK_STACK_INCLUSIVE);
@@ -892,15 +879,16 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
                                 // TODO - remove unwanted fragment transaction from back stack. Unable to find a
                                 // TODO - way to do this without full fragment lifecycle being called.
-
-                                doFragmentReplaceTransaction(fragment, tag, ANIMATION_FADE_DELAYED);
+                                final Pair<Fragment, String> fragmentPair = getFragmentAndTag(fragmentIndex);
+                                doFragmentReplaceTransaction(fragmentPair.first, fragmentPair.second, ANIMATION_FADE_DELAYED);
                             }
                         } else {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "onNavigationItemSelected: backStackCount 0");
                             }
 
-                            doFragmentReplaceTransaction(fragment, tag, ANIMATION_FADE_DELAYED);
+                            final Pair<Fragment, String> fragmentPair = getFragmentAndTag(fragmentIndex);
+                            doFragmentReplaceTransaction(fragmentPair.first, fragmentPair.second, ANIMATION_FADE_DELAYED);
                         }
                     }
                 }
@@ -946,17 +934,17 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
                             case ANIMATION_NONE:
                                 getSupportFragmentManager().beginTransaction()
-                                        .replace(R.id.fragmentContent, fragment, tag).commit();
+                                        .replace(R.id.fragmentContent, fragment, tag).commitAllowingStateLoss();
                                 break;
                             case ANIMATION_FADE:
                                 getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow, R.anim.none)
-                                        .replace(R.id.fragmentContent, fragment, tag).commit();
+                                        .replace(R.id.fragmentContent, fragment, tag).commitAllowingStateLoss();
                                 break;
                             case ANIMATION_FADE_DELAYED:
                                 getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow_delayed, R.anim.none)
-                                        .replace(R.id.fragmentContent, fragment, tag).commit();
+                                        .replace(R.id.fragmentContent, fragment, tag).commitAllowingStateLoss();
                                 break;
                         }
                         if (fragmentTransactionCount == 0 || fragmentTransactionCount % 12 != 0 || Global.isInVoiceTutorial() || R.id.nav_home == navId) {
@@ -1000,19 +988,19 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                             case ANIMATION_NONE:
                                 getSupportFragmentManager().beginTransaction()
                                         .replace(R.id.fragmentContent, fragment, tag)
-                                        .addToBackStack(String.valueOf(backStackTag)).commit();
+                                        .addToBackStack(String.valueOf(backStackTag)).commitAllowingStateLoss();
                                 break;
                             case ANIMATION_FADE:
                                 getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow, R.anim.none)
                                         .replace(R.id.fragmentContent, fragment, tag)
-                                        .addToBackStack(String.valueOf(backStackTag)).commit();
+                                        .addToBackStack(String.valueOf(backStackTag)).commitAllowingStateLoss();
                                 break;
                             case ANIMATION_FADE_DELAYED:
                                 getSupportFragmentManager().beginTransaction()
                                         .setCustomAnimations(R.anim.fade_in_slow_delayed, R.anim.none)
                                         .replace(R.id.fragmentContent, fragment, tag)
-                                        .addToBackStack(String.valueOf(backStackTag)).commit();
+                                        .addToBackStack(String.valueOf(backStackTag)).commitAllowingStateLoss();
                                 break;
                         }
                     }
@@ -1032,7 +1020,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                 @Override
                 public void run() {
                     final Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContent);
-                    if (navId == MENU_INDEX_HOME) {
+                    if (navId == 0) {
                         if (fragment == null) {
                             navigationView.getMenu().getItem(MENU_INDEX_HOME).setChecked(false);
                             return;
@@ -1098,9 +1086,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @return the navigation id
      */
     private int getNavIdFromTag(@NonNull final String tag) {
-
         switch (Integer.parseInt(tag)) {
-
             case INDEX_FRAGMENT_HOME:
                 return R.id.nav_home;
             case INDEX_FRAGMENT_SETTINGS:

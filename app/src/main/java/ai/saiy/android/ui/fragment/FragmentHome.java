@@ -223,7 +223,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                         localRequest.prepareDefault(LocalRequest.ACTION_STOP_HOTWORD, null);
                         localRequest.setShutdownHotword();
                         localRequest.execute();
-                        Pair<Boolean, Boolean> permissions = ai.saiy.android.permissions.PermissionHelper.checkTutorialPermissions(getApplicationContext());
+                        final Pair<Boolean, Boolean> permissions = ai.saiy.android.permissions.PermissionHelper.checkTutorialPermissions(getApplicationContext());
                         if (permissions.first && permissions.second) {
                             startTutorial();
                         } else if (permissions.first) {
@@ -494,7 +494,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         if (DEBUG) {
             MyLog.i(CLS_NAME, "requestAudioPermissions");
         }
-        final String[] strArr = {android.Manifest.permission.RECORD_AUDIO};
+        final String[] permissions = {android.Manifest.permission.RECORD_AUDIO};
         if (ActivityCompat.shouldShowRequestPermissionRationale(getParentActivity(), android.Manifest.permission.RECORD_AUDIO)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "requestAudioPermissions: showing rational");
@@ -505,14 +505,14 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "requestAudioPermissions: on snack click");
                     }
-                    ActivityCompat.requestPermissions(getParentActivity(), strArr, REQUEST_AUDIO);
+                    ActivityCompat.requestPermissions(getParentActivity(), permissions, REQUEST_AUDIO);
                 }
             });
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "requestAudioPermissions: requesting");
             }
-            ActivityCompat.requestPermissions(getParentActivity(), strArr, REQUEST_AUDIO);
+            ActivityCompat.requestPermissions(getParentActivity(), permissions, REQUEST_AUDIO);
         }
     }
 

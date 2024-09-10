@@ -17,10 +17,6 @@
 
 package ai.saiy.android.recognition.provider.google.cloud;
 
-/**
- * Created by benrandall76@gmail.com on 27/09/2016.
- */
-
 import com.google.auth.Credentials;
 
 import java.io.IOException;
@@ -41,6 +37,7 @@ import io.grpc.StatusException;
 
 /**
  * Authenticates the gRPC channel.
+ * Created by benrandall76@gmail.com on 27/09/2016.
  */
 public class GoogleCredentialsInterceptor implements ClientInterceptor {
 
