@@ -1060,6 +1060,16 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getRestart(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_restart);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getShutdown(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_shutdown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getSearchError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_search);
         return stringArray[new Random().nextInt(stringArray.length)];

@@ -37,6 +37,7 @@ import java.util.ArrayList;
 import ai.saiy.android.R;
 import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.request.SaiyRequestParams;
+import ai.saiy.android.command.agenda.CommandAgenda;
 import ai.saiy.android.command.alexa.CommandAlexa;
 import ai.saiy.android.command.application.foreground.CommandForeground;
 import ai.saiy.android.command.application.kill.CommandKill;
@@ -98,6 +99,7 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsAbility;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
@@ -487,7 +489,7 @@ public class Quantum extends Tunnelling {
                     final ai.saiy.android.command.navigation.CommandNavigation commandNavigation = new ai.saiy.android.command.navigation.CommandNavigation();
                     outcome = commandNavigation.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_TIME:
@@ -497,7 +499,7 @@ public class Quantum extends Tunnelling {
                     final ai.saiy.android.command.time.CommandTime commandTime = new ai.saiy.android.command.time.CommandTime();
                     outcome = commandTime.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_HARDWARE:
@@ -507,7 +509,7 @@ public class Quantum extends Tunnelling {
                     final CommandHardware commandHardware = new CommandHardware();
                     outcome = commandHardware.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_CLIPBOARD: {
@@ -533,7 +535,7 @@ public class Quantum extends Tunnelling {
                     final CommandSettings commandSettings = new CommandSettings();
                     outcome = commandSettings.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_MUSIC:
@@ -543,7 +545,7 @@ public class Quantum extends Tunnelling {
                     final CommandMusic commandMusic = new CommandMusic();
                     outcome = commandMusic.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_SOMERSAULT:
@@ -553,7 +555,7 @@ public class Quantum extends Tunnelling {
                     final CommandSomersault commandSomersault = new CommandSomersault();
                     outcome = commandSomersault.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_ORIENTATION:
@@ -563,7 +565,7 @@ public class Quantum extends Tunnelling {
                     final CommandOrientation commandOrientation = new CommandOrientation();
                     outcome = commandOrientation.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_REDIAL:
@@ -574,7 +576,7 @@ public class Quantum extends Tunnelling {
                         final ai.saiy.android.command.call.CommandRedial commandRedial = new ai.saiy.android.command.call.CommandRedial();
                         outcome = commandRedial.getResponse(mContext, toResolve, sl, cr);
                         request.setUtterance(outcome.getUtterance());
-                        request.setAction(outcome.getAction());
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
@@ -590,13 +592,39 @@ public class Quantum extends Tunnelling {
                         final ai.saiy.android.command.call.CommandCallBack commandCallBack = new ai.saiy.android.command.call.CommandCallBack();
                         outcome = commandCallBack.getResponse(mContext, toResolve, sl, cr);
                         request.setUtterance(outcome.getUtterance());
-                        request.setAction(outcome.getAction());
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
                         result = Outcome.SUCCESS;
                     }
+                    break;
+                case COMMAND_SHUTDOWN:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SHUTDOWN.name());
+                    }
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    if (!secure) {
+                        request.setUtterance(PersonalityResponse.getRestart(mContext, sl));
+                        UtilsAbility.shutdown(mContext);
+                    } else {
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                    }
+                    result = Outcome.SUCCESS;
+                    break;
+                case COMMAND_RESTART:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_RESTART.name());
+                    }
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    if (!secure) {
+                        request.setUtterance(PersonalityResponse.getRestart(mContext, sl));
+                        UtilsAbility.restart(mContext);
+                    } else {
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                    }
+                    result = Outcome.SUCCESS;
                     break;
                 case COMMAND_DEFINE:
                     if (DEBUG) {
@@ -605,7 +633,7 @@ public class Quantum extends Tunnelling {
                     final CommandDefine commandDefine = new CommandDefine();
                     outcome = commandDefine.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_APPLICATION_SETTINGS:
@@ -615,7 +643,7 @@ public class Quantum extends Tunnelling {
                     final CommandApplicationSettings commandApplicationSettings = new CommandApplicationSettings();
                     outcome = commandApplicationSettings.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_KILL:
@@ -626,7 +654,7 @@ public class Quantum extends Tunnelling {
                         final CommandKill commandKill = new CommandKill();
                         outcome = commandKill.getResponse(mContext, toResolve, sl, cr);
                         request.setUtterance(outcome.getUtterance());
-                        request.setAction(outcome.getAction());
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
@@ -641,7 +669,7 @@ public class Quantum extends Tunnelling {
                     final CommandLaunch commandLaunch = new CommandLaunch();
                     outcome = commandLaunch.getResponse(mContext,toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_LOCATION:
@@ -651,7 +679,7 @@ public class Quantum extends Tunnelling {
                     final CommandLocation commandLocation = new CommandLocation();
                     outcome = commandLocation.getResponse(mContext, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_PARKED_VEHICLE:
@@ -661,7 +689,7 @@ public class Quantum extends Tunnelling {
                     final CommandParkedVehicle commandParkedVehicle = new CommandParkedVehicle();
                     outcome = commandParkedVehicle.getResponse(mContext, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_LOCATE_VEHICLE:
@@ -672,7 +700,7 @@ public class Quantum extends Tunnelling {
                         final CommandLocateVehicle commandLocateVehicle = new CommandLocateVehicle();
                         outcome = commandLocateVehicle.getResponse(mContext, sl);
                         request.setUtterance(outcome.getUtterance());
-                        request.setAction(outcome.getAction());
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
@@ -687,7 +715,7 @@ public class Quantum extends Tunnelling {
                     final CommandForeground commandForeground = new CommandForeground();
                     outcome = commandForeground.getResponse(mContext, sl);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_AUDIO:
@@ -697,7 +725,7 @@ public class Quantum extends Tunnelling {
                     final CommandAudio commandAudio = new CommandAudio();
                     outcome = commandAudio.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_HOROSCOPE:
@@ -707,8 +735,24 @@ public class Quantum extends Tunnelling {
                     final ai.saiy.android.command.horoscope.CommandHoroscope commandHoroscope = new ai.saiy.android.command.horoscope.CommandHoroscope();
                     outcome = commandHoroscope.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
+                    break;
+                case COMMAND_AGENDA:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_AGENDA.name());
+                    }
+                    if (!secure) {
+                        final CommandAgenda commandAgenda = new CommandAgenda();
+                        outcome = commandAgenda.getResponse(mContext, toResolve, sl, cr);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    }
                     break;
                 case COMMAND_WEATHER:
                     if (DEBUG) {
@@ -717,7 +761,7 @@ public class Quantum extends Tunnelling {
                     final ai.saiy.android.command.weather.CommandWeather commandWeather = new ai.saiy.android.command.weather.CommandWeather();
                     outcome = commandWeather.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_NOTE:
@@ -740,7 +784,7 @@ public class Quantum extends Tunnelling {
                     final CommandSearch commandSearch = new CommandSearch();
                     outcome = commandSearch.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_ALARM:
@@ -750,7 +794,7 @@ public class Quantum extends Tunnelling {
                     final ai.saiy.android.command.alarm.CommandAlarm commandAlarm = new ai.saiy.android.command.alarm.CommandAlarm();
                     outcome = commandAlarm.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_CALENDAR:
@@ -760,7 +804,7 @@ public class Quantum extends Tunnelling {
                     final ai.saiy.android.command.calendar.CommandCalendar commandCalendar = new ai.saiy.android.command.calendar.CommandCalendar();
                     outcome = commandCalendar.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
-                    request.setAction(outcome.getAction());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
                 case COMMAND_SUPERUSER:
@@ -771,7 +815,7 @@ public class Quantum extends Tunnelling {
                         final ai.saiy.android.command.superuser.CommandSuperuser commandSuperuser = new ai.saiy.android.command.superuser.CommandSuperuser();
                         outcome = commandSuperuser.getResponse(mContext, toResolve, sl, cr);
                         request.setUtterance(outcome.getUtterance());
-                        request.setAction(outcome.getAction());
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
@@ -787,7 +831,7 @@ public class Quantum extends Tunnelling {
                         final ai.saiy.android.command.sms.CommandSms commandSms = new ai.saiy.android.command.sms.CommandSms();
                         outcome = commandSms.getResponse(mContext, toResolve, sl, cr);
                         request.setUtterance(outcome.getUtterance());
-                        request.setAction(outcome.getAction());
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
@@ -1402,6 +1446,16 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALL_BACK.name());
                     }
                     break;
+                case COMMAND_SHUTDOWN:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SHUTDOWN.name());
+                    }
+                    break;
+                case COMMAND_RESTART:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_RESTART.name());
+                    }
+                    break;
                 case COMMAND_DEFINE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DEFINE.name());
@@ -1450,6 +1504,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_HOROSCOPE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HOROSCOPE.name());
+                    }
+                    break;
+                case COMMAND_AGENDA:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_AGENDA.name());
                     }
                     break;
                 case COMMAND_WEATHER:

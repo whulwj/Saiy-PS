@@ -24,7 +24,7 @@
         <item name="android:statusBarColor">@android:color/transparent</item>
     </style>
 
-    <style name="Theme.MaterialDialog.Transparent" parent="@style/AppTheme">
+    <style name="Theme.MaterialDialog.Transparent" parent="@style/Theme.MaterialComponents.DayNight.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>

@@ -185,10 +185,10 @@ public class SettingsIntent {
         arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, IntentConstants.COMPONENT_VOICE_SEARCH_PREFERENCES_VELVET));
         arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, IntentConstants.COMPONENT_VOICE_SEARCH_PREFERENCES));
         arrayList.add(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, "com.google.android.apps.gsa.settingsui.VoiceSearchPreferences"));
-        Iterator it = arrayList.iterator();
+        Iterator<ComponentName> it = arrayList.iterator();
         while (it.hasNext()) {
             try {
-                intent.setComponent((ComponentName) it.next());
+                intent.setComponent(it.next());
                 context.startActivity(intent);
                 return true;
             } catch (ActivityNotFoundException e) {

@@ -205,21 +205,6 @@
         android:smallScreens="true"
         android:xlargeScreens="true"/>
 
-    <!--<compatible-screens>-->
-    <!--<screen-->
-    <!--android:screenSize="small"-->
-    <!--android:screenDensity="xhdpi"/>-->
-    <!--<screen-->
-    <!--android:screenSize="normal"-->
-    <!--android:screenDensity="xhdpi"/>-->
-    <!--<screen-->
-    <!--android:screenSize="large"-->
-    <!--android:screenDensity="xhdpi"/>-->
-    <!--<screen-->
-    <!--android:screenSize="xlarge"-->
-    <!--android:screenDensity="xhdpi"/>-->
-    <!--</compatible-screens>-->
-
     <application
         android:name="ai.saiy.android.utils.Global"
         android:allowBackup="true"

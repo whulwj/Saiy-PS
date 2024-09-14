@@ -163,7 +163,7 @@ public class ApiRequest {
      * @param tts                      : if text to speech is true
      * @param sentiment                : if sentiment analysis is true
      * @param knowledge                : if knowledge base is true
-     * @param fixedCredentialsProvider : fixedCredentialsProvider for knowledgebase
+     * @param fixedCredentialsProvider : fixedCredentialsProvider for knowledge base
      * @return : DetectIntentRequest object
      */
     private DetectIntentRequest getDetectIntentRequest(SessionName sessionName,

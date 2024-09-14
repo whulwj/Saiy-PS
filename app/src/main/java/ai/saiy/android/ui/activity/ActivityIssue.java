@@ -122,11 +122,11 @@ public class ActivityIssue extends AppCompatActivity {
                 .setTitle(R.string.menu_voice_recognition)
                 .setMessage(message)
                 .setIcon(R.drawable.ic_info)
-                .setNeutralButton(R.string.title_install, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.title_install, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showNoVRDialog: onNeutral");
+                            MyLog.i(CLS_NAME, "showNoVRDialog: onPositive");
                         }
 
                         Install.showInstallLink(ActivityIssue.this.getApplicationContext(), Installed.PACKAGE_NAME_GOOGLE_NOW);

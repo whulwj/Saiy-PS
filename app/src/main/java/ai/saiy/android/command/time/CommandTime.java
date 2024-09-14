@@ -39,18 +39,18 @@ public class CommandTime {
         return outcome;
     }
 
-    private String getUrl(Context context, String query) {
+    private String getUrl(@NonNull Context context, @NonNull String query) {
         final Pair<Boolean, String> authPair = new WeatherOnlineReference().getAPIKey(context);
         if (authPair.first) {
-            return "https://api.worldweatheronline.com/premium/v1/tz.ashx?key=" + authPair.second + "&q=" + query.trim().replaceAll("\\s", "%20").trim() + "&format=json";
+            return "https://api.worldweatheronline.com/premium/v1/tz.ashx?key=" + authPair.second + "&q=" + query.trim().replaceAll("\\s", "%20") + "&format=json";
         }
         if (DEBUG) {
             MyLog.w(CLS_NAME, "authPair error");
         }
-        return "https://api.worldweatheronline.com/premium/v1/tz.ashx?key=&q=" + query.trim().replaceAll("\\s", "%20").trim() + "&format=json";
+        return "https://api.worldweatheronline.com/premium/v1/tz.ashx?key=&q=" + query.trim().replaceAll("\\s", "%20") + "&format=json";
     }
 
-    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
+    public @NonNull Outcome getResponse(@NonNull Context context, @NonNull ArrayList<String> voiceData, @NonNull SupportedLanguage supportedLanguage, @NonNull ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
@@ -100,10 +100,8 @@ public class CommandTime {
                 outcome.setOutcome(Outcome.SUCCESS);
                 return returnOutcome(outcome);
             }
-            outcome.setUtterance(ai.saiy.android.personality.PersonalityResponse.getTimeInError(context, supportedLanguage));
-            outcome.setOutcome(Outcome.FAILURE);
-            return returnOutcome(outcome);
         }
+
         outcome.setUtterance(ai.saiy.android.personality.PersonalityResponse.getTimeInError(context, supportedLanguage));
         outcome.setOutcome(Outcome.FAILURE);
         return returnOutcome(outcome);

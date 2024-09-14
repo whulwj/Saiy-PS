@@ -37,14 +37,16 @@
 
 package ai.saiy.android.algorithms.needlemanwunch.simmetrics;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
+
+import androidx.annotation.NonNull;
+
 import org.simmetrics.StringMetric;
 import org.simmetrics.metrics.SmithWaterman;
 import org.simmetrics.metrics.SmithWatermanGotoh;
 import org.simmetrics.metrics.functions.MatchMismatch;
 import org.simmetrics.metrics.functions.Substitution;
-
-import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.base.Preconditions.checkNotNull;
 
 /**
  * Applies the Needleman-Wunsch algorithm to calculate the similarity
@@ -98,10 +100,9 @@ public final class NeedlemanWunch implements StringMetric {
             return 1.0f;
         }
 
-        float maxDistance = java.lang.Math.max(a.length(), b.length())
-                * java.lang.Math.max(substitution.max(), gapValue);
-        float minDistance = java.lang.Math.max(a.length(), b.length())
-                * java.lang.Math.min(substitution.min(), gapValue);
+        final int maxLength = Math.max(a.length(), b.length());
+        float maxDistance = maxLength * java.lang.Math.max(substitution.max(), gapValue);
+        float minDistance = maxLength * java.lang.Math.min(substitution.min(), gapValue);
 
         return (-needlemanWunch(a, b) - minDistance)
                 / (maxDistance - minDistance);
@@ -156,7 +157,7 @@ public final class NeedlemanWunch implements StringMetric {
     }
 
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return "NeedlemanWunch [costFunction=" + substitution + ", gapCost="
                 + gapValue + "]";
     }

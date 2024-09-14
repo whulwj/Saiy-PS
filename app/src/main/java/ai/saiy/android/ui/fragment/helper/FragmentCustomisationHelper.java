@@ -1418,11 +1418,11 @@ public class FragmentCustomisationHelper {
                 .setView(R.layout.sound_effect_dialog_layout)
                 .setTitle(R.string.menu_sound_effects)
                 .setIcon(R.drawable.ic_music_square)
-                .setNeutralButton(R.string.title_cool, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.title_cool, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showSoundEffectDialog: onNeutral");
+                            MyLog.i(CLS_NAME, "showSoundEffectDialog: onPositive");
                         }
                         if (dialog instanceof AlertDialog) {
                             final EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etSoundEffect);

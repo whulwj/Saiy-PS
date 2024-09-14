@@ -2,6 +2,7 @@ package ai.saiy.android.ui.activity;
 
 import android.os.Build;
 import android.os.Bundle;
+import android.text.format.DateUtils;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -28,8 +29,6 @@ import ai.saiy.android.utils.UtilsToast;
 public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRewardListener {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityDonate.class.getSimpleName();
-
-    private RewardedAd rewardedAd;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
         if (DEBUG) {
             MyLog.i(CLS_NAME, "updateFirebase");
         }
-        new UserFirebaseHelper().updateUser(getApplicationContext(), 5L, 86400000L);
+        new UserFirebaseHelper().updateUser(getApplicationContext(), 5L, DateUtils.DAY_IN_MILLIS);
     }
 
     private final RewardedAdLoadCallback rewardedAdLoadCallback = new RewardedAdLoadCallback() {
@@ -84,7 +83,6 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onAdFailedToLoad:" + loadAdError);
             }
-            rewardedAd = null;
             toast(getString(R.string.ad_error_playback), Toast.LENGTH_LONG);
             finish();
         }
@@ -95,7 +93,6 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
                 MyLog.i(CLS_NAME, "onAdLoaded");
             }
             if (isActive()) {
-                ActivityDonate.this.rewardedAd = rewardedAd;
                 rewardedAd.show(ActivityDonate.this, ActivityDonate.this);
             }
         }

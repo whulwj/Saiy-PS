@@ -69,11 +69,11 @@
     <string name="freesound_org">freesound.org</string>
     <string name="license_freesound">Credit bone666138 &amp; deathpie @ freesound.org</string>
     <string name="twitter_oauth_view">TwitterOAuthView</string>
-    <string name="license_twitter_oauth_view">Copyright (C) 2012-2013 Neo Visionaries Inc.</string>
+    <string name="license_twitter_oauth_view">Copyright © 2012-2013 Neo Visionaries Inc.</string>
     <string name="twitter4j">Twitter4j</string>
     <string name="license_twitter4j">Copyright 2007 Yusuke Yamamoto</string>
     <string name="java_aes_crypto">java-aes-crypto</string>
-    <string name="license_java_aes_crypto">Copyright (c) 2014-2015 Tozny, LLC; (http://tozny.com)</string>
+    <string name="license_java_aes_crypto">Copyright © 2014-2015 Tozny, LLC; (http://tozny.com)</string>
     <string name="standout">StandOut</string>
     <string name="license_standout">Copyright (c) Mark Wei github@pingpongboss - credits github@jasonconnery &amp; github@sherpya</string>
     <string name="amazon_avs">Amazon AVS</string>
@@ -2313,4 +2313,16 @@
     <string name="songs">songs</string>
     <string name="track">track</string>
     <string name="tracks">tracks</string>
+
+    <string name="agenda">agenda</string>
+    <string name="am_i_busy">am i busy</string>
+    <string name="day_after_tomorrow">day after tomorrow</string>
+    <string name="diary">diary</string>
+    <string name="gender">gender</string>
+    <string name="i_m_a_busy">i\'m a busy</string>
+    <string name="run">run</string>
+    <string name="what_am_i_doing">what am i doing</string>
+
+    <string name="re_start">re start</string>
+    <string name="restart">restart</string>
 </resources>

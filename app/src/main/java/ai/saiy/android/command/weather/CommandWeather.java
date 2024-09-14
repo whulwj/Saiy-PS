@@ -76,21 +76,21 @@ public class CommandWeather {
         if (SPH.getWeatherProvider(context) == WeatherProvider.WEATHER_ONLINE) {
             authPair = new WeatherOnlineReference().getAPIKey(context);
             if (authPair.first) {
-                return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=" + authPair.second + "&q=" + query.trim().replaceAll("\\s", "%20").trim() + "&format=json&num_of_days=1";
+                return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=" + authPair.second + "&q=" + query.trim().replaceAll("\\s", "%20") + "&format=json&num_of_days=1";
             }
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "authPair error");
             }
-            return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=&q=" + query.trim().replaceAll("\\s", "%20").trim() + "&format=json&num_of_days=1";
+            return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=&q=" + query.trim().replaceAll("\\s", "%20") + "&format=json&num_of_days=1";
         }
         authPair = new OpenWeatherMapReference().getAPIKey(context);
         if (authPair.first) {
-            return "http://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20").trim() + "&appid=" + authPair.second;
+            return "http://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20") + "&appid=" + authPair.second;
         }
         if (DEBUG) {
             MyLog.w(CLS_NAME, "authPair error");
         }
-        return "http://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20").trim() + "&appid=";
+        return "http://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20") + "&appid=";
     }
 
     public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {

@@ -11,6 +11,7 @@ import dagger.hilt.android.components.ActivityComponent;
  * CurrentActivityProvider activityProvider = entryPoint.getActivityProvider();
  */
 @EntryPoint
+@FunctionalInterface
 @InstallIn(ActivityComponent.class)
 public interface ActivityProviderEntryPoint {
     CurrentActivityProvider getActivityProvider();

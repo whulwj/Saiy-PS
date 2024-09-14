@@ -6,7 +6,6 @@ import android.os.Looper;
 import androidx.core.os.HandlerCompat;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -44,7 +43,7 @@ public abstract class ExecutorModule {
 
     @Provides
     @Singleton
-    static Executor provideExecutor() {
+    static ExecutorService provideExecutor() {
         return sExecutorService;
     }
 

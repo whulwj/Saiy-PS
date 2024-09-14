@@ -186,11 +186,11 @@ public class ActivityShowDialog extends AppCompatActivity {
                 .setTitle(R.string.menu_donate)
                 .setMessage(R.string.content_ad_overview)
                 .setIcon(R.drawable.ic_gift)
-                .setNeutralButton(R.string.title_watch_now, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.title_watch_now, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showAdOverviewDialog: onNeutral");
+                            MyLog.i(CLS_NAME, "showAdOverviewDialog: onPositive");
                         }
                         startAd();
                     }

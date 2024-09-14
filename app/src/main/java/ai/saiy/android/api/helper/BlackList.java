@@ -138,7 +138,7 @@ public class BlackList {
                 MyLog.v(CLS_NAME, "shouldBlackList: matches: " + matches);
             }
 
-            final ListIterator itr = blackListArray.listIterator();
+            final ListIterator<BlackList> itr = blackListArray.listIterator();
 
             if (matches > MAX_ACQUIRE_REJECT) {
                 if (DEBUG) {
@@ -146,7 +146,7 @@ public class BlackList {
                 }
 
                 while (itr.hasNext()) {
-                    blackList = (BlackList) itr.next();
+                    blackList = itr.next();
                     packageName = blackList.getPackageName();
 
                     if (packageName.matches(currentPackageName)) {
@@ -160,7 +160,7 @@ public class BlackList {
             } else {
 
                 while (itr.hasNext()) {
-                    blackList = (BlackList) itr.next();
+                    blackList = itr.next();
 
                     if ((currentRequestTime - blackList.getRequestTime()) > MAX_PAST_TIME) {
                         itr.remove();

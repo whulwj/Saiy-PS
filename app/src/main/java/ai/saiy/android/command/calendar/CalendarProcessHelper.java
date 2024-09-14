@@ -1,6 +1,6 @@
 package ai.saiy.android.command.calendar;
 
-import static ai.saiy.android.command.calendar.CalendarProcess.MONTH_OFFSET;
+import static ai.saiy.android.utils.UtilsDate.MONTH_OFFSET;
 
 import android.content.Context;
 
@@ -20,6 +20,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsDate;
 
 public class CalendarProcessHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -64,13 +65,6 @@ public class CalendarProcessHelper {
     private static String IN_THE_MORNING;
     private static String IN_THE_AFTERNOON;
     private static String IN_THE_EVENING;
-    private static String MONDAY;
-    private static String TUESDAY;
-    private static String WEDNESDAY;
-    private static String THURSDAY;
-    private static String FRIDAY;
-    private static String SATURDAY;
-    private static String SUNDAY;
     private static String _MORNING;
     private static String _EVENING;
     private static String _NIGHT;
@@ -205,14 +199,6 @@ public class CalendarProcessHelper {
     private static final Pattern p29th = Pattern.compile(".*\\b29th\\b.*");
     private static final Pattern p30th = Pattern.compile(".*\\b30th\\b.*");
     private static final Pattern p31st = Pattern.compile(".*\\b31st\\b.*");
-    private static final Pattern p2012 = Pattern.compile(".*\\b2012\\b.*");
-    private static final Pattern p2013 = Pattern.compile(".*\\b2013\\b.*");
-    private static final Pattern p2014 = Pattern.compile(".*\\b2014\\b.*");
-    private static final Pattern p2015 = Pattern.compile(".*\\b2015\\b.*");
-    private static final Pattern p2016 = Pattern.compile(".*\\b2016\\b.*");
-    private static final Pattern p2017 = Pattern.compile(".*\\b2017\\b.*");
-    private static final Pattern p2018 = Pattern.compile(".*\\b2018\\b.*");
-    private static final Pattern p2019 = Pattern.compile(".*\\b2019\\b.*");
     private static final Pattern p2020 = Pattern.compile(".*\\b2020\\b.*");
     private static final Pattern p2021 = Pattern.compile(".*\\b2021\\b.*");
     private static final Pattern p2022 = Pattern.compile(".*\\b2022\\b.*");
@@ -240,7 +226,7 @@ public class CalendarProcessHelper {
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "resolveCalendar: strings initialised");
         }
-        String str = "";
+        String str;
         String structuredString = "";
         boolean hasTime = false;
         for (int i = 0, size = voiceData.size(); i < size; ++i) {
@@ -490,13 +476,13 @@ public class CalendarProcessHelper {
         pOCTOBER = Pattern.compile(".*\\b" + context.getString(R.string.OCTOBER) + "\\b.*");
         pNOVEMBER = Pattern.compile(".*\\b" + context.getString(R.string.NOVEMBER) + "\\b.*");
         pDECEMBER = Pattern.compile(".*\\b" + context.getString(R.string.DECEMBER) + "\\b.*");
-        MONDAY = context.getString(R.string.MONDAY);
-        TUESDAY = context.getString(R.string.TUESDAY);
-        WEDNESDAY = context.getString(R.string.WEDNESDAY);
-        THURSDAY = context.getString(R.string.THURSDAY);
-        FRIDAY = context.getString(R.string.FRIDAY);
-        SATURDAY = context.getString(R.string.SATURDAY);
-        SUNDAY = context.getString(R.string.SUNDAY);
+        final String MONDAY = context.getString(R.string.MONDAY);
+        final String TUESDAY = context.getString(R.string.TUESDAY);
+        final String WEDNESDAY = context.getString(R.string.WEDNESDAY);
+        final String THURSDAY = context.getString(R.string.THURSDAY);
+        final String FRIDAY = context.getString(R.string.FRIDAY);
+        final String SATURDAY = context.getString(R.string.SATURDAY);
+        final String SUNDAY = context.getString(R.string.SUNDAY);
         pMONDAY = Pattern.compile(".*\\b" + MONDAY + "\\b.*");
         pTUESDAY = Pattern.compile(".*\\b" + TUESDAY + "\\b.*");
         pWEDNESDAY = Pattern.compile(".*\\b" + WEDNESDAY + "\\b.*");
@@ -592,7 +578,7 @@ public class CalendarProcessHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "calendarProcess.haveYear: " + calendarProcess.haveYear);
         }
-        if (!dissectHourAndMinute(context, str)) {
+        if (!dissectHourAndMinute(str)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: false");
             }
@@ -671,7 +657,7 @@ public class CalendarProcessHelper {
         return false;
     }
 
-    private static boolean hasHourAndMinute(Context context, String str, String delimiter, boolean less) {
+    private static boolean hasHourAndMinute(String str, String delimiter, boolean less) {
         String[] separated = str.split(delimiter);
         if (separated.length <= 0) {
             if (DEBUG) {
@@ -992,27 +978,28 @@ public class CalendarProcessHelper {
         if (calendarProcess.year == 0 && calendarProcess.month != 0) {
             getYear(calendarProcess.month);
         }
-        String dayOfMonthString = String.valueOf(calendarProcess.dayOfMonth);
-        String monthString = String.valueOf(calendarProcess.month);
-        String yearString = String.valueOf(calendarProcess.year);
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
         if (calendarProcess.year == 0) {
             calendarProcess.year = calendar.get(Calendar.YEAR);
-            yearString = String.valueOf(calendarProcess.year);
         }
         if (calendarProcess.month == 0) {
             calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
-            monthString = String.valueOf(calendarProcess.month);
         }
         if (calendarProcess.dayOfMonth == 0) {
             calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-            dayOfMonthString = String.valueOf(calendarProcess.dayOfMonth);
         }
+        String dayOfMonthString;
+        String monthString;
+        final String yearString = String.valueOf(calendarProcess.year);
         if (calendarProcess.month > 0 && calendarProcess.month < 10) {
             monthString = "0" + calendarProcess.month;
+        } else {
+            monthString = String.valueOf(calendarProcess.month);
         }
         if (calendarProcess.dayOfMonth > 0 && calendarProcess.dayOfMonth < 10) {
             dayOfMonthString = "0" + calendarProcess.dayOfMonth;
+        } else {
+            dayOfMonthString = String.valueOf(calendarProcess.dayOfMonth);
         }
         final String dateString = dayOfMonthString + monthString + yearString;
         if (DEBUG) {
@@ -1035,25 +1022,13 @@ public class CalendarProcessHelper {
                         case 0:
                             return false;
                         case Calendar.SUNDAY:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + SUNDAY;
-                            break;
                         case Calendar.MONTH:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + MONDAY;
-                            break;
                         case Calendar.TUESDAY:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + TUESDAY;
-                            break;
                         case Calendar.WEDNESDAY:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + WEDNESDAY;
-                            break;
                         case Calendar.THURSDAY:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + THURSDAY;
-                            break;
                         case Calendar.FRIDAY:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + FRIDAY;
-                            break;
                         case Calendar.SATURDAY:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + SATURDAY;
+                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + UtilsDate.getWeekday(context, calendarProcess.weekday);
                             break;
                         default:
                             return false;
@@ -1073,7 +1048,7 @@ public class CalendarProcessHelper {
         }
     }
 
-    private static boolean dissectHourAndMinute(Context context, String str) {
+    private static boolean dissectHourAndMinute(String str) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "in hasTime");
         }
@@ -1229,7 +1204,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: five to");
             }
-            if (!hasHourAndMinute(context, replace, FIVE_TO, true)) {
+            if (!hasHourAndMinute(replace, FIVE_TO, true)) {
                 return false;
             }
             calendarProcess.minute = 55;
@@ -1242,7 +1217,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: ten to");
             }
-            if (!hasHourAndMinute(context, replace, TEN_TO, true)) {
+            if (!hasHourAndMinute(replace, TEN_TO, true)) {
                 return false;
             }
             calendarProcess.minute = 50;
@@ -1255,7 +1230,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: 10 to");
             }
-            if (!hasHourAndMinute(context, replace, NUMERIC_TEN_TO, true)) {
+            if (!hasHourAndMinute(replace, NUMERIC_TEN_TO, true)) {
                 return false;
             }
             calendarProcess.minute = 50;
@@ -1268,7 +1243,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: quarter to");
             }
-            if (!hasHourAndMinute(context, replace, QUARTER_TO, true)) {
+            if (!hasHourAndMinute(replace, QUARTER_TO, true)) {
                 return false;
             }
             calendarProcess.minute = 45;
@@ -1281,7 +1256,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: twenty to");
             }
-            if (!hasHourAndMinute(context, replace, TWENTY_TO, true)) {
+            if (!hasHourAndMinute(replace, TWENTY_TO, true)) {
                 return false;
             }
             calendarProcess.minute = 40;
@@ -1294,7 +1269,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: 25 to");
             }
-            if (!hasHourAndMinute(context, replace, NUMERIC_TWENTY_FIVE_TO, true)) {
+            if (!hasHourAndMinute(replace, NUMERIC_TWENTY_FIVE_TO, true)) {
                 return false;
             }
             calendarProcess.minute = 35;
@@ -1307,7 +1282,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: twenty five to");
             }
-            if (!hasHourAndMinute(context, replace, TWENTY_FIVE_TO, true)) {
+            if (!hasHourAndMinute(replace, TWENTY_FIVE_TO, true)) {
                 return false;
             }
             calendarProcess.minute = 35;
@@ -1320,7 +1295,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: half past");
             }
-            if (!hasHourAndMinute(context, replace, HALF_PAST, false)) {
+            if (!hasHourAndMinute(replace, HALF_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 30;
@@ -1333,7 +1308,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: twenty five past");
             }
-            if (!hasHourAndMinute(context, replace, TWENTY_FIVE_PAST, false)) {
+            if (!hasHourAndMinute(replace, TWENTY_FIVE_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 25;
@@ -1346,7 +1321,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: twenty five past");
             }
-            if (!hasHourAndMinute(context, replace, TWENTY_NUMERIC_FIVE_PAST, false)) {
+            if (!hasHourAndMinute(replace, TWENTY_NUMERIC_FIVE_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 25;
@@ -1359,7 +1334,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: 25 past");
             }
-            if (!hasHourAndMinute(context, replace, NUMERIC_TWENTY_FIVE_PAST, false)) {
+            if (!hasHourAndMinute(replace, NUMERIC_TWENTY_FIVE_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 25;
@@ -1372,7 +1347,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: twenty past");
             }
-            if (!hasHourAndMinute(context, replace, TWENTY_PAST, false)) {
+            if (!hasHourAndMinute(replace, TWENTY_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 20;
@@ -1385,7 +1360,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: twenty past");
             }
-            if (!hasHourAndMinute(context, replace, NUMERIC_TWENTY_PAST, false)) {
+            if (!hasHourAndMinute(replace, NUMERIC_TWENTY_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 20;
@@ -1398,7 +1373,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: quarter past");
             }
-            if (!hasHourAndMinute(context, replace, QUARTER_PAST, false)) {
+            if (!hasHourAndMinute(replace, QUARTER_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 15;
@@ -1411,7 +1386,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: ten past");
             }
-            if (!hasHourAndMinute(context, replace, TEN_PAST, false)) {
+            if (!hasHourAndMinute(replace, TEN_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 10;
@@ -1424,7 +1399,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: 10 past");
             }
-            if (!hasHourAndMinute(context, replace, NUMERIC_TEN_PAST, false)) {
+            if (!hasHourAndMinute(replace, NUMERIC_TEN_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 10;
@@ -1437,7 +1412,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: five past");
             }
-            if (!hasHourAndMinute(context, replace, FIVE_PAST, false)) {
+            if (!hasHourAndMinute(replace, FIVE_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 5;
@@ -1450,7 +1425,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "hasTime: 5 past");
             }
-            if (!hasHourAndMinute(context, replace, NUMERIC_FIVE_PAST, false)) {
+            if (!hasHourAndMinute(replace, NUMERIC_FIVE_PAST, false)) {
                 return false;
             }
             calendarProcess.minute = 5;
@@ -2091,62 +2066,6 @@ public class CalendarProcessHelper {
     }
 
     private static boolean isYear(String str) {
-        if (p2012.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2012");
-            }
-            calendarProcess.year = 2012;
-            return true;
-        }
-        if (p2013.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2013");
-            }
-            calendarProcess.year = 2013;
-            return true;
-        }
-        if (p2014.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2014");
-            }
-            calendarProcess.year = 2014;
-            return true;
-        }
-        if (p2015.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2015");
-            }
-            calendarProcess.year = 2015;
-            return true;
-        }
-        if (p2016.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2016");
-            }
-            calendarProcess.year = 2016;
-            return true;
-        }
-        if (p2017.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2017");
-            }
-            calendarProcess.year = 2017;
-            return true;
-        }
-        if (p2018.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2018");
-            }
-            calendarProcess.year = 2018;
-            return true;
-        }
-        if (p2019.matcher(str).matches()) {
-            if (DEBUG) {
-                MyLog.v(CLS_NAME, "isYear: p2019");
-            }
-            calendarProcess.year = 2019;
-            return true;
-        }
         if (p2020.matcher(str).matches()) {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isYear: p2020");

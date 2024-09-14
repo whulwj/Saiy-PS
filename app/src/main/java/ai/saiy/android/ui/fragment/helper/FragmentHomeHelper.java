@@ -168,8 +168,7 @@ public class FragmentHomeHelper {
             MyLog.i(CLS_NAME, "getRecyclerView");
         }
 
-        final RecyclerView mRecyclerView = (RecyclerView)
-                parent.findViewById(R.id.layout_common_fragment_recycler_view);
+        final RecyclerView mRecyclerView = parent.findViewById(R.id.layout_common_fragment_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getParentActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getParentActivity(), null));
@@ -473,11 +472,11 @@ public class FragmentHomeHelper {
                 .setTitle(R.string.menu_donate)
                 .setMessage(R.string.content_ad_overview)
                 .setIcon(R.drawable.ic_gift)
-                .setNeutralButton(R.string.title_watch_now, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.title_watch_now, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showAdOverviewDialog: onNeutral");
+                            MyLog.i(CLS_NAME, "showAdOverviewDialog: onPositive");
                         }
                         showAd();
                     }

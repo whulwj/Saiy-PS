@@ -46,7 +46,6 @@ import ai.saiy.android.command.battery.BatteryInformation;
 import ai.saiy.android.command.horoscope.CommandHoroscopeValues;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.unknown.Unknown;
-import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
 import ai.saiy.android.firebase.database.read.WeatherProvider;
@@ -128,6 +127,7 @@ public class SPH {
     private static final String VEHICLE_LOCATION_LAT = "vehicle_location_lat";
     private static final String VEHICLE_LOCATION_LONG = "vehicle_location_long";
     private static final String STAR_SIGN = "star_sign";
+    private static final String USER_ATTENDEE_NAME = "user_attendee_name";
     private static final String LAST_CONTACT_UPDATE = "last_contact_update";
     private static final String DOB_YEAR = "dob_year";
     private static final String DOB_MONTH = "dob_month";
@@ -187,7 +187,6 @@ public class SPH {
     private static final String TWITTER_SECRET = "twitter_secret";
     private static final String USED_INCREMENT = "used_increment";
     private static final String FOURSQUARE_TOKEN = "foursquare_token";
-    private static final String MAX_SPEECH_CACHE_SIZE = "max_speech_cache_size";
     private static final String DEFAULT_SONG_RECOGNITION = "default_song_recognition";
     private static final String ANNOUNCE_TASKER = "announce_tasker";
     private static final String ANNOUNCE_NOTIFICATIONS = "announce_notifications";
@@ -533,32 +532,6 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(DEFAULT_SONG_RECOGNITION, provider.ordinal());
-        edit.apply();
-    }
-
-    /**
-     * Get the user assigned maximum speech cache size, which they can adjust in the Saiy
-     * Application Settings
-     *
-     * @param ctx the application context
-     * @return the maximum speech cache size
-     */
-    public static long getMaxSpeechCacheSize(@NonNull final Context ctx) {
-        final SharedPreferences pref = getPref(ctx);
-        return pref.getLong(MAX_SPEECH_CACHE_SIZE, DBSpeech.MAX_CACHE_SIZE);
-    }
-
-    /**
-     * Set the maximum speech cache size
-     *
-     * @param maxSize the maximum cache size
-     * @param ctx     the application context
-     */
-    public static void setMaxSpeechCacheSize(@NonNull final Context ctx, final long maxSize) {
-        final SharedPreferences pref = getPref(ctx);
-        final SharedPreferences.Editor edit = getEditor(pref);
-
-        edit.putLong(MAX_SPEECH_CACHE_SIZE, maxSize);
         edit.apply();
     }
 
@@ -2473,6 +2446,16 @@ public class SPH {
         } else {
             edit.putString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name());
         }
+        edit.apply();
+    }
+
+    public static String getUserAttendeeName(Context context) {
+        return getPref(context).getString(USER_ATTENDEE_NAME, null);
+    }
+
+    public static void setUserAttendeeName(Context context, String name) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(USER_ATTENDEE_NAME, name);
         edit.apply();
     }
 

@@ -48,6 +48,7 @@ public class DBSpeech extends SQLiteOpenHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = DBSpeech.class.getSimpleName();
 
+    /** maximum speech cache size */
     public static final long MAX_CACHE_SIZE = 20000000L;
     private static final long MAX_UNUSED_THRESHOLD = 2600000000L;
     private static final long VACUUM_THRESHOLD = 25L;
@@ -494,7 +495,7 @@ public class DBSpeech extends SQLiteOpenHelper {
      * be concerned about.
      *
      * @param ctx the application context
-     * @return true if the total size of the database exceeds {@link SPH#getMaxSpeechCacheSize(Context)}
+     * @return true if the total size of the database exceeds {@link #MAX_CACHE_SIZE}
      */
     public boolean shouldRunMaintenance(@NonNull final Context ctx) {
         if (DEBUG) {
@@ -568,7 +569,7 @@ public class DBSpeech extends SQLiteOpenHelper {
             }
         }
 
-        return dbSize > SPH.getMaxSpeechCacheSize(ctx);
+        return dbSize > DBSpeech.MAX_CACHE_SIZE;
     }
 
     /**

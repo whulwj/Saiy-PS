@@ -7,6 +7,8 @@ import java.util.Calendar;
 import ai.saiy.android.R;
 
 public class UtilsDate {
+    public static final int MONTH_OFFSET = 1;
+
     public static String getWeekday(Context context, int weekday) {
         switch (weekday) {
             case Calendar.SUNDAY:

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAdvertisement.class.getSimpleName();
 
-    protected @Inject Handler mResultHandler;;
+    protected @Inject Handler mResultHandler;
     private Context mContext;
     private AdView adView;
     private InterstitialAd interstitialAd;
@@ -405,7 +406,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
         if (DEBUG) {
             MyLog.i(CLS_NAME, "updateFirebase");
         }
-        new UserFirebaseHelper().updateUser(getApplicationContext(), 5L, 86400000L);
+        new UserFirebaseHelper().updateUser(getApplicationContext(), 5L, DateUtils.DAY_IN_MILLIS);
     }
 
     public boolean isActive() {

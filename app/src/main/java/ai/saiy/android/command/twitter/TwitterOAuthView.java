@@ -5,7 +5,6 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.util.AttributeSet;
 import android.view.View;
 import android.webkit.WebSettings;
@@ -138,10 +137,9 @@ public class TwitterOAuthView extends WebView {
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB || !shouldOverrideUrlLoading(view, url)) {
-                    return;
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onPageStarted: " + url);
                 }
-                stopLoading();
             }
 
             @Override

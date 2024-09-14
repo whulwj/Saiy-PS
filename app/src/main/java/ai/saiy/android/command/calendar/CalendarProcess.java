@@ -1,10 +1,9 @@
 package ai.saiy.android.command.calendar;
 
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.UtilsDate;
 
 public class CalendarProcess {
-    public static final int MONTH_OFFSET = 1;
-
     boolean haveHourOrMinute;
     boolean allDay;
     boolean haveYear;
@@ -18,7 +17,7 @@ public class CalendarProcess {
     int hourOfDay = 0;
     int minute = 0;
     /**
-     * The valid month starts from 1
+     * The valid month starts from {@link UtilsDate#MONTH_OFFSET}
      */
     int month = 0;
     int weekday = 0;

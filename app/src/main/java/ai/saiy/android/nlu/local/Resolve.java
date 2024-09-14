@@ -34,6 +34,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
+import ai.saiy.android.command.ability.Restart;
+import ai.saiy.android.command.ability.Shutdown;
+import ai.saiy.android.command.agenda.Agenda;
 import ai.saiy.android.command.alarm.Alarm;
 import ai.saiy.android.command.alexa.Alexa;
 import ai.saiy.android.command.application.foreground.Foreground;
@@ -156,6 +159,8 @@ public final class Resolve {
         callableList.add(new Orientation(sr, sl, voiceData, confidence));
         callableList.add(new Redial(sr, sl, voiceData, confidence));
         callableList.add(new CallBack(sr, sl, voiceData, confidence));
+        callableList.add(new Shutdown(sr, sl, voiceData, confidence));
+        callableList.add(new Restart(sr, sl, voiceData, confidence));
         callableList.add(new Define(sr, sl, voiceData, confidence));
         callableList.add(new ApplicationSettings(sr, sl, voiceData, confidence));
         callableList.add(new Kill(sr, sl, voiceData, confidence));
@@ -166,6 +171,7 @@ public final class Resolve {
         callableList.add(new Foreground(sr, sl, voiceData, confidence));
         callableList.add(new Audio(sr, sl, voiceData, confidence));
         callableList.add(new Horoscope(sr, sl, voiceData, confidence));
+        callableList.add(new Agenda(sr, sl, voiceData, confidence));
         callableList.add(new Weather(sr, sl, voiceData, confidence));
         callableList.add(new Note(sr, sl, voiceData, confidence));
         callableList.add(new Search(sr, sl, voiceData, confidence));

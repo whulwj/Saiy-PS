@@ -52,7 +52,7 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
     private final String CLS_NAME = FragmentSettings.class.getSimpleName();
 
     private RecyclerView mRecyclerView;
-    private RecyclerView.Adapter mAdapter;
+    private RecyclerView.Adapter<?> mAdapter;
     private ArrayList<ContainerUI> mObjects;
     private FragmentSettingsHelper helper;
 
@@ -285,7 +285,7 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
      *
      * @return the current adapter
      */
-    public RecyclerView.Adapter getAdapter() {
+    public RecyclerView.Adapter<?> getAdapter() {
         return mAdapter;
     }
 
