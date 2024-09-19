@@ -24,12 +24,12 @@ plugins {
 android {
     namespace 'ai.saiy.android'
     //noinspection GradleDependency: For android.service.voice.AlwaysOnHotwordDetector
-    compileSdk 30
+    compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "ai.saiy.android"
         minSdkVersion 16
-        targetSdkVersion 30
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 3
         versionName "1.0.3"
         ndk {

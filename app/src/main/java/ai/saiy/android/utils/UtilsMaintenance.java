@@ -6,9 +6,9 @@ import android.os.Debug;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class UtilsAbility {
+public class UtilsMaintenance {
     private static final boolean DEBUG = MyLog.DEBUG;
-    private static final String CLS_NAME = UtilsAbility.class.getSimpleName();
+    private static final String CLS_NAME = UtilsMaintenance.class.getSimpleName();
 
     public static void restart(final Context context) {
         debugInfo();

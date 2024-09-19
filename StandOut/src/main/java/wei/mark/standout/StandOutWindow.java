@@ -1119,6 +1119,13 @@ public abstract class StandOutWindow extends Service {
 		StandOutLayoutParams params = window.getLayoutParams();
 
 		try {
+			// force remove the view from the window manager to prevent adding it again
+			mWindowManager.removeView(window);
+		} catch(Throwable t) {
+			Log.d(TAG, "removeView " + t.getClass().getSimpleName() + ", " + t.getMessage());
+		}
+
+		try {
 			// add the view to the window manager
 			mWindowManager.addView(window, params);
 

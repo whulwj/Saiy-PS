@@ -4,11 +4,11 @@ plugins {
 
 android {
     namespace 'wei.mark.standout'
-    compileSdk 30
+    compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 15
+        targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
     }

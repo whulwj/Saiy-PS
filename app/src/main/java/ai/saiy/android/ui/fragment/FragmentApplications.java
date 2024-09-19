@@ -34,6 +34,7 @@ import ai.saiy.android.amazon.UtilsNetwork;
 import ai.saiy.android.amazon.listener.AuthorizationListener;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -48,7 +49,6 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentApplicationsHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
-import ai.saiy.android.firebase.helper.UtilsAnalytic;
 
 public class FragmentApplications extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final Object lock = new Object();
@@ -253,9 +253,9 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         });
     }
 
-    public void deauthoriseAlexa() {
+    public void signOutAlexa() {
         if (DEBUG) {
-            MyLog.d(CLS_NAME, "deauthoriseAlexa");
+            MyLog.d(CLS_NAME, "signOutAlexa");
         }
         showProgress(true);
         ai.saiy.android.utils.SPH.setAlexaAccessToken(getApplicationContext(), null);
@@ -263,7 +263,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         ai.saiy.android.utils.SPH.setAlexaAccessTokenExpiry(getApplicationContext(), 0L);
         ai.saiy.android.utils.SPH.setAlexaNotification(getApplicationContext(), false);
         ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
-        UtilsAnalytic.alexaDeauthorised(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
+        UtilsAnalytic.signOutAlexa(getApplicationContext(), FirebaseAnalytics.getInstance(getApplicationContext()));
         com.amazon.identity.auth.device.api.authorization.AuthorizationManager.signOut(getApplicationContext(), new com.amazon.identity.auth.device.api.Listener<Void, AuthError>() {
             @Override
             public void onError(AuthError authError) {
@@ -383,7 +383,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                         }
                     }).start();
                     if (TokenHelper.hasToken(getApplicationContext())) {
-                        deauthoriseAlexa();
+                        signOutAlexa();
                         return;
                     } else {
                         new Thread(new Runnable() {

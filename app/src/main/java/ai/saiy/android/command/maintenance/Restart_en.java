@@ -1,4 +1,4 @@
-package ai.saiy.android.command.ability;
+package ai.saiy.android.command.maintenance;
 
 import android.util.Pair;
 

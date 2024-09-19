@@ -145,7 +145,7 @@ public class Hardware_en {
                     final int size = voiceData.size();
                     for (int i = 0; i < size; i++) {
                         String vdLower = voiceData.get(i).toLowerCase(locale).trim();
-                        if (vdLower.contains(wifi) || vdLower.contains(wi_fi) || vdLower.contains(Hardware_en.data) || vdLower.contains(bluetooth) || vdLower.contains(gps) || vdLower.contains(g_p_s) || vdLower.contains(nfc) || vdLower.contains(n_f_c) || vdLower.contains(hotspot) || vdLower.contains(hot_spot) || vdLower.contains(airplane) || vdLower.contains(aeroplane) || vdLower.contains(flight) || vdLower.contains(torch) || vdLower.contains(flashlight) || vdLower.contains(flash_light)) {
+                        if (vdLower.contains(wifi) || vdLower.contains(wi_fi) || vdLower.contains(data) || vdLower.contains(bluetooth) || vdLower.contains(gps) || vdLower.contains(g_p_s) || vdLower.contains(nfc) || vdLower.contains(n_f_c) || vdLower.contains(hotspot) || vdLower.contains(hot_spot) || vdLower.contains(airplane) || vdLower.contains(aeroplane) || vdLower.contains(flight) || vdLower.contains(torch) || vdLower.contains(flashlight) || vdLower.contains(flash_light)) {
                             toReturn.add(new Pair<>(CC.COMMAND_HARDWARE, confidence[i]));
                         }
                     }

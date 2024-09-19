@@ -115,7 +115,7 @@ public abstract class UtilsReflection {
      */
     @Nullable
     public static Method getMethod(@NonNull Class<?> clz, @NonNull String methodName,
-                                   Class... clzArgs) {
+                                   Class<?>... clzArgs) {
         Method method = null;
         if (canReflection()) {
             try {
@@ -165,7 +165,7 @@ public abstract class UtilsReflection {
      * @return obj
      */
     public static Object invokeMethod(@NonNull Object src, @NonNull Class<?> clz,
-                                      @NonNull String methodName, Class[] clzArgs, Object... objArgs) {
+                                      @NonNull String methodName, Class<?>[] clzArgs, Object... objArgs) {
         Object result = null;
         try {
             final Method method = getMethod(clz, methodName, clzArgs);

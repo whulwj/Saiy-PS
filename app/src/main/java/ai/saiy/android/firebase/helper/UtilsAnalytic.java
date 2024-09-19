@@ -144,19 +144,19 @@ public class UtilsAnalytic {
         }
     }
 
-    public static void alexaDeauthorised(Context context, FirebaseAnalytics firebaseAnalytics) {
+    public static void signOutAlexa(Context context, FirebaseAnalytics firebaseAnalytics) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "alexaDeauthorised");
+            MyLog.i(CLS_NAME, "signOutAlexa");
         }
         if (firebaseAnalytics == null) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "alexaDeauthorised: mFirebaseAnalytics null");
+                MyLog.w(CLS_NAME, "signOutAlexa: mFirebaseAnalytics null");
             }
             return;
         }
         if (!SPH.getAnonymousUsageStats(context)) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "alexaDeauthorised: getAnonymousUsageStats false");
+                MyLog.i(CLS_NAME, "signOutAlexa: getAnonymousUsageStats false");
             }
             return;
         }
@@ -172,7 +172,7 @@ public class UtilsAnalytic {
         bundle.putBoolean(HAS_CUSTOM_VOICE, SPH.getDefaultTTSVoice(context) != null);
         bundle.putBoolean(HAS_UNKNOWN_COMMAND_SOLUTION, SPH.getCommandUnknownAction(context) != 0);
         bundle.putBoolean(HAS_VOICE_ID, HasVoiceId(context));
-        firebaseAnalytics.logEvent("alexa_deauthorise", bundle);
+        firebaseAnalytics.logEvent("alexa_sign_out", bundle);
     }
 
     public static void alexaAuthSuccess(Context context, FirebaseAnalytics firebaseAnalytics) {

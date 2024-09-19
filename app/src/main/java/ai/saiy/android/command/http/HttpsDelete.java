@@ -77,48 +77,39 @@ public class HttpsDelete {
                 }
                 this.response = UtilsString.streamToString(httpsURLConnection.getErrorStream());
             }
-            disconnect();
         } catch (MalformedURLException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "MalformedURLException, " + e.getMessage());
             }
-            disconnect();
         } catch (UnsupportedEncodingException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "UnsupportedEncodingException, " + e.getMessage());
             }
-            disconnect();
         } catch (ParseException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "ParseException, " + e.getMessage());
             }
-            disconnect();
         } catch (UnknownHostException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "UnknownHostException, " + e.getMessage());
             }
-            disconnect();
         } catch (IOException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "IOException, " + e.getMessage());
             }
-            disconnect();
         } catch (IllegalStateException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "IllegalStateException, " + e.getMessage());
             }
-            disconnect();
         } catch (NullPointerException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "NullPointerException, " + e.getMessage());
             }
-            disconnect();
         } catch (Exception e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "Exception, " + e.getMessage());
             }
-            disconnect();
-        } catch (Throwable th) {
+        } finally {
             disconnect();
         }
         if (DEBUG) {

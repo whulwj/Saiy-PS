@@ -73,6 +73,7 @@ public class OpenWeatherMapHelper {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "response: " + new JSONObject(response).toString(4));
                     }
+                    break;
                 }
             } catch (MalformedURLException e) {
                 if (DEBUG) {

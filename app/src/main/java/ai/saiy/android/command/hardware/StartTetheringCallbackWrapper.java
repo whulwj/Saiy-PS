@@ -9,7 +9,7 @@ public class StartTetheringCallbackWrapper {
     private static final String TAG = "OnStartTetheringCallback";
 
     private static final String ON_START_TETHERING_CALLBACK_CLASS_NAME = "android.net.ConnectivityManager.OnStartTetheringCallback";
-    protected static Class sStartTetheringCallbackClass;
+    protected static Class<?> sStartTetheringCallbackClass;
 
     static {
         try {
@@ -33,7 +33,7 @@ public class StartTetheringCallbackWrapper {
         if (mProxyInstance != null) {
             return mProxyInstance;
         }
-        final Class listenerClass = sStartTetheringCallbackClass;
+        final Class<?> listenerClass = sStartTetheringCallbackClass;
         if (listenerClass == null) {
             return null;
         }

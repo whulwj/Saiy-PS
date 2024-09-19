@@ -22,8 +22,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
-import ai.saiy.android.command.ability.Restart;
-import ai.saiy.android.command.ability.Shutdown;
 import ai.saiy.android.command.agenda.Agenda;
 import ai.saiy.android.command.alarm.Alarm;
 import ai.saiy.android.command.alexa.Alexa;
@@ -55,6 +53,8 @@ import ai.saiy.android.command.hotword.Hotword;
 import ai.saiy.android.command.location.address.Location;
 import ai.saiy.android.command.location.vehicle.locate.LocateVehicle;
 import ai.saiy.android.command.location.vehicle.parked.ParkedVehicle;
+import ai.saiy.android.command.maintenance.Restart;
+import ai.saiy.android.command.maintenance.Shutdown;
 import ai.saiy.android.command.music.Music;
 import ai.saiy.android.command.navigation.Navigation;
 import ai.saiy.android.command.note.Note;

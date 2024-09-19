@@ -29,7 +29,7 @@ public class WifiManagerHelper {
                             MyLog.w(CLS_NAME, "onTetheringFailed");
                         }
                     }
-                });
+                }.getProxyInstance());
             } else {
                 UtilsReflection.invokeMethod(connectivityManager, ConnectivityManager.class, "stopTethering", new Class[]{Integer.TYPE}, 0/*ConnectivityManager.TETHERING_WIFI*/);
             }

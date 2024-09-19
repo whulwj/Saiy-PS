@@ -101,10 +101,10 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
-import ai.saiy.android.utils.UtilsAbility;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
+import ai.saiy.android.utils.UtilsMaintenance;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsToast;
 
@@ -609,7 +609,7 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     if (!secure) {
                         request.setUtterance(PersonalityResponse.getShutdown(mContext, sl));
-                        UtilsAbility.shutdown(mContext);
+                        UtilsMaintenance.shutdown(mContext);
                     } else {
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
                     }
@@ -622,7 +622,7 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     if (!secure) {
                         request.setUtterance(PersonalityResponse.getRestart(mContext, sl));
-                        UtilsAbility.restart(mContext);
+                        UtilsMaintenance.restart(mContext);
                     } else {
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
                     }
