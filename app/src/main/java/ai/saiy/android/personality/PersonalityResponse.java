@@ -774,6 +774,17 @@ public final class PersonalityResponse {
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getStockQuoteUnknownError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_stock_quote_unknown);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getStockQuoteError(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_stock_quote);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
+                PersonalityHelper.getUserNameOrNot(ctx)));
+    }
+
     /**
      * Get the vocal id error response.
      *

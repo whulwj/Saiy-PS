@@ -51,6 +51,7 @@ import ai.saiy.android.command.definition.CommandDefine;
 import ai.saiy.android.command.dice.CommandDice;
 import ai.saiy.android.command.emotion.CommandEmotion;
 import ai.saiy.android.command.facebook.CommandFacebook;
+import ai.saiy.android.command.financial.CommandStockQuote;
 import ai.saiy.android.command.foursquare.CommandFoursquare;
 import ai.saiy.android.command.hardware.CommandHardware;
 import ai.saiy.android.command.helper.CC;
@@ -64,6 +65,7 @@ import ai.saiy.android.command.orientation.CommandOrientation;
 import ai.saiy.android.command.search.CommandSearch;
 import ai.saiy.android.command.settings.application.CommandApplicationSettings;
 import ai.saiy.android.command.settings.system.CommandSettings;
+import ai.saiy.android.command.show.CommandShow;
 import ai.saiy.android.command.somersault.CommandSomersault;
 import ai.saiy.android.command.songrecognition.CommandSongRecognition;
 import ai.saiy.android.command.spell.CommandSpell;
@@ -606,7 +608,7 @@ public class Quantum extends Tunnelling {
                     }
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     if (!secure) {
-                        request.setUtterance(PersonalityResponse.getRestart(mContext, sl));
+                        request.setUtterance(PersonalityResponse.getShutdown(mContext, sl));
                         UtilsAbility.shutdown(mContext);
                     } else {
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
@@ -764,6 +766,16 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_STOCK_QUOTE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_STOCK_QUOTE.name());
+                    }
+                    final CommandStockQuote commandStockQuote = new CommandStockQuote();
+                    outcome = commandStockQuote.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_NOTE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_NOTE.name());
@@ -846,6 +858,16 @@ public class Quantum extends Tunnelling {
                     final ai.saiy.android.command.help.CommandHelp commandHelp = new ai.saiy.android.command.help.CommandHelp();
                     outcome = commandHelp.getResponse(mContext, toResolve, sl, cr);
                     qubit = outcome.getQubit();
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_SHOW:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SHOW.name());
+                    }
+                    final CommandShow commandShow = new CommandShow();
+                    outcome = commandShow.getResponse(mContext, toResolve, sl);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -1516,6 +1538,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_WEATHER.name());
                     }
                     break;
+                case COMMAND_STOCK_QUOTE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_STOCK_QUOTE.name());
+                    }
+                    break;
                 case COMMAND_NOTE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_NOTE.name());
@@ -1553,6 +1580,11 @@ public class Quantum extends Tunnelling {
                     Bundle bundle = new Bundle();
                     bundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_COMMANDS);
                     ExecuteIntent.saiyActivity(mContext, ActivityHome.class, bundle, true);
+                    break;
+                case COMMAND_SHOW:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SHOW.name());
+                    }
                     break;
                 case COMMAND_CHAT_BOT:
                     if (DEBUG) {

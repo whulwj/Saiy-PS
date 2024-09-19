@@ -2325,4 +2325,12 @@
 
     <string name="re_start">re start</string>
     <string name="restart">restart</string>
+
+    <string name="show">show</string>
+    <string name="result">result</string>
+    <string name="quote_response">is currently trading at</string>
+    <string name="share_price">share price</string>
+    <string name="show_response">Visualising results is disabled in the current version. It\'ll be back soon.</string>
+    <string name="stock_price">stock price</string>
+    <string name="stock_quote">stock quote</string>
 </resources>
