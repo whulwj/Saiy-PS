@@ -28,7 +28,6 @@ import com.google.gson.GsonBuilder;
 
 import org.apache.commons.codec.EncoderException;
 import org.apache.commons.codec.language.Soundex;
-import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -141,10 +140,10 @@ public class SoundexHelper<T> implements Resolvable {
                                     MyLog.i(CLS_NAME, "Exact match " + phrase);
                                 }
                                 container.setExactMatch(true);
-                                toKeep.add(SerializationUtils.clone(container));
+                                toKeep.add(container.clone());
                                 break outer;
                             } else {
-                                toKeep.add(SerializationUtils.clone(container));
+                                toKeep.add(container.clone());
                             }
 
                         } else {

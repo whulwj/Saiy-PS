@@ -27,7 +27,6 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.simmetrics.StringMetric;
 import org.simmetrics.metrics.MongeElkan;
 import org.simmetrics.metrics.SmithWatermanGotoh;
@@ -126,10 +125,10 @@ public class MongeElkanHelper<T> implements Resolvable {
                         }
 
                         container.setExactMatch(true);
-                        toKeep.add(SerializationUtils.clone(container));
+                        toKeep.add(container.clone());
                         break outer;
                     } else {
-                        toKeep.add(SerializationUtils.clone(container));
+                        toKeep.add(container.clone());
                     }
                 }
             }

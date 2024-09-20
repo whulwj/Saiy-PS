@@ -27,7 +27,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import org.apache.commons.codec.language.DoubleMetaphone;
-import org.apache.commons.lang3.SerializationUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -127,7 +126,7 @@ public class DoubleMetaphoneHelper<T> implements Resolvable {
                         container.setScore(score);
                         container.setUtterance(vd);
                         container.setExactMatch(true);
-                        toKeep.add(SerializationUtils.clone(container));
+                        toKeep.add(container.clone());
                         break outer;
                     } else {
                         if (DEBUG) {

@@ -19,17 +19,12 @@ package ai.saiy.android.custom;
 
 import androidx.annotation.NonNull;
 
-import java.io.Serializable;
-
 import ai.saiy.android.api.request.Regex;
 
 /**
  * Created by benrandall76@gmail.com on 21/04/2016.
  */
-public class CustomCommandContainer implements Serializable {
-
-    private static final long serialVersionUID = -1806338054844964403L;
-
+public class CustomCommandContainer implements Cloneable {
     private final String keyphrase;
     private final long rowId;
     private final String serialised;
@@ -50,10 +45,15 @@ public class CustomCommandContainer implements Serializable {
      */
     public CustomCommandContainer(final long rowId, @NonNull final String keyphrase, @NonNull final String regex,
                                   @NonNull final String serialised) {
+        this(rowId, keyphrase, Regex.getRegex(regex), serialised);
+    }
+
+    public CustomCommandContainer(final long rowId, @NonNull final String keyphrase, @NonNull final Regex regex,
+                                  @NonNull final String serialised) {
         this.keyphrase = keyphrase;
         this.rowId = rowId;
         this.serialised = serialised;
-        this.regex = Regex.getRegex(regex);
+        this.regex = regex;
     }
 
     public String getUtterance() {
@@ -94,5 +94,19 @@ public class CustomCommandContainer implements Serializable {
 
     public Regex getRegex() {
         return regex;
+    }
+
+    @Override
+    public @NonNull CustomCommandContainer clone() {
+        CustomCommandContainer ccc;
+        try {
+            ccc = (CustomCommandContainer) super.clone();
+        } catch (CloneNotSupportedException e) {
+            ccc = new CustomCommandContainer(this.rowId, this.keyphrase, this.regex, this.serialised);
+            ccc.score = this.score;
+            ccc.exactMatch = this.exactMatch;
+            ccc.utterance = this.utterance;
+        }
+        return ccc;
     }
 }

@@ -21,9 +21,9 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import org.apache.commons.collections4.CollectionUtils;
-
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 
 import ai.saiy.android.command.helper.CC;
@@ -106,7 +106,7 @@ public final class FrequencyAnalysis {
 
                 if (ccArray.size() > 1) {
 
-                    final Map<CC, Integer> cardinalityMap = CollectionUtils.getCardinalityMap(ccArray);
+                    final Map<CC, Integer> cardinalityMap = FrequencyAnalysis.getCardinalityMap(ccArray);
 
                     CC firstCommand = CC.COMMAND_UNKNOWN;
                     int firstQuantity = 0;
@@ -217,5 +217,33 @@ public final class FrequencyAnalysis {
         }
 
         return commandInt;
+    }
+
+    /**
+     * Returns a {@link Map} mapping each unique element in the given
+     * {@link Collection} to an {@link Integer} representing the number
+     * of occurrences of that element in the {@link Collection}.
+     * <p>
+     * Only those elements present in the collection will appear as
+     * keys in the map.
+     * </p>
+     * Source from org.apache.commons.collections4.CollectionUtils#getCardinalityMap(java.util.Collection col)
+     *
+     * @param <O>  the type of object in the returned {@link Map}. This is a super type of &lt;I&gt;.
+     * @param coll  the collection to get the cardinality map for, must not be null
+     * @return the populated cardinality map
+     * @throws NullPointerException if coll is null
+     */
+    private static <O> Map<O, Integer> getCardinalityMap(@NonNull final Iterable<? extends O> coll) {
+        final Map<O, Integer> count = new HashMap<>();
+        for (final O obj : coll) {
+            final Integer c = count.get(obj);
+            if (c == null) {
+                count.put(obj, 1);
+            } else {
+                count.put(obj, c + 1);
+            }
+        }
+        return count;
     }
 }

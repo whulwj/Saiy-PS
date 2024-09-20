@@ -59,6 +59,7 @@ import ai.saiy.android.utils.UtilsString;
  * one of {@link Activity#RESULT_OK} or {@link Activity#RESULT_CANCELED} is returned to the
  * requesting application.
  * <p>
+ * adb shell am broadcast -a "ai.saiy.android.SAIY_REQUEST_RECEIVER" --ei request_type "1" --es requesting_package "ai.saiy.android" --es keyphrase xxx -n "ai.saiy.android/ai.saiy.android.broadcast.BRRemote" "ai.saiy.android"
  * Created by benrandall76@gmail.com on 25/03/2016.
  */
 public class BRRemote extends BroadcastReceiver {

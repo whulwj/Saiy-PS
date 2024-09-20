@@ -22,8 +22,6 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.apache.commons.lang3.SerializationUtils;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Callable;
@@ -94,7 +92,7 @@ public class StartsWithHelper implements Callable<CustomCommand> {
 
                 if (vd.startsWith(phrase)) {
 
-                    final CustomCommandContainer ccc = SerializationUtils.clone(container);
+                    final CustomCommandContainer ccc = container.clone();
                     final Gson gson = new GsonBuilder().disableHtmlEscaping().create();
                     customCommand = gson.fromJson(ccc.getSerialised(), CustomCommand.class);
                     customCommand.setExactMatch(true);

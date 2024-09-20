@@ -140,7 +140,6 @@ dependencies {
     implementation libs.billing
     implementation libs.commons.lang3
     implementation libs.commons.codec
-    implementation libs.commons.collections4
     implementation libs.commons.io
     implementation libs.commons.fileupload
     implementation libs.commons.text

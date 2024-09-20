@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
@@ -130,7 +129,7 @@ public class FuzzyHelper<T> implements Resolvable {
 
                         container.setScore(score);
                         container.setUtterance(vd);
-                        toKeep.add(SerializationUtils.clone(container));
+                        toKeep.add(container.clone());
                     } else {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Matches: double check JW: rejected");
