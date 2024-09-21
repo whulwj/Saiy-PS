@@ -26,6 +26,7 @@ android {
 }
 
 dependencies {
+    implementation libs.collection
     implementation (libs.core) {
         exclude group: 'androidx.core', module: 'core-ktx'
     }

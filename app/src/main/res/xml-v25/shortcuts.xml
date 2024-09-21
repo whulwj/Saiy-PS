@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shortcuts xmlns:android="http://schemas.android.com/apk/res/android">
+    <shortcut
+        android:icon="@drawable/ic_shortcut_ic_car"
+        android:enabled="true"
+        android:shortcutId="driving"
+        android:shortcutShortLabel="@string/title_driving"
+        android:shortcutLongLabel="@string/shortcut_toggle_driving"
+        android:shortcutDisabledMessage="@string/disabled">
+        <intent
+            android:targetPackage="ai.saiy.android"
+            android:action="ai.saiy.android.DRIVING"
+            android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_shortcut_ic_blur"
+        android:enabled="true"
+        android:shortcutId="hotword"
+        android:shortcutShortLabel="@string/title_hotword"
+        android:shortcutLongLabel="@string/shortcut_toggle_hotword"
+        android:shortcutDisabledMessage="@string/disabled">
+        <intent
+            android:targetPackage="ai.saiy.android"
+            android:action="ai.saiy.android.HOTWORD"
+            android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_shortcut_record_voice_over"
+        android:enabled="true"
+        android:shortcutId="recognition"
+        android:shortcutShortLabel="@string/title_assist"
+        android:shortcutLongLabel="@string/menu_start_voice_recognition"
+        android:shortcutDisabledMessage="@string/disabled">
+        <intent
+            android:targetPackage="ai.saiy.android"
+            android:action="android.intent.action.ASSIST"
+            android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_shortcut_notifications"
+        android:enabled="true"
+        android:shortcutId="notifications"
+        android:shortcutShortLabel="@string/title_notifications"
+        android:shortcutLongLabel="@string/shortcut_toggle_notifications"
+        android:shortcutDisabledMessage="@string/disabled">
+        <intent
+            android:targetPackage="ai.saiy.android"
+            android:action="ai.saiy.android.NOTIFICATIONS"
+            android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+    <shortcut
+        android:icon="@drawable/ic_shortcut_alexa"
+        android:enabled="true"
+        android:shortcutId="alexa"
+        android:shortcutShortLabel="@string/menu_alexa"
+        android:shortcutLongLabel="@string/shortcut_start_alexa"
+        android:shortcutDisabledMessage="@string/disabled">
+        <intent
+            android:targetPackage="ai.saiy.android"
+            android:action="ai.saiy.android.action.ALEXA"
+            android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
+        <categories android:name="android.shortcut.conversation"/>
+    </shortcut>
+</shortcuts>

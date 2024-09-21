@@ -19,7 +19,6 @@ package ai.saiy.android.tts;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.media.AudioAttributes;
@@ -27,7 +26,6 @@ import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Process;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
@@ -43,7 +41,6 @@ import androidx.annotation.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.IllformedLocaleException;
 import java.util.List;
@@ -687,54 +684,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
     }
 
     @Override
-    public int addEarcon(final String earcon, final File file) {
-        return super.addEarcon(earcon, file);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public int addEarcon(final String earcon, final String filename) {
-        return super.addEarcon(earcon, filename);
-    }
-
-    @Override
-    public int addEarcon(final String earcon, final String packageName, final int resourceId) {
-        return super.addEarcon(earcon, packageName, resourceId);
-    }
-
-    @Override
-    public int addSpeech(final CharSequence text, final File file) {
-        return super.addSpeech(text, file);
-    }
-
-    @Override
-    public int addSpeech(final CharSequence text, final String packageName,
-                         final int resourceId) {
-        return super.addSpeech(text, packageName, resourceId);
-    }
-
-    @Override
-    public int addSpeech(final String text, final String filename) {
-        return super.addSpeech(text, filename);
-    }
-
-    @Override
-    public int addSpeech(final String text, final String packageName, final int resourceId) {
-        return super.addSpeech(text, packageName, resourceId);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public boolean areDefaultsEnforced() {
-        return super.areDefaultsEnforced();
-    }
-
-    @Override
-    public Set<Locale> getAvailableLanguages() {
-        return super.getAvailableLanguages();
-    }
-
-    @Override
     public String getDefaultEngine() {
 
         String packageName = "";
@@ -830,21 +779,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
     }
 
     /**
-     * Check if the user has the Google TTS Engine installed
-     *
-     * @param ctx the application context
-     * @return true if the Google TTS Engine is installed
-     */
-    public static boolean isGoogleTTSAvailable(final Context ctx) {
-        try {
-            ctx.getApplicationContext().getPackageManager().getApplicationInfo(TTSDefaults.TTS_PKG_NAME_GOOGLE, 0);
-            return true;
-        } catch (final PackageManager.NameNotFoundException e) {
-            return false;
-        }
-    }
-
-    /**
      * Limit of length of input string passed to speak and synthesizeToFile.
      *
      * @see #speak
@@ -875,34 +809,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
         }
 
         return MAX_UTTERANCE_LENGTH;
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public Locale getDefaultLanguage() {
-        return super.getDefaultLanguage();
-    }
-
-    @Override
-    public List<EngineInfo> getEngines() {
-        return super.getEngines();
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public Set<String> getFeatures(final Locale locale) {
-        return super.getFeatures(locale);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public Locale getLanguage() {
-        return super.getLanguage();
-    }
-
-    @Override
-    public Voice getDefaultVoice() {
-        return super.getDefaultVoice();
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -952,7 +858,14 @@ public class SaiyTextToSpeech extends TextToSpeech {
 
     @Override
     public Voice getVoice() {
-        return super.getVoice();
+        try {
+            return super.getVoice();
+        } catch (Throwable t) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getVoice:" + t.getClass().getSimpleName() + ", " + t.getMessage());
+            }
+        }
+        return null;
     }
 
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -1057,68 +970,9 @@ public class SaiyTextToSpeech extends TextToSpeech {
     }
 
     @Override
-    public int playEarcon(final String earcon, final int queueMode, final Bundle params, final String utteranceId) {
-        return super.playEarcon(earcon, queueMode, params, utteranceId);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public int playEarcon(final String earcon, final int queueMode, final HashMap<String, String> params) {
-        return super.playEarcon(earcon, queueMode, params);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public int playSilence(final long durationInMs, final int queueMode, final HashMap<String, String> params) {
-        return super.playSilence(durationInMs, queueMode, params);
-    }
-
-    @Override
-    public int playSilentUtterance(final long durationInMs, final int queueMode, final String utteranceId) {
-        return super.playSilentUtterance(durationInMs, queueMode, utteranceId);
-    }
-
-    @Override
-    public int setAudioAttributes(final AudioAttributes audioAttributes) {
-        return super.setAudioAttributes(audioAttributes);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public int setEngineByPackageName(final String enginePackageName) {
-        return super.setEngineByPackageName(enginePackageName);
-    }
-
-    @Override
-    public int setLanguage(final Locale loc) {
-        return super.setLanguage(loc);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public int setOnUtteranceCompletedListener(final OnUtteranceCompletedListener listener) {
-        return super.setOnUtteranceCompletedListener(listener);
-    }
-
-    @Override
     public int setOnUtteranceProgressListener(final UtteranceProgressListener listener) {
         this.listener = (SaiyProgressListener) listener;
         return super.setOnUtteranceProgressListener(listener);
-    }
-
-    @Override
-    public int setPitch(final float pitch) {
-        return super.setPitch(pitch);
-    }
-
-    @Override
-    public int setSpeechRate(final float speechRate) {
-        return super.setSpeechRate(speechRate);
-    }
-
-    @Override
-    public int setVoice(final Voice voice) {
-        return super.setVoice(voice);
     }
 
     /**
@@ -1721,17 +1575,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
         }
 
         return ERROR;
-    }
-
-    @Override
-    public int synthesizeToFile(final CharSequence text, final Bundle params, final File file, final String utteranceId) {
-        return super.synthesizeToFile(text, params, file, utteranceId);
-    }
-
-    @SuppressWarnings("deprecation")
-    @Override
-    public int synthesizeToFile(final String text, final HashMap<String, String> params, final String filename) {
-        return super.synthesizeToFile(text, params, filename);
     }
 
     /**
@@ -2394,18 +2237,12 @@ public class SaiyTextToSpeech extends TextToSpeech {
             return filterQuality(voiceArray);
         }
 
-
         private ArrayList<SaiyVoice> filterQuality(@NonNull final ArrayList<SaiyVoice> voiceArray) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "filterQuality");
             }
 
-            Collections.sort(voiceArray, new Comparator<SaiyVoice>() {
-                @Override
-                public int compare(final SaiyVoice v1, final SaiyVoice v2) {
-                    return v2.getQuality() - v1.getQuality();
-                }
-            });
+            Collections.sort(voiceArray, new SaiyVoice.SaiyVoiceComparator());
             return voiceArray;
         }
     }

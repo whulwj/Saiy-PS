@@ -1,5 +1,5 @@
 [versions]
-gradlePlugin = "8.2.2"
+gradlePlugin = "8.6.0"
 googleAuthLibraryOauth2Http = "1.12.2"
 billing = "6.0.1"
 commonsIo = "2.16.1"
@@ -34,10 +34,12 @@ annotation = "1.7.1"
 browser = "1.3.0"
 cardview = "1.0.0"
 constraintlayout = "2.1.4"
+collection = "1.2.0"
 core = "1.7.0-alpha01"
 documentfile = "1.0.1"
 drawerlayout = "1.1.1"
 fragment = "1.3.6"
+core-common = "2.1.0"
 lifecycle_version = "2.3.1"
 print = "1.1.0-beta01"
 recyclerview = "1.2.1"
@@ -104,10 +106,12 @@ annotation = { group = "androidx.annotation", name = "annotation", version.ref =
 browser = { group = "androidx.browser", name = "browser", version.ref = "browser"}
 cardview = { group = "androidx.cardview", name = "cardview", version.ref = "cardview" }
 constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+collection = { group = "androidx.collection", name = "collection", version.ref = "collection" }
 core = { group = "androidx.core", name = "core", version.ref = "core" }
 documentfile = { group = "androidx.documentfile", name = "documentfile", version.ref = "documentfile" }
 drawerlayout = { group = "androidx.drawerlayout", name = "drawerlayout", version.ref = "drawerlayout" }
 fragment = { group = "androidx.fragment", name = "fragment", version.ref = "fragment" }
+core-common = { group = "androidx.arch.core", name = "core-common", version.ref = "core-common" }
 lifecycle-runtime = { group = "androidx.lifecycle", name = "lifecycle-runtime", version.ref = "lifecycle_version" }
 lifecycle-livedata = { group = "androidx.lifecycle", name = "lifecycle-livedata", version.ref = "lifecycle_version" }
 lifecycle-viewmodel = { group = "androidx.lifecycle", name = "lifecycle-viewmodel", version.ref = "lifecycle_version" }

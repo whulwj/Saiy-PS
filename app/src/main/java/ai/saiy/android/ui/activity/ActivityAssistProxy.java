@@ -21,18 +21,15 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.localisation.SupportedLanguage;
-import ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
 /**
  * Created by benrandall76@gmail.com on 22/08/2016.
  */
-
 public class ActivityAssistProxy extends AppCompatActivity {
 
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -40,22 +37,22 @@ public class ActivityAssistProxy extends AppCompatActivity {
 
     long then;
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         then = System.nanoTime();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            final Intent intent = new Intent(this, ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService.class);
+            intent.setAction(Intent.ACTION_ASSIST);
 
-        final Intent intent = new Intent(this, SaiyInteractionService.class);
-        intent.setAction(Intent.ACTION_ASSIST);
-
-        final Bundle extras = new Bundle();
-        extras.putString(SaiyInteractionService.EXTRA_VOICE_KEYPHRASE_HINT_TEXT, SPH.getHotword(getApplicationContext()));
-        extras.putString(SaiyInteractionService.EXTRA_VOICE_KEYPHRASE_LOCALE,
-                SupportedLanguage.ENGLISH.getLanguageCountry());
-        intent.putExtras(extras);
-        getApplicationContext().startService(intent);
+            final Bundle extras = new Bundle();
+            extras.putString(ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService.EXTRA_VOICE_KEYPHRASE_HINT_TEXT, SPH.getHotword(getApplicationContext()));
+            extras.putString(ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService.EXTRA_VOICE_KEYPHRASE_LOCALE,
+                    SupportedLanguage.ENGLISH.getLanguageCountry());
+            intent.putExtras(extras);
+            getApplicationContext().startService(intent);
+        }
 
         finish();
     }

@@ -23,26 +23,30 @@ import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.service.voice.AlwaysOnHotwordDetector;
 import android.service.voice.AlwaysOnHotwordDetector.Callback;
 import android.service.voice.AlwaysOnHotwordDetector.EventPayload;
 import android.service.voice.VoiceInteractionService;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
+import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by benrandall76@gmail.com on 22/08/2016.
  */
+@AndroidEntryPoint
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public class SaiyInteractionService extends VoiceInteractionService {
 
@@ -57,6 +61,9 @@ public class SaiyInteractionService extends VoiceInteractionService {
     private AlwaysOnHotwordDetector mHotwordDetector;
     private String hotword;
     private Locale locale;
+    @Inject
+    protected Handler mRequestHandler;
+    private @Nullable Runnable mCreateHotwordDetector;
 
     @Override
     public void onCreate() {
@@ -107,10 +114,14 @@ public class SaiyInteractionService extends VoiceInteractionService {
             MyLog.i(CLS_NAME, "onReady");
         }
 
+        if (mCreateHotwordDetector != null) {
+            mRequestHandler.removeCallbacks(mCreateHotwordDetector);
+        }
         if (hotword != null && locale != null) {
             mHotwordDetector = createAlwaysOnHotwordDetector(hotword, locale, hotwordCallback);
         } else {
-            new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            mCreateHotwordDetector = new Runnable() {
+                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void run() {
                     if (DEBUG) {
@@ -124,13 +135,23 @@ public class SaiyInteractionService extends VoiceInteractionService {
                         }
                     }
                 }
-            }, MINI_SLEEP);
+            };
+            mRequestHandler.postDelayed(mCreateHotwordDetector, MINI_SLEEP);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mCreateHotwordDetector != null) {
+            mRequestHandler.removeCallbacks(mCreateHotwordDetector);
         }
     }
 
     /**
      * Callbacks for hotword registration and availability
      */
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private final Callback hotwordCallback = new Callback() {
 
         @Override

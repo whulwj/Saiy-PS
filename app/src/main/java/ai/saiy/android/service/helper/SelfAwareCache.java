@@ -39,7 +39,6 @@ import ai.saiy.android.cache.speech.SpeechCachePrepare;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.service.SelfAware;
 import ai.saiy.android.tts.SaiyProgressListener;
-import ai.saiy.android.tts.helper.SaiyVoice;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsFile;
@@ -81,12 +80,12 @@ public class SelfAwareCache extends SaiyProgressListener {
      * @param ttsLocale  the {@link TextToSpeech} {@link Locale}
      * @param utterance  the utterance
      * @param initEngine the initialised {@link TextToSpeech} engine
-     * @param voice      the {@link SaiyVoice}
+     * @param voice      the {@link ai.saiy.android.tts.helper.SaiyVoice}
      */
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     protected void shouldCache(@NonNull final SelfAwareParameters params, @NonNull final Locale ttsLocale,
                                @NonNull final String utterance, @NonNull final String initEngine,
-                               @NonNull final SaiyVoice voice) {
+                               @NonNull final ai.saiy.android.tts.helper.SaiyVoice voice) {
 
         AsyncTask.execute(new Runnable() {
             @Override

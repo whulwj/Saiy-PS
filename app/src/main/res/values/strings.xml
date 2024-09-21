@@ -2333,4 +2333,12 @@
     <string name="show_response">Visualising results is disabled in the current version. It\'ll be back soon.</string>
     <string name="stock_price">stock price</string>
     <string name="stock_quote">stock quote</string>
+
+    <string name="shortcut_start_alexa">Start Alexa interaction</string>
+    <string name="shortcut_toggle_driving">Toggle the Driving Profile</string>
+    <string name="shortcut_toggle_hotword">Toggle the Hotword</string>
+    <string name="shortcut_toggle_notifications">Toggle notification announcements</string>
+    <string name="title_driving">Driving</string>
+    <string name="title_hotword">Hotword</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

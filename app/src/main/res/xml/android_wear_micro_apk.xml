@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wearableApp package="ai.saiy.android">
+    <versionCode>3
+    </versionCode>
+    <versionName>1.0.3
+    </versionName>
+    <rawPathResId>android_wear_micro_apk
+    </rawPathResId>
+</wearableApp>

@@ -118,7 +118,6 @@ import ai.saiy.android.tts.SaiyProgressListener;
 import ai.saiy.android.tts.SaiyTextToSpeech;
 import ai.saiy.android.tts.TTS;
 import ai.saiy.android.tts.engine.EngineNuance;
-import ai.saiy.android.tts.helper.SaiyVoice;
 import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
@@ -2510,7 +2509,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                 if (TTSDefaults.isApprovedVoice(tts.getInitialisedEngine())) {
                     if (!isSilentUtterance() && getUtterance().length() < SelfAwareCache.MAX_UTTERANCE_CHARS) {
                         if (!servingRemote()) {
-                            final SaiyVoice voice = tts.getBoundSaiyVoice();
+                            final ai.saiy.android.tts.helper.SaiyVoice voice = tts.getBoundSaiyVoice();
 
                             if (voice != null) {
                                 cache.shouldCache(params, getTTSLocale(), getUtterance(), tts.getInitialisedEngine(), voice);

@@ -6,16 +6,65 @@
 -dontwarn com.google.protobuf.**
 -dontwarn io.grpc.**
 -dontwarn okio.**
--keepclassmembers class com.google.cloud.speech.** extends com.google.protobuf.GeneratedMessageV3 { <fields>; }
+-keepclassmembers class com.google.cloud.speech.v2.** extends com.google.protobuf.GeneratedMessageV3 { <fields>; }
 
-# ads
--keep public class com.google.android.gms.ads.** {
-   public *;
+##---------------Begin: proguard configuration for ads  ----------
+# https://github.com/dandar3/android-google-play-services-ads-lite/blob/main/proguard-project.txt
+
+# Keep implementations of the AdMob mediation adapter interfaces. Adapters for
+# third party ad networks implement these interfaces and are invoked by the
+# AdMob SDK via reflection.
+-keep class * implements com.google.android.gms.ads.mediation.MediationAdapter {
+  public *;
+}
+-keep class * implements com.google.ads.mediation.MediationAdapter {
+  public *;
+}
+-keep class * implements com.google.android.gms.ads.mediation.customevent.CustomEvent {
+  public *;
+}
+-keep class * implements com.google.ads.mediation.customevent.CustomEvent {
+  public *;
+}
+-keep class * extends com.google.android.gms.ads.mediation.UnifiedNativeAdMapper {
+  public *;
+}
+-keep class * extends com.google.android.gms.ads.mediation.Adapter {
+  public *;
 }
 
--keep public class com.google.ads.** {
+# Keep classes used for offline ads created by reflection. WorkManagerUtil is
+# created reflectively by callers within GMSCore and OfflineNotificationPoster
+# is created reflectively by WorkManager.
+-keep class com.google.android.gms.ads.internal.util.WorkManagerUtil {
+  public *;
+}
+-keep class com.google.android.gms.ads.internal.offline.buffering.OfflineNotificationPoster {
+  public *;
+}
+-keep class com.google.android.gms.ads.internal.offline.buffering.OfflinePingSender {
+  public *;
+}
+
+# We keep all fields for every generated proto file as the runtime uses
+# reflection over them that ProGuard cannot detect. Without this keep
+# rule, fields may be removed that would cause runtime failures.
+-keepclassmembers class * extends com.google.android.gms.internal.ads.zzgeq {
+  <fields>;
+}
+
+# https://github.com/googleads/googleads-mobile-android-examples/issues/545
+-keep class com.google.android.gms.internal.ads.** { public *; }
+-keep interface com.google.android.gms.internal.ads.** { public *; }
+
+# https://ads-developers.googleblog.com/2015/10/proguard-and-admob-mediation.html
+-keep class com.google.ads.mediation.admob.AdMobAdapter {
    public *;
 }
+-keep class com.google.ads.mediation.AdUrlAdapter {
+   public *;
+}
+##---------------End: proguard configuration for ads  ----------
 
 # Simple XML
 -keep interface org.simpleframework.xml.core.Label { public *;}
@@ -34,39 +83,16 @@
     @org.simpleframework.xml.* <init>(...);
 }
 
-# Explicitly preserve all serialization members. The Serializable interface
-# is only a marker interface, so it wouldn't save them.
-# You can comment this out if your library doesn't use serialization.
-# If your code contains serializable classes that have to be backward
-# compatible, please refer to the manual.
-
--keepclassmembers class * implements java.io.Serializable {
-    static final long serialVersionUID;
-    static final java.io.ObjectStreamField[] serialPersistentFields;
-    private void writeObject(java.io.ObjectOutputStream);
-    private void readObject(java.io.ObjectInputStream);
-    java.lang.Object writeReplace();
-    java.lang.Object readResolve();
-}
-
 -keepattributes *Annotation*
 -keepattributes InnerClasses,Signature,Deprecated,SourceFile,LineNumberTable,EnclosingMethod,Attribute,Element,Root
 -keepclassmembers class * {
     @org.simpleframework.xml.* *;
 }
 
-# Volley
--keep class com.android.volley.** { *; }
-
 ##---------------Begin: proguard configuration for Guava  ----------
 #https://github.com/google/guava/wiki/UsingProGuardWithGuava
 
 -dontwarn javax.lang.model.element.Modifier
-
-# Note: We intentionally don't add the flags we'd need to make Enums work.
-# That's because the Proguard configuration required to make it work on
-# optimized code would preclude lots of optimization, like converting enums
-# into ints.
 
 # FinalizableReferenceQueue calls this reflectively
 # Proguard is intelligent enough to spot the use of reflection onto this, so we
@@ -193,23 +219,83 @@
 }
 
 # OkHttp
--keepattributes Signature
--keepattributes *Annotation*
--keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
--dontwarn com.squareup.okhttp.**
-
-# apache commons
--keep class org.apache.commons.logging.**
--dontwarn org.apache.commons.logging.impl.**
+-keep public class okhttp3.** { public *; }
+-keep interface okhttp3.** { public *; }
+-dontwarn okhttp3.**
 
 # apache commons codec
 -dontwarn org.apache.commons.codec.binary.**
 
 # firebase database
--keepclassmembers class ai.saiy.android.firebase.database.read.** {
+-keepclassmembers public class ai.saiy.android.firebase.database.read.** {
     public *;
 }
--keepclassmembers class ai.saiy.android.firebase.database.write.** {
+-keepclassmembers public class ai.saiy.android.firebase.database.write.** {
     public *;
 }
+
+# Twitter4j.
+-dontwarn javax.management.**
+-dontwarn java.lang.management.**
+
+##---------------Begin: proguard configuration for firebase  ----------
+#https://github.com/firebase/firebase-android-sdk/blob/master/default-preguard.txt
+-keepparameternames
+-renamesourcefileattribute SourceFile
+-keepattributes Exceptions,InnerClasses,Signature,Deprecated,
+                SourceFile,LineNumberTable,*Annotation*,EnclosingMethod
+
+# Keep the classes/members we need for client functionality.
+-keep @interface androidx.annotation.Keep
+-keep @androidx.annotation.Keep class *
+-keepclasseswithmembers class * {
+  @androidx.annotation.Keep <fields>;
+}
+-keepclasseswithmembers class * {
+  @androidx.annotation.Keep <methods>;
+}
+
+# Keep the classes/members we need for client functionality.
+-keep @interface com.google.android.gms.common.annotation.KeepForSdk
+-keep @com.google.android.gms.common.annotation.KeepForSdk class *
+-keepclasseswithmembers class * {
+  @com.google.android.gms.common.annotation.KeepForSdk <fields>;
+}
+-keepclasseswithmembers class * {
+  @com.google.android.gms.common.annotation.KeepForSdk <methods>;
+}
+
+# Keep the public API
+-keep @interface com.google.firebase.annotations.PublicApi
+-keep @com.google.firebase.annotations.PublicApi class *
+-keepclasseswithmembers class * {
+  @com.google.firebase.annotations.PublicApi <fields>;
+}
+-keepclasseswithmembers class * {
+  @com.google.firebase.annotations.PublicApi <methods>;
+}
+
+# Keep Enum members implicitly
+-keepclassmembers @androidx.annotation.Keep public class * extends java.lang.Enum {
+    public <fields>;
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keepclassmembers @com.google.android.gms.common.annotation.KeepForSdk class * extends java.lang.Enum {
+    public <fields>;
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+-keepclassmembers @com.google.firebase.annotations.PublicApi class * extends java.lang.Enum {
+    public <fields>;
+    public static **[] values();
+    public static ** valueOf(java.lang.String);
+}
+
+# Implicitly keep methods inside annotations
+-keepclassmembers @interface * {
+    public <methods>;
+}
+##---------------End: proguard configuration for firebase  ----------

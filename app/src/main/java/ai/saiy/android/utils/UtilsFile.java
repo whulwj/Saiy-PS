@@ -18,9 +18,7 @@
 package ai.saiy.android.utils;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.util.Pair;
@@ -28,7 +26,6 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
-import androidx.core.content.FileProvider;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
@@ -45,8 +42,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ai.saiy.android.tts.helper.TTSDefaults;
-
 /**
  * Utility class of handy file method. Static for ease of access
  * <p>
@@ -59,8 +54,6 @@ public class UtilsFile {
     private static final String CLS_NAME = UtilsFile.class.getSimpleName();
 
     public static final String FILE_PROVIDER = "ai.saiy.android.fileprovider";
-    private static final String SOUND_EFFECT_DIR = "/se/";
-    @Deprecated private static final String TTS_GOOGLE_DIRECTORY = "/Android/data/" + TTSDefaults.TTS_PKG_NAME_GOOGLE + "/files/";
     private static final String SAIY_DIRECTORY = "/Saiy";
     private static final String SOUND_DIRECTORY = "/Sounds";
     private static final String RELATIVE_SOUND_DIRECTORY = SAIY_DIRECTORY + SOUND_DIRECTORY;
@@ -77,49 +70,6 @@ public class UtilsFile {
      */
     public UtilsFile() {
         throw new IllegalArgumentException(Resources.getSystem().getString(android.R.string.no));
-    }
-
-    /**
-     * Convert a raw resource to a file on the private storage
-     *
-     * @param ctx        the application context
-     * @param resourceId the resource identifier
-     * @return the file or null if the process failed
-     */
-    public static File oggToCacheAndGrant(@NonNull final Context ctx, final int resourceId, final String packageName) {
-
-        final String cachePath = getPrivateDirPath(ctx);
-
-        if (UtilsString.notNaked(cachePath)) {
-
-            final String name = ctx.getResources().getResourceEntryName(resourceId);
-
-            final File file = resourceToFile(ctx, resourceId, new File(cachePath + SOUND_EFFECT_DIR + name
-                    + "." + Constants.OGG_AUDIO_FILE_SUFFIX));
-
-            if (file != null) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "wavToCacheAndGrant file exists: " + file.exists());
-                    MyLog.i(CLS_NAME, "wavToCacheAndGrant file path: " + file.getAbsolutePath());
-                }
-
-                final Uri contentUri = FileProvider.getUriForFile(ctx, FILE_PROVIDER, file);
-                ctx.grantUriPermission(packageName, contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                return file;
-            } else {
-                if (DEBUG) {
-                    MyLog.e(CLS_NAME, "wavToCacheAndGrant file null");
-                }
-            }
-        } else {
-            if (DEBUG) {
-                MyLog.e(CLS_NAME, "wavToCacheAndGrant failed to get any path");
-            }
-        }
-
-        return null;
-
     }
 
     /**
@@ -191,7 +141,7 @@ public class UtilsFile {
 
     /**
      * Attempt to get a directory location that does not require permission to read/write. This should be
-     * simple but @see https://code.google.com/p/android/issues/detail?id=81357
+     * simple but @see <a href="https://code.google.com/p/android/issues/detail?id=81357"/>
      *
      * @param ctx the application context
      * @return the absolute path of the location or null if all efforts fail.

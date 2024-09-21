@@ -72,7 +72,6 @@ import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.thirdparty.tasker.TaskerHelper;
-import ai.saiy.android.tts.helper.SaiyVoice;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.DividerItemDecoration;
@@ -283,7 +282,7 @@ public class FragmentSettingsHelper {
                     return;
                 }
                 final ArrayList<Voice> voices = new ArrayList<>(set);
-                Collections.sort(voices, new SaiyVoice.VoiceComparator());
+                Collections.sort(voices, new ai.saiy.android.tts.helper.SaiyVoice.VoiceComparator());
                 if (DEBUG) {
                     for (Voice voice : voices) {
                         MyLog.d("Voice: ", voice.toString());
@@ -299,7 +298,7 @@ public class FragmentSettingsHelper {
                 }
                 int checkedIndex = 0;
                 if (ai.saiy.android.utils.UtilsString.notNaked(defaultSaiyVoiceString)) {
-                    SaiyVoice saiyVoice = UtilsParcelable.unmarshall(defaultSaiyVoiceString, SaiyVoice.CREATOR);
+                    final ai.saiy.android.tts.helper.SaiyVoice saiyVoice = UtilsParcelable.unmarshall(defaultSaiyVoiceString, ai.saiy.android.tts.helper.SaiyVoice.CREATOR);
                     if (saiyVoice != null) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "defaultSaiyVoice: " + saiyVoice.getName());
@@ -365,7 +364,7 @@ public class FragmentSettingsHelper {
                                                         MyLog.i(CLS_NAME, "showVoiceSelector: onPositive: " + voice.toString());
                                                     }
                                                     TTSDefaults.Google[] values = TTSDefaults.Google.values();
-                                                    SaiyVoice saiyVoice = new SaiyVoice(voice);
+                                                    final ai.saiy.android.tts.helper.SaiyVoice saiyVoice = new ai.saiy.android.tts.helper.SaiyVoice(voice);
                                                     saiyVoice.setEngine(TTSDefaults.TTS_PKG_NAME_GOOGLE);
                                                     String quote = Pattern.quote(voice.getName());
                                                     for (TTSDefaults.Google google : values) {

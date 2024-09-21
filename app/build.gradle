@@ -51,6 +51,7 @@ android {
     buildTypes {
         release {
             minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
 
@@ -93,6 +94,7 @@ dependencies {
     implementation libs.browser
     implementation libs.cardview
     implementation libs.constraintlayout
+    implementation libs.collection
     implementation (libs.core) {
         exclude group: 'androidx.core', module: 'core-ktx'
     }
@@ -101,6 +103,7 @@ dependencies {
     implementation(libs.fragment) {
         exclude group: 'androidx.fragment', module: 'fragment-ktx'
     }
+    implementation libs.core.common
     implementation(libs.lifecycle.runtime) {
         exclude group: 'androidx.lifecycle', module: 'lifecycle-runtime-ktx'
     }

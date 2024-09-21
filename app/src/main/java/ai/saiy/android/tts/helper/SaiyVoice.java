@@ -130,7 +130,6 @@ public class SaiyVoice extends Voice {
     }
 
     public static class VoiceComparator implements Comparator<Voice> {
-
         @Override
         public int compare(final Voice v1, final Voice v2) {
             return v1.getLocale().toString().compareTo(v2.getLocale().toString());
@@ -138,10 +137,9 @@ public class SaiyVoice extends Voice {
     }
 
     public static class SaiyVoiceComparator implements Comparator<SaiyVoice> {
-
         @Override
         public int compare(final SaiyVoice v1, final SaiyVoice v2) {
-            return v1.getLocale().toString().compareTo(v2.getLocale().toString());
+            return v2.getQuality() - v1.getQuality();
         }
     }
 
