@@ -256,7 +256,11 @@ public class SaiyTextToSpeech extends TextToSpeech {
                             if (DEBUG) {
                                 MyLog.w(CLS_NAME, "No valid sound effect: " + item.getText());
                             }
-                            result = ERROR;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                result = speak21(mContext.getString(R.string.error_sound_effect), QUEUE_ADD, params, item.getUtteranceId());
+                            } else {
+                                result = speak(mContext.getString(R.string.error_sound_effect), QUEUE_ADD, params);
+                            }
                         }
 
                         break;
@@ -353,8 +357,14 @@ public class SaiyTextToSpeech extends TextToSpeech {
 
     @Override
     public int speak(final String text, final int queueMode, final HashMap<String, String> map) {
-
         if (text.length() > getMaxUtteranceLength()) {
+            final String utteranceId = map.get(Engine.KEY_PARAM_UTTERANCE_ID);
+            if (TextUtils.isEmpty(utteranceId)) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "speak: " + utteranceId);
+                }
+                return super.speak(text, queueMode, map);
+            }
 
             final ArrayList<String> splitUtterances = SelfAwareHelper.splitUtteranceRegex(text,
                     getMaxUtteranceLength());
@@ -362,8 +372,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
             final int splitUtterancesSize = splitUtterances.size();
 
             if (splitUtterancesSize > 1) {
-
-                final String utteranceId = map.get(Engine.KEY_PARAM_UTTERANCE_ID);
                 final boolean overrideId = utteranceId.contains(ARRAY_DELIMITER);
 
                 if (DEBUG) {
@@ -422,39 +430,30 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 return ARRAY_LAST + ARRAY_DELIMITER + utteranceId;
             }
 
-        } else {
+        } else if (position == 0) {
+            if (overrideId) {
 
-            switch (position) {
+                if (utteranceId.startsWith(ARRAY_FIRST) || utteranceId.startsWith(ARRAY_INTERIM)) {
+                    return utteranceId;
+                } else {
+                    return ARRAY_INTERIM + ARRAY_DELIMITER + TextUtils.split(utteranceId, ARRAY_DELIMITER)[1];
+                }
 
-                case 0:
-
-                    if (overrideId) {
-
-                        if (utteranceId.startsWith(ARRAY_FIRST) || utteranceId.startsWith(ARRAY_INTERIM)) {
-                            return utteranceId;
-                        } else {
-                            return ARRAY_INTERIM + ARRAY_DELIMITER + TextUtils.split(utteranceId, ARRAY_DELIMITER)[1];
-                        }
-
-                    } else {
-                        return ARRAY_FIRST + ARRAY_DELIMITER + utteranceId;
-                    }
-
-                default:
-
-                    if (overrideId) {
-
-                        if (utteranceId.startsWith(ARRAY_INTERIM)) {
-                            return utteranceId;
-                        } else {
-                            return ARRAY_INTERIM + ARRAY_DELIMITER + TextUtils.split(utteranceId, ARRAY_DELIMITER)[1];
-                        }
-
-                    } else {
-                        return ARRAY_INTERIM + ARRAY_DELIMITER + utteranceId;
-                    }
-
+            } else {
+                return ARRAY_FIRST + ARRAY_DELIMITER + utteranceId;
             }
+        }
+
+        if (overrideId) {
+
+            if (utteranceId.startsWith(ARRAY_INTERIM)) {
+                return utteranceId;
+            } else {
+                return ARRAY_INTERIM + ARRAY_DELIMITER + TextUtils.split(utteranceId, ARRAY_DELIMITER)[1];
+            }
+
+        } else {
+            return ARRAY_INTERIM + ARRAY_DELIMITER + utteranceId;
         }
     }
 
@@ -466,8 +465,28 @@ public class SaiyTextToSpeech extends TextToSpeech {
      * @return true if the audio data is available to stream. False otherwise.
      */
     private boolean synthesisAvailable(@NonNull final String utterance, @NonNull final String voiceName) {
-
         final DBSpeech dbSpeech = new DBSpeech(mContext);
+        final int rate = getSpeechRate();
+        final int pitch = getPitch();
+        if (rate != SPH.getTTSRate(mContext) || pitch != SPH.getTTSPitch(mContext)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "synthesisAvailable: user defaults have changed");
+            }
+            SPH.setTTSRate(mContext, rate);
+            SPH.setTTSPitch(mContext, pitch);
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
+                    dbSpeech.deleteTable();
+                }
+            });
+            return false;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "synthesisAvailable: user defaults unchanged");
+        }
+
         final SpeechCacheResult speechCacheResult = dbSpeech.getBytes(getInitialisedEngine(),
                 voiceName, utterance);
 
@@ -508,86 +527,110 @@ public class SaiyTextToSpeech extends TextToSpeech {
      * @return true if the audio data is available to stream. False otherwise.
      */
     private boolean canSynthesise(@NonNull final String utterance, @NonNull final SelfAwareParameters params) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: < LOLLIPOP");
+            }
+            return false;
+        }
+        if (getAudioTrack() == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: audioTrack null");
+            }
+            return false;
+        }
+        if (!SPH.isCacheSpeech(mContext)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: user declined");
+            }
+            return false;
+        }
+        if (!TTSDefaults.isApprovedVoice(getInitialisedEngine())) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: not approved engine");
+            }
+            return false;
+        }
+        if (utterance.length() >= SelfAwareCache.MAX_UTTERANCE_CHARS) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: length > MAX_UTTERANCE_CHARS");
+            }
+            return false;
+        }
+        if (utterance.matches(SaiyRequestParams.SILENCE)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: silence");
+            }
+            return false;
+        }
+        if (!UtilsString.notNaked(getInitialisedEngine())) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: getBytes engine naked");
+            }
+            return false;
+        }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            if (getAudioTrack() != null) {
-                if (TTSDefaults.isApprovedVoice(getInitialisedEngine())) {
-                    if (utterance.length() < SelfAwareCache.MAX_UTTERANCE_CHARS) {
-                        if (!utterance.matches(SaiyRequestParams.SILENCE)) {
-                            if (UtilsString.notNaked(getInitialisedEngine())) {
-
-                                final SaiyVoice voice = getBoundSaiyVoice();
-
-                                if (voice != null) {
-
-                                    final DBSpeech dbSpeech = new DBSpeech(mContext);
-                                    final SpeechCacheResult speechCacheResult = dbSpeech.getBytes(getInitialisedEngine(),
-                                            voice.getName(), utterance);
-
-                                    if (speechCacheResult.isSuccess()) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "canSynthesise: true");
-                                        }
-
-                                        final byte[] uncompressedBytes = AudioCompression.decompressBytes(mContext,
-                                                speechCacheResult.getCompressedBytes(), speechCacheResult.getRowId());
-
-                                        if (UtilsList.notNaked(uncompressedBytes)) {
-                                            startSynthesis(params, uncompressedBytes);
-                                            return true;
-                                        } else {
-                                            if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "canSynthesise: getBytes empty or null");
-                                            }
-                                        }
-                                    } else {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "canSynthesise: getBytes failed or speech does not exist");
-                                        }
-
-                                        if (speechCacheResult.getRowId() > -1) {
-                                            AsyncTask.execute(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
-                                                    dbSpeech.deleteEntry(speechCacheResult.getRowId());
-                                                }
-                                            });
-                                        }
-                                    }
-                                } else {
-                                    if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "canSynthesise: false: saiyVoice null");
-                                    }
-                                }
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "canSynthesise: false: getBytes engine naked");
-                                }
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "canSynthesise: false: silence");
-                            }
-                        }
-                    } else {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "canSynthesise: false: length > MAX_UTTERANCE_CHARS");
-                        }
-                    }
-                } else {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "canSynthesise: false: not approved engine");
-                    }
+        final SaiyVoice voice = getBoundSaiyVoice();
+        if (voice == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: false: saiyVoice null");
+            }
+            return false;
+        }
+        final DBSpeech dbSpeech = new DBSpeech(mContext);
+        final int rate = getSpeechRate();
+        final int pitch = getPitch();
+        if (rate != SPH.getTTSRate(mContext) || pitch != SPH.getTTSPitch(mContext)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: user defaults have changed");
+            }
+            SPH.setTTSRate(mContext, rate);
+            SPH.setTTSPitch(mContext, pitch);
+            AsyncTask.execute(new Runnable() {
+                @Override
+                public void run() {
+                    Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
+                    dbSpeech.deleteTable();
                 }
+            });
+            return false;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "canSynthesise: user defaults unchanged");
+        }
+
+        final SpeechCacheResult speechCacheResult = dbSpeech.getBytes(getInitialisedEngine(),
+                voice.getName(), utterance);
+
+        if (speechCacheResult.isSuccess()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "canSynthesise: true");
+            }
+
+            final byte[] uncompressedBytes = AudioCompression.decompressBytes(mContext,
+                    speechCacheResult.getCompressedBytes(), speechCacheResult.getRowId());
+
+            if (UtilsList.notNaked(uncompressedBytes)) {
+                startSynthesis(params, uncompressedBytes);
+                return true;
             } else {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "canSynthesise: false: audioTrack null");
+                    MyLog.i(CLS_NAME, "canSynthesise: getBytes empty or null");
                 }
             }
         } else {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "canSynthesise: false: < LOLLIPOP");
+                MyLog.i(CLS_NAME, "canSynthesise: getBytes failed or speech does not exist");
+            }
+
+            if (speechCacheResult.getRowId() > -1) {
+                AsyncTask.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
+                        dbSpeech.deleteEntry(speechCacheResult.getRowId());
+                    }
+                });
             }
         }
 
@@ -692,12 +735,12 @@ public class SaiyTextToSpeech extends TextToSpeech {
             packageName = super.getDefaultEngine();
         } catch (final NullPointerException e) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "getDefaultEngineSecure: NullPointerException");
+                MyLog.w(CLS_NAME, "getDefaultEngine: NullPointerException");
                 e.printStackTrace();
             }
         } catch (final Exception e) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "getDefaultEngineSecure: Exception");
+                MyLog.w(CLS_NAME, "getDefaultEngine: Exception");
                 e.printStackTrace();
             }
         }
@@ -817,13 +860,7 @@ public class SaiyTextToSpeech extends TextToSpeech {
         final String userDefaultSaiyVoiceString = SPH.getDefaultTTSVoice(mContext);
 
         if (UtilsString.notNaked(userDefaultSaiyVoiceString)) {
-
-            final SaiyVoice userDefaultSaiyVoice = UtilsParcelable.unmarshall(userDefaultSaiyVoiceString, SaiyVoice.CREATOR);
-
-            if (userDefaultSaiyVoice != null) {
-                return userDefaultSaiyVoice;
-            }
-
+            return UtilsParcelable.unmarshall(userDefaultSaiyVoiceString, SaiyVoice.CREATOR);
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "userDefaultSaiyVoiceString: naked");
@@ -919,6 +956,28 @@ public class SaiyTextToSpeech extends TextToSpeech {
             MyLog.getElapsed("getSaiyVoices", then);
         }
         return saiyVoiceSet;
+    }
+
+    private int getPitch() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getPitch");
+        }
+        final int pitch = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.TTS_DEFAULT_PITCH, 100);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "pitch: " + pitch);
+        }
+        return pitch;
+    }
+
+    private int getSpeechRate() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "getSpeechRate");
+        }
+        final int rate = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.TTS_DEFAULT_RATE, 100);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "pitch: " + rate);
+        }
+        return rate;
     }
 
     @Override
@@ -1116,18 +1175,39 @@ public class SaiyTextToSpeech extends TextToSpeech {
 
         try {
 
-            switch (conditions.getCondition()) {
+            if (Condition.CONDITION_TRANSLATION == conditions.getCondition()) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setVoice21: CONDITION_TRANSLATION");
+                }
+            } else {
+                userDefaultSaiyVoice = getUserDefaultSaiyVoice();
 
-                case Condition.CONDITION_TRANSLATION:
+                if (userDefaultSaiyVoice == null) {
+                    AsyncTask.execute(new Runnable() {
+                        @Override
+                        public void run() {
+                            SaiyTextToSpeech.this.setDefaultVoice(language, region, conditions, params);
+                        }
+                    });
+                } else {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "setVoice21: CONDITION_TRANSLATION");
+                        MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice: " + userDefaultSaiyVoice);
                     }
-                    break;
-                default:
 
-                    userDefaultSaiyVoice = getUserDefaultSaiyVoice();
+                    boolean exists = false;
+                    for (final SaiyVoice voice : getSaiyVoices()) {
+                        if (userDefaultSaiyVoice.getName().matches("(?i)" + Pattern.quote(voice.getName()))) {
+                            exists = true;
+                            break;
+                        }
+                    }
 
-                    if (userDefaultSaiyVoice == null) {
+                    if (!exists) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "setVoice21: defaultSaiyVoice: no longer exists");
+                        }
+                        userDefaultSaiyVoice = null;
+                        SPH.setDefaultTTSVoice(mContext, null);
                         AsyncTask.execute(new Runnable() {
                             @Override
                             public void run() {
@@ -1136,37 +1216,10 @@ public class SaiyTextToSpeech extends TextToSpeech {
                         });
                     } else {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice: " + userDefaultSaiyVoice);
-                        }
-
-                        boolean exists = false;
-                        for (final SaiyVoice voice : getSaiyVoices()) {
-                            if (userDefaultSaiyVoice.getName().matches("(?i)" + Pattern.quote(voice.getName()))) {
-                                exists = true;
-                                break;
-                            }
-                        }
-
-                        if (!exists) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "setVoice21: defaultSaiyVoice: no longer exists");
-                            }
-                            userDefaultSaiyVoice = null;
-                            SPH.setDefaultTTSVoice(mContext, null);
-                            AsyncTask.execute(new Runnable() {
-                                @Override
-                                public void run() {
-                                    SaiyTextToSpeech.this.setDefaultVoice(language, region, conditions, params);
-                                }
-                            });
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "setVoice21: defaultSaiyVoice: exists");
-                            }
+                            MyLog.i(CLS_NAME, "setVoice21: defaultSaiyVoice: exists");
                         }
                     }
-
-                    break;
+                }
             }
 
             SaiyVoice boundSaiyVoice = getBoundSaiyVoice();
@@ -1185,92 +1238,86 @@ public class SaiyTextToSpeech extends TextToSpeech {
                 }
             }
 
-            switch (conditions.getCondition()) {
+            if (Condition.CONDITION_TRANSLATION == conditions.getCondition()) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setVoice21: CONDITION_TRANSLATION");
+                }
+            } else {
+                if (userDefaultSaiyVoice != null) {
+                    if (!boundSaiyVoice.equals(userDefaultSaiyVoice)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice engine: " + userDefaultSaiyVoice.getEngine());
+                            MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice engine: " + boundSaiyVoice.getEngine());
+                        }
 
-                case Condition.CONDITION_TRANSLATION:
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "setVoice21: CONDITION_TRANSLATION");
-                    }
-                    break;
-                default:
-
-                    if (userDefaultSaiyVoice != null) {
-                        if (!boundSaiyVoice.equals(userDefaultSaiyVoice)) {
+                        if (userDefaultSaiyVoice.getEngine().matches(boundSaiyVoice.getEngine())) {
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice engine: " + userDefaultSaiyVoice.getEngine());
-                                MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice engine: " + boundSaiyVoice.getEngine());
+                                MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice & boundSaiyVoice engines match");
                             }
 
-                            if (userDefaultSaiyVoice.getEngine().matches(boundSaiyVoice.getEngine())) {
+                            if (isNetworkAvailable) {
                                 if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice & boundSaiyVoice engines match");
+                                    MyLog.i(CLS_NAME, "setVoice21: engines match: network available: setting default");
+                                }
+                                setVoice(userDefaultSaiyVoice);
+                                boundSaiyVoice = getBoundSaiyVoice();
+                            } else {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "setVoice21: engines match: no network");
                                 }
 
-                                if (isNetworkAvailable) {
+                                if (!userDefaultSaiyVoice.isNetworkConnectionRequired()) {
                                     if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "setVoice21: engines match: network available: setting default");
+                                        MyLog.i(CLS_NAME, "setVoice21: engines match: userDefaultSaiyVoice network not needed");
                                     }
                                     setVoice(userDefaultSaiyVoice);
                                     boundSaiyVoice = getBoundSaiyVoice();
                                 } else {
                                     if (DEBUG) {
-                                        MyLog.i(CLS_NAME, "setVoice21: engines match: no network");
+                                        MyLog.i(CLS_NAME, "setVoice21: engines match: userDefaultSaiyVoice requires network");
                                     }
 
-                                    if (!userDefaultSaiyVoice.isNetworkConnectionRequired()) {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "setVoice21: engines match: userDefaultSaiyVoice network not needed");
-                                        }
-                                        setVoice(userDefaultSaiyVoice);
-                                        boundSaiyVoice = getBoundSaiyVoice();
-                                    } else {
-                                        if (DEBUG) {
-                                            MyLog.i(CLS_NAME, "setVoice21: engines match: userDefaultSaiyVoice requires network");
-                                        }
+                                    final String utterance = conditions.getUtterance();
 
-                                        final String utterance = conditions.getUtterance();
+                                    if (UtilsString.notNaked(utterance) && !utterance.matches(SaiyRequestParams.SILENCE)) {
 
-                                        if (UtilsString.notNaked(utterance) && !utterance.matches(SaiyRequestParams.SILENCE)) {
-
-                                            if (synthesisAvailable(conditions.getUtterance(), userDefaultSaiyVoice.getName())) {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "setVoice21: synthesis cached: SUCCESS");
-                                                }
-                                                setVoice(userDefaultSaiyVoice);
-                                                return SUCCESS;
-                                            } else {
-                                                if (DEBUG) {
-                                                    MyLog.i(CLS_NAME, "setVoice21: no synthesis cache");
-                                                }
+                                        if (synthesisAvailable(conditions.getUtterance(), userDefaultSaiyVoice.getName())) {
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "setVoice21: synthesis cached: SUCCESS");
                                             }
+                                            setVoice(userDefaultSaiyVoice);
+                                            return SUCCESS;
                                         } else {
                                             if (DEBUG) {
-                                                MyLog.i(CLS_NAME, "setVoice21: engine warm up only");
+                                                MyLog.i(CLS_NAME, "setVoice21: no synthesis cache");
                                             }
-                                            return SUCCESS;
                                         }
+                                    } else {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "setVoice21: engine warm up only");
+                                        }
+                                        return SUCCESS;
                                     }
                                 }
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice & boundSaiyVoice engines don't match.");
-                                }
-
-                                saiyVoiceSet = null;
                             }
                         } else {
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice and userDefaultSaiyVoice match");
+                                MyLog.i(CLS_NAME, "setVoice21: userDefaultSaiyVoice & boundSaiyVoice engines don't match.");
                             }
+
+                            saiyVoiceSet = null;
                         }
                     } else {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "setVoice21: defaultSaiyVoice: null");
+                            MyLog.i(CLS_NAME, "setVoice21: boundSaiyVoice and userDefaultSaiyVoice match");
                         }
-                        SPH.setDefaultTTSVoice(mContext, null);
                     }
-
-                    break;
+                } else {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "setVoice21: defaultSaiyVoice: null");
+                    }
+                    SPH.setDefaultTTSVoice(mContext, null);
+                }
             }
 
             if (!UtilsLocale.localesLanguageMatch(boundSaiyVoice.getLocale(), new Locale(language, region))) {
@@ -1674,9 +1721,9 @@ public class SaiyTextToSpeech extends TextToSpeech {
             }
         }
 
-        if (DEBUG) {
-            //getInfo();
-        }
+/*        if (DEBUG) {
+            getInfo();
+        }*/
 
         addSoundEffects();
     }
@@ -1897,7 +1944,6 @@ public class SaiyTextToSpeech extends TextToSpeech {
         private final String language;
         private final String region;
         private final SelfAwareConditions conditions;
-        private final SelfAwareParameters params;
         private final boolean isNetworkAllowed;
         private final boolean isNetworkAvailable;
         private final SaiyVoice currentVoice;
@@ -1914,11 +1960,10 @@ public class SaiyTextToSpeech extends TextToSpeech {
             this.language = language;
             this.region = region;
             this.conditions = conditions;
-            this.params = params;
             this.currentVoice = currentVoice;
 
-            isNetworkAllowed = this.params.isNetworkAllowed();
-            isNetworkAvailable = this.params.shouldNetwork();
+            isNetworkAllowed = params.isNetworkAllowed();
+            isNetworkAvailable = params.shouldNetwork();
 
         }
 

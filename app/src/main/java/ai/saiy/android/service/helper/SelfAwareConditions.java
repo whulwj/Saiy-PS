@@ -2504,43 +2504,49 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         NotificationHelper.cancelFetchingNotification(mContext);
         NotificationHelper.cancelSpeakingNotification(mContext);
 
-        if (tts != null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (TTSDefaults.isApprovedVoice(tts.getInitialisedEngine())) {
-                    if (!isSilentUtterance() && getUtterance().length() < SelfAwareCache.MAX_UTTERANCE_CHARS) {
-                        if (!servingRemote()) {
-                            final ai.saiy.android.tts.helper.SaiyVoice voice = tts.getBoundSaiyVoice();
+        if (tts == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: tts null");
+            }
+            return;
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: < LOLLIPOP");
+            }
+            return;
+        }
+        if (!SPH.isCacheSpeech(mContext)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onTTSEnded: not caching user: unapproved");
+            }
+            return;
+        }
+        if (!TTSDefaults.isApprovedVoice(tts.getInitialisedEngine())) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: unapproved");
+            }
+            return;
+        }
+        if (!isSilentUtterance() && getUtterance().length() < SelfAwareCache.MAX_UTTERANCE_CHARS) {
+            if (!servingRemote()) {
+                final ai.saiy.android.tts.helper.SaiyVoice voice = tts.getBoundSaiyVoice();
 
-                            if (voice != null) {
-                                cache.shouldCache(params, getTTSLocale(), getUtterance(), tts.getInitialisedEngine(), voice);
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: saiyVoice null");
-                                }
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: serving remote");
-                            }
-                        }
-                    } else {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: utterance failed string checks");
-                        }
-                    }
+                if (voice != null) {
+                    cache.shouldCache(params, getTTSLocale(), getUtterance(), tts.getInitialisedEngine(), voice);
                 } else {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: unapproved");
+                        MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: saiyVoice null");
                     }
                 }
             } else {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: < LOLLIPOP");
+                    MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: serving remote");
                 }
             }
         } else {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: tts null");
+                MyLog.i(CLS_NAME, "onTTSEnded: not caching voice: utterance failed string checks");
             }
         }
     }

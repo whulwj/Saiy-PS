@@ -204,6 +204,8 @@ public class SPH {
     private static final String PREMIUM_CONTENT_VERBOSE = "premium_content_verbose";
     private static final String HOROSCOPE_INCREMENT = "horoscope_increment";
     private static final String CACHE_SPEECH = "cache_speech";
+    private static final String TTS_PITCH = "tts_pitch";
+    private static final String TTS_RATE = "tts_rate";
     private static final String SMS_ID_FIX = "sms_id_fix";
     private static final String SMS_BODY_FIX = "sms_body_fix";
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
@@ -2540,6 +2542,26 @@ public class SPH {
     public static void setCacheSpeech(Context context, boolean condition) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(CACHE_SPEECH, condition);
+        edit.apply();
+    }
+
+    public static int getTTSPitch(Context context) {
+        return getPref(context).getInt(TTS_PITCH, 100);
+    }
+
+    public static void setTTSPitch(Context context, int value) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(TTS_PITCH, value);
+        edit.apply();
+    }
+
+    public static int getTTSRate(Context context) {
+        return getPref(context).getInt(TTS_RATE, 100);
+    }
+
+    public static void setTTSRate(Context context, int value) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(TTS_RATE, value);
         edit.apply();
     }
 

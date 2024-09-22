@@ -1110,6 +1110,7 @@
     <string name="content_android_bug">Not working correctly on many Android versions!</string>
 
     <!-- TTS - Specific error Strings -->
+    <string name="error_sound_effect">misconfigured sound effect</string>
     <string name="error_tts_initialisation" translatable="true">"There is a problem with your Text to Speech engine."</string>
     <string name="error_tts_progress" translatable="true">"There was a problem with the Text to Speech playback."</string>
     <string name="error_tts_voice" translatable="true">"Unable to set TTS language."</string>

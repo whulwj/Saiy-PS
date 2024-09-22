@@ -37,7 +37,7 @@ import ai.saiy.android.tts.attributes.Gender;
  */
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class SaiyVoice extends Voice {
+public final class SaiyVoice extends Voice {
 
     private String engine;
     private Gender gender = Gender.UNDEFINED;
@@ -145,16 +145,15 @@ public class SaiyVoice extends Voice {
 
     @Override
     public @NonNull String toString() {
-        final StringBuilder builder = new StringBuilder();
-        return builder.append("SaiyVoice[Name: ").append(getName())
-                .append(", locale: ").append(getLocale())
-                .append(", quality: ").append(getQuality())
-                .append(", latency: ").append(getLatency())
-                .append(", requiresNetwork: ").append(isNetworkConnectionRequired())
-                .append(", features: ").append(getFeatures().toString())
-                .append(", engine: ").append(engine)
-                .append(", gender: ").append(gender.name())
-                .append("]").toString();
+        return "SaiyVoice[Name: " + getName() +
+                ", locale: " + getLocale() +
+                ", quality: " + getQuality() +
+                ", latency: " + getLatency() +
+                ", requiresNetwork: " + isNetworkConnectionRequired() +
+                ", features: " + getFeatures().toString() +
+                ", engine: " + engine +
+                ", gender: " + gender.name() +
+                "]";
     }
 
     @Override

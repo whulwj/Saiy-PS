@@ -48,16 +48,17 @@ import dagger.hilt.android.AndroidEntryPoint;
  */
 @AndroidEntryPoint
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-public class SaiyInteractionService extends VoiceInteractionService {
+public final class SaiyInteractionService extends VoiceInteractionService {
 
     private static final boolean DEBUG = MyLog.DEBUG;
-    private final String CLS_NAME = SaiyInteractionService.class.getSimpleName();
+    private static final String CLS_NAME = SaiyInteractionService.class.getSimpleName();
 
     private static final String ACTION_MANAGE_VOICE_KEYPHRASES = "com.android.intent.action.MANAGE_VOICE_KEYPHRASES";
     public static final String EXTRA_VOICE_KEYPHRASE_HINT_TEXT = "com.android.intent.extra.VOICE_KEYPHRASE_HINT_TEXT";
     public static final String EXTRA_VOICE_KEYPHRASE_LOCALE = "com.android.intent.extra.VOICE_KEYPHRASE_LOCALE";
     private static final long MINI_SLEEP = 1500L;
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private AlwaysOnHotwordDetector mHotwordDetector;
     private String hotword;
     private Locale locale;
@@ -121,14 +122,18 @@ public class SaiyInteractionService extends VoiceInteractionService {
             mHotwordDetector = createAlwaysOnHotwordDetector(hotword, locale, hotwordCallback);
         } else {
             mCreateHotwordDetector = new Runnable() {
-                @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
                 @Override
                 public void run() {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+                        return;
+                    }
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onReady: trying again");
                     }
-                    if (hotword != null && locale != null) {
-                        mHotwordDetector = SaiyInteractionService.this.createAlwaysOnHotwordDetector(hotword, locale, hotwordCallback);
+                    // Specify its full name, so this class won't be loaded on the older devices (API level < 21)
+                    final ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService interactionService = ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService.this;
+                    if (interactionService.hotword != null && interactionService.locale != null) {
+                        interactionService.mHotwordDetector = interactionService.createAlwaysOnHotwordDetector(interactionService.hotword, interactionService.locale, interactionService.hotwordCallback);
                     } else {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "onReady: hotword info permanently missing");
