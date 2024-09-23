@@ -18,7 +18,6 @@
 package ai.saiy.android.ui.fragment;
 
 import android.accounts.AccountManager;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -460,27 +459,28 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         return new Pair<>(isMute, isInaudible);
     }
 
-    @TargetApi(Build.VERSION_CODES.M)
     private void requestSystemAlertPermissions() {
-        Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getApplicationContext().getPackageName()));
         if (!isActive()) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "requestSystemAlertPermissions: no longer active");
             }
             return;
         }
-        try {
-            startActivityForResult(intent, SYSTEM_OVERLAY_REQUEST_CODE);
-            return;
-        } catch (ActivityNotFoundException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "requestSystemAlertPermissions: ActivityNotFoundException");
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "requestSystemAlertPermissions: Exception");
-                e.printStackTrace();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            final Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + getApplicationContext().getPackageName()));
+            try {
+                startActivityForResult(intent, SYSTEM_OVERLAY_REQUEST_CODE);
+                return;
+            } catch (ActivityNotFoundException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "requestSystemAlertPermissions: ActivityNotFoundException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "requestSystemAlertPermissions: Exception");
+                    e.printStackTrace();
+                }
             }
         }
         if (DEBUG) {

@@ -22,7 +22,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.service.voice.AlwaysOnHotwordDetector;
 import android.service.voice.AlwaysOnHotwordDetector.Callback;
 import android.service.voice.AlwaysOnHotwordDetector.EventPayload;
@@ -34,19 +33,16 @@ import androidx.annotation.RequiresApi;
 
 import java.util.List;
 import java.util.Locale;
-
-import javax.inject.Inject;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
-import dagger.hilt.android.AndroidEntryPoint;
 
 /**
  * Created by benrandall76@gmail.com on 22/08/2016.
  */
-@AndroidEntryPoint
 @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
 public final class SaiyInteractionService extends VoiceInteractionService {
 
@@ -56,15 +52,12 @@ public final class SaiyInteractionService extends VoiceInteractionService {
     private static final String ACTION_MANAGE_VOICE_KEYPHRASES = "com.android.intent.action.MANAGE_VOICE_KEYPHRASES";
     public static final String EXTRA_VOICE_KEYPHRASE_HINT_TEXT = "com.android.intent.extra.VOICE_KEYPHRASE_HINT_TEXT";
     public static final String EXTRA_VOICE_KEYPHRASE_LOCALE = "com.android.intent.extra.VOICE_KEYPHRASE_LOCALE";
-    private static final long MINI_SLEEP = 1500L;
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     private AlwaysOnHotwordDetector mHotwordDetector;
     private String hotword;
     private Locale locale;
-    @Inject
-    protected Handler mRequestHandler;
-    private @Nullable Runnable mCreateHotwordDetector;
+    private final AtomicBoolean mIsReady = new AtomicBoolean();
 
     @Override
     public void onCreate() {
@@ -103,6 +96,12 @@ public final class SaiyInteractionService extends VoiceInteractionService {
                 MyLog.i(CLS_NAME, "hotword: " + hotword);
                 MyLog.i(CLS_NAME, "locale: " + locale.toString());
             }
+            if (hotword != null && locale != null && mIsReady.get() && mHotwordDetector == null) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onStartCommand: trying again");
+                }
+                mHotwordDetector = createAlwaysOnHotwordDetector(hotword, locale, hotwordCallback);
+            }
         }
 
         return super.onStartCommand(intent, flags, startId);
@@ -115,49 +114,45 @@ public final class SaiyInteractionService extends VoiceInteractionService {
             MyLog.i(CLS_NAME, "onReady");
         }
 
-        if (mCreateHotwordDetector != null) {
-            mRequestHandler.removeCallbacks(mCreateHotwordDetector);
-        }
         if (hotword != null && locale != null) {
             mHotwordDetector = createAlwaysOnHotwordDetector(hotword, locale, hotwordCallback);
-        } else {
-            mCreateHotwordDetector = new Runnable() {
-                @Override
-                public void run() {
-                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-                        return;
-                    }
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onReady: trying again");
-                    }
-                    // Specify its full name, so this class won't be loaded on the older devices (API level < 21)
-                    final ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService interactionService = ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionService.this;
-                    if (interactionService.hotword != null && interactionService.locale != null) {
-                        interactionService.mHotwordDetector = interactionService.createAlwaysOnHotwordDetector(interactionService.hotword, interactionService.locale, interactionService.hotwordCallback);
-                    } else {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "onReady: hotword info permanently missing");
-                        }
-                    }
-                }
-            };
-            mRequestHandler.postDelayed(mCreateHotwordDetector, MINI_SLEEP);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "onReady: hotword info temporarily missing");
         }
+        mIsReady.set(true);
+    }
+
+    @Override
+    public void onShutdown() {
+        super.onShutdown();
+        mIsReady.set(false);
+        mHotwordDetector = null;
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mCreateHotwordDetector != null) {
-            mRequestHandler.removeCallbacks(mCreateHotwordDetector);
-        }
+        mIsReady.set(false);
     }
 
     /**
      * Callbacks for hotword registration and availability
      */
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
-    private final Callback hotwordCallback = new Callback() {
+    private final Callback hotwordCallback = new SaiyCallback(this);
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    private static class SaiyCallback extends Callback {
+        @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+        private final SaiyInteractionService saiyInteractionService;
+
+        public SaiyCallback(@NonNull SaiyInteractionService saiyInteractionService) {
+            this.saiyInteractionService = saiyInteractionService;
+        }
+
+        @Nullable AlwaysOnHotwordDetector getHotwordDetector() {
+            return saiyInteractionService.mHotwordDetector;
+        }
 
         @Override
         public void onAvailabilityChanged(int status) {
@@ -181,8 +176,11 @@ public final class SaiyInteractionService extends VoiceInteractionService {
                         MyLog.i(CLS_NAME, "STATE_KEYPHRASE_UNENROLLED");
                     }
 
-                    Intent enroll = mHotwordDetector.createEnrollIntent();
-                    MyLog.i(CLS_NAME, "Need to enroll with " + enroll);
+                    final AlwaysOnHotwordDetector alwaysOnHotwordDetector = getHotwordDetector();
+                    if (alwaysOnHotwordDetector != null) {
+                        Intent enroll = alwaysOnHotwordDetector.createEnrollIntent();
+                        MyLog.i(CLS_NAME, "Need to enroll with " + enroll);
+                    }
 
                     break;
                 case AlwaysOnHotwordDetector.STATE_KEYPHRASE_ENROLLED:
@@ -191,18 +189,23 @@ public final class SaiyInteractionService extends VoiceInteractionService {
                     }
 
                     try {
-
-                        if (mHotwordDetector.startRecognition(
-                                AlwaysOnHotwordDetector.RECOGNITION_FLAG_CAPTURE_TRIGGER_AUDIO)) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "startRecognition succeeded");
+                        final AlwaysOnHotwordDetector onHotwordDetector = getHotwordDetector();
+                        if (onHotwordDetector != null) {
+                            if (onHotwordDetector.startRecognition(
+                                    AlwaysOnHotwordDetector.RECOGNITION_FLAG_CAPTURE_TRIGGER_AUDIO)) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "startRecognition succeeded");
+                                }
+                            } else {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "startRecognition failed");
+                                }
                             }
                         } else {
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "startRecognition failed");
+                                MyLog.i(CLS_NAME, "no AlwaysOnHotwordDetector");
                             }
                         }
-
                     } catch (final IllegalStateException e) {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "startRecognition IllegalStateException");
@@ -246,5 +249,5 @@ public final class SaiyInteractionService extends VoiceInteractionService {
                 MyLog.i(CLS_NAME, "onRecognitionResumed");
             }
         }
-    };
+    }
 }

@@ -54,7 +54,6 @@ libraries-bom = "26.1.4"
 cloud-dialogflow = "4.11.0"
 proto-google-common = "2.39.1"
 firebase-bom = "28.4.2"
-firebase-analytics = "19.0.2"
 firebase-appcheck = "17.1.2"
 firebase-auth = "21.0.4"
 firebase-messaging = "22.0.0"
@@ -130,7 +129,6 @@ simple-xml = { group = "org.simpleframework", name = "simple-xml", version.ref =
 libraries-bom = { group = "com.google.cloud", name = "libraries-bom", version.ref = "libraries-bom" }
 cloud-dialogflow = { group = "com.google.cloud", name = "google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
 proto-google-common = { group = "com.google.api.grpc", name = "proto-google-common-protos", version.ref = "proto-google-common" }
-firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-appcheck = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebase-appcheck" }
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebase-appcheck" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }

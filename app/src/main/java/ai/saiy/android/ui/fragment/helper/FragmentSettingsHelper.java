@@ -19,7 +19,6 @@ package ai.saiy.android.ui.fragment.helper;
 
 import static android.widget.AdapterView.INVALID_POSITION;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -30,7 +29,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.tts.TextToSpeech;
-import android.speech.tts.Voice;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +40,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
@@ -104,7 +103,7 @@ public class FragmentSettingsHelper {
     private String defaultTTSPackage;
     private final TextToSpeech.OnInitListener initListener = new TextToSpeech.OnInitListener() {
         @Override
-        @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+        @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         public void onInit(int status) {
             if (status == TextToSpeech.SUCCESS) {
                 if (DEBUG) {
@@ -118,7 +117,7 @@ public class FragmentSettingsHelper {
                     toast(getString(R.string.error_tts_initialisation), Toast.LENGTH_SHORT);
                     return;
                 }
-                Set<Voice> set = null;
+                Set<android.speech.tts.Voice> set = null;
                 if (UtilsString.notNaked(defaultTTSPackage) && defaultTTSPackage.matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
                     try {
                         set = tts.getVoices();
@@ -216,8 +215,8 @@ public class FragmentSettingsHelper {
         return getApplicationContext().getString(resId);
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void setVoice(Voice voice) {
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private void setVoice(android.speech.tts.Voice voice) {
         if (this.tts == null) {
             shutdownTTS();
             toast(getString(R.string.error_tts_initialisation), Toast.LENGTH_SHORT);
@@ -255,14 +254,14 @@ public class FragmentSettingsHelper {
     }
 
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    private void showVoiceSelector(final Set<Voice> set) {
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private void showVoiceSelector(final Set<android.speech.tts.Voice> set) {
         AsyncTask.execute(new Runnable() {
             @Override
             public void run() {
-                Iterator<Voice> it = set.iterator();
+                Iterator<android.speech.tts.Voice> it = set.iterator();
                 while (it.hasNext()) {
-                    Voice voice = it.next();
+                    final android.speech.tts.Voice voice = it.next();
                     if (!ai.saiy.android.utils.UtilsLocale.localesLanguageMatch(voice.getLocale(), SupportedLanguage.ENGLISH.getLocale())) {
                         if (DEBUG) {
                             MyLog.d(CLS_NAME, "removing locale: " + voice.getLocale().toString());
@@ -281,15 +280,15 @@ public class FragmentSettingsHelper {
                     SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.TTS);
                     return;
                 }
-                final ArrayList<Voice> voices = new ArrayList<>(set);
+                final ArrayList<android.speech.tts.Voice> voices = new ArrayList<>(set);
                 Collections.sort(voices, new ai.saiy.android.tts.helper.SaiyVoice.VoiceComparator());
                 if (DEBUG) {
-                    for (Voice voice : voices) {
+                    for (android.speech.tts.Voice voice : voices) {
                         MyLog.d("Voice: ", voice.toString());
                     }
                 }
                 final ArrayList<String> namesOfVoice = new ArrayList<>(voices.size());
-                for (Voice voice : voices) {
+                for (android.speech.tts.Voice voice : voices) {
                     namesOfVoice.add(voice.getName());
                 }
                 String defaultSaiyVoiceString = ai.saiy.android.utils.SPH.getDefaultTTSVoice(getApplicationContext());
@@ -359,7 +358,7 @@ public class FragmentSettingsHelper {
                                             new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    Voice voice = voices.get(position);
+                                                    final android.speech.tts.Voice voice = voices.get(position);
                                                     if (DEBUG) {
                                                         MyLog.i(CLS_NAME, "showVoiceSelector: onPositive: " + voice.toString());
                                                     }
@@ -427,8 +426,8 @@ public class FragmentSettingsHelper {
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-    public void receivedVoices(Set<Voice> set) {
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    public void receivedVoices(Set<android.speech.tts.Voice> set) {
         if (set != null && !set.isEmpty()) {
             showVoiceSelector(set);
             return;
@@ -1367,7 +1366,7 @@ public class FragmentSettingsHelper {
         });
     }
 
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void getVoices() {
         showProgress(true);
         AsyncTask.execute(new Runnable() {

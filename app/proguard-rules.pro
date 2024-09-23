@@ -66,6 +66,12 @@
 }
 ##---------------End: proguard configuration for ads  ----------
 
+# https://github.com/firebase/firebase-android-sdk/issues/1562
+-keepclassmembers enum io.opencensus.trace.** {
+  public static **[] $VALUES;
+  public *;
+}
+
 # Simple XML
 -keep interface org.simpleframework.xml.core.Label { public *;}
 -keep class * implements org.simpleframework.xml.core.Label { public *;}
@@ -167,28 +173,73 @@
 -keep class androidx.cardview.widget.RoundRectDrawable { *; }
 
 ##---------------Begin: proguard configuration for Gson  ----------
-# Gson specific classes
--dontwarn sun.misc.**
+# https://github.com/google/gson/blob/main/gson/src/main/resources/META-INF/proguard/gson.pro
 
-# GSON TypeAdapters are only referenced in annotations so ProGuard doesn't find their method usage
--keepclassmembers,allowobfuscation,includedescriptorclasses class * extends com.google.gson.TypeAdapter {
-    public <methods>;
+# Keep generic signatures; needed for correct type resolution
+-keepattributes Signature
+
+# Keep Gson annotations
+# Note: Cannot perform finer selection here to only cover Gson annotations, see also https://stackoverflow.com/q/47515093
+-keepattributes RuntimeVisibleAnnotations,AnnotationDefault
+
+### The following rules are needed for R8 in "full mode" which only adheres to `-keepattribtues` if
+### the corresponding class or field is matches by a `-keep` rule as well, see
+### https://r8.googlesource.com/r8/+/refs/heads/main/compatibility-faq.md#r8-full-mode
+
+# Keep class TypeToken (respectively its generic signature) if present
+-if class com.google.gson.reflect.TypeToken
+-keep,allowobfuscation class com.google.gson.reflect.TypeToken
+
+# Keep any (anonymous) classes extending TypeToken
+-keep,allowobfuscation class * extends com.google.gson.reflect.TypeToken
+
+# Keep classes with @JsonAdapter annotation
+-keep,allowobfuscation,allowoptimization @com.google.gson.annotations.JsonAdapter class *
+
+# Keep fields with any other Gson annotation
+# Also allow obfuscation, assuming that users will additionally use @SerializedName or
+# other means to preserve the field names
+-keepclassmembers,allowobfuscation class * {
+  @com.google.gson.annotations.Expose <fields>;
+  @com.google.gson.annotations.JsonAdapter <fields>;
+  @com.google.gson.annotations.Since <fields>;
+  @com.google.gson.annotations.Until <fields>;
 }
 
-# Prevent proguard from stripping interface information from TypeAdapterFactory,
-# JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
--keep, allowobfuscation, includedescriptorclasses class * implements com.google.gson.TypeAdapterFactory
--keep, allowobfuscation, includedescriptorclasses class * implements com.google.gson.JsonSerializer
--keep, allowobfuscation, includedescriptorclasses class * implements com.google.gson.JsonDeserializer
-
-# Ensure that all fields annotated with SerializedName will be kept
--keepclassmembers class * {
-    @com.google.gson.annotations.SerializedName <fields>;
+# Keep no-args constructor of classes which can be used with @JsonAdapter
+# By default their no-args constructor is invoked to create an adapter instance
+-keepclassmembers class * extends com.google.gson.TypeAdapter {
+  <init>();
 }
-# Prevent R8 from leaving Data object members always null ()
--keepclasseswithmembers, allowobfuscation, includedescriptorclasses class * {
+-keepclassmembers class * implements com.google.gson.TypeAdapterFactory {
+  <init>();
+}
+-keepclassmembers class * implements com.google.gson.JsonSerializer {
+  <init>();
+}
+-keepclassmembers class * implements com.google.gson.JsonDeserializer {
+  <init>();
+}
+
+# Keep fields annotated with @SerializedName for classes which are referenced.
+# If classes with fields annotated with @SerializedName have a no-args
+# constructor keep that as well. Based on
+# https://issuetracker.google.com/issues/150189783#comment11.
+# See also https://github.com/google/gson/pull/2420#discussion_r1241813541
+# for a more detailed explanation.
+-if class *
+-keepclasseswithmembers,allowobfuscation class <1> {
   @com.google.gson.annotations.SerializedName <fields>;
 }
+-if class * {
+  @com.google.gson.annotations.SerializedName <fields>;
+}
+-keepclassmembers,allowobfuscation,allowoptimization class <1> {
+  <init>();
+}
+
+# With R8 full mode generic signatures are stripped for classes that are not kept.
+-keep,allowobfuscation,allowshrinking class ai.saiy.android.nlu.nuance.NLUNuance
 ##---------------End: proguard configuration for Gson  ----------
 
 # Needed by google-api-client to keep generic types and @Key annotations accessed via reflection

@@ -17,7 +17,6 @@
 
 package ai.saiy.android.applications;
 
-import android.annotation.TargetApi;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +29,7 @@ import android.provider.MediaStore;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.text.Collator;
 import java.util.ArrayList;
@@ -124,7 +124,7 @@ public class Installed {
      * @return an ArrayList containing a {@link Pair} with the first parameter containing the application name
      * and the second the package name.
      */
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
+    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     public static ArrayList<Pair<String, String>> declaresSaiyPermission(@NonNull final Context ctx) {
         final long then = System.nanoTime();
         final ArrayList<Pair<String, String>> holdsPermission = new ArrayList<>();

@@ -2530,7 +2530,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
         if (!isSilentUtterance() && getUtterance().length() < SelfAwareCache.MAX_UTTERANCE_CHARS) {
             if (!servingRemote()) {
-                final ai.saiy.android.tts.helper.SaiyVoice voice = tts.getBoundSaiyVoice();
+                final android.speech.tts.Voice voice = tts.getVoice();
 
                 if (voice != null) {
                     cache.shouldCache(params, getTTSLocale(), getUtterance(), tts.getInitialisedEngine(), voice);

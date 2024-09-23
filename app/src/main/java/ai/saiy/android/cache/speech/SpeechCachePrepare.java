@@ -19,10 +19,12 @@ package ai.saiy.android.cache.speech;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Process;
 import android.speech.tts.Voice;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import ai.saiy.android.audio.AudioCompression;
 import ai.saiy.android.database.DBSpeech;
@@ -40,6 +42,7 @@ public class SpeechCachePrepare implements IAudioCompression {
     private String engine;
     private String utterance;
     private String locale;
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private Voice voice;
     private volatile byte[] compressedAudio;
 
@@ -94,10 +97,12 @@ public class SpeechCachePrepare implements IAudioCompression {
         this.utterance = utterance;
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public Voice getVoice() {
         return voice;
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     public void setVoice(@NonNull final Voice voice) {
         this.voice = voice;
     }

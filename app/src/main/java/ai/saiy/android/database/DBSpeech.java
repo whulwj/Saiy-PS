@@ -17,7 +17,6 @@
 
 package ai.saiy.android.database;
 
-import android.annotation.TargetApi;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -689,7 +688,6 @@ public class DBSpeech extends SQLiteOpenHelper {
      *
      * @param scp the prepared {@link SpeechCachePrepare} object
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     public void insertRow(@NonNull final SpeechCachePrepare scp) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, ": insertRow");
@@ -706,7 +704,7 @@ public class DBSpeech extends SQLiteOpenHelper {
                     final ContentValues values = new ContentValues();
 
                     values.put(COLUMN_ENGINE_PACKAGE, scp.getEngine());
-                    values.put(COLUMN_VOICE_NAME, scp.getVoice().getName());
+                    values.put(COLUMN_VOICE_NAME, (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)? scp.getVoice().getName() : "");
                     values.put(COLUMN_UTTERANCE, scp.getUtterance().trim().replaceAll("[^a-zA-Z0-9]", ""));
                     values.put(COLUMN_VOICE_LOCALE, scp.getLocale());
                     values.put(COLUMN_BINARY, scp.getCompressedAudio());

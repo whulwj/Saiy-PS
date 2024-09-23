@@ -17,12 +17,12 @@
 
 package ai.saiy.android.tts.helper;
 
-import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Parcel;
 import android.speech.tts.Voice;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import java.util.Comparator;
 import java.util.HashSet;
@@ -35,8 +35,7 @@ import ai.saiy.android.tts.attributes.Gender;
 /**
  * Created by benrandall76@gmail.com on 19/08/2016.
  */
-
-@TargetApi(Build.VERSION_CODES.LOLLIPOP)
+@RequiresApi(Build.VERSION_CODES.LOLLIPOP)
 public final class SaiyVoice extends Voice {
 
     private String engine;

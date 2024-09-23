@@ -1601,7 +1601,10 @@ public class SelfAware extends Service {
         new Thread() {
             public void run() {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
-                tts = new SaiyTextToSpeech(SelfAware.this, onInitListener);
+                final ai.saiy.android.service.SelfAware selfAware = ai.saiy.android.service.SelfAware.this;
+                selfAware.tts = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)?
+                        new ai.saiy.android.tts.TextToSpeech21(selfAware, selfAware.onInitListener)
+                        : new ai.saiy.android.tts.TextToSpeechLegacy(selfAware, selfAware.onInitListener);
             }
         }.start();
     }

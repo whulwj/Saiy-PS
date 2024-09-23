@@ -17,7 +17,6 @@
 
 package ai.saiy.android.service.helper;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -25,6 +24,7 @@ import android.os.Process;
 import android.speech.tts.TextToSpeech;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 
 import org.apache.commons.io.FileUtils;
 
@@ -80,12 +80,12 @@ public class SelfAwareCache extends SaiyProgressListener {
      * @param ttsLocale  the {@link TextToSpeech} {@link Locale}
      * @param utterance  the utterance
      * @param initEngine the initialised {@link TextToSpeech} engine
-     * @param voice      the {@link ai.saiy.android.tts.helper.SaiyVoice}
+     * @param voice      the {@link android.speech.tts.Voice}
      */
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     protected void shouldCache(@NonNull final SelfAwareParameters params, @NonNull final Locale ttsLocale,
                                @NonNull final String utterance, @NonNull final String initEngine,
-                               @NonNull final ai.saiy.android.tts.helper.SaiyVoice voice) {
+                               @NonNull final android.speech.tts.Voice voice) {
 
         AsyncTask.execute(new Runnable() {
             @Override
@@ -143,8 +143,7 @@ public class SelfAwareCache extends SaiyProgressListener {
      * @param scp    the populated {@link SpeechCachePrepare}
      * @param params the {@link SelfAwareParameters}
      */
-    @SuppressWarnings("deprecation")
-    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void doAudioCache(@NonNull final SpeechCachePrepare scp, @NonNull final SelfAwareParameters params) {
         this.scp = scp;
 

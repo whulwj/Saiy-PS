@@ -175,7 +175,6 @@ dependencies {
         exclude group: 'com.google.firebase', module: 'firebase-appcheck'
         exclude group: 'com.google.firebase', module: 'firebase-common-ktx'
     }
-    implementation libs.firebase.analytics
     implementation(libs.firebase.auth) {
         exclude group: 'com.google.firebase', module: 'firebase-auth-ktx'
     }
