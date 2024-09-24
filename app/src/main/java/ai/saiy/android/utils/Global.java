@@ -26,6 +26,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
@@ -74,6 +75,7 @@ public class Global extends MultiDexApplication implements Application.ActivityL
         firebaseAppCheck.installAppCheckProviderFactory(
                 DebugAppCheckProviderFactory.getInstance());
         registerActivityLifecycleCallbacks(this);
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         // TODO
         setGlobalId();
         authenticateGoogleCloud();

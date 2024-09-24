@@ -1,5 +1,5 @@
 [versions]
-gradlePlugin = "8.6.0"
+gradlePlugin = "8.8.0-alpha02" #"8.6.1"
 googleAuthLibraryOauth2Http = "1.12.2"
 billing = "6.0.1"
 commonsIo = "2.16.1"
@@ -54,6 +54,7 @@ libraries-bom = "26.1.4"
 cloud-dialogflow = "4.11.0"
 proto-google-common = "2.39.1"
 firebase-bom = "28.4.2"
+firebase-analytics = "19.0.2"
 firebase-appcheck = "17.1.2"
 firebase-auth = "21.0.4"
 firebase-messaging = "22.0.0"
@@ -128,11 +129,12 @@ desugar_jdk_libs = { group = "com.android.tools", name = "desugar_jdk_libs", ver
 simple-xml = { group = "org.simpleframework", name = "simple-xml", version.ref = "simpleXml" }
 libraries-bom = { group = "com.google.cloud", name = "libraries-bom", version.ref = "libraries-bom" }
 cloud-dialogflow = { group = "com.google.cloud", name = "google-cloud-dialogflow", version.ref = "cloud-dialogflow" }
+firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 proto-google-common = { group = "com.google.api.grpc", name = "proto-google-common-protos", version.ref = "proto-google-common" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebase-analytics" }
 firebase-appcheck = { group = "com.google.firebase", name = "firebase-appcheck-debug", version.ref = "firebase-appcheck" }
 firebase-appcheck-playintegrity = { group = "com.google.firebase", name = "firebase-appcheck-playintegrity", version.ref = "firebase-appcheck" }
 firebase-auth = { group = "com.google.firebase", name = "firebase-auth", version.ref = "firebase-auth" }
-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging", version.ref = "firebase-messaging" }
 firebase-functions = { group = "com.google.firebase", name = "firebase-functions", version.ref = "firebase-functions" }
 firebase-database = { group = "com.google.firebase", name = "firebase-database", version.ref = "firebase-database" }
