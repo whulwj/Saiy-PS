@@ -23,7 +23,6 @@ import android.media.MediaRecorder;
 import android.media.audiofx.AcousticEchoCanceler;
 import android.media.audiofx.AutomaticGainControl;
 import android.media.audiofx.NoiseSuppressor;
-import android.os.Build;
 
 import ai.saiy.android.utils.MyLog;
 
@@ -68,7 +67,7 @@ public class SaiyAudio extends AudioRecord {
 
         super(audioSource, sampleRateInHz, channelConfig, audioFormat, bufferSizeInBytes);
 
-        if (enhance && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+        if (enhance) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "attempting audio enhancements");
             }

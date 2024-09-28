@@ -10,13 +10,12 @@ import android.widget.RadioGroup;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Locale;
-
 import ai.saiy.android.R;
 import ai.saiy.android.broadcast.BRTaskerReceiver;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsBundle;
+import ai.saiy.android.utils.UtilsLocale;
 
 public class ActivityTaskerPluginAction extends AppCompatActivity {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -75,7 +74,7 @@ public class ActivityTaskerPluginAction extends AppCompatActivity {
         bundle.putInt(BRTaskerReceiver.EXTRA_ACTION, action);
         bundle.putString(BRTaskerReceiver.EXTRA_BLURB, restraintBlurb(blurb, getString(R.string.tasker_prefix_action)));
         bundle.putString(Speaker.EXTRA_VALUE, "placeholder");
-        bundle.putString(Speaker.EXTRA_LOCALE, Locale.getDefault().toString());
+        bundle.putString(Speaker.EXTRA_LOCALE, UtilsLocale.getDefaultLocale().toString());
         final Intent data = new Intent();
         data.putExtra(BRTaskerReceiver.EXTRA_BUNDLE, bundle);
         setResult(Activity.RESULT_OK, data);

@@ -21,6 +21,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 public class AgendaProcessHelper {
@@ -30,7 +31,7 @@ public class AgendaProcessHelper {
     private static AgendaProcess agendaProcess;
 
     private static void checkYear(@NonNull AgendaProcess agendaProcess) {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         final int thisMonth = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkYear: comparing: " + agendaProcess.getMonth() + " with thisMonth " + thisMonth);
@@ -94,7 +95,7 @@ public class AgendaProcessHelper {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "hasStructure: FALSE - Using today");
             }
-            final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+            final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
             agendaProcess.setOutcome(Outcome.SUCCESS);
             agendaProcess.setWeekday(calendar.get(Calendar.DAY_OF_WEEK));
             agendaProcess.setMonth(calendar.get(Calendar.MONTH) + MONTH_OFFSET);
@@ -156,7 +157,7 @@ public class AgendaProcessHelper {
         if (agendaProcess.getYear() == 0 && agendaProcess.getMonth() != 0) {
             checkYear(agendaProcess);
         }
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         if (agendaProcess.getYear() == 0) {
             agendaProcess.setYear(calendar.get(Calendar.YEAR));
         }
@@ -209,7 +210,7 @@ public class AgendaProcessHelper {
                         case Calendar.THURSDAY:
                         case Calendar.FRIDAY:
                         case Calendar.SATURDAY:
-                            yearString = (agendaProcess.getYear() == Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).get(Calendar.YEAR)) ? "" : XMLResultsHandler.SEP_SPACE + agendaProcess.getYear();
+                            yearString = (agendaProcess.getYear() == Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale()).get(Calendar.YEAR)) ? "" : XMLResultsHandler.SEP_SPACE + agendaProcess.getYear();
                             agendaProcess.setUtterance("The " + UtilsDate.getDayOfMonth(context, agendaProcess.getDayOfMonth()) + " of " + UtilsDate.getMonth(context, agendaProcess.getMonth() - MONTH_OFFSET) + yearString + " is " + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + UtilsDate.getWeekday(context, weekday));
                             break;
                         default:
@@ -218,7 +219,7 @@ public class AgendaProcessHelper {
                 }
             }
 
-            calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+            calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
             calendar.set(agendaProcess.getYear(), agendaProcess.getMonth() - MONTH_OFFSET, agendaProcess.getDayOfMonth(), 0, 0);
             calendar.setTimeZone(TimeZone.getDefault());
             if (DEBUG) {
@@ -267,7 +268,7 @@ public class AgendaProcessHelper {
             MyLog.i(CLS_NAME, "containerDate.haveWeekday: " + agendaProcess.haveWeekday());
         }
         if (agendaProcess.haveWeekday()) {
-            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
             switch (agendaProcess.getWeekday()) {
                 case AgendaHelper.TODAY:
                     agendaProcess.setWeekday(calendar.get(Calendar.DAY_OF_WEEK));
@@ -400,7 +401,7 @@ public class AgendaProcessHelper {
     }
 
     private static void checkMonth(@NonNull AgendaProcess agendaProcess) {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         final int thisDate = calendar.get(Calendar.DAY_OF_MONTH);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkMonth: comparing: " + agendaProcess.getDayOfMonth() + " with thisDate " + thisDate);

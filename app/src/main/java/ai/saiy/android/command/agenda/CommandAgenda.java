@@ -10,7 +10,6 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.Random;
 import java.util.TimeZone;
 
@@ -21,6 +20,7 @@ import ai.saiy.android.tts.attributes.Gender;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
 import ai.saiy.android.utils.UtilsList;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandAgenda {
@@ -180,8 +180,8 @@ public class CommandAgenda {
     }
 
     private void examEndDate(ArrayList<ai.saiy.android.command.calendar.Event> events) {
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        Calendar eventEndCal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
+        Calendar eventEndCal = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         ai.saiy.android.command.calendar.Event event;
         for (int i = 0; i < events.size(); ++i) {
             event = events.get(i);
@@ -199,21 +199,21 @@ public class CommandAgenda {
     }
 
     private void examineAllDay(@NonNull ArrayList<ai.saiy.android.command.calendar.Event> events, @NonNull AgendaProcess agendaProcess) {
-        final Calendar queryCal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar queryCal = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         queryCal.setTime(agendaProcess.getDate());
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "Querying from: " + queryCal.getTime().toLocaleString());
+            MyLog.i(CLS_NAME, "Querying from: " + java.text.DateFormat.getDateTimeInstance().format(queryCal.getTime()));
         }
         ai.saiy.android.command.calendar.Event event;
         for (int i = 0; i < events.size(); ++i) {
             event = events.get(i);
             if (event.isAllDay()) {
-                final Calendar eventStartCal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                final Calendar eventStartCal = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
                 eventStartCal.setTime(event.getStartDate());
                 if (DEBUG) {
                     MyLog.v(CLS_NAME, "------------------ all day examine start --------------");
                     MyLog.i(CLS_NAME, "eventName: " + event.getTitle());
-                    MyLog.i(CLS_NAME, "startDate: " + eventStartCal.getTime().toLocaleString());
+                    MyLog.i(CLS_NAME, "startDate: " + java.text.DateFormat.getDateTimeInstance().format(eventStartCal.getTime()));
                     MyLog.i(CLS_NAME, "startHour: " + eventStartCal.get(Calendar.HOUR_OF_DAY));
                     MyLog.i(CLS_NAME, "DST offset: " + eventStartCal.get(Calendar.DST_OFFSET));
                     MyLog.i(CLS_NAME, "Zone offset: " + eventStartCal.get(Calendar.ZONE_OFFSET));
@@ -237,14 +237,14 @@ public class CommandAgenda {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "eventStartCal is < today");
                         }
-                        final Calendar eventEndCal = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+                        final Calendar eventEndCal = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
                         eventEndCal.setTime(event.getEndDate());
                         eventEndCal.add(Calendar.MILLISECOND, -eventEndCal.get(Calendar.DST_OFFSET));
                         eventEndCal.add(Calendar.MILLISECOND, -eventEndCal.get(Calendar.ZONE_OFFSET));
                         eventEndCal.add(Calendar.MINUTE, -55);
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "eventEndCal: updated endHour: " + eventEndCal.get(Calendar.HOUR_OF_DAY));
-                            MyLog.i(CLS_NAME, "eventEndCal: updated date: " + eventEndCal.getTime().toLocaleString());
+                            MyLog.i(CLS_NAME, "eventEndCal: updated date: " + java.text.DateFormat.getDateTimeInstance().format(eventEndCal.getTime()));
                             MyLog.i(CLS_NAME, "eventEndCal DAY_OF_YEAR: " + eventEndCal.get(Calendar.DAY_OF_YEAR));
                         }
                         if (eventEndCal.get(Calendar.DAY_OF_YEAR) < queryCal.get(Calendar.DAY_OF_YEAR)) {
@@ -463,7 +463,7 @@ public class CommandAgenda {
             MyLog.v(CLS_NAME, "dotm: " + dayOfMonthString);
             MyLog.v(CLS_NAME, "monthString: " + monthString);
             MyLog.v(CLS_NAME, "year: " + yearString);
-            MyLog.v(CLS_NAME, "queried from Locale: " + agendaProcess.getDate().toLocaleString());
+            MyLog.v(CLS_NAME, "queried from Locale: " + java.text.DateFormat.getDateTimeInstance().format(agendaProcess.getDate()));
         }
         final StringBuilder sb = new StringBuilder();
         boolean haveObsoletedEvent = false;
@@ -490,7 +490,7 @@ public class CommandAgenda {
                 sb.append("tomorrow.");
             } else {
                 sb.append("on ").append(weekday).append(", ").append("the ").append(dayOfMonthString).append(" of ").append(monthString);
-                if (agendaProcess.getYear() != Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).get(Calendar.YEAR)) {
+                if (agendaProcess.getYear() != Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale()).get(Calendar.YEAR)) {
                     sb.append(", ").append(agendaProcess.getYear()).append(".");
                 } else {
                     sb.append(".");
@@ -506,7 +506,7 @@ public class CommandAgenda {
             sb.append("Tomorrow, ");
         } else {
             sb.append("On ").append(weekday).append(", ").append("the ").append(dayOfMonthString).append(" of ").append(monthString).append(", ");
-            if (agendaProcess.getYear() != Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).get(Calendar.YEAR)) {
+            if (agendaProcess.getYear() != Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale()).get(Calendar.YEAR)) {
                 sb.append(agendaProcess.getYear()).append(", ");
             }
         }

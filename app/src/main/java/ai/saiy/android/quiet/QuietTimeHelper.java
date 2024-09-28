@@ -5,11 +5,11 @@ import android.content.Context;
 import com.google.gson.JsonSyntaxException;
 
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsParcelable;
 
 public class QuietTimeHelper {
@@ -33,7 +33,7 @@ public class QuietTimeHelper {
 
     public static boolean canProceed(Context context) {
         QuietTime quietTime = getQuietTimes(context);
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         int currentCombined = calendar.get(Calendar.MINUTE) + (calendar.get(Calendar.HOUR_OF_DAY) * 60);
         int qtStartCombined = (quietTime.getStartHour() * 60) + quietTime.getStartMinute();
         int qtEndCombined = quietTime.getEndMinute() + (quietTime.getEndHour() * 60);

@@ -20,6 +20,7 @@ package ai.saiy.android.utils;
 import android.content.res.Resources;
 import android.os.Build;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
@@ -49,9 +50,6 @@ public class UtilsLocale {
 
     public static final String LOCALE_DELIMITER_1 = "-";
     public static final String LOCALE_DELIMITER_2 = "_";
-
-    public static final Locale DEFAULT_LOCALE = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O ? Locale.getDefault(Locale.Category.DISPLAY) : Locale.getDefault();
-    public static final String DEFAULT_LOCALE_STRING = DEFAULT_LOCALE.toString();
 
     public static String convertToIETF(Locale locale) {
         if (locale != null) {
@@ -143,7 +141,7 @@ public class UtilsLocale {
             }
         }
 
-        return DEFAULT_LOCALE;
+        return getDefaultLocale();
     }
 
     public static boolean localesLanguageMatch(@Nullable final Locale localeOne, @Nullable final Locale localeTwo) {
@@ -206,6 +204,19 @@ public class UtilsLocale {
         }
 
         return false;
+    }
+
+    public static @NonNull Locale getDefaultLocale() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            final android.os.LocaleList localeList = android.os.LocaleList.getDefault();
+            if (!localeList.isEmpty()) {
+                final Locale locale = localeList.get(0);
+                if (locale != null) {
+                    return locale;
+                }
+            }
+        }
+        return Locale.getDefault();
     }
 
     public static class LocaleComparator implements Comparator<Locale> {

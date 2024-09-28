@@ -34,7 +34,7 @@ import org.java_websocket.util.Base64;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
@@ -60,7 +60,6 @@ import ai.saiy.android.nlu.bluemix.Result;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.recognition.provider.bluemix.mod.TrustAllBluemixWebSocketClient;
-import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
@@ -155,7 +154,7 @@ public class RecognitionBluemix implements IMic, IWebSocketCallback {
         }
 
         final String auth = BASIC + Base64.encodeBytes((userName + DELIMITER + password)
-                .getBytes(Charset.forName(Constants.ENCODING_UTF8)));
+                .getBytes(StandardCharsets.UTF_8));
 
         final HashMap<String, String> header = new HashMap<>();
         header.put(CONTENT_TYPE, AUDIO_FORMAT_DEFAULT);

@@ -491,7 +491,7 @@ public class SPH {
      */
     public static int getDefaultTemperatureUnits(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return pref.getInt(DEFAULT_TEMPERATURE_UNITS, Locale.getDefault() == Locale.US
+        return pref.getInt(DEFAULT_TEMPERATURE_UNITS, UtilsLocale.getDefaultLocale() == Locale.US
                 ? BatteryInformation.FAHRENHEIT : BatteryInformation.CELSIUS);
     }
 
@@ -1577,7 +1577,7 @@ public class SPH {
      */
     public static Locale getVRLocale(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        String localeString = pref.getString(VR_LOCALE, UtilsLocale.DEFAULT_LOCALE_STRING);
+        String localeString = pref.getString(VR_LOCALE, UtilsLocale.getDefaultLocale().toString());
         if (UtilsString.notNaked(localeString)) {
             return UtilsLocale.stringToLocale(localeString);
         }
@@ -1608,7 +1608,7 @@ public class SPH {
      */
     public static Locale getTTSLocale(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        String localeString = pref.getString(TTS_LOCALE, UtilsLocale.DEFAULT_LOCALE_STRING);
+        String localeString = pref.getString(TTS_LOCALE, UtilsLocale.getDefaultLocale().toString());
         if (UtilsString.notNaked(localeString)) {
             return UtilsLocale.stringToLocale(localeString);
         }

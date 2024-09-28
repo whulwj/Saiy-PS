@@ -9,7 +9,6 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.request.SaiyRequestParams;
@@ -23,6 +22,7 @@ import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 public class CommandNavigation {
@@ -67,7 +67,7 @@ public class CommandNavigation {
                             outcome.setOutcome(Outcome.FAILURE);
                             outcome.setUtterance(PersonalityResponse.getCalendarAccessError(context, supportedLanguage));
                         } else {
-                            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                            Calendar calendar = Calendar.getInstance(UtilsLocale.getDefaultLocale());
                             final ArrayList<Event> events = calendarHelper.getEvents(context, accounts, calendar.getTimeInMillis(), calendar.getTimeInMillis() + (DateUtils.DAY_IN_MILLIS - 1));
                             if (!UtilsList.notNaked(events)) {
                                 outcome.setOutcome(Outcome.FAILURE);

@@ -16,6 +16,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
+import ai.saiy.android.utils.UtilsLocale;
 
 public class TimeHelper {
     private static int minuteInt = 0;
@@ -236,9 +237,9 @@ public class TimeHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getTime");
         }
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        final SimpleDateFormat hourOfDayFormat = new SimpleDateFormat("h", Locale.getDefault());
-        final SimpleDateFormat minuteFormat = new SimpleDateFormat("m", Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
+        final SimpleDateFormat hourOfDayFormat = new SimpleDateFormat("h", UtilsLocale.getDefaultLocale());
+        final SimpleDateFormat minuteFormat = new SimpleDateFormat("m", UtilsLocale.getDefaultLocale());
         hour = hourOfDayFormat.format(calendar.getTime());
         minute = minuteFormat.format(calendar.getTime());
         minuteInt = Integer.parseInt(minute);
@@ -250,10 +251,10 @@ public class TimeHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getTime");
         }
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         calendar.setTimeInMillis(millis);
-        final SimpleDateFormat hourOfDayFormat = new SimpleDateFormat("h", Locale.getDefault());
-        final SimpleDateFormat minuteFormat = new SimpleDateFormat("m", Locale.getDefault());
+        final SimpleDateFormat hourOfDayFormat = new SimpleDateFormat("h", UtilsLocale.getDefaultLocale());
+        final SimpleDateFormat minuteFormat = new SimpleDateFormat("m", UtilsLocale.getDefaultLocale());
         hour = hourOfDayFormat.format(calendar.getTime());
         minute = minuteFormat.format(calendar.getTime());
         minuteInt = Integer.parseInt(minute);
@@ -262,7 +263,7 @@ public class TimeHelper {
     }
 
     public String getDate(Context context, SupportedLanguage supportedLanguage, long millis) {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         calendar.setTimeInMillis(millis);
         final ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
         final String today = sr.getString(R.string.today);
@@ -275,7 +276,7 @@ public class TimeHelper {
         final String the = sr.getString(R.string.the);
         final String on = sr.getString(R.string.on);
         sr.reset();
-        final Calendar lastMonthCalendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar lastMonthCalendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         lastMonthCalendar.setTimeInMillis(millis);
         lastMonthCalendar.add(Calendar.DAY_OF_MONTH, -1);
         return (lastMonthCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && lastMonthCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && lastMonthCalendar.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH))

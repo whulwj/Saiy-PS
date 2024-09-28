@@ -12,12 +12,12 @@ import androidx.annotation.Nullable;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.List;
-import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 public class LocationHelper {
@@ -86,7 +86,7 @@ public class LocationHelper {
     public @NonNull Pair<Boolean, String> getAddress(Context context, SupportedLanguage sl, @NonNull Location location) {
         final long then = System.nanoTime();
         try {
-            final android.location.Geocoder geocoder = new android.location.Geocoder(context, Locale.getDefault());
+            final android.location.Geocoder geocoder = new android.location.Geocoder(context, UtilsLocale.getDefaultLocale());
             final double latitude = location.getLatitude();
             final double longitude = location.getLongitude();
             final List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);

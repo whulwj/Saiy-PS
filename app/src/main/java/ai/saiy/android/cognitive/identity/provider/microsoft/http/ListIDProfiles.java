@@ -167,7 +167,7 @@ public class ListIDProfiles {
             final Type type = new TypeToken<List<ProfileItem>>() {
             }.getType();
 
-            final ProfileList profileList = new ProfileList(gson.<List<ProfileItem>>fromJson(response,type));
+            final ProfileList profileList = new ProfileList(gson.fromJson(response,type));
 
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onResponse: profileList size: " + profileList.getItems().size());

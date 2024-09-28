@@ -14,12 +14,12 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import ai.saiy.android.R;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 public class CalendarHelper {
@@ -73,7 +73,7 @@ public class CalendarHelper {
         }
         final ArrayList<Account> accounts = getAccounts(context);
         if (UtilsList.notNaked(accounts)) {
-            Calendar calendar = Calendar.getInstance(Locale.getDefault());
+            Calendar calendar = Calendar.getInstance(UtilsLocale.getDefaultLocale());
             final ArrayList<Event> events = getEvents(context, accounts, calendar.getTimeInMillis(), 100 * DateUtils.DAY_IN_MILLIS + calendar.getTimeInMillis());
             if (UtilsList.notNaked(events)) {
                 ArrayList<String> attendees = new ArrayList<>();
@@ -105,8 +105,8 @@ public class CalendarHelper {
         final Uri.Builder buildUpon = CalendarContract.Instances.CONTENT_URI.buildUpon();
         ContentUris.appendId(buildUpon, beginTimestamp);
         ContentUris.appendId(buildUpon, endTimestamp);
-        Calendar beginTimeCalendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
-        Calendar endTimeCalendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar beginTimeCalendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
+        Calendar endTimeCalendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         final ArrayList<Event> events = new ArrayList<>();
         final String[] eventProjection = {CalendarContract.Instances._ID, CalendarContract.Instances.TITLE, CalendarContract.Instances.BEGIN, CalendarContract.Instances.END, CalendarContract.Instances.EVENT_ID, CalendarContract.Instances.ALL_DAY, CalendarContract.Instances.EVENT_LOCATION};
         final String[] attendeesProjection = {CalendarContract.Attendees.ATTENDEE_NAME};

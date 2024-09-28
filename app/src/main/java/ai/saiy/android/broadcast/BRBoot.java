@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import ai.saiy.android.command.horoscope.CommandHoroscopeValues;
@@ -33,6 +32,7 @@ import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsFile;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -91,13 +91,13 @@ public class BRBoot extends BroadcastReceiver {
             }
             final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
             final PendingIntent broadcast = PendingIntent.getBroadcast(context, 0, new Intent(context, BRBirthday.class), PendingIntent.FLAG_IMMUTABLE);
-            final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+            final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
             calendar.setTimeInMillis(System.currentTimeMillis());
             calendar.set(Calendar.DAY_OF_MONTH, SPH.getDobDay(context));
             calendar.set(Calendar.MONTH, SPH.getDobMonth(context));
             calendar.set(Calendar.HOUR_OF_DAY, 10);
             calendar.set(Calendar.MINUTE, 30);
-            if (Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault()).after(calendar)) {
+            if (Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale()).after(calendar)) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onReceive: calendar after: adding year");
                 }

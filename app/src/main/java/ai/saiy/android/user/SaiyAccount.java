@@ -28,7 +28,6 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.UUID;
 
 import ai.saiy.android.applications.Install;
@@ -37,6 +36,7 @@ import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileI
 import ai.saiy.android.cognitive.identity.provider.microsoft.http.CreateIDProfile;
 import ai.saiy.android.configuration.MicrosoftConfiguration;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -155,7 +155,7 @@ public class SaiyAccount {
                 public void run() {
 
                     final Pair<Boolean, EnrollmentID> enrollmentPair = new CreateIDProfile(ctx,
-                            MicrosoftConfiguration.OCP_APIM_KEY_1, Locale.getDefault()).getID();
+                            MicrosoftConfiguration.OCP_APIM_KEY_1, UtilsLocale.getDefaultLocale()).getID();
 
                     if (enrollmentPair.first) {
                         profileItem = new ProfileItem(enrollmentPair.second.getId());

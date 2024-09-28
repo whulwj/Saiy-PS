@@ -24,7 +24,6 @@ import java.net.URL;
 import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -32,6 +31,7 @@ import javax.net.ssl.HttpsURLConnection;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -50,7 +50,7 @@ public class FoursquareHelper {
     @SuppressLint({"SimpleDateFormat"})
     private static String time(long timeStamp) {
         final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         calendar.setTimeInMillis(timeStamp);
         return simpleDateFormat.format(calendar.getTime());
     }

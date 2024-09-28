@@ -21,13 +21,13 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.broadcast.BRTaskerReceiver;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.thirdparty.tasker.TaskerHelper;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 public class ActivityTaskerPluginSpeech extends AppCompatActivity implements RadioGroup.OnCheckedChangeListener {
@@ -129,7 +129,7 @@ public class ActivityTaskerPluginSpeech extends AppCompatActivity implements Rad
         }
 
         bundle.putBoolean(Speaker.EXTRA_START_VR, cbTaskerStartListening.isChecked());
-        bundle.putString(Speaker.EXTRA_LOCALE, Locale.getDefault().toString());
+        bundle.putString(Speaker.EXTRA_LOCALE, UtilsLocale.getDefaultLocale().toString());
         final Intent intent = new Intent();
         intent.putExtra(BRTaskerReceiver.EXTRA_BUNDLE, bundle);
         setResult(Activity.RESULT_OK, intent);

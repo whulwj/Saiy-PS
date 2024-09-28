@@ -20,7 +20,6 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
-import java.util.Locale;
 import java.util.TimeZone;
 
 import ai.saiy.android.R;
@@ -34,6 +33,7 @@ import ai.saiy.android.thirdparty.tasker.TaskerHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
+import ai.saiy.android.utils.UtilsLocale;
 
 public class ActivityShowDialog extends AppCompatActivity {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -257,7 +257,7 @@ public class ActivityShowDialog extends AppCompatActivity {
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         calendar.setLenient(true);
         calendar.set(SPH.getDobYear(getApplicationContext()), SPH.getDobMonth(getApplicationContext()), SPH.getDobDay(getApplicationContext()));
         ((DatePicker) materialDialog.getWindow().findViewById(R.id.dobDatePicker)).updateDate(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DATE));

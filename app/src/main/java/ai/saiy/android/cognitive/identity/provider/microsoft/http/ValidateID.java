@@ -118,7 +118,7 @@ public class ValidateID implements IMic {
                 try {
 
                     final String url = IDENTIFICATION_URL + URLEncoder.encode(profileId, Constants.ENCODING_UTF8)
-                            + IDENTIFICATION_URL_EXTRA + String.valueOf(shortAudio);
+                            + IDENTIFICATION_URL_EXTRA + shortAudio;
 
                     urlConnection = (HttpsURLConnection) new URL(url).openConnection();
                     urlConnection.setRequestMethod(Constants.HTTP_POST);

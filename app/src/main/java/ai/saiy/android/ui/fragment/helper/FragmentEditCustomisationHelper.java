@@ -53,6 +53,7 @@ import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.ui.fragment.FragmentEditCustomisation;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsLocale;
 
 public class FragmentEditCustomisationHelper {
     private final FragmentEditCustomisation parentFragment;
@@ -478,7 +479,7 @@ public class FragmentEditCustomisationHelper {
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                                 customHttp.setTaskerVariableName(variable.toLowerCase(Locale.getDefault(Locale.Category.DISPLAY)));
                             } else {
-                                customHttp.setTaskerVariableName(variable.toLowerCase(Locale.getDefault()));
+                                customHttp.setTaskerVariableName(variable.toLowerCase(UtilsLocale.getDefaultLocale()));
                             }
                             dialog.dismiss();
                             final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);

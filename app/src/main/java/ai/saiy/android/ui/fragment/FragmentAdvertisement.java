@@ -55,7 +55,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentAdvertisement.class.getSimpleName();
 
-    protected @Inject Handler mResultHandler;
+    @Inject Handler mResultHandler;
     private Context mContext;
     private AdView adView;
     private InterstitialAd interstitialAd;

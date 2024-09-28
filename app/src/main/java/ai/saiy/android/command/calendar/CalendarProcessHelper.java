@@ -21,6 +21,7 @@ import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
+import ai.saiy.android.utils.UtilsLocale;
 
 public class CalendarProcessHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -365,7 +366,7 @@ public class CalendarProcessHelper {
     }
 
     private static void compareTime() {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         final int hour = calendar.get(Calendar.HOUR);
         if (calendarProcess.hourOfDay < hour) {
             if (DEBUG) {
@@ -420,7 +421,7 @@ public class CalendarProcessHelper {
     }
 
     private static void getWeekday(final int weekday) {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         final int thisWeekday = calendar.get(Calendar.DAY_OF_WEEK);
         if (weekday < thisWeekday) {
             if (DEBUG) {
@@ -879,7 +880,7 @@ public class CalendarProcessHelper {
     }
 
     private static void getCurrentDate() {
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
         calendarProcess.year = calendar.get(Calendar.YEAR);
@@ -894,7 +895,7 @@ public class CalendarProcessHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getYear: moty: " + month);
         }
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         final int thisMonth = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getYear: thisMonth: " + thisMonth);
@@ -978,7 +979,7 @@ public class CalendarProcessHelper {
         if (calendarProcess.year == 0 && calendarProcess.month != 0) {
             getYear(calendarProcess.month);
         }
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         if (calendarProcess.year == 0) {
             calendarProcess.year = calendar.get(Calendar.YEAR);
         }
@@ -1697,7 +1698,7 @@ public class CalendarProcessHelper {
     }
 
     private static void getMonth(int dayOfMonth) {
-        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        final Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         final int thisDayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
         if (dayOfMonth < thisDayOfMonth) {
             calendar.add(Calendar.MONTH, 1);
@@ -2015,7 +2016,7 @@ public class CalendarProcessHelper {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "isWeekday: pTomorrow");
             }
-            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+            Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             calendarProcess.weekday = calendar.get(Calendar.DAY_OF_WEEK);
             getWeekday(calendarProcess.weekday);
@@ -2024,7 +2025,7 @@ public class CalendarProcessHelper {
         if (DEBUG) {
             MyLog.v(CLS_NAME, "isWeekday: pToday");
         }
-        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), Locale.getDefault());
+        Calendar calendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         calendarProcess.weekday = calendar.get(Calendar.DAY_OF_WEEK);
         calendarProcess.month = calendar.get(Calendar.MONTH) + MONTH_OFFSET;
         calendarProcess.dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);

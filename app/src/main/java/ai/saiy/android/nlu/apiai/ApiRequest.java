@@ -67,7 +67,7 @@ public class ApiRequest {
         this.mContext = context;
         // Variables needed to retrieve an auth token
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
-                java.util.Locale.getDefault());
+                ai.saiy.android.utils.UtilsLocale.getDefaultLocale());
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
     }
 

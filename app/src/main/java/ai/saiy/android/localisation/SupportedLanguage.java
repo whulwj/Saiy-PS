@@ -319,7 +319,7 @@ public enum SupportedLanguage {
     }
 
     public static String getGoogleNativeVRSupportedLanguageString() {
-        Locale locale = UtilsLocale.DEFAULT_LOCALE;
+        Locale locale = UtilsLocale.getDefaultLocale();
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: " + locale);
         }

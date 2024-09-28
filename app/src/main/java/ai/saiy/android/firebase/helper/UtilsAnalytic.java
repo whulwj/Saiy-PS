@@ -5,8 +5,6 @@ import android.os.Bundle;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
 
-import java.util.Locale;
-
 import ai.saiy.android.R;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem;
 import ai.saiy.android.user.SaiyAccount;
@@ -14,6 +12,7 @@ import ai.saiy.android.user.SaiyAccountHelper;
 import ai.saiy.android.user.SaiyAccountList;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 public class UtilsAnalytic {
@@ -190,7 +189,7 @@ public class UtilsAnalytic {
         } else {
             final Bundle bundle = new Bundle(2);
             bundle.putLong(USAGE_COUNT, SPH.getUsedIncrement(context));
-            bundle.putString(USER_LOCALE, Locale.getDefault().toString());
+            bundle.putString(USER_LOCALE, UtilsLocale.getDefaultLocale().toString());
             firebaseAnalytics.logEvent("alexa_auth_success", bundle);
         }
     }
@@ -210,7 +209,7 @@ public class UtilsAnalytic {
         } else {
             final Bundle bundle = new Bundle(2);
             bundle.putLong(USAGE_COUNT, SPH.getUsedIncrement(context));
-            bundle.putString(USER_LOCALE, Locale.getDefault().toString());
+            bundle.putString(USER_LOCALE, UtilsLocale.getDefaultLocale().toString());
             firebaseAnalytics.logEvent("alexa_auth_error", bundle);
         }
     }

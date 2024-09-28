@@ -1154,7 +1154,7 @@ public class SelfAwareHelper {
 
         final ArrayList<String> speakableUtterances = new ArrayList<>();
 
-        final Pattern p = Pattern.compile(".{" + String.valueOf(1) + "," + maxLength + "}(?:[.!?,]\\s+|\\n|$)",
+        final Pattern p = Pattern.compile(".{1," + maxLength + "}(?:[.!?,]\\s+|\\n|$)",
                 Pattern.DOTALL);
 
         final Matcher matcher = p.matcher(utterance);

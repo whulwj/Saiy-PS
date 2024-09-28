@@ -23,7 +23,7 @@ public class SaiyWebHelper {
     public static final int BING = 3;
 
     public static String extension(int searchEngine, SupportedLanguage supportedLanguage) {
-        Locale locale = Locale.getDefault();
+        Locale locale = UtilsLocale.getDefaultLocale();
         if (DEBUG) {
             MyLog.d(CLS_NAME, "defaultLocale: " + locale);
         }
@@ -91,7 +91,7 @@ public class SaiyWebHelper {
     }
 
     public static String yahooImage(SupportedLanguage supportedLanguage) {
-        Locale locale = Locale.getDefault();
+        Locale locale = UtilsLocale.getDefaultLocale();
         if (SupportedLanguage.ENGLISH_US == supportedLanguage) {
             return "images.search.yahoo.com/search/images;_ylu=?p=";
         } else if (UtilsLocale.localesMatch(Locale.CANADA, locale)) {
@@ -107,7 +107,7 @@ public class SaiyWebHelper {
     }
 
     public static String yahooVideo(SupportedLanguage supportedLanguage) {
-        Locale locale = Locale.getDefault();
+        Locale locale = UtilsLocale.getDefaultLocale();
         if (SupportedLanguage.ENGLISH_US == supportedLanguage) {
             return "video.search.yahoo.com/search/video;_ylu=?p=";
         } else if (UtilsLocale.localesMatch(Locale.CANADA, locale)) {

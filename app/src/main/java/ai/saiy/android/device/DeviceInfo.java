@@ -45,7 +45,6 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPublicKey;
 import java.util.List;
-import java.util.Locale;
 
 import ai.saiy.android.BuildConfig;
 import ai.saiy.android.R;
@@ -55,6 +54,7 @@ import ai.saiy.android.firebase.database.reference.IAPVersionReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
+import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -100,7 +100,7 @@ public class DeviceInfo {
                 "\n" +
                 ctx.getString(R.string.locale) +
                 ": " +
-                Locale.getDefault() +
+                UtilsLocale.getDefaultLocale() +
                 "\n" +
                 "VR " + ctx.getString(R.string.locale) +
                 ": " +
