@@ -70,7 +70,9 @@ import ai.saiy.android.command.songrecognition.SongRecognition;
 import ai.saiy.android.command.spell.Spell;
 import ai.saiy.android.command.superuser.Superuser;
 import ai.saiy.android.command.tasker.Tasker;
+import ai.saiy.android.command.taxi.Taxi;
 import ai.saiy.android.command.time.Time;
+import ai.saiy.android.command.timer.Timer;
 import ai.saiy.android.command.translate.Translate;
 import ai.saiy.android.command.twitter.Twitter;
 import ai.saiy.android.command.username.UserName;
@@ -159,8 +161,9 @@ public final class InitStrings {
         callableList.add(new Search(sr, sl, voiceData, confidence));
         callableList.add(new Alarm(sr, sl, voiceData, confidence));
         callableList.add(new Calendar(sr, sl, voiceData, confidence));
-        callableList.add(new Superuser(sr, sl, voiceData, confidence));
+        callableList.add(new Timer(sr, sl, voiceData, confidence));
         callableList.add(new Sms(sr, sl, voiceData, confidence));
+        callableList.add(new Superuser(sr, sl, voiceData, confidence));
         callableList.add(new Help(sr, sl, voiceData, confidence));
         callableList.add(new Show(sr, sl, voiceData, confidence));
         callableList.add(new ChatBot(sr, sl, voiceData, confidence));
@@ -168,6 +171,7 @@ public final class InitStrings {
         callableList.add(new Facebook(sr, sl, voiceData, confidence));
         callableList.add(new Twitter(sr, sl, voiceData, confidence));
         callableList.add(new Foursquare(sr, sl, voiceData, confidence));
+        callableList.add(new Taxi(sr, sl, voiceData, confidence));
         callableList.add(new Dice(sr, sl, voiceData, confidence));
         callableList.add(new Donate(sr, sl, voiceData, confidence));
         callableList.add(new Alexa(sr, sl, voiceData, confidence));

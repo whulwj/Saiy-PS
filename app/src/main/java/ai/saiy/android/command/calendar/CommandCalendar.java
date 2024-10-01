@@ -59,7 +59,7 @@ public class CommandCalendar {
                 case AlarmProcess.TYPE_HOUR:
                 case AlarmProcess.TYPE_MINUTE:
                 case AlarmProcess.TYPE_HOUR_MINUTE:
-                    if (AlarmHelper.setAlarm(context, alarmProcess.getHourOfDay(), alarmProcess.getMinute(), alarmProcess.getTimeString())) {
+                    if (AlarmHelper.setAlarm(context, alarmProcess.getHourOfDay(), alarmProcess.getMinute(), alarmProcess.getCallee())) {
                         outcome.setOutcome(Outcome.SUCCESS);
                         outcome.setUtterance(context.getString(R.string.calendar_to_alarm));
                         return returnOutcome(outcome);

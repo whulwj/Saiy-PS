@@ -190,11 +190,11 @@ public class AlarmHelper {
                     alarmProcess.setMinute(timeFromNow.second);
                     break;
             }
-            alarmProcess.setTimeString(getTimes(str));
+            alarmProcess.setCallee(getCallee(str));
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "alarmProcess.hourInt: " + alarmProcess.getHourOfDay());
                 MyLog.i(CLS_NAME, "alarmProcess.minuteInt: " + alarmProcess.getMinute());
-                MyLog.i(CLS_NAME, "alarmProcess.called: " + alarmProcess.getTimeString());
+                MyLog.i(CLS_NAME, "alarmProcess.called: " + alarmProcess.getCallee());
                 MyLog.i(CLS_NAME, "alarmProcess.result: " + alarmProcess.isValid());
                 MyLog.getElapsed(CLS_NAME, then);
             }
@@ -263,11 +263,11 @@ public class AlarmHelper {
         }
         alarmProcess.setValidness(true);
         alarmProcess.setType(AlarmProcess.TYPE_HOUR_MINUTE);
-        alarmProcess.setTimeString(getTimes(str));
+        alarmProcess.setCallee(getCallee(str));
         if (DEBUG) {
             MyLog.i(CLS_NAME, "alarmProcess.hourInt: " + alarmProcess.getHourOfDay());
             MyLog.i(CLS_NAME, "alarmProcess.minuteInt: " + alarmProcess.getMinute());
-            MyLog.i(CLS_NAME, "alarmProcess.called: " + alarmProcess.getTimeString());
+            MyLog.i(CLS_NAME, "alarmProcess.called: " + alarmProcess.getCallee());
             MyLog.i(CLS_NAME, "alarmProcess.result: " + alarmProcess.isValid());
             MyLog.getElapsed(CLS_NAME, then);
         }
@@ -1308,7 +1308,7 @@ public class AlarmHelper {
         return 0;
     }
 
-    private static String getTimes(String str) {
+    private static String getCallee(String str) {
         String[] separated = {""};
         if (pCalled.matcher(str).matches()) {
             separated = str.split(called);

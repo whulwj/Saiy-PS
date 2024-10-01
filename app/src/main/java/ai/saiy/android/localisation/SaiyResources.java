@@ -17,6 +17,7 @@
 
 package ai.saiy.android.localisation;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Configuration;
@@ -67,6 +68,7 @@ public final class SaiyResources {
      * Must be called once no further localised resources are required. If it is not,
      * {@link Build.VERSION_CODES#JELLY_BEAN_MR1} devices will have their global system local changed.
      */
+    @SuppressLint("AppBundleLocaleChanges")
     public void reset() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "reset");

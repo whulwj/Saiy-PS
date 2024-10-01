@@ -620,6 +620,31 @@ public class ExecuteIntent {
         return false;
     }
 
+    public static boolean orderTaxi(@NonNull final Context ctx) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "orderTaxi");
+        }
+
+        final Intent intent = new Intent(com.google.android.gms.actions.ReserveIntents.ACTION_RESERVE_TAXI_RESERVATION);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.addCategory(Intent.CATEGORY_DEFAULT);
+        try {
+            ctx.startActivity(intent);
+            return true;
+        } catch (final ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "orderTaxi: ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "orderTaxi: Exception");
+                e.printStackTrace();
+            }
+        }
+        return ai.saiy.android.applications.UtilsApplication.launchAppFromPackageName(ctx, Installed.PACKAGE_UBER);
+    }
+
     /**
      * Launch an Activity of the application
      *

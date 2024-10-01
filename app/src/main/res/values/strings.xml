@@ -1650,6 +1650,7 @@
     <string name="SATURDAY">saturday</string>
     <string name="SUNDAY">sunday</string>
     <string name="hour">hour</string>
+    <string name="hours">hours</string>
     <string name="called">called</string>
     <string name="calls">calls</string>
     <string name="name">name</string>
@@ -2342,4 +2343,19 @@
     <string name="title_driving">Driving</string>
     <string name="title_hotword">Hotword</string>
     <string name="title_notifications">Notifications</string>
+
+    <string name="cab">cab</string>
+    <string name="get">get</string>
+    <string name="need">need</string>
+    <string name="order">order</string>
+    <string name="suggest_install_uber">I would suggest installing Uber</string>
+    <string name="taxi">taxi</string>
+    <string name="count_down">count down</string>
+    <string name="countdown">countdown</string>
+    <string name="error_timer_duration">Android will only allow timers to be set within 24 hours from now</string>
+    <string name="error_timer_establish">Sorry, but I was unable to establish the required duration for the timer.</string>
+    <string name="error_timer_schedule">Something went wrong setting that timer</string>
+    <string name="error_timer_structure">The structure of a timer must be in hours, minutes and seconds only</string>
+    <string name="timer">timer</string>
+    <string name="timer_set_for">Timer set for</string>
 </resources>

@@ -70,6 +70,8 @@ import ai.saiy.android.command.somersault.CommandSomersault;
 import ai.saiy.android.command.songrecognition.CommandSongRecognition;
 import ai.saiy.android.command.spell.CommandSpell;
 import ai.saiy.android.command.tasker.CommandTasker;
+import ai.saiy.android.command.taxi.CommandTaxi;
+import ai.saiy.android.command.timer.CommandTimer;
 import ai.saiy.android.command.translate.CommandTranslate;
 import ai.saiy.android.command.twitter.CommandTwitter;
 import ai.saiy.android.command.unknown.Unknown;
@@ -183,37 +185,32 @@ public class Quantum extends Tunnelling {
         } else if (UtilsList.notNaked(toResolve)) {
             final float[] confidence = cr.getConfidenceArray();
             final SaiyDefaults.LanguageModel languageModel = SPH.getDefaultLanguageModel(mContext);
-            switch (languageModel) {
-                case LOCAL:
+            if (languageModel == SaiyDefaults.LanguageModel.LOCAL) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "LanguageModel LOCAL");
+                }
+
+                COMMAND = new FrequencyAnalysis(
+                        new Resolve(mContext, toResolve, confidence, sl).resolve()).analyse();
+            } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "LanguageModel EXTERNAL");
+                }
+
+                COMMAND = cr.getCC();
+
+                if (CommandRequest.inError(COMMAND)) {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "LanguageModel LOCAL");
+                        MyLog.i(CLS_NAME, "LanguageModelDefault.EXTERNAL inError: reverting to LOCAL");
                     }
 
                     COMMAND = new FrequencyAnalysis(
                             new Resolve(mContext, toResolve, confidence, sl).resolve()).analyse();
-
-                    break;
-                default:
+                } else {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "LanguageModel EXTERNAL");
+                        MyLog.i(CLS_NAME, "LanguageModelDefault.EXTERNAL: populated");
                     }
-
-                    COMMAND = cr.getCC();
-
-                    if (CommandRequest.inError(COMMAND)) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "LanguageModelDefault.EXTERNAL inError: reverting to LOCAL");
-                        }
-
-                        COMMAND = new FrequencyAnalysis(
-                                new Resolve(mContext, toResolve, confidence, sl).resolve()).analyse();
-                    } else {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "LanguageModelDefault.EXTERNAL: populated");
-                        }
-                    }
-
-                    break;
+                }
             }
             eventExtra = (CC.COMMAND_UNKNOWN == COMMAND || CC.COMMAND_EMPTY_ARRAY == COMMAND || CC.COMMAND_SOMETHING_WEIRD == COMMAND)? null : new Bundle(5);
             if (eventExtra != null) {
@@ -819,13 +816,24 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
-                case COMMAND_SUPERUSER:
+                case COMMAND_TIMER:
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SUPERUSER.name());
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TIMER.name());
+                    }
+                    final CommandTimer commandTimer = new CommandTimer();
+                    outcome = commandTimer.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = outcome.getOutcome();
+                    publishProgress(outcome.getEntangledPair());
+                    break;
+                case COMMAND_SMS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SMS.name());
                     }
                     if (!secure) {
-                        final ai.saiy.android.command.superuser.CommandSuperuser commandSuperuser = new ai.saiy.android.command.superuser.CommandSuperuser();
-                        outcome = commandSuperuser.getResponse(mContext, toResolve, sl, cr);
+                        final ai.saiy.android.command.sms.CommandSms commandSms = new ai.saiy.android.command.sms.CommandSms();
+                        outcome = commandSms.getResponse(mContext, toResolve, sl, cr);
                         request.setUtterance(outcome.getUtterance());
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
@@ -835,13 +843,13 @@ public class Quantum extends Tunnelling {
                         result = Outcome.SUCCESS;
                     }
                     break;
-                case COMMAND_SMS:
+                case COMMAND_SUPERUSER:
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SMS.name());
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SUPERUSER.name());
                     }
                     if (!secure) {
-                        final ai.saiy.android.command.sms.CommandSms commandSms = new ai.saiy.android.command.sms.CommandSms();
-                        outcome = commandSms.getResponse(mContext, toResolve, sl, cr);
+                        final ai.saiy.android.command.superuser.CommandSuperuser commandSuperuser = new ai.saiy.android.command.superuser.CommandSuperuser();
+                        outcome = commandSuperuser.getResponse(mContext, toResolve, sl, cr);
                         request.setUtterance(outcome.getUtterance());
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                         result = outcome.getOutcome();
@@ -951,6 +959,22 @@ public class Quantum extends Tunnelling {
                         if (outcome.getExtra() instanceof Parcelable) {
                             request.setParcelableObject((Parcelable) outcome.getExtra());
                         }
+                        result = outcome.getOutcome();
+                    } else {
+                        request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                        request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    }
+                    break;
+                case COMMAND_TAXI:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TAXI.name());
+                    }
+                    if (!secure) {
+                        final CommandTaxi commandTaxi = new CommandTaxi();
+                        outcome = commandTaxi.getResponse(mContext, sl);
+                        request.setUtterance(outcome.getUtterance());
+                        request.setAction(outcome.getAction());
                         result = outcome.getOutcome();
                     } else {
                         request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
@@ -1563,14 +1587,19 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALENDAR.name());
                     }
                     break;
-                case COMMAND_SUPERUSER:
+                case COMMAND_TIMER:
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SUPERUSER.name());
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TIMER.name());
                     }
                     break;
                 case COMMAND_SMS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SMS.name());
+                    }
+                    break;
+                case COMMAND_SUPERUSER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SUPERUSER.name());
                     }
                     break;
                 case COMMAND_HELP:
@@ -1609,6 +1638,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_FOURSQUARE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_FOURSQUARE.name());
+                    }
+                    break;
+                case COMMAND_TAXI:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TAXI.name());
                     }
                     break;
                 case COMMAND_FLOAT_COMMANDS:

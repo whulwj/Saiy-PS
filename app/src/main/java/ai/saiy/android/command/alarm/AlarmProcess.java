@@ -13,14 +13,14 @@ public class AlarmProcess {
     private int hourOfDay;
     private int minute;
     private int weekday;
-    private String timesString = "";
+    private String callee = "";
 
     public void setType(int type) {
         this.type = type;
     }
 
-    public void setTimeString(String timesString) {
-        this.timesString = timesString;
+    public void setCallee(String timesString) {
+        this.callee = timesString;
     }
 
     public void setValidness(boolean condition) {
@@ -83,7 +83,7 @@ public class AlarmProcess {
         return this.weekday;
     }
 
-    public String getTimeString() {
-        return this.timesString;
+    public String getCallee() {
+        return this.callee;
     }
 }

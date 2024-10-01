@@ -52,7 +52,7 @@ public class CommandAlarm {
                 case AlarmProcess.TYPE_HOUR:
                 case AlarmProcess.TYPE_MINUTE:
                 case AlarmProcess.TYPE_HOUR_MINUTE:
-                    if (AlarmHelper.setAlarm(context, alarmProcess.getHourOfDay(), alarmProcess.getMinute(), alarmProcess.getTimeString())) {
+                    if (AlarmHelper.setAlarm(context, alarmProcess.getHourOfDay(), alarmProcess.getMinute(), alarmProcess.getCallee())) {
                         outcome.setOutcome(Outcome.SUCCESS);
                         outcome.setUtterance(PersonalityResponse.getGenericAcknowledgement(context, supportedLanguage));
                     } else {
