@@ -86,4 +86,5 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
+    <style name="AppTheme.Button.Bug" parent="Widget.MaterialComponents.Button"/>
 </resources>

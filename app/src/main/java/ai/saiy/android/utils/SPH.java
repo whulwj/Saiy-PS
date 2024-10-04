@@ -55,7 +55,7 @@ import ai.saiy.android.recognition.provider.android.RecognitionNative;
 import ai.saiy.android.service.SelfAware;
 import ai.saiy.android.service.helper.SelfAwareConditions;
 import ai.saiy.android.tts.attributes.Gender;
-import ai.saiy.android.utils.Conditions.Network;
+import ai.saiy.android.utils.conditions.Network;
 
 /**
  * Created by benrandall76@gmail.com on 07/02/2016.

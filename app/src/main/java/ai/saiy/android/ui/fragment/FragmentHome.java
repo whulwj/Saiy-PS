@@ -70,7 +70,7 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentHomeHelper;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.ui.viewmodel.ViewModelBilling;
-import ai.saiy.android.utils.Conditions.Network;
+import ai.saiy.android.utils.conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;

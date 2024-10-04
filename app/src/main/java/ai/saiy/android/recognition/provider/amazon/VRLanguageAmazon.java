@@ -1,4 +1,4 @@
-package ai.saiy.android.recognition.provider.Amazon;
+package ai.saiy.android.recognition.provider.amazon;
 
 public enum VRLanguageAmazon {
     ENGLISH_US("en-US"),

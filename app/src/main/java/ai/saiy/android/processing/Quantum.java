@@ -100,7 +100,7 @@ import ai.saiy.android.thirdparty.tasker.TaskerHelper;
 import ai.saiy.android.ui.activity.ActivityChooserDialog;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.notification.NotificationHelper;
-import ai.saiy.android.utils.Conditions.Network;
+import ai.saiy.android.utils.conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;

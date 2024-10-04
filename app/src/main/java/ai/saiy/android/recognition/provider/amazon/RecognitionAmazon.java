@@ -1,4 +1,4 @@
-package ai.saiy.android.recognition.provider.Amazon;
+package ai.saiy.android.recognition.provider.amazon;
 
 import android.content.Context;
 import android.media.AudioRecord;

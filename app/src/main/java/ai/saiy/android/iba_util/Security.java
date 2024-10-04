@@ -1,4 +1,4 @@
-package ai.saiy.android.IABUtil;
+package ai.saiy.android.iba_util;
 
 import android.text.TextUtils;
 import android.util.Base64;

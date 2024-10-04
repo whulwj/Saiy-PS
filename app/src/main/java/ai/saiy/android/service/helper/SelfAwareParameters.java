@@ -36,7 +36,7 @@ import ai.saiy.android.sound.VolumeHelper;
 import ai.saiy.android.tts.SaiyProgressListener;
 import ai.saiy.android.tts.SaiyTextToSpeech;
 import ai.saiy.android.tts.helper.TTSDefaults;
-import ai.saiy.android.utils.Conditions.Network;
+import ai.saiy.android.utils.conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;

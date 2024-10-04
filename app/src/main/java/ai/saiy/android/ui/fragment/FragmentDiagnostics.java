@@ -568,9 +568,13 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
         View rootView = layoutInflater.inflate(R.layout.fragment_diagnostics_layout, viewGroup, false);
         tvDiagnostics = rootView.findViewById(R.id.tv_diagnostics);
         tvASRCount = rootView.findViewById(R.id.tvASRCount);
+        tvASRCount.setText(String.valueOf(0));
         tvTTSCount = rootView.findViewById(R.id.tvTTSCount);
+        tvTTSCount.setText(String.valueOf(0));
         tvErrorCount = rootView.findViewById(R.id.tvErrorCount);
+        tvErrorCount.setText(String.valueOf(0));
         tvPassedCount = rootView.findViewById(R.id.tvPassedCount);
+        tvPassedCount.setText(String.valueOf(0));
         fab = rootView.findViewById(R.id.fab);
         fab.setOnClickListener(this);
         svDiagnostics = rootView.findViewById(R.id.svDiagnostics);

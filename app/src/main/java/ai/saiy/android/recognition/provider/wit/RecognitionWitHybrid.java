@@ -45,7 +45,7 @@ import ai.saiy.android.audio.pause.PauseListener;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
-import ai.saiy.android.recognition.provider.Amazon.VRLanguageAmazon;
+import ai.saiy.android.recognition.provider.amazon.VRLanguageAmazon;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;

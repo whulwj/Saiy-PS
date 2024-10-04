@@ -471,7 +471,7 @@ public class NotificationService extends IntentService {
                                     sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
                                     break;
                                 }
-                                if (!ai.saiy.android.utils.Conditions.Network.isNetworkAvailable(getApplicationContext())) {
+                                if (!ai.saiy.android.utils.conditions.Network.isNetworkAvailable(getApplicationContext())) {
                                     if (DEBUG) {
                                         MyLog.w(CLS_NAME, "onHandleIntent: NOTIFICATION_ALEXA: no network");
                                     }

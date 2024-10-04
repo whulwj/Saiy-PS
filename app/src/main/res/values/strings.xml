@@ -64,20 +64,20 @@
     <string name="license_pocketsphinx" translatable="false">Copyright © 2013-2015, Alpha Cephei Inc. All rights reserved.</string>
     <string name="sound_bible" translatable="false">Sound Bible</string>
     <string name="license_sound_bible" translatable="false">Credit Mike Koenig @ Soundbible.com</string>
-    <string name="math_eval">Math Eval</string>
-    <string name="license_math_eval">Copyright © Lawrence PC Dol</string>
-    <string name="freesound_org">freesound.org</string>
-    <string name="license_freesound">Credit bone666138 &amp; deathpie @ freesound.org</string>
-    <string name="twitter_oauth_view">TwitterOAuthView</string>
-    <string name="license_twitter_oauth_view">Copyright © 2012-2013 Neo Visionaries Inc.</string>
-    <string name="twitter4j">Twitter4j</string>
-    <string name="license_twitter4j">Copyright 2007 Yusuke Yamamoto</string>
-    <string name="java_aes_crypto">java-aes-crypto</string>
-    <string name="license_java_aes_crypto">Copyright © 2014-2015 Tozny, LLC; (http://tozny.com)</string>
-    <string name="standout">StandOut</string>
-    <string name="license_standout">Copyright (c) Mark Wei github@pingpongboss - credits github@jasonconnery &amp; github@sherpya</string>
-    <string name="amazon_avs">Amazon AVS</string>
-    <string name="license_amazon_avs">Copyright © 2016 Amazon.com, Inc. or its affiliates</string>
+    <string name="math_eval" translatable="false">Math Eval</string>
+    <string name="license_math_eval" translatable="false">Copyright © Lawrence PC Dol</string>
+    <string name="freesound_org" translatable="false">freesound.org</string>
+    <string name="license_freesound" translatable="false">Credit bone666138 &amp; deathpie @ freesound.org</string>
+    <string name="twitter_oauth_view" translatable="false">TwitterOAuthView</string>
+    <string name="license_twitter_oauth_view" translatable="false">Copyright © 2012–2013 Neo Visionaries Inc.</string>
+    <string name="twitter4j" translatable="false">Twitter4j</string>
+    <string name="license_twitter4j" translatable="false">Copyright 2007 Yusuke Yamamoto</string>
+    <string name="java_aes_crypto" translatable="false">java-aes-crypto</string>
+    <string name="license_java_aes_crypto" translatable="false">Copyright © 2014–2015 Tozny, LLC; (http://tozny.com)</string>
+    <string name="standout" translatable="false">StandOut</string>
+    <string name="license_standout" translatable="false">Copyright (c) Mark Wei github@pingpongboss - credits github@jasonconnery &amp; github@sherpya</string>
+    <string name="amazon_avs" translatable="false">Amazon AVS</string>
+    <string name="license_amazon_avs" translatable="false">Copyright © 2016 Amazon.com, Inc. or its affiliates</string>
 
     <!-- App Strings -->
 
@@ -92,7 +92,7 @@
     <string name="navigation_drawer_open" translatable="true">Open navigation drawer</string>
     <string name="navigation_drawer_close" translatable="true">Close navigation drawer</string>
     <string name="app_name" translatable="false">Saiy</string>
-    <string name="saiy_hyperlink">&lt;a href=http://saiy.ai&gt;Saiy&lt;/a&gt;</string>
+    <string name="saiy_hyperlink" translatable="false">&lt;a href=http://saiy.ai&gt;Saiy&lt;/a&gt;</string>
     <string name="control_saiy_permission_label" translatable="true">Remotely control Saiy features</string>
     <string name="control_saiy_permission_description" translatable="true">control certain features of Saiy. These features include
         the recording of audio, passing of this speech data to the remote application and varying the type of voice engine used.</string>
@@ -120,13 +120,13 @@
     <string name="engine" translatable="true">engine</string>
     <string name="engines">engines</string>
     <string name="ask_repeat" translatable="true">Ask you to repeat</string>
-    <string name="menu_tts">Text to Speech</string>
-    <string name="menu_web_search">Perform a web search</string>
-    <string name="search_confirm">Searching %1$s, for %2$s</string>
-    <string name="google_assistant">Google Assistant</string>
-    <string name="menu_alexa">Alexa</string>
-    <string name="menu_alexa_closest_region">Select closest region for Alexa</string>
-    <string name="microsoft_cortana">Microsoft Cortana</string>
+    <string name="menu_tts" translatable="true">Text to Speech</string>
+    <string name="menu_web_search" translatable="true">Perform a web search</string>
+    <string name="search_confirm" translatable="true">Searching %1$s, for %2$s</string>
+    <string name="google_assistant" translatable="true">Google Assistant</string>
+    <string name="menu_alexa" translatable="true">Alexa</string>
+    <string name="menu_alexa_closest_region" translatable="true">Select closest region for Alexa</string>
+    <string name="microsoft_cortana" translatable="true">Microsoft Cortana</string>
     <string name="state_command_unknown" translatable="true">State command unknown</string>
     <string name="menu_send_to" translatable="true">Send to</string>
     <string name="menu_application_disclaimer" translatable="true">Application Disclaimer</string>
@@ -169,7 +169,7 @@
 
     <!-- UI Strings -->
     <string name="menu_tap_begin" translatable="true">tap to begin</string>
-    <string name="menu_tap_edit">tap to edit</string>
+    <string name="menu_tap_edit" translatable="true">tap to edit</string>
     <string name="menu_tap_view" translatable="true">tap to view</string>
     <string name="menu_tap_topics" translatable="true">tap for topics</string>
     <string name="menu_tap_contribute" translatable="true">tap to contribute</string>
@@ -182,13 +182,13 @@
     <string name="menu_tap_legends" translatable="true">tap for legends</string>
     <string name="menu_tap_send" translatable="true">tap to send</string>
     <string name="menu_tap_help" translatable="true">tap for help</string>
-    <string name="menu_tap_manage">tap to manage</string>
-    <string name="menu_tap_export">tap to export</string>
-    <string name="menu_tap_import">tap to import</string>
-    <string name="menu_tap_play">tap to play</string>
-    <string name="menu_tap_reset">tap to reset</string>
-    <string name="menu_tap_restore">tap to restore</string>
-    <string name="menu_tap_run">tap to run</string>
+    <string name="menu_tap_manage" translatable="true">tap to manage</string>
+    <string name="menu_tap_export" translatable="true">tap to export</string>
+    <string name="menu_tap_import" translatable="true">tap to import</string>
+    <string name="menu_tap_play" translatable="true">tap to play</string>
+    <string name="menu_tap_reset" translatable="true">tap to reset</string>
+    <string name="menu_tap_restore" translatable="true">tap to restore</string>
+    <string name="menu_tap_run" translatable="true">tap to run</string>
 
     <string name="title_home" translatable="true">Home</string>
     <string name="title_settings" translatable="true">Settings</string>
@@ -322,7 +322,8 @@
     <string name="menu_reset_success">Reset success!</string>
     <string name="menu_override_secure">Override Secure Commands</string>
     <string name="secure_intro_text">Select override conditions</string>
-    <string name="content_reset">This will reset all settings to default, as if you\'d just installed Saiy.\n\nThis includes all customisations, tweaks and commands.</string>
+    <string name="content_reset">This will reset all settings to default, as if you\'d just installed Saiy.\n\n
+        This includes all customisations, tweaks and commands.</string>
     <string name="content_override_secure">This will allow me to respond to all commands, even when the device is locked.\n\nPlease consider carefully whether you should enable this feature, as I will respond to all requests from any voice instruction to read and send messages, call contacts, announce your agenda - and much more.</string>
     <string name="lp_algorithms_2">In a future release, here you\'ll be able to tweak the thresholds of the algorithms I use to compare spoken words, to close alternatives. Increasing them too much will result in many false positives, but finding the right balance may help me to detect your commands, even if Google is sending back something completely different. At present, the legacy option only applies to contact matching.</string>
     <string name="lp_blacklist">External applications installed on your device, can request that I speak on their behalf, or register keyphrases that perform actions specific to their content. Any such application will need to request permission from you to do so. If you find that one is abusing the privilege, you can blacklist it here, and prevent it from connecting to me.</string>
@@ -981,7 +982,34 @@
     <string name="content_report_bug">Please describe the problem you are experiencing and how to replicate it, if possible.\n\nClicking on email below, will prepopulate some of your device data into the body of the message. Hopefully this will make the bug easier to resolve!</string>
     <string name="lp_bug_report">If you\'ve found I\'m suffering from a bug, you can submit it to my developer here.</string>
     <string name="menu_to_do_list">To-Do List</string>
-    <string name="content_to_do_list">In no particular order:\n\n• Customisable hotword\n• Wired headsets\n• Bluetooth headsets\n• Car kits\n• Wear compatibility\n• Multiple intro support\n• Google Assistant vs browser choice\n• Hotword screen off\n• Full application back-up\n• Location aware profiles\n• User sound effects\n• Save emotion analysis\n• Regex in commands\n• MicroG support\n\nCommands:\n\n• Heart rate\n• Steps\n• Stopwatch\n• Run\n• Workout\n• Bike ride\n• ICE\n• Music search\n• Agenda timespans\n• Delete alarms\n• 24 hour time\n• etc…!</string>
+    <string name="content_to_do_list">In no particular order:\n\n
+        • Customisable hotword\n
+        • Wired headsets\n
+        • Bluetooth headsets\n
+        • Car kits\n
+        • Wear compatibility\n
+        • Multiple intro support\n
+        • Google Assistant vs browser choice\n
+        • Hotword screen off\n
+        • Full application back-up\n
+        • Location aware profiles\n
+        • User sound effects\n
+        • Save emotion analysis\n
+        • Regex in commands\n
+        • MicroG support\n\n
+        Commands:\n\n
+        • Heart rate\n
+        • Steps\n
+        • Stopwatch\n
+        • Run\n
+        • Workout\n
+        • Bike ride\n
+        • ICE\n
+        • Music search\n
+        • Agenda timespans\n
+        • Delete alarms\n
+        • 24 hour time\n
+        • etc…!</string>
     <string name="lp_to_do">View a list of what my developer is working on in the very near future. Once he has completed this list, he has my permission to get a life.</string>
     <string name="menu_suggest_an_enhancement">Suggest an Enhancement</string>
     <string name="lp_enhancement">Have a suggestion of how I could be improved? Let my developer know your ideas here.</string>
@@ -1411,7 +1439,7 @@
 
     <!-- Command - Translate error -->
     <string name="error_translate_length" translatable="true">"I'm afraid %1$s, that translations are currently limited to 2000 characters."</string>
-    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translationProvider."</string>
+    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translation."</string>
     <string name="error_translate_unsupported" translatable="true">"I'm sorry %1$s, but that language is not currently supported for
         translations"</string>
 
@@ -1589,7 +1617,7 @@
     <string name="dialing">dialing</string>
     <string name="ring">ring</string>
     <string name="display">display</string>
-    <string name="displayed" translatable="false">displayed</string>
+    <string name="displayed" translatable="true">displayed</string>
     <string name="edit">edit</string>
     <string name="editing">editing</string>
     <string name="navigate">navigate</string>
@@ -2254,7 +2282,7 @@
     <string name="iap_starter">Buy me milk</string>
     <string name="iap_unknown_cost">$?</string>
     <string name="content_billing_error">A problem occurred when attempting to verify your purchase.\n\nEach time the application starts, it will automatically attempt to resolve this issue over the next 48 hour period. If however, after this time, you believe your purchase still has not been correctly applied, please email me directly via %1$s\n\nPlease accept my apologies for any inconvenience caused. I greatly appreciate your donation.</string>
-    <string name="content_billing_success">Thank you for your donation!\n\nIn order to get rid of the pesky ads, you may need to kill the application and open it again.\n\nPlease be aware, evey time the application starts, it checks if you are a Premium User. Sometimes, due to weird and wonderful billing responses from Google, it may incorrectly report the status of a donation and therefore ads will appear once again. This issue is normally short-lived…\n\nThank you once again.\n\nBen</string>
+    <string name="content_billing_success">Thank you for your donation!\n\nIn order to get rid of the pesky ads, you may need to kill the application and open it again.\n\nPlease be aware, evey time the application starts, it checks if you are a Premium User. Sometimes, due to weird and wonderful billing responses from Google, it may incorrectly report the status of a donation and therefore ads will appear once again. This issue is normally short-lived…\n\nThank you once again.</string>
     <string name="menu_billing_error">Billing Error</string>
     <string name="menu_billing_success">Donation Processed</string>
     <string name="network_error">A network error occurred</string>

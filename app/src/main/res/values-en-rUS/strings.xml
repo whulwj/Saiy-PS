@@ -1,51 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-  ~ Copyright (c) 2016. Saiy Ltd. All Rights Reserved.
-  ~
-  ~ This program is free software: you can redistribute it and/or modify
-  ~ it under the terms of the GNU Affero General Public License as published
-  ~ by the Free Software Foundation, either version 3 of the License, or
-  ~ (at your option) any later version.
-  ~
-  ~ This program is distributed in the hope that it will be useful,
-  ~ but WITHOUT ANY WARRANTY; without even the implied warranty of
-  ~ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-  ~ GNU Affero General Public License for more details.
-  ~
-  ~ You should have received a copy of the GNU Affero General Public License
-  ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
 <resources>
+    <!-- Command - Voice Identification -->
+    <string name="analyse">analyze</string>
 
-    <string name="title_customisation" translatable="true">Customization</string>
-    <string name="error_hotword" translatable="true">"Hotword engine failed to initialize :("</string>
-    <string name="menu_synthesised_voice" translatable="true">Google Synthesized Voice</string>
+    <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
+    <string name="beyond_verbal_extra_verbose">OK %1$s. In order for me to analyze\n
+        your emotional state, you need to speak for at least thirteen seconds. After that, I\'ll\n
+        detect when you\'ve finished speaking. You could tell me about your day today, or about a\n
+        memory from your past. If you can\'t think of anything, just close your eyes and count slowly\n
+        up to fifteen, whilst your mind wanders. I\'ll let you know with a notification when the\n
+        analysis is complete.</string>
 
-    <string name="notification_initialising_tts" translatable="true">"Initializing TTS"</string>
-
-    <string name="cancelled" translatable="true">"cancelled"</string>
-    <string name="analyse" translatable="true">"analyze"</string>
-    <string name="vocal_notify_verify" translatable="true">"Okay. I'll notify you know when I've analyzed the audio."</string>
-
-
-    <string name="bug_content_delay_speech" translatable="true">Text to speech engines take up a lot of resource
-        and consequently can take a while to initialize and be ready to speak. This is more common on higher
-        quality engines, regardless of whether they are downloaded and installed on the device or not.\n\nIn the
-        Superuser Settings, under Memory Usage, you can adjust how long the text to speech engine is bound to
-        Saiy and kept in the memory. The longer allowed time, the less likely the initialization process
-        will be required for subsequent commands\n\nThis additional memory usage
-        should be negligible to the performance of any modern device. If Android needs the memory back,
-        it will take it!\n\nIn the Saiy Settings, if you have selected to use the network synthesized voices
-        (available via Google\'s text to speech engine), a delay can occur due to the speed of your network
-        connection. If your mobile connectivity is a little hit and miss, disabling this feature unless you are
-        connected to WiFi, could certainly help…\n\nTap for settings. Tap and hold for Superuser Settings</string>
-
-    <string name="beyond_verbal_extra_verbose" translatable="true">"OK %1$s. In order for me to analyze
-        your emotional state, you need to speak for at least thirteen seconds. After that, I'll
-        detect when you've finished speaking. You could tell me about your day today, or about a
-        memory from your past. If you can't think of anything, just close your eyes and count slowly
-        up to fifteen, whilst your mind wanders. I'll let you know with a notification when the
-        analysis is complete."</string>
-
+    <string name="cancelled">canceled</string>
+    <string name="content_reset">This will reset all settings to default, as if you\'d just installed Saiy.\n\n
+        This includes all customizations, tweaks and commands.</string>
+    <string name="content_to_do_list">In no particular order:\n\n
+        • Customizable hotword\n
+        • Wired headsets\n
+        • Bluetooth headsets\n
+        • Car kits\n
+        • Wear compatibility\n
+        • Multiple intro support\n
+        • Google Assistant vs browser choice\n• Hotword screen off\n
+        • Full application back-up\n
+        • Location aware profiles\n
+        • User sound effects\n
+        • Save emotion analysis\n
+        • Regex in commands\n
+        • MicroG support\n\n
+        Commands:\n\n
+        • Heart rate
+        \n• Steps\n
+        • Stopwatch\n
+        • Run\n
+        • Workout\n
+        • Bike ride\n
+        • ICE\n
+        • Music search\n
+        • Agenda timespans\n
+        • Delete alarms\n
+        • 24 hour time\n
+        • etc…!</string>
+    <string name="diagnostics_analysing">Analyzing results…</string>
+    <string name="diagnostics_init_failed">Initialization failed</string>
+    <string name="diagnostics_init_prepare">Preparing to initialize</string>
+    <string name="diagnostics_init_success">Initialization successful</string>
+    <string name="diagnostics_initialising">Initializing</string>
+    <string name="diagnostics_supported_language_5">Google Text to Speech engine failed the speech test. This is unfortunate, as it is usually the most reliable amongst its alternatives. However, it can take a long time to initialize on some devices, under low memory conditions, so a fresh reboot of your device may solve the issue in the short term. Alternatively, try uninstalling and reinstalling the engine and any associated language packs you have installed. If it continues to fail, you may need to switch to a lower quality, unsupported voice engine, such a Pico TTS</string>
+    <string name="error_hotword">Hotword engine failed to initialize :(</string>
+    <string name="foursquare_auth_cancelled">Foursquare authorization canceled</string>
+    <string name="foursquare_auth_error">Foursquare authorization failed</string>
+    <string name="foursquare_auth_success">Foursquare authorization successful</string>
+    <string name="menu_edit_customisations">Edit Customizations</string>
+    <string name="menu_grey_hairs">Gray Hairs</string>
+    <string name="menu_synthesised_voice">Google Synthesized Voice</string>
+    <string name="menu_tap_authorise">tap to authorize</string>
+    <string name="menu_tap_deauthorise">tap to deauthorize</string>
+    <string name="no_customisations">No customizations to edit!</string>
+    <string name="notification_initialising_tts">Initializing TTS</string>
+    <string name="title_customisation">Customization</string>
+    <string name="twitter_auth_cancelled">Twitter authorization canceled</string>
+    <string name="twitter_auth_error">Twitter authorization failed</string>
+    <string name="twitter_auth_success">Twitter authorization successful</string>
+    <string name="vocal_notify_verify">Okay. I\'ll notify you when I\'ve analyzed the audio.</string>
 </resources>

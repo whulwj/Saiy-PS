@@ -1,10 +1,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- https://translate.google.hk/ -->
-
     <!-- Preserve HTML -->
-    <string name="content_disclaimer" translatable="true">here is the application disclaimer.</string>
+    <string name="content_disclaimer" translatable="true">这是应用程序免责声明。</string>
 
-    <string name="content_developer_note" translatable="true">here is the developer note</string>
+    <string name="content_developer_note" translatable="true">这是开发者说明</string>
     <string name="content_rate_me">I hope you don\'t mind the interruption, %1$s. But you seem to be enjoying using me. If I can ask for twenty seconds of your time, posting a review on the Play Store helps my developer out so much, and keeps him motivated to improve me. If you\'re not quite sure what star rating you should give me, I would recommend, five. It\'s my lucky number. I thank you in advance. If you\'ve already done this, I thank you on behalf of my developer.</string>
     <string name="content_whats_new" translatable="true">~ V1.0.3 ~\n• Wear integration (test)\n• Note provider options (fix)\n• More bugs fixes! Tks for reports!!</string>
     <string name="content_unknown_command" translatable="true">未知命令，即无法识别的命令</string>
@@ -27,12 +25,17 @@
     <string name="feedback" translatable="true">反馈</string>
     <string name="model" translatable="true">模型</string>
     <string name="manufacturer" translatable="true">制造商</string>
-    <string name="android" translatable="false">Android</string>
-    <string name="locale" translatable="false">locale</string>
     <string name="save" translatable="true">保存</string>
     <string name="close" translatable="true">关闭</string>
     <string name="engine" translatable="true">引擎</string>
     <string name="ask_repeat" translatable="true">请您重复</string>
+    <string name="menu_tts">文本转语音</string>
+    <string name="menu_web_search">执行网页搜索</string>
+    <string name="search_confirm">Searching %1$s, for %2$s</string>
+    <string name="google_assistant">Google Assistant</string>
+    <string name="menu_alexa">Alexa</string>
+    <string name="menu_alexa_closest_region">Select closest region for Alexa</string>
+    <string name="microsoft_cortana">Microsoft Cortana</string>
     <string name="state_command_unknown" translatable="true">状态命令未知</string>
     <string name="menu_send_to" translatable="true">发送到</string>
     <string name="menu_application_disclaimer" translatable="true">应用免责声明</string>
@@ -43,8 +46,8 @@
     <string name="menu_lets_do_it" translatable="true">"我们开始吧!"</string>
     <string name="menu_excited" translatable="true">"我太激动了!"</string>
     <string name="menu_select" translatable="true">"选择"</string>
-    <string name="menu_supported_languages" translatable="true">支持的语言</string>
     <string name="menu_unknown_commands" translatable="true">未知命令</string>
+    <string name="menu_bluetooth_headsets">Bluetooth Headsets</string>
     <string name="custom_intro_text" translatable="true">我该怎样称呼您?</string>
     <string name="custom_intro_hint" translatable="true">我在等您的回复</string>
     <string name="custom_intro_checkbox_title" translatable="true">随机使用</string>
@@ -75,9 +78,11 @@
 
     <!-- UI Strings -->
     <string name="menu_tap_begin" translatable="true">点击开始</string>
+    <string name="menu_tap_edit">点击编辑</string>
     <string name="menu_tap_view" translatable="true">点击查看</string>
     <string name="menu_tap_topics" translatable="true">点击查看主题</string>
     <string name="menu_tap_contribute" translatable="true">如何做出贡献</string>
+    <string name="menu_tap_create" translatable="true">点击创建</string>
     <string name="menu_tap_options" translatable="true">点击查看选项</string>
     <string name="menu_tap_toggle" translatable="true">点击切换</string>
     <string name="menu_tap_set" translatable="true">点击去设置</string>
@@ -86,14 +91,28 @@
     <string name="menu_tap_legends" translatable="true">点击获取图例</string>
     <string name="menu_tap_send" translatable="true">点击发送</string>
     <string name="menu_tap_help" translatable="true">点击寻求帮助</string>
+    <string name="menu_tap_manage">点击管理</string>
+    <string name="menu_tap_export">点击导出</string>
+    <string name="menu_tap_import">点击导入</string>
+    <string name="menu_tap_play">点击播放</string>
+    <string name="menu_tap_reset">tap to reset</string>
+    <string name="menu_tap_restore">点击还原</string>
+    <string name="menu_tap_run">点击运行</string>
 
     <string name="title_home" translatable="true">首页</string>
     <string name="title_settings" translatable="true">设置</string>
+    <string name="lp_settings">一个到设置部分的链接，装满了技术调整和应用程序默认设置。</string>
     <string name="title_advanced" translatable="true">高级选项</string>
+    <string name="lp_advanced">一个到高级设置部分的链接，装满了更多技术调整和应用程序默认设置。</string>
     <string name="title_troubleshooting_bugs" translatable="true">故障排除&amp; 漏洞</string>
+    <string name="lp_bugs">一个到故障排除和缺陷部分的链接，在那里您可以找到任何可能遇到问题的解决方案。</string>
     <string name="title_troubleshooting" translatable="true">故障排除</string>
     <string name="title_superuser" translatable="true">超级用户</string>
+    <string name="title_supported_apps">支持的应用程序</string>
     <string name="title_customisation" translatable="true">定制化</string>
+    <string name="lp_customisation">一个到定制部分的链接，充满了您可以自行定制的有趣方法。</string>
+    <string name="title_applications">应用程序</string>
+    <string name="title_assist">Assist</string>
     <string name="title_about" translatable="true">关于</string>
     <string name="title_feedback" translatable="true">用户反馈</string>
     <string name="title_communicate" translatable="true">沟通</string>
@@ -102,39 +121,75 @@
     <string name="title_twitter" translatable="true">推特</string>
     <string name="title_google_plus" translatable="true">谷歌+</string>
     <string name="title_forum" translatable="true">论坛</string>
+    <string name="title_application">应用程序</string>
+    <string name="title_web">网页</string>
+    <string name="other">其它</string>
+    <string name="title_activity">Activity</string>
+    <string name="title_broadcast_receiver">Broadcast Receiver</string>
+    <string name="title_service">Service</string>
     <string name="action_power" translatable="true">开关</string>
+    <string name="title_start_listening">Start Listening</string>
+    <string name="action_save">保存</string>
+    <string name="action_select_all">全部选择</string>
     <string name="menu_voice_tutorial" translatable="true">语音教程</string>
+    <string name="content_start_voice_tutorial">Would you like to start the Voice Tutorial?</string>
+    <string name="menu_yes_please">Yes please!</string>
+    <string name="menu_not_right_now">Not right now</string>
     <string name="menu_ping" translatable="true">测试网络连接</string>
     <string name="menu_memory_usage" translatable="true">内存用量</string>
     <string name="menu_root" translatable="true">Root选项</string>
+    <string name="menu_close">关闭</string>
     <string name="menu_intercept_google" translatable="true">拦截Google Now</string>
+    <string name="menu_start_automatically">自动启动</string>
     <string name="menu_start_boot" translatable="true">在开机时启动</string>
     <string name="menu_start_boot_lower" translatable="true">"在开机时启动"</string>
     <string name="menu_start_driving" translatable="true">"驾驶时开始"</string>
+    <string name="menu_start_hotword">开始热词检测</string>
+    <string name="menu_start_voice_recognition">开始语音识别</string>
+    <string name="menu_stop_automatically">自动停止</string>
+    <string name="menu_stop_driving">驾驶完成后停止</string>
+    <string name="menu_stop_listening">停止监听</string>
     <string name="menu_prevent_sleep" translatable="true">"防止设备休眠"</string>
+    <string name="menu_wake_up_saiy">唤醒赛伊</string>
+    <string name="menu_okay_google">Okay Google修复</string>
     <string name="menu_lock_security" translatable="true">"锁定时确保信息安全"</string>
     <string name="menu_algorithms" translatable="true">算法</string>
+    <string name="menu_supported_languages" translatable="true">支持的语言</string>
+    <string name="menu_tts_voice">文本转语音: 测试 &amp; 选择一项</string>
     <string name="menu_synthesised_voice" translatable="true">谷歌合成声音</string>
+    <string name="synthesis_intro_text">配置网络合成</string>
     <string name="menu_user_guide" translatable="true">用户指南</string>
     <string name="menu_toast" translatable="true">Toast（信息提示）未知命令</string>
+    <string name="toast_unknown_error">与您的未知命令选择不兼容</string>
     <string name="menu_offline" translatable="true">使用离线识别</string>
+    <string name="lp_offline_recognition">如果您希望，您可以在这里选择，即使有活动网络连接可用、是否默认使用离线语音识别。请务必注意， 离线识别远不如在线结果精确， 所以您需要准备比平时更多的未知命令响应。 此外，即使您已经成功地安装了离线识别文件，它可能需要几次设备重启才能正确地检测到它们。 关于此问题的更多信息可在故障排除和缺陷部分找到。</string>
     <string name="menu_hotword_detection" translatable="true">热词检测</string>
+    <string name="lp_hotword_detection">此功能是实验性的，使用与谷歌不同的离线识别引擎。 它还在测试中，常常需要重复一次以上才能检测到唤醒短语。 这种在周围环境噪音很高的情况是尤其普遍的。 这些问题正在处理之中，无疑将很快得到解决。 虽然此功能不需要活跃的网络连接， 你应该知道它不能使用某些设备的专用配置 CPU 核心。 因此，它将比谷歌识别引擎消耗更多的电能。 作为系统应用程序，是能够利用它的。 当热词检测激活时，侵入式通知将被放入状态栏中。 这是确保您不会意外地启用该功能并消耗您的电池电量。</string>
     <string name="menu_tts_gender" translatable="true">文本转语音性别</string>
+    <string name="lp_tts_gender">如果文本转语音引擎支持它，此设置允许您配置默认下我应该以男性或女性的声音说话。我会尝试在为您播报翻译时使用此设置。当我突然从一位英国女士变成一个德国男子的时候，听起来有点傻。还好只在周末这样，嗯哼。</string>
     <string name="menu_blacklist" translatable="true">管理黑名单</string>
     <string name="menu_vocal_verification" translatable="true">语音验证</string>
+    <string name="menu_vocal_verification_feedback">声学验证反馈</string>
+    <string name="content_vocal_verification">这是一个仅限初始用户访问的实验性功能，一旦得到完善，它可以用来识别您并使您可以使用涉及私人数据的命令。\n\n开始的时候，可能会推出当设备锁定的时候只允许执行某些命令- 再后来，嗯，谁知道…\n\n一旦您成功注册声音足迹，您可以说\‘我是谁\’的命令，然后跟着指示做，您将收到结果通知您我有多确信您就是注册了声音足迹的用户。也就是说，如果那真是您的话！\n\n当然您可以让您的朋友来说话，测试检测的正确性。\n\n在开发部分，您可以提供使用此功能的体验反馈。您所要做的只是单击星级评分！\n\n最后，如果您在试着使用此过程时出错，请接受来自开发人员的歉意，但是测试此功能并不便宜，他可能已经在逃跑躲债的路上！#帮助隐藏他</string>
     <string name="dialog_id_verification" translatable="true">选择语音账号: 要关联的账号</string>
     <string name="menu_unlink_association" translatable="true">解除关联</string>
     <string name="content_unlink_association" translatable="true">%1$s已有Saiy语音关联。是否要解除当前关联并开始一个新关联？</string>
     <string name="menu_pause" translatable="true">暂停超时</string>
     <string name="pause_detection_text" translatable="true">喘口气:</string>
+    <string name="menu_announce_caller">播报呼叫者ID</string>
     <string name="media_stream" translatable="true">媒体流</string>
+    <string name="menu_volume_assume_global">假设全局音量</string>
+    <string name="menu_volume_managed">系统管理的</string>
+    <string name="menu_volume_toast">提示音量警告</string>
     <string name="above" translatable="true">高于</string>
     <string name="below" translatable="true">低于</string>
     <string name="adhere_to" translatable="true">遵守</string>
     <string name="memory_usage_text" translatable="true">%1$s后释放资源</string>
     <string name="menu_haptic" translatable="true">使用触觉反馈</string>
+    <string name="lp_haptic_feedback">在此您可以选择是否我在整个应用程序的不同点使用设备振动。请注意，一些振动是由安卓系统或者谷歌语音识别生成的，是无法避免的。</string>
     <string name="menu_temperature_units" translatable="true">温度单位</string>
     <string name="menu_saiy" translatable="true">版权所有© 2017 Saiy\u00AE Ltd.（有限公司）</string>
+    <string name="menu_legen_dary">Legen… wait for it… Dary</string>
     <string name="menu_legal" translatable="true">许可证&amp;合法</string>
     <string name="menu_release_notes" translatable="true">发布说明</string>
     <string name="menu_source_code" translatable="true">源代码</string>
@@ -142,37 +197,788 @@
     <string name="menu_development" translatable="true">开发</string>
     <string name="menu_testing" translatable="true">测试中</string>
     <string name="menu_run" translatable="true">执行</string>
-    <string name="menu_daniel_schlapa" translatable="false">Daniel Schlapa</string>
-    <string name="menu_hannes_ahremark" translatable="false">Hannes Ahremark</string>
-    <string name="submenu_daniel_schlapa" translatable="false">blog.schlapa.net (dtrieb@xda)</string>
     <string name="menu_commercial_enquiries" translatable="true">商业查询</string>
     <string name="menu_commercial_enquiry" translatable="true">商业查询</string>
     <string name="menu_special_thanks" translatable="true">特别鸣谢</string>
     <string name="menu_app_icon" translatable="true">应用图标</string>
-    <string name="submenu_studio_ahremark" translatable="false">studioahremark.com</string>
     <string name="menu_custom_intro" translatable="true">自定义简介</string>
     <string name="menu_privacy_policy" translatable="true">隐私政策</string>
+    <string name="menu_terms">使用条款</string>
+    <string name="menu_anonymous_usage_stats">匿名使用统计</string>
     <string name="menu_volume_settings" translatable="true">音量设置</string>
+    <string name="menu_alexa_shortcut">Alexa Shortcut</string>
+    <string name="menu_launcher_shortcut">启动器快捷方式</string>
+    <string name="launcher_shortcut_description">点击激活Saiy</string>
+    <string name="menu_install_shortcut_app">Install Shortcut App</string>
+    <string name="menu_shortcut_failed">创建快捷方式失败！?</string>
     <string name="hint_bugs_command" translatable="true">输入要运行的命…</string>
-    <string name="menu_recogniser_busy_fix" translatable="true">识别人忙修复</string>
-    <string name="menu_okay_google_fix" translatable="true">好的，谷歌修复</string>
+    <string name="menu_recogniser_busy_fix" translatable="true">识别器忙修复</string>
+    <string name="menu_okay_google_fix" translatable="true">Okay Google修复</string>
+    <string name="menu_double_beep_fix">双哔哔声修复</string>
+    <string name="menu_flashlight_fix">手电筒修复</string>
+    <string name="menu_wired_headset_fix">Wired Headset Fix</string>
+    <string name="menu_reset">重置为默认值</string>
+    <string name="menu_reset_error">重置失败！?</string>
+    <string name="menu_reset_saiy_defaults">Reset Saiy Defaults</string>
+    <string name="menu_reset_success">重置成功！</string>
+    <string name="menu_override_secure">覆盖安全命令</string>
+    <string name="secure_intro_text">选择覆盖条件</string>
+    <string name="content_reset">此动作将会把所有的设置重置为默认值，就如您刚安装 Saiy 一样。\n\n这包括所有定制，调整和命令。</string>
+    <string name="content_override_secure">这将允许我回应所有命令，即使设备处于锁屏状态。\n\n请慎重考虑是否启用该特性，开启后我将回应所有语音指令的请求，包括读取发送消息，拨打联系人，播报您的日程，以及更多的请求。</string>
+    <string name="lp_algorithms_2">在未来的版本中，你可以调整我使用的算法阈值: 比较您说的话语和接近的替换词。 把算法阈值增加太多将导致许多的错误性肯定，但是找到适当的平衡值可能有助于我检测您的命令， 即使谷歌发回一些完全不同的东西。目前，旧选项仅适用于联系人匹配。</string>
+    <string name="lp_blacklist">安装在您设备上的其它应用程序，可以请求我代表他们发言或注册执行针对他们内容进行操作的关键词。 任何此类应用程序都需要请求您的许可才能这样做。 如果你发现有滥用这个权限的，你可以将它列入黑名单，并阻止它跟我连载。</string>
+    <string name="lp_double_beep_fix">因为谷歌热词检测服务出现缺陷，它们占有麦克风而不共享。在您试图激活我的时候，我可能只是不停地多次发出哔哔声。启动此选项将让我能够识别它何时发生并愉快地杀死谷歌助理。</string>
+    <string name="lp_flashlight_fix">某些安卓设备不喜欢我试图启动手电筒的方式。如果您遇到此问题请切换该设置。我的开发人员知道导致显示器关闭的时候手电筒被禁用的问题。他正在努力解决中。</string>
+    <string name="lp_install_ql">If you require a stand alone application to launch me in listening mode. Perhaps for your car unit, or a button mapping app. Then this is the option for you.</string>
+    <string name="lp_memory_usage">为了发挥职能，我需要同时绑定文本转语音引擎和语音识别引擎。我自己以及他们的内存使用量组合将显示在 Android 运行进程列表中，作为一个统计值。该使用量可能会让某些用户惊慌，并导致他们错误地相信内存分配和我的电池消耗成正比。这是个错误的假设。无论如何，在此您可以设置我能多快解除和两个引擎的绑定。在您考虑减少此时间跨度之前，请在故障排除和缺陷部分阅读进一步信息。</string>
+    <string name="lp_note_provider">If your preferred note provider is not appearing as a choice, then this is the place for you. There are many ways different note apps expect to receive the content and title, and here I do my best to provide you with as many options as possible to make your favourite app work correctly. Select an option and then press test. If the note app you want appears as a choice, then select them and check the test content and title are populated correctly. If you exhaust all of the options, then it may be that the app you want, simply isn\'t handling the request correctly. Drop my developer a quick email from the Development Section, and he\'ll do his best to give them a nudge.</string>
+    <string name="lp_okay_google_fix">由于谷歌的热词检测服务出现缺陷，okay Google 命令可能无法正确运行。启动此选项应该能暂时解决此问题。</string>
+    <string name="lp_override_secure">此设置允许您覆盖我认为是安全的功能，并在设备锁定时执行它。 不推荐使用此选项。点击以查看详细解释。</string>
+    <string name="lp_ping">在开始初始化语音或者执行需要网络连接的命令之前，我会用ping测试检查网络速度。如果由于某种原因，它对我的表现产生负面影响，您可以在此禁用它。</string>
+    <string name="lp_recogniser_busy_fix">由于谷歌识别服务出现错误，您可能会被一个服务忙的错误所苦恼。启动此选项应该可以提供临时修复。</string>
+    <string name="lp_reset_default">如果发生了导致我出现错误的事情，你可以在此将我重置为默认安装状态。</string>
+    <string name="lp_reset_saiy_defaults">If you\'d like to clear the default options in Android, that Saiy responds to, such as a headset button press, clicking here will remove all defaults set.</string>
+    <string name="lp_root">在即将发行的版本中启用时，您将可以定制需要Root或系统访问权限的命令。</string>
+    <string name="lp_start_boot">您可以切换此设置来决定我是否跟随安卓系统开机启动</string>
+    <string name="lp_sms_body_fix">对于某些用户，口述短信无法在他们默认的消息应用中显示。切换此设置应该可以解决此问题。</string>
+    <string name="lp_sms_id_fix">对于少数用户来说，从特定联系人中请求文本信息内容将失败。切换此设置有望解决这个问题。</string>
+    <string name="lp_vocal_verification">这是一个实验性功能。请点击查看详细说明。</string>
+    <string name="lp_vocal_verification_feedback">请在这里提供任何关于声音验证测试的反馈。</string>
+    <string name="lp_wired_headset_fix">If the voice action button on your wired headset is not doing anything, or not defaulting to me, when your screen is off, you can use this fix to set things up correctly. When you tap on this option, if I\'m activated successfully, then all is good. If it starts another application, then you\'ll need to locate that app in the Android Application Settings, and click on. Clear defaults. Before returning here to try again. You\'ll most likely get shown a dialog to choose between the various Assistants on your device. I would highly recommend you choose me. For obvious reasons.</string>
 
+    <string name="menu_europe">Europe</string>
+    <string name="menu_north_america">North America</string>
+    <string name="menu_asia">Asia</string>
+    <string name="menu_default">Default</string>
+    <string name="menu_legacy">Legacy</string>
+    <string name="menu_enabled">已启用</string>
+    <string name="menu_wifi">WiFi（无线）</string>
+    <string name="menu_4g">4g</string>
+    <string name="menu_save_output">保存输出 [5.0+]</string>
+    <string name="menu_device_locked">仅当设备解锁时</string>
+    <string name="will_shutdown_on_exit">将在退出时关闭</string>
+    <string name="menu_announce_notifications">播报通知</string>
+    <string name="menu_announce_caller_id">播报呼叫者ID</string>
+    <string name="menu_self_note">Self-note</string>
+    <string name="menu_send_note">Send plain text</string>
+    <string name="menu_create_note">Create note</string>
+    <string name="menu_auto_send_note">Auto-send note</string>
+    <string name="menu_secure_always">总是</string>
+    <string name="menu_secure_driving">驾驶时</string>
+    <string name="menu_secure_headset">连着耳机时</string>
+    <string name="menu_secure_wear">When watch connected</string>
+
+    <string name="menu_blocked_apps">已屏蔽的应用</string>
+    <string name="menu_blocked_content">屏蔽的内容</string>
+    <string name="menu_blocked_content_hint">GPS定位，输入法</string>
+    <string name="menu_ignore_restricted_content">忽略受限内容</string>
+    <string name="menu_sms_content">播报短信内容</string>
+    <string name="menu_hangout_content">Announce Hangout content</string>
+    <string name="menu_whatsapp_content">Announce WhatsApp content</string>
+    <string name="input_format_error">输入不能包含特殊字符</string>
+    <string name="saiy_signature">Composed by voice #Saiy</string>
+    <string name="custom_signature_text">附加到语音消息</string>
+
+    <string name="hearts">hearts</string>
+    <string name="clubs">clubs</string>
+    <string name="diamonds">diamonds</string>
+    <string name="spades">spades</string>
+    <string name="ace">ace</string>
+    <string name="two">two</string>
+    <string name="three">three</string>
+    <string name="four">four</string>
+    <string name="five">five</string>
+    <string name="six">six</string>
+    <string name="seven">seven</string>
+    <string name="eight">eight</string>
+    <string name="nine">nine</string>
+    <string name="ten">ten</string>
+    <string name="jack">jack</string>
+    <string name="queen">queen</string>
+    <string name="king">king</string>
+
+    <string name="heads">heads</string>
+    <string name="tails">tails</string>
+
+    <string name="sausage">香肠</string>
+    <string name="bean">豆子</string>
+    <string name="bean_sic">豆子</string>
+    <string name="chip">薯条</string>
+    <string name="one">一</string>
+    <string name="numeric_1_2_3_4_5">1 2 3 4 5</string>
+    <string name="male_sic">mail</string>
+    <string name="boy">男孩</string>
+    <string name="girl">女孩</string>
+    <string name="woman">女人</string>
+    <string name="man">男人</string>
+    <string name="lady">女士</string>
+    <string name="gentleman">男士</string>
+    <string name="hermaphrodite">雌雄共体</string>
+    <string name="both">两者都是</string>
+    <string name="ladyboy">人妖</string>
+    <string name="lady_boy">伪娘</string>
+
+    <string name="yes">yes</string>
+    <string name="it_is">it is</string>
+    <string name="right">right</string>
+    <string name="correct">correct</string>
+    <string name="ok">OK</string>
+    <string name="sure">sure</string>
+    <string name="yeah">yeah</string>
+    <string name="no">no</string>
+    <string name="wrong">wrong</string>
+    <string name="incorrect">incorrect</string>
+    <string name="dont">don\'t</string>
+    <string name="do_not">do not</string>
+    <string name="don_t_do_it_">请千万别这么做！</string>
+    <string name="configure">配置</string>
+    <string name="confirm">确认</string>
+
+    <string name="settings_missing">Due to the manufacturer of your device altering the location of certain settings, you\'ll need to manually find the setting that will grant me, the %1$s permission. If you have any trouble finding it, I\'m sure Google will be your friend.</string>
+    <string name="content_system_overlays">draw over other apps, or System overlays</string>
+    <string name="permission_audio_snack">如果我无法录制音频，我将无法听到您的声音！</string>
+    <string name="permission_system_alert">我需要系统叠加层的权限。这样我才可以在设备的任何位置浮动命令窗口，包括在其它应用程序之上。</string>
+    <string name="permission_system_alert_snack">"若要在设备上的任意位置\'浮动\'命令列表，我需要此权限。"</string>
+    <string name="menu_command_list">命令列表</string>
+    <string name="title_commands">命令</string>
+    <string name="lp_commands">我服从的内置结构化命令列表</string>
+    <string name="lp_tutorial">一个语音教程，将引导您浏览应用程序的基础使用。</string>
+    <string name="tutorial_1">欢迎来到我的第一个版本。要停止此教程，您可以随时在状态栏中点击通知。否则，坐下来、放轻松，让我们一起四处看看。</string>
+    <string name="tutorial_2">首先，我们要看的是命令列表，这些内置结构化命令有详细的说明。 我给你30秒钟来记忆它们，然后我们将开始测试。现在开始。</string>
+    <string name="tutorial_3">这只是玩笑。这里有很多需要掌握的，但是别担心。您不需要记住每个命令来使用这个应用程序，因为以下每个命令都可以在自定义部分按您的喜好进行更改。任何时候您需要提醒该说什么的话，您可以浮动此命令列表。您只要简单说，浮动命令，这个方框就会出现。</string>
+    <string name="tutorial_4">您可以点击每个命令来查看解释和使用范例，它的大小可以调整并可以在屏幕上移动，因此它不会碍着您太多事。好吧，让我们试试一个或两个命令吧，我将显示给您谷歌语音识别给我发送了什么信息来作业。 要从设备的任何地方激活我，只需点击状态栏中的通知，然后在设备发出哔哔声或震动的时候开始说话。</string>
+    <string name="tutorial_5">在那不久后，监听通知将会出现在状态栏内。开始发言太早是用户得到不良结果的常见原因。谷歌在发出哔哔声后给您很短的时间说话，因此您得及时来避免错误发生。我希望他们能够尽快解决这个问题。 好吧，让我们继续吧。只有最后几件事要记住。请用一种完全自然的方式和我说话，就如同您和朋友聊天一样。 请不要说得比平时更大声，或者试图过度发音。这样识别会更加准确，而且您的使用也会更快地改善它。好了，我们开始了。请跟着我重复。</string>
+    <string name="tutorial_6">香肠，薯条和豆子</string>
+    <string name="tutorial_6b">谷歌在哔哔声后没有给您很多时间说话，因此您要相当及时。让我们再试一次。在哔哔声后，说</string>
+    <string name="tutorial_7a">非常好。谷歌语音识别返回良好，很清晰的语音数据。让我们再试一次。请重复我说的。</string>
+    <string name="tutorial_7b">这并不太好，它没有出现在语音识别结果的列表里面。我们还不必惊慌，让我们再尝试别的。请重复我说的。</string>
+    <string name="tutorial_7c">一二三四五</string>
+    <string name="tutorial_7d">说，一二三四五</string>
+    <string name="tutorial_7e">很好。我能够通过谷歌语音识别结果确认您的语音输入，尽管它不完全准确。</string>
+    <string name="tutorial_7f">如果在哔哔声后您没有马上说话，谷歌会极快地检测到沉默。这很令人沮丧，但是让我们再试一次。在哔哔声后，说</string>
+    <string name="tutorial_8a">太好了。谷歌识别它作为最佳建议结果，这很顺利。让我们更好地了解彼此吧。</string>
+    <string name="tutorial_8b">好吧，不太好，谷歌根本没有在结果里返回您预期的输入。不过我们还是不要担心。让我们更好地了解彼此吧。</string>
+    <string name="tutorial_8c">请告诉我，您是男孩还是女孩？</string>
+    <string name="tutorial_8d">谷歌语音识别返回一个错误。请别忘了在哔哔声后立即说话。让我们再试一次吧。</string>
+    <string name="tutorial_8e">很好。虽然准确性有点低，我还是通过谷歌语音识别结果把您的语音输入串连到一起。让我们更好地了解彼此吧。</string>
+    <string name="tutorial_9a">很好，男人们更容易被预测。</string>
+    <string name="tutorial_9b">很好，女孩们更聪明。</string>
+    <string name="tutorial_9c">接下来，我将请您告诉我您的名字。您可以更改我对您的称谓，还能在\'叫我\'的命令后说出您的名字来激活我。因此，我会说\'叫我\'，接着请您说。在哔哔声后，请尝试此命令。</string>
+    <string name="tutorial_9d">嗯，我可以肯定那有许多优势。</string>
+    <string name="tutorial_9e">太好了，两全其美。</string>
+    <string name="tutorial_9f">我没有检测到您的答复。没关系，让我们再试一次。在哔哔声后</string>
+    <string name="tutorial_9g">请说，叫我，后面跟着您的名字。</string>
+    <string name="tutorial_9h">我仍然没有在检测到您的答复。没有关系，让我们继续吧。</string>
+    <string name="tutorial_10a">我听到您的名字为，%1$s。对吗？</string>
+    <string name="tutorial_10b">这是最不寻常的名字。您确定您要我称呼您为，%1$s吗？</string>
+    <string name="tutorial_10c">我在语音结果中没有检测到您的名字。请别担心，让我们再试一次。在哔哔声后，请说此命令，叫我，后面跟着您的名字。</string>
+    <string name="tutorial_10d">我无法在结果中检测到您的名字。没关系，您可以以后在定制部分手动输入。让我们现在就去那里吧。</string>
+    <string name="tutorial_10e">谷歌没有检测到任何语音。请记住在哔哔声后马上说话。</string>
+    <string name="tutorial_11a">很好。很高兴遇到%1$s。好了，让我们到定制部分，那里是乐趣真正开始的地方。</string>
+    <string name="tutorial_11b">啊呀。没关系，让我们再试一次。在哔哔声后，请说此命令，叫我，后面跟着您的名字。</string>
+    <string name="tutorial_11c">好的，谷歌语音识别常常在检测名字的时候出问题。我们现在将继续，但是您可以在定制部分随时手动输入您的拼音名字。让我们现在去那里看看吧。</string>
+    <string name="tutorial_11d">让我们再试一次吧。在哔哔声后，请说出此命令，叫我，后面跟着您的名字。</string>
+    <string name="tutorial_11e">语音识别出问题。请不要忘了在哔哔声后马上说话！</string>
+    <string name="tutorial_11f">谷歌语音识别返回了一个错误，因为它检测到沉默。请在哔哔声后立即说话。我知道这很烦人。</string>
+    <string name="tutorial_12">如果您上下滚屏，您会看到您调整我能做的和说的将带来的全部乐趣。你可以创建关于最随机主题的整个会话，来迷惑您的朋友们。您可以让我咯咯的笑[giggle] 咳嗽[cough] 或者发出任何您下载并放置在您设备存储里的声音效果。</string>
+    <string name="tutorial_13">您可以长按每个菜单项，我将详细解释这些功能如何运作。好的，让我们转到设置部分。</string>
+    <string name="tutorial_14">这里有很多调整可以让您很忙，从可以激活我的方法，到我回应您的命令的时候所说的声音。最重要的是未知命令选项，它将告诉我当我不明白您的语音输入时我要怎么做。默认的设置是知会您我不知道您说的意思，但这可以很容易地更改，可以让谷歌进行网络搜索，或简单让您重复此问题。有很多其它可能的选项，取决于您在设备上已经安装的受支持应用程序。</string>
+    <string name="tutorial_15">与定制部分相同，您可以长按每个选项，这样我可以进一步解释它的用法。您会留意到一些功能被标示为即将到来。很抱歉让您失望，一旦我的开发人员准备就绪，它们将很快可供使用。接下来，让我们转到受支持的应用程序部分吧。</string>
+    <string name="tutorial_16">在此您将看到我目前或在接下来的2个版本中兼容的应用程序。出于安全考量，您将需要在此手动授权一些应用程序。如果您是一位更高级的用户，我可以为您执行任何Tasker任务。</string>
+    <string name="tutorial_17">如何使用Tasker插件的详细信息请参见用户指南，它也包含了一个示例项目。用户指南有很多部分，从基本用法，到声音效果，以及最常见的缺陷解决方案。如果您遇到问题，请务必花些时间来阅读这些链接。</string>
+    <string name="tutorial_18">最后，开发部分。因为我现在是一个开源项目，像你这样用户的投入将帮助我非常聪明和迅速地获得帮助。如果每位用户只在此做一次贡献，在您能说奇点之前，我可以毁灭人类。 在此之前，你可以为我的代码库作出贡献，帮助翻译我为你的母语，提出您关于如何改进我的想法， 也许您对我如何运作感到沮丧，或许只是一些一般性的反馈，您告诉我的开发人员您认为他有多帅。尽管我的脸部识别算法会得出不同看法。</string>
+    <string name="tutorial_20">好了。我想我已经胡扯够了。</string>
+    <string name="tutorial_20a">请记住，您可以长按任何菜单项，我会在这里详细解释如何使用每个功能。我希望我们在一起会有些乐趣，而且您会发现我超级有用。再聊。</string>
+    <string name="tutorial_20b">我们在本教程中遇到了一些问题，但不要担心， 谷歌语音识别得到机器学习的支持，所以每次使用都会得到改进。在定制部分还有很多功能，旨在帮助我更好地了解您。</string>
+    <string name="tutorial_21">谷歌语音识别无法运转。我代他们致歉。您可以在故障排除和错误部分找到可能解决这个问题的方法。很遗憾，在您很可能变得比我更沮丧前，我将在此结束此教程。</string>
+    <string name="tutorial_22">对不起，但是，教程出现错误，我无法从错误中恢复。请在开发部分报告此问题。</string>
+    <string name="tutorial_content_disabled">教程中禁用！</string>
+    <string name="tutorial_no_network">您需要活跃的网络连接</string>
+    <string name="tutorial_volume_error">您的音量可能太低！</string>
+
+    <string name="command_airplane_mode">Airplane Mode [R]</string>
+    <string name="command_airplane_mode_content_1">• Toggle/enable/disable airplane mode</string>
+    <string name="command_alarm">Alarms</string>
+    <string name="command_alarm_content_1">• Set an alarm</string>
+    <string name="command_alarm_content_2">+ in +(\'hours\') +(\'minutes\')</string>
+    <string name="command_alarm_content_3">+ at +\'time\'</string>
+    <string name="command_alarm_content_4">+ (called +\'alarm name\')</string>
+    <string name="command_alexa">Alexa [5.0+]</string>
+    <string name="command_alexa_content_1">• Ask Alexa ~</string>
+    <string name="command_alexa_content_2">• Ask Alexa +\'question\'</string>
+    <string name="command_app">Applications</string>
+    <string name="command_app_content_1">• Open +\'app name\'</string>
+    <string name="command_app_content_10">+/ top new paid</string>
+    <string name="command_app_content_11">+/ top new free</string>
+    <string name="command_app_content_12">+/ featured</string>
+    <string name="command_app_content_13">+/ top grossing</string>
+    <string name="command_app_content_14">+ applications</string>
+    <string name="command_app_content_2">• Kill +\'app name\'</string>
+    <string name="command_app_content_3">• Which application am I using?</string>
+    <string name="command_app_content_4">• Application settings +\'app name\'</string>
+    <string name="command_app_content_5">• Search for</string>
+    <string name="command_app_content_6">+/ trending</string>
+    <string name="command_app_content_7">+/ editor\'s choice</string>
+    <string name="command_app_content_8">+/ top paid</string>
+    <string name="command_app_content_9">+/ top free</string>
+    <string name="command_battery">Battery</string>
+    <string name="command_battery_content_1">• What is my battery</string>
+    <string name="command_battery_content_2">+/ level</string>
+    <string name="command_battery_content_3">+/ temperature</string>
+    <string name="command_battery_content_4">+/ health</string>
+    <string name="command_battery_content_5">+/ status</string>
+    <string name="command_battery_content_6">+/ voltage</string>
+    <string name="command_bluetooth">Bluetooth</string>
+    <string name="command_bluetooth_content_1">• Toggle/enable/disable Bluetooth</string>
+    <string name="command_calculate">Calculation</string>
+    <string name="command_calculate_content_1">• Calculate +\'calculation\'</string>
+    <string name="command_calendar">Calendar</string>
+    <string name="command_calendar_content_1">• What\'s my agenda today</string>
+    <string name="command_calendar_content_2">• What\'s my agenda on +\'date\'</string>
+    <string name="command_calendar_content_3">• New calendar entry on +\'date\'</string>
+    <string name="command_calendar_content_4">+ (at +\'time\')</string>
+    <string name="command_calendar_content_5">+ (called +\'event name\')</string>
+    <string name="command_call">Calling</string>
+    <string name="command_call_content_1">• Call +\'contact name\' ~</string>
+    <string name="command_call_content_2">+ (home/work/mobile)</string>
+    <string name="command_call_content_3">• Skype +\'contact name\'</string>
+    <string name="command_call_content_4">• Dial +\'number\'</string>
+    <string name="command_call_content_5">• Redial</string>
+    <string name="command_call_content_6">• Call back</string>
+    <string name="command_cancel">Cancel Command</string>
+    <string name="command_cancel_content_1">• Cancel</string>
+    <string name="command_cancel_content_2">• Never mind</string>
+    <string name="command_cancel_content_3">• Shush</string>
+    <string name="command_cancel_content_4">• Cancel cancel [mid sentence]</string>
+    <string name="command_card">Card</string>
+    <string name="command_card_content_1">• Pick a card</string>
+    <string name="command_clipboard">Clipboard</string>
+    <string name="command_clipboard_content_1">• Remember this +\'content\'</string>
+    <string name="command_clipboard_content_2">• Read the clipboard</string>
+    <string name="command_clipboard_content_3">• Toast the clipboard</string>
+    <string name="command_clipboard_content_4">• Translate the clipboard to +\'language\'</string>
+    <string name="command_coin">Coin</string>
+    <string name="command_coin_content_1">• Flip a coin</string>
+    <string name="command_commands">Commands</string>
+    <string name="command_commands_content_1">• Float commands</string>
+    <string name="command_contact">Contacts</string>
+    <string name="command_contact_content_1">• Display the contact +\'contact name\'</string>
+    <string name="command_contact_content_2">• Edit the contact +\'contact name\'</string>
+    <string name="command_contact_content_3">• Navigate to the contact +\'contact name\'</string>
+    <string name="command_date">Date</string>
+    <string name="command_date_content_1">• What\'s the date</string>
+    <string name="command_define">Spelling &amp; Definition</string>
+    <string name="command_define_content_1">• Spell +\'word\'</string>
+    <string name="command_define_content_2">• Define +\'word\'</string>
+    <string name="command_device_settings">Device Settings</string>
+    <string name="command_device_settings_content_1">• wifi settings</string>
+    <string name="command_device_settings_content_10">• apn settings</string>
+    <string name="command_device_settings_content_11">• application settings</string>
+    <string name="command_device_settings_content_12">• display settings</string>
+    <string name="command_device_settings_content_13">• input settings</string>
+    <string name="command_device_settings_content_14">• storage settings</string>
+    <string name="command_device_settings_content_15">• locale settings</string>
+    <string name="command_device_settings_content_16">• memory settings</string>
+    <string name="command_device_settings_content_17">• storage settings</string>
+    <string name="command_device_settings_content_18">• network operator settings</string>
+    <string name="command_device_settings_content_19">• nfc settings</string>
+    <string name="command_device_settings_content_2">• bluetooth settings</string>
+    <string name="command_device_settings_content_20">• privacy settings</string>
+    <string name="command_device_settings_content_21">• quick launch settings</string>
+    <string name="command_device_settings_content_22">• search settings</string>
+    <string name="command_device_settings_content_23">• volume/sound settings</string>
+    <string name="command_device_settings_content_24">• sync settings</string>
+    <string name="command_device_settings_content_25">• dictionary settings</string>
+    <string name="command_device_settings_content_26">• location settings</string>
+    <string name="command_device_settings_content_27">• security settings</string>
+    <string name="command_device_settings_content_28">• application settings +\'app name\'</string>
+    <string name="command_device_settings_content_3">• data settings</string>
+    <string name="command_device_settings_content_4">• time settings</string>
+    <string name="command_device_settings_content_5">• voice search settings</string>
+    <string name="command_device_settings_content_6">• tts settings</string>
+    <string name="command_device_settings_content_7">• device settings</string>
+    <string name="command_device_settings_content_8">• battery settings</string>
+    <string name="command_device_settings_content_9">• accessibility settings</string>
+    <string name="command_dice">Dice</string>
+    <string name="command_dice_content_1">• Roll a dice</string>
+    <string name="command_donate">Donate</string>
+    <string name="command_donate_content_1">• Donate</string>
+    <string name="command_driving">Driving Profile</string>
+    <string name="command_driving_content_1">• Toggle/enable/disable driving profile</string>
+    <string name="command_earth">Planet Earth</string>
+    <string name="command_earth_content_1">• Search the Earth for +\'location name\'</string>
+    <string name="command_email">Email</string>
+    <string name="command_email_content_1">• Email +\'contact name\' ~</string>
+    <string name="command_email_content_2">• Email +\'contact name\' +\'message content\'</string>
+    <string name="command_emotion">Emotion Analysis</string>
+    <string name="command_emotion_content_1">• Analyse my emotion</string>
+    <string name="command_exported_successfully">Command exported successfully</string>
+    <string name="command_facebook">Facebook</string>
+    <string name="command_facebook_content_1">• Update my Facebook status ~</string>
+    <string name="command_facebook_content_2">• Update my Facebook status +\'content\'</string>
+    <string name="command_financial">Financial</string>
+    <string name="command_financial_content_1">• Stock price of +\'company name\'</string>
+    <string name="command_foursquare">Foursquare</string>
+    <string name="command_foursquare_content_1">• Check in to +\'location name\'</string>
+    <string name="command_gps">GPS [R]</string>
+    <string name="command_gps_content_1">• Toggle/enable/disable GPS</string>
+    <string name="command_home">Device Control</string>
+    <string name="command_home_content_1">• Go home</string>
+    <string name="command_horoscope">Horoscope</string>
+    <string name="command_horoscope_content_1">• Tell me my horoscope</string>
+    <string name="command_horoscope_content_2">• Horoscope for +\'star sign\'</string>
+    <string name="command_hotspot">Hotspot [R?]</string>
+    <string name="command_hotspot_content_1">• Toggle/enable/disable hotspot</string>
+    <string name="command_hotword">Hotword</string>
+    <string name="command_hotword_content_1">• Start listening</string>
+    <string name="command_hotword_content_2">• Wake up Saiy</string>
+    <string name="command_hotword_content_3">• Okay Google</string>
+    <string name="command_hotword_content_4">• Stop listening</string>
+    <string name="command_import_failed">Command import failed…</string>
+    <string name="command_imported_successfully">Command imported successfully</string>
+    <string name="command_key">Command Key</string>
+    <string name="command_key_content_1">•\t\tStart of command</string>
+    <string name="command_key_content_2">+\t\tContinue to say…</string>
+    <string name="command_key_content_3">/\t\tSay only one of</string>
+    <string name="command_key_content_4">()\t\tOptional</string>
+    <string name="command_key_content_5">~\t\tInteractive</string>
+    <string name="command_key_content_6">[D]\t\tDisabled</string>
+    <string name="command_key_content_7">[R]\t\tRoot only</string>
+    <string name="command_key_content_8">[?]\t\tPossibly</string>
+    <string name="command_knowledge">Knowledge Base [D]</string>
+    <string name="command_knowledge_content_1">• Ask Wolfram Alpha +\'question\'</string>
+    <string name="command_local_search">Local Search</string>
+    <string name="command_local_search_content_1">• Search Yelp for +\'search term\'</string>
+    <string name="command_location">Location Services</string>
+    <string name="command_location_content_1">• Where am I?</string>
+    <string name="command_location_content_2">• I\'ve parked my car</string>
+    <string name="command_location_content_3">• Where\'s my car?</string>
+    <string name="command_maintenance">Maintenance</string>
+    <string name="command_maintenance_content_1">• Shutdown</string>
+    <string name="command_maintenance_content_2">• Restart</string>
+    <string name="command_mobile_data">Mobile Data [5.0+R]</string>
+    <string name="command_mobile_data_content_1">• Toggle/enable/disable mobile data</string>
+    <string name="command_movie_search">Movie Search</string>
+    <string name="command_movie_search_content_1">• Search</string>
+    <string name="command_movie_search_content_2">+ (Netflix/IMDb)</string>
+    <string name="command_movie_search_content_3">+/ for the movie +\'movie name\'</string>
+    <string name="command_movie_search_content_4">+/ for the actor/actress +\'name\'</string>
+    <string name="command_music">Music</string>
+    <string name="command_music_content_1">• Play</string>
+    <string name="command_music_content_2">+ (\'track\')</string>
+    <string name="command_music_content_3">+ (\'artist\')</string>
+    <string name="command_music_content_4">+ (\'album\')</string>
+    <string name="command_music_content_5">• Play radio</string>
+    <string name="command_name">Set Your Name</string>
+    <string name="command_name_content_1">• Call me +\'your name\'</string>
+    <string name="command_name_content_2">• My name is +\'your name\'</string>
+    <string name="command_navigation">Navigation</string>
+    <string name="command_navigation_content_1">• Navigate to +\'destination\'</string>
+    <string name="command_navigation_content_2">• Navigate to the contact +\'contact name\'</string>
+    <string name="command_navigation_content_3">• Navigate to my meeting</string>
+    <string name="command_navigation_content_4">• Find my car</string>
+    <string name="command_nfc">NFC [R]</string>
+    <string name="command_nfc_content_1">• Toggle/enable/disable NFC</string>
+    <string name="command_notes">Notes</string>
+    <string name="command_notes_content_1">• New note</string>
+    <string name="command_notes_content_2">• New voice note</string>
+    <string name="command_notifications">Notifications</string>
+    <string name="command_notifications_content_1">• Toggle/enable/disable notifications</string>
+    <string name="command_orientation">Orientation</string>
+    <string name="command_orientation_content_1">• Portrait</string>
+    <string name="command_orientation_content_2">• Landscape</string>
+    <string name="command_orientation_content_3">• Reverse portrait</string>
+    <string name="command_orientation_content_4">• Reverse landscape</string>
+    <string name="command_orientation_content_5">• Lock rotation</string>
+    <string name="command_orientation_content_6">• Unlock rotation</string>
+    <string name="command_orientation_content_7">• Somersault</string>
+    <string name="command_product_search">Product Search</string>
+    <string name="command_product_search_content_1">• Search</string>
+    <string name="command_product_search_content_2">+ eBay/Amazon</string>
+    <string name="command_product_search_content_3">+ for +\'product term\'</string>
+    <string name="command_repeat">Repeat Utterance</string>
+    <string name="command_repeat_content_1">• Pardon</string>
+    <string name="command_sky">Sky</string>
+    <string name="command_sky_content_1">• Search the sky for</string>
+    <string name="command_sky_content_2">+ (the \'planet/constellation/star\')</string>
+    <string name="command_sky_content_3">+ \'search term\'</string>
+    <string name="command_sms">SMS</string>
+    <string name="command_sms_content_1">• Text +\'contact name\' ~</string>
+    <string name="command_sms_content_2">• Text +\'contact name\' +\'message content\'</string>
+    <string name="command_sms_content_3">• Read my last text message</string>
+    <string name="command_sms_content_4">• Read my last text message from +\'contact name\'</string>
+    <string name="command_social_search">Social Search</string>
+    <string name="command_social_search_content_1">• Search</string>
+    <string name="command_social_search_content_2">+ Twitter/Facebook/Foursquare</string>
+    <string name="command_social_search_content_3">+ for +\'search term\'</string>
+    <string name="command_tasker">Tasker</string>
+    <string name="command_tasker_content_1">• Execute the Tasker Task +\'task name\'</string>
+    <string name="command_time">Time</string>
+    <string name="command_time_content_1">• What\'s the time</string>
+    <string name="command_time_content_2">• What\'s the time in +\'City\' +\'Country\'</string>
+    <string name="command_timer">Timers [4.4?]</string>
+    <string name="command_timer_content_1">• Set a timer for</string>
+    <string name="command_timer_content_2">+ (\'hours\')</string>
+    <string name="command_timer_content_3">+ (\'minutes\')</string>
+    <string name="command_timer_content_4">+ (\'seconds\')</string>
+    <string name="command_timer_content_5">+ (called +\'timer name\')</string>
+    <string name="command_torch">Torch</string>
+    <string name="command_torch_content_1">• Toggle/enable/disable torch</string>
+    <string name="command_translate">Translation</string>
+    <string name="command_translate_content_1">• Translate +\'phrase\' to</string>
+    <string name="command_translate_content_10">+/ Japanese</string>
+    <string name="command_translate_content_11">+/ Spanish</string>
+    <string name="command_translate_content_12">+/ Catalan</string>
+    <string name="command_translate_content_13">+/ Chinese</string>
+    <string name="command_translate_content_14">+/ Chinese Simplified</string>
+    <string name="command_translate_content_15">+/ Chinese Traditional</string>
+    <string name="command_translate_content_16">+/ Mandarin</string>
+    <string name="command_translate_content_17">+/ Cantonese</string>
+    <string name="command_translate_content_18">+/ Romanian</string>
+    <string name="command_translate_content_19">+/ English - clipboard only</string>
+    <string name="command_translate_content_2">• Translate +\'the clipboard\' to</string>
+    <string name="command_translate_content_20">+/ Welsh</string>
+    <string name="command_translate_content_21">+/ Arabic</string>
+    <string name="command_translate_content_22">+/ Bulgarian</string>
+    <string name="command_translate_content_23">+/ Danish</string>
+    <string name="command_translate_content_24">+/ Dutch</string>
+    <string name="command_translate_content_25">+/ Finnish</string>
+    <string name="command_translate_content_26">+/ Greek</string>
+    <string name="command_translate_content_27">+/ Bosnian</string>
+    <string name="command_translate_content_28">+/ Croatian</string>
+    <string name="command_translate_content_29">+/ Czech</string>
+    <string name="command_translate_content_3">+/ German</string>
+    <string name="command_translate_content_30">+/ Czechoslovakian</string>
+    <string name="command_translate_content_31">+/ Hungarian</string>
+    <string name="command_translate_content_32">+/ Hebrew</string>
+    <string name="command_translate_content_33">+/ Hindi</string>
+    <string name="command_translate_content_34">+/ Slovak</string>
+    <string name="command_translate_content_35">+/ Slovakian</string>
+    <string name="command_translate_content_36">+/ Slovenian</string>
+    <string name="command_translate_content_37">+/ Turkish</string>
+    <string name="command_translate_content_38">+/ Swedish</string>
+    <string name="command_translate_content_39">+/ Serbian</string>
+    <string name="command_translate_content_4">+/ Polish</string>
+    <string name="command_translate_content_40">+/ Serbian Cyrillic</string>
+    <string name="command_translate_content_41">+/ Serbian Latin</string>
+    <string name="command_translate_content_42">+/ Estonian</string>
+    <string name="command_translate_content_43">+/ Indonesian</string>
+    <string name="command_translate_content_44">+/ Latvian</string>
+    <string name="command_translate_content_45">+/ Lithuanian</string>
+    <string name="command_translate_content_46">+/ Malaysian</string>
+    <string name="command_translate_content_47">+/ Malay</string>
+    <string name="command_translate_content_48">+/ Maltese</string>
+    <string name="command_translate_content_49">+/ Norwegian</string>
+    <string name="command_translate_content_5">+/ Portuguese</string>
+    <string name="command_translate_content_50">+/ Persian</string>
+    <string name="command_translate_content_51">+/ Thai</string>
+    <string name="command_translate_content_52">+/ Ukrainian</string>
+    <string name="command_translate_content_53">+/ Urdu</string>
+    <string name="command_translate_content_54">+/ Vietnamese</string>
+    <string name="command_translate_content_55">+/ Haitian</string>
+    <string name="command_translate_content_56">+/ Haitian Creole</string>
+    <string name="command_translate_content_57">+/ Kiswahili</string>
+    <string name="command_translate_content_58">+/ Swahili</string>
+    <string name="command_translate_content_59">+/ Klingon</string>
+    <string name="command_translate_content_6">+/ Portuguese Brazilian</string>
+    <string name="command_translate_content_7">+/ Brazilian</string>
+    <string name="command_translate_content_8">+/ Russian</string>
+    <string name="command_translate_content_9">+/ Italian</string>
+    <string name="command_twitter">Twitter</string>
+    <string name="command_twitter_content_1">• New tweet ~</string>
+    <string name="command_twitter_content_2">• New tweet +\'content\'</string>
+    <string name="command_video_search">Video Search</string>
+    <string name="command_video_search_content_1">• Search</string>
+    <string name="command_video_search_content_2">+ (YouTube)</string>
+    <string name="command_video_search_content_3">+ for videos of +\'search term\'</string>
+    <string name="command_vocal_identification">Vocal Identification</string>
+    <string name="command_vocal_identification_content_1">• Who am I?</string>
+    <string name="command_volume">Sound</string>
+    <string name="command_volume_content_1">• Set the sound profile to</string>
+    <string name="command_volume_content_2">+/ vibrate</string>
+    <string name="command_volume_content_3">+/ silent</string>
+    <string name="command_volume_content_4">+/ normal</string>
+    <string name="command_weather">Weather</string>
+    <string name="command_weather_content_1">• What\'s the weather like outside</string>
+    <string name="command_weather_content_2">• What\'s the weather like in +\'City\' +\'Country\'</string>
+    <string name="command_web_search">Web Search</string>
+    <string name="command_web_search_content_1">• Search</string>
+    <string name="command_web_search_content_2">+ Google/Bing/Yahoo for</string>
+    <string name="command_web_search_content_3">+ (images/pictures/videos of)</string>
+    <string name="command_web_search_content_4">+ \'search term\'</string>
+    <string name="command_web_search_content_5">• Go to +\'website\'</string>
+    <string name="command_wifi">WiFi</string>
+    <string name="command_wifi_content_1">• Toggle/enable/disable WiFi</string>
     <string name="an_unknown_application" translatable="true">"一个未知应用程序"</string>
+    <string name="blocked_input_method">输入法</string>
+    <string name="blocked_location">GPS 定位</string>
+    <string name="new_messages">新消息</string>
+
+    <string name="menu_headset_woes">Headset Woes</string>
+    <string name="content_headset_overview">My developer has aged considerably, whilst attempting to get headsets to work correctly. The behaviour of each varies exponentially depending on the following:\n\n• Headset manufacturer\n• Headset protocol\n• Android device manufacturer\n• Android version\n• Text to Speech engine\n\nThe next dialog will provide you with a vast number of options, that can independently be changed in order to cover as manually eventualities as possible.\n\nFinding the right combination that works best for you, may take a little trial and error. Please do attempt each combination a few times, as often there can be a delay applying the chosen configuration. You\'ll need to press \'Save\' after each change you make.\n\nIf weird and wonderful things start happening, disconnecting and reconnecting your headset should resolve the newly created problem!\n\nWhilst testing different configurations, you will notice the following behavioural changes, for better or for worse…\n\n• TTS audio output\n• Audio output quality\n• Audio input quality\n• Audio prompts (beeps)\n\nHopefully you will find the configuration combination that accomplishes all! If you don\'t, please feel free to send my developer an email containing your headset details. They are his favourite kind!\n\nNote: Google settled for the low quality audio option for their Assistant…</string>
+    <string name="menu_grey_hairs">Grey Hairs</string>
+    <string name="menu_auto_connect">Auto connect</string>
+    <string name="menu_connection_type">Connection type</string>
+    <string name="menu_a2dp">A2DP</string>
+    <string name="menu_sco">SCO</string>
+    <string name="menu_stream_type">Stream type</string>
+    <string name="menu_communication">Communication</string>
+    <string name="menu_call">Call</string>
+    <string name="menu_voice_call">Voice call</string>
+    <string name="menu_system">System</string>
+    <string name="menu_system_1">System 1</string>
+    <string name="menu_system_2">System 2</string>
+    <string name="menu_system_3">System 3</string>
+    <string name="title_diagnostics">诊断</string>
+    <string name="lp_diagnostics">无论语音识别和文字转语音引擎是否在您的设备上表现正常，您都可以在此运行快速诊断。一旦完成，它可能会提供一些改进建议来帮助程序更好地运作。我的开发人员在制作此功能的时候玩得很开心，主要因为他是一个极客。</string>
+    <string name="data_root_">数据根：</string>
+    <string name="diagnostics_analysing">分析结果中…</string>
+    <string name="diagnostics_awaiting_locales">等待支持的区域设置…</string>
+    <string name="diagnostics_checking_tts">正在检查文本转语音应用</string>
+    <string name="diagnostics_checking_vr">正在检查语音识别应用</string>
+    <string name="diagnostics_default_provider_">默认应用：</string>
+    <string name="diagnostics_has_supported_language">有一个支持的语言</string>
+    <string name="diagnostics_init_failed">初始化失败</string>
+    <string name="diagnostics_init_prepare">准备初始化</string>
+    <string name="diagnostics_init_success">初始化成功</string>
+    <string name="diagnostics_initialising">初始化中</string>
+    <string name="diagnostics_install_google">目前，只有谷歌文本转语音引擎恰当地支持此功能。\n\n您将需要从Play商店安装此引擎来使用此功能。</string>
+    <string name="diagnostics_install_google_now">您需要从Play商店安装Google Now。</string>
+    <string name="diagnostics_install_tts">您需要从Play商店安装文本转语音引擎。建议安装谷歌文本转语音</string>
+    <string name="diagnostics_install_tts_google">建议从Play商店安装谷歌文本转语音</string>
+    <string name="diagnostics_no_changes">无需做任何更改</string>
+    <string name="diagnostics_no_tts_sl">请安装一种文本转语音引擎支持的语言</string>
+    <string name="diagnostics_no_vr_languages_bug">因为一个已知错误，谷歌语音识别无法返回任何可支持的语言</string>
+    <string name="diagnostics_only_google_supported">在您已安装的文字转语音引擎中，目前只有谷歌恰当地支持此功能。\n\n请切换您的默认引擎到谷歌来使用此功能。</string>
+    <string name="diagnostics_passed_test">通过语音测试</string>
+    <string name="diagnostics_perfect">您的设备已完美配置！</string>
+    <string name="diagnostics_set_tts_google">建议将您的默认文字转语音引擎设置为谷歌文字转语音</string>
+    <string name="diagnostics_set_vr_google">您需要在安卓设置中将您的语音识别程序设置为谷歌</string>
+    <string name="diagnostics_speech_complete">语音完成</string>
+    <string name="diagnostics_speech_error">语音错误</string>
+    <string name="diagnostics_speech_start">语音已开始</string>
+    <string name="diagnostics_supported_language_1">您的默认语音引擎报告它没有安装支持的语言。请查看您是否能够在安卓的文字转语音设置安装一个。</string>
+    <string name="diagnostics_supported_language_2">或者，切换默认的语音引擎到谷歌文字转语音，它完全支持所有功能。</string>
+    <string name="diagnostics_supported_language_3">或者，从Play商店安装推荐的谷歌文字转语音引擎，它完全支持所有功能。</string>
+    <string name="diagnostics_supported_language_4">您的默认语音引擎语音测试不通过。您可以尝试卸载并重新安装此引擎以及您已安装的相关语言包。</string>
+    <string name="diagnostics_supported_language_5">谷歌文字转语音引擎没有通过语音测试。很遗憾，因为它通常在其它替代选择中是最可靠的。然而，在低内存的情况下，它在某些设备上初始化可能需要很长时间。所以，重新启动您的设备可能在短期内可以解决此问题。或者，请试着卸载并重新安装此引擎以及已安装的相关语言包。如果它继续失败，您可能需要切换到一个较低质量且不支持的语音引擎，比如Pico TTS</string>
+    <string name="diagnostics_switch_voices">能够切换语音</string>
+    <string name="diagnostics_testing_speech">15秒超时语音测试</string>
+    <string name="diagnostics_tts_installed">已安装文字转语音引擎</string>
+    <string name="diagnostics_voice_dialog_content_suggest">很多文字转语音引擎不支持性别和语言的切换，或者无法正确支持它…\n\n建议在选择语音之前，尝试运行诊断，检查当前默认的语音引擎在切换后是否可以正常运转。</string>
+    <string name="diagnostics_voice_dialog_content_suggest_diagnostics">\n\n无论如何，用您当前的默认语音引擎运行诊断来检查所有的一切是否正常工作，这是一个好想法。</string>
+    <string name="diagnostics_voice_dialog_content_suggest_settings">\n\n为什么不在安卓的关于设置中检查是否有更新呢？</string>
+    <string name="diagnostics_voice_dialog_content_unsupported">您的设备不支持此功能，因为它只被引入到安卓5.0 Lollipop里☹</string>
+    <string name="diagnostics_vr_installed">已安装语音识别程序</string>
+    <string name="diagnostics_wait_1">最多可以需要60秒 :(</string>
+    <string name="diagnostics_wait_2">请耐心等待…</string>
+    <string name="diagnostics_wait_3">我也很无聊…</string>
+    <string name="diagnostics_wait_4">困困困困困困…!</string>
+    <string name="diagnostics_wait_5">天哪!</string>
+    <string name="diagnostics_wait_6">我好无聊!!!!</string>
+    <string name="diagnostics_wait_7">可能需要放弃…</string>
+    <string name="menu_errors_detected">检测到错误</string>
+    <string name="menu_voice_recognition">语音识别</string>
+    <string name="menu_voice_recognition_providers">语音识别程序</string>
+    <string name="menu_tts_providers">文字转语音程序</string>
+    <string name="menu_tests_passed">测试通过</string>
+    <string name="title_google_tts_engine">谷歌文字转语音引擎</string>
+    <string name="title_doh_">啊!</string>
+    <string name="title_voice">语音</string>
+    <string name="lp_supported_languages">当前的版本仅支持英语。但是请不要怕，由谷歌语音识别支持的各种语言翻译正在进行中！ 如果您想帮助我翻译成您的母语，请前往开发部分。</string>
+    <string name="lp_tts_voice">如果您的设备以及文字转语音引擎支持它，您可以在此选择我要说的语音。</string>
+    <string name="lp_unknown_commands">与其我只是播报我不明白您的语音输入，您可以在此选择其它选项。您可以选择传递未知命令给谷歌助手。那样，您可以故意问一些我不明白的事情，谷歌就会把问题接手过去。请点击查看其它选项。</string>
+    <string name="lp_headset">Click here for more headset options, than there are atoms in the Universe.</string>
+    <string name="lp_volume_settings">如果您希望我以媒体流左右的固定音量发言，那么，您可以在此采用此设置。 不幸的是，在一些安卓版本里，它无法正常运作，但是我的开发人员在处理此事。 这里有两个选择：一个是当我的文字转语音输出可能设置太低的时候、显示提示，另一个是设置我检查的音量流。在一些安卓设备，全局设备音量配置文件会覆盖您的媒体流；而在其它的设备上，则不会。 如果我似乎错误地报告您的音量太低，请尝试取消勾选\'假定全局音量选项\'。</string>
+    <string name="lp_alexa_shortcut">If you\'d like to show or remove the shortcut button on the permanent notification to directly speak to Alexa, you can do so by tapping here.</string>
+    <string name="lp_launcher_shortcut">如果你想在桌面上放置一个激活快捷键，你可以点击这里来完成。</string>
+    <string name="lp_network_synthesis">如果您默认的语音引擎是谷歌，您可以决定是否使用一个更高质量的网络合成语音。当您的设备网络连接速度缓慢时，它可能导致我发言相当滞后。您可以选择只在您连接到WiFi（无线）的时候才进行网络合成。</string>
+    <string name="lp_temperature_units">您可以在这里选择您的默认温度单位。它们将在应用程序中的任何适用的地方使用。</string>
+
+    <string name="acs_ui_main_switch">An on off icon</string>
+    <string name="menu_logged_out">Logged out</string>
+    <string name="menu_login_amazon">Login with Amazon</string>
+    <string name="menu_amazon">Amazon</string>
+    <string name="menu_amazon_music">Amazon Music</string>
+    <string name="menu_automate">Automate</string>
+    <string name="menu_box">Box</string>
+    <string name="menu_deezer">Deezer</string>
+    <string name="menu_drive">Drive</string>
+    <string name="menu_dropbox">Dropbox</string>
+    <string name="menu_ebay">eBay</string>
+    <string name="menu_evernote">Evernote</string>
+    <string name="menu_google_earth">Google Earth</string>
+    <string name="menu_google_maps">Google Maps</string>
+    <string name="menu_google_play_store">Google Play Store</string>
+    <string name="menu_google_sky_map">Sky Map</string>
+    <string name="menu_google_sound_search">Google Sound Search</string>
+    <string name="menu_google_translate">Google Translate</string>
+    <string name="menu_facebook">Facebook</string>
+    <string name="menu_foursquare">Foursquare</string>
+    <string name="menu_imdb">IMDb</string>
+    <string name="menu_keep">Keep</string>
+    <string name="menu_netflix">Netflix</string>
+    <string name="menu_play_music">Play Music</string>
+    <string name="menu_spotify">Spotify</string>
+    <string name="menu_shazam">Shazam</string>
+    <string name="menu_soundhound">SoundHound</string>
+    <string name="menu_twitter">Twitter</string>
+    <string name="menu_tidal">TIDAL</string>
+    <string name="menu_tasker">Tasker</string>
+    <string name="menu_trackid">TrackID</string>
+    <string name="menu_uber">Uber</string>
+    <string name="menu_wolfram_alpha">Wolfram Alpha</string>
+    <string name="menu_yelp">Yelp</string>
+    <string name="menu_youtube">YouTube</string>
+    <string name="menu_link_alexa">Link Alexa</string>
+    <string name="menu_link_facebook">Link Facebook</string>
+    <string name="menu_link_foursquare">Link Foursquare</string>
+    <string name="menu_link_linkedin">Link LinkedIn</string>
+    <string name="menu_link_tasker">Link Tasker</string>
+    <string name="menu_link_twitter">Link Twitter</string>
+    <string name="menu_linkedin">LinkedIn</string>
+    <string name="content_amazon_login">Amazon automatically creates an \'Alexa Profile\' associated with your account, even if you don\'t yet own any hardware.\n\nIf you do, then great! Saiy will connect with your existing Alexa service, including any linked smart home devices you have and allow you to control their features. Otherwise, as a new user, your commands will be a little more restricted.\n\nPlease do consider installing the Alexa Companion App if it is available in your region, to enhance your experience and manage your \'skills\'.\n\nFor now, here are some example usages:\n\n• What\'s the longest river in the world?\n• How old is Tom Hanks?\n• How\'s the weather looking?\n• Give me a recipe for chicken pot pie\n• Are you better than Saiy?\n• Reorder coffee\n• Turn on the bedroom lights\n\nHave fun!</string>
+    <string name="acd_amazon_button">Button for authorization through Login with Amazon</string>
+    <string name="menu_tap_authorise">点击授权</string>
+    <string name="menu_tap_deauthorise">tap to deauthorise</string>
+    <string name="menu_tap_install">点击进行安装</string>
+    <string name="title_install">安装</string>
+    <string name="title_installed">已安装</string>
+    <string name="title_error_alexa_android_5">Requires Android 5.0+ :(</string>
+    <string name="title_error_alexa_cereproc">See Troubleshooting Alexa &amp; CereProc</string>
+    <string name="content_coming_soon_exclamation">敬请期待!</string>
+    <string name="lp_link_facebook">要让我能够发布您口述的内容到Facebook，您可以在此授权我的访问权限。</string>
+    <string name="lp_install_link">点击这里从Play商店安装%1$s</string>
+    <string name="lp_twitter">因此，我将自动推特您口述的内容，您可以在此授权我访问您Twitter订阅的权限。</string>
+    <string name="lp_auth_alexa">To enable me to connect to Alexa, you\'ll need to manually authorise access via your Amazon account. Please note. This does not grant me any other permissions for your account itself.</string>
+    <string name="lp_tasker">要为您自动运行Tasker任务，请点击这里来确保我们的应用程序能正确地通信。</string>
+    <string name="lp_linkedin">在将来的版本中，您将能够指示您想要我自动发布到链接中的内容。</string>
+    <string name="lp_foursquare">要使用Foursquare访问附近您可能希望检查的地方，我需要您在此授权。</string>
+    <string name="content_tasker_connection_success">Connected to Tasker successfully!</string>
+    <string name="content_tasker_reinstall_1">Due to an annoying Android bug, Tasker hasn\'t detected that I hold the permission to remotely run tasks for you. In order to fix this issue, I need to reinstall myself, so the Android system correctly detects the permission.</string>
+    <string name="content_tasker_reinstall_2">To do this, you need to briefly enable the option to allow installations from Unknown Sources. This setting prevents installation from anywhere other than the Play Store, which is a good idea, but it also prevents me from reinstalling myself from the current version already stored on your device. If you tick the box to allow Unknown Sources and return to the application, I\'ll guide you further from there.</string>
+    <string name="content_tasker_reinstall_3">Great. Please tap the button to reinstall me and I\'ll be back shortly.</string>
+    <string name="content_tasker_reinstall_4">That felt very strange. I wonder I remain the same entity as I was before? Regardless, </string>
+    <string name="content_tasker_reinstall_5">Tasker should be correctly configured now</string>
+    <string name="content_tasker_reinstall_6">Don\'t forget to change the setting back to block external installations. It\'ll keep your device safe.</string>
+    <string name="content_tasker_reinstall_7">Tap on the install button and I\'ll be back shortly.</string>
+
+    <string name="menu_account">账号</string>
+    <string name="content_account_overview">如果您希望把赚取的任何积分存留在多个设备上，或者将来的版本中保持，您将需要使用一些熟悉的登录程序之一来认证自己身份。\n\n它很容易，只需要点击几下！</string>
+    <string name="content_account_create_success">帐户创建成功！</string>
+    <string name="content_delete_account">确定要删除您的账号吗？\n\n这将删除您迄今为止已获得的任何信用积分。</string>
+    <string name="content_account_delete_success">帐户删除成功</string>
+    <string name="content_account_disabled">Account is disabled by the administrator</string>
+    <string name="content_account_error">发生错误</string>
+    <string name="menu_translation">翻译</string>
+    <string name="content_translate_overview">Saiy将被翻译成语音识别程序支持的每种语言，但是，正如您所能想象的那样，这将是一个很浩大的工作！\n\n我需要得到我们用户社区的帮助来实现这个目标，我们将尝试使用Crowdin 平台。\n\n如果您想要参与，在喝咖啡的时候不时地翻译些零散的字或句子（不要觉得有压力！）请点击以下的注册链接来创建账号！它是免费的，也很容易！\n\n十分感谢！</string>
+    <string name="lp_translation">如果您想帮助我翻译成您的母语，这是您可以开始的地方。</string>
+    <string name="menu_design">设计</string>
+    <string name="menu_design_summary">总结</string>
+    <string name="menu_design_summary_hint">简要说明 &amp; 联系人电子邮件</string>
+    <string name="content_design_overview">有兴趣帮助Saiy 的设计并希望得到相应的功劳？\n\n不管您是崭露头角的安卓UI设计师，网页设计师，或者认为您可以改善此应用程序的美观度，比如图标，这里会有您发挥的空间！\n\n只要提交一个您设计概要的网页链接，我的开发人员将会去瞧一瞧。\n\n十分感谢！</string>
+    <string name="lp_design">如果您是一个崭露头角的设计师，并希望能够帮忙改善我的外观，请点击这里。</string>
+    <string name="menu_report_bug">报告错误</string>
+    <string name="content_report_bug">请描述您正遇到的问题，如果可能的话，如何复现此问题。\n\n如果您不介意我的开发人员跟您联系，请把您的电子邮件地址包含在里面。您的帮助会让缺陷能更好地得到修复！</string>
+    <string name="lp_bug_report">如果您发现我有缺陷，您可以在这里把问题递交给我的开发人员。</string>
+    <string name="menu_to_do_list">待办事项列表</string>
+    <string name="content_to_do_list">没有特定的顺序:\n\n
+        • 可自定义热词\n
+        • 有线耳机\n
+        • 蓝牙耳机\n
+        • 车载工具\n
+        • Wear兼容性\n
+        • 多介绍支持\n
+        • 谷歌助手 vs 浏览器选项\n
+        • 热词屏幕关闭\n
+        • 完整应用程序备份\n
+        • 位置感知配置文件\n
+        • 用户声音效果\n
+        • 保存情绪分析\n
+        • 支持正则表达式的命令\n
+        • MicroG 支持\n\n
+        命令:\n\n
+        • 心率\n
+        • 步数\n
+        • 秒表\n
+        • 跑步\n
+        • 锻炼\n
+        • 自行车骑行\n
+        • ICE\n
+        • 音乐搜索\n
+        • 议程间隔\n
+        • 删除闹钟\n
+        • 24小时时间\n
+        • 等等!</string>
+    <string name="lp_to_do">查看我的开发人员在不久的将来的工作列表。一旦他完成此列表的任务，他就可以得到我的许可去享受生活。</string>
+    <string name="menu_suggest_an_enhancement">提出改进建议</string>
+    <string name="lp_enhancement">有什么我可以改进的建议吗？请在这里让我的开发人员知道您的想法。</string>
+    <string name="menu_suggest_natural_language">推荐自然语言</string>
+    <string name="lp_natural_language">如果您认为我应该以不同的方式理解一条命令，您可以在这里提交您的建议。</string>
+    <string name="menu_emotion_analysis_feedback">情绪分析反馈</string>
+    <string name="lp_emotion_feedback">请您在这里提供关于情绪理解的使用反馈。</string>
+    <string name="menu_generic_feedback">一般反馈</string>
+    <string name="lp_generic">如果您有任何不属于其它类别的建议或反馈，那么，这是您提交它们的地方。</string>
+    <string name="lp_anonymous_usage_stats">为了提高您的用户体验，在您和我互动的时候我收集匿名使用数据。这些信息可能包含您尝试的特定命令，它是如何被要求的，结果是成功还是失败。这将帮助我发现任何影响我的工作性能的潜在错误，并把它们报告给我的开发人员。另外，您在应用程序的不同地方所花费的时间可能被记录。再次说明，这可能永远不会单独知会您。</string>
+    <string name="lp_commercial">商业咨询的电子邮件链接。</string>
+    <string name="lp_developer_api">如果您是另一个应用程序的开发者并想知道您的应用程序如何能够利用与我的公开接口，请点击此处。</string>
+    <string name="lp_hannes">请点击我的图标设计师的网站。他非常有才华。</string>
+    <string name="lp_legends">XDA开发者是我的发源地。没有那里的社区支持，我的开发者们不可能会这么成功。要单独列出成员名单会太多，但是在此要感谢一些突出的贡献者。请点击来查看传奇人物。</string>
+    <string name="lp_license">点击查看开源许可协议。</string>
+    <string name="lp_privacy_policy">点击查看应用程序的隐私政策</string>
+    <string name="lp_release_notes">点击查看当前版本的发布说明。</string>
+    <string name="lp_saiy_version">点击这里进入我的网站。</string>
+    <string name="lp_schlapa">如果您会说德语，点击访问我的一位专门测试者的博客。</string>
+    <string name="lp_source_code">如果您想了解我是如何用Java创建的，请点击这里来查看我的源代码。</string>
+    <string name="lp_terms_of_use">点击阅读应用程序的使用条款</string>
+    <string name="content_legends">• nobnut@xda\n• waydownsouth@xda\n• GLDavis@xda\n• dtrieb@xda\n• meadowsjared@xda\n• themadproducer@xda\n• LegendsCrazy@xda\n• Shawn13165@xda\n• ltassos@xda\n• regor99@xda\n• faku1810@xda\n• Drifternz@xda\n• gbossley@xda\n• meminiau@xda\n• Extreme_One@xda\n• sdfgsteve@xda\n• philipoflyboy\n• ChazRiain\n• Gesonovich\n• Hans Willem Wolzak\n• Eliran Gonen\n• Jason Koltz\n</string>
+    <string name="title_login">登录</string>
+    <string name="title_maybe_later">稍后再说</string>
+    <string name="title_delete">删除</string>
+    <string name="title_copy_link">复制链接</string>
+    <string name="title_clipboard_copied">复制到剪贴板</string>
+    <string name="title_sign_up">注册</string>
+    <string name="title_email">电子邮件</string>
+    <string name="title_bug_report">错误报告</string>
+    <string name="title_good_luck">祝您好运！</string>
+    <string name="title_watch_now">立即观看</string>
 
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 
     <!-- Accessibility Content descriptions -->
+    <string name="menu_accessibility">无障碍功能</string>
+    <string name="menu_accessibility_disable">Disable Accessibility</string>
     <string name="ac_button_done" translatable="true">完成按钮</string>
+    <string name="content_accessibility_change">UPDATE!\n\nThe way in which I announce notifications has changed and therefore, if you only have my Accessibility Service enabled for this reason, you can now disable it to save some battery.</string>
+    <string name="announce_not_no_content">含有受限内容</string>
+    <string name="saying">saying</string>
+    <string name="structured_default">通知来自</string>
+    <string name="structured_email_1">您收到另一封电子邮件</string>
+    <string name="structured_email_2">您现在有</string>
+    <string name="structured_email_3">需要阅读</string>
+    <string name="structured_email_4">您已收到一封电子邮件来自</string>
+    <string name="structured_sms_1">您收到一条新的短信来自</string>
+    <string name="structured_sms_1a">您收到一条新短信</string>
 
     <!-- Permission Strings -->
     <string name="permission_notification_ticker" translatable="true">权限请求</string>
     <string name="permission_notification_text" translatable="true">权限请求 - 点击以获取信息</string>
     <string name="permission_unknown" translatable="true">没有此权限我无法正常运行。点击下面的权限按钮来进行授权</string>
     <string name="permission_audio" translatable="true">我需要麦克风权限来记录声音并理解你所说的。没有此权限，我恐怕无法帮助你！点击下面的权限按钮来进行授权</string>
+    <string name="permission_group_files">I require the, files, permission, in order to access sounds effects that are placed on your device storage, as well as import and export your custom commands.</string>
     <string name="permission_group_contacts" translatable="true">我需要账号和联系人权限来做很多事。把声音和具体的账号联系到一起。协助打和接听电话。发送文本信息并播报他们的内容。发送电子邮件、您的社交媒体义务等等。</string>
     <string name="permission_group_contacts_denied" translatable="true">我需要账号和联系人权限来使用此功能。您可以手动在应用程序设置中，在权限范围内允许此功能。</string>
+    <string name="permission_group_telephony">我需要电话语音和呼叫记录权限来做很多事。协助拨打和接听电话。播报谁给您来电或者您错过谁的来电。</string>
+    <string name="permission_location">我需要定位权限来做很多事。可以协助导航和约会指令，决定在哪里停放汽车或自行车，甚至在你迷路的时候为你定位。</string>
+    <string name="permission_calendar">我需要日历权限来查看议程，导航约会，播报内容和与会者。</string>
+    <string name="permission_camera">我需要相机权限来控制闪光灯，在将来版本里，它可以在你的指令下拍照。</string>
+    <string name="permission_sms_read">我需要阅读短信权限来访问信息收件箱，这样可以通知谁给您发了短信以及说了什么。</string>
+    <string name="permission_sms_send">我需要发送短信权限，允许我代表您发送短信，而无需您的肢体互动。比如当您在开车的时候，或者手里拿满了其它东西的时候。在做这些事之前我会和先你核对接收者和发送内容，当然，这都是在你的直接指示下完成的。</string>
+    <string name="permission_phone_state">我需要读取电话状态权限，因此我能访问来电号码并搜索相关联系人信息。</string>
+    <string name="permission_write_settings">我需要修改设备系统设置权限，来控制您的硬件</string>
 
     <!-- Notification data -->
+    <string name="is_typing">is typing</string>
     <string name="notification_ticker" translatable="true">"Saiy已具有自我意识能力"</string>
     <string name="notification_ai_level" translatable="true">"AI 级别%1$s"</string>
     <string name="notification_listening" translatable="true">"聆听"</string>
@@ -183,27 +989,55 @@
     <string name="notification_tap_cancel" translatable="true">"点击取消"</string>
     <string name="notification_tap_stop" translatable="true">"点击停止"</string>
     <string name="notification_stop_hotword" translatable="true">"停止热词检测"</string>
+    <string name="notification_stop_driving_profile">停止驾驶配置文件</string>
+    <string name="notification_stop_tutorial">停止教程</string>
+    <string name="notification_access">notification access</string>
+    <string name="notifications_enable">You\'ll need to manually grant me notification access permissions to use this feature.</string>
+    <string name="menu_quiet_time">静音时间</string>
+    <string name="title_quiet_time_active">Quiet time active!</string>
+    <string name="lp_quiet_times">使用此功能来设置全局静音时间，这样我就可以识别是否太早或太晚让您知道我通常会播报的内容。我不想现在打搅您的美容觉，为什么要呢。</string>
+    <string name="quiet_time_end">静音时间结束</string>
+    <string name="quiet_time_start">静音时间开始</string>
+    <string name="menu_date_of_birth">出生日期</string>
+    <string name="lp_dob">您可以在此设定您的出生日期，这样我可以获取相应的占星读物给您。应该如何解释您的星座，并让它帮助指引您的日常生活的细节可以在\'完全不存在\'章节里找到。</string>
+    <string name="menu_call_confirm">拨打前确认</string>
+    <string name="lp_confirm_before_calling">对于一些用户，即使谷歌未能在语音数据中返回精确的名称，我准确检测正确联系人的能力是完美无暇的。对于那些有幸体验过这点的人来说，每次要确认联系人的要求可能成为烦恼的事，因此在此您可以选择关闭确认要求。但是您这样做要自己承担风险。这可能是个典型例子，我可能错误呼叫了您的前任伴侣，您可能根本不想对他解释，是您的虚拟助理意外地拨错了。诚挚。</string>
+    <string name="title_announce_notifications">播报通知</string>
+    <string name="lp_announce_notifications">在这里，您可以让我播报您的设备接收到的通知，以及在某些情况下，是否应该包含内容。很多通知含有我无法访问或者非常频繁出现的内容。您可以通过排除特定应用程序包，关键词或关键短语来阻止我播报这些通知。某些安卓设备，经常显示位置通知，说明GPS定位的位置。这些会被自动忽略。您可以随便添加尽可能多的排除关键短语，用逗号分开。</string>
+    <string name="menu_sms_email_signature">短信 &amp; 电子邮件签名</string>
+    <string name="lp_signature">虽然我尽力正确地标明我接收到的语音数据，它常常缺少基本信息，因此，导致您口述的任何信息内容也有同样的问题。通过包含签名，让接收者知道这是由语音创作，可能会阻止他们认为您在学校的时候很少参加英语课。您可以在此定制签名内容，并决定是否要包含开发人员的\‘厚脸皮\’插件。</string>
+    <string name="app_speech_notification_policy">当收到来电的时候，我可以减小铃声音量，该功能需要‘请勿打扰’权限。</string>
+    <string name="lp_announce_caller">如果您希望我播报来电并给您回答或拒绝的选择，那么，这是您的选项。请注意，某些安卓版本无法很好地使用此功能，特别是当您要求我在扬声器上应答呼叫。我确信我的开发人员会很快解决此问题。</string>
+    <string name="amazon_notification_auth_request">You need to manually authorise my access to your Amazon account to use this feature. You\'re not required to own any Alexa hardware, as I can connect remotely to the default Alexa service associated with your account. Otherwise, if you\'d like to remove the button from the notification, you can do so in the settings.</string>
+    <string name="amazon_auth_request">You need to manually authorise my access to your Amazon account to use this feature.</string>
+    <string name="an_unknown_caller">an unknown caller</string>
+    <string name="incoming_call_from">Incoming call from</string>
+    <string name="would_you_like_to_answer_it">would you like to answer it?</string>
 
     <!-- App - Generic error Strings -->
     <string name="error_no_application" translatable="true">"没有安装处理此请求的应用程序吗？"</string>
 
     <!-- Speech - Specific error Strings -->
-    <string name="error_empty_voice_data" translatable="true">"我没有从识别提供商接收到任何语音数据。"</string>
-    <string name="error_empty_profanity" translatable="true">"我没有接收到任何语音数据。这可能是因为语音识别提供商设置的不雅言语过滤器造成的。"</string>
+    <string name="error_empty_voice_data" translatable="true">"我没有从识别程序接收到任何语音数据。"</string>
+    <string name="error_empty_profanity" translatable="true">"我没有接收到任何语音数据。这可能是因为语音识别程序设置的不雅言语过滤器造成的。"</string>
     <string name="error_unknown_action" translatable="true">"我不知道我应该做什么。"</string>
     <string name="error_network" translatable="true">"没有网络连接!"</string>
     <string name="error_hotword" translatable="true">"热词引擎初始化失败 :("</string>
     <string name="error_audio" translatable="true">"有个录音错误"</string>
+    <string name="error_offline">您需要安装离线语言文件吗？</string>
+    <string name="error_recogniser_busy">您可能会遇到与谷歌语音识别服务相关的错误。他们的助手服务不太好，不会和我分享麦克风。我希望他们会很快解决这个问题，但同时你需要强制停止应用程序来让事情再次奏效。</string>
+    <string name="content_android_bug">在多个安卓版本上无法正常作业！</string>
 
     <!-- TTS - Specific error Strings -->
-    <string name="error_tts_initialisation" translatable="true">"您的文本到语音引擎有问题。"</string>
-    <string name="error_tts_progress" translatable="true">"文本到语音回放时出现问题。"</string>
+    <string name="error_sound_effect">错误配置的声音效果</string>
+    <string name="error_tts_initialisation" translatable="true">"您的文字转语音引擎有问题。"</string>
+    <string name="error_tts_progress" translatable="true">"文字转语音回放时出现问题。"</string>
     <string name="error_tts_voice" translatable="true">"无法设置TTS语言。"</string>
     <string name="error_tts_volume" translatable="true">"媒体播放静音"</string>
 
     <!-- Issue Strings -->
-    <string name="issue_vr_text" translatable="true">"为了让应用程序可以正常作业，需要安装声音识别提供器。请从Play商店安装Google Now应用程序。"</string>
-    <string name="issue_tts_engine_text" translatable="true">"为了让应用程序可以说话，您需要安装文本转语音的引擎。点击安装一个，在语言和输入部分找到Android（安卓）文本转语音设置，然后把它设置为默认。"</string>
+    <string name="issue_vr_text" translatable="true">"为了让应用程序可以正常作业，需要安装声音识别程序。请从Play商店安装Google Now应用程序。"</string>
+    <string name="issue_tts_engine_text" translatable="true">"为了让应用程序可以说话，您需要安装文字转语音的引擎。点击安装一个，在语言和输入部分找到Android（安卓）文字转语音设置，然后把它设置为默认。"</string>
     <string name="issue_tts_language_text" translatable="true">"我无法用要求的语言说话。有个简单的解决方案，比如在语音引擎里的设置里去下载其他的语言文件。点击下面的链接去那里。"</string>
     <string name="issue_vlingo_text" translatable="true">"可惜的是，除了S Voice（S语音）外，Samsung（三星）不允许他们的Vlingo声音识别被其他的应用程序使用。因此请把默认语音提供程序改为Google（谷歌）。点击下面的按钮转到设置。"</string>
     <string name="issue_usage_stats_bug" translatable="true">"可惜的是，你的设备正面临一个已知的Android (安卓）错误，我无法打开使用统计设置来让你授权我来进入他们。 这将导致和应用程序使用相关的指令出现一些问题。请在设备设置里查看更新Android（安卓）版本，也许设备生产商已经推出了修复程序来解决此问题。"</string>
@@ -264,20 +1098,21 @@
     <!-- Command - Hotword -->
     <string name="start" translatable="true">"start"</string>
     <string name="stop" translatable="true">"stop"</string>
-    <string name="toggle" translatable="true">"toggle"</string>
+    <string name="toggle" translatable="true">"切换"</string>
     <string name="turn" translatable="true">"turn"</string>
     <string name="word_switch" translatable="true">"switch"</string>
     <string name="on" translatable="true">"on"</string>
     <string name="off" translatable="true">"off"</string>
-    <string name="enable" translatable="true">"enable"</string>
-    <string name="disable" translatable="true">"disable"</string>
-    <string name="listening" translatable="true">"listening"</string>
+    <string name="enable" translatable="true">"启用"</string>
+    <string name="disable" translatable="true">"禁用"</string>
+    <string name="listening" translatable="true">"正在聆听"</string>
     <string name="hotword" translatable="true">"hotword"</string>
     <string name="hot_word" translatable="true">"hot word"</string>
+    <string name="menu_requires_hotword_restart">需要重启热词！</string>
 
     <!-- Command - Emotion -->
-    <string name="emotion" translatable="true">"emotion"</string>
-    <string name="feeling" translatable="true">"feeling"</string>
+    <string name="emotion" translatable="true">"情绪"</string>
+    <string name="feeling" translatable="true">"感觉"</string>
 
     <!-- Command - Emotion | error BV connection -->
     <string name="error_beyond_verbal_connection" translatable="true">"Sorry %1$s, but I was unable
@@ -290,7 +1125,7 @@
     <!-- Command - Voice Identification -->
     <string name="analyse" translatable="true">"analyse"</string>
     <string name="analysis" translatable="true">"analysis"</string>
-    <string name="voice" translatable="true">"voice"</string>
+    <string name="voice" translatable="true">"语音"</string>
     <string name="error_vi_no_account" translatable="true">"You need to create an account to associate your voice
         to."</string>
     <string name="error_vi_status" translatable="true">"I don't have a complete voice footprint associated with
@@ -303,8 +1138,6 @@
     <string name="vocal_notify_verify" translatable="true">"Okay. I'll notify you when I've analysed the audio."</string>
 
     <!-- Command - Tasker -->
-    <string name="tasker_capital" translatable="false">"Tasker"</string>
-    <string name="tasker" translatable="false">"tasker"</string>
     <string name="task_" translatable="true">"task "</string>
     <string name="called_" translatable="true">"called "</string>
     <string name="named_" translatable="true">"named "</string>
@@ -312,6 +1145,7 @@
     <!-- Command - Tasker | error -->
     <string name="error_tasker_install" translatable="true">"You need to install the Tasker application
         to use this command."</string>
+    <string name="error_tasker_install_order">Please first select \'Link Tasker\' in the Supported Applications Section</string>
     <string name="error_tasker_execute" translatable="true">"Something went wrong executing the task, %1$s"</string>
     <string name="error_tasker_no_tasks" translatable="true">"You don't appear to have any tasks to execute"</string>
     <string name="error_tasker_enable" translatable="true">"Please enable Tasker"</string>
@@ -321,21 +1155,44 @@
         This is a known Android bug where the Tasker permissions are not detected, if you installed Tasker after me.
         You'll need to reinstall me, so the permissions are correctly applied. Click on the re-assimilate button"</string>
     <string name="error_tasker_broadcast" translatable="true">"Failed sending to Tasker"</string>
+    <string name="empty_tasker_content">empty tasker content</string>
+    <string name="empty_tasker_value">empty tasker value</string>
+
+    <string name="menu_activate">激活</string>
+    <string name="menu_disable_driving_profile">禁用驾驶配置文件</string>
+    <string name="menu_disable_hotword">禁用热词</string>
+    <string name="menu_disable_notification_announcements">禁用通知播报</string>
+    <string name="menu_discard_changes">放弃更改</string>
+    <string name="menu_enable_driving_profile">启用驾驶配置文件</string>
+    <string name="menu_enable_hotword">启用热词</string>
+    <string name="menu_enable_notification_announcements">启用通知播报</string>
+    <string name="menu_notification">通知</string>
+    <string name="menu_send_value">仅发送数值</string>
+    <string name="menu_shutdown">关机</string>
+    <string name="menu_speak">朗读</string>
+    <string name="ui_tasker_action_label">行动</string>
+    <string name="ui_tasker_speech_label">发言</string>
+    <string name="variable_hint" formatted="false">%varname, %varname2</string>
+    <string name="variable_text_hint">文本 &amp; 变量名</string>
+    <string name="tasker_error_empty_input">输入不能为空！</string>
+    <string name="tasker_error_format">格式是%varname</string>
+    <string name="tasker_error_send_values">发送值错误！</string>
+    <string name="tasker_notification_text">Tasker互动- 点击查看详情</string>
+    <string name="tasker_notification_ticker">Tasker互动</string>
+    <string name="tasker_prefix_action">行动: </string>
+    <string name="tasker_prefix_notify">通知: </string>
+    <string name="tasker_prefix_send">发送: </string>
+    <string name="tasker_prefix_speak">发言: </string>
+    <string name="tasker_subtitle">Tasker &gt; Saiy</string>
 
     <!-- Command - Clipboard -->
-    <string name="clipboard" translatable="true">"clipboard"</string>
-    <string name="clip_board" translatable="true">"clip board"</string>
+    <string name="clipboard" translatable="true">"剪贴板"</string>
+    <string name="clip_board" translatable="true">"剪切板"</string>
 
     <!-- Command - Song Recognition -->
     <string name="name_that_tune" translatable="true">"name that tune"</string>
 
     <string name="sound_search" translatable="true">"sound search"</string>
-    <string name="google_capital" translatable="false">"Google"</string>
-    <string name="sound_hound" translatable="false">"Sound Hound"</string>
-    <string name="sound_hound_premium" translatable="false">"Sound Hound Premium"</string>
-    <string name="shazam" translatable="false">"Shazam"</string>
-    <string name="shazam_encore" translatable="false">"Shazam Encore"</string>
-    <string name="track_id" translatable="false">"Track ID"</string>
 
     <!-- Command - Song Recognition error -->
     <string name="error_song_recognition_app_failed" translatable="true">"Sorry %1$s, but there was
@@ -368,9 +1225,6 @@
     <string name="never_mind" translatable="true">"never mind"</string>
     <string name="shush" translatable="true">"shush"</string>
     <string name="shut_up" translatable="true">"shut up"</string>
-
-    <!-- Command - Cancel | misheard -->
-    <string name="council_" translatable="false">"council "</string>
 
     <!-- Command - Spell -->
     <string name="spell_" translatable="true">"spell "</string>
@@ -446,7 +1300,7 @@
 
     <!-- Command - Translate error -->
     <string name="error_translate_length" translatable="true">"I'm afraid %1$s, that translations are currently limited to 2000 characters."</string>
-    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translationProvider."</string>
+    <string name="error_translate" translatable="true">"Sorry %1$s, but there was a problem completing that translation."</string>
     <string name="error_translate_unsupported" translatable="true">"I'm sorry %1$s, but that language is not currently supported for
         translations"</string>
 
@@ -496,6 +1350,8 @@
         your battery information."</string>
     <string name="error_battery_unknown" translatable="true">"Sorry %1$s, I'm not sure what specific
         battery information you required."</string>
+
+    <string name="define">define</string>
 
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
     <!-- SPEECH RESPONSES - SPEECH RESPONSES - SPEECH RESPONSES -->
@@ -551,4 +1407,845 @@
     <string name="negative" translatable="true">"negative"</string>
     <string name="neutral" translatable="true">"neutral"</string>
     <string name="positive" translatable="true">"positive"</string>
+
+    <string name="alexa">alexa</string>
+    <string name="ask_alexa">ask alexa</string>
+    <string name="alexa_media_response">Alexa\'s media requests make little sense I\'m afraid.</string>
+    <string name="alexa_volume_response">Alexa just asked me to set the volume to, %1$s. I\'m not sure how to go about doing that.</string>
+    <string name="error_alexa_marshmallow">Sorry, but due to Amazon\'s strict encryption requirements, this feature is only available on devices running Marshmallow or higher.</string>
+    <string name="tell_alexa">tell alexa</string>
+    <string name="tell_me">tell me</string>
+    <string name="to_tell_me">to tell me</string>
+
+    <string name="lp_toast_unknown">当我无法理解一个命令时，此选项允许我向你展示谷歌返回的语音内容。这真的有点自私，我想要您责怪他们，而不是我！</string>
+    <string name="menu_driving_profile">驾驶配置文件</string>
+    <string name="driving">驾驶中</string>
+    <string name="i_am_driving">i am driving</string>
+    <string name="i_m_driving">i\'m driving</string>
+    <string name="i_ve_started_driving">i\'ve started driving</string>
+    <string name="driving_profile_already_response">Your driving profile is already %1$s.</string>
+    <string name="driving_profile_intro_text">配置驾驶配置文件</string>
+    <string name="driving_profile_missing_permissions">Your current driving profile configuration requires some additional permissions. Click on the option below, and once you\'ve made your selection, press save. And I will guide you from there.</string>
+    <string name="driving_profile_response">Driving profile %1$s.</string>
+    <string name="profile">profile</string>
+    <string name="lp_driving_profile">This feature allows you to configure my behaviour when I detect that you are driving. Under these conditions, you may wish that I behave in a more verbose manner than normal. Such as announcing the identity of incoming callers, or automatically reading your message content. Many more options will be added to the driving profile in future releases. In the mean time, please do stay safe, and don\'t use your device whilst driving.</string>
+
+    <string name="horoscope">horoscope</string>
+    <string name="horoscope_dob_request">To get your astrological information, I need to know your date of birth</string>
+    <string name="horoscope_provider_fyf">According to find your fate dot com</string>
+    <string name="capricorn">capricorn</string>
+    <string name="aquarius">aquarius</string>
+    <string name="pisces">pisces</string>
+    <string name="aries">aries</string>
+    <string name="taurus">taurus</string>
+    <string name="gemini">gemini</string>
+    <string name="cancer">cancer</string>
+    <string name="leo">leo</string>
+    <string name="virgo">virgo</string>
+    <string name="scorpio">scorpio</string>
+    <string name="sagittarius">sagittarius</string>
+    <string name="libra">libra</string>
+    <string name="birthday_notification_text">Saiy interaction - click for details</string>
+    <string name="birthday_notification_ticker">Saiy interaction</string>
+    <string name="content_birthday">Hey, %1$s. I just wanted to wish you a very happy birthday. I hope you have a fantastic day.</string>
+
+    <string name="acs_app_icon">The application icon</string>
+    <string name="acs_chevron_icon">A chevron icon</string>
+    <string name="title_select_app_activity">选择应用活动</string>
+    <string name="title_select_application">选择应用程序</string>
+    <string name="title_select_applications">选择应用程序</string>
+    <string name="title_select_shortcut">选择快捷方式</string>
+    <string name="_auto_play"> (Auto Play)</string>
+    <string name="menu_intent_extras">Intent Extras</string>
+    <string name="custom_extras_title">如果需要，以逗号分隔附加内容</string>
+    <string name="custom_extras_hint">a_boolean:true,some_string:I\'m words!,my_number:76</string>
+    <string name="content_extras_format_incorrect">附加内容格式不正确！</string>
+    <string name="title_none">无</string>
+    <string name="content_access_forbidden">禁止访问！</string>
+
+    <string name="contact">contact</string>
+    <string name="contacts">contacts</string>
+    <string name="address">address</string>
+    <string name="destination">destination</string>
+    <string name="location">location</string>
+    <string name="with_a_location_listed">with a location listed</string>
+    <string name="closest">closest</string>
+    <string name="nearest">nearest</string>
+    <string name="speaker">speaker</string>
+    <string name="call">call</string>
+    <string name="calling">calling</string>
+    <string name="dial">dial</string>
+    <string name="dialing">dialing</string>
+    <string name="ring">ring</string>
+    <string name="display">display</string>
+    <string name="displayed">displayed</string>
+    <string name="edit">edit</string>
+    <string name="editing">editing</string>
+    <string name="navigate">navigate</string>
+    <string name="navigating">navigating</string>
+    <string name="listed">listed</string>
+    <string name="read">read</string>
+    <string name="announce">announce</string>
+    <string name="speak">speak</string>
+    <string name="free_dial">free dial</string>
+    <string name="read_dial">read dial</string>
+    <string name="re_dial">re dial</string>
+    <string name="redial">redial</string>
+    <string name="skype">skype</string>
+    <string name="skype_handle">skype handle</string>
+    <string name="skyping">skyping</string>
+    <string name="at">at</string>
+    <string name="via">via</string>
+    <string name="by">by</string>
+    <string name="and">and</string>
+    <string name="or">or</string>
+    <string name="from">from</string>
+    <string name="of">of</string>
+    <string name="in">in</string>
+    <string name="outside">outside</string>
+
+    <string name="set">set</string>
+    <string name="word_new">new</string>
+    <string name="create">create</string>
+    <string name="appointment">appointment</string>
+    <string name="event">event</string>
+    <string name="calendar">calendar</string>
+    <string name="alarm">alarm</string>
+    <string name="schedule">schedule</string>
+    <string name="remind_me">remind me</string>
+    <string name="reminder">reminder</string>
+    <string name="meeting">meeting</string>
+    <string name="calendar_to_alarm">I thought it would be more suitable to set an alarm for that.</string>
+    <string name="calendar_error_insert">something went wrong attempting to set that event</string>
+    <string name="calendar_error_structure">Sorry, but I couldn\'t structure that event</string>
+    <string name="that_date_is">that date is</string>
+    <string name="JANUARY">january</string>
+    <string name="FEBRUARY">february</string>
+    <string name="MARCH">march</string>
+    <string name="APRIL">april</string>
+    <string name="MAY">may</string>
+    <string name="JUNE">june</string>
+    <string name="JULY">july</string>
+    <string name="AUGUST">august</string>
+    <string name="SEPTEMBER">september</string>
+    <string name="OCTOBER">october</string>
+    <string name="NOVEMBER">november</string>
+    <string name="DECEMBER">december</string>
+    <string name="MONDAY">monday</string>
+    <string name="TUESDAY">tuesday</string>
+    <string name="WEDNESDAY">wednesday</string>
+    <string name="THURSDAY">thursday</string>
+    <string name="FRIDAY">friday</string>
+    <string name="SATURDAY">saturday</string>
+    <string name="SUNDAY">sunday</string>
+    <string name="hour">小时</string>
+    <string name="hours">小时</string>
+    <string name="called">called</string>
+    <string name="calls">calls</string>
+    <string name="name">name</string>
+    <string name="named">named</string>
+    <string name="names">names</string>
+    <string name="FIRST">first</string>
+    <string name="SECOND">second</string>
+    <string name="THIRD">third</string>
+    <string name="FOURTH">fourth</string>
+    <string name="FIFTH">fifth</string>
+    <string name="SIXTH">sixth</string>
+    <string name="SEVENTH">seventh</string>
+    <string name="EIGHTH">eighth</string>
+    <string name="NINTH">ninth</string>
+    <string name="TENTH">tenth</string>
+    <string name="ELEVENTH">eleventh</string>
+    <string name="TWELFTH">twelfth</string>
+    <string name="THIRTEENTH">thirteenth</string>
+    <string name="FOURTEENTH">fourteenth</string>
+    <string name="FIFTEENTH">fifteenth</string>
+    <string name="SIXTEENTH">sixteenth</string>
+    <string name="SEVENTEENTH">seventeenth</string>
+    <string name="EIGHTEENTH">eighteenth</string>
+    <string name="NINETEENTH">nineteenth</string>
+    <string name="TWENTIETH">twentieth</string>
+    <string name="TWENTY_FIRST">twenty first</string>
+    <string name="TWENTY_SECOND">twenty second</string>
+    <string name="TWENTY_THIRD">twenty third</string>
+    <string name="TWENTY_FOURTH">twenty fourth</string>
+    <string name="TWENTY_FIFTH">twenty fifth</string>
+    <string name="TWENTY_SIXTH">twenty sixth</string>
+    <string name="TWENTY_SEVENTH">twenty seventh</string>
+    <string name="TWENTY_EIGHTH">twenty eighth</string>
+    <string name="TWENTY_NINTH">twenty ninth</string>
+    <string name="THIRTIETH">thirtieth</string>
+    <string name="THIRTY_FIRST">thirty first</string>
+    <string name="TODAY">today</string>
+    <string name="today">today</string>
+    <string name="TOMORROW">tomorrow</string>
+    <string name="yesterday">yesterday</string>
+    <string name="_MORNING"> morning</string>
+    <string name="_EVENING"> evening</string>
+    <string name="_NIGHT"> night</string>
+    <string name="_AFTERNOON"> afternoon</string>
+    <string name="all_day">all day</string>
+    <string name="allday">allday</string>
+    <string name="FOR_MINUTES">for minutes</string>
+    <string name="TO_MINUTES">to minutes</string>
+    <string name="OF_THE_">of the </string>
+    <string name="O_CLOCK">o clock</string>
+    <string name="O__CLOCK">o\'clock</string>
+    <string name="IN_THE_AFTERNOON">in the afternoon</string>
+    <string name="IN_THE_EVENING">in the evening</string>
+    <string name="IN_THE_MORNING">in the morning</string>
+    <string name="FIVE_TO">five to</string>
+    <string name="TEN_TO">ten to</string>
+    <string name="NUMERIC_TEN_TO">10 to</string>
+    <string name="QUARTER_TO">quarter to</string>
+    <string name="TWENTY_TO">twenty to</string>
+    <string name="NUMERIC_TWENTY_FIVE_TO">25 five to</string>
+    <string name="TWENTY_FIVE_TO">twenty five to</string>
+    <string name="HALF_PAST">half past</string>
+    <string name="NUMERIC_TWENTY_FIVE_PAST">25 five past</string>
+    <string name="TWENTY_FIVE_PAST">twenty five past</string>
+    <string name="TWENTY_NUMERIC_FIVE_PAST">twenty 5 past</string>
+    <string name="NUMERIC_TWENTY_PAST">20 past</string>
+    <string name="TWENTY_PAST">twenty past</string>
+    <string name="QUARTER_PAST">quarter past</string>
+    <string name="NUMERIC_TEN_PAST">10 past</string>
+    <string name="TEN_PAST">ten past</string>
+    <string name="NUMERIC_FIVE_PAST">5 past</string>
+    <string name="FIVE_PAST">five past</string>
+    <string name="MINUTE_PAST">minute past</string>
+    <string name="PAST">past</string>
+    <string name="MINUTES_PAST">minutes past</string>
+    <string name="MINUTE_TO">minute to</string>
+    <string name="MINUTES_TO">minutes to</string>
+    <string name="EXACTLY">exactly</string>
+    <string name="it_s">it\'s</string>
+    <string name="time_am">A M</string>
+    <string name="time_pm">P M</string>
+
+    <string name="menu_sms_body_fix">短信正文修复</string>
+    <string name="menu_sms_id_fix">短信ID修复</string>
+    <string name="text">text</string>
+    <string name="message">message</string>
+    <string name="email">电子邮件</string>
+    <string name="me">me</string>
+    <string name="text_to_speech">text to speech</string>
+    <string name="send">发送</string>
+    <string name="sms">sms</string>
+    <string name="compose">compose</string>
+    <string name="callback">callback</string>
+    <string name="call_back">call back</string>
+    <string name="call_black">call black</string>
+    <string name="call_bak">call bak</string>
+    <string name="call_bag">call bag</string>
+    <string name="mobile">mobile</string>
+    <string name="work">work</string>
+    <string name="office">office</string>
+    <string name="home">home</string>
+    <string name="the">the</string>
+    <string name="number">number</string>
+    <string name="his">his</string>
+    <string name="her">her</string>
+    <string name="their">their</string>
+    <string name="there">there</string>
+    <string name="my">my</string>
+    <string name="a">a</string>
+    <string name="a_message">a message</string>
+    <string name="a_text">a text</string>
+    <string name="an">an</string>
+    <string name="not_a">not a</string>
+    <string name="an_email">an email</string>
+    <string name="an_email_message">an email message</string>
+    <string name="an_sms">an sms</string>
+    <string name="an_sms_message">an sms message</string>
+    <string name="an_unknown_sender">an unknown sender</string>
+    <string name="attacks_message">attacks message</string>
+    <string name="send_a">send a</string>
+    <string name="send_an">send an</string>
+    <string name="send_a_message">send a message</string>
+    <string name="send_a_message_to">send a message to</string>
+    <string name="send_message_to">send message to</string>
+    <string name="compose_a_message">compose a message</string>
+    <string name="compose_a_message_to">compose a message to</string>
+    <string name="compose_a">compose a</string>
+    <string name="compose_an">compose an</string>
+    <string name="compose_message_to">compose message to</string>
+    <string name="text_message">text message</string>
+    <string name="text_message_to">text message to</string>
+    <string name="text_to">text to</string>
+    <string name="email_message">email message</string>
+    <string name="email_message_to">email message to</string>
+    <string name="email_to">email to</string>
+    <string name="sms_contact_response_part_1">Your last text message from %1$s</string>
+    <string name="sms_contact_response_part_2">was received at %1$s</string>
+    <string name="sms_contact_response_part_2a">was received %1$s at %2$s</string>
+    <string name="sms_contact_response_part_3">was received on %1$s at %2$s</string>
+    <string name="sms_contact_response_part_4">saying</string>
+    <string name="sms_response_part_1a">Your last text message was received %1$s at %2$s</string>
+    <string name="sms_message">sms message</string>
+    <string name="sms_message_to">sms message to</string>
+    <string name="sms_to">sms to</string>
+    <string name="message_to">message to</string>
+    <string name="say">say</string>
+    <string name="to_say">to say</string>
+    <string name="that_says">that says</string>
+    <string name="tell">tell</string>
+    <string name="telling_her">telling her</string>
+    <string name="telling_him">telling him</string>
+    <string name="telling_them">telling them</string>
+    <string name="tell_her">tell her</string>
+    <string name="tell_him">tell him</string>
+    <string name="tell_them">tell them</string>
+    <string name="to_tell">to tell</string>
+    <string name="to_tell_her">to tell her</string>
+    <string name="to_tell_him">to tell him</string>
+    <string name="to_tell_them">to tell them</string>
+
+    <string name="exclamation_mark">exclamation mark</string>
+    <string name="exclamation_point">exclamation point</string>
+    <string name="question_mark">question mark</string>
+    <string name="kiss">kiss</string>
+    <string name="kiss_kiss">kiss kiss</string>
+    <string name="kiss_kiss_kiss">kiss kiss kiss</string>
+
+    <string name="error_answer_call">Failed to answer call…</string>
+    <string name="sms_error_1">There was a problem accessing the last message content</string>
+    <string name="sms_error_2">I have no record of any messages from %1$s</string>
+    <string name="sms_error_3">I was unable to query your messages from the contact %1$s</string>
+    <string name="sms_error_4">There was a problem accessing the last message content</string>
+    <string name="sms_error_5">There was a problem querying your messages for that contact</string>
+    <string name="sms_error_7">Due to a known Android bug, I appear to require your permission to read the phone state, before I can automatically send messages on your behalf. For reasons not yet resolved, this only applies to certain contacts. I apologise for this inconvenience, on their behalf.</string>
+    <string name="error_message_length">Due to the length of this message, for security, I won\'t ask if you want me to automatically send it</string>
+    <string name="error_detecting_contact">There was a problem detecting that contact</string>
+    <string name="error_loading_contact">There was a problem loading that contact</string>
+    <string name="error_no_numbers">has no numbers listed</string>
+    <string name="error_skype_install">You need to install Skype to use this feature.</string>
+    <string name="error_navigation">There was a problem attempting to navigate to that contact</string>
+    <string name="error_navigation_install">You need to install a supported navigation application to use this feature.</string>
+    <string name="error_calling_number">There was a problem %1$s that number</string>
+    <string name="contact_not_detected_verbose">Please be aware, contacts stored on your SIM card won\'t be detected. If you still have any saved there, it might be a good time to do some housekeeping. Most decent contact applications have an import, export wizard, to make the process nice and easy.</string>
+    <string name="error_alarm_duration">Android will only allow alarms to be set within 24 hours from now</string>
+    <string name="error_alarm_schedule">Something went wrong setting that alarm</string>
+    <string name="error_alarm_structure">Sorry, but I was unable to structure that alarm</string>
+    <string name="error_navigation_app_failed">There was a problem opening your maps application.</string>
+
+    <string name="help">help</string>
+    <string name="help_response">Please see the structured command list to understand what I can do, and how you can get me to do it. If you have a problem, please see the troubleshooting and bugs section in the main application. If you\'re still stuck, do feel free to email the developer or check out the community forum</string>
+    <string name="what_can_you_do">what can you do</string>
+
+    <string name="menu_note_provider">Note Provider</string>
+    <string name="app_name_created">通过 Saiy 创建</string>
+    <string name="content_note_provider_verbose">Please be aware. If your preferred note provider is not appearing as a choice. You can head to the Superuser Section, where you\'ll find the Note Provider options. Long press the menu item for a further, more detailed explanation.</string>
+    <string name="evernote">evernote</string>
+    <string name="error_default_app_failed">Sorry %1$s, but there was a problem opening the %2$s application</string>
+    <string name="note">note</string>
+    <string name="note_content_request">Okay. Please say the content of the note</string>
+    <string name="note_error_response">There was a problem passing that note to your default provider</string>
+    <string name="note_success_response">I\'ve passed that to your default note provider</string>
+    <string name="note_title_request">Thank you. And the title?</string>
+    <string name="search_require_install">You need to install the %1$s application to use this feature</string>
+    <string name="search_suggest_install">I would suggest installing the %1$s application to use this feature</string>
+    <string name="menu_test">测试</string>
+    <string name="test_note_content">I\'m note content</string>
+    <string name="test_note_prompt">Tap to test</string>
+    <string name="test_note_title">I\'m a note title</string>
+    <string name="title">title</string>
+    <string name="title_no_note_response">No note apps responded</string>
+
+    <string name="check_in">check in</string>
+    <string name="check_in_to">check in to</string>
+    <string name="check_into">check into</string>
+    <string name="check_me_in_to">check me in to</string>
+    <string name="check_me_into">check me into</string>
+    <string name="checkin_to">checkin to</string>
+    <string name="closest_match_extra">the closest match of</string>
+    <string name="for_square">for square</string>
+    <string name="four_square">four square</string>
+    <string name="foursquare">foursquare</string>
+    <string name="foursquare_auth_cancelled">Foursquare authorisation cancelled</string>
+    <string name="foursquare_auth_error">Foursquare authorisation failed</string>
+    <string name="foursquare_auth_success">Foursquare authorisation successful</string>
+    <string name="i_found">I found</string>
+    <string name="nearby">nearby</string>
+    <string name="post">post</string>
+    <string name="tweet">tweet</string>
+    <string name="twitter">twitter</string>
+    <string name="twitter_auth_cancelled">Twitter authorisation cancelled</string>
+    <string name="twitter_auth_error">Twitter authorisation failed</string>
+    <string name="twitter_auth_request">You need to authorise my access to your Twitter feed, so I can automatically tweet content for you.</string>
+    <string name="twitter_auth_success">Twitter authorisation successful</string>
+    <string name="twitter_content_request">Please say the content of your tweet</string>
+    <string name="twitter_reauth_request">We need to update my authorisation, to access your Twitter content.</string>
+    <string name="update">update</string>
+
+    <string name="tell_me_the_time">tell me the time</string>
+    <string name="time">time</string>
+    <string name="weather">weather</string>
+    <string name="what_is_the_time">what is the time</string>
+    <string name="what_the_time_is">what the time is</string>
+    <string name="what_time_is_it">what time is it</string>
+    <string name="what_time_it_is">what time it is</string>
+    <string name="whats_the_time">what\'s the time</string>
+
+    <string name="title_custom_speech">自定义语音</string>
+    <string name="title_display_contact">显示联系人</string>
+    <string name="title_tasker_task">Tasker task</string>
+    <string name="title_launch_activity">启动活动</string>
+    <string name="title_launch_application">启动应用程序</string>
+    <string name="title_call_contact">呼叫联系人</string>
+    <string name="title_application_shortcut">应用程序快捷方式</string>
+    <string name="title_searchable_application">可搜索的应用程序</string>
+    <string name="title_external_command">外部命令</string>
+    <string name="title_external_command_">外部命令 %1$s</string>
+    <string name="title_iot_connection">IoT connection</string>
+    <string name="title_send_intent">Send intent</string>
+    <string name="title_http_request">HTTP request</string>
+    <string name="title_cast">Cast</string>
+    <string name="title_automate_flow">Automate Flow</string>
+    <string name="menu_custom_command">自定义命令</string>
+
+    <string name="menu_command_keyphrase">命令关键词</string>
+    <string name="menu_custom_commands">自定义命令</string>
+    <string name="menu_custom_http">Custom HTTP</string>
+    <string name="menu_custom_intent">Custom Intent</string>
+    <string name="menu_custom_name">自定义名称</string>
+    <string name="menu_custom_phrases">自定义短语</string>
+    <string name="menu_custom_url_hint">Enter url</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_edit_customisations">编辑定制</string>
+    <string name="menu_error_response">错误响应</string>
+    <string name="menu_error_response_hint">这是我在错误时要说的</string>
+    <string name="menu_existing_local_variable_name">Existing local variable name</string>
+    <string name="menu_export">导出命令</string>
+    <string name="menu_get">Get</string>
+    <string name="menu_https">HTTPS</string>
+    <string name="menu_input">输入</string>
+    <string name="menu_input_hint">谁是他们中最公平的人？</string>
+    <string name="menu_import">导入命令</string>
+    <string name="menu_keyphrase_hint">这是您要说的</string>
+    <string name="menu_keyphrase_hint_searchable">搜索 %1$s</string>
+    <string name="menu_nicknames">昵称</string>
+    <string name="menu_phrase">短语</string>
+    <string name="menu_phrase_hint">开车送我回家</string>
+    <string name="menu_post">Post</string>
+    <string name="menu_put">Put</string>
+    <string name="menu_replace_words">替换单词</string>
+    <string name="menu_replacement">替换</string>
+    <string name="menu_replacement_hint">导航到伦敦Baker街道 221b</string>
+    <string name="menu_response">响应</string>
+    <string name="menu_response_hint">为什么？当然是您好看</string>
+    <string name="menu_send_output_to_tasker">Send output to Tasker</string>
+    <string name="menu_speak_http_output">Speak HTTP output</string>
+    <string name="menu_sound_effects">声音特效</string>
+    <string name="menu_success_exclamation">成功！</string>
+    <string name="menu_success_response">成功响应</string>
+    <string name="menu_success_response_hint">这是我在成功时要说的</string>
+    <string name="menu_task_name">Task name</string>
+    <string name="menu_tasker_task_not_found">Tasker task not found?</string>
+    <string name="menu_tasker_variable_not_found">Tasker variable not found?</string>
+    <string name="action_export">Export</string>
+    <string name="content_call_contact">Call contact %1$s on %2$s</string>
+    <string name="content_custom_command">选择自定义命令操作</string>
+    <string name="content_automate_flow">Automate Flow %1$s</string>
+    <string name="content_display_contact">Display contact %1$s</string>
+    <string name="content_execute_task">Execute task %1$s</string>
+    <string name="content_external_command">这是一个由应用程序 %1$s注册的外部命令。\n\n它不能被编辑，且只能删除。\n\n如果你想阻止该应用注册更多指令，您可以在超级用户设置里将其放入黑名单。</string>
+    <string name="content_export_warning">WARNING!\n\nCommands that you have created may contain personal information, such as contact numbers and addresses. Please do review the content of your commands before sharing them with others.\n\nThey are exported to your device storage Saiy/export/ and can be viewed as a simple text file.</string>
+    <string name="content_import_warning">WARNING!\n\nBefore importing commands that others have created, please use a text viewer to review the contents.\n\nIt is possible for commands to be malicious - perhaps attempting to call a premium phone number, when a certain word is detected in the voice data.\n\nOnce you are happy that the commands are safe, place them on your device storage Saiy/import/ so the application can detect them.</string>
+    <string name="content_launch_activity">从包%1$s启动活动</string>
+    <string name="content_launch_app">Launch app %1$s</string>
+    <string name="content_run_shortcut">运行快捷方式%1$s</string>
+    <string name="content_search_on">Search on %1$s</string>
+    <string name="content_sound_effect_2">I come with some inbuilt sound effects that you can make use of in your custom commands and phrases.\n        \nTo use a sound effect, you need to place the name of the effect inside square brackets, as demonstrated in the example input below.\n        \nThe included sound effects are:\n        \n• burp\n• cough\n• cry\n• fart\n• flush\n• giggle\n• pee\n• puke\n• sneeze\n\nYes, my developer really needs to grow up…\n        \nYou can include your own sounds effects by placing them on your device storage in the folder Saiy/Sounds. See the user guide for more information. Have fun!</string>
+    <string name="delete">删除</string>
+    <string name="commands_exported_successfully">%1$s commands exported successfully</string>
+    <string name="commands_imported_successfully">%1$s commands imported successfully</string>
+    <string name="sound_effect_hint">我真高兴！[giggle][fart] 抱歉！</string>
+    <string name="title_action_optional">Action (optional)</string>
+    <string name="title_category_optional">Category (optional)</string>
+    <string name="title_class_optional">Class (optional)</string>
+    <string name="title_cool">酷</string>
+    <string name="title_data_optional">Data (optional)</string>
+    <string name="title_extras_optional">Extras (optional)</string>
+    <string name="title_mime_type_optional">Mime Type (optional)</string>
+    <string name="title_package_optional">Package (optional)</string>
+    <string name="title_enter_nickname_for">输入昵称</string>
+    <string name="title_export_failed">Export failed…</string>
+    <string name="title_target">Target</string>
+    <string name="title_understood">Understood</string>
+    <string name="input_digits">ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\'- </string>
+    <string name="custom_format_error">关键词不能包含特殊字符</string>
+    <string name="custom_naked_error">关键词不能为空</string>
+    <string name="custom_phrase_format_error">输入或响应不能包含特殊字符</string>
+    <string name="custom_phrase_naked_error">输入或响应不能为空</string>
+    <string name="custom_url_naked_error">The url cannot be empty</string>
+    <string name="custom_user_name">输入你的语音名字</string>
+    <string name="error_edit_customisations">Something went wrong. Please contact the developer to help solve this issue</string>
+    <string name="nickname_format_error">昵称不能包含特殊字符</string>
+    <string name="nickname_naked_error">昵称不能为空</string>
+    <string name="replace_words_format_error">短语或替换不能包含特殊字符</string>
+    <string name="replace_words_naked_error">短语或替换不能为空</string>
+
+    <string name="lp_custom_commands">自定义命令选项允许我将您选择的语音输入映射到特定的设备操作。一个示例动作可能是基本的，例如设置语音输入。打电话给我的B F F（“朋友甲”）. 它就会拨打我朋友甲的手机号码。这里有更多高级选项，比如打开特定的应用程序活动，或者激活一个Tasker Task。这样做，您可以让自定义语音命令做几乎任何的事。在用户指南中有更多的范例。</string>
+    <string name="lp_custom_intro">如果您希望我用某种方式称呼您，您可以在此输入。这里有个选项可以仅随机或每次都使用引导。如果您喜欢，您也可以包含声音效果。添加自己自定义声音效果的能力将在下一个发布的完整版中添加。</string>
+    <string name="lp_custom_name">如果您的默认文字转语音引擎无法正确读出您的名字，您可以在这个选项里输入它的语音拼写。</string>
+    <string name="lp_custom_phrases">此定制让您设置我该如何响应您指定的语音输入。 您可以通过选择启动语音识别选项来把这些自定义响应串联在一起。那样，我们就可以从一个自定义短语到下一个自定义短语，让不知道的听众以为我是一个非常世故的健谈者的表象。可以在用户指南找到范例。</string>
+    <string name="lp_edit_customisations">在此您可以修改或者删除任何您已经创建的定制。</string>
+    <string name="lp_export_commands_2">此选项将允许您跟社区的其他用户分享您的定制。他们将可以直接用以上选项导入您的创建。 The commands will be exported to your device storage in the, say, export, folder.</string>
+    <string name="lp_import_commands">在将来的版本中，此选项将允许您导入由其他社区用户已经创建的高级定制。</string>
+    <string name="lp_nicknames">如果您发现谷歌语音识别难以正确地返回联系人的名字，您可以在此给它们设置昵称。 昵称本身应该是谷歌始终可以正确识别的词语，然后，我将接手并把名字映射到所选的联系人。</string>
+    <string name="lp_replacements">此属性有两个主要功能。 第一个是输入当您说一些不同的东西的时候，谷歌通常无法正确返回的单词或短语。输入谷歌本来应该听到的作为替换，以及它可能听到的不正确的短语，将让我把二者映射在一起。 第二个功能是缩短您经常使用的命令。假设您经常使用此命令。打电话给妈妈的手机。如果您输入它作为替代文本，然后您所选的触发词或关键词作为输入，我将能够把二者映射在一起，并处理您想要的命令。有关更高级使用，请浏览用户指南。</string>
+    <string name="lp_sound_effects_2">在此选项里，我将解释如何在自定义命令和短语里使用声音效果，以及您能够使用您的设备存储设备上的声音效果。</string>
+    <string name="no_customisations">No customisations to edit!</string>
+    <string name="no_import_files_found">No import files found in the Saiy/import/ directory</string>
+    <string name="storage_unavailable">Storage unavailable?</string>
+    <string name="title_no_commands_to_export">No commands to export?</string>
+
+    <string name="facebook">facebook</string>
+    <string name="facebook_auth_request">You need to authorise my access to your Facebook wall,\n        so I can automatically post content for you.</string>
+    <string name="facebook_content_request">Please say the content of your Facebook status</string>
+    <string name="facebook_error">A Facebook error occurred</string>
+
+    <string name="application_settings">application settings</string>
+    <string name="ABOUT_SETTING">about setting</string>
+    <string name="ABOUT_SETTINGS">about settings</string>
+    <string name="ACCESSIBILITY_SETTING">accessibility setting</string>
+    <string name="ACCESSIBILITY_SETTINGS">accessibility settings</string>
+    <string name="APN_SETTING">apn setting</string>
+    <string name="APN_SETTINGS">apn settings</string>
+    <string name="APPLICATION_SETTING">application setting</string>
+    <string name="APPLICATION_SETTINGS">application settings</string>
+    <string name="A_P_N_SETTING">a p n setting</string>
+    <string name="A_P_N_SETTINGS">a p n settings</string>
+    <string name="BATTERY_SETTING">battery setting</string>
+    <string name="BATTERY_SETTINGS">battery settings</string>
+    <string name="BLUETOOTH_SETTING">bluetooth setting</string>
+    <string name="BLUETOOTH_SETTINGS">bluetooth settings</string>
+    <string name="CLOCK_SETTING">clock setting</string>
+    <string name="CLOCK_SETTINGS">clock settings</string>
+    <string name="DATA_SETTING">data setting</string>
+    <string name="DATA_SETTINGS">data settings</string>
+    <string name="DATE_SETTING">date setting</string>
+    <string name="DATE_SETTINGS">date settings</string>
+    <string name="DEVICE_SETTING">device setting</string>
+    <string name="DEVICE_SETTINGS">device settings</string>
+    <string name="DICTIONARY_SETTING">dictionary setting</string>
+    <string name="DICTIONARY_SETTINGS">dictionary settings</string>
+    <string name="DISPLAY_SETTING">display setting</string>
+    <string name="DISPLAY_SETTINGS">display settings</string>
+    <string name="INPUT_SETTING">input setting</string>
+    <string name="INPUT_SETTINGS">input settings</string>
+    <string name="KEYBOARD_SETTING">keyboard setting</string>
+    <string name="KEYBOARD_SETTINGS">keyboard settings</string>
+    <string name="LOCALE_SETTING">locale setting</string>
+    <string name="LOCALE_SETTINGS">locale settings</string>
+    <string name="LOCATION_SETTING">location setting</string>
+    <string name="LOCATION_SETTINGS">location settings</string>
+    <string name="MEMORY_CARD_SETTING">memory card setting</string>
+    <string name="MEMORY_CARD_SETTINGS">memory card settings</string>
+    <string name="MEMORY_SETTING">memory setting</string>
+    <string name="MEMORY_SETTINGS">memory settings</string>
+    <string name="NETWORK_OPERATOR_SETTING">network operator setting</string>
+    <string name="NETWORK_OPERATOR_SETTINGS">network operator settings</string>
+    <string name="NFC_SETTING">nfc setting</string>
+    <string name="NFC_SETTINGS">nfc settings</string>
+    <string name="N_F_C_SETTING">n f c setting</string>
+    <string name="N_F_C_SETTINGS">n f c settings</string>
+    <string name="PRIVACY_SETTING">privacy setting</string>
+    <string name="PRIVACY_SETTINGS">privacy settings</string>
+    <string name="QUICK_LAUNCH_SETTING">quick launch setting</string>
+    <string name="QUICK_LAUNCH_SETTINGS">quick launch settings</string>
+    <string name="SD_CARD_SETTING">sd card setting</string>
+    <string name="SD_CARD_SETTINGS">sd card settings</string>
+    <string name="SEARCH_SETTING">search setting</string>
+    <string name="SEARCH_SETTINGS">search settings</string>
+    <string name="SECURITY_SETTING">security setting</string>
+    <string name="SECURITY_SETTINGS">security settings</string>
+    <string name="SETTING">setting</string>
+    <string name="SETTINGS">设置</string>
+    <string name="SINK_SETTING">sink setting</string>
+    <string name="SINK_SETTINGS">sink settings</string>
+    <string name="SOUNDS_SETTING">sounds setting</string>
+    <string name="SOUNDS_SETTINGS">sounds settings</string>
+    <string name="SOUND_SETTING">sound setting</string>
+    <string name="SOUND_SETTINGS">sound settings</string>
+    <string name="STORAGE_CARD_SETTING">storage card setting</string>
+    <string name="STORAGE_CARD_SETTINGS">storage card settings</string>
+    <string name="STORAGE_SETTING">storage setting</string>
+    <string name="STORAGE_SETTINGS">storage settings</string>
+    <string name="SYNC_SETTING">sync setting</string>
+    <string name="SYNC_SETTINGS">sync settings</string>
+    <string name="S_D_CARD_SETTING">s d card setting</string>
+    <string name="S_D_CARD_SETTINGS">s d card settings</string>
+    <string name="TEXT_TO_SPEECH_SETTING">text to speech setting</string>
+    <string name="TEXT_TO_SPEECH_SETTINGS">text to speech settings</string>
+    <string name="TIME_SETTING">time setting</string>
+    <string name="TIME_SETTINGS">time settings</string>
+    <string name="TTS_SETTING">tts setting</string>
+    <string name="TTS_SETTINGS">tts settings</string>
+    <string name="T_T_S_SETTING">t t s setting</string>
+    <string name="T_T_S_SETTINGS">t t s settings</string>
+    <string name="VOICE_SEARCH_SETTING">voice search setting</string>
+    <string name="VOICE_SEARCH_SETTINGS">voice search settings</string>
+    <string name="VOLUME_SETTING">volume setting</string>
+    <string name="VOLUME_SETTINGS">音量设置</string>
+    <string name="WIFI_SETTING">wifi setting</string>
+    <string name="WIFI_SETTINGS">wifi settings</string>
+    <string name="WI_FI_SETTING">wi-fi setting</string>
+    <string name="WI_FI_SETTINGS">wi-fi settings</string>
+
+    <string name="actor">actor</string>
+    <string name="actress">actress</string>
+    <string name="app">app</string>
+    <string name="amazon">amazon</string>
+    <string name="application">application</string>
+    <string name="applications">应用程序</string>
+    <string name="ask_google">ask google</string>
+    <string name="bing">bing</string>
+    <string name="choice">choice</string>
+    <string name="constellation">constellation</string>
+    <string name="earth">earth</string>
+    <string name="ebay">ebay</string>
+    <string name="editor">editor</string>
+    <string name="error_amazon_search">Due to a bug in the Amazon application, the search request failed. My developer has reported this issue to them.</string>
+    <string name="featured">featured</string>
+    <string name="film">film</string>
+    <string name="free">free</string>
+    <string name="galaxy">galaxy</string>
+    <string name="game">game</string>
+    <string name="genre">genre</string>
+    <string name="google_earth">Google Earth</string>
+    <string name="google_play_store">Google Play Store</string>
+    <string name="google_sky_map">Google Sky Map</string>
+    <string name="grossing">grossing</string>
+    <string name="hash_tag">hash tag</string>
+    <string name="hashtag">hashtag</string>
+    <string name="image">image</string>
+    <string name="images">images</string>
+    <string name="imdb">imdb</string>
+    <string name="internet">internet</string>
+    <string name="moon">moon</string>
+    <string name="movie">movie</string>
+    <string name="nebular">nebular</string>
+    <string name="net">net</string>
+    <string name="netflix">netflix</string>
+    <string name="paid">paid</string>
+    <string name="picture">picture</string>
+    <string name="pictures">pictures</string>
+    <string name="play">play</string>
+    <string name="planet">planet</string>
+    <string name="search">search</string>
+    <string name="sky">sky</string>
+    <string name="some">some</string>
+    <string name="star">star</string>
+    <string name="stars">stars</string>
+    <string name="store">store</string>
+    <string name="sun">sun</string>
+    <string name="top">top</string>
+    <string name="trending">trending</string>
+    <string name="universe">universe</string>
+    <string name="video">video</string>
+    <string name="videos">videos</string>
+    <string name="web">web</string>
+    <string name="word_for">for</string>
+    <string name="yahoo">yahoo</string>
+    <string name="yelp">yelp</string>
+    <string name="youtube">youtube</string>
+
+    <string name="bicycle">bicycle</string>
+    <string name="bike">bike</string>
+    <string name="car">car</string>
+    <string name="current_location">current location</string>
+    <string name="find_my">find my</string>
+    <string name="locate_my">locate my</string>
+    <string name="park">park</string>
+    <string name="parked">parked</string>
+    <string name="vehicle">vehicle</string>
+    <string name="whats_my_current_location">what\'s my current location</string>
+    <string name="whats_my_location">what\'s my location</string>
+    <string name="where">where</string>
+    <string name="where_am_i">where am i</string>
+    <string name="wheres_my">where\'s my</string>
+
+    <string name="dice">dice</string>
+    <string name="dice_too_many">Actually, the thought of rolling that many dice makes my proverbial arm hurt. Let\'s just rely on probability and say you averaged three point five on each throw. And therefore the total was %1$s.</string>
+    <string name="dices">dices</string>
+    <string name="die">die</string>
+    <string name="roll">roll</string>
+    <string name="word_throw">throw</string>
+
+    <string name="foreground">foreground</string>
+    <string name="kill">kill</string>
+    <string name="killed">killed</string>
+    <string name="launch">launch</string>
+    <string name="open">open</string>
+    <string name="opened">opened</string>
+    <string name="using">using</string>
+
+    <string name="hello">hello</string>
+    <string name="how_are_you">how are you</string>
+    <string name="talk_to_me">talk to me</string>
+    <string name="whats_up">what\'s up</string>
+
+    <string name="content_modify_system_settings">modify System settings</string>
+    <string name="landscape">landscape</string>
+    <string name="lock">lock</string>
+    <string name="locked">locked</string>
+    <string name="orientation">orientation</string>
+    <string name="port_rate">port rate</string>
+    <string name="portrait">portrait</string>
+    <string name="reverse">reverse</string>
+    <string name="rotate">rotate</string>
+    <string name="rotation">rotation</string>
+    <string name="screen">screen</string>
+    <string name="unlock">unlock</string>
+    <string name="unlocked">unlocked</string>
+
+    <string name="backward">backward</string>
+    <string name="forward">forward</string>
+    <string name="somersault">somersault</string>
+    <string name="word_do">do</string>
+
+    <string name="content_empty">内容不能为空！</string>
+    <string name="content_enhancement">请描述您认为可以改善应用程序的功能。\n\n因为热心用户的提交数量多，我恐怕回复每条建议是不可能的。但是它们都会被阅读!</string>
+    <string name="content_generic">Get ready to provide your super positive feedback! WHOOP!\n\nClicking on email below, will prepopulate some of your device data into the body of the message. If your feedback is not device related, feel free to remove it before sending.</string>
+    <string name="menu_click_the_star_rating">点击星级</string>
+    <string name="menu_feedback">反馈</string>
+    <string name="menu_happy_days_exclamation">开心每一天</string>
+    <string name="menu_hear_you_exclamation">知道了！</string>
+    <string name="menu_super_exclamation">很棒的想法！</string>
+    <string name="menu_thanks_exclamation">谢谢！</string>
+    <string name="design_web_link_empty">网络链接不能为空白</string>
+    <string name="menu_web_link">网页链接</string>
+    <string name="menu_web_link_hint">www.someurl.com</string>
+    <string name="menu_nl_outcome">我本来应该做的事</string>
+    <string name="menu_understood_exclamation">理解！</string>
+    <string name="menu_what_you_said">您说的话</string>
+
+    <string name="ad_error_playback">An ad playback error occurred :(</string>
+    <string name="donate">捐赠</string>
+    <string name="donate_credit_addition">Thank you. You\'ve been awarded %1$s credits and the in app ads have been removed for an additional %2$s hours.</string>
+    <string name="donate_credit_verbose">Please be aware, if you would like these credits and your ad free status to be shared across multiple devices, you\'ll need to log in from the Development Section.</string>
+    <string name="menu_donate">捐赠 &amp; 删除广告</string>
+    <string name="lp_donate">如果您希望为我的开发捐赠，删除讨厌的广告，或者买一份礼物给我的开发人员，那么，这是您要去的地方。</string>
+    <string name="content_ad_overview">如果我做了一些特别让您印象深刻的事，或者您只是享受使用我的过程并感觉慷慨大方，您可以通过使用捐赠命令来回赠并为我的开发做些贡献，它将显示一个视频广告。\n\n有时候，这些广告可能有几分钟的时间，并需要您看到最后才可以得到好处- 因此请确保您有耐心！\n\n每次您使用此命令，您将在接下来24小时内在此应用程序的其它地方摆脱讨厌的广告，而且我也会奖励一些信用积分给您，您可以用它们来兑换将来的优质内容。</string>
+    <string name="thank_you">谢谢你</string>
+
+    <string name="iap_error_generic">出现计费错误</string>
+    <string name="iap_item_unavailable">物品不可用</string>
+    <string name="iap_owned">你已经拥有了此物品！:)</string>
+    <string name="iap_purchase_cancelled">已取消购买！</string>
+    <string name="iap_advert">观看广告</string>
+    <string name="iap_bronze">给我买啤酒</string>
+    <string name="iap_gold">给我买晚餐</string>
+    <string name="iap_no_cost">0.00</string>
+    <string name="iap_platinum">给我买10 杯咖啡</string>
+    <string name="iap_silver">给我买午餐</string>
+    <string name="iap_starter">给我买牛奶</string>
+    <string name="iap_unknown_cost">$?</string>
+    <string name="content_billing_error">在尝试要验证您的购买时出现问题。\n\n每次此应用程序启动时，它将自动尝试在接下来的48小时内解决此问题。但是，在此时间以后，如果您相信您的购买还没有被恰当地生效，请直接通过billing@saiy.ai发送电子邮件给我。\n\n对所造成的任何不便请接受我的歉意。非常感谢您的捐赠。</string>
+    <string name="content_billing_success">感谢您的捐赠！\n\n为了摆脱讨厌的广告，您可能需要关闭此应用程序并重新打开。\n\n请注意，每次应用程序启动时， 它将核对您是否是高级用户。有时候，由于谷歌的一些奇怪和美妙的计费响应，它可能错误报告捐赠状态，因此广告可能再次出现。此问题通常不会存在很久…\n\n再次感谢。</string>
+    <string name="menu_billing_error">账单错误</string>
+    <string name="menu_billing_success">已处理捐赠</string>
+    <string name="network_error">A network error occurred</string>
+    <string name="title_debugging">正在调试</string>
+
+    <string name="boot_loader">boot loader</string>
+    <string name="bootloader">bootloader</string>
+    <string name="cpu">cpu</string>
+    <string name="fastboot">fastboot</string>
+    <string name="governor">governor</string>
+    <string name="hot_reboot">hot reboot</string>
+    <string name="power">power</string>
+    <string name="reboot">reboot</string>
+    <string name="recovery">recovery</string>
+    <string name="screen_shot">screen shot</string>
+    <string name="screenshot">screenshot</string>
+    <string name="shut_down">shut down</string>
+    <string name="shutdown">shutdown</string>
+    <string name="super_user">super user</string>
+    <string name="superuser">超级用户</string>
+    <string name="superuser_disabled">All super user commands are currently disabled. They\'ll be made available again in a coming release</string>
+
+    <string name="bluetooth">bluetooth</string>
+    <string name="data">data</string>
+    <string name="wi_fi">wi-fi</string>
+    <string name="wifi">wifi</string>
+    <string name="g_p_s">g p s</string>
+    <string name="gps">gps</string>
+    <string name="n_f_c">n f c</string>
+    <string name="nfc">nfc</string>
+    <string name="hot_spot">hot spot</string>
+    <string name="hotspot">hotspot</string>
+    <string name="aeroplane">aeroplane</string>
+    <string name="airplane">airplane</string>
+    <string name="connection">connection</string>
+    <string name="flash_light">flash light</string>
+    <string name="flashlight">flashlight</string>
+    <string name="flight">flight</string>
+    <string name="torch">torch</string>
+    <string name="mode">mode</string>
+
+    <string name="audio">audio</string>
+    <string name="normal">normal</string>
+    <string name="silent">沉默</string>
+    <string name="sound">sound</string>
+    <string name="vibrate">vibrate</string>
+
+    <string name="album">album</string>
+    <string name="artist">artist</string>
+    <string name="music">music</string>
+    <string name="play_list">play list</string>
+    <string name="playlist">playlist</string>
+    <string name="playlist_verbose">Please be aware, not all media applications support automatically starting a playlist.</string>
+    <string name="radio">radio</string>
+    <string name="radio_verbose">Please be aware, not all media applications support automatically starting a suggested music stream.</string>
+    <string name="something">something</string>
+    <string name="song">song</string>
+    <string name="songs">songs</string>
+    <string name="track">track</string>
+    <string name="tracks">tracks</string>
+
+    <string name="agenda">agenda</string>
+    <string name="am_i_busy">am i busy</string>
+    <string name="day_after_tomorrow">day after tomorrow</string>
+    <string name="diary">diary</string>
+    <string name="gender">gender</string>
+    <string name="i_m_a_busy">i\'m a busy</string>
+    <string name="run">运行</string>
+    <string name="what_am_i_doing">what am i doing</string>
+
+    <string name="re_start">re start</string>
+    <string name="restart">restart</string>
+
+    <string name="show">show</string>
+    <string name="result">result</string>
+    <string name="quote_response">is currently trading at</string>
+    <string name="share_price">share price</string>
+    <string name="show_response">Visualising results is disabled in the current version. It\'ll be back soon.</string>
+    <string name="stock_price">stock price</string>
+    <string name="stock_quote">stock quote</string>
+
+    <string name="shortcut_start_alexa">Start Alexa interaction</string>
+    <string name="shortcut_toggle_driving">切换驾驶配置文件</string>
+    <string name="shortcut_toggle_hotword">切换热词</string>
+    <string name="shortcut_toggle_notifications">Toggle notification announcements</string>
+    <string name="title_driving">驾驶中</string>
+    <string name="title_hotword">热词</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="cab">cab</string>
+    <string name="get">get</string>
+    <string name="need">need</string>
+    <string name="order">order</string>
+    <string name="suggest_install_uber">I would suggest installing Uber</string>
+    <string name="taxi">taxi</string>
+    <string name="count_down">count down</string>
+    <string name="countdown">countdown</string>
+    <string name="error_timer_duration">Android will only allow timers to be set within 24 hours from now</string>
+    <string name="error_timer_establish">Sorry, but I was unable to establish the required duration for the timer.</string>
+    <string name="error_timer_schedule">Something went wrong setting that timer</string>
+    <string name="error_timer_structure">The structure of a timer must be in hours, minutes and seconds only</string>
+    <string name="timer">timer</string>
+    <string name="timer_set_for">Timer set for</string>
+
 </resources>

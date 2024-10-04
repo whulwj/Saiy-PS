@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="array_beyond_verbal">
+        <item>OK %1$s. I\'ll be listening.</item>
+        <item>OK %1$s. I\'m ready to analyze you.</item>
+    </array>
+    <array name="array_beyond_verbal_error">
+        <item>Sorry %1$s, but I\'m afraid the emotion analysis failed.</item>
+        <item>Sorry %1$s, but I\'m afraid I was unable to analyze the emotions of the audio.</item>
+        <item>Apologies %1$s, but I failed to successfully analyze the emotional content.</item>
+    </array>
+    <array name="array_no_comprende">
+        <item>Really sorry %1$s, but I\'m not sure what you meant by that.</item>
+        <item>Really sorry, but I\'m not sure what you meant by that %1$s.</item>
+        <item>I\'m sorry %1$s, but I didn\'t recognize that command.</item>
+        <item>I\'m sorry, but I didn\'t recognize that command  %1$s.</item>
+    </array>
+</resources>

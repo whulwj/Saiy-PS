@@ -31,7 +31,7 @@ public class TokenHelper {
     private static long refreshTimestamp;
 
     public static void refreshTokenIfRequired(final Context context) {
-        if (!ai.saiy.android.utils.Conditions.Network.isNetworkAvailable(context)) {
+        if (!ai.saiy.android.utils.conditions.Network.isNetworkAvailable(context)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "refreshTokenIfRequired: no network");
                 return;

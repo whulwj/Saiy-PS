@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package ai.saiy.android.utils.Conditions;
+package ai.saiy.android.utils.conditions;
 
 import android.Manifest;
 import android.content.Context;
