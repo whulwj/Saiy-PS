@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 import com.google.api.client.util.SecurityUtils;
 
-import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -27,7 +26,7 @@ public class Security {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = "Security";
 
-    public static PublicKey parsePublicKey(@NonNull String encodedPublicKey) throws IOException {
+    public static PublicKey parsePublicKey(@NonNull String encodedPublicKey) {
         EncodedKeySpec keySpec;
         try {
             final byte[] encoded = Base64.decode(encodedPublicKey, Base64.DEFAULT);
@@ -62,21 +61,14 @@ public class Security {
             }
             return false;
         }
-        try {
-            final PublicKey publicKey = parsePublicKey(encodedPublicKey);
-            if (publicKey == null) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "Unable to parse verifier public key");
-                }
-                return false;
-            }
-            return verifySignature(publicKey, content, signature);
-        } catch (IOException e) {
+        final PublicKey publicKey = parsePublicKey(encodedPublicKey);
+        if (publicKey == null) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "IOException: " + e.getClass().getSimpleName() + ", " + e.getMessage());
+                MyLog.w(CLS_NAME, "Unable to parse verifier public key");
             }
+            return false;
         }
-        return false;
+        return verifySignature(publicKey, content, signature);
     }
 
     public static boolean verifySignature(@NonNull PublicKey publicKey, String content, String signature) {

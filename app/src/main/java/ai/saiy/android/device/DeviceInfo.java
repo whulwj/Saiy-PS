@@ -104,11 +104,11 @@ public class DeviceInfo {
                 "\n" +
                 "VR " + ctx.getString(R.string.locale) +
                 ": " +
-                SPH.getVRLocale(ctx).toString() +
+                SPH.getVRLocale(ctx) +
                 "\n" +
                 "TTS " + ctx.getString(R.string.locale) +
                 ": " +
-                SPH.getTTSLocale(ctx).toString() +
+                SPH.getTTSLocale(ctx) +
                 "\n" +
                 "TTS " + ctx.getString(R.string.engine) +
                 ": " +

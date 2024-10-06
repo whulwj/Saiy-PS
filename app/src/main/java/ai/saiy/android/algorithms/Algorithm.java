@@ -61,7 +61,7 @@ public enum Algorithm {
     public static final double SOUNDEX_UPPER_THRESHOLD = 2.9;
     public static final double SOUNDEX_MAX_THRESHOLD = 4;
 
-    private static final double LENGTH_THRESHOLD = 0.75;
+    public static final double LENGTH_THRESHOLD = 0.75;
 
     /**
      * A utility method to compare the lengths of two strings and check the difference falls
@@ -114,7 +114,7 @@ public enum Algorithm {
      *
      * @param ctx    the application context
      * @param locale the {@link Locale}
-     * @return a list of {@link Algorithm}
+     * @return an array of {@link Algorithm}
      */
     public static Algorithm[] getAlgorithms(@NonNull final Context ctx, @NonNull final Locale locale) {
 

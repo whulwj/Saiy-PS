@@ -2142,7 +2142,7 @@
     <string name="iap_silver">给我买午餐</string>
     <string name="iap_starter">给我买牛奶</string>
     <string name="iap_unknown_cost">$?</string>
-    <string name="content_billing_error">在尝试要验证您的购买时出现问题。\n\n每次此应用程序启动时，它将自动尝试在接下来的48小时内解决此问题。但是，在此时间以后，如果您相信您的购买还没有被恰当地生效，请直接通过billing@saiy.ai发送电子邮件给我。\n\n对所造成的任何不便请接受我的歉意。非常感谢您的捐赠。</string>
+    <string name="content_billing_error">在尝试要验证您的购买时出现问题。\n\n每次此应用程序启动时，它将自动尝试在接下来的48小时内解决此问题。但是，在此时间以后，如果您相信您的购买还没有被恰当地生效，请直接通过%1$s发送电子邮件给我。\n\n对所造成的任何不便请接受我的歉意。非常感谢您的捐赠。</string>
     <string name="content_billing_success">感谢您的捐赠！\n\n为了摆脱讨厌的广告，您可能需要关闭此应用程序并重新打开。\n\n请注意，每次应用程序启动时， 它将核对您是否是高级用户。有时候，由于谷歌的一些奇怪和美妙的计费响应，它可能错误报告捐赠状态，因此广告可能再次出现。此问题通常不会存在很久…\n\n再次感谢。</string>
     <string name="menu_billing_error">账单错误</string>
     <string name="menu_billing_success">已处理捐赠</string>

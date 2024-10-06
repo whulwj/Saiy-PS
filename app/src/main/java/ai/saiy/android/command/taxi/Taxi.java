@@ -2,6 +2,8 @@ package ai.saiy.android.command.taxi;
 
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
 
@@ -12,7 +14,7 @@ public final class Taxi implements Callable<ArrayList<Pair<CC, Float>>> {
     private final SupportedLanguage sl;
     private final Object taxi;
 
-    public Taxi(ai.saiy.android.localisation.SaiyResources sr, SupportedLanguage supportedLanguage, ArrayList<String> voiceData, float[] confidence) {
+    public Taxi(@NonNull ai.saiy.android.localisation.SaiyResources sr, @NonNull SupportedLanguage supportedLanguage, @NonNull ArrayList<String> voiceData, @NonNull float[] confidence) {
         this.sl = supportedLanguage;
         switch (supportedLanguage) {
             case ENGLISH:
@@ -39,7 +41,7 @@ public final class Taxi implements Callable<ArrayList<Pair<CC, Float>>> {
     }
 
     @Override
-    public ArrayList<Pair<CC, Float>> call() throws Exception {
+    public ArrayList<Pair<CC, Float>> call() {
         return detectCallable();
     }
 }

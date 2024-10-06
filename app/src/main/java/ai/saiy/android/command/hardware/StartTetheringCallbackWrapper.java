@@ -42,7 +42,7 @@ public class StartTetheringCallbackWrapper {
                 new java.lang.Class[] { listenerClass },
                 new java.lang.reflect.InvocationHandler() {
                     @Override
-                    public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) throws java.lang.Throwable {
+                    public Object invoke(Object proxy, java.lang.reflect.Method method, Object[] args) {
                         final String method_name = method.getName();
                         if (method_name.equals("onTetheringStarted")) {
                             StartTetheringCallbackWrapper.this.onTetheringStarted();

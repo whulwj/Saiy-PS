@@ -45,7 +45,7 @@
         android:id="@+id/cbGlobalVolume"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/menu_volume_assume_global"/>
     <CheckBox
@@ -53,7 +53,7 @@
         android:id="@+id/cbToastVolume"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/menu_volume_toast"/>
     <CheckBox
@@ -61,7 +61,7 @@
         android:id="@+id/cbSystemManagedVolume"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
         android:layout_marginTop="@dimen/activity_horizontal_margin"
         android:text="@string/menu_volume_managed"/>
 </LinearLayout>

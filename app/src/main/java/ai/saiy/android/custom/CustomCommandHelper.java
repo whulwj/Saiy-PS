@@ -444,7 +444,7 @@ public class CustomCommandHelper {
      * @param ctx           the application context
      * @param customCommand to be set
      * @param rowId         the row id of the command to be replaced
-     * @return true if the insertion was successful
+     * @return a {@link Pair}, which #first field will be true if the insertion was successful
      */
     public static Pair<Boolean, Long> setCommand(@NonNull final Context ctx, @NonNull final CustomCommand customCommand,
                                                  final long rowId) {
@@ -482,7 +482,7 @@ public class CustomCommandHelper {
      *
      * @param dbCustomCommand the {@link DBCustomCommand}
      * @param customCommand   the prepared {@link CustomCommand}
-     * @return true if the keyphrase exists, false otherwise
+     * @return a {@link Pair}, which #first field will be true if the keyphrase exists, false otherwise
      */
     private static Pair<Boolean, Long> commandExists(@NonNull final DBCustomCommand dbCustomCommand,
                                                      @NonNull final CustomCommand customCommand) {

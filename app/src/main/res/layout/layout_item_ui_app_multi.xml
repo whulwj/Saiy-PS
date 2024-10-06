@@ -15,7 +15,7 @@
         android:duplicateParentState="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"
+        android:layout_marginStart="@dimen/activity_vertical_margin"
         android:contentDescription="@string/acs_app_icon"/>
     <CheckedTextView
         android:textStyle="bold"
@@ -26,8 +26,8 @@
         android:duplicateParentState="true"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_horizontal_margin"
-        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
         android:checkMark="?android:attr/listChoiceIndicatorMultiple"
         android:layout_weight="1"
         android:fontFamily="sans-serif-smallcaps"/>

@@ -20,7 +20,7 @@
         android:duplicateParentState="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/activity_vertical_margin"/>
+        android:layout_marginStart="@dimen/activity_vertical_margin"/>
     <TextView
         android:textStyle="bold"
         android:textColor="@color/colorFade"
