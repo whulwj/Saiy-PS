@@ -2386,4 +2386,10 @@
     <string name="error_timer_structure">The structure of a timer must be in hours, minutes and seconds only</string>
     <string name="timer">timer</string>
     <string name="timer_set_for">Timer set for</string>
+
+    <string name="toast">toast</string>
+    <string name="f_off">fuck off</string>
+    <string name="go_to">go to</string>
+    <string name="web_site">web site</string>
+    <string name="website">website</string>
 </resources>

@@ -7,6 +7,7 @@ commonsCodec = "1.17.1"
 commonsLang3 = "3.14.0"
 commonsFileUpload = "1.5"
 commonsText = "1.12.0"
+commonsValidator = "1.9.0"
 googleGoogleApiServicesTranslate = "v2-rev51-1.25.0"
 grpcAuth = "1.55.3"
 grpcJava = "1.55.3"
@@ -78,6 +79,7 @@ commons-codec = { group = "commons-codec", name = "commons-codec", version.ref =
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commonsLang3" }
 commons-fileupload = { group = "commons-fileupload", name = "commons-fileupload", version.ref = "commonsFileUpload" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commonsText" }
+commons-validator = { group = "commons-validator", name = "commons-validator", version.ref = "commonsValidator" }
 google-google-api-services-translate = { group = "com.google.apis", name = "google-api-services-translate", version.ref = "googleGoogleApiServicesTranslate" }
 grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpcAuth" }
 grpc-okhttp = { group = "io.grpc", name = "grpc-okhttp", version.ref = "grpcJava" }

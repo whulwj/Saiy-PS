@@ -513,6 +513,28 @@ public class UtilsApplication {
         return toReturn;
     }
 
+    public static void uninstallApplication(Context context, String packageName) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "uninstallApplication");
+        }
+        final Intent intent = new Intent(Intent.ACTION_DELETE);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setData(Uri.parse("package:" + packageName));
+        try {
+            context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "uninstallApplication: ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "uninstallApplication: Exception");
+                e.printStackTrace();
+            }
+        }
+    }
+
     public static boolean openApplicationSpecificSettings(Context context, String packageName) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "openApplicationSpecificSettings");

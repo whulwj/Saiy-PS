@@ -77,6 +77,7 @@ import ai.saiy.android.command.twitter.CommandTwitter;
 import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.command.username.CommandUserName;
 import ai.saiy.android.command.vocalrecognition.CommandVocalRecognition;
+import ai.saiy.android.command.web.CommandWeb;
 import ai.saiy.android.command.wolframalpha.CommandWolframAlpha;
 import ai.saiy.android.custom.CustomResolver;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionChooser;
@@ -100,7 +101,6 @@ import ai.saiy.android.thirdparty.tasker.TaskerHelper;
 import ai.saiy.android.ui.activity.ActivityChooserDialog;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.notification.NotificationHelper;
-import ai.saiy.android.utils.conditions.Network;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
@@ -109,6 +109,7 @@ import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsMaintenance;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsToast;
+import ai.saiy.android.utils.conditions.Network;
 
 /**
  * This is the main class for resolving and actioning a spoken command. Regardless or not as to whether
@@ -274,6 +275,7 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TRANSLATE.name());
                     }
 
+                    publishProgress(new EntangledPair(Position.CLIPBOARD, CC.COMMAND_TOAST));
                     outcome = new CommandTranslate().getResponse(mContext, toResolve, sl, cr);
 
                     request.setUtterance(outcome.getUtterance());
@@ -511,6 +513,33 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_TOAST: {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TOAST.name());
+                    }
+                    publishProgress(new EntangledPair(Position.CLIPBOARD, CC.COMMAND_TOAST));
+                    try {
+                        Thread.sleep(175);
+                    } catch (InterruptedException e) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "InterruptedException");
+                            e.printStackTrace();
+                        }
+                    }
+                    final android.util.Pair<Boolean, String> clipboardPair = ai.saiy.android.command.clipboard.ClipboardHelper.getClipboardContentPair(mContext, sl);
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    if (clipboardPair.first) {
+                        request.setUtterance(PersonalityResponse.getToast(mContext, sl));
+                        result = Outcome.SUCCESS;
+                        final EntangledPair entangledPair = new EntangledPair(Position.TOAST_LONG, CC.COMMAND_TOAST);
+                        entangledPair.setToastContent(clipboardPair.second);
+                        publishProgress(entangledPair);
+                    } else {
+                        request.setUtterance(clipboardPair.second);
+                        result = Outcome.FAILURE;
+                    }
+                }
+                    break;
                 case COMMAND_CLIPBOARD: {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CLIPBOARD.name());
@@ -623,6 +652,15 @@ public class Quantum extends Tunnelling {
                     } else {
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
                     }
+                    result = Outcome.SUCCESS;
+                    break;
+                case COMMAND_UNINSTALL:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_UNINSTALL.name());
+                    }
+                    ai.saiy.android.applications.UtilsApplication.uninstallApplication(mContext, mContext.getPackageName());
+                    request.setUtterance(PersonalityResponse.getUninstallSaiy(mContext, sl));
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = Outcome.SUCCESS;
                     break;
                 case COMMAND_DEFINE:
@@ -858,6 +896,16 @@ public class Quantum extends Tunnelling {
                         request.setUtterance(PersonalityResponse.getSecureErrorResponse(mContext, sl));
                         result = Outcome.SUCCESS;
                     }
+                    break;
+                case COMMAND_WEB:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_WEB.name());
+                    }
+                    final CommandWeb commandWeb = new CommandWeb();
+                    outcome = commandWeb.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_HELP:
                     if (DEBUG) {
@@ -1457,6 +1505,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HARDWARE.name());
                     }
                     break;
+                case COMMAND_TOAST:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TOAST.name());
+                    }
+                    break;
                 case COMMAND_CLIPBOARD:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CLIPBOARD.name());
@@ -1500,6 +1553,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_RESTART:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_RESTART.name());
+                    }
+                    break;
+                case COMMAND_UNINSTALL:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_UNINSTALL.name());
                     }
                     break;
                 case COMMAND_DEFINE:
@@ -1600,6 +1658,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_SUPERUSER:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SUPERUSER.name());
+                    }
+                    break;
+                case COMMAND_WEB:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_WEB.name());
                     }
                     break;
                 case COMMAND_HELP:

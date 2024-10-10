@@ -30,6 +30,7 @@ import androidx.core.content.PermissionChecker;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -82,6 +83,48 @@ public final class Network {
     public static boolean isNetworkAvailable(final Context ctx) {
         final NetworkInfo activeNetworkInfo = getActiveNetworkInfo(ctx);
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
+
+    public static boolean isWebAddressReachable(Context ctx, String spec) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "isWebAddressReachable: " + spec);
+        }
+        java.net.HttpURLConnection httpURLConnection = null;
+        try {
+            final java.net.URL url = new java.net.URL(spec);
+            httpURLConnection = (java.net.HttpURLConnection) url.openConnection();
+            httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
+            httpURLConnection.addRequestProperty("Accept-Encoding", "identity");
+            httpURLConnection.setConnectTimeout(SPH.getPingTimeout(ctx));
+            httpURLConnection.setRequestMethod("HEAD");
+            httpURLConnection.connect();
+            final int responseCode = httpURLConnection.getResponseCode();
+            if (DEBUG) {
+                 MyLog.e(CLS_NAME, "isWebAddressReachable: " + spec + " ~ " + responseCode);
+            }
+            if (responseCode == HttpURLConnection.HTTP_OK || responseCode == HttpURLConnection.HTTP_MOVED_PERM || responseCode == HttpURLConnection.HTTP_MOVED_TEMP) {
+                return true;
+            }
+        } catch (MalformedURLException e) {
+            if (DEBUG) {
+                 MyLog.e(CLS_NAME, "isWebAddressReachable SocketTimeoutException");
+            }
+        } catch (IOException e) {
+            if (DEBUG) {
+                 MyLog.e(CLS_NAME, "isWebAddressReachable IOException");
+            }
+        } finally {
+            if (httpURLConnection != null) {
+                try {
+                    httpURLConnection.disconnect();
+                } catch (Exception e) {
+                    if (DEBUG) {
+                         MyLog.e(CLS_NAME, "webAddressIsReachable disconnect Exception");
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     /**

@@ -986,6 +986,11 @@ public final class PersonalityResponse {
         return stringArray[new Random().nextInt(stringArray.length)];
     }
 
+    public static String getToast(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_toast);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
     public static String getHardwareToggle(Context context, SupportedLanguage supportedLanguage, String str, String str2) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_hardware_toggle);
         return String.format(stringArray[new Random().nextInt(stringArray.length)], str, str2);
@@ -1091,6 +1096,16 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getWebAddressFormatError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_web_address_format);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getWebAddressUnreachableError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_web_address_unreachable);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
     public static String getDisplayedApplicationSettings(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_displayed_application_settings);
         return stringArray[new Random().nextInt(stringArray.length)];
@@ -1101,9 +1116,14 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getUninstallSaiy(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_uninstall_saiy);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
     public static String getDefineError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_define);
-        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getDefineUnknownError(Context context, SupportedLanguage supportedLanguage) {

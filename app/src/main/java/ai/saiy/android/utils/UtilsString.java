@@ -28,6 +28,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -190,6 +192,39 @@ public class UtilsString {
         } else {
             return inputString;
         }
+    }
+
+    public static String getPublicSuffix(String url) {
+        try {
+            final String host = new URL(url).getHost();
+            if (host != null) {
+                final com.google.common.net.InternetDomainName publicSuffix = com.google.common.net.InternetDomainName.from(host).publicSuffix();
+                if (publicSuffix != null) {
+                    return publicSuffix.toString();
+                }
+            }
+        } catch (IllegalArgumentException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getPublicSuffix IllegalArgumentException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getPublicSuffix NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (MalformedURLException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getPublicSuffix MalformedURLException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getPublicSuffix Exception");
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     public static int stripSpace(String str) {

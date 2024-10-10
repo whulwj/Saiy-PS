@@ -85,11 +85,14 @@ import ai.saiy.android.command.tasker.Tasker;
 import ai.saiy.android.command.taxi.Taxi;
 import ai.saiy.android.command.time.Time;
 import ai.saiy.android.command.timer.Timer;
+import ai.saiy.android.command.toast.Toast;
 import ai.saiy.android.command.translate.Translate;
 import ai.saiy.android.command.twitter.Twitter;
+import ai.saiy.android.command.uninstall.Uninstall;
 import ai.saiy.android.command.username.UserName;
 import ai.saiy.android.command.vocalrecognition.VocalRecognition;
 import ai.saiy.android.command.weather.Weather;
+import ai.saiy.android.command.web.Web;
 import ai.saiy.android.command.wolframalpha.WolframAlpha;
 import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -156,6 +159,7 @@ public final class Resolve {
         callableList.add(new Navigation(sr, sl, voiceData, confidence));
         callableList.add(new Time(sr, sl, voiceData, confidence));
         callableList.add(new Hardware(sr, sl, voiceData, confidence));
+        callableList.add(new Toast(sr, sl, voiceData, confidence));
         callableList.add(new Clipboard(sr, sl, voiceData, confidence));
         callableList.add(new Settings(sr, sl, voiceData, confidence));
         callableList.add(new Music(sr, sl, voiceData, confidence));
@@ -165,6 +169,7 @@ public final class Resolve {
         callableList.add(new CallBack(sr, sl, voiceData, confidence));
         callableList.add(new Shutdown(sr, sl, voiceData, confidence));
         callableList.add(new Restart(sr, sl, voiceData, confidence));
+        callableList.add(new Uninstall(sr, sl, voiceData, confidence));
         callableList.add(new Define(sr, sl, voiceData, confidence));
         callableList.add(new ApplicationSettings(sr, sl, voiceData, confidence));
         callableList.add(new Kill(sr, sl, voiceData, confidence));
@@ -185,6 +190,7 @@ public final class Resolve {
         callableList.add(new Timer(sr, sl, voiceData, confidence));
         callableList.add(new Sms(sr, sl, voiceData, confidence));
         callableList.add(new Superuser(sr, sl, voiceData, confidence));
+        callableList.add(new Web(sr, sl, voiceData, confidence));
         callableList.add(new Help(sr, sl, voiceData, confidence));
         callableList.add(new Show(sr, sl, voiceData, confidence));
         callableList.add(new ChatBot(sr, sl, voiceData, confidence));

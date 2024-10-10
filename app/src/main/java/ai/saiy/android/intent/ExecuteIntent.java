@@ -49,6 +49,7 @@ import ai.saiy.android.applications.Installed;
 import ai.saiy.android.command.intent.CustomIntent;
 import ai.saiy.android.command.search.CommandSearchValues;
 import ai.saiy.android.device.DeviceInfo;
+import ai.saiy.android.localisation.SaiyWebHelper;
 import ai.saiy.android.ui.activity.ActivityLauncherShortcut;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
@@ -782,6 +783,33 @@ public class ExecuteIntent {
             }
         }
         return false;
+    }
+
+    public static boolean googleNowOrGoogleWeb(Context ctx, ai.saiy.android.localisation.SupportedLanguage sl, java.lang.String searchTerm, java.lang.String extra) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "googleNowOrGoogleWeb");
+        }
+        final Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
+        intent.setComponent(new android.content.ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW,
+                IntentConstants.PACKAGE_NAME_GOOGLE_NOW + IntentConstants.ACTIVITY_GOOGLE_NOW_SEARCH));
+        intent.putExtra(SearchManager.QUERY, searchTerm);
+        intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_RECEIVER_FOREGROUND);
+        try {
+            ctx.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "googleNowOrGoogleWeb: ActivityNotFoundException");
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "googleNowOrGoogleWeb: Exception");
+            }
+        }
+        if (extra == null) {
+            extra = "";
+        }
+        return webSearch(ctx, "http://google." + ai.saiy.android.localisation.SaiyWebHelper.extension(SaiyWebHelper.GOOGLE, sl) + "/search?q=" + searchTerm.trim().replaceAll("\\s", "%20") + extra);
     }
 
     public static boolean searchSky(Context context, CommandSearchValues commandSearchValues) {
