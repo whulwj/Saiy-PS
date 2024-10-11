@@ -44,6 +44,8 @@ import ai.saiy.android.command.application.kill.CommandKill;
 import ai.saiy.android.command.application.launch.CommandLaunch;
 import ai.saiy.android.command.audio.CommandAudio;
 import ai.saiy.android.command.battery.CommandBattery;
+import ai.saiy.android.command.calculate.CommandCalculate;
+import ai.saiy.android.command.card.CommandCard;
 import ai.saiy.android.command.chatbot.CommandChatBot;
 import ai.saiy.android.command.clipboard.ClipboardHelper;
 import ai.saiy.android.command.custom.CommandCustom;
@@ -683,6 +685,17 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_CALCULATE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CALCULATE.name());
+                    }
+                    final CommandCalculate commandCalculate = new CommandCalculate();
+                    outcome = commandCalculate.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = outcome.getOutcome();
+                    publishProgress(outcome.getEntangledPair());
+                    break;
                 case COMMAND_KILL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_KILL.name());
@@ -1045,6 +1058,16 @@ public class Quantum extends Tunnelling {
                     }
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = Outcome.SUCCESS;
+                    break;
+                case COMMAND_CARD:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_CARD.name());
+                    }
+                    final CommandCard commandCard = new CommandCard();
+                    outcome = commandCard.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
                     break;
                 case COMMAND_DICE:
                     if (DEBUG) {
@@ -1570,6 +1593,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_APPLICATION_SETTINGS.name());
                     }
                     break;
+                case COMMAND_CALCULATE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALCULATE.name());
+                    }
+                    break;
                 case COMMAND_KILL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_KILL.name());
@@ -1711,6 +1739,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_FLOAT_COMMANDS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_FLOAT_COMMANDS.name());
+                    }
+                    break;
+                case COMMAND_CARD:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CARD.name());
                     }
                     break;
                 case COMMAND_DICE:

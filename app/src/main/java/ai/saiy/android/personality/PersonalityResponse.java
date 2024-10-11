@@ -866,6 +866,13 @@ public final class PersonalityResponse {
                 PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getCardResponse(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
+        final String[] valueArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_card_value);
+        final String[] suitArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_card_suit);
+        return String.format(SaiyResourcesHelper.getStringResource(ctx, sl, R.string.card_response), valueArray[new Random().nextInt(valueArray.length)],
+                suitArray[new Random().nextInt(suitArray.length)]);
+    }
+
     public static String getAudioConfirm(Context context, SupportedLanguage supportedLanguage, String str) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_audio_confirm);
         return String.format(stringArray[new Random().nextInt(stringArray.length)], str);
@@ -994,6 +1001,11 @@ public final class PersonalityResponse {
     public static String getHardwareToggle(Context context, SupportedLanguage supportedLanguage, String str, String str2) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_hardware_toggle);
         return String.format(stringArray[new Random().nextInt(stringArray.length)], str, str2);
+    }
+
+    public static String getCalculateUnknownError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_calculation_unknown);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
     public static String getCalculateWolframAlpha(Context context, SupportedLanguage supportedLanguage) {

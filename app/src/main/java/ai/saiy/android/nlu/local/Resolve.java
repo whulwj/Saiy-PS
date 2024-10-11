@@ -42,10 +42,12 @@ import ai.saiy.android.command.application.kill.Kill;
 import ai.saiy.android.command.application.launch.Launch;
 import ai.saiy.android.command.audio.Audio;
 import ai.saiy.android.command.battery.Battery;
+import ai.saiy.android.command.calculate.Calculate;
 import ai.saiy.android.command.calendar.Calendar;
 import ai.saiy.android.command.call.CallBack;
 import ai.saiy.android.command.call.Redial;
 import ai.saiy.android.command.cancel.Cancel;
+import ai.saiy.android.command.card.Card;
 import ai.saiy.android.command.chatbot.ChatBot;
 import ai.saiy.android.command.clipboard.Clipboard;
 import ai.saiy.android.command.contact.Contact;
@@ -172,6 +174,7 @@ public final class Resolve {
         callableList.add(new Uninstall(sr, sl, voiceData, confidence));
         callableList.add(new Define(sr, sl, voiceData, confidence));
         callableList.add(new ApplicationSettings(sr, sl, voiceData, confidence));
+        callableList.add(new Calculate(sr, sl, voiceData, confidence));
         callableList.add(new Kill(sr, sl, voiceData, confidence));
         callableList.add(new Launch(sr, sl, voiceData, confidence));
         callableList.add(new Location(sr, sl, voiceData, confidence));
@@ -200,6 +203,7 @@ public final class Resolve {
         callableList.add(new Foursquare(sr, sl, voiceData, confidence));
         callableList.add(new Taxi(sr, sl, voiceData, confidence));
         callableList.add(new Dice(sr, sl, voiceData, confidence));
+        callableList.add(new Card(sr, sl, voiceData, confidence));
         callableList.add(new Donate(sr, sl, voiceData, confidence));
         callableList.add(new Alexa(sr, sl, voiceData, confidence));
         sr.reset();

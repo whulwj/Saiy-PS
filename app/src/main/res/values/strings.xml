@@ -2392,4 +2392,30 @@
     <string name="go_to">go to</string>
     <string name="web_site">web site</string>
     <string name="website">website</string>
+
+    <string name="card">card</string>
+    <string name="card_response">The %1$s of %2$s</string>
+    <string name="choose">choose</string>
+    <string name="pick">pick</string>
+    <string name="EQUAL">equal</string>
+    <string name="EQUALS">equals</string>
+    <string name="PERCENT">percent</string>
+    <string name="SQUARE_ROOT">square root</string>
+    <string name="_ADD_"> add </string>
+    <string name="_CUBED"> cubed</string>
+    <string name="_DIVIDED_"> divided </string>
+    <string name="_DIVIDED_BY_"> divided by </string>
+    <string name="_DIVIDE_"> divide </string>
+    <string name="_DIVIDE_BY_"> divide by </string>
+    <string name="_MINUS_"> minus </string>
+    <string name="_MULTIPLIED_"> multiplied </string>
+    <string name="_MULTIPLIED_BY_"> multiplied by </string>
+    <string name="_PLUS_"> plus </string>
+    <string name="_SQUARED"> squared</string>
+    <string name="_SUBTRACTED_"> subtracted </string>
+    <string name="_SUBTRACT_"> subtract </string>
+    <string name="_TIME"> time </string>
+    <string name="_TIMES_"> times </string>
+    <string name="_TO_THE_POWER_"> to the power </string>
+    <string name="_TO_THE_POWER_OF_"> to the power of </string>
 </resources>

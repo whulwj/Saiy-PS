@@ -94,7 +94,8 @@ public class SPH {
     private static final String CUSTOM_INTRO = "custom_intro";
     private static final String CUSTOM_INTRO_RANDOM = "custom_intro_random";
     private static final String DEFAULT_TTS_VOICE = "default_tts_voice";
-    private static final String SPELL_COMMAND_VERBOSE = "spell_command_verbose";
+    private static final String SPELL_COMMAND_VERBOSE = "calculate_command_verbose";
+    private static final String CALCULATE_COMMAND_VERBOSE = "spell_command_verbose";
     private static final String EMOTION_COMMAND_VERBOSE = "emotion_command_verbose";
     private static final String TRANSLATE_COMMAND_VERBOSE = "translate_command_verbose";
     private static final String EMOTION_PERMISSION = "emotion_permission";
@@ -320,6 +321,19 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(DEFAULT_LANGUAGE_MODEL, model.name());
+        edit.apply();
+    }
+
+    public static int getCalculateCommandVerbose(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        return pref.getInt(CALCULATE_COMMAND_VERBOSE, ZERO);
+    }
+
+    public static void incrementCalculateCommandVerbose(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putInt(CALCULATE_COMMAND_VERBOSE, (getCalculateCommandVerbose(ctx) + 1));
         edit.apply();
     }
 
