@@ -112,7 +112,7 @@ public class UtilsString {
      * as check is needed.
      *
      * @param toCheck the input String
-     * @return true if the String is neither null or empty
+     * @return true if the String is neither null nor empty
      */
     public static boolean notNaked(@Nullable final String toCheck) {
         return toCheck != null && !toCheck.trim().isEmpty();

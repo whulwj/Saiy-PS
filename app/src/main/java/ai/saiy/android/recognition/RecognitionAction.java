@@ -213,6 +213,12 @@ public class RecognitionAction {
                     this.bundle.putBoolean(LocalRequest.EXTRA_VR_RETRY, false);
                     new ai.saiy.android.tutorial.Tutorial(mContext, vrLocale, ttsLocale, sl, bundle).execute();
                     break;
+                case Condition.CONDITION_EASTER_EGG:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Condition.CONDITION_EASTER_EGG");
+                    }
+                    new ai.saiy.android.command.easter_egg.EasterEggHunter(mContext, vrLocale, ttsLocale, sl, bundle).hunt();
+                    break;
                 case Condition.CONDITION_ALEXA_TTS:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_ALEXA_TTS");

@@ -48,6 +48,7 @@ public final class Condition {
     public static final int CONDITION_CHECK_REINSTALLATION = 15;
     public static final int CONDITION_TUTORIAL = 16;
     public static final int CONDITION_SELF_AWARE = 17;
+    public static final int CONDITION_EASTER_EGG = 18;
     public static final int CONDITION_ALEXA_TTS = 19;
     public static final int CONDITION_IGNORE = 99;
 

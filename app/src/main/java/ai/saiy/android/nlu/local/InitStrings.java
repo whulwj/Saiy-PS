@@ -38,11 +38,14 @@ import ai.saiy.android.command.cancel.Cancel;
 import ai.saiy.android.command.card.Card;
 import ai.saiy.android.command.chatbot.ChatBot;
 import ai.saiy.android.command.clipboard.Clipboard;
+import ai.saiy.android.command.coin.Coin;
 import ai.saiy.android.command.contact.Contact;
+import ai.saiy.android.command.date.Date;
 import ai.saiy.android.command.definition.Define;
 import ai.saiy.android.command.dice.Dice;
 import ai.saiy.android.command.donate.Donate;
 import ai.saiy.android.command.driving.Driving;
+import ai.saiy.android.command.easter_egg.EasterEgg;
 import ai.saiy.android.command.emotion.Emotion;
 import ai.saiy.android.command.facebook.Facebook;
 import ai.saiy.android.command.financial.StockQuote;
@@ -138,6 +141,7 @@ public final class InitStrings {
         callableList.add(new VocalRecognition(sr, sl, voiceData, confidence));
         callableList.add(new Contact(sr, sl, voiceData, confidence));
         callableList.add(new Navigation(sr, sl, voiceData, confidence));
+        callableList.add(new Date(sr, sl, voiceData, confidence));
         callableList.add(new Time(sr, sl, voiceData, confidence));
         callableList.add(new Hardware(sr, sl, voiceData, confidence));
         callableList.add(new Toast(sr, sl, voiceData, confidence));
@@ -173,6 +177,7 @@ public final class InitStrings {
         callableList.add(new Sms(sr, sl, voiceData, confidence));
         callableList.add(new Superuser(sr, sl, voiceData, confidence));
         callableList.add(new Web(sr, sl, voiceData, confidence));
+        callableList.add(new EasterEgg(sr, sl, voiceData, confidence));
         callableList.add(new Help(sr, sl, voiceData, confidence));
         callableList.add(new Show(sr, sl, voiceData, confidence));
         callableList.add(new ChatBot(sr, sl, voiceData, confidence));
@@ -183,6 +188,7 @@ public final class InitStrings {
         callableList.add(new Taxi(sr, sl, voiceData, confidence));
         callableList.add(new Dice(sr, sl, voiceData, confidence));
         callableList.add(new Card(sr, sl, voiceData, confidence));
+        callableList.add(new Coin(sr, sl, voiceData, confidence));
         callableList.add(new Donate(sr, sl, voiceData, confidence));
         callableList.add(new Alexa(sr, sl, voiceData, confidence));
         sr.reset();

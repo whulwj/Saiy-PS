@@ -48,9 +48,12 @@ import ai.saiy.android.command.calculate.CommandCalculate;
 import ai.saiy.android.command.card.CommandCard;
 import ai.saiy.android.command.chatbot.CommandChatBot;
 import ai.saiy.android.command.clipboard.ClipboardHelper;
+import ai.saiy.android.command.coin.CommandCoin;
 import ai.saiy.android.command.custom.CommandCustom;
+import ai.saiy.android.command.date.CommandDate;
 import ai.saiy.android.command.definition.CommandDefine;
 import ai.saiy.android.command.dice.CommandDice;
+import ai.saiy.android.command.easter_egg.CommandEasterEgg;
 import ai.saiy.android.command.emotion.CommandEmotion;
 import ai.saiy.android.command.facebook.CommandFacebook;
 import ai.saiy.android.command.financial.CommandStockQuote;
@@ -495,6 +498,16 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_DATE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_DATE.name());
+                    }
+                    final CommandDate commandDate = new CommandDate();
+                    outcome = commandDate.getResponse(mContext, sl);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_TIME:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_TIME.name());
@@ -920,6 +933,17 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_EASTER_EGG:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_EASTER_EGG.name());
+                    }
+                    final CommandEasterEgg commandEasterEgg = new CommandEasterEgg();
+                    outcome = commandEasterEgg.getResponse(mContext, sl);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    request.setCondition(outcome.getCondition());
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_HELP:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HELP.name());
@@ -1075,6 +1099,16 @@ public class Quantum extends Tunnelling {
                     }
                     final CommandDice commandDice = new CommandDice();
                     outcome = commandDice.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_COIN:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_COIN.name());
+                    }
+                    final CommandCoin commandCoin = new CommandCoin();
+                    outcome = commandCoin.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -1518,6 +1552,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_NAVIGATION.name());
                     }
                     break;
+                case COMMAND_DATE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DATE.name());
+                    }
+                    break;
                 case COMMAND_TIME:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_TIME.name());
@@ -1693,6 +1732,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_WEB.name());
                     }
                     break;
+                case COMMAND_EASTER_EGG:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_EASTER_EGG.name());
+                    }
+                    break;
                 case COMMAND_HELP:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HELP.name());
@@ -1749,6 +1793,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_DICE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_DICE.name());
+                    }
+                    break;
+                case COMMAND_COIN:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_COIN.name());
                     }
                     break;
                 case COMMAND_DONATE:

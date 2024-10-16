@@ -865,6 +865,15 @@ public class SelfAware extends Service {
                     }
                     new ai.saiy.android.tutorial.Tutorial(getApplicationContext(), conditions.getVRLocale(false), conditions.getTTSLocale(false), conditions.getSupportedLanguage(false), conditions.getBundle()).execute();
                     break;
+                case Condition.CONDITION_EASTER_EGG:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "soRun: Condition.CONDITION_EASTER_EGG");
+                    }
+                    if (ai.saiy.android.command.easter_egg.EasterEggHunter.STAGE_4 == SPH.getEasterEggState(getApplicationContext())) {
+                        SPH.setEasterEggState(getApplicationContext(), ai.saiy.android.command.easter_egg.EasterEggHunter.STAGE_5);
+                        ai.saiy.android.command.easter_egg.EasterEggLocal.shareIntent(getApplicationContext());
+                        break;
+                    }
                 case Condition.CONDITION_NONE:
                 default:
                     if (DEBUG) {

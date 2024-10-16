@@ -98,6 +98,7 @@ public class SPH {
     private static final String CALCULATE_COMMAND_VERBOSE = "spell_command_verbose";
     private static final String EMOTION_COMMAND_VERBOSE = "emotion_command_verbose";
     private static final String TRANSLATE_COMMAND_VERBOSE = "translate_command_verbose";
+    private static final String EASTER_EGG_STAGE = "easter_egg_stage";
     private static final String EMOTION_PERMISSION = "emotion_permission";
     private static final String VIBRATE = "vibrate";
     private static final String NETWORK_SYNTHESIS = "network_synthesis";
@@ -1711,6 +1712,19 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putInt(TRANSLATE_COMMAND_VERBOSE, (getTranslateCommandVerbose(ctx) + 1));
+        edit.apply();
+    }
+
+    public static int getEasterEggState(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        return pref.getInt(EASTER_EGG_STAGE, ONE);
+    }
+
+    public static void setEasterEggState(@NonNull final Context ctx, int value) {
+        final SharedPreferences pref = getPref(ctx);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putInt(EASTER_EGG_STAGE, value);
         edit.apply();
     }
 

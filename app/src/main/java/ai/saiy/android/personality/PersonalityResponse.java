@@ -114,6 +114,11 @@ public final class PersonalityResponse {
                 R.string.error_beyond_verbal_connection), PersonalityHelper.getUserNameOrNot(ctx)));
     }
 
+    public static String getEasterEggIncorrect(Context ctx, SupportedLanguage sl) {
+        final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_easter_egg_incorrect);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
     public static String getRateMe(Context ctx, SupportedLanguage sl) {
         return String.format(SaiyResourcesHelper.getStringResource(ctx, sl, R.string.content_rate_me), SPH.getUserName(ctx));
     }
@@ -208,6 +213,12 @@ public final class PersonalityResponse {
     public static String getTaskerDisabledResponse(@NonNull final Context ctx,
                                                    @NonNull final SupportedLanguage sl) {
         return SaiyResourcesHelper.getStringResource(ctx, sl, R.string.error_tasker_enable);
+    }
+
+    public static String getEasterEggStage(@NonNull final Context ctx, @NonNull final SupportedLanguage sl,
+                                           @NonNull final String stage, @NonNull final String stageHint) {
+        return String.format(SaiyResourcesHelper.getStringResource(ctx, sl,
+                R.string.stage_number), stage, stageHint);
     }
 
     /**

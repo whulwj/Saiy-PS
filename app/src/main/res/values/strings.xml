@@ -2418,4 +2418,17 @@
     <string name="_TIMES_"> times </string>
     <string name="_TO_THE_POWER_"> to the power </string>
     <string name="_TO_THE_POWER_OF_"> to the power of </string>
+
+    <string name="coin">coin</string>
+    <string name="flip">flip</string>
+    <string name="toss">toss</string>
+    <string name="easter_egg">easter egg</string>
+    <string name="stage_number">Easter Egg. Stage, %1$s. %2$s</string>
+    <string name="date">date</string>
+    <string name="tell_me_the_date">tell me the date</string>
+    <string name="easter_egg_share">I\'m Easter Egg hunting! #Saiy</string>
+    <string name="what_date_is_it">what date is it</string>
+    <string name="what_is_the_date">what is the date</string>
+    <string name="what_the_date_is">what the date is</string>
+    <string name="whats_the_date">what\'s the date</string>
 </resources>
