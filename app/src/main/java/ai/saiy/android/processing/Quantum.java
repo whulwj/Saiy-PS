@@ -61,12 +61,15 @@ import ai.saiy.android.command.foursquare.CommandFoursquare;
 import ai.saiy.android.command.hardware.CommandHardware;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
+import ai.saiy.android.command.joke.CommandJoke;
 import ai.saiy.android.command.location.address.CommandLocation;
 import ai.saiy.android.command.location.vehicle.locate.CommandLocateVehicle;
 import ai.saiy.android.command.location.vehicle.parked.CommandParkedVehicle;
 import ai.saiy.android.command.music.CommandMusic;
 import ai.saiy.android.command.note.CommandNote;
+import ai.saiy.android.command.notification.CommandNotifications;
 import ai.saiy.android.command.orientation.CommandOrientation;
+import ai.saiy.android.command.remember.CommandRemember;
 import ai.saiy.android.command.search.CommandSearch;
 import ai.saiy.android.command.settings.application.CommandApplicationSettings;
 import ai.saiy.android.command.settings.system.CommandSettings;
@@ -591,6 +594,19 @@ public class Quantum extends Tunnelling {
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_HOME:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HOME.name());
+                    }
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    if (ai.saiy.android.intent.ExecuteIntent.goHome(mContext)) {
+                        request.setUtterance(PersonalityResponse.getHomeScreen(mContext, sl));
+                        result = Outcome.SUCCESS;
+                    } else {
+                        request.setUtterance(PersonalityResponse.getHomeScreenError(mContext, sl));
+                        result = Outcome.FAILURE;
+                    }
+                    break;
                 case COMMAND_SOMERSAULT:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_SOMERSAULT.name());
@@ -669,6 +685,17 @@ public class Quantum extends Tunnelling {
                     }
                     result = Outcome.SUCCESS;
                     break;
+                case COMMAND_REMEMBER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_REMEMBER.name());
+                    }
+                    final CommandRemember commandRemember = new CommandRemember();
+                    outcome = commandRemember.getResponse(mContext, toResolve, sl, cr);
+                    qubit = outcome.getQubit();
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_UNINSTALL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_UNINSTALL.name());
@@ -704,6 +731,7 @@ public class Quantum extends Tunnelling {
                     }
                     final CommandCalculate commandCalculate = new CommandCalculate();
                     outcome = commandCalculate.getResponse(mContext, toResolve, sl, cr);
+                    qubit = outcome.getQubit();
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     result = outcome.getOutcome();
@@ -944,6 +972,16 @@ public class Quantum extends Tunnelling {
                     request.setCondition(outcome.getCondition());
                     result = outcome.getOutcome();
                     break;
+                case COMMAND_JOKE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_JOKE.name());
+                    }
+                    final CommandJoke commandJoke = new CommandJoke();
+                    outcome = commandJoke.getResponse(mContext, toResolve, sl, cr);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
                 case COMMAND_HELP:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "DT " + CC.COMMAND_HELP.name());
@@ -971,6 +1009,16 @@ public class Quantum extends Tunnelling {
                     }
                     final CommandChatBot commandChatBot = new CommandChatBot();
                     outcome = commandChatBot.getResponse(mContext, toResolve, sl, cr, vrLocale, ttsLocale);
+                    request.setUtterance(outcome.getUtterance());
+                    request.setAction(outcome.getAction());
+                    result = outcome.getOutcome();
+                    break;
+                case COMMAND_NOTIFICATIONS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "DT " + CC.COMMAND_NOTIFICATIONS.name());
+                    }
+                    final CommandNotifications commandNotifications = new CommandNotifications();
+                    outcome = commandNotifications.getResponse(mContext, toResolve, sl, cr);
                     request.setUtterance(outcome.getUtterance());
                     request.setAction(outcome.getAction());
                     result = outcome.getOutcome();
@@ -1587,6 +1635,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_MUSIC.name());
                     }
                     break;
+                case COMMAND_HOME:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HOME.name());
+                    }
+                    break;
                 case COMMAND_SOMERSAULT:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_SOMERSAULT.name());
@@ -1617,6 +1670,14 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_RESTART.name());
                     }
                     break;
+                case COMMAND_REMEMBER:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_REMEMBER.name());
+                    }
+                    if (result == Outcome.SUCCESS) {
+                        ClipboardHelper.setClipboardContent(mContext, qubit.getClipboardContent());
+                    }
+                    break;
                 case COMMAND_UNINSTALL:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_UNINSTALL.name());
@@ -1635,6 +1696,9 @@ public class Quantum extends Tunnelling {
                 case COMMAND_CALCULATE:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CALCULATE.name());
+                    }
+                    if (result == Outcome.SUCCESS) {
+                        ClipboardHelper.setClipboardContent(mContext, qubit.getClipboardContent());
                     }
                     break;
                 case COMMAND_KILL:
@@ -1737,6 +1801,11 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_EASTER_EGG.name());
                     }
                     break;
+                case COMMAND_JOKE:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_JOKE.name());
+                    }
+                    break;
                 case COMMAND_HELP:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_HELP.name());
@@ -1753,6 +1822,11 @@ public class Quantum extends Tunnelling {
                 case COMMAND_CHAT_BOT:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_CHAT_BOT.name());
+                    }
+                    break;
+                case COMMAND_NOTIFICATIONS:
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "OSP " + CC.COMMAND_NOTIFICATIONS.name());
                     }
                     break;
                 case COMMAND_DRIVING:

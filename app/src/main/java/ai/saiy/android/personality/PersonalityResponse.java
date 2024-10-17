@@ -1069,6 +1069,16 @@ public final class PersonalityResponse {
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
     }
 
+    public static String getHomeScreenError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_home_screen);
+        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getHomeScreen(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_home_screen);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
     public static String getSomersault(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_somersault);
         return stringArray[new Random().nextInt(stringArray.length)];
@@ -1137,6 +1147,16 @@ public final class PersonalityResponse {
     public static String getUnknownSettingsError(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_unknown_settings);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+    }
+
+    public static String getRememberError(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_error_remember);
+        return stringArray[new Random().nextInt(stringArray.length)];
+    }
+
+    public static String getClipboardRemember(Context context, SupportedLanguage supportedLanguage) {
+        String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_clipboard_remember);
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getUninstallSaiy(Context context, SupportedLanguage supportedLanguage) {

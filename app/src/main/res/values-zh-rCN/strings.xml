@@ -2292,4 +2292,15 @@
     <string name="what_is_the_date">what is the date</string>
     <string name="what_the_date_is">what the date is</string>
     <string name="whats_the_date">what\'s the date</string>
+
+    <string name="command">command</string>
+    <string name="word_float">float</string>
+    <string name="go_home">go home</string>
+    <string name="joke">joke</string>
+    <string name="joke_submit">I\'m afraid I don\'t have a very good sense of humour at the moment. If you know any family friendly jokes that you think I should tell, you can submit them via the Development section in the main application</string>
+    <string name="announc_sic">announc</string>
+    <string name="no_longer">no longer</string>
+    <string name="notification">notification</string>
+    <string name="notification_response">I\'ll %1$s announce your notifications</string>
+    <string name="remember_this_">remember this </string>
 </resources>
