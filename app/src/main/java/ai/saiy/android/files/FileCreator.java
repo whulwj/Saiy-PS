@@ -215,6 +215,11 @@ public class FileCreator {
                     MyLog.i(CLS_NAME, "recording duration: " + duration);
                 }
 
+            } catch (IOException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "IOException: completeFileWrite");
+                    e.printStackTrace();
+                }
             } catch (final RuntimeException e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "RuntimeException: completeFileWrite");
