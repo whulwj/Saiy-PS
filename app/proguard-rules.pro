@@ -302,3 +302,6 @@
     public <methods>;
 }
 ##---------------End: proguard configuration for firebase  ----------
+
+# No kotlin-reflect, so remove the  kotlin.Metadata annotation
+-checkdiscard class kotlin.Metadata

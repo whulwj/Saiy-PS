@@ -562,7 +562,7 @@ public class ActivityHomeHelper {
      * Check for notification permission before starting the service so that the notification is visible
      */
     public boolean isAcceptableToRequestNotificationPermission() {
-        if (Build.VERSION.SDK_INT >= 33/*Build.VERSION_CODES.TIRAMISU*/) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!mIsNotificationPermissionRequested) {
                 mIsNotificationPermissionRequested = true;
                 return true;

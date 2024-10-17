@@ -172,10 +172,8 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <!-- Protection Privileged  -->
-    <uses-permission android:name="android.permission.CAPTURE_AUDIO_HOTWORD"/>
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
     <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE"/>
-    <uses-permission android:name="android.permission.BIND_VOICE_INTERACTION"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
 
     <!-- Non-Standard -->
@@ -279,21 +277,6 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.ActivityAssistProxy"
-            android:clearTaskOnLaunch="true"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:enabled="false"
-            android:excludeFromRecents="true"
-            android:exported="true"
-            android:launchMode="singleInstance"
-            android:noHistory="true"
-            android:theme="@style/AppTheme.Translucent.NoActionBar.Fullscreen">
-            <intent-filter>
-                <action android:name="android.intent.action.ASSIST"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
-        <activity
             android:name=".ui.activity.ActivityAssistSettings"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="false"
@@ -304,27 +287,6 @@
                 <category android:name="android.intent.category.DEFAULT"/>
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".recognition.provider.saiy.assist.SaiyInteractionService"
-            android:enabled="false"
-            android:exported="false"
-            android:permission="android.permission.BIND_VOICE_INTERACTION"
-            android:process=":interaction">
-            <meta-data
-                android:name="android.voice_interaction"
-                android:resource="@xml/interaction_service"/>
-            <intent-filter>
-                <action android:name="android.service.voice.VoiceInteractionService"/>
-            </intent-filter>
-        </service>
-        <service
-            android:name=".recognition.provider.saiy.assist.SaiyInteractionSessionService"
-            android:enabled="false"
-            android:exported="false"
-            android:permission="android.permission.BIND_VOICE_INTERACTION"
-            android:process=":session">
-        </service>
 
         <activity
             android:name="ai.saiy.android.ui.activity.ActivityPermissionDialog"
