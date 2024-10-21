@@ -76,7 +76,7 @@ The project is built using Java 8 - Android SDK (API 30) - Android NDK.
 
 Using Android Studio, it can be imported as a new project via version control or the downloadable zip.
 
-There is a direct dependency on the [Saiy Library project](https://github.com/brandall76/Saiy-Library). Once that project has compiled, you'll need to add the generated AAR file as a module to the main project, as described [here](https://stackoverflow.com/q/29826717/1256219).
+There is a direct dependency on the [Saiy Library project](https://github.com/whulwj/Saiy-Library). Once that project has compiled, you'll need to add the generated AAR file as a module to the main project, as described [here](https://stackoverflow.com/q/29826717/1256219).
 
 Without stating the obvious, when testing on a physical device, the performance of the code is accentuated by the hardware specifications—more so than your average app, as there is a lot going on.
 
@@ -111,17 +111,17 @@ In all major areas of the code, I will attempt to add further README files to de
 
 Briefly, there are two major classes in the app that direct and distribute work elsewhere:
 
-- [SelfAware](https://github.com/brandall76/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/service/SelfAware.java) is the main Foreground Service, responsible for managing the application state and channelling voice recognition, text-to-speech, and other API requests.
+- [SelfAware](https://github.com/whulwj/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/service/SelfAware.java) is the main Foreground Service, responsible for managing the application state and channelling voice recognition, text-to-speech, and other API requests.
 
-- [Quantum](https://github.com/brandall76/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/processing/Quantum.java) is the main processing class, where commands are locally resolved (if required), sensibility checked, and actioned.
+- [Quantum](https://github.com/whulwj/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/processing/Quantum.java) is the main processing class, where commands are locally resolved (if required), sensibility checked, and actioned.
 
 Understanding the above two classes is essential to following the flow of the full application logic.
 
-- [MyLog](https://github.com/brandall76/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/utils/MyLog.java#L41) is a global verbose logging toggle. When enabled, the output will flow from class to class, as well as display durations for time sensitive functions.
+- [MyLog](https://github.com/whulwj/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/utils/MyLog.java#L41) is a global verbose logging toggle. When enabled, the output will flow from class to class, as well as display durations for time sensitive functions.
 
 ## Credentials
 
-For the sake of testing ease, the code points to static API keys and secrets held in the [configuration directory](https://github.com/brandall76/Saiy-PS/tree/master/app/src/main/java/ai/saiy/android/configuration). It should probably go without saying, don't do this in production code.
+For the sake of testing ease, the code points to static API keys and secrets held in the [configuration directory](https://github.com/whulwj/Saiy-PS/tree/master/app/src/main/java/ai/saiy/android/configuration). It should probably go without saying, don't do this in production code.
 
 ## Strings for offline language processing?
 
@@ -188,4 +188,4 @@ I am entirely self-taught in Java, so go easy on me!
   - An augmented reality visualisation of Saiy built using [ARCore](https://github.com/google-ar/arcore-android-sdk) can be found [here](https://github.com/brandall76/Saiy-AR).
 
 - Localisation
-  - If a user is controlling Saiy in a language other than their native (presumably due to it being unsupported), standard String resource management, based on their device Locale, will point to the wrong destination and therefore fail. The resolution of this process is done using a [SupportedLanguage](https://github.com/brandall76/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/localisation/SupportedLanguage.java) object. Further explanation can be found in the [localisation directory](https://github.com/brandall76/Saiy-PS/tree/master/app/src/main/java/ai/saiy/android/localisation) README.
+  - If a user is controlling Saiy in a language other than their native (presumably due to it being unsupported), standard String resource management, based on their device Locale, will point to the wrong destination and therefore fail. The resolution of this process is done using a [SupportedLanguage](https://github.com/whulwj/Saiy-PS/blob/master/app/src/main/java/ai/saiy/android/localisation/SupportedLanguage.java) object. Further explanation can be found in the [localisation directory](https://github.com/whulwj/Saiy-PS/tree/master/app/src/main/java/ai/saiy/android/localisation) README.
