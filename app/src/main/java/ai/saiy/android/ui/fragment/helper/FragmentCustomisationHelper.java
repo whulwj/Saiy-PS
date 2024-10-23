@@ -49,6 +49,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -107,6 +108,8 @@ public class FragmentCustomisationHelper {
     private static final int SEARCHABLE_REQ_CODE = 1007;
     private static final int ACTIVITY_REQ_CODE = 1008;
     private static final int AUTOMATE_FLOW_PICKER_REQ_CODE = 1009;
+    public static final int IMPORT_PICKER_REQ_CODE = 1100;
+    public static final int EXPORT_PICKER_REQ_CODE = 1101;
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentCustomisationHelper.class.getSimpleName();
@@ -136,6 +139,10 @@ public class FragmentCustomisationHelper {
 
     private String getString(@StringRes int resId) {
         return getApplicationContext().getString(resId);
+    }
+
+    private String getString(@StringRes int resId, Object... formatArgs) {
+        return getApplicationContext().getString(resId, formatArgs);
     }
 
     public void toast(String text, int duration) {
@@ -1068,7 +1075,7 @@ public class FragmentCustomisationHelper {
         }
         if (resultCode != Activity.RESULT_OK) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "onActivityResult: RESULT_CANCELLED");
+                MyLog.w(CLS_NAME, "onActivityResult: " + requestCode);
             }
             return;
         }
@@ -1347,6 +1354,39 @@ public class FragmentCustomisationHelper {
                 }
             }
             break;
+            case IMPORT_PICKER_REQ_CODE:
+                final Uri directoryUri = data.getData();
+                if (directoryUri == null) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onActivityResult: import uri null");
+                    }
+                    break;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "onActivityResult: importUri: " + directoryUri);
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    if (takeFlags != 0) {
+                        getApplicationContext().getContentResolver().takePersistableUriPermission(directoryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    }
+                }
+                final DocumentFile documentFile = DocumentFile.fromTreeUri(getApplicationContext(), directoryUri);
+                DocumentFile[] childDocuments = null;
+                if (documentFile != null && documentFile.isDirectory()) {
+                    childDocuments = documentFile.listFiles();
+                }
+                if (childDocuments == null) {
+                    getParent().toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
+                    return;
+                }
+                final String directoryName = documentFile.getName();
+                if (childDocuments.length <= 0) {
+                    getParent().toast(getString(R.string.no_import_files_found, directoryName), Toast.LENGTH_LONG);
+                    return;
+                }
+                getParent().importFiles(directoryName, childDocuments);
+                break;
             default:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onActivityResult: DEFAULT");

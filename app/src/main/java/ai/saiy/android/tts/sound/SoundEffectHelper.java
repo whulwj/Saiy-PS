@@ -25,6 +25,7 @@ import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_LAST;
 import static ai.saiy.android.tts.SaiyTextToSpeech.ARRAY_SINGLE;
 
 import android.content.Context;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -150,36 +151,40 @@ public class SoundEffectHelper {
     }
 
     public static @NonNull List<File> getUserSoundEffects(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            //TODO let user select
+            return Collections.emptyList();
+        }
         if (!ai.saiy.android.permissions.PermissionHelper.checkFilePermissionsNR(context)) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getUserSoundEffects: no permission");
             }
             return Collections.emptyList();
         }
-        if (!ai.saiy.android.utils.UtilsFile.isExternalStorageReadable()) {
+        if (!ai.saiy.android.utils.UtilsFile.isExternalStorageReadable(context)) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getUserSoundEffects: isExternalStorageReadable: false");
             }
             return Collections.emptyList();
         }
-        if (!ai.saiy.android.utils.UtilsFile.isSoundDirectoryExists()) {
+        if (!ai.saiy.android.utils.UtilsFile.isSoundDirectoryExists(context)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "getUserSoundEffects: soundDirExists: false");
             }
-            if (!ai.saiy.android.utils.UtilsFile.isExternalStorageWritable()) {
+            if (!ai.saiy.android.utils.UtilsFile.isExternalStorageWritable(context)) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getUserSoundEffects: isExternalStorageWritable: false");
                 }
                 return Collections.emptyList();
             }
-            if (!ai.saiy.android.utils.UtilsFile.createSoundDirectory()) {
+            if (!ai.saiy.android.utils.UtilsFile.createSoundDirectory(context)) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getUserSoundEffects: createSoundDir: false");
                 }
                 return Collections.emptyList();
             }
         }
-        final List<File> userSoundEffectArray = ai.saiy.android.utils.UtilsFile.getSoundFiles();
+        final List<File> userSoundEffectArray = ai.saiy.android.utils.UtilsFile.getSoundFiles(context);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getUserSoundEffects: userSoundEffectArray: size: " + userSoundEffectArray.size());
             for (File file : userSoundEffectArray) {

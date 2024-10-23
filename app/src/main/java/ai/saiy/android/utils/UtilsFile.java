@@ -26,6 +26,7 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
+import androidx.core.os.EnvironmentCompat;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOCase;
@@ -58,10 +59,11 @@ public class UtilsFile {
     private static final String SOUND_DIRECTORY = "/Sounds";
     private static final String RELATIVE_SOUND_DIRECTORY = SAIY_DIRECTORY + SOUND_DIRECTORY;
     private static final String IMPORT_DIRECTORY = "/Import";
-    private static final String RELATIVE_IMPORT_DIRECTORY = SAIY_DIRECTORY + IMPORT_DIRECTORY;
+    public static final String RELATIVE_IMPORT_DIRECTORY = SAIY_DIRECTORY + IMPORT_DIRECTORY;
     private static final String EXPORT_DIRECTORY = "/Export";
     private static final String RELATIVE_EXPORT_DIRECTORY = SAIY_DIRECTORY + EXPORT_DIRECTORY;
-    public static final String EXPORT_FILE_SUFFIX = "saiy";
+    public static final String OLD_EXPORT_FILE_SUFFIX = ".saiy";
+    public static final String EXPORT_FILE_SUFFIX = ".json";
     private static final String QUICK_LAUNCH_FILE = "/saiy_ql.apk";
     private static final String NO_MEDIA_FILE = "/.nomedia";
 
@@ -364,7 +366,7 @@ public class UtilsFile {
                  * @param file1 The first file to compare.
                  * @param file2 The second file to compare.
                  * @return a negative value if the first file's last modified date/time is less than the second, zero if the last
-                 *         modified date/time are the same and a positive value if the first files last modified date/time is
+                 *         modified date/time are the same and a positive value if the first file's last modified date/time is
                  *         greater than the second file.
                  */
                 @Override
@@ -383,93 +385,127 @@ public class UtilsFile {
         return files;
     }
 
-    public static File quickLaunchFile() {
-        return new File(saiyDirectory() + QUICK_LAUNCH_FILE);
+    public static File quickLaunchFile(@NonNull final Context ctx) {
+        return new File(saiyDirectory(ctx) + QUICK_LAUNCH_FILE);
     }
 
-    public static boolean isExternalStorageReadable() {
-        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageDirectory().canRead();
-    }
-
-    public static boolean isExternalStorageWritable() {
-        return Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED) || Environment.getExternalStorageDirectory().canWrite();
-    }
-
-    public static boolean isSaiyDirectoryExists() {
-        File file = new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY);
-        return file.exists() && file.isDirectory();
-    }
-
-    public static boolean createSaiyDirectory() {
-        return new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY).mkdir();
-    }
-
-    public static File saiyDirectory() {
-        return new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY);
-    }
-
-    public static boolean isSoundDirectoryExists() {
-        File file = new File(Environment.getExternalStorageDirectory() + RELATIVE_SOUND_DIRECTORY);
-        return file.exists() && file.isDirectory();
-    }
-
-    public static boolean createSoundDirectory() {
-        if (isSaiyDirectoryExists()) {
-            return new File(Environment.getExternalStorageDirectory() + RELATIVE_SOUND_DIRECTORY).mkdir();
+    public static boolean isExternalStorageReadable(@NonNull final Context ctx) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            final File file = ctx.getExternalFilesDir(null);
+            if (file != null) {
+                final String storageState = EnvironmentCompat.getStorageState(file);
+                return Environment.MEDIA_MOUNTED.equals(storageState) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(storageState) || file.canRead();
+            }
+        } else {
+            final String storageState = Environment.getExternalStorageState();
+            return Environment.MEDIA_MOUNTED.equals(storageState) || Environment.MEDIA_MOUNTED_READ_ONLY.equals(storageState) || Environment.getExternalStorageDirectory().canRead();
         }
-        boolean result = createSaiyDirectory() && new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY + SOUND_DIRECTORY).mkdir();
+        return false;
+    }
+
+    public static boolean isExternalStorageWritable(@NonNull final Context ctx) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            final File file = ctx.getExternalFilesDir(null);
+            if (file != null) {
+                return Environment.MEDIA_MOUNTED.equals(EnvironmentCompat.getStorageState(file)) || file.canWrite();
+            }
+        } else {
+            return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState()) || Environment.getExternalStorageDirectory().canWrite();
+        }
+        return false;
+    }
+    
+    private static File getExternalStorageDirectory(@NonNull final Context ctx, String type) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            return ctx.getExternalFilesDir(type);
+        } else {
+            return Environment.getExternalStorageDirectory();
+        }
+    }
+
+    public static boolean isSaiyDirectoryExists(@NonNull final Context ctx) {
+        final File file = new File(getExternalStorageDirectory(ctx, null) + SAIY_DIRECTORY);
+        return file.exists() && file.isDirectory();
+    }
+
+    public static boolean createSaiyDirectory(@NonNull final Context ctx) {
+        return new File(getExternalStorageDirectory(ctx, null) + SAIY_DIRECTORY).mkdir();
+    }
+
+    public static File saiyDirectory(@NonNull final Context ctx) {
+        return new File(getExternalStorageDirectory(ctx, null) + SAIY_DIRECTORY);
+    }
+
+    public static boolean isSoundDirectoryExists(@NonNull final Context ctx) {
+        final File file = new File(getExternalStorageDirectory(ctx, null) + RELATIVE_SOUND_DIRECTORY);
+        return file.exists() && file.isDirectory();
+    }
+
+    public static boolean createSoundDirectory(@NonNull final Context ctx) {
+        if (isSaiyDirectoryExists(ctx)) {
+            return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_SOUND_DIRECTORY).mkdir();
+        }
+        final boolean result = createSaiyDirectory(ctx) && new File(getExternalStorageDirectory(ctx, null) + SAIY_DIRECTORY + SOUND_DIRECTORY).mkdir();
         if (result) {
-            createNewFile(soundDirectory() + NO_MEDIA_FILE);
+            createNewFile(soundDirectory(ctx) + NO_MEDIA_FILE);
         }
         return true;
     }
 
-    public static File soundDirectory() {
-        return new File(Environment.getExternalStorageDirectory() + RELATIVE_SOUND_DIRECTORY);
+    public static File soundDirectory(@NonNull final Context ctx) {
+        return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_SOUND_DIRECTORY);
     }
 
-    private static boolean createQuickLaunchFile(Context context) {
-        File file = resourceToFile(context, ai.saiy.android.R.raw.saiy_ql, quickLaunchFile());
+    private static boolean createQuickLaunchFile(@NonNull Context context) {
+        final File file = resourceToFile(context, ai.saiy.android.R.raw.saiy_ql, quickLaunchFile(context));
         return file != null && file.exists();
     }
 
-    public static boolean isImportDirectoryExists() {
-        File file = new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY);
+    private static boolean isImportDirectoryExists(@NonNull final Context ctx) {
+        final File file = new File(getExternalStorageDirectory(ctx, null) + RELATIVE_IMPORT_DIRECTORY);
         return file.exists() && file.isDirectory();
     }
 
-    public static boolean createImportDirectory() {
-        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY + IMPORT_DIRECTORY).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY).mkdir();
+    private static boolean createImportDirectory(@NonNull final Context ctx) {
+        if (!isSaiyDirectoryExists(ctx) && !createSaiyDirectory(ctx)) {
+            return false;
+        }
+        return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_IMPORT_DIRECTORY).mkdir();
     }
 
-    public static File getImportDirectory() {
-        return new File(Environment.getExternalStorageDirectory() + RELATIVE_IMPORT_DIRECTORY);
+    public static File getImportDirectory(@NonNull final Context ctx) {
+        return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_IMPORT_DIRECTORY);
     }
 
-    public static boolean isExportDirectoryExists() {
-        File file = new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY);
+    private static boolean isExportDirectoryExists(@NonNull final Context ctx) {
+        final File file = new File(getExternalStorageDirectory(ctx, null) + RELATIVE_EXPORT_DIRECTORY);
         return file.exists() && file.isDirectory();
     }
 
-    public static boolean createExportDirectory() {
-        return !isSaiyDirectoryExists() ? createSaiyDirectory() && new File(Environment.getExternalStorageDirectory() + SAIY_DIRECTORY + EXPORT_DIRECTORY).mkdir() : new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY).mkdir();
+    private static boolean createExportDirectory(@NonNull final Context ctx) {
+        if (!isSaiyDirectoryExists(ctx) && !createSaiyDirectory(ctx)) {
+            return false;
+        }
+        return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_EXPORT_DIRECTORY).mkdir();
     }
 
-    public static File createExportFile(String str) {
-        return new File(Environment.getExternalStorageDirectory() + RELATIVE_EXPORT_DIRECTORY + "/" + str);
+    public static File createExportFile(@NonNull final Context ctx, String str) {
+        return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_EXPORT_DIRECTORY + "/" + str);
     }
 
-    public static boolean createDirs(Context context) {
+    public static boolean createDirs(@NonNull Context ctx) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "createDirs");
         }
-        if (!ai.saiy.android.permissions.PermissionHelper.checkFilePermissionsNR(context)) {
+        if (!ai.saiy.android.permissions.PermissionHelper.checkFilePermissionsNR(ctx)) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "createDirs: permission denied");
             }
             return false;
         }
-        if (isSaiyDirectoryExists() && isImportDirectoryExists() && isExportDirectoryExists() && isSoundDirectoryExists() && isNoMediaFileExists() && isQuickLaunchFileExists()) {
+        if (isSaiyDirectoryExists(ctx) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || isImportDirectoryExists(ctx)) &&
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || isExportDirectoryExists(ctx)) &&
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q || isSoundDirectoryExists(ctx) && isNoMediaFileExists(ctx)) && isQuickLaunchFileExists(ctx)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "createDirs: all dirs exist: true");
             }
@@ -478,30 +514,21 @@ public class UtilsFile {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "createDirs: dirs missing: false");
         }
-        if (!isExternalStorageWritable()) {
+        if (!isExternalStorageWritable(ctx)) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "createDirs: isExternalStorageWritable: false");
             }
             return false;
         }
-        if (isSaiyDirectoryExists()) {
+        if (isSaiyDirectoryExists(ctx)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "createDirs: saiyDirExists: true");
-            }
-            if (!isQuickLaunchFileExists()) {
-                if (createQuickLaunchFile(context)) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "createDirs: createQL: success");
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "createDirs: createQL: failed");
-                }
             }
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "createDirs: saiyDirExists: false");
             }
-            if (!createSaiyDirectory()) {
+            if (!createSaiyDirectory(ctx)) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "createDirs: createSaiyDir: failed");
                 }
@@ -510,41 +537,36 @@ public class UtilsFile {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "createDirs: createSaiyDir: success");
             }
-            if (!isQuickLaunchFileExists()) {
-                if (createQuickLaunchFile(context)) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "createDirs: createQL: success");
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "createDirs: createQL: failed");
+        }
+
+        if (!isQuickLaunchFileExists(ctx)) {
+            if (createQuickLaunchFile(ctx)) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "createDirs: createQL: success");
                 }
+            } else if (DEBUG) {
+                MyLog.w(CLS_NAME, "createDirs: createQL: failed");
             }
         }
-        if (isSoundDirectoryExists()) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "createDirs: soundDirExists: true");
-            }
-            if (!isNoMediaFileExists()) {
-                if (createNewFile(soundDirectory() + NO_MEDIA_FILE)) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "createDirs: createNoMediaFile: success");
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "createDirs: createNoMediaFile: failed");
-                }
-            }
-        } else {
-            if (!createSoundDirectory()) {
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.P) {
+            if (isSoundDirectoryExists(ctx)) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "createDirs: createSoundDir: failed");
+                    MyLog.i(CLS_NAME, "createDirs: soundDirExists: true");
                 }
-                return false;
+            } else {
+                if (!createSoundDirectory(ctx)) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "createDirs: createSoundDir: failed");
+                    }
+                    return false;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "createDirs: createSoundDir: success");
+                }
             }
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "createDirs: createSoundDir: success");
-            }
-            if (!isNoMediaFileExists()) {
-                if (createNewFile(soundDirectory() + NO_MEDIA_FILE)) {
+            if (!isNoMediaFileExists(ctx)) {
+                if (createNewFile(soundDirectory(ctx) + NO_MEDIA_FILE)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "createDirs: createNoMediaFile: success");
                     }
@@ -553,45 +575,51 @@ public class UtilsFile {
                 }
             }
         }
-        if (isImportDirectoryExists()) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "createDirs: importDirExists: true");
-            }
-        } else {
-            if (!createImportDirectory()) {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (isImportDirectoryExists(ctx)) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "createDirs: createImportDir: failed");
+                    MyLog.i(CLS_NAME, "createDirs: importDirExists: true");
                 }
-                return false;
-            }
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "createDirs: createImportDir: success");
+            } else {
+                if (!createImportDirectory(ctx)) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "createDirs: createImportDir: failed");
+                    }
+                    return false;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "createDirs: createImportDir: success");
+                }
             }
         }
-        if (isExportDirectoryExists()) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "createDirs: exportDirExists: true");
-            }
-        } else {
-            if (!createExportDirectory()) {
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            if (isExportDirectoryExists(ctx)) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "createDirs: createExportDir: failed");
+                    MyLog.i(CLS_NAME, "createDirs: exportDirExists: true");
                 }
-                return false;
-            }
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "createDirs: createExportDir: success");
+            } else {
+                if (!createExportDirectory(ctx)) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "createDirs: createExportDir: failed");
+                    }
+                    return false;
+                }
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "createDirs: createExportDir: success");
+                }
             }
         }
         return true;
     }
 
-    public static @NonNull List<File> getSoundFiles() { //TODO Manifest.permission#READ_MEDIA_AUDIO
+    public static @NonNull List<File> getSoundFiles(@NonNull final Context ctx) { //TODO Manifest.permission#READ_MEDIA_AUDIO
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoClassDefFoundError: IOFileFilter
-                return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(soundDirectory(), soundFileFilter(), null));
+                return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(soundDirectory(ctx), soundFileFilter(), null));
             } else {
-                final File[] fileArray = soundDirectory().listFiles((dir, name) -> {
+                final File[] fileArray = soundDirectory(ctx).listFiles((dir, name) -> {
                     if (name != null) {
                         return IOCase.INSENSITIVE.checkEndsWith(name, Constants.DEFAULT_AUDIO_FILE_SUFFIX) || IOCase.INSENSITIVE.checkEndsWith(name, Constants.OGG_AUDIO_FILE_SUFFIX) || IOCase.INSENSITIVE.checkEndsWith(name, Constants.MP3_AUDIO_FILE_SUFFIX);
                     }
@@ -610,17 +638,12 @@ public class UtilsFile {
         return Collections.emptyList();
     }
 
-    public static @Nullable ArrayList<File> getImportFiles() {
+    public static @Nullable ArrayList<File> getImportFiles(@NonNull final Context ctx) {
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) { //NoClassDefFoundError: IOFileFilter
-                return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(getImportDirectory(), importFileFilter(), null));
+                return new ArrayList<>(org.apache.commons.io.FileUtils.listFiles(getImportDirectory(ctx), importFileFilter(), null));
             } else {
-                final File[] fileArray = getImportDirectory().listFiles((dir, name) -> {
-                    if (name != null) {
-                        return IOCase.INSENSITIVE.checkEndsWith(name, EXPORT_FILE_SUFFIX);
-                    }
-                    return false;
-                });
+                final File[] fileArray = getImportDirectory(ctx).listFiles((dir, name) -> IOCase.INSENSITIVE.checkEndsWith(name, EXPORT_FILE_SUFFIX));
                 if (fileArray == null|| fileArray.length == 0) {
                     return null;
                 }
@@ -642,11 +665,11 @@ public class UtilsFile {
         return FileFilterUtils.or(FileFilterUtils.suffixFileFilter(Constants.DEFAULT_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE), FileFilterUtils.suffixFileFilter(Constants.OGG_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE), FileFilterUtils.suffixFileFilter(Constants.MP3_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE));
     }
 
-    private static boolean isQuickLaunchFileExists() {
-        return new File(saiyDirectory() + QUICK_LAUNCH_FILE).exists();
+    private static boolean isQuickLaunchFileExists(@NonNull final Context ctx) {
+        return new File(saiyDirectory(ctx) + QUICK_LAUNCH_FILE).exists();
     }
 
-    private static boolean isNoMediaFileExists() {
-        return new File(soundDirectory() + NO_MEDIA_FILE).exists();
+    private static boolean isNoMediaFileExists(@NonNull final Context ctx) {
+        return new File(soundDirectory(ctx) + NO_MEDIA_FILE).exists();
     }
 }

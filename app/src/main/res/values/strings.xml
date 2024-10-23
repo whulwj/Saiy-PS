@@ -2035,7 +2035,7 @@
     <string name="lp_replacements">This feature has two main functions. The first is to enter words or phrases that Google commonly returns incorrectly, when you were saying something different. Entering what Google should have heard as the replacement, and what it may have heard incorrectly as the phrase, will enable me to map the two together. The second function is to shorten commands that you use frequently. Let\'s say that you often use the command. Call my mum on her mobile. If you enter that as the replacement text, and then your chosen trigger word or keyphrase as the input, I\'ll be able to map the two together, and process your intended command. For more advanced usages, take a glance at the user guide.</string>
     <string name="lp_sound_effects_2">In this option, I explain how you can use sound effects within your custom commands and phrases, along with the ability for you to use your own sound effects that you place on your device storage.</string>
     <string name="no_customisations">No customisations to edit!</string>
-    <string name="no_import_files_found">No import files found in the Saiy/import/ directory</string>
+    <string name="no_import_files_found">No import files found in the %1$s directory</string>
     <string name="storage_unavailable">Storage unavailable?</string>
     <string name="title_no_commands_to_export">No commands to export?</string>
 

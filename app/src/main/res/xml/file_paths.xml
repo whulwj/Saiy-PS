@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-    <external-path
-        name="Saiy"
-        path="Saiy/"/>
+    <external-path name="Saiy" path="Saiy/"/>
+    <external-files-path name="Saiy" path="Saiy/"/>
 </paths>

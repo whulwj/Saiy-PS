@@ -1185,13 +1185,13 @@ public class ExecuteIntent {
         return true;
     }
 
-    public static boolean installQL(Context context) {
+    public static boolean installQL(@NonNull Context context) {
         try {
             final Intent intent = new Intent(Intent.ACTION_VIEW);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.setDataAndType(FileProvider.getUriForFile(context, UtilsFile.FILE_PROVIDER, UtilsFile.quickLaunchFile()), PACKAGE_MIME_TYPE);
+                intent.setDataAndType(FileProvider.getUriForFile(context, UtilsFile.FILE_PROVIDER, UtilsFile.quickLaunchFile(context)), PACKAGE_MIME_TYPE);
             } else {
-                intent.setDataAndType(Uri.fromFile(UtilsFile.quickLaunchFile()), PACKAGE_MIME_TYPE);
+                intent.setDataAndType(Uri.fromFile(UtilsFile.quickLaunchFile(context)), PACKAGE_MIME_TYPE);
             }
             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

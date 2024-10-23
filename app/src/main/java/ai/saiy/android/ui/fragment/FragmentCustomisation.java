@@ -20,8 +20,10 @@ package ai.saiy.android.ui.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +31,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -37,6 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ai.saiy.android.R;
+import ai.saiy.android.files.CachingDocumentFile;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.UIMainAdapter;
@@ -45,6 +49,7 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentCustomisationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsFile;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
@@ -177,6 +182,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                 helper.showCustomReplacementDialog();
                 break;
             case 6:
+                //TODO let user select
                 if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
                     new Thread(new Runnable() {
                         @Override
@@ -212,95 +218,82 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                 }).start();
                 break;
             case 8:
-                if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
-                    if (ai.saiy.android.utils.SPH.getImportWarning(getApplicationContext())) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showProgress(true);
-                                if (ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
-                                    final ai.saiy.android.custom.imports.ImportHelper importHelper = new ai.saiy.android.custom.imports.ImportHelper();
-                                    final List<File> importFiles = importHelper.getImportFiles();
-                                    if (ai.saiy.android.utils.UtilsList.notNaked(importFiles)) {
-                                        if (DEBUG) {
-                                            MyLog.w(CLS_NAME, "importFiles: size: " + importFiles.size());
-                                        }
-                                        final ArrayList<Object> objectArray = importHelper.runImport(importFiles);
-                                        if (ai.saiy.android.utils.UtilsList.notNaked(objectArray)) {
-                                            final int count = importHelper.insertCommands(getApplicationContext(), objectArray);
-                                            switch (count) {
-                                                case 0:
-                                                    toast(getString(R.string.command_import_failed), Toast.LENGTH_LONG);
-                                                    break;
-                                                case 1:
-                                                    toast(getString(R.string.command_imported_successfully), Toast.LENGTH_LONG);
-                                                    break;
-                                                default:
-                                                    toast(getString(R.string.commands_imported_successfully, String.valueOf(count)), Toast.LENGTH_LONG);
-                                                    break;
-                                            }
-                                        } else {
-                                            if (DEBUG) {
-                                                MyLog.w(CLS_NAME, "onClick: IMPORT: objectArray: naked");
-                                            }
-                                            toast(getString(R.string.command_import_failed), Toast.LENGTH_LONG);
-                                        }
-                                    } else {
-                                        if (DEBUG) {
-                                            MyLog.w(CLS_NAME, "onClick: IMPORT: importFiles: naked");
-                                        }
-                                        toast(getString(R.string.no_import_files_found), Toast.LENGTH_LONG);
+                if (ai.saiy.android.utils.SPH.getImportWarning(getApplicationContext())) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                            intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.fromFile(UtilsFile.saiyDirectory(getApplicationContext())));
+                        }
+                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                        startActivityForResult(intent, FragmentCustomisationHelper.IMPORT_PICKER_REQ_CODE);
+                        return;
+                    }
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showProgress(true);
+                            if (ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
+                                final List<File> importFiles = ai.saiy.android.custom.imports.ImportHelper.getImportFiles(getApplicationContext());
+                                if (ai.saiy.android.utils.UtilsList.notNaked(importFiles)) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "importFiles: size: " + importFiles.size());
                                     }
+                                    final ai.saiy.android.custom.imports.ImportHelper importHelper = new ai.saiy.android.custom.imports.ImportHelper();
+                                    final ArrayList<Object> objectArray = importHelper.runImport(importFiles);
+                                    insertCommands(importHelper, objectArray);
                                 } else {
                                     if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "onClick: IMPORT: createDirs failed");
+                                        MyLog.w(CLS_NAME, "onClick: IMPORT: importFiles: naked");
                                     }
-                                    toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
+                                    toast(getString(R.string.no_import_files_found, UtilsFile.RELATIVE_IMPORT_DIRECTORY), Toast.LENGTH_LONG);
                                 }
-                                showProgress(false);
+                            } else {
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "onClick: IMPORT: createDirs failed");
+                                }
+                                toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
                             }
-                        }).start();
-                    } else {
-                        ai.saiy.android.utils.SPH.markImportWarning(getApplicationContext());
-                        helper.showImportWarningDialog();
-                    }
+                            showProgress(false);
+                        }
+                    }).start();
+                } else {
+                    ai.saiy.android.utils.SPH.markImportWarning(getApplicationContext());
+                    helper.showImportWarningDialog();
                 }
                 break;
             case 9:
-                if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
-                    if (ai.saiy.android.utils.SPH.getExportWarning(getApplicationContext())) {
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                showProgress(true);
-                                if (ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
-                                    final ArrayList<ContainerCustomisation> containerCustomisations = new ai.saiy.android.custom.CustomHelper().getCustomisations(getApplicationContext());
-                                    if (ai.saiy.android.utils.UtilsList.notNaked(containerCustomisations)) {
-                                        final Bundle args = new Bundle(1);
-                                        args.putParcelableArrayList(FragmentExportCustomisation.EXTRA_KEY, containerCustomisations);
-                                        if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_EXPORT_CUSTOMISATION))) {
-                                            getParentActivity().doFragmentAddTransaction(FragmentExportCustomisation.newInstance(args), String.valueOf(ActivityHome.INDEX_FRAGMENT_EXPORT_CUSTOMISATION), ActivityHome.ANIMATION_FADE, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
-                                        } else if (DEBUG) {
-                                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_EXPORT_CUSTOMISATION being added");
-                                        }
-                                    } else if (isActive()) {
-                                        showProgress(false);
-                                        getParentActivity().vibrate();
-                                        toast(getString(R.string.title_no_commands_to_export), Toast.LENGTH_SHORT);
+                if (ai.saiy.android.utils.SPH.getExportWarning(getApplicationContext())) {
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            showProgress(true);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
+                                final ArrayList<ContainerCustomisation> containerCustomisations = new ai.saiy.android.custom.CustomHelper().getCustomisations(getApplicationContext());
+                                if (ai.saiy.android.utils.UtilsList.notNaked(containerCustomisations)) {
+                                    final Bundle args = new Bundle(1);
+                                    args.putParcelableArrayList(FragmentExportCustomisation.EXTRA_KEY, containerCustomisations);
+                                    if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_EXPORT_CUSTOMISATION))) {
+                                        getParentActivity().doFragmentAddTransaction(FragmentExportCustomisation.newInstance(args), String.valueOf(ActivityHome.INDEX_FRAGMENT_EXPORT_CUSTOMISATION), ActivityHome.ANIMATION_FADE, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
+                                    } else if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_EXPORT_CUSTOMISATION being added");
                                     }
-                                } else {
-                                    if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "onClick: EXPORT: createDirs failed");
-                                    }
-                                    toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
+                                } else if (isActive()) {
+                                    showProgress(false);
+                                    getParentActivity().vibrate();
+                                    toast(getString(R.string.title_no_commands_to_export), Toast.LENGTH_SHORT);
                                 }
-                                showProgress(false);
+                            } else {
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "onClick: EXPORT: createDirs failed");
+                                }
+                                toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
                             }
-                        }).start();
-                    } else {
-                        ai.saiy.android.utils.SPH.markExportWarning(getApplicationContext());
-                        helper.showExportWarningDialog();
-                    }
+                            showProgress(false);
+                        }
+                    }).start();
+                } else {
+                    ai.saiy.android.utils.SPH.markExportWarning(getApplicationContext());
+                    helper.showExportWarningDialog();
                 }
                 break;
             default:
@@ -360,6 +353,52 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
         }
 
         return true;
+    }
+
+    private void insertCommands(@NonNull ai.saiy.android.custom.imports.ImportHelper importHelper, ArrayList<Object> objectArray) {
+        if (ai.saiy.android.utils.UtilsList.notNaked(objectArray)) {
+            final int count = importHelper.insertCommands(getApplicationContext(), objectArray);
+            switch (count) {
+                case 0:
+                    toast(getString(R.string.command_import_failed), Toast.LENGTH_LONG);
+                    break;
+                case 1:
+                    toast(getString(R.string.command_imported_successfully), Toast.LENGTH_LONG);
+                    break;
+                default:
+                    toast(getString(R.string.commands_imported_successfully, String.valueOf(count)), Toast.LENGTH_LONG);
+                    break;
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onClick: IMPORT: objectArray: naked");
+            }
+            toast(getString(R.string.command_import_failed), Toast.LENGTH_LONG);
+        }
+    }
+
+    public void importFiles(String directoryName, @NonNull DocumentFile[] documentFiles) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                showProgress(true);
+                final List<CachingDocumentFile> importFiles = ai.saiy.android.custom.imports.ImportHelper.getImportFiles(documentFiles);
+                if (ai.saiy.android.utils.UtilsList.notNaked(importFiles)) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "importFiles: size: " + importFiles.size());
+                    }
+                    final ai.saiy.android.custom.imports.ImportHelper importHelper = new ai.saiy.android.custom.imports.ImportHelper();
+                    final ArrayList<Object> objectArray = importHelper.runImport(getApplicationContext(), importFiles);
+                    insertCommands(importHelper, objectArray);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: IMPORT: importFiles: naked");
+                    }
+                    toast(getString(R.string.no_import_files_found, directoryName), Toast.LENGTH_LONG);
+                }
+                showProgress(false);
+            }
+        }).start();
     }
 
     public void toast(String text, int duration) {

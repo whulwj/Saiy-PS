@@ -1896,7 +1896,7 @@
     <string name="lp_replacements">此属性有两个主要功能。 第一个是输入当您说一些不同的东西的时候，谷歌通常无法正确返回的单词或短语。输入谷歌本来应该听到的作为替换，以及它可能听到的不正确的短语，将让我把二者映射在一起。 第二个功能是缩短您经常使用的命令。假设您经常使用此命令。打电话给妈妈的手机。如果您输入它作为替代文本，然后您所选的触发词或关键词作为输入，我将能够把二者映射在一起，并处理您想要的命令。有关更高级使用，请浏览用户指南。</string>
     <string name="lp_sound_effects_2">在此选项里，我将解释如何在自定义命令和短语里使用声音效果，以及您能够使用您的设备存储设备上的声音效果。</string>
     <string name="no_customisations">No customisations to edit!</string>
-    <string name="no_import_files_found">No import files found in the Saiy/import/ directory</string>
+    <string name="no_import_files_found">No import files found in the %1$s directory</string>
     <string name="storage_unavailable">Storage unavailable?</string>
     <string name="title_no_commands_to_export">No commands to export?</string>
 

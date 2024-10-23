@@ -2,8 +2,11 @@ package ai.saiy.android.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.DocumentsContract;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,6 +17,8 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.documentfile.provider.DocumentFile;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,9 +35,11 @@ import ai.saiy.android.custom.exports.ExportHelper;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.UIExportCustomisationAdapter;
 import ai.saiy.android.ui.containers.ContainerCustomisation;
+import ai.saiy.android.ui.fragment.helper.FragmentCustomisationHelper;
 import ai.saiy.android.ui.fragment.helper.FragmentExportCustomisationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsFile;
 
 public class FragmentExportCustomisation extends Fragment implements View.OnClickListener {
     public static final String EXTRA_KEY = "container_customisation_key";
@@ -64,18 +71,18 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
         }
     }
 
-    private boolean runExport(ArrayList<ContainerCustomisation> arrayList) {
+    private boolean runExport(@Nullable final DocumentFile documentFile, ArrayList<ContainerCustomisation> arrayList) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "runExport: size: " + arrayList.size());
         }
-        final ExportHelper exportHelper = new ExportHelper();
-        if (!exportHelper.exportProceed(getApplicationContext())) {
+        if (documentFile == null && !ExportHelper.exportProceed(getApplicationContext())) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "exportProceed: false");
             }
             return false;
         }
         final com.google.gson.Gson gson = new com.google.gson.GsonBuilder().disableHtmlEscaping().create();
+        final ExportHelper exportHelper = new ExportHelper(gson);
         for (ContainerCustomisation containerCustomisation : arrayList) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "getCustom: " + containerCustomisation.getCustom().name());
@@ -91,7 +98,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "customPhrase: " + customPhrase.getKeyphrase());
                     }
-                    exportHelper.exportCustomPhrase(customPhrase);
+                    exportHelper.exportCustomPhrase(getApplicationContext(), documentFile, customPhrase);
                     break;
                 case CUSTOM_NICKNAME:
                     final CustomNickname customNickname = gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomNickname>() {
@@ -99,15 +106,15 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "customNickname: " + customNickname.getNickname());
                     }
-                    exportHelper.exportCustomNickname(customNickname);
+                    exportHelper.exportCustomNickname(getApplicationContext(), documentFile, customNickname);
                     break;
                 case CUSTOM_REPLACEMENT:
-                    final CustomReplacement customReplacement = (CustomReplacement) gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomReplacement>() {
+                    final CustomReplacement customReplacement = gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomReplacement>() {
                     }.getType());
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "customReplacement: " + customReplacement.getKeyphrase());
                     }
-                    exportHelper.exportCustomReplacement(customReplacement);
+                    exportHelper.exportCustomReplacement(getApplicationContext(), documentFile, customReplacement);
                     break;
                 case CUSTOM_COMMAND:
                     final CustomCommand customCommand = gson.fromJson(serialised, new com.google.gson.reflect.TypeToken<CustomCommand>() {
@@ -115,73 +122,77 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "customCommandContainer: " + customCommand.getKeyphrase());
                     }
-                    switch (customCommand.getCustomAction()) {
-                        case CUSTOM_DISPLAY_CONTACT:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_DISPLAY_CONTACT");
-                            }
-                            break;
-                        case CUSTOM_TASKER_TASK:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_TASKER_TASK");
-                            }
-                            break;
-                        case CUSTOM_ACTIVITY:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_ACTIVITY");
-                            }
-                            break;
-                        case CUSTOM_CALL_CONTACT:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_CALL_CONTACT");
-                            }
-                            break;
-                        case CUSTOM_LAUNCH_APPLICATION:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_LAUNCH_APPLICATION");
-                            }
-                            break;
-                        case CUSTOM_LAUNCH_SHORTCUT:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_LAUNCH_SHORTCUT");
-                            }
-                            break;
-                        case CUSTOM_AUTOMATE_FLOW:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_AUTOMATE_FLOW");
-                            }
-                            break;
-                        case CUSTOM_SEARCHABLE:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_SEARCHABLE");
-                            }
-                            break;
-                        case CUSTOM_INTENT_SERVICE:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_INTENT_SERVICE");
-                            }
-                            break;
-                        case CUSTOM_HTTP:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_HTTP");
-                            }
-                            break;
-                        case CUSTOM_SEND_INTENT:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "CUSTOM_SEND_INTENT");
-                            }
-                            break;
-                        default:
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "default custom type?");
-                            }
-                            break;
-                    }
-                    exportHelper.exportCustomCommand(customCommand);
+                    logCustomCommand(customCommand);
+                    exportHelper.exportCustomCommand(getApplicationContext(), documentFile, customCommand);
                     break;
             }
         }
         return true;
+    }
+
+    private void logCustomCommand(@NonNull CustomCommand customCommand) {
+        switch (customCommand.getCustomAction()) {
+            case CUSTOM_DISPLAY_CONTACT:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_DISPLAY_CONTACT");
+                }
+                break;
+            case CUSTOM_TASKER_TASK:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_TASKER_TASK");
+                }
+                break;
+            case CUSTOM_ACTIVITY:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_ACTIVITY");
+                }
+                break;
+            case CUSTOM_CALL_CONTACT:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_CALL_CONTACT");
+                }
+                break;
+            case CUSTOM_LAUNCH_APPLICATION:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_LAUNCH_APPLICATION");
+                }
+                break;
+            case CUSTOM_LAUNCH_SHORTCUT:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_LAUNCH_SHORTCUT");
+                }
+                break;
+            case CUSTOM_AUTOMATE_FLOW:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_AUTOMATE_FLOW");
+                }
+                break;
+            case CUSTOM_SEARCHABLE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_SEARCHABLE");
+                }
+                break;
+            case CUSTOM_INTENT_SERVICE:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_INTENT_SERVICE");
+                }
+                break;
+            case CUSTOM_HTTP:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_HTTP");
+                }
+                break;
+            case CUSTOM_SEND_INTENT:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "CUSTOM_SEND_INTENT");
+                }
+                break;
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "default custom type?");
+                }
+                break;
+        }
     }
 
     public void toast(String text, int duration) {
@@ -328,6 +339,45 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onActivityResult: " + requestCode + " ~ " + resultCode);
+        }
+        if (requestCode != FragmentCustomisationHelper.EXPORT_PICKER_REQ_CODE) {
+            return;
+        }
+        if (resultCode != Activity.RESULT_OK) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onActivityResult: " + requestCode);
+            }
+            return;
+        }
+        final Uri directoryUri = data.getData();
+        if (directoryUri == null) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "onActivityResult: export uri null");
+            }
+            return;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onActivityResult: exportUri: " + directoryUri);
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            if (takeFlags != 0) {
+                getApplicationContext().getContentResolver().takePersistableUriPermission(directoryUri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+            }
+        }
+        final DocumentFile documentFile = DocumentFile.fromTreeUri(getApplicationContext(), directoryUri);
+        if (documentFile == null || !documentFile.isDirectory()) {
+            toast(getString(R.string.storage_unavailable), Toast.LENGTH_LONG);
+            return;
+        }
+        runExport(documentFile);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         if (DEBUG) {
@@ -344,60 +394,16 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
             if (mObjects.isEmpty() || !isActive()) {
                 return true;
             }
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    showProgress(true);
-                    SparseBooleanArray sparseBooleanArray = ((UIExportCustomisationAdapter) getAdapter()).getCheckedArray();
-                    int size = sparseBooleanArray.size();
-                    ArrayList<ContainerCustomisation> arrayList = new ArrayList<>();
-                    for (int i = 0; i < size; i++) {
-                        int key = sparseBooleanArray.keyAt(i);
-                        boolean value = sparseBooleanArray.get(key);
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "sparse array: key: " + key + " ~ value: " + value);
-                        }
-                        if (value) {
-                            ContainerCustomisation containerCustomisation = mObjects.get(key);
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "sparse array: getTitle: " + containerCustomisation.getTitle());
-                                MyLog.i(CLS_NAME, "sparse array: getSubtitle: " + containerCustomisation.getSubtitle());
-                            }
-                            arrayList.add(containerCustomisation);
-                        }
-                    }
-                    switch (arrayList.size()) {
-                        case 0:
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "sparse array: no items selected");
-                            }
-                            break;
-                        case 1:
-                            if (runExport(arrayList)) {
-                                toast(getString(R.string.command_exported_successfully), Toast.LENGTH_LONG);
-                                onBackPressed();
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.w(CLS_NAME, "runExport: failed");
-                                }
-                                toast(getString(R.string.title_export_failed), Toast.LENGTH_LONG);
-                            }
-                            break;
-                        default:
-                            if (runExport(arrayList)) {
-                                toast(getString(R.string.commands_exported_successfully, String.valueOf(arrayList.size())), Toast.LENGTH_LONG);
-                                onBackPressed();
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.w(CLS_NAME, "runExport: failed");
-                                }
-                                toast(getString(R.string.title_export_failed), Toast.LENGTH_LONG);
-                            }
-                            break;
-                    }
-                    showProgress(false);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                final Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O && Build.VERSION.SDK_INT <= Build.VERSION_CODES.Q) {
+                    intent.putExtra(DocumentsContract.EXTRA_INITIAL_URI, Uri.fromFile(UtilsFile.saiyDirectory(getApplicationContext())));
                 }
-            }).start();
+                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_PERSISTABLE_URI_PERMISSION);
+                startActivityForResult(intent, FragmentCustomisationHelper.EXPORT_PICKER_REQ_CODE);
+                return true;
+            }
+            runExport(null);
             return true;
         } else if (R.id.action_select_all == menuItem.getItemId()) {
             if (mObjects.isEmpty() || !isActive()) {
@@ -427,6 +433,59 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
         } else {
             return super.onOptionsItemSelected(menuItem);
         }
+    }
+
+    private ArrayList<ContainerCustomisation> getSelections() {
+        final SparseBooleanArray sparseBooleanArray = ((UIExportCustomisationAdapter) getAdapter()).getCheckedArray();
+        int size = sparseBooleanArray.size();
+        ArrayList<ContainerCustomisation> arrayList = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            int key = sparseBooleanArray.keyAt(i);
+            boolean value = sparseBooleanArray.get(key);
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "sparse array: key: " + key + " ~ value: " + value);
+            }
+            if (value) {
+                ContainerCustomisation containerCustomisation = mObjects.get(key);
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "sparse array: getTitle: " + containerCustomisation.getTitle());
+                    MyLog.i(CLS_NAME, "sparse array: getSubtitle: " + containerCustomisation.getSubtitle());
+                }
+                arrayList.add(containerCustomisation);
+            }
+        }
+        return arrayList;
+    }
+
+    private void runExport(@Nullable final DocumentFile documentFile) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                showProgress(true);
+                final ArrayList<ContainerCustomisation> arrayList = getSelections();
+                final int itemsCount = arrayList.size();
+                if (0 == itemsCount) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "sparse array: no items selected");
+                    }
+                } else {
+                    if (runExport(documentFile, arrayList)) {
+                        if (itemsCount > 1) {
+                            toast(getString(R.string.commands_exported_successfully, String.valueOf(itemsCount)), Toast.LENGTH_LONG);
+                        } else {
+                            toast(getString(R.string.command_exported_successfully), Toast.LENGTH_LONG);
+                        }
+                        onBackPressed();
+                    } else {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "runExport: failed");
+                        }
+                        toast(getString(R.string.title_export_failed), Toast.LENGTH_LONG);
+                    }
+                }
+                showProgress(false);
+            }
+        }).start();
     }
 
     @Override

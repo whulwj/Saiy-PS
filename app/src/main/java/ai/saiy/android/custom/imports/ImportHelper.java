@@ -1,18 +1,29 @@
 package ai.saiy.android.custom.imports;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.documentfile.provider.DocumentFile;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
 import com.google.gson.JsonSyntaxException;
 import com.google.gson.stream.JsonReader;
 
+import org.apache.commons.io.IOCase;
+
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import ai.saiy.android.custom.CustomCommandHelper;
@@ -27,11 +38,80 @@ import ai.saiy.android.custom.exports.CustomNicknameExport;
 import ai.saiy.android.custom.exports.CustomPhraseExport;
 import ai.saiy.android.custom.exports.CustomReplacementExport;
 import ai.saiy.android.custom.exports.ExportConfiguration;
+import ai.saiy.android.files.CachingDocumentFile;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsFile;
 
-public class ImportHelper {
+public final class ImportHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
-    private final String CLS_NAME = ImportHelper.class.getSimpleName();
+    private static final String CLS_NAME = ImportHelper.class.getSimpleName();
+    private static final String JSON_TYPE = "application/json";
+
+    public static @NonNull List<File> getImportFiles(@NonNull final Context ctx) {
+        final ArrayList<File> importFiles = ai.saiy.android.utils.UtilsFile.getImportFiles(ctx);
+        return ai.saiy.android.utils.UtilsList.notNaked(importFiles) ? ai.saiy.android.utils.UtilsFile.sortByLastModified(importFiles) : Collections.emptyList();
+    }
+
+    public static @NonNull List<CachingDocumentFile> getImportFiles(@NonNull DocumentFile[] documentFiles) {
+        final ArrayList<CachingDocumentFile> importFiles = new ArrayList<>();
+        String name;
+        String type;
+        for (DocumentFile documentFile : documentFiles) {
+            if (documentFile.isDirectory()) {
+                continue;
+            }
+            type = documentFile.getType();
+            if (TextUtils.isEmpty(type)) {
+                name = documentFile.getName();
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "check importFile name:" + name);
+                }
+                if (IOCase.INSENSITIVE.checkEndsWith(name, UtilsFile.EXPORT_FILE_SUFFIX)) {
+                    importFiles.add(new CachingDocumentFile(documentFile));
+                } else if (IOCase.INSENSITIVE.checkEndsWith(name, UtilsFile.OLD_EXPORT_FILE_SUFFIX)) {
+                    importFiles.add(new CachingDocumentFile(documentFile));
+                }
+            } else {
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "check importFile type:" + type);
+                }
+                if (TextUtils.equals(type, JSON_TYPE)) {
+                    importFiles.add(new CachingDocumentFile(documentFile));
+                }
+            }
+        }
+        if (!ai.saiy.android.utils.UtilsList.notNaked(importFiles)){
+            return Collections.emptyList();
+        }
+        importFiles.sort(new Comparator<CachingDocumentFile>() {
+            /**
+             * Compares the last the last modified date/time of two CachingDocumentFiles.
+             *
+             * @param o1 The first CachingDocumentFile to compare.
+             * @param o2 The second CachingDocumentFile to compare.
+             * @return a negative value if the first CachingDocumentFile's last modified date/time is less than the second, zero if the last
+             *         modified date/time are the same and a positive value if the first CachingDocumentFile's last modified date/time is
+             *         greater than the second CachingDocumentFile.
+             */
+            @Override
+            public int compare(CachingDocumentFile o1, CachingDocumentFile o2) {
+                final long result = o1.getLastModified() - o2.getLastModified();
+                if (result < 0) {
+                    return -1;
+                } else if (result > 0) {
+                    return 1;
+                } else {
+                    return 0;
+                }
+            }
+        });
+        return importFiles;
+    }
+
+    private final Gson mGson;
+    public ImportHelper() {
+        this.mGson = new com.google.gson.GsonBuilder().disableHtmlEscaping().create();
+    }
 
     private CustomNickname toCustomNickname(CustomNicknameExport customNicknameExport) {
         return new CustomNickname(customNicknameExport.getNickname(), customNicknameExport.getContactName());
@@ -108,91 +188,26 @@ public class ImportHelper {
         return i;
     }
 
-    public @NonNull List<File> getImportFiles() {
-        final ArrayList<File> importFiles = ai.saiy.android.utils.UtilsFile.getImportFiles();
-        return ai.saiy.android.utils.UtilsList.notNaked(importFiles) ? ai.saiy.android.utils.UtilsFile.sortByLastModified(importFiles) : Collections.emptyList();
-    }
-
     public ArrayList<Object> runImport(@NonNull List<File> files) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "runImport");
         }
-        final com.google.gson.Gson gson = new com.google.gson.GsonBuilder().disableHtmlEscaping().create();
         ArrayList<Object> objectArray = new ArrayList<>();
-        FileReader fileReader = null;
-        JsonReader jsonReader = null;
+        Object object;
         for (File file : files) {
             try {
-                fileReader = new FileReader(file);
-                jsonReader = new JsonReader(fileReader);
-
-                ExportConfiguration exportConfiguration = ((CustomGeneric) gson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomGeneric>() {
-                }.getType())).getExportConfiguration();
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "exportConfiguration: getVersion: " + exportConfiguration.getVersion());
-                    MyLog.i(CLS_NAME, "exportConfiguration: getTimestamp: " + exportConfiguration.getTimestamp());
-                    MyLog.i(CLS_NAME, "exportConfiguration: getCustom: " + exportConfiguration.getCustom().name());
+                final ExportConfiguration exportConfiguration = runImport(new BufferedReader(new FileReader(file)));
+                if (exportConfiguration == null) {
+                    continue;
                 }
-                switch (exportConfiguration.getCustom()) {
-                    case CUSTOM_PHRASE:
-                        objectArray.add(gson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomPhraseExport>() {
-                        }.getType()));
-                        break;
-                    case CUSTOM_NICKNAME:
-                        objectArray.add(gson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomNicknameExport>() {
-                        }.getType()));
-                        break;
-                    case CUSTOM_REPLACEMENT:
-                        objectArray.add(gson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomReplacementExport>() {
-                        }.getType()));
-                        break;
-                    case CUSTOM_COMMAND:
-                        objectArray.add(gson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomCommandExport>() {
-                        }.getType()));
-                        break;
-                    case CUSTOM_INTRO:
-                        break;
-                    default:
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "runImport: instanceOfNone");
-                        }
-                        break;
+                object = runImport(exportConfiguration, new BufferedReader(new FileReader(file)));
+                if (object != null) {
+                    objectArray.add(object);
                 }
             } catch (FileNotFoundException e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "runImport: FileNotFoundException");
                     e.printStackTrace();
-                }
-            } catch (JsonSyntaxException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "runImport: JsonSyntaxException");
-                    e.printStackTrace();
-                }
-            } catch (JsonIOException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "runImport: JsonIOException");
-                    e.printStackTrace();
-                }
-            } finally {
-                if (fileReader != null) {
-                    try {
-                        fileReader.close();
-                    } catch (Throwable t) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "runImport: " + t.getClass().getSimpleName() + ", " + t.getMessage());
-                        }
-                    }
-                    fileReader = null;
-                }
-                if (jsonReader != null) {
-                    try {
-                        jsonReader.close();
-                    } catch (Throwable t) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "runImport: " + t.getClass().getSimpleName() + ", " + t.getMessage());
-                        }
-                    }
-                    jsonReader = null;
                 }
             }
         }
@@ -200,5 +215,135 @@ public class ImportHelper {
             MyLog.i(CLS_NAME, "runImport: objectArray: size " + objectArray.size());
         }
         return objectArray;
+    }
+
+    public ArrayList<Object> runImport(@NonNull final Context ctx, @NonNull List<CachingDocumentFile> documentFiles) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "runImport");
+        }
+        final ContentResolver contentResolver = ctx.getContentResolver();
+        final com.google.gson.Gson gson = new com.google.gson.GsonBuilder().disableHtmlEscaping().create();
+        ArrayList<Object> objectArray = new ArrayList<>();
+        Object object;
+        for (CachingDocumentFile documentFile : documentFiles) {
+            try {
+                final ExportConfiguration exportConfiguration = runImport(new BufferedReader(new InputStreamReader(contentResolver.openInputStream(documentFile.getUri()))));
+                if (exportConfiguration == null) {
+                    continue;
+                }
+                object = runImport(exportConfiguration, new BufferedReader(new InputStreamReader(contentResolver.openInputStream(documentFile.getUri()))));
+                if (object != null) {
+                    objectArray.add(object);
+                }
+            } catch (FileNotFoundException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "runImport: FileNotFoundException");
+                    e.printStackTrace();
+                }
+            }
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "runImport: objectArray: size " + objectArray.size());
+        }
+        return objectArray;
+    }
+
+    private @Nullable ExportConfiguration runImport(@NonNull Reader reader) {
+        JsonReader jsonReader = null;
+        try {
+            jsonReader = new JsonReader(reader);
+            final ExportConfiguration exportConfiguration = ((CustomGeneric) mGson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomGeneric>() {
+            }.getType())).getExportConfiguration();
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "exportConfiguration: getVersion: " + exportConfiguration.getVersion());
+                MyLog.i(CLS_NAME, "exportConfiguration: getTimestamp: " + exportConfiguration.getTimestamp());
+                MyLog.i(CLS_NAME, "exportConfiguration: getCustom: " + exportConfiguration.getCustom().name());
+            }
+            return exportConfiguration;
+        } catch (JsonSyntaxException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "runImport: JsonSyntaxException");
+                e.printStackTrace();
+            }
+        } catch (JsonIOException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "runImport: JsonIOException");
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                reader.close();
+            } catch (Throwable t) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "runImport: " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                }
+            }
+            if (jsonReader != null) {
+                try {
+                    jsonReader.close();
+                } catch (Throwable t) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "runImport: " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private @Nullable Object runImport(@NonNull ExportConfiguration exportConfiguration, @NonNull BufferedReader reader) {
+        JsonReader jsonReader = null;
+        try {
+            jsonReader = new JsonReader(reader);
+            switch (exportConfiguration.getCustom()) {
+                case CUSTOM_PHRASE:
+                    return mGson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomPhraseExport>() {
+                    }.getType());
+                case CUSTOM_NICKNAME:
+                    return mGson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomNicknameExport>() {
+                    }.getType());
+                case CUSTOM_REPLACEMENT:
+                    return mGson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomReplacementExport>() {
+                    }.getType());
+                case CUSTOM_COMMAND:
+                    return mGson.fromJson(jsonReader, new com.google.gson.reflect.TypeToken<CustomCommandExport>() {
+                    }.getType());
+                case CUSTOM_INTRO:
+                    break;
+                default:
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "runImport: instanceOfNone");
+                    }
+                    break;
+            }
+        } catch (JsonSyntaxException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "runImport: JsonSyntaxException");
+                e.printStackTrace();
+            }
+        } catch (JsonIOException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "runImport: JsonIOException");
+                e.printStackTrace();
+            }
+        } finally {
+            try {
+                reader.close();
+            } catch (Throwable t) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "runImport: " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                }
+            }
+            if (jsonReader != null) {
+                try {
+                    jsonReader.close();
+                } catch (Throwable t) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "runImport: " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                    }
+                }
+            }
+        }
+        return null;
     }
 }

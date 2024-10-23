@@ -113,11 +113,10 @@
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
+        android:maxSdkVersion="28"/>
 
     <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18"/>
+        android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <!--suppress DeprecatedClassUsageInspection -->
     <uses-permission
