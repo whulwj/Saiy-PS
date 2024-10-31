@@ -65,20 +65,26 @@ public class GoogleNowMonitor {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
 
                 boolean timeout = true;
-                final String foregroundPackage = UtilsApplication.getForegroundPackage(ctx, HISTORY);
+                if ((System.currentTimeMillis() - MAX_DURATION) < then) {
+                    final String foregroundPackage = UtilsApplication.getForegroundPackage(ctx, HISTORY);
 
-                if (UtilsString.notNaked(foregroundPackage)) {
-                    if (pPACKAGE_NAME_GOOGLE_NOW.matcher(foregroundPackage).matches()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "foreground remains google");
+                    if (UtilsString.notNaked(foregroundPackage)) {
+                        if (pPACKAGE_NAME_GOOGLE_NOW.matcher(foregroundPackage).matches()) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "foreground remains google");
+                            }
+                            Schedulers.io().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
+                            return;
+                        } else {
+                            GoogleNowMonitor.this.restartHotword(ctx);
+                            timeout = false;
                         }
                     } else {
-                        GoogleNowMonitor.this.restartHotword(ctx);
-                        timeout = false;
-                    }
-                } else {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "foreground package null");
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "foreground package null");
+                        }
+                        Schedulers.io().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
+                        return;
                     }
                 }
 
@@ -90,7 +96,7 @@ public class GoogleNowMonitor {
                     GoogleNowMonitor.this.shutdownHotword(ctx);
                 }
             }
-        }, Math.max(0, Math.min(System.currentTimeMillis() - then, MAX_DURATION)), TimeUnit.MILLISECONDS);
+        }, 5000, TimeUnit.MILLISECONDS);
     }
 
     /**
