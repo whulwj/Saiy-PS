@@ -85,6 +85,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 25/07/2016.
@@ -910,7 +911,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 MyLog.i(CLS_NAME, "startEnrollment: onPositive");
                             }
 
-                            if (SaiyAccountHelper.deleteAccount(FragmentSuperuserHelper.this.getApplicationContext(), accountName, null)) {
+                            if (SaiyAccountHelper.deleteAccount(getApplicationContext(), accountName, null)) {
                                 FragmentSuperuserHelper.this.proceedEnrollment(accountName);
                             }
                         }
@@ -1145,7 +1146,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         showProgress(true);
-                        new Thread() {
+                        Schedulers.io().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {
                                 Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
@@ -1212,7 +1213,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                     }
                                 });
                             }
-                        }.start();
+                        });
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {

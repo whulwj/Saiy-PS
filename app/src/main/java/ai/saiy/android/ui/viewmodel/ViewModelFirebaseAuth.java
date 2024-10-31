@@ -22,6 +22,7 @@ import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public final class ViewModelFirebaseAuth extends AndroidViewModel implements LifecycleEventObserver,
         UserFirebaseListener {
@@ -87,7 +88,7 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
         if (DEBUG) {
             MyLog.i(CLS_NAME, "persistFirebase");
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 com.google.firebase.database.FirebaseDatabase.getInstance().setPersistenceEnabled(true);
@@ -115,7 +116,7 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
                 }
                 new UserFirebaseHelper().isAdFree(getApplication(), ViewModelFirebaseAuth.this);
             }
-        }).start();
+        });
     }
 
     /**

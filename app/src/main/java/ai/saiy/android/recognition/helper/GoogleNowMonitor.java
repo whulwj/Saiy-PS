@@ -22,6 +22,7 @@ import android.os.Process;
 
 import androidx.annotation.NonNull;
 
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.applications.UtilsApplication;
@@ -29,6 +30,7 @@ import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 05/09/2016.
@@ -57,41 +59,26 @@ public class GoogleNowMonitor {
             MyLog.i(CLS_NAME, "start");
         }
 
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
 
                 boolean timeout = true;
+                final String foregroundPackage = UtilsApplication.getForegroundPackage(ctx, HISTORY);
 
-                while ((System.currentTimeMillis() - MAX_DURATION) < then) {
-
-                    try {
-                        Thread.sleep(5000);
-                    } catch (final InterruptedException e) {
+                if (UtilsString.notNaked(foregroundPackage)) {
+                    if (pPACKAGE_NAME_GOOGLE_NOW.matcher(foregroundPackage).matches()) {
                         if (DEBUG) {
-                            MyLog.w(CLS_NAME, "InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
-
-                    final String foregroundPackage = UtilsApplication.getForegroundPackage(ctx, HISTORY);
-
-                    if (UtilsString.notNaked(foregroundPackage)) {
-
-                        if (pPACKAGE_NAME_GOOGLE_NOW.matcher(foregroundPackage).matches()) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "foreground remains google");
-                            }
-                        } else {
-                            GoogleNowMonitor.this.restartHotword(ctx);
-                            timeout = false;
-                            break;
+                            MyLog.i(CLS_NAME, "foreground remains google");
                         }
                     } else {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "foreground package null");
-                        }
+                        GoogleNowMonitor.this.restartHotword(ctx);
+                        timeout = false;
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "foreground package null");
                     }
                 }
 
@@ -103,7 +90,7 @@ public class GoogleNowMonitor {
                     GoogleNowMonitor.this.shutdownHotword(ctx);
                 }
             }
-        }).start();
+        }, Math.max(0, Math.min(System.currentTimeMillis() - then, MAX_DURATION)), TimeUnit.MILLISECONDS);
     }
 
     /**

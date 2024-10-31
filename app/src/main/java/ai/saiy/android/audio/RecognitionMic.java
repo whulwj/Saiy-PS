@@ -33,6 +33,7 @@ import ai.saiy.android.files.FileCreator;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 12/08/2016.
@@ -171,8 +172,8 @@ public class RecognitionMic implements PauseListener {
             throw new IllegalArgumentException("No iMic listener is set");
         }
 
-        new Thread() {
-
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
             public void run() {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
 
@@ -266,7 +267,7 @@ public class RecognitionMic implements PauseListener {
                         break;
                 }
             }
-        }.start();
+        });
     }
 
     private void onError(final int error) {

@@ -38,6 +38,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to check the device's network connectivity and speed. This is made of up of code samples
@@ -447,9 +448,9 @@ public final class Network {
 
             final AtomicBoolean success = new AtomicBoolean(false);
 
-            new Thread() {
+            Schedulers.io().scheduleDirect(new Runnable() {
+                @Override
                 public void run() {
-
                     HttpURLConnection urlConnection = null;
 
                     final int timeout = SPH.getPingTimeout(ctx);
@@ -490,7 +491,7 @@ public final class Network {
                         }
                     }
                 }
-            }.start();
+            });
 
             try {
                 lock.wait();

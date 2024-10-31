@@ -86,6 +86,7 @@ import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsParcelable;
 import ai.saiy.android.utils.UtilsReflection;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -355,7 +356,7 @@ public class FragmentSettingsHelper {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "showVoiceSelector: onPositive: " + position);
                                             }
-                                            new Thread(new Runnable() {
+                                            Schedulers.computation().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     final android.speech.tts.Voice voice = voices.get(position);
@@ -378,7 +379,7 @@ public class FragmentSettingsHelper {
                                                     }
                                                     SPH.setDefaultTTSVoice(getApplicationContext(), base64String);
                                                 }
-                                            }).start();
+                                            });
                                             shutdownTTS();
                                         }
                                     }

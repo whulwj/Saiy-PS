@@ -10,9 +10,9 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.wearable.WearableListenerService;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Wearable;
+import com.google.android.gms.wearable.WearableListenerService;
 import com.google.gson.GsonBuilder;
 
 import java.net.URISyntaxException;
@@ -23,6 +23,7 @@ import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.wear.containers.WearMessageEvent;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class WearListenerService extends WearableListenerService {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -37,7 +38,7 @@ public class WearListenerService extends WearableListenerService {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendMessage: nodeId: " + nodeId);
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String gsonString = new GsonBuilder().disableHtmlEscaping().create().toJson(wearMessageEvent);
@@ -83,7 +84,7 @@ public class WearListenerService extends WearableListenerService {
                     stopSelf(pair.second);
                 }
             }
-        }).start();
+        });
     }
 
     @Override

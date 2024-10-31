@@ -56,6 +56,7 @@ import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -435,7 +436,7 @@ public class FragmentHomeHelper {
     }
 
     public void showAccountPicker() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Pair<Boolean, String> iapKeyPair = new IAPCodeReference().getKey(getApplicationContext());
@@ -461,7 +462,7 @@ public class FragmentHomeHelper {
                     MyLog.w(CLS_NAME, "showAccountPicker Fragment detached");
                 }
             }
-        }).start();
+        });
     }
 
     private void showAdOverviewDialog() {

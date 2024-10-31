@@ -30,6 +30,7 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsFile;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Short-lived Activity class to handle the permission requests from the user.
@@ -158,12 +159,12 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
                         bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
                         new LocalRequest(getApplicationContext(), bundle).execute();
                     }
-                    new Thread(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             UtilsFile.createDirs(ActivityPermissionDialog.this.getApplicationContext());
                         }
-                    }).start();
+                    });
                 } else {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_FILE: PERMISSION_DENIED");

@@ -38,6 +38,7 @@
 package ai.saiy.android.audio.pause;
 
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 15/02/2016.
@@ -107,9 +108,9 @@ public class PauseDetector {
         synchronized (this) {
 
             if (!hasDetected) {
-                new Thread() {
+                Schedulers.computation().scheduleDirect(new Runnable() {
+                    @Override
                     public void run() {
-
                         mRecordedLength += buffer.length;
 
                         if (mRecordedLength <= maxSize) {
@@ -123,7 +124,7 @@ public class PauseDetector {
                             hasDetected = true;
                         }
                     }
-                }.start();
+                });
             }
         }
     }
@@ -144,7 +145,8 @@ public class PauseDetector {
 
             if (!hasDetected) {
 
-                new Thread() {
+                Schedulers.computation().scheduleDirect(new Runnable() {
+                    @Override
                     public void run() {
 
                         double pauseScore = getPauseScore();
@@ -163,7 +165,7 @@ public class PauseDetector {
                             }
                         }
                     }
-                }.start();
+                });
 
                 if (DEBUG) {
                     int running = 0;

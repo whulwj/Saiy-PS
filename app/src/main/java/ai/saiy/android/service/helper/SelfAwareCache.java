@@ -43,6 +43,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsFile;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Utility class to manage the caching of data associated with the
@@ -263,7 +264,8 @@ public class SelfAwareCache extends SaiyProgressListener {
         }
 
         if (SPH.getUsedIncrement(mContext) % DBS_MAINTENANCE_INCREMENT == 0) {
-            new Thread() {
+            Schedulers.io().scheduleDirect(new Runnable() {
+                @Override
                 public void run() {
                     Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
 
@@ -279,7 +281,7 @@ public class SelfAwareCache extends SaiyProgressListener {
                         }
                     }
                 }
-            }.start();
+            });
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "shouldRunMaintenance: false: " + SPH.getUsedIncrement(mContext));

@@ -1,5 +1,5 @@
 [versions]
-gradlePlugin = "8.7.0"
+gradlePlugin = "8.7.1"
 googleAuthLibraryOauth2Http = "1.12.2"
 billing = "6.0.1"
 commonsIo = "2.16.1"
@@ -50,6 +50,9 @@ hilt_version = '2.42'
 
 multidex = "2.0.1"
 desugar_jdk_libs_version = "2.1.2"
+rxjava3_version = "3.1.9"
+rx_android_version = "3.0.2"
+rxlint_version = "1.7.8"
 simpleXml = "2.7.1"
 libraries-bom = "26.1.4"
 cloud-dialogflow = "4.11.0"
@@ -128,6 +131,9 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-compiler", version.r
 
 multidex = { group = "androidx.multidex", name = "multidex", version.ref = "multidex" }
 desugar_jdk_libs = { group = "com.android.tools", name = "desugar_jdk_libs", version.ref = "desugar_jdk_libs_version" }
+rxjava3 = { group = "io.reactivex.rxjava3", name = "rxjava", version.ref = "rxjava3_version" }
+rx_android = { group = "io.reactivex.rxjava3", name = "rxandroid", version.ref = "rx_android_version" }
+rxlint = { group = "nl.littlerobots.rxlint", name = "rxlint", version.ref = "rxlint_version" }
 simple-xml = { group = "org.simpleframework", name = "simple-xml", version.ref = "simpleXml" }
 libraries-bom = { group = "com.google.cloud", name = "libraries-bom", version.ref = "libraries-bom" }
 cloud-dialogflow = { group = "com.google.cloud", name = "google-cloud-dialogflow", version.ref = "cloud-dialogflow" }

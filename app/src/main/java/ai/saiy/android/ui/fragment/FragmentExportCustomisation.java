@@ -40,6 +40,7 @@ import ai.saiy.android.ui.fragment.helper.FragmentExportCustomisationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsFile;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentExportCustomisation extends Fragment implements View.OnClickListener {
     public static final String EXTRA_KEY = "container_customisation_key";
@@ -409,7 +410,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
             if (mObjects.isEmpty() || !isActive()) {
                 return true;
             }
-            new Thread(new Runnable() {
+            Schedulers.computation().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     FragmentExportCustomisation.this.isAllChecked = !isAllChecked;
@@ -428,7 +429,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
                         });
                     }
                 }
-            }).start();
+            });
             return true;
         } else {
             return super.onOptionsItemSelected(menuItem);
@@ -458,7 +459,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
     }
 
     private void runExport(@Nullable final DocumentFile documentFile) {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 showProgress(true);
@@ -485,7 +486,7 @@ public class FragmentExportCustomisation extends Fragment implements View.OnClic
                 }
                 showProgress(false);
             }
-        }).start();
+        });
     }
 
     @Override

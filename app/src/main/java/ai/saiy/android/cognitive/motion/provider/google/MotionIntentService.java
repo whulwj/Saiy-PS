@@ -31,6 +31,7 @@ import java.util.Set;
 import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to handle callbacks from the ActivityRecognition API.
@@ -72,7 +73,7 @@ public class MotionIntentService extends IntentService {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onHandleIntent");
         }
-        new Thread(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (!SPH.getSelfAwareEnabled(getApplicationContext())) {
@@ -130,7 +131,7 @@ public class MotionIntentService extends IntentService {
                     }
                 }
             }
-        }).start();
+        });
     }
 
     /**

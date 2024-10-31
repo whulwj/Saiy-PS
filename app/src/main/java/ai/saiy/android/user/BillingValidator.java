@@ -20,6 +20,7 @@ import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class BillingValidator implements AcknowledgePurchaseResponseListener {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -37,7 +38,7 @@ public class BillingValidator implements AcknowledgePurchaseResponseListener {
     }
 
     public void validate(final List<com.android.billingclient.api.PurchaseHistoryRecord> list) {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(mContext) == ConnectionResult.SUCCESS) {
@@ -93,11 +94,11 @@ public class BillingValidator implements AcknowledgePurchaseResponseListener {
                     }
                 }
             }
-        }).start();
+        });
     }
 
     public void validate(final List<com.android.billingclient.api.Purchase> list, final byte condition) {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(mContext) == ConnectionResult.SUCCESS) {
@@ -204,7 +205,7 @@ public class BillingValidator implements AcknowledgePurchaseResponseListener {
                     }
                 }
             }
-        }).start();
+        });
     }
 
     @Override

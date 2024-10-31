@@ -46,6 +46,7 @@ import ai.saiy.android.user.SaiyAccountHelper;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 15/09/2016.
@@ -105,8 +106,8 @@ public class CreateIDEnrollment {
             MyLog.i(CLS_NAME, "stream");
         }
 
-        final Thread httpThread = new Thread() {
-
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
             public void run() {
                 android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
@@ -232,9 +233,7 @@ public class CreateIDEnrollment {
                     closeConnection();
                 }
             }
-        };
-
-        httpThread.start();
+        });
     }
 
     /**

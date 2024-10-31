@@ -18,6 +18,7 @@ import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsToast;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ActivityActivityPicker extends AppCompatActivity implements UserFirebaseListener {
     public static final String EXTRA_APPLICATION = "extra_application";
@@ -117,7 +118,7 @@ public class ActivityActivityPicker extends AppCompatActivity implements UserFir
         }
         getSupportFragmentManager().beginTransaction().add(R.id.fragmentContent, FragmentActivityPicker.newInstance(getIntent().getExtras()), String.valueOf(0)).commitAllowingStateLoss();
         setupToolbar();
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 new UserFirebaseHelper().isAdFree(getApplication(), ActivityActivityPicker.this);

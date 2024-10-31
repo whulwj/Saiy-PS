@@ -47,6 +47,7 @@ import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to stream raw audio to the BV API
@@ -107,8 +108,8 @@ public class BVStreamAudio implements IMic {
 
         mic.startRecording();
 
-        final Thread httpThread = new Thread() {
-
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
             public void run() {
                 android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
@@ -223,9 +224,7 @@ public class BVStreamAudio implements IMic {
                     mic.stopRecording();
                 }
             }
-        };
-
-        httpThread.start();
+        });
     }
 
     @Override

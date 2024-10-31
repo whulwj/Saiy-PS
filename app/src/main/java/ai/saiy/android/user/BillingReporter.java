@@ -26,6 +26,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class BillingReporter implements PurchaseHistoryResponseListener, PurchasesResponseListener {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -64,7 +65,7 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
     }
 
     public void report() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) == ConnectionResult.SUCCESS) {
@@ -91,7 +92,7 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
                     sendOutput();
                 }
             }
-        }).start();
+        });
     }
 
     @Override

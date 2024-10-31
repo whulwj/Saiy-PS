@@ -37,6 +37,7 @@ import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsFile;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -94,13 +95,13 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
         this.initEngine = initEngine;
         Global.setAlexDirectiveBundle(null);
         this.isWorking = true;
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
                 ai.saiy.android.amazon.TokenHelper.getAccessToken(context, AlexaTTS.this);
             }
-        }).start();
+        });
         ArrayList<String> arrayList = new ArrayList<>();
         if (initEngine.startsWith(TTSDefaults.TTS_PKG_NAME_CEREPROC)) {
             if (DEBUG) {
@@ -177,7 +178,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
     }
 
     private void sendAudio() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -251,7 +252,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
                     }
                 }
             }
-        }).start();
+        });
     }
 
     private void saveResults(DirectiveList directiveList) {

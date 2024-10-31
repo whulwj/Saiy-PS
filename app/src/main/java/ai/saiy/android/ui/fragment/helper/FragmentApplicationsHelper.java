@@ -33,6 +33,7 @@ import ai.saiy.android.ui.fragment.FragmentApplications;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentApplicationsHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -444,7 +445,7 @@ public class FragmentApplicationsHelper {
     }
 
     public void checkTaskerInstallation() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.thirdparty.tasker.TaskerHelper taskerHelper = new ai.saiy.android.thirdparty.tasker.TaskerHelper();
@@ -503,7 +504,7 @@ public class FragmentApplicationsHelper {
                 localRequest.setCondition(Condition.CONDITION_CHECK_REINSTALLATION);
                 localRequest.execute();
             }
-        }).start();
+        });
     }
 
     public ActivityHome getParentActivity() {

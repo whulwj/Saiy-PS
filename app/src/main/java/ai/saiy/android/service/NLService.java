@@ -31,6 +31,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NLService extends NotificationListenerService {
@@ -201,7 +202,7 @@ public class NLService extends NotificationListenerService {
         if (DEBUG) {
             MyLog.d(CLS_NAME, "onNotificationPosted");
         }
-        new Thread(new NotificationPostedTask(NLService.this, statusBarNotification)).start();
+        Schedulers.computation().scheduleDirect((new NotificationPostedTask(NLService.this, statusBarNotification)));
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)

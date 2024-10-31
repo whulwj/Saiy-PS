@@ -27,6 +27,7 @@ import androidx.annotation.NonNull;
 
 import ai.saiy.android.R;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Wrapper class around {@link SoundPool} to handle short sounds
@@ -73,12 +74,13 @@ public class SaiySoundPool implements SoundPool.OnLoadCompleteListener {
 
         switch (type) {
             case VOICE_RECOGNITION:
-                new Thread() {
+                Schedulers.io().scheduleDirect(new Runnable() {
+                    @Override
                     public void run() {
                         beepStart = sp.load(ctx, R.raw.beep_high, 1);
                         beepStop = sp.load(ctx, R.raw.beep_low, 1);
                     }
-                }.start();
+                });
                 break;
             default:
                 break;

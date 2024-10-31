@@ -29,6 +29,7 @@ import java.io.RandomAccessFile;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsFile;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to handle writing audio data to a file whilst it is being recorded. This can be done
@@ -111,7 +112,8 @@ public class FileCreator {
 
             synchronized (lock) {
 
-                new Thread() {
+                Schedulers.io().scheduleDirect(new Runnable() {
+                    @Override
                     public void run() {
                         try {
                             fWriter.write(buff);
@@ -123,7 +125,7 @@ public class FileCreator {
                             }
                         }
                     }
-                }.start();
+                });
             }
         }
     }

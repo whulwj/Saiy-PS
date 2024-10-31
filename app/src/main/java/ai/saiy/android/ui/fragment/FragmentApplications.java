@@ -49,6 +49,7 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentApplicationsHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentApplications extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final Object lock = new Object();
@@ -376,17 +377,17 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     return;
                 }
                 if (PermissionHelper.checkFilePermissions(getApplicationContext())) {
-                    new Thread(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext());
                         }
-                    }).start();
+                    });
                     if (TokenHelper.hasToken(getApplicationContext())) {
                         signOutAlexa();
                         return;
                     } else {
-                        new Thread(new Runnable() {
+                        Schedulers.io().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {
                                 if (DEBUG) {
@@ -442,7 +443,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                     }
                                 });
                             }
-                        }).start();
+                        });
                         return;
                     }
                 }
@@ -452,12 +453,12 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                 return;
             case 7:
                 if (PermissionHelper.checkFilePermissions(getApplicationContext())) {
-                    new Thread(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext());
                         }
-                    }).start();
+                    });
                     helper.checkTaskerInstallation();
                     return;
                 }
@@ -654,7 +655,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
         if (DEBUG) {
             MyLog.d(CLS_NAME, "onResume: attemptingReinstallation: " + isAttemptingReinstallation());
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (isAttemptingReinstallation()) {
@@ -684,7 +685,7 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     localRequest.execute();
                 }
             }
-        }).start();
+        });
     }
 
     @Override

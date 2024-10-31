@@ -14,6 +14,7 @@ import ai.saiy.android.amazon.listener.IAlexaToken;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
@@ -55,12 +56,12 @@ public class TokenHelper {
                 MyLog.i(CLS_NAME, "refreshTokenIfRequired: invalid: delay ok");
             }
             refreshTimestamp = System.currentTimeMillis();
-            new Thread(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     refreshToken(context);
                 }
-            }).start();
+            });
         }
     }
 

@@ -76,6 +76,7 @@ android {
         exclude "org/**"
 		exclude "**/*.java"
         exclude "**/*.proto"
+		exclude "androidsupportmultidexversion.txt"
     }
 }
 
@@ -87,6 +88,9 @@ dependencies {
     implementation fileTree(include: ['*.aar', '*.jar', '*.so'], dir: 'libs')
     implementation libs.multidex
     coreLibraryDesugaring libs.desugar.jdk.libs
+	implementation libs.rxjava3
+    implementation libs.rx.android
+    implementation libs.rxlint
 
     implementation libs.material
     implementation libs.appcompat

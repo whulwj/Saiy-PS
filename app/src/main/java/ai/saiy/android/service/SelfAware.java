@@ -113,6 +113,7 @@ import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.wear.UtilsWearMessage;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * This foreground service class will remain running unless the user deactivates it
@@ -532,7 +533,8 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "GOOGLE_CLOUD: IDLE");
                                             }
-                                            new Thread() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                                @Override
                                                 public void run() {
                                                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
                                                     if (DEBUG) {
@@ -544,7 +546,7 @@ public class SelfAware extends Service {
                                                             false, 0, true, false);
                                                     recogGoogleCloud = conditions.getGoogleCloudRecognition(recogMic, recognitionListener);
                                                 }
-                                            }.start();
+                                            });
                                             break;
                                     }
                                     break;
@@ -554,7 +556,8 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "IBM: IDLE");
                                             }
-                                            new Thread() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                                @Override
                                                 public void run() {
                                                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
                                                     if (DEBUG) {
@@ -566,7 +569,7 @@ public class SelfAware extends Service {
                                                             false, 0, true, false);
                                                     recogIBM = conditions.getIBMRecognition(recogMic, recognitionListener);
                                                 }
-                                            }.start();
+                                            });
                                             break;
                                     }
                                     break;
@@ -576,7 +579,7 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "AMAZON: IDLE");
                                             }
-                                            new Thread() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
@@ -585,7 +588,7 @@ public class SelfAware extends Service {
                                                     }
                                                     SelfAware.this.recogAmazon = SelfAware.this.conditions.getAmazonRecognition(SelfAware.this.recognitionListener);
                                                 }
-                                            }.start();
+                                            });
                                             break;
                                     }
                                     break;
@@ -595,7 +598,7 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "WIT_HYBRID: IDLE");
                                             }
-                                            new Thread() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
@@ -604,7 +607,7 @@ public class SelfAware extends Service {
                                                     }
                                                     SelfAware.this.recogWitHybrid = SelfAware.this.conditions.getWitHybridRecognition(SelfAware.this.recognitionListener);
                                                 }
-                                            }.start();
+                                            });
                                             break;
                                     }
                                 case MICROSOFT:
@@ -613,7 +616,8 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "MICROSOFT: IDLE");
                                             }
-                                            new Thread() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                                @Override
                                                 public void run() {
                                                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
                                                     if (DEBUG) {
@@ -621,7 +625,7 @@ public class SelfAware extends Service {
                                                     }
                                                     recogOxford = conditions.getMicrosoftRecognition(recognitionListener);
                                                 }
-                                            }.start();
+                                            });
                                             break;
                                     }
                                     break;
@@ -1607,7 +1611,8 @@ public class SelfAware extends Service {
             MyLog.i(CLS_NAME, "initSaiyTTS");
         }
 
-        new Thread() {
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
             public void run() {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
                 final ai.saiy.android.service.SelfAware selfAware = ai.saiy.android.service.SelfAware.this;
@@ -1615,7 +1620,7 @@ public class SelfAware extends Service {
                         new ai.saiy.android.tts.TextToSpeech21(selfAware, selfAware.onInitListener)
                         : new ai.saiy.android.tts.TextToSpeechLegacy(selfAware, selfAware.onInitListener);
             }
-        }.start();
+        });
     }
 
     /**

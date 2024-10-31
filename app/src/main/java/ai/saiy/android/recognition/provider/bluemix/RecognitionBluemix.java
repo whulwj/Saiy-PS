@@ -64,6 +64,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class uses the IBM Bluemix speech SDK. At the time of writing, I find it hard to believe the accuracy
@@ -217,7 +218,8 @@ public class RecognitionBluemix implements IMic, IWebSocketCallback {
 
                     if (startClient()) {
 
-                        new Thread() {
+                        Schedulers.io().scheduleDirect(new Runnable() {
+                            @Override
                             public void run() {
                                 android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
@@ -266,7 +268,7 @@ public class RecognitionBluemix implements IMic, IWebSocketCallback {
                                     stopListening();
                                 }
                             }
-                        }.start();
+                        });
                     } else {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "startListening client error");
@@ -311,7 +313,8 @@ public class RecognitionBluemix implements IMic, IWebSocketCallback {
         if (isRecording.get()) {
             isRecording.set(false);
 
-            new Thread() {
+            Schedulers.io().scheduleDirect(new Runnable() {
+                @Override
                 public void run() {
                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
                     mic.stopRecording();
@@ -334,7 +337,7 @@ public class RecognitionBluemix implements IMic, IWebSocketCallback {
 
                     closeConnection();
                 }
-            }.start();
+            });
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "called stopRecording: isRecording false");

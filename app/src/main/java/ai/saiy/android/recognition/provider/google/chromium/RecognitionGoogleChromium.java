@@ -55,6 +55,7 @@ import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to use the unofficial Chrome Speech API. You'll need to register in the Chromium Google
@@ -192,8 +193,8 @@ public class RecognitionGoogleChromium implements PauseListener {
 
         final long apiPair = MIN + (long) (Math.random() * ((MAX - MIN) + 1L));
 
-        final Thread resultsThread = new Thread() {
-
+        final Runnable resultsRunnable = new Runnable() {
+            @Override
             public void run() {
                 android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
@@ -313,8 +314,8 @@ public class RecognitionGoogleChromium implements PauseListener {
             }
         };
 
-        final Thread audioThread = new Thread() {
-
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
             public void run() {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
 
@@ -371,7 +372,7 @@ public class RecognitionGoogleChromium implements PauseListener {
                                             Recognition.setState(Recognition.State.LISTENING);
 
                                             listener.onReadyForSpeech(null);
-                                            resultsThread.start();
+                                            Schedulers.io().scheduleDirect(resultsRunnable);
                                             count++;
                                         }
 
@@ -493,9 +494,7 @@ public class RecognitionGoogleChromium implements PauseListener {
                         break;
                 }
             }
-        };
-
-        audioThread.start();
+        });
     }
 
     /**

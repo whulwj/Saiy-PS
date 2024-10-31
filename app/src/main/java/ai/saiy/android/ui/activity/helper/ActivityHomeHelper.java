@@ -52,6 +52,7 @@ import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 26/08/2016.
@@ -520,12 +521,12 @@ public class ActivityHomeHelper {
             MyLog.i(CLS_NAME, "showBillingErrorDialog: parent no longer active");
         }
 
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 new UserFirebaseHelper().isAdFree(activity.getApplication(), listener);
             }
-        }).start();
+        });
     }
 
     public void checkAppRestrictionsStatus(Activity context) {

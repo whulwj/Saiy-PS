@@ -42,6 +42,7 @@ import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to detect commands within the partial voice results from the recognition provider. We can
@@ -108,7 +109,8 @@ public class PartialHelper {
      */
     public void isPartial(@NonNull final Bundle partialResults) {
 
-        new Thread() {
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
@@ -164,7 +166,7 @@ public class PartialHelper {
                     }
                 }
             }
-        }.start();
+        });
     }
 
     public void shutdown() {

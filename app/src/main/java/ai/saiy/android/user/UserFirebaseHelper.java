@@ -20,6 +20,7 @@ import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.firebase.database.read.PremiumUser;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class UserFirebaseHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -84,7 +85,7 @@ public class UserFirebaseHelper {
     }
 
     public void updateUser(final Context context, final long credits, final long timeSpan) {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ai.saiy.android.firebase.UserFirebase userFirebase = UtilsFirebase.getUserFirebase(context);
@@ -148,7 +149,7 @@ public class UserFirebaseHelper {
                     }
                 });
             }
-        }).start();
+        });
     }
 
     public void isAdFree(Context context, @NonNull UserFirebaseListener listener) {

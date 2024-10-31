@@ -38,6 +38,7 @@ import ai.saiy.android.configuration.MicrosoftConfiguration;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 08/09/2016.
@@ -151,7 +152,8 @@ public class SaiyAccount {
 
         if (autoEnroll) {
 
-            new Thread() {
+            Schedulers.io().scheduleDirect(new Runnable() {
+                @Override
                 public void run() {
 
                     final Pair<Boolean, EnrollmentID> enrollmentPair = new CreateIDProfile(ctx,
@@ -167,7 +169,7 @@ public class SaiyAccount {
                     SaiyAccountHelper.addSaiyAccount(ctx, SaiyAccount.this);
 
                 }
-            }.start();
+            });
         }
     }
 

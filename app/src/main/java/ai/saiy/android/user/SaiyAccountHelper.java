@@ -40,6 +40,7 @@ import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 09/09/2016.
@@ -461,15 +462,13 @@ public class SaiyAccountHelper {
         }
 
         if (UtilsString.notNaked(profileId)) {
-
-            new Thread() {
+            Schedulers.io().scheduleDirect(new Runnable() {
+                @Override
                 public void run() {
-
                     new DeleteIDProfile(ctx, MicrosoftConfiguration.OCP_APIM_KEY_1,
                             profileId).delete();
-
                 }
-            }.start();
+            });
         }
     }
 

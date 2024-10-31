@@ -43,6 +43,8 @@ import ai.saiy.android.recognition.provider.wit.RecognitionWitHybrid;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.CurrentActivityProvider;
 import dagger.hilt.android.HiltAndroidApp;
+import io.reactivex.rxjava3.plugins.RxJavaPlugins;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Helper Class to deal with application wide variables. Use with caution as the expected persistent
@@ -76,6 +78,7 @@ public class Global extends MultiDexApplication implements Application.ActivityL
                 DebugAppCheckProviderFactory.getInstance());
         registerActivityLifecycleCallbacks(this);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        RxJavaPlugins.setFailOnNonBlockingScheduler(true);
         // TODO
         setGlobalId();
         authenticateGoogleCloud();
@@ -143,13 +146,12 @@ public class Global extends MultiDexApplication implements Application.ActivityL
     }
 
     private void setGlobalId() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (UtilsString.notNaked(Global.getGlobalID())) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "setGlobalId: already set");
-                        return;
                     }
                     return;
                 }
@@ -170,11 +172,11 @@ public class Global extends MultiDexApplication implements Application.ActivityL
                     }
                 }
             }
-        }).start();
+        });
     }
 
     private void authenticateGoogleCloud() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -191,6 +193,6 @@ public class Global extends MultiDexApplication implements Application.ActivityL
                     }
                 }
             }
-        }).start();
+        });
     }
 }

@@ -32,6 +32,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
@@ -47,6 +48,7 @@ import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListener, View.OnClickListener {
     private static final Object lock = new Object();
@@ -180,7 +182,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkErrors");
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 String charSequence = tvDiagnostics.getText().toString();
@@ -199,7 +201,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
                     appendDiagnosticInfo("\n" + getString(R.string.diagnostics_analysing));
                 }
             }
-        }).start();
+        });
     }
 
     private boolean isSame(String str) {
@@ -217,20 +219,12 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
         }
         setFABImage(R.drawable.ic_media_play);
         if (forceStop) {
-            new Thread(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
-                    try {
-                        Thread.sleep(300L);
-                    } catch (InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.e(CLS_NAME, "checkErrors InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
                     setDiagnosticInfo("");
                 }
-            }).start();
+            }, 300, TimeUnit.MILLISECONDS);
             return;
         }
 
@@ -461,7 +455,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
                 }
             }
             if (requestCount == containerVEArray.size()) {
-                new Thread() {
+                Schedulers.computation().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         for (int i = 0; i < containerVEArray.size(); ++i) {
@@ -485,7 +479,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
                             MyLog.w(CLS_NAME, "diagnostics.isCancelled()");
                         }
                     }
-                }.start();
+                });
             }
         } catch (IndexOutOfBoundsException e) {
             if (DEBUG) {

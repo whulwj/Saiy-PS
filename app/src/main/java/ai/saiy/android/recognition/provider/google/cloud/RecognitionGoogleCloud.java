@@ -66,6 +66,7 @@ import io.grpc.StatusRuntimeException;
 import io.grpc.internal.DnsNameResolverProvider;
 import io.grpc.okhttp.OkHttpChannelProvider;
 import io.grpc.stub.StreamObserver;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 21/09/2016.
@@ -227,7 +228,8 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
 
                 requestObserver.onNext(initial);
 
-                new Thread() {
+                Schedulers.io().scheduleDirect(new Runnable() {
+                    @Override
                     public void run() {
                         android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
@@ -276,7 +278,7 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
                             stopListening();
                         }
                     }
-                }.start();
+                });
 
             } else {
                 if (DEBUG) {
@@ -415,7 +417,8 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
         if (isRecording.get()) {
             isRecording.set(false);
 
-            new Thread() {
+            Schedulers.io().scheduleDirect(new Runnable() {
+                @Override
                 public void run() {
                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
@@ -433,7 +436,7 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
                         }
                     }
                 }
-            }.start();
+            });
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "called stopRecording: isRecording false");

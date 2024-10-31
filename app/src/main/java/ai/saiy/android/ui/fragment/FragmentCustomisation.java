@@ -50,6 +50,7 @@ import ai.saiy.android.ui.fragment.helper.FragmentCustomisationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsFile;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
@@ -184,17 +185,17 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
             case 6:
                 //TODO let user select
                 if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
-                    new Thread(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext());
                         }
-                    }).start();
+                    });
                     helper.showSoundEffectDialog();
                 }
                 break;
             case 7:
-                new Thread(new Runnable() {
+                Schedulers.io().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         showProgress(true);
@@ -215,7 +216,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                             MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_EDIT_CUSTOMISATION being added");
                         }
                     }
-                }).start();
+                });
                 break;
             case 8:
                 if (ai.saiy.android.utils.SPH.getImportWarning(getApplicationContext())) {
@@ -228,7 +229,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                         startActivityForResult(intent, FragmentCustomisationHelper.IMPORT_PICKER_REQ_CODE);
                         return;
                     }
-                    new Thread(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             showProgress(true);
@@ -255,7 +256,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                             }
                             showProgress(false);
                         }
-                    }).start();
+                    });
                 } else {
                     ai.saiy.android.utils.SPH.markImportWarning(getApplicationContext());
                     helper.showImportWarningDialog();
@@ -263,7 +264,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                 break;
             case 9:
                 if (ai.saiy.android.utils.SPH.getExportWarning(getApplicationContext())) {
-                    new Thread(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             showProgress(true);
@@ -290,7 +291,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                             }
                             showProgress(false);
                         }
-                    }).start();
+                    });
                 } else {
                     ai.saiy.android.utils.SPH.markExportWarning(getApplicationContext());
                     helper.showExportWarningDialog();
@@ -378,7 +379,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
     }
 
     public void importFiles(String directoryName, @NonNull DocumentFile[] documentFiles) {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 showProgress(true);
@@ -398,7 +399,7 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
                 }
                 showProgress(false);
             }
-        }).start();
+        });
     }
 
     public void toast(String text, int duration) {

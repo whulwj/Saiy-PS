@@ -44,13 +44,12 @@ import ai.saiy.android.ui.fragment.helper.FragmentSuperuserHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
  */
-
-public class FragmentSuperUser extends Fragment implements View.OnClickListener, View.OnLongClickListener {
-
+public final class FragmentSuperUser extends Fragment implements View.OnClickListener, View.OnLongClickListener {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = FragmentSuperUser.class.getSimpleName();
 
@@ -174,7 +173,7 @@ public class FragmentSuperUser extends Fragment implements View.OnClickListener,
                 break;
             case 1:
                 if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
-                    new Thread(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             if (!ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
@@ -186,7 +185,7 @@ public class FragmentSuperUser extends Fragment implements View.OnClickListener,
                                 toast(getString(R.string.failed), Toast.LENGTH_SHORT);
                             }
                         }
-                    }).start();
+                    });
                 }
                 break;
             case 2:

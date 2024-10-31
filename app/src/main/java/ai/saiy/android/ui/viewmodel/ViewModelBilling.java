@@ -38,17 +38,18 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ai.saiy.android.iba_util.Security;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.firebase.database.write.IAPPurchase;
+import ai.saiy.android.iba_util.Security;
 import ai.saiy.android.ui.activity.CurrentActivityProvider;
 import ai.saiy.android.user.BillingValidator;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @HiltViewModel
 public final class ViewModelBilling extends AndroidViewModel implements LifecycleEventObserver,
@@ -101,12 +102,12 @@ public final class ViewModelBilling extends AndroidViewModel implements Lifecycl
             debugBillingResponse("onBillingSetupFinished", billingResult);
         }
         if (BillingClient.BillingResponseCode.OK == billingResult.getResponseCode()) {
-            new Thread(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     queryPurchasesAsync();
                 }
-            }).start();
+            });
         }
     }
 
@@ -274,12 +275,12 @@ public final class ViewModelBilling extends AndroidViewModel implements Lifecycl
             MyLog.d(CLS_NAME, "originalJSON: " + originalJSON);
             MyLog.d(CLS_NAME, "signature: " + signature);
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 sendSubmissionIAP(purchase);
             }
-        }).start();
+        });
         final boolean secure = Security.verifyPurchase(iapKey, originalJSON, signature);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "secure: " + secure);

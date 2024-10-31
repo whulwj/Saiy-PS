@@ -16,6 +16,7 @@ import ai.saiy.android.firebase.database.reference.TranslationProviderReference;
 import ai.saiy.android.firebase.database.reference.WeatherProviderReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class UtilsFirebase {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -103,7 +104,7 @@ public class UtilsFirebase {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "doPeriodic: updating");
             }
-            new Thread(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     final UserFirebase userFirebase = getUserFirebase(context);
@@ -155,7 +156,7 @@ public class UtilsFirebase {
                         doPeriodicProviders(context);
                     }
                 }
-            }).start();
+            });
         }
     }
 

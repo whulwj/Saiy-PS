@@ -59,6 +59,7 @@ import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentDevelopmentHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -895,12 +896,12 @@ public class FragmentDevelopmentHelper {
             }
             final String anonymousUid = SPH.getFirebaseAnonymousUid(getApplicationContext());
             if (ai.saiy.android.utils.UtilsString.notNaked(anonymousUid)) {
-                new Thread(new Runnable() {
+                Schedulers.io().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         FragmentDevelopmentHelper.this.premiumUserPair = new UserFirebaseHelper().getPremiumUser(anonymousUid);
                     }
-                }).start();
+                });
             }
             if (getParent().isActive()) {
                 final AuthUI.SignInIntentBuilder intentBuilder = AuthUI.getInstance().createSignInIntentBuilder()

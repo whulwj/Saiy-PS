@@ -28,6 +28,7 @@ import androidx.annotation.RequiresApi;
 
 import ai.saiy.android.audio.AudioCompression;
 import ai.saiy.android.database.DBSpeech;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to prepare an entry into {@link DBSpeech}. The method {@link #setUncompressedAudio(byte[])}
@@ -61,12 +62,13 @@ public class SpeechCachePrepare implements IAudioCompression {
      * @param uncompressedAudio byte[]
      */
     public void setUncompressedAudio(@NonNull final byte[] uncompressedAudio) {
-        new Thread() {
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO);
                 AudioCompression.compressBytes(SpeechCachePrepare.this, uncompressedAudio);
             }
-        }.start();
+        });
     }
 
     public byte[] getCompressedAudio() {

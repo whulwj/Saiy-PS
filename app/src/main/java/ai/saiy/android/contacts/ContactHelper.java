@@ -29,6 +29,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ContactHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -153,7 +154,7 @@ public class ContactHelper {
         if (!UtilsList.notNaked(contacts) || this.isBusy.get()) {
             return;
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
@@ -163,7 +164,7 @@ public class ContactHelper {
                 }
                 ContactHelper.this.isBusy.set(false);
             }
-        }).start();
+        });
     }
 
     private ArrayList<Contact> setEmail(Context context, ArrayList<Contact> contacts, String str) {
@@ -861,7 +862,7 @@ public class ContactHelper {
         if (this.isBusy.get()) {
             return;
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
@@ -870,7 +871,7 @@ public class ContactHelper {
                 ContactHelper.this.isBusy.set(false);
                 ContactHelper.this.saveContacts(context, allContacts);
             }
-        }).start();
+        });
     }
 
     public String getNameFromEmail(Context context, String address) {

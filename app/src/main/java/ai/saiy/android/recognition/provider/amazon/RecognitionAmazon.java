@@ -31,6 +31,7 @@ import ai.saiy.android.recognition.SaiyRecognitionListener;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import okhttp3.Response;
@@ -137,13 +138,13 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (servingRemote) {
             this.pauseDetector = new PauseDetector(this, audioParameters.getSampleRateInHz(), audioParameters.getnChannels(), 3250L);
         }
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
                 ai.saiy.android.amazon.TokenHelper.getAccessToken(context, RecognitionAmazon.this);
             }
-        }).start();
+        });
         this.saiyRecorder = new SaiyRecorder(audioParameters.getAudioSource(),
                 audioParameters.getSampleRateInHz(), audioParameters.getChannelConfig(),
                 audioParameters.getAudioFormat(), true);
@@ -226,7 +227,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
     }
 
     private void sendAudio() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -284,7 +285,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
                     handleError(android.speech.SpeechRecognizer.ERROR_NETWORK_TIMEOUT);
                 }
             }
-        }).start();
+        });
     }
 
     private void audioShutdown() {

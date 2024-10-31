@@ -51,6 +51,7 @@ import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import okhttp3.Call;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -230,13 +231,13 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
         this.saiyRecorder = new SaiyRecorder(audioParameters.getAudioSource(),
                 audioParameters.getSampleRateInHz(), audioParameters.getChannelConfig(),
                 audioParameters.getAudioFormat(), true);
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
                 TokenHelper.getAccessToken(context, RecognitionWitHybrid.this);
             }
-        }).start();
+        });
     }
 
     private void handleError(int error) {
@@ -318,7 +319,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
     }
 
     private void sendAudio() {
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 try {
@@ -349,12 +350,12 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                                 }
                                 final DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse();
                                 response.body().close();
-                                new Thread(new Runnable() {
+                                Schedulers.io().scheduleDirect(new Runnable() {
                                     @Override
                                     public void run() {
                                         sendResults(directiveList);
                                     }
-                                }).start();
+                                });
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "onSuccess: end");
                                 }
@@ -381,7 +382,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                     handleError(android.speech.SpeechRecognizer.ERROR_NETWORK_TIMEOUT);
                 }
             }
-        }).start();
+        });
     }
 
     public void audioShutdown() {

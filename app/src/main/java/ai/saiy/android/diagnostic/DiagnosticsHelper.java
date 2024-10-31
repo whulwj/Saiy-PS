@@ -27,6 +27,7 @@ import java.util.MissingResourceException;
 import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.StringTokenizer;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -35,6 +36,8 @@ import ai.saiy.android.applications.Installed;
 import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class DiagnosticsHelper {
     private static final int SAIY_VR_REQUEST_CODE = 1234;
@@ -44,7 +47,7 @@ public class DiagnosticsHelper {
 
     private final Handler handler;
     private volatile TextToSpeech tts;
-    private Thread thread;
+    private Disposable disposable;
     private final DiagnosticInfoListener diagnosticInfoListener;
     private final Context mContext;
     private ArrayList<VoiceEngine> containerVoiceEngine;
@@ -90,7 +93,7 @@ public class DiagnosticsHelper {
                     if (diagnosticIndex.get() == 0) {
                         diagnosticsInfo.setDefaultTTSPackage(tts.getDefaultEngine());
                     }
-                    thread = new Thread() {
+                    disposable = Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             if (DEBUG) {
@@ -139,14 +142,6 @@ public class DiagnosticsHelper {
                                 List<Locale> localeArray = diagnosticsInfo.getVoiceEngineInfos().get(diagnosticIndex.get()).getLocaleArray();
                                 for (int i = 0; i < localeArray.size() && !isCancelled.get(); i++) {
                                     diagnosticInfoListener.appendDiagnosticInfo(localeArray.get(i).toString());
-                                    try {
-                                        Thread.sleep(7L);
-                                    } catch (InterruptedException e) {
-                                        if (DEBUG) {
-                                            MyLog.e(CLS_NAME, "ttsLoc InterruptedException");
-                                            e.printStackTrace();
-                                        }
-                                    }
                                 }
                             } catch (NullPointerException e) {
                                 if (DEBUG) {
@@ -162,8 +157,7 @@ public class DiagnosticsHelper {
                                 releaseTTS();
                             }
                         }
-                    };
-                    thread.start();
+                    });
                     break;
                 default:
                     break;
@@ -179,14 +173,16 @@ public class DiagnosticsHelper {
             System.gc();
             progressListener.onError(UTTERANCE_ID);
             try {
-                thread.interrupt();
-            } catch (SecurityException e) {
+                if (!disposable.isDisposed()) {
+                    disposable.dispose();
+                }
+            } catch (Exception e) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "engineMonitor: SecurityException");
+                    MyLog.w(CLS_NAME, "engineMonitor: Exception");
                     e.printStackTrace();
                 }
             } finally {
-                thread = null;
+                disposable = null;
             }
         }
     };
@@ -705,17 +701,9 @@ public class DiagnosticsHelper {
             diagnosticInfoListener.setASRCount(String.valueOf(i + 1));
         }
         diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_awaiting_locales));
-        new Thread() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                try {
-                    Thread.sleep(5 * 1000L);
-                } catch (InterruptedException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "populateASRCount: InterruptedException");
-                        e.printStackTrace();
-                    }
-                }
                 if (isBroadcastReceived.get() || isCancelled.get()) {
                     return;
                 }
@@ -793,7 +781,7 @@ public class DiagnosticsHelper {
                 }
                 diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_wait_7));
             }
-        }.start();
+        }, 5, TimeUnit.SECONDS);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "populateASRCount: waiting...");
         }
@@ -935,12 +923,12 @@ public class DiagnosticsHelper {
             }
         } catch (NullPointerException e) {
             if (DEBUG) {
-                MyLog.e(CLS_NAME, "releaseTTS NullPointerException");
+                MyLog.e(CLS_NAME, "destroyTTS NullPointerException");
                 e.printStackTrace();
             }
         } catch (Exception e) {
             if (DEBUG) {
-                MyLog.e(CLS_NAME, "releaseTTS Exception");
+                MyLog.e(CLS_NAME, "destroyTTS Exception");
                 e.printStackTrace();
             }
         }
@@ -975,13 +963,13 @@ public class DiagnosticsHelper {
         }
         isDoInBackground.set(true);
         containerVoiceEngine = arrayList;
-        new Thread(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 checkSpeechRecognizer();
                 flashCursor(mContext.getString(R.string.diagnostics_checking_vr), SET_MODE);
             }
-        }).start();
+        });
     }
 
     public boolean isCancelled() {

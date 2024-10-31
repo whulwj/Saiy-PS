@@ -85,6 +85,7 @@ import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsToast;
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Main activity class that handles the fragment management
@@ -1153,13 +1154,13 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @param action one of {@link LocalRequest#ACTION_SPEAK_ONLY} {@link LocalRequest#ACTION_SPEAK_LISTEN}
      */
     public void speak(final int resId, final int action) {
-        new Thread(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext()));
                 speak(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, resId), action);
             }
-        }).start();
+        });
     }
 
     /**
@@ -1169,14 +1170,14 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @param action    one of {@link LocalRequest#ACTION_SPEAK_ONLY} {@link LocalRequest#ACTION_SPEAK_LISTEN}
      */
     public void speak(@NonNull final String utterance, final int action) {
-        new Thread(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final LocalRequest request = new LocalRequest(getApplicationContext());
                 request.prepareDefault(action, utterance);
                 request.execute();
             }
-        }).start();
+        });
     }
 
     /**

@@ -49,6 +49,7 @@ import ai.saiy.android.ui.fragment.helper.FragmentAdvancedSettingsHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
@@ -252,7 +253,7 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
                     helper.showAnnounceNotificationsDialog();
                 } else if (SPH.getAccessibilityChange(getApplicationContext()) || !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
-                    new Thread(new Runnable() {
+                    Schedulers.computation().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             boolean isNotificationListenerEnabled = false;
@@ -284,7 +285,7 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                                 getParentActivity().speak(getString(R.string.settings_missing, getString(R.string.notification_access)), LocalRequest.ACTION_SPEAK_ONLY);
                             }
                         }
-                    }).start();
+                    });
                 } else {
                     SPH.setAccessibilityChange(getApplicationContext());
                     helper.showAccessibilityChangeDialog();
