@@ -45,6 +45,7 @@ import ai.saiy.android.processing.Quantum;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class that determines where to send the recognition results.
@@ -126,7 +127,7 @@ public class RecognitionAction {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Condition.CONDITION_CONVERSATION");
                     }
-                    AsyncTask.execute(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             new ChatBotHelper().validate(mContext, sl, vrLocale, ttsLocale, resultsRecognition.get(0), true, bundle.getString(LocalRequest.EXTRA_WEAR));

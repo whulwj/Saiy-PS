@@ -1,7 +1,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -11,13 +10,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.UICommandsAdapter;
 import ai.saiy.android.ui.containers.SimpleContainerUI;
 import ai.saiy.android.ui.fragment.FragmentCommands;
+import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentCommandsHelper {
 
@@ -384,24 +386,10 @@ public class FragmentCommandsHelper {
     }
 
     public void finaliseUI() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<SimpleContainerUI> tempArray = FragmentCommandsHelper.this.getUIComponents();
-                if (FragmentCommandsHelper.this.getParent().isActive()) {
-                    if (FragmentCommandsHelper.this.getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-                        try {
-                            Thread.sleep(200L);
-                        } catch (InterruptedException e) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
-                }
                 if (FragmentCommandsHelper.this.getParent().isActive()) {
                     FragmentCommandsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -414,7 +402,7 @@ public class FragmentCommandsHelper {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public ActivityHome getParentActivity() {

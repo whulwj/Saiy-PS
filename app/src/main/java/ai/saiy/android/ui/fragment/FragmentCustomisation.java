@@ -88,14 +88,14 @@ public class FragmentCustomisation extends Fragment implements View.OnClickListe
     }
 
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         this.mContext = context.getApplicationContext();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(final Activity activity) {
+    public void onAttach(@NonNull final Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.mContext = activity.getApplicationContext();

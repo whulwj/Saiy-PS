@@ -11,6 +11,8 @@ package ai.saiy.android.command.calculate;
 // is not liable for any losses of any kind, direct or indirect, which result
 // from the use of this software.
 
+import androidx.annotation.NonNull;
+
 import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
@@ -182,7 +184,7 @@ public class MathEval {
     public double getConstant(String nam) {
         Double val = constants.get(nam);
 
-        return (val == null ? 0 : val.doubleValue());
+        return (val == null ? 0 : val);
     }
 
     /**
@@ -259,7 +261,7 @@ public class MathEval {
     public double getVariable(String nam) {
         Double val = variables.get(nam);
 
-        return (val == null ? 0 : val.doubleValue());
+        return (val == null ? 0 : val);
     }
 
     /**
@@ -591,10 +593,10 @@ public class MathEval {
         Double val;
 
         if ((val = constants.get(nam)) != null) {
-            return val.doubleValue();
+            return val;
         } else if ((val = variables.get(nam)) != null) {
             isConstant = false;
-            return val.doubleValue();
+            return val;
         } else if (relaxed) {
             isConstant = false;
             return 0.0;
@@ -741,7 +743,8 @@ public class MathEval {
             handler = hnd;
         }
 
-        public String toString() {
+        @Override
+        public @NonNull String toString() {
             return ("MathOperator['" + symbol + "']");
         }
     }

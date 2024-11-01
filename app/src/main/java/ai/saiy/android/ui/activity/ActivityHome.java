@@ -21,7 +21,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -741,7 +740,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
 
         drawer.closeDrawer(GravityCompat.START);
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
 
@@ -908,7 +907,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     public void doFragmentReplaceTransaction(@NonNull final Fragment fragment, @NonNull final String tag,
                                              final int fade) {
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
 
@@ -967,7 +966,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     public void doFragmentAddTransaction(@NonNull final Fragment fragment, @NonNull final String tag,
                                          final int fade, final int backStackTag) {
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
 
@@ -1154,7 +1153,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @param action one of {@link LocalRequest#ACTION_SPEAK_ONLY} {@link LocalRequest#ACTION_SPEAK_LISTEN}
      */
     public void speak(final int resId, final int action) {
-        Schedulers.single().scheduleDirect(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext()));
@@ -1170,7 +1169,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
      * @param action    one of {@link LocalRequest#ACTION_SPEAK_ONLY} {@link LocalRequest#ACTION_SPEAK_LISTEN}
      */
     public void speak(@NonNull final String utterance, final int action) {
-        Schedulers.single().scheduleDirect(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final LocalRequest request = new LocalRequest(getApplicationContext());
@@ -1343,7 +1342,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onRequestPermissionsResult");

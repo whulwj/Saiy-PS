@@ -19,7 +19,6 @@ package ai.saiy.android.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,6 +46,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import de.psdev.licensesdialog.LicensesDialog;
 import de.psdev.licensesdialog.model.Notices;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
@@ -83,14 +84,14 @@ public class FragmentAbout extends Fragment implements View.OnClickListener, Vie
     }
 
     @Override
-    public void onAttach(final Context context) {
+    public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
         this.mContext = context.getApplicationContext();
     }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void onAttach(final Activity activity) {
+    public void onAttach(@NonNull final Activity activity) {
         super.onAttach(activity);
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             this.mContext = activity.getApplicationContext();
@@ -113,7 +114,7 @@ public class FragmentAbout extends Fragment implements View.OnClickListener, Vie
     }
 
     @Override
-    public View onCreateView(final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
+    public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
         }
@@ -270,7 +271,7 @@ public class FragmentAbout extends Fragment implements View.OnClickListener, Vie
             MyLog.i(CLS_NAME, "prepareLicenses");
         }
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Notices notices = helper.getLicenses();

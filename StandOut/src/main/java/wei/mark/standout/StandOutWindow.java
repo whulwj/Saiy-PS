@@ -1,12 +1,5 @@
 package wei.mark.standout;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-
-import wei.mark.standout.constants.StandOutFlags;
-import wei.mark.standout.ui.Window;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -38,8 +31,17 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.content.res.ResourcesCompat;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+
+import wei.mark.standout.constants.StandOutFlags;
+import wei.mark.standout.ui.Window;
 
 /**
  * Extend this class to easily create and manage floating StandOut windows.
@@ -289,7 +291,7 @@ public abstract class StandOutWindow extends Service {
 	}
 
 	/**
-	 * See {@link #closeAll(Context, Class, int)}.
+	 * See {@link #closeAll(Context, Class)}.
 	 *
 	 * @param context
 	 *            A Context of the application package implementing this class.
@@ -468,7 +470,7 @@ public abstract class StandOutWindow extends Service {
 	public abstract void createAndAttachView(int id, FrameLayout frame);
 
 	/**
-	 * Return the {@link StandOutWindow#LayoutParams} for the corresponding id.
+	 * Return the {@link StandOutLayoutParams} for the corresponding id.
 	 * The system will set the layout params on the view for this StandOut
 	 * window. The layout params may be reused.
 	 *
@@ -478,7 +480,7 @@ public abstract class StandOutWindow extends Service {
 	 * @param window
 	 *            The window corresponding to the id. Given as courtesy, so you
 	 *            may get the existing layout params.
-	 * @return The {@link StandOutWindow#LayoutParams} corresponding to the id.
+	 * @return The {@link StandOutLayoutParams} corresponding to the id.
 	 *         The layout params will be set on the window. The layout params
 	 *         returned will be reused whenever possible, minimizing the number
 	 *         of times getParams() will be called.
@@ -861,7 +863,7 @@ public abstract class StandOutWindow extends Service {
 	 * window corresponding to the id.
 	 *
 	 * <p>
-	 * Note that even if you set {@link #FLAG_DECORATION_SYSTEM}, you will not
+	 * Note that even if you set {@link StandOutFlags#FLAG_DECORATION_SYSTEM}, you will not
 	 * receive touch events from the system window decorations.
 	 *
 	 * @see {@link View.OnTouchListener#onTouch(View, MotionEvent)}
@@ -1016,7 +1018,7 @@ public abstract class StandOutWindow extends Service {
 	 *            The updated layout params.
 	 * @return Return true to cancel the window from being updated, or false to
 	 *         continue.
-	 * @see #updateViewLayout(int, Window, StandOutLayoutParams)
+	 * @see #updateViewLayout(int, StandOutLayoutParams)
 	 */
 	public boolean onUpdate(int id, Window window, StandOutLayoutParams params) {
 		return false;
@@ -1367,7 +1369,7 @@ public abstract class StandOutWindow extends Service {
 	}
 
 	/**
-	 * Send {@link Parceleable} data in a {@link Bundle} to a new or existing
+	 * Send {@link android.os.Parcelable} data in a {@link Bundle} to a new or existing
 	 * windows. The implementation of the recipient window can handle what to do
 	 * with the data. To receive a result, provide the id of the sender.
 	 *
@@ -1521,7 +1523,7 @@ public abstract class StandOutWindow extends Service {
 	/**
 	 * Return the window corresponding to the id, if it exists in cache. The
 	 * window will not be created with
-	 * {@link #createAndAttachView(int, ViewGroup)}. This means the returned
+	 * {@link #createAndAttachView(int, FrameLayout)}. This means the returned
 	 * value will be null if the window is not shown or hidden.
 	 *
 	 * @param id
@@ -2016,7 +2018,7 @@ public abstract class StandOutWindow extends Service {
 		}
 
 		@Override
-		public String toString() {
+		public @NonNull String toString() {
 			return description;
 		}
 	}

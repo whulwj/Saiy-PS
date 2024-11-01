@@ -14,6 +14,7 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.firebase.FirebaseInstallationsHelper;
@@ -22,6 +23,7 @@ import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public final class ViewModelFirebaseAuth extends AndroidViewModel implements LifecycleEventObserver,
@@ -33,6 +35,7 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
     private volatile boolean isUserSignedIn;
     private final MutableLiveData<Boolean> isAddFree = new MutableLiveData<>();
     private volatile boolean havePersisted;
+    private final CompositeDisposable mLocalDisposable = new CompositeDisposable();
 
     private final AtomicInteger signInCount = new AtomicInteger();
     private final FirebaseAuth.AuthStateListener mAuth = new FirebaseAuth.AuthStateListener() {
@@ -140,14 +143,25 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
                 }
                 // If sign in fails, try it again later.
                 if (signInCount.incrementAndGet() < 4) {
-                    try {
-                        Thread.sleep(signInCount.get() * 5000L);
-                    } catch (InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "signInAnonymously InterruptedException");
-                            e.printStackTrace();
+                    mLocalDisposable.add(Schedulers.io().scheduleDirect(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                final com.google.firebase.auth.FirebaseUser firebaseUser = firebaseAuth.getCurrentUser();
+                                if (firebaseUser == null) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "onAuthStateChanged: firebaseUser null");
+                                    }
+                                    signInAnonymously();
+                                }
+                            } catch (Throwable t) {
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "signInAnonymously Throwable");
+                                    t.printStackTrace();
+                                }
+                            }
                         }
-                    }
+                    }, signInCount.get() * 5000L, TimeUnit.MILLISECONDS));
                 }
             }
         });
@@ -164,5 +178,11 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
     @Override
     public void onDetermineAdFree(boolean isAddFree) {
         ViewModelFirebaseAuth.this.isAddFree.postValue(isAddFree);
+    }
+
+    @Override
+    protected void onCleared() {
+        super.onCleared();
+        mLocalDisposable.dispose();
     }
 }

@@ -18,7 +18,6 @@
 package ai.saiy.android.service.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Process;
 import android.speech.tts.TextToSpeech;
@@ -88,7 +87,7 @@ public class SelfAwareCache extends SaiyProgressListener {
                                @NonNull final String utterance, @NonNull final String initEngine,
                                @NonNull final android.speech.tts.Voice voice) {
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
@@ -148,7 +147,7 @@ public class SelfAwareCache extends SaiyProgressListener {
     private void doAudioCache(@NonNull final SpeechCachePrepare scp, @NonNull final SelfAwareParameters params) {
         this.scp = scp;
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO);

@@ -17,6 +17,7 @@ import ai.saiy.android.ui.components.UIFloatingCommandsAdapter;
 import ai.saiy.android.ui.containers.SimpleContainerUI;
 import ai.saiy.android.ui.service.FloatingCommandsService;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FloatingCommandsHelper {
 
@@ -371,7 +372,7 @@ public class FloatingCommandsHelper {
     }
 
     public void finaliseUI() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<SimpleContainerUI> tempArray = FloatingCommandsHelper.this.getUIComponents();

@@ -3,7 +3,6 @@ package ai.saiy.android.ui.fragment.helper;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.util.Pair;
@@ -37,6 +36,7 @@ import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.device.DeviceInfo;
@@ -196,24 +196,10 @@ public class FragmentDevelopmentHelper {
     }
 
     public void finaliseUI() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = getUIComponents();
-                if (getParent().isActive()) {
-                    if (getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-                        try {
-                            Thread.sleep(200L);
-                        } catch (InterruptedException e) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
-                }
                 if (getParent().isActive()) {
                     getParentActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -226,7 +212,7 @@ public class FragmentDevelopmentHelper {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public void handleActivityResult(final int resultCode, Intent intent) {
@@ -348,7 +334,7 @@ public class FragmentDevelopmentHelper {
     }
 
     private void migratePremium(final String anonymousUid, final String uid) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 new UserFirebaseHelper().getRequestPremiumUser(anonymousUid);

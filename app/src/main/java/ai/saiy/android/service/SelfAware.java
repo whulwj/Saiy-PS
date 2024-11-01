@@ -22,7 +22,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ServiceInfo;
-import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
@@ -414,7 +413,7 @@ public class SelfAware extends Service {
             MyLog.i(CLS_NAME, "startHotwordDetection: threadTid: " + android.os.Process.getThreadPriority(android.os.Process.myTid()));
         }
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
@@ -533,7 +532,7 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "GOOGLE_CLOUD: IDLE");
                                             }
-                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                            Schedulers.computation().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
@@ -556,7 +555,7 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "IBM: IDLE");
                                             }
-                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                            Schedulers.computation().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
@@ -579,7 +578,7 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "AMAZON: IDLE");
                                             }
-                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                            Schedulers.computation().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
@@ -598,7 +597,7 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "WIT_HYBRID: IDLE");
                                             }
-                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                            Schedulers.computation().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
@@ -616,7 +615,7 @@ public class SelfAware extends Service {
                                             if (DEBUG) {
                                                 MyLog.i(CLS_NAME, "MICROSOFT: IDLE");
                                             }
-                                            Schedulers.io().scheduleDirect(new Runnable() {
+                                            Schedulers.computation().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     android.os.Process.setThreadPriority(Process.THREAD_PRIORITY_DEFAULT);
@@ -1003,7 +1002,7 @@ public class SelfAware extends Service {
 
                                     recognitionListener.resetBugVariables();
 
-                                    AsyncTask.execute(new Runnable() {
+                                    Schedulers.computation().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (!waitGoogleCloud()) {
@@ -1056,7 +1055,7 @@ public class SelfAware extends Service {
 
                                     recognitionListener.resetBugVariables();
 
-                                    AsyncTask.execute(new Runnable() {
+                                    Schedulers.computation().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
                                             recogGoogleChromium = conditions.getGoogleChromiumRecognition(recognitionListener);
@@ -1100,7 +1099,7 @@ public class SelfAware extends Service {
                                     conditions.setFetchingCountdown();
                                     recognitionListener.resetBugVariables();
 
-                                    AsyncTask.execute(new Runnable() {
+                                    Schedulers.computation().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (!waitMicrosoft()) {
@@ -1146,7 +1145,7 @@ public class SelfAware extends Service {
 
                                     conditions.setFetchingCountdown();
                                     recognitionListener.resetBugVariables();
-                                    AsyncTask.execute(new Runnable() {
+                                    Schedulers.io().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
                                             Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
@@ -1184,7 +1183,7 @@ public class SelfAware extends Service {
                                     }
                                     conditions.setFetchingCountdown();
                                     recognitionListener.resetBugVariables();
-                                    AsyncTask.execute(new Runnable() {
+                                    Schedulers.io().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (!SelfAware.this.waitAlexa()) {
@@ -1261,7 +1260,7 @@ public class SelfAware extends Service {
                                     }
 
                                     conditions.setFetchingCountdown();
-                                    AsyncTask.execute(new Runnable() {
+                                    Schedulers.io().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
                                             if (!waitIBM()) {
@@ -1432,7 +1431,7 @@ public class SelfAware extends Service {
                                                     AudioParameters.getDefaultBeyondVerbal(), true,
                                                     BeyondVerbal.MINIMUM_AUDIO_TIME, false, false);
 
-                                            AsyncTask.execute(new Runnable() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
                                                     new BeyondVerbal(getApplicationContext(),
@@ -1450,7 +1449,7 @@ public class SelfAware extends Service {
                                                     AudioParameters.getDefaultMicrosoft(), true,
                                                     SpeakerEnrollment.MINIMUM_AUDIO_TIME, false, true);
 
-                                            AsyncTask.execute(new Runnable() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
 
@@ -1473,7 +1472,7 @@ public class SelfAware extends Service {
                                                     AudioParameters.getDefaultMicrosoft(), true,
                                                     SpeakerIdentification.MINIMUM_AUDIO_TIME, false, true);
 
-                                            AsyncTask.execute(new Runnable() {
+                                            Schedulers.io().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
 
@@ -1611,7 +1610,7 @@ public class SelfAware extends Service {
             MyLog.i(CLS_NAME, "initSaiyTTS");
         }
 
-        Schedulers.io().scheduleDirect(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_URGENT_AUDIO);
@@ -2199,7 +2198,7 @@ public class SelfAware extends Service {
 
                 case API_AI:
 
-                    AsyncTask.execute(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
 
                         @SuppressWarnings("ConstantConditions")
                         @Override
@@ -2226,6 +2225,7 @@ public class SelfAware extends Service {
                                             results.getFloatArray(SpeechRecognizer.CONFIDENCE_SCORES),
                                             results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION))
                                             .unpack(remoteAPIPair.second);
+                                    //TODO handle result
                                 }
                             } else {
                                 if (servingRemote) {

@@ -1,7 +1,6 @@
 package ai.saiy.android.ui.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Pair;
 import android.widget.Toast;
@@ -17,6 +16,7 @@ import ai.saiy.android.command.twitter.TwitterOAuthView;
 import ai.saiy.android.firebase.database.reference.TwitterReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import twitter4j.AccessToken;
 
 /**
@@ -167,7 +167,7 @@ public class ActivityTwitterOAuth extends AppCompatActivity implements TwitterOA
             return;
         }
         this.isOAuthStarted = true;
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Pair<Boolean, Pair<String, String>> twitterPair = new TwitterReference().getCredentials(getApplicationContext());

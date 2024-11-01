@@ -91,7 +91,7 @@ public class UIBugsAdapter extends RecyclerView.Adapter<UIBugsAdapter.ViewHolder
     }
 
     @Override
-    public UIBugsAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+    public @NonNull UIBugsAdapter.ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
         return new ViewHolder(
                 LayoutInflater.from(
                         parent.getContext()).inflate(R.layout.cardview_bugs_item, parent, false));

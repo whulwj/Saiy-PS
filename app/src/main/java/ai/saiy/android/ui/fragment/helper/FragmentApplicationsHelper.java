@@ -1,7 +1,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Toast;
@@ -16,6 +15,7 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.amazon.TokenHelper;
@@ -400,24 +400,10 @@ public class FragmentApplicationsHelper {
     }
 
     public void finaliseUI() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = FragmentApplicationsHelper.this.getUIComponents();
-                if (FragmentApplicationsHelper.this.getParent().isActive()) {
-                    if (FragmentApplicationsHelper.this.getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-                        try {
-                            Thread.sleep(200L);
-                        } catch (InterruptedException e) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
-                }
                 if (FragmentApplicationsHelper.this.getParent().isActive()) {
                     FragmentApplicationsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -430,7 +416,7 @@ public class FragmentApplicationsHelper {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public void toast(String text, int duration) {

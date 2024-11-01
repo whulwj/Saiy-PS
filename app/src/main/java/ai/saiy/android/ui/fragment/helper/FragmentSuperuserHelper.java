@@ -21,7 +21,6 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Process;
 import android.speech.tts.TextToSpeech;
@@ -48,6 +47,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ai.saiy.android.R;
@@ -304,21 +304,10 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
      * Update the parent fragment with the UI components
      */
     public void finaliseUI() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = FragmentSuperuserHelper.this.getUIComponents();
-
-                try {
-                    Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
-                } catch (final InterruptedException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                        e.printStackTrace();
-                    }
-                }
-
                 if (FragmentSuperuserHelper.this.getParent().isActive()) {
 
                     FragmentSuperuserHelper.this.getParentActivity().runOnUiThread(new Runnable() {
@@ -336,7 +325,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                     }
                 }
             }
-        });
+        }, FragmentHome.DRAWER_CLOSE_DELAY, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -577,7 +566,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
     }
 
     public void showAlgorithmSelector() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] stringArray = getParent().getResources().getStringArray(R.array.array_algorithms);
@@ -636,7 +625,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
     }
 
     public void showNoteProviderSelector() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] stringArray = getParent().getResources().getStringArray(R.array.array_note_provider);
@@ -763,7 +752,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
         if (PermissionHelper.checkContactGroupPermissions(getApplicationContext(), null)) {
 
-            AsyncTask.execute(new Runnable() {
+            Schedulers.computation().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     final AccountManager accountManager = AccountManager.get(FragmentSuperuserHelper.this.getApplicationContext());
@@ -1270,7 +1259,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
     }
 
     public void showOverrideSecureSelector() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (!getParent().isActive()) {

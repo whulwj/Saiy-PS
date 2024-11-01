@@ -2,7 +2,6 @@ package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.text.Html;
 import android.text.InputFilter;
@@ -34,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.request.Regex;
@@ -51,9 +51,11 @@ import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.UIEditCustomisationAdapter;
 import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.ui.fragment.FragmentEditCustomisation;
+import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsLocale;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentEditCustomisationHelper {
     private final FragmentEditCustomisation parentFragment;
@@ -83,7 +85,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void deleteCustomNickname(final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomNicknameHelper.deleteCustomNickname(getApplicationContext(), rowId);
@@ -102,7 +104,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void setNickname(final CustomNickname customNickname, final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Pair<Boolean, Long> duplicatePair = ai.saiy.android.custom.CustomNicknameHelper.setNickname(getApplicationContext(), customNickname, null, rowId);
@@ -126,7 +128,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void setPhrase(final CustomPhrase customPhrase, final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Pair<Boolean, Long> duplicatePair = ai.saiy.android.custom.CustomPhraseHelper.setPhrase(getApplicationContext(), customPhrase, null, rowId);
@@ -150,7 +152,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void setReplacement(final CustomReplacement customReplacement, final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Pair<Boolean, Long> duplicatePair = ai.saiy.android.custom.CustomReplacementHelper.setReplacement(getApplicationContext(), customReplacement, null, rowId);
@@ -174,7 +176,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void setCommand(final ai.saiy.android.custom.CustomCommand customCommand, final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Pair<Boolean, Long> duplicatePair = ai.saiy.android.custom.CustomCommandHelper.setCommand(getApplicationContext(), customCommand, rowId);
@@ -196,7 +198,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void deleteCustomReplacement(final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomReplacementHelper.deleteCustomReplacement(getApplicationContext(), rowId);
@@ -215,7 +217,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void deleteCustomPhrase(final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomPhraseHelper.deleteCustomPhrase(getApplicationContext(), rowId);
@@ -238,7 +240,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     private void deleteCustomCommand(final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomCommandHelper.deleteCustomCommand(getApplicationContext(), rowId);
@@ -275,23 +277,9 @@ public class FragmentEditCustomisationHelper {
     }
 
     public void finaliseUI() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                if (getParent().isActive()) {
-                    if (getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-                        try {
-                            Thread.sleep(200L);
-                        } catch (InterruptedException e) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
-                }
                 if (getParent().isActive()) {
                     getParentActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -314,7 +302,7 @@ public class FragmentEditCustomisationHelper {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public void showCustomHttpDialog(CustomCommand customCommand, final CustomHttp customHttp, final int index, final long rowId) {
@@ -946,7 +934,7 @@ public class FragmentEditCustomisationHelper {
     }
 
     public void showNicknameDialog(final String nickname, final String contactName, final int index, final long rowId) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] nicknameHints = ai.saiy.android.localisation.SaiyResourcesHelper.getArrayResource(getApplicationContext(), SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext())), R.array.array_nickname_hints);

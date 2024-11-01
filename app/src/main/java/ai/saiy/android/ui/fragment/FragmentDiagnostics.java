@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -230,7 +229,7 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
 
         UtilsAnalytic.diagnosticsComplete(getApplicationContext(), firebaseAnalytics, diagnosticsInfo.getErrorCount() > 0);
         checkErrors();
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.utils.SPH.setRunDiagnostics(getApplicationContext(), true);

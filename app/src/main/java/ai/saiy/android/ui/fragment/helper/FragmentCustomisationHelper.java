@@ -26,7 +26,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.provider.ContactsContract;
 import android.text.InputFilter;
@@ -60,6 +59,7 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.api.request.Regex;
@@ -91,6 +91,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -265,24 +266,10 @@ public class FragmentCustomisationHelper {
      * Update the parent fragment with the UI components
      */
     public void finaliseUI() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = FragmentCustomisationHelper.this.getUIComponents();
-
-                if (FragmentCustomisationHelper.this.getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-
-                    try {
-                        Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
-                    } catch (final InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
                 if (FragmentCustomisationHelper.this.getParent().isActive()) {
 
                     FragmentCustomisationHelper.this.getParentActivity().runOnUiThread(new Runnable() {
@@ -299,7 +286,7 @@ public class FragmentCustomisationHelper {
                     }
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -488,7 +475,7 @@ public class FragmentCustomisationHelper {
     }
 
     private void setNickname(final CustomNickname customNickname) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomNicknameHelper.setNickname(getApplicationContext(), customNickname, null, -1L);
@@ -497,7 +484,7 @@ public class FragmentCustomisationHelper {
     }
 
     private void setPhrase(final CustomPhrase customPhrase) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomPhraseHelper.setPhrase(getApplicationContext(), customPhrase, null, -1L);
@@ -506,7 +493,7 @@ public class FragmentCustomisationHelper {
     }
 
     private void setReplacement(final CustomReplacement customReplacement) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomReplacementHelper.setReplacement(getApplicationContext(), customReplacement, null, -1L);
@@ -515,7 +502,7 @@ public class FragmentCustomisationHelper {
     }
 
     private void setCommand(final ai.saiy.android.custom.CustomCommand customCommand) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 ai.saiy.android.custom.CustomCommandHelper.setCommand(getApplicationContext(), customCommand, -1L);
@@ -524,7 +511,7 @@ public class FragmentCustomisationHelper {
     }
 
     private void showNicknameDialog(String contactName) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] nicknameHints = ai.saiy.android.localisation.SaiyResourcesHelper.getArrayResource(getApplicationContext(), SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext())), R.array.array_nickname_hints);

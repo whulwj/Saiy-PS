@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 
+import androidx.annotation.NonNull;
+
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
@@ -123,7 +125,7 @@ public class FacebookConfirm {
                         shareApi.setMessage(commandFacebookValues.getText());
                         shareApi.share(new com.facebook.FacebookCallback<Sharer.Result>() {
                             @Override
-                            public void onError(FacebookException facebookException) {
+                            public void onError(@NonNull FacebookException facebookException) {
                                 if (DEBUG) {
                                     MyLog.w(CLS_NAME, "onError");
                                     facebookException.printStackTrace();

@@ -69,7 +69,7 @@ public class ApplicationActivityBasic implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int flags) {
+    public void writeToParcel(@NonNull Parcel parcel, int flags) {
         TextUtils.writeToParcel(name, parcel, flags);
         parcel.writeString(packageName);
         parcel.writeString(activityName);

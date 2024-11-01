@@ -1,7 +1,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,7 @@ import ai.saiy.android.ui.activity.ActivityActivityPicker;
 import ai.saiy.android.ui.components.UIActivityPickerAdapter;
 import ai.saiy.android.ui.fragment.FragmentActivityPicker;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentActivityPickerHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -58,7 +58,7 @@ public class FragmentActivityPickerHelper {
 
     public void finaliseUI() {
         if (getParent().isActive()) {
-            AsyncTask.execute(new Runnable() {
+            Schedulers.single().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     final ArrayList<Application> accessibleApplications = ai.saiy.android.applications.Installed.getAccessibleApplications(getApplicationContext().getPackageManager());

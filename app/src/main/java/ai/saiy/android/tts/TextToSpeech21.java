@@ -21,7 +21,6 @@ import android.content.Context;
 import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.AudioTrack;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Process;
 import android.provider.Settings;
@@ -60,6 +59,7 @@ import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsParcelable;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Due to misbehaving voice engines, it's necessary to subclass the TTS object here and handle extra
@@ -175,7 +175,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
             }
             SPH.setTTSRate(mContext, rate);
             SPH.setTTSPitch(mContext, pitch);
-            AsyncTask.execute(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
@@ -205,7 +205,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "synthesisAvailable: speech does not exist");
                 }
-                AsyncTask.execute(new Runnable() {
+                Schedulers.io().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
@@ -282,7 +282,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
             }
             SPH.setTTSRate(mContext, rate);
             SPH.setTTSPitch(mContext, pitch);
-            AsyncTask.execute(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
@@ -320,7 +320,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
             }
 
             if (speechCacheResult.getRowId() > -1) {
-                AsyncTask.execute(new Runnable() {
+                Schedulers.io().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         Process.setThreadPriority(Process.THREAD_PRIORITY_LOWEST);
@@ -343,7 +343,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                                 @NonNull final byte[] uncompressedBytes) {
         audioTrack.setListener(listener);
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO);
@@ -574,7 +574,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                 userDefaultSaiyVoice = getUserDefaultSaiyVoice();
 
                 if (userDefaultSaiyVoice == null) {
-                    AsyncTask.execute(new Runnable() {
+                    Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             setDefaultVoice(language, region, conditions, params);
@@ -599,7 +599,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                         }
                         userDefaultSaiyVoice = null;
                         SPH.setDefaultTTSVoice(mContext, null);
-                        AsyncTask.execute(new Runnable() {
+                        Schedulers.io().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {
                                 setDefaultVoice(language, region, conditions, params);
@@ -932,7 +932,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
     private void getInfo() {
         MyLog.i(CLS_NAME, "getQuickInfo");
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 try {

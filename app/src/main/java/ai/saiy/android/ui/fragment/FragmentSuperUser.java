@@ -19,7 +19,6 @@ package ai.saiy.android.ui.fragment;
 
 import android.app.Activity;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -206,7 +205,7 @@ public final class FragmentSuperUser extends Fragment implements View.OnClickLis
                 mAdapter.notifyItemChanged(position);
                 break;
             case 5:
-                AsyncTask.execute(new Runnable() {
+                Schedulers.computation().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         if (!helper.showBlackListSelector()) {

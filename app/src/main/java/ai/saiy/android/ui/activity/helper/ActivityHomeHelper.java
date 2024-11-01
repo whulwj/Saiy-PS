@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.text.Html;
 import android.view.View;
@@ -324,8 +323,7 @@ public class ActivityHomeHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showLanguageSelector(@NonNull final Activity act) {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] languages = act.getResources().getStringArray(R.array.array_supported_languages);

@@ -18,7 +18,6 @@
 package ai.saiy.android.cache.speech;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Process;
 import android.speech.tts.Voice;
@@ -119,7 +118,7 @@ public class SpeechCachePrepare implements IAudioCompression {
      * Execute the insertion of the audio data into {@link DBSpeech}
      */
     private void executeInsert() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO);

@@ -180,7 +180,7 @@ public enum TranslationLanguageGoogle {
      * @return The String representation of this language.
      */
     @Override
-    public String toString() {
+    public @NonNull String toString() {
         return this.language;
     }
 }

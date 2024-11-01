@@ -18,7 +18,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
@@ -30,6 +29,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.ui.activity.ActivityHome;
@@ -38,6 +38,7 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentBugs;
 import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -167,24 +168,10 @@ public class FragmentBugsHelper {
      * the first initialisation of the application - neither of which require a delay.
      */
     public void finaliseUI() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = FragmentBugsHelper.this.getUIComponents();
-
-                if (FragmentBugsHelper.this.getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-
-                    try {
-                        Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
-                    } catch (final InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
                 if (FragmentBugsHelper.this.getParent().isActive()) {
 
                     FragmentBugsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
@@ -201,7 +188,7 @@ public class FragmentBugsHelper {
                     }
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     /**

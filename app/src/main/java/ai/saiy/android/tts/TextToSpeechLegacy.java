@@ -18,13 +18,13 @@
 package ai.saiy.android.tts;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Build;
 
 import java.util.Locale;
 
 import ai.saiy.android.tts.attributes.Gender;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Due to misbehaving voice engines, it's necessary to subclass the TTS object here and handle extra
@@ -81,7 +81,7 @@ public final class TextToSpeechLegacy extends SaiyTextToSpeech {
     private void getInfo() {
         MyLog.i(CLS_NAME, "getQuickInfo");
 
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {

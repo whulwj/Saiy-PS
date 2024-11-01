@@ -1,7 +1,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -21,6 +20,7 @@ import ai.saiy.android.ui.activity.ActivityApplicationPickerMulti;
 import ai.saiy.android.ui.components.UIAppPickerMultiAdapter;
 import ai.saiy.android.ui.fragment.FragmentAppPickerMulti;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentAppPickerMultiHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -74,7 +74,7 @@ public class FragmentAppPickerMultiHelper {
      */
     public void finaliseUI(final @Nullable BlockedApplications blockedApplications) {
         if (getParent().isActive()) {
-            AsyncTask.execute(new Runnable() {
+            Schedulers.single().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     final ArrayList<Application> tempArray = ai.saiy.android.applications.Installed.getInstalledApplications(getApplicationContext(), true);

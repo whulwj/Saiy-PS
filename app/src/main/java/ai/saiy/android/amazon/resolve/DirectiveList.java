@@ -6,6 +6,8 @@ import android.os.Parcelable;
 import android.text.TextUtils;
 import android.util.Pair;
 
+import androidx.annotation.NonNull;
+
 import java.io.File;
 import java.util.ArrayList;
 
@@ -112,7 +114,7 @@ public class DirectiveList implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int flags) {
+    public void writeToParcel(@NonNull Parcel parcel, int flags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             parcel.writeParcelableList(directiveList, flags);
         } else {

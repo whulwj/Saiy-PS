@@ -1,7 +1,6 @@
 package ai.saiy.android.ui.activity;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Pair;
 import android.widget.Toast;
@@ -17,6 +16,7 @@ import ai.saiy.android.command.foursquare.FoursquareOAuthView;
 import ai.saiy.android.firebase.database.reference.FoursquareReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ActivityFoursquareOAuth extends AppCompatActivity implements FoursquareOAuthView.Listener {
     private FoursquareOAuthView foursquareOAuthView;
@@ -158,7 +158,7 @@ public class ActivityFoursquareOAuth extends AppCompatActivity implements Foursq
             return;
         }
         this.isOAuthStarted = true;
-        AsyncTask.execute(new Runnable() {
+        Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Pair<Boolean, String> foursquarePair = new FoursquareReference().getClientId(getApplicationContext());

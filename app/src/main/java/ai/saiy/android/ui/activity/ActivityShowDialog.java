@@ -3,7 +3,6 @@ package ai.saiy.android.ui.activity;
 import static android.widget.AdapterView.INVALID_POSITION;
 
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -34,6 +33,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsLocale;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ActivityShowDialog extends AppCompatActivity {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -47,7 +47,7 @@ public class ActivityShowDialog extends AppCompatActivity {
     private long then;
 
     private void showUnknownCommandSelector() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] actions = getResources().getStringArray(R.array.array_unknown_action);

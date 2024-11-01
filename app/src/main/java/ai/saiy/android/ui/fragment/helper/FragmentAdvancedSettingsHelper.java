@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,6 +57,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.accessibility.BlockedApplications;
@@ -84,6 +84,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -259,24 +260,10 @@ public class FragmentAdvancedSettingsHelper {
      * Update the parent fragment with the UI components
      */
     public void finaliseUI() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = FragmentAdvancedSettingsHelper.this.getUIComponents();
-
-                if (FragmentAdvancedSettingsHelper.this.getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-
-                    try {
-                        Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
-                    } catch (final InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
                 if (FragmentAdvancedSettingsHelper.this.getParent().isActive()) {
 
                     FragmentAdvancedSettingsHelper.this.getParentActivity().runOnUiThread(new Runnable() {
@@ -294,7 +281,7 @@ public class FragmentAdvancedSettingsHelper {
                     }
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -352,8 +339,7 @@ public class FragmentAdvancedSettingsHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showGenderSelector() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
 
@@ -432,7 +418,7 @@ public class FragmentAdvancedSettingsHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showHotwordSelector() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] hotwordActions = FragmentAdvancedSettingsHelper.this.getParent().getResources().getStringArray(R.array.array_hotword);
@@ -593,7 +579,7 @@ public class FragmentAdvancedSettingsHelper {
     }
 
     public void showDrivingProfileSelector() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] stringArray = getParent().getResources().getStringArray(R.array.array_driving_profile);
@@ -864,7 +850,7 @@ public class FragmentAdvancedSettingsHelper {
                         return;
                     }
                 }
-                AsyncTask.execute(new Runnable() {
+                Schedulers.io().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         BlockedApplications blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());

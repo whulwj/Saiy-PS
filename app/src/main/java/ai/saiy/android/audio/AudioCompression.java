@@ -18,7 +18,6 @@
 package ai.saiy.android.audio;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Process;
 
 import androidx.annotation.NonNull;
@@ -36,6 +35,7 @@ import ai.saiy.android.cache.speech.IAudioCompression;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsFile;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to handle compression of audio bytes.
@@ -234,7 +234,7 @@ public class AudioCompression {
                 MyLog.w(CLS_NAME, "decompressBytes null or empty: deleting entry");
             }
 
-            AsyncTask.execute(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
@@ -373,7 +373,7 @@ public class AudioCompression {
                 MyLog.w(CLS_NAME, "decompressBytesToFile null or empty: deleting entry");
             }
 
-            AsyncTask.execute(new Runnable() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);

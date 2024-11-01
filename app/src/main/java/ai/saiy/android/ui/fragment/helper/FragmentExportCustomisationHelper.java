@@ -1,7 +1,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,13 +11,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.components.UIExportCustomisationAdapter;
 import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.ui.fragment.FragmentExportCustomisation;
+import ai.saiy.android.ui.fragment.FragmentHome;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class FragmentExportCustomisationHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -57,23 +59,9 @@ public class FragmentExportCustomisationHelper {
     }
 
     public void finaliseUI() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                if (getParent().isActive()) {
-                    if (getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-                        try {
-                            Thread.sleep(200L);
-                        } catch (InterruptedException e) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                                e.printStackTrace();
-                            }
-                        }
-                    }
-                } else if (DEBUG) {
-                    MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
-                }
                 if (getParent().isActive()) {
                     getParentActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -96,7 +84,7 @@ public class FragmentExportCustomisationHelper {
                     MyLog.w(CLS_NAME, "finaliseUI Fragment detached");
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public void toast(String text, int duration) {

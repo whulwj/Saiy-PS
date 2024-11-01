@@ -18,7 +18,6 @@
 package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -30,6 +29,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.BuildConfig;
 import ai.saiy.android.R;
@@ -49,6 +49,7 @@ import de.psdev.licensesdialog.licenses.CreativeCommonsAttributionShareAlike30Un
 import de.psdev.licensesdialog.licenses.MITLicense;
 import de.psdev.licensesdialog.model.Notice;
 import de.psdev.licensesdialog.model.Notices;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Utility class to assist its parent fragment and avoid clutter there
@@ -210,21 +211,10 @@ public class FragmentAboutHelper {
      * Update the parent fragment with the UI components
      */
     public void finaliseUI() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = FragmentAboutHelper.this.getUIComponents();
-
-                try {
-                    Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
-                } catch (final InterruptedException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                        e.printStackTrace();
-                    }
-                }
-
                 if (FragmentAboutHelper.this.getParent().isActive()) {
 
                     FragmentAboutHelper.this.getParentActivity().runOnUiThread(new Runnable() {
@@ -242,7 +232,7 @@ public class FragmentAboutHelper {
                     }
                 }
             }
-        });
+        }, FragmentHome.DRAWER_CLOSE_DELAY, TimeUnit.MILLISECONDS);
     }
 
     /**

@@ -24,7 +24,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -58,6 +57,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
@@ -257,7 +257,7 @@ public class FragmentSettingsHelper {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void showVoiceSelector(final Set<android.speech.tts.Voice> set) {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 Iterator<android.speech.tts.Voice> it = set.iterator();
@@ -556,24 +556,10 @@ public class FragmentSettingsHelper {
      * Update the parent fragment with the UI components
      */
     public void finaliseUI() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = getUIComponents();
-
-                if (getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-
-                    try {
-                        Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
-                    } catch (final InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
                 if (getParent().isActive()) {
 
                     getParentActivity().runOnUiThread(new Runnable() {
@@ -591,7 +577,7 @@ public class FragmentSettingsHelper {
                     }
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public void showVoicesDialog() {
@@ -659,8 +645,7 @@ public class FragmentSettingsHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showTemperatureUnitsSelector() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
 
@@ -874,8 +859,7 @@ public class FragmentSettingsHelper {
      */
     @SuppressWarnings("ConstantConditions")
     public void showUnknownCommandSelector() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] actions = getParent().getResources().getStringArray(R.array.array_unknown_action);
@@ -1175,7 +1159,7 @@ public class FragmentSettingsHelper {
     }
 
     public void showNetworkSynthesisDialog() {
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final String[] networkSynthesis = getParent().getResources().getStringArray(R.array.array_google_synthesised_voice);
@@ -1370,7 +1354,7 @@ public class FragmentSettingsHelper {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void getVoices() {
         showProgress(true);
-        AsyncTask.execute(new Runnable() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final Intent intent = new Intent(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);

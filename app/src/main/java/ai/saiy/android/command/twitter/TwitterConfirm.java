@@ -1,7 +1,6 @@
 package ai.saiy.android.command.twitter;
 
 import android.content.Context;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.speech.SpeechRecognizer;
 import android.util.Pair;
@@ -18,9 +17,10 @@ import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 import twitter4j.Twitter;
-import twitter4j.v1.Status;
 import twitter4j.TwitterException;
+import twitter4j.v1.Status;
 
 public class TwitterConfirm {
     private static final boolean DEBUG = ai.saiy.android.utils.MyLog.DEBUG;
@@ -98,7 +98,7 @@ public class TwitterConfirm {
                             MyLog.i(CLS_NAME, "getText: " + commandTwitterValues.getText());
                         }
                         localRequest = new LocalRequest(mContext, bundle);
-                        AsyncTask.execute(new Runnable() {
+                        Schedulers.io().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {
                                 try {

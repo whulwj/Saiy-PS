@@ -66,7 +66,7 @@ public class BlockedApplications implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int flags) {
+    public void writeToParcel(@NonNull Parcel parcel, int flags) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             parcel.writeParcelableList(applicationArray, flags);
         } else {

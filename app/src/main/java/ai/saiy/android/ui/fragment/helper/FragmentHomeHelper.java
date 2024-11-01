@@ -19,7 +19,6 @@ package ai.saiy.android.ui.fragment.helper;
 
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,6 +42,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.firebase.database.reference.IAPCodeReference;
@@ -196,24 +196,10 @@ public class FragmentHomeHelper {
      * the first initialisation of the application - neither of which require a delay.
      */
     public void finaliseUI() {
-
-        AsyncTask.execute(new Runnable() {
+        Schedulers.single().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 final ArrayList<ContainerUI> tempArray = FragmentHomeHelper.this.getUIComponents();
-
-                if (FragmentHomeHelper.this.getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)) {
-
-                    try {
-                        Thread.sleep(FragmentHome.DRAWER_CLOSE_DELAY);
-                    } catch (final InterruptedException e) {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "finaliseUI InterruptedException");
-                            e.printStackTrace();
-                        }
-                    }
-                }
-
                 if (FragmentHomeHelper.this.getParent().isActive()) {
 
                     FragmentHomeHelper.this.getParentActivity().runOnUiThread(new Runnable() {
@@ -231,7 +217,7 @@ public class FragmentHomeHelper {
                     }
                 }
             }
-        });
+        }, getParentActivity().getDrawer().isDrawerOpen(GravityCompat.START)? FragmentHome.DRAWER_CLOSE_DELAY : 0, TimeUnit.MILLISECONDS);
     }
 
     public void showPremiumDialog(List<com.android.billingclient.api.ProductDetails> productDetailsList) {

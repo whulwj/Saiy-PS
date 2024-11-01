@@ -24,7 +24,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -70,11 +69,12 @@ import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.helper.FragmentHomeHelper;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.ui.viewmodel.ViewModelBilling;
-import ai.saiy.android.utils.conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import ai.saiy.android.utils.conditions.Network;
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
@@ -215,7 +215,7 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
         }
         switch (position) {
             case 0:
-                AsyncTask.execute(new Runnable() {
+                Schedulers.computation().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(FragmentHome.this.getApplicationContext());
