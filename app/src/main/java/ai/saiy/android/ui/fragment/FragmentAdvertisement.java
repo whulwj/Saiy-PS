@@ -32,8 +32,7 @@ import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -49,6 +48,8 @@ import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 @AndroidEntryPoint
 public final class FragmentAdvertisement extends Fragment implements OnUserEarnedRewardListener {
@@ -62,7 +63,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
     private ProgressBar adProgress;
     private ViewModelFirebaseAuth viewModelFirebaseAuth;
     private ViewModelAdvertisement viewModelAdvertisement;
-    private Timer timer;
+    private Disposable disposable;
 
     private boolean isAdLoaded;
     private final AtomicInteger retryCount = new AtomicInteger();
@@ -82,11 +83,10 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onAdFailedToLoad: retrying");
                 }
-                if (timer != null) {
-                    timer.cancel();
+                if (disposable != null && !disposable.isDisposed()) {
+                    disposable.dispose();
                 }
-                timer = new Timer(CLS_NAME);
-                timer.schedule(new TimerTask() {
+                disposable = Schedulers.computation().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         if (!isActive()) {
@@ -122,7 +122,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
                             }
                         });
                     }
-                }, 5000L);
+                }, 5000L, TimeUnit.MILLISECONDS);
             } else {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onAdFailedToLoad max retries");
@@ -207,9 +207,11 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onDestroy");
         }
-        if (timer != null) {
-            timer.cancel();
-            timer = null;
+        if (disposable != null) {
+            if (!disposable.isDisposed()) {
+                disposable.dispose();
+            }
+            disposable = null;
         }
         destroyAd();
         destroyInterstitial();

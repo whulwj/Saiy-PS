@@ -22,12 +22,12 @@ import com.android.internal.telephony.ITelephony;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsReflection;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class CallHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -275,14 +275,14 @@ public class CallHelper {
         try {
             context.sendOrderedBroadcast(headsetHookDown, Manifest.permission.CALL_PRIVILEGED);
             context.sendOrderedBroadcast(headsetHookUp, Manifest.permission.CALL_PRIVILEGED);
-            new Timer().schedule(new TimerTask() {
+            Schedulers.computation().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     audioManager.setMode(AudioManager.MODE_IN_CALL);
                     audioManager.setSpeakerphoneOn(true);
                     ai.saiy.android.utils.SPH.setResetSpeaker(context, true);
                 }
-            }, 1500L);
+            }, 1500L, TimeUnit.MILLISECONDS);
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "answerCallOnSpeaker: success");
             }

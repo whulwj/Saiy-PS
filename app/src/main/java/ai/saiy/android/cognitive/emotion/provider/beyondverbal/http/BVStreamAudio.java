@@ -28,8 +28,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -263,7 +262,7 @@ public class BVStreamAudio implements IMic {
 
             retryCount++;
 
-            final TimerTask timerTask = new TimerTask() {
+            Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     if (DEBUG) {
@@ -275,9 +274,7 @@ public class BVStreamAudio implements IMic {
                         proceedAndNotify();
                     }
                 }
-            };
-
-            new Timer().schedule(timerTask, BeyondVerbal.FETCH_ANALYSIS_DELAY);
+            }, BeyondVerbal.FETCH_ANALYSIS_DELAY, TimeUnit.MILLISECONDS);
         }
     }
 

@@ -45,8 +45,7 @@ import com.google.gson.GsonBuilder;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.io.File;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -112,6 +111,7 @@ import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.wear.UtilsWearMessage;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -178,7 +178,7 @@ public class SelfAware extends Service {
     private volatile PartialHelper partialHelper;
     private volatile PendingTTS pendingTTS;
     private final AtomicInteger initCount = new AtomicInteger();
-    private volatile TimerTask timerTask;
+    private volatile Disposable disposable;
 
     private final MotionRecognition motionRecognition = new MotionRecognition();
 
@@ -2445,8 +2445,8 @@ public class SelfAware extends Service {
                             MyLog.i(CLS_NAME, "PhoneStateListener: incoming number null or permission denied");
                         }
                     } else {
-                        if (timerTask == null) {
-                            timerTask = new TimerTask() {
+                        if (disposable == null) {
+                            disposable = Schedulers.computation().scheduleDirect(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (getTelephonyManager().getCallState() != TelephonyManager.CALL_STATE_RINGING) {
@@ -2468,26 +2468,25 @@ public class SelfAware extends Service {
                                         MyLog.i(CLS_NAME, "PhoneStateListener: have caller name: " + userName);
                                     }
                                     VolumeHelper.muteRinger(getApplicationContext(), true);
-                                    new Timer().schedule(new TimerTask() {
+                                    Schedulers.computation().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
                                             VolumeHelper.muteRinger(SelfAware.this.getApplicationContext(), false);
                                         }
-                                    }, 5000L);
+                                    }, 5000L, TimeUnit.MILLISECONDS);
                                     LocalRequest localRequest = new LocalRequest(SelfAware.this.getApplicationContext());
                                     localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), getString(R.string.incoming_call_from) + XMLResultsHandler.SEP_SPACE + userName + ", " + getString(R.string.would_you_like_to_answer_it));
                                     localRequest.setCondition(Condition.CONDITION_ANNOUNCE_CALLER);
                                     localRequest.setSpeechPriority(SpeechPriority.PRIORITY_MAX);
                                     localRequest.execute();
-                                    new Timer().schedule(new TimerTask() {
+                                    Schedulers.computation().scheduleDirect(new Runnable() {
                                         @Override
                                         public void run() {
-                                            timerTask = null;
+                                            disposable = null;
                                         }
-                                    }, 14000L);
+                                    }, 14000L, TimeUnit.MILLISECONDS);
                                 }
-                            };
-                            new Timer().schedule(SelfAware.this.timerTask, 5000L);
+                            }, 5000L, TimeUnit.MILLISECONDS);
                         }
                     }
                     break;
@@ -2501,10 +2500,10 @@ public class SelfAware extends Service {
                             MyLog.i(CLS_NAME, "PhoneStateListener: TelephonyManager.CALL_STATE_IDLE: resetting");
                         }
                         SPH.setResetSpeaker(getApplicationContext(), false);
-                        new Timer().schedule(new TimerTask() {
+                        Schedulers.computation().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {
-                                SelfAware.this.timerTask = null;
+                                SelfAware.this.disposable = null;
                                 final android.media.AudioManager audioManager = (android.media.AudioManager) SelfAware.this.getSystemService(Context.AUDIO_SERVICE);
                                 audioManager.setMode(android.media.AudioManager.MODE_NORMAL);
                                 audioManager.setSpeakerphoneOn(false);
@@ -2522,7 +2521,7 @@ public class SelfAware extends Service {
                                     startHotwordDetection(conditions.getBundle());
                                 }
                             }
-                        }, 3500L);
+                        }, 3500L, TimeUnit.MILLISECONDS);
                     } else {
                         if (conditions.restartHotword()) {
                             startHotwordDetection(conditions.getBundle());

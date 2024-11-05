@@ -32,8 +32,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.net.UnknownHostException;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import javax.net.ssl.HttpsURLConnection;
 
@@ -163,7 +162,7 @@ public class CreateIDEnrollment {
                                 MyLog.d(CLS_NAME, "response statusUrl: " + statusUrl);
                             }
 
-                            final TimerTask timerTask = new TimerTask() {
+                            Schedulers.computation().scheduleDirect(new Runnable() {
                                 @Override
                                 public void run() {
                                     if (DEBUG) {
@@ -172,9 +171,7 @@ public class CreateIDEnrollment {
                                     checkResult(new FetchIDOperation(mic.getContext(), apiKey, statusUrl)
                                             .getStatus(), statusUrl);
                                 }
-                            };
-
-                            new Timer().schedule(timerTask, FETCH_DELAY);
+                            }, FETCH_DELAY, TimeUnit.MILLISECONDS);
 
                         } else {
                             mic.getMicListener().onError(Speaker.ERROR_NETWORK);
@@ -279,7 +276,7 @@ public class CreateIDEnrollment {
                     if (retry) {
                         retry = false;
 
-                        final TimerTask timerTask = new TimerTask() {
+                        Schedulers.computation().scheduleDirect(new Runnable() {
                             @Override
                             public void run() {
                                 if (DEBUG) {
@@ -288,9 +285,7 @@ public class CreateIDEnrollment {
                                 checkResult(new FetchIDOperation(mic.getContext(), apiKey, statusUrl)
                                         .getStatus(), statusUrl);
                             }
-                        };
-
-                        new Timer().schedule(timerTask, FETCH_DELAY_EXTENDED);
+                        }, FETCH_DELAY_EXTENDED, TimeUnit.MILLISECONDS);
 
                     } else {
                         NotificationHelper.createIdentificationNotification(mic.getContext(),

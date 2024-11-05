@@ -437,7 +437,7 @@ public final class FragmentSuperUser extends Fragment implements View.OnClickLis
         }
 
         helper.enrollmentCancelled.set(true);
-        helper.cancelTimer();
+        helper.dispose();
         getParentActivity().showProgress(false);
     }
 }

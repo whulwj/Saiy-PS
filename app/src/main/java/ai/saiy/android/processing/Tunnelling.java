@@ -24,8 +24,7 @@ import androidx.annotation.NonNull;
 
 import java.util.Collections;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.command.helper.CommandRequest;
@@ -33,6 +32,8 @@ import ai.saiy.android.custom.CustomCommandHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * If you are here to read more about the quantum methods used to resolve commands, I'm afraid
@@ -77,7 +78,7 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
 
     protected @Outcome.Result int result = Outcome.SUCCESS;
     CC COMMAND = CC.COMMAND_UNKNOWN;
-    private final Timer timer = new Timer();
+    private Disposable disposable;
     protected final long then;
     protected boolean secure;
 
@@ -113,18 +114,16 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
             MyLog.i(CLS_NAME, "onPreExecute");
         }
 
-        final TimerTask timerTask = new TimerTask() {
+        disposable = Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "timerTask: show computing");
+                    MyLog.i(CLS_NAME, "show computing");
                 }
                 final EntangledPair entangledPair = new EntangledPair(Position.SHOW_COMPUTING, CC.COMMAND_UNKNOWN, isAlexaTTS);
                 onProgressUpdate(entangledPair);
             }
-        };
-
-        timer.schedule(timerTask, COMPUTING_DELAY);
+        }, COMPUTING_DELAY, TimeUnit.MILLISECONDS);
     }
 
     @Override
@@ -159,7 +158,7 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
 
     @Override
     protected void onPostExecute(final Qubit qubit) {
-        cancelTimer();
+        dispose();
         onSuperposition(qubit);
     }
 
@@ -186,24 +185,25 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
     }
 
     /**
-     * Cancel the notification timer, as it's no longer needed.
+     * Cancel the notification task, as it's no longer needed.
      */
-    private void cancelTimer() {
+    private void dispose() {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "cancelTimer");
+            MyLog.i(CLS_NAME, "dispose");
         }
 
         try {
-            timer.cancel();
-            timer.purge();
+            if (disposable != null && !disposable.isDisposed()) {
+                disposable.dispose();
+            }
         } catch (final NullPointerException e) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "cancelTimer: NullPointerException");
+                MyLog.w(CLS_NAME, "dispose: NullPointerException");
                 e.printStackTrace();
             }
         } catch (final Exception e) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "cancelTimer: Exception");
+                MyLog.w(CLS_NAME, "dispose: Exception");
                 e.printStackTrace();
             }
         }

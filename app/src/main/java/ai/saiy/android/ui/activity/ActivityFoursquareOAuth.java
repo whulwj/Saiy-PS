@@ -7,8 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ai.saiy.android.R;
@@ -16,11 +15,12 @@ import ai.saiy.android.command.foursquare.FoursquareOAuthView;
 import ai.saiy.android.firebase.database.reference.FoursquareReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ActivityFoursquareOAuth extends AppCompatActivity implements FoursquareOAuthView.Listener {
     private FoursquareOAuthView foursquareOAuthView;
-    private volatile Timer timer;
+    private volatile Disposable disposable;
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityFoursquareOAuth.class.getSimpleName();
@@ -31,9 +31,8 @@ public class ActivityFoursquareOAuth extends AppCompatActivity implements Foursq
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startShutdown");
         }
-        if (this.timer == null) {
-            this.timer = new Timer();
-            timer.schedule(new TimerTask() {
+        if (this.disposable == null) {
+            this.disposable = Schedulers.computation().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     if (isFinishing.get()) {
@@ -42,7 +41,7 @@ public class ActivityFoursquareOAuth extends AppCompatActivity implements Foursq
                     isFinishing.set(true);
                     finish();
                 }
-            }, 2000L);
+            }, 2000L, TimeUnit.MILLISECONDS);
         }
     }
 

@@ -7,8 +7,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ai.saiy.android.R;
@@ -16,6 +15,7 @@ import ai.saiy.android.command.twitter.TwitterOAuthView;
 import ai.saiy.android.firebase.database.reference.TwitterReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import twitter4j.AccessToken;
 
@@ -24,7 +24,7 @@ import twitter4j.AccessToken;
  */
 public class ActivityTwitterOAuth extends AppCompatActivity implements TwitterOAuthView.Listener {
     private TwitterOAuthView twitterOAuthView;
-    private volatile Timer timer;
+    private volatile Disposable disposable;
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = ActivityTwitterOAuth.class.getSimpleName();
@@ -35,9 +35,8 @@ public class ActivityTwitterOAuth extends AppCompatActivity implements TwitterOA
         if (DEBUG) {
             MyLog.i(CLS_NAME, "startShutdown");
         }
-        if (this.timer == null) {
-            this.timer = new Timer();
-            timer.schedule(new TimerTask() {
+        if (this.disposable == null) {
+            this.disposable = Schedulers.computation().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
                     if (isFinishing.get()) {
@@ -46,7 +45,7 @@ public class ActivityTwitterOAuth extends AppCompatActivity implements TwitterOA
                     isFinishing.set(true);
                     finish();
                 }
-            }, 2000L);
+            }, 2000L, TimeUnit.MILLISECONDS);
         }
     }
 

@@ -5,8 +5,7 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.call.CallHelper;
@@ -16,6 +15,7 @@ import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ContactHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -47,7 +47,7 @@ public class ContactHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sleep");
         }
-        new Timer().schedule(new TimerTask() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (DEBUG) {
@@ -97,7 +97,7 @@ public class ContactHelper {
                     }
                 }
             }
-        }, commandContactValues.getContact() != null ? 3000L : 5500L);
+        }, commandContactValues.getContact() != null ? 3000L : 5500L, TimeUnit.MILLISECONDS);
     }
 
     public void perform(boolean shouldAction) {
@@ -105,14 +105,6 @@ public class ContactHelper {
             MyLog.i(CLS_NAME, "perform");
         }
         switch (commandContactValues.getType()) {
-            case UNKNOWN:
-            case DISPLAY:
-            case EDIT:
-            case NAVIGATE:
-            case TEXT:
-            case EMAIL:
-            default:
-                break;
             case CALL:
                 sleep();
                 if (shouldAction) {
@@ -120,6 +112,14 @@ public class ContactHelper {
                     localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, commandContactValues.getActionUtterance());
                     localRequest.execute();
                 }
+                break;
+            case UNKNOWN:
+            case DISPLAY:
+            case EDIT:
+            case NAVIGATE:
+            case TEXT:
+            case EMAIL:
+            default:
                 break;
         }
     }

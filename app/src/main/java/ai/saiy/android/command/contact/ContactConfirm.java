@@ -9,8 +9,7 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
@@ -24,6 +23,7 @@ import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class ContactConfirm {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -245,12 +245,12 @@ public class ContactConfirm {
                         } else {
                             SmsHelper.sendSMS(mContext, contact.getNumber(), contact.getGeneric(), true);
                             localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, PersonalityResponse.getNoPermissionForSms(mContext, sl));
-                            new Timer().schedule(new TimerTask() {
+                            Schedulers.computation().scheduleDirect(new Runnable() {
                                 @Override
                                 public void run() {
                                     ai.saiy.android.permissions.PermissionHelper.checkPhoneStatePermissions(mContext);
                                 }
-                            }, 2000L);
+                            }, 2000L, TimeUnit.MILLISECONDS);
                         }
                         localRequest.execute();
                         break;

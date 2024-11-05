@@ -51,8 +51,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
@@ -84,6 +83,7 @@ import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsToast;
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -179,17 +179,11 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             MyLog.i(CLS_NAME, "onAttachedToWindow");
         }
 
-        new Timer().schedule(new TimerTask() {
+        AndroidSchedulers.mainThread().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-
                 try {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            runStartConfiguration();
-                        }
-                    });
+                    runStartConfiguration();
                 } catch (final NullPointerException e) {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "onAttachedToWindow:  NullPointerException");
@@ -202,7 +196,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     }
                 }
             }
-        }, ARBITRARY_WAIT);
+        }, ARBITRARY_WAIT, TimeUnit.MILLISECONDS);
 
         viewModelBilling.isBillingSuccessful().observe(this, new Observer<Boolean>() {
             @Override

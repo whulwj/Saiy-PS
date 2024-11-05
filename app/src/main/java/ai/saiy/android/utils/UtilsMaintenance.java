@@ -3,8 +3,9 @@ package ai.saiy.android.utils;
 import android.content.Context;
 import android.os.Debug;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class UtilsMaintenance {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -12,7 +13,7 @@ public class UtilsMaintenance {
 
     public static void restart(final Context context) {
         debugInfo();
-        new Timer().schedule(new TimerTask() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (DEBUG) {
@@ -21,12 +22,12 @@ public class UtilsMaintenance {
                 SPH.setSelfAwareEnabled(context, true);
                 ai.saiy.android.service.helper.SelfAwareHelper.restartService(context);
             }
-        }, 3500L);
+        }, 3500L, TimeUnit.MILLISECONDS);
     }
 
     public static void shutdown(final Context context) {
         debugInfo();
-        new Timer().schedule(new TimerTask() {
+        Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (DEBUG) {
@@ -36,7 +37,7 @@ public class UtilsMaintenance {
                 ai.saiy.android.service.helper.SelfAwareHelper.stopService(context);
                 System.exit(0);
             }
-        }, 3500L);
+        }, 3500L, TimeUnit.MILLISECONDS);
     }
 
     private static void debugInfo() {

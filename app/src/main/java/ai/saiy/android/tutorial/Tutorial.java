@@ -12,10 +12,10 @@ import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
+import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -30,8 +30,8 @@ import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
-import ai.saiy.android.firebase.helper.UtilsAnalytic;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public class Tutorial {
     public static final int TUTORIAL_WINDOW_ID = 2;
@@ -471,14 +471,14 @@ public class Tutorial {
                 actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
                 ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_DEVELOPMENT, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_16) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_17), false);
-                new Timer().schedule(new TimerTask() {
+                Schedulers.computation().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
                         Bundle innerBundle = new Bundle();
                         innerBundle.putInt(ActivityHome.DIALOG_INDEX, ActivityHome.INDEX_DIALOG_USER_GUIDE);
                         ExecuteIntent.saiyActivity(Tutorial.this.context, ActivityHome.class, innerBundle, true);
                     }
-                }, 25 * 1000L);
+                }, 25 * 1000L, TimeUnit.MILLISECONDS);
                 break;
             case STAGE_DEVELOPMENT:
                 if (DEBUG) {

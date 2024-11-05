@@ -45,8 +45,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -85,6 +83,7 @@ import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -101,7 +100,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
     public final AtomicBoolean enrollmentCancelled = new AtomicBoolean();
 
     private final FragmentSuperUser parentFragment;
-    private volatile Timer timer;
+    private volatile Disposable disposable;
 
     /**
      * Constructor
@@ -964,7 +963,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
         if (!enrollmentCancelled.get()) {
             accountInitialised.set(true);
-            cancelTimer();
+            dispose();
 
             showProgress(false);
 
@@ -1015,8 +1014,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
             MyLog.i(CLS_NAME, "monitorAccountCreation");
         }
 
-        timer = new Timer();
-        final TimerTask timerTask = new TimerTask() {
+        disposable = Schedulers.computation().scheduleDirect(new Runnable() {
             @Override
             public void run() {
                 if (DEBUG) {
@@ -1038,9 +1036,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                     enrollmentFailed(accountName);
                 }
             }
-        };
-
-        timer.schedule(timerTask, ARBITRARY_DELAY);
+        }, ARBITRARY_DELAY, TimeUnit.MILLISECONDS);
     }
 
     /**
@@ -1100,26 +1096,24 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
     }
 
     /**
-     * Cancel the timer, as it's no longer needed.
+     * Dispose the monitor, as it's no longer needed.
      */
-    public void cancelTimer() {
+    public void dispose() {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "cancelTimer");
+            MyLog.i(CLS_NAME, "dispose");
         }
 
-        if (timer != null) {
-
+        if (disposable != null && !disposable.isDisposed()) {
             try {
-                timer.cancel();
-                timer.purge();
+                disposable.dispose();
             } catch (final NullPointerException e) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "cancelTimer: NullPointerException");
+                    MyLog.w(CLS_NAME, "dispose: NullPointerException");
                     e.printStackTrace();
                 }
             } catch (final Exception e) {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "cancelTimer: Exception");
+                    MyLog.w(CLS_NAME, "dispose: Exception");
                     e.printStackTrace();
                 }
             }
