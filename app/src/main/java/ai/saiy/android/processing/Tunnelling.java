@@ -78,7 +78,7 @@ abstract class Tunnelling extends AsyncTask<CommandRequest, EntangledPair, Qubit
 
     protected @Outcome.Result int result = Outcome.SUCCESS;
     CC COMMAND = CC.COMMAND_UNKNOWN;
-    private Disposable disposable;
+    private volatile Disposable disposable;
     protected final long then;
     protected boolean secure;
 

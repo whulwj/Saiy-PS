@@ -63,7 +63,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
     private ProgressBar adProgress;
     private ViewModelFirebaseAuth viewModelFirebaseAuth;
     private ViewModelAdvertisement viewModelAdvertisement;
-    private Disposable disposable;
+    private volatile Disposable disposable;
 
     private boolean isAdLoaded;
     private final AtomicInteger retryCount = new AtomicInteger();
