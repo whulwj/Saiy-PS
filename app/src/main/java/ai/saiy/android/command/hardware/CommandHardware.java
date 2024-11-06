@@ -1,5 +1,6 @@
 package ai.saiy.android.command.hardware;
 
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Context;
 import android.content.Intent;
@@ -8,11 +9,14 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.provider.Settings;
 import android.text.TextUtils;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
 
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
@@ -23,10 +27,12 @@ import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.nlu.local.OnOff;
+import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
+import ai.saiy.android.utils.UtilsWireless;
 
 public class CommandHardware {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -73,23 +79,44 @@ public class CommandHardware {
                         outcome.setOutcome(Outcome.SUCCESS);
                         outcome.setUtterance(bluetooth + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
+                        @Nullable String errorMessage;
                         switch (hardwarePair.second) {
                             case ON:
-                                defaultAdapter.enable();
-                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.on)));
+                                errorMessage = setBluetoothEnabled(context, defaultAdapter, true, cr.getBundle());
+                                if (errorMessage != null) {
+                                    outcome.setOutcome(Outcome.FAILURE);
+                                    outcome.setUtterance(errorMessage);
+                                } else {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.on)));
+                                }
                                 break;
                             case OFF:
-                                defaultAdapter.disable();
-                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.off)));
+                                errorMessage = setBluetoothEnabled(context, defaultAdapter, false, cr.getBundle());
+                                if (errorMessage != null) {
+                                    outcome.setOutcome(Outcome.FAILURE);
+                                    outcome.setUtterance(errorMessage);
+                                } else {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.off)));
+                                }
                                 break;
                             case TOGGLE:
                             case UNRESOLVED:
                                 if (defaultAdapter.isEnabled()) {
-                                    defaultAdapter.disable();
-                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.off)));
+                                    errorMessage = setBluetoothEnabled(context, defaultAdapter, false, cr.getBundle());
+                                    if (errorMessage != null) {
+                                        outcome.setOutcome(Outcome.FAILURE);
+                                        outcome.setUtterance(errorMessage);
+                                    } else {
+                                        outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.off)));
+                                    }
                                 } else {
-                                    defaultAdapter.enable();
-                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.on)));
+                                    errorMessage = setBluetoothEnabled(context, defaultAdapter, true, cr.getBundle());
+                                    if (errorMessage != null) {
+                                        outcome.setOutcome(Outcome.FAILURE);
+                                        outcome.setUtterance(errorMessage);
+                                    } else {
+                                        outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, bluetooth, context.getString(R.string.on)));
+                                    }
                                 }
                                 break;
                         }
@@ -108,23 +135,44 @@ public class CommandHardware {
                         outcome.setOutcome(Outcome.SUCCESS);
                         outcome.setUtterance(wifi + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
+                        @StringRes int errorMessage;
                         switch (hardwarePair.second) {
                             case ON:
-                                wifiManager.setWifiEnabled(true);
-                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.on)));
+                                errorMessage = setWifiEnabled(context, wifiManager, true);
+                                if (errorMessage != 0) {
+                                    outcome.setOutcome(Outcome.FAILURE);
+                                    outcome.setUtterance(context.getString(errorMessage));
+                                } else {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.on)));
+                                }
                                 break;
                             case OFF:
-                                wifiManager.setWifiEnabled(false);
-                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.off)));
+                                errorMessage = setWifiEnabled(context, wifiManager, false);
+                                if (errorMessage != 0) {
+                                    outcome.setOutcome(Outcome.FAILURE);
+                                    outcome.setUtterance(context.getString(errorMessage));
+                                } else {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.off)));
+                                }
                                 break;
                             case TOGGLE:
                             case UNRESOLVED:
                                 if (wifiManager.isWifiEnabled()) {
-                                    wifiManager.setWifiEnabled(false);
-                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.off)));
+                                    errorMessage = setWifiEnabled(context, wifiManager, false);
+                                    if (errorMessage != 0) {
+                                        outcome.setOutcome(Outcome.FAILURE);
+                                        outcome.setUtterance(context.getString(errorMessage));
+                                    } else {
+                                        outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.off)));
+                                    }
                                 } else {
-                                    wifiManager.setWifiEnabled(true);
-                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.on)));
+                                    errorMessage = setWifiEnabled(context, wifiManager, true);
+                                    if (errorMessage != 0) {
+                                        outcome.setOutcome(Outcome.FAILURE);
+                                        outcome.setUtterance(context.getString(errorMessage));
+                                    } else {
+                                        outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, wifi, context.getString(R.string.on)));
+                                    }
                                 }
                                 break;
                         }
@@ -375,5 +423,51 @@ public class CommandHardware {
             MyLog.getElapsed(CLS_NAME, then);
         }
         return outcome;
+    }
+
+    @SuppressLint("MissingPermission")
+    private @Nullable String setBluetoothEnabled(final Context ctx, BluetoothAdapter defaultAdapter, boolean enabled, @Nullable Bundle bundle) {
+        if (enabled) {
+            // Show message if Bluetooth is not allowed in airplane mode
+            if (!UtilsWireless.isRadioAllowed(ctx.getApplicationContext(), (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)? Settings.Global.RADIO_BLUETOOTH : Settings.System.RADIO_BLUETOOTH)) {
+                return ctx.getString(R.string.wifi_in_airplane_mode);
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !PermissionHelper.checkBluetoothPermissions(ctx, bundle)) {
+            return SaiyRequestParams.SILENCE;
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            final Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            enableBtIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(enableBtIntent);
+        } else {
+            if (enabled) {
+                defaultAdapter.enable();
+            } else {
+                defaultAdapter.disable();
+            }
+        }
+
+        //https://developer.android.com/reference/android/bluetooth/BluetoothAdapter#ACTION_STATE_CHANGED
+        return null;
+    }
+
+    private @StringRes int setWifiEnabled(final Context ctx, WifiManager wifiManager, boolean enabled) {
+        if (enabled) {
+            // Show message if Wi-Fi is not allowed in airplane mode
+            if (!UtilsWireless.isRadioAllowed(ctx.getApplicationContext(), (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)? Settings.Global.RADIO_WIFI : Settings.System.RADIO_WIFI)) {
+                return R.string.wifi_in_airplane_mode;
+            }
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            final Intent panelIntent = new Intent(android.provider.Settings.Panel.ACTION_WIFI);
+            panelIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(panelIntent);
+        } else {
+            if (!wifiManager.setWifiEnabled(enabled)) {
+                return R.string.wifi_error;
+            }
+        }
+        return 0;
     }
 }

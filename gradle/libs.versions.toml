@@ -1,5 +1,5 @@
 [versions]
-gradlePlugin = "8.7.1"
+gradlePlugin = "8.7.2"
 googleAuthLibraryOauth2Http = "1.12.2"
 billing = "6.0.1"
 commonsIo = "2.16.1"

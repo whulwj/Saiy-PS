@@ -1084,6 +1084,7 @@
     <string name="permission_sms_send">I require the, send SMS, permission to enable me to send text messages on your behalf, without your physical interaction. When you are driving for example, or have your hands full with something else. I\'ll always double check the recipient and content with you prior to doing this, and it will of course, only ever be as a result of your direct instruction.</string>
     <string name="permission_phone_state">So I can access the number of your incoming calls, and search for the associated contact. I require the permission to read the phone state.</string>
     <string name="permission_write_settings">To control your hardware, I need to be able to modify the device\'s system settings</string>
+    <string name="permission_bluetooth_connect">I require the, Bluetooth connect, permission in order to turn Bluetooth on or off, and communicate with already-paired Bluetooth devices.</string>
 
     <!-- Notification data -->
     <string name="is_typing">is typing</string>
@@ -2442,4 +2443,8 @@
     <string name="notification">notification</string>
     <string name="notification_response">I\'ll %1$s announce your notifications</string>
     <string name="remember_this_">remember this </string>
+
+    <!-- Toast message when Wi-Fi or bluetooth is disallowed in airplane mode -->
+    <string name="wifi_in_airplane_mode">In Airplane mode</string>
+    <string name="wifi_error">Error</string>
 </resources>

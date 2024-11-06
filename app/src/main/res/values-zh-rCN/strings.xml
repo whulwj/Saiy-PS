@@ -976,6 +976,7 @@
     <string name="permission_sms_send">我需要发送短信权限，允许我代表您发送短信，而无需您的肢体互动。比如当您在开车的时候，或者手里拿满了其它东西的时候。在做这些事之前我会和先你核对接收者和发送内容，当然，这都是在你的直接指示下完成的。</string>
     <string name="permission_phone_state">我需要读取电话状态权限，因此我能访问来电号码并搜索相关联系人信息。</string>
     <string name="permission_write_settings">我需要修改设备系统设置权限，来控制您的硬件</string>
+    <string name="permission_bluetooth_connect">我需要Bluetooth连接权限才能打开或关闭 Bluetooth，并与配对的Bluetooth设备通信。</string>
 
     <!-- Notification data -->
     <string name="is_typing">is typing</string>
@@ -2303,4 +2304,7 @@
     <string name="notification">notification</string>
     <string name="notification_response">I\'ll %1$s announce your notifications</string>
     <string name="remember_this_">remember this </string>
+
+    <string name="wifi_in_airplane_mode">"正处于飞行模式下"</string>
+    <string name="wifi_error">"出错"</string>
 </resources>

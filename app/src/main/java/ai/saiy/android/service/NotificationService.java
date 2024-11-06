@@ -19,6 +19,7 @@ package ai.saiy.android.service;
 
 import android.app.IntentService;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
@@ -263,6 +264,12 @@ public class NotificationService extends IntentService {
                                         }
                                         permissionContent = getString(ai.saiy.android.R.string.permission_phone_state);
                                         break;
+                                    case PermissionHelper.REQUEST_BLUETOOTH_CONNECT:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_BLUETOOTH_CONNECT");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_bluetooth_connect);
+                                        break;
                                     default:
                                         if (DEBUG) {
                                             MyLog.w(CLS_NAME, "onHandleIntent: PermissionHelper.UNKNOWN");
@@ -304,8 +311,10 @@ public class NotificationService extends IntentService {
                                 request.setShutdownHotword();
                                 request.execute();
 
-                                final Intent closeShadeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-                                sendBroadcast(closeShadeIntent);
+                                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+                                    final Intent closeShadeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+                                    sendBroadcast(closeShadeIntent);
+                                }
 
                                 break;
                             case NOTIFICATION_IDENTIFICATION:

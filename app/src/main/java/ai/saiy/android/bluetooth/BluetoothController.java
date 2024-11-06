@@ -9,9 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
+import android.os.Build;
 
 import java.util.List;
 
+import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.utils.BluetoothConstants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -664,8 +666,15 @@ public class BluetoothController {
     }
 
     public boolean startController() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "startController");
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (!SPH.isAutoConnectHeadset(mContext) || audioManager.isBluetoothScoAvailableOffCall()) && !PermissionHelper.checkBluetoothPermissions(mContext, null)) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "startController");
+            }
+            return false;
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "startController");
+            }
         }
         if (!SPH.isAutoConnectHeadset(mContext)) {
             if (DEBUG) {

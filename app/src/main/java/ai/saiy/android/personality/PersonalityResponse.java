@@ -1009,9 +1009,9 @@ public final class PersonalityResponse {
         return stringArray[new Random().nextInt(stringArray.length)];
     }
 
-    public static String getHardwareToggle(Context context, SupportedLanguage supportedLanguage, String str, String str2) {
+    public static String getHardwareToggle(Context context, SupportedLanguage supportedLanguage, String device, String state) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_hardware_toggle);
-        return String.format(stringArray[new Random().nextInt(stringArray.length)], str, str2);
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], device, state);
     }
 
     public static String getCalculateUnknownError(Context context, SupportedLanguage supportedLanguage) {

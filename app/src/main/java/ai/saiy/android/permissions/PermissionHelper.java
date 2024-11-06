@@ -29,6 +29,7 @@ import android.provider.Settings;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.core.content.ContextCompat;
 
@@ -60,6 +61,7 @@ public class PermissionHelper {
     public static final int REQUEST_SMS_READ = 8;
     public static final int REQUEST_SMS_SEND = 9;
     public static final int REQUEST_PHONE_STATE = 10;
+    public static final int REQUEST_BLUETOOTH_CONNECT = 11;
 
     /**
      * Check if the calling application has the correct permission to control Saiy.
@@ -642,5 +644,46 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkNotificationPolicyPermission");
         }
         return Build.VERSION.SDK_INT < Build.VERSION_CODES.N || ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).isNotificationPolicyAccessGranted();
+    }
+
+    /**
+     * Check if the user has granted bluetooth connect permissions
+     *
+     * @param ctx the application context
+     * @return true if the permissions have been granted. False if they have been denied or are
+     * required to be requested.
+     */
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    public static boolean checkBluetoothPermissions(@NonNull final Context ctx, @Nullable Bundle bundle) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkBluetoothPermissions");
+        }
+
+        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.BLUETOOTH_CONNECT)) {
+            case PackageManager.PERMISSION_GRANTED:
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "checkBluetoothPermissions: PERMISSION_GRANTED");
+                }
+                return true;
+            case PackageManager.PERMISSION_DENIED:
+            default:
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "checkBluetoothPermissions: PERMISSION_DENIED");
+                }
+
+                final Intent intent = new Intent(ctx, ActivityPermissionDialog.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                if (!UtilsBundle.notNaked(bundle)) {
+                    bundle = new Bundle();
+                }
+                bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.BLUETOOTH_CONNECT});
+                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_AUDIO);
+
+                intent.putExtras(bundle);
+
+                ctx.startActivity(intent);
+                return false;
+        }
     }
 }

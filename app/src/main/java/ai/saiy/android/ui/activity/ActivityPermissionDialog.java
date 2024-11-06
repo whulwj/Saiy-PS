@@ -305,6 +305,43 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
                     createPermissionsNotification(requestCode);
                 }
                 break;
+            case PermissionHelper.REQUEST_PHONE_STATE:
+                if (granted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_PHONE_STATE: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_PHONE_STATE: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_PHONE_STATE: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                }
+            case PermissionHelper.REQUEST_BLUETOOTH_CONNECT:
+                if (granted(grantResults)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_BLUETOOTH_CONNECT: PERMISSION_GRANTED");
+                    }
+                    if (bundle.containsKey(LocalRequest.EXTRA_ACTION)) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQUEST_BLUETOOTH_CONNECT: PERMISSION_GRANTED: Proceed command");
+                        }
+                        bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
+                        new LocalRequest(getApplicationContext(), bundle).execute();
+                    }
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onRequestPermissionsResult: REQUEST_BLUETOOTH_CONNECT: PERMISSION_DENIED");
+                    }
+                    createPermissionsNotification(requestCode);
+                }
+                break;
             default:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "onRequestPermissionsResult: Unknown request?");
