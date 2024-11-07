@@ -17,6 +17,7 @@
 
 package ai.saiy.android.service;
 
+import android.annotation.SuppressLint;
 import android.app.IntentService;
 import android.content.Intent;
 import android.os.Build;
@@ -108,6 +109,7 @@ public class NotificationService extends IntentService {
         super.onCreate();
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     protected void onHandleIntent(final Intent intent) {
         if (DEBUG) {
@@ -264,6 +266,12 @@ public class NotificationService extends IntentService {
                                         }
                                         permissionContent = getString(ai.saiy.android.R.string.permission_phone_state);
                                         break;
+                                    case PermissionHelper.REQUEST_BACKGROUND_LOCATION:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_BACKGROUND_LOCATION");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_background_location);
+                                        break;
                                     case PermissionHelper.REQUEST_BLUETOOTH_CONNECT:
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_BLUETOOTH_CONNECT");
@@ -312,8 +320,14 @@ public class NotificationService extends IntentService {
                                 request.execute();
 
                                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
-                                    final Intent closeShadeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-                                    sendBroadcast(closeShadeIntent);
+                                    try {
+                                        final Intent closeShadeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+                                        sendBroadcast(closeShadeIntent);
+                                    } catch (SecurityException e) {
+                                        if (DEBUG) {
+                                            MyLog.w(CLS_NAME, "onHandleIntent: NOTIFICATION_HOTWORD " + e.getMessage());
+                                        }
+                                    }
                                 }
 
                                 break;
@@ -477,7 +491,15 @@ public class NotificationService extends IntentService {
                                     bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, SPH.getTTSLocale(getApplicationContext()).toString());
                                     new LocalRequest(getApplicationContext(), bundle).execute();
                                     ExecuteIntent.saiyActivity(getApplicationContext(), ActivityHome.class, bundle, true);
-                                    sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+                                        try {
+                                            sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+                                        } catch (SecurityException e) {
+                                            if (DEBUG) {
+                                                MyLog.w(CLS_NAME, "onHandleIntent: NOTIFICATION_ALEXA " + e.getMessage());
+                                            }
+                                        }
+                                    }
                                     break;
                                 }
                                 if (!ai.saiy.android.utils.conditions.Network.isNetworkAvailable(getApplicationContext())) {
@@ -498,7 +520,15 @@ public class NotificationService extends IntentService {
                                 bundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, SPH.getTTSLocale(getApplicationContext()).toString());
                                 bundle.putSerializable(LocalRequest.EXTRA_RECOGNITION_PROVIDER, SaiyDefaults.VR.ALEXA);
                                 new LocalRequest(getApplicationContext(), bundle).execute();
-                                sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+                                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+                                    try {
+                                        sendBroadcast(new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS));
+                                    } catch (SecurityException e) {
+                                        if (DEBUG) {
+                                            MyLog.w(CLS_NAME, "onHandleIntent: NOTIFICATION_ALEXA " + e.getMessage());
+                                        }
+                                    }
+                                }
                                 break;
                             default:
                                 if (DEBUG) {

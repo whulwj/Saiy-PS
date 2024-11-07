@@ -289,7 +289,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
         this.ssp.play(this.ssp.getBeepStart());
         Recognition.setState(Recognition.State.LISTENING);
         this.listener.onReadyForSpeech(null);
-        switch (this.saiyRecorder.initialise()) {
+        switch (saiyRecorder.initialise(mContext)) {
             case AudioRecord.STATE_UNINITIALIZED:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "AudioRecord.STATE_UNINITIALIZED");

@@ -1,5 +1,6 @@
 package ai.saiy.android.recognition.provider.remote;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -77,10 +78,12 @@ public class RecognitionRemote implements PauseListener {
     private final String language;
     private final String apiKey;
     private final Uri remoteUri;
+    private final Context mContext;
 
     /**
      * Constructor
      *
+     * @param context      the application context
      * @param listener  the associated {@link SaiyRecognitionListener}
      * @param language  the Locale we are using to analyse the voice data. This is not necessarily the
      *                  Locale of the device, as the user may be multi-lingual and have set a custom
@@ -88,9 +91,10 @@ public class RecognitionRemote implements PauseListener {
      * @param remoteUri the Uri of the remote server
      * @param apiKey    the Remote API key or access token
      */
-    public RecognitionRemote(@NonNull final SaiyRecognitionListener listener,
+    public RecognitionRemote(@NonNull final Context context, @NonNull final SaiyRecognitionListener listener,
                              @NonNull final String language, @NonNull final Uri remoteUri,
                              @NonNull final String apiKey, @NonNull final SaiySoundPool ssp) {
+        this.mContext = context;
         this.listener = listener;
         this.language = language;
         this.apiKey = apiKey;
@@ -148,7 +152,7 @@ public class RecognitionRemote implements PauseListener {
 
         final byte[] buffer = new byte[bufferSize];
 
-        switch (saiyRecorder.initialise()) {
+        switch (saiyRecorder.initialise(mContext)) {
 
             case AudioRecord.STATE_INITIALIZED:
 

@@ -17,12 +17,15 @@
 
 package ai.saiy.android.audio;
 
+import android.Manifest;
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Looper;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.PermissionChecker;
 
 import ai.saiy.android.utils.MyLog;
 
@@ -107,15 +110,22 @@ public class SaiyRecorder {
     /**
      * Initialise the Voice Recorder
      *
+     * @param context      the application context
      * @return The audio record initialisation state.
      */
-    public int initialise() {
+    public int initialise(@NonNull final Context context) {
 
         int count = 0;
 
         while (count < 4) {
             count++;
 
+            if (PermissionChecker.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PermissionChecker.PERMISSION_GRANTED) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "SaiyAudio no permission");
+                }
+                continue;
+            }
             saiyAudio = new SaiyAudio(audioSource, sampleRateInHz, channelConfig, audioFormat,
                     bufferSizeInBytes, enhance);
 

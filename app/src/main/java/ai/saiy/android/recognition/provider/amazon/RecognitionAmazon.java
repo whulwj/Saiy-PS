@@ -197,7 +197,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         if (servingRemote) {
             pauseDetector.begin();
         }
-        switch (saiyRecorder.initialise()) {
+        switch (saiyRecorder.initialise(mContext)) {
             case AudioRecord.STATE_UNINITIALIZED:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "AudioRecord.STATE_UNINITIALIZED");

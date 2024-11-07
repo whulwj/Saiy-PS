@@ -31,7 +31,7 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.ContextCompat;
+import androidx.core.content.PermissionChecker;
 
 import ai.saiy.android.ui.activity.ActivityPermissionDialog;
 import ai.saiy.android.utils.Constants;
@@ -61,7 +61,8 @@ public class PermissionHelper {
     public static final int REQUEST_SMS_READ = 8;
     public static final int REQUEST_SMS_SEND = 9;
     public static final int REQUEST_PHONE_STATE = 10;
-    public static final int REQUEST_BLUETOOTH_CONNECT = 11;
+    public static final int REQUEST_BACKGROUND_LOCATION = 11;
+    public static final int REQUEST_BLUETOOTH_CONNECT = 12;
 
     /**
      * Check if the calling application has the correct permission to control Saiy.
@@ -89,13 +90,13 @@ public class PermissionHelper {
 
     private static int hasSelfPermission(Context context, String permission) {
         try {
-            return ContextCompat.checkSelfPermission(context, permission);
+            return PermissionChecker.checkSelfPermission(context, permission);
         } catch (RuntimeException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "hasSelfPermission: RuntimeException");
                 e.printStackTrace();
             }
-            return PackageManager.PERMISSION_DENIED;
+            return PermissionChecker.PERMISSION_DENIED;
         }
     }
 
@@ -105,7 +106,7 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkTutorialPermissions");
         }
         switch (hasSelfPermission(context, android.Manifest.permission.RECORD_AUDIO)) {
-            case PackageManager.PERMISSION_GRANTED:
+            case PermissionChecker.PERMISSION_GRANTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkTutorialPermissions: PERMISSION_GRANTED");
                 }
@@ -178,14 +179,14 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkAudioPermissions");
         }
 
-        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.RECORD_AUDIO)) {
+        switch (hasSelfPermission(ctx, android.Manifest.permission.RECORD_AUDIO)) {
 
-            case PackageManager.PERMISSION_GRANTED:
+            case PermissionChecker.PERMISSION_GRANTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkAudioPermissions: PERMISSION_GRANTED");
                 }
                 return true;
-            case PackageManager.PERMISSION_DENIED:
+            case PermissionChecker.PERMISSION_DENIED:
             default:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "checkAudioPermissions: PERMISSION_DENIED");
@@ -209,7 +210,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkTelephonyGroupPermissions");
         }
-        if (hasSelfPermission(context, Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.CALL_PHONE) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkTelephonyGroupPermissions: PERMISSION_GRANTED");
             }
@@ -234,7 +235,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkPhoneStatePermissionsNR");
         }
-        if (hasSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.READ_PHONE_STATE) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkPhoneStatePermissionsNR: PERMISSION_GRANTED");
             }
@@ -253,7 +254,7 @@ public class PermissionHelper {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
             return true;
         }
-        if (hasSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.ANSWER_PHONE_CALLS) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkAnswerCallsPermissionsNR: PERMISSION_GRANTED");
             }
@@ -269,7 +270,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkCameraPermissions");
         }
-        if (hasSelfPermission(context, Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.CAMERA) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkCameraPermissions: PERMISSION_GRANTED");
             }
@@ -294,7 +295,19 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkLocationPermissions");
         }
-        if (hasSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED ||
+                hasSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && hasSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
+                final Intent intent = new Intent(context, ActivityPermissionDialog.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                if (!UtilsBundle.notNaked(bundle)) {
+                    bundle = new Bundle();
+                }
+                bundle.putStringArray(REQUESTED_PERMISSION, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION});
+                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_BACKGROUND_LOCATION);
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkLocationPermissions: PERMISSION_GRANTED");
             }
@@ -319,7 +332,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkCalendarPermissions");
         }
-        if (hasSelfPermission(context, Manifest.permission.READ_CALENDAR) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.READ_CALENDAR) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkCalendarPermissions: PERMISSION_GRANTED");
             }
@@ -372,7 +385,7 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkSMSReadPermissions");
         }
         switch (hasSelfPermission(context, android.Manifest.permission.READ_SMS)) {
-            case PackageManager.PERMISSION_GRANTED:
+            case PermissionChecker.PERMISSION_GRANTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkSMSReadPermissions: PERMISSION_GRANTED");
                 }
@@ -402,7 +415,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkSMSSendPermissions");
         }
-        if (hasSelfPermission(context, Manifest.permission.SEND_SMS) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.SEND_SMS) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkSMSSendPermissions: PERMISSION_GRANTED");
             }
@@ -447,13 +460,13 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkFilePermissions");
         }
 
-        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            case PackageManager.PERMISSION_GRANTED:
+        switch (hasSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            case PermissionChecker.PERMISSION_GRANTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkFilePermissions: PERMISSION_GRANTED");
                 }
                 return true;
-            case PackageManager.PERMISSION_DENIED:
+            case PermissionChecker.PERMISSION_DENIED:
             default:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "checkFilePermissions: PERMISSION_DENIED");
@@ -478,13 +491,13 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkFilePermissionsNR");
         }
 
-        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            case PackageManager.PERMISSION_GRANTED:
+        switch (hasSelfPermission(ctx, android.Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+            case PermissionChecker.PERMISSION_GRANTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkFilePermissionsNR: PERMISSION_GRANTED");
                 }
                 return true;
-            case PackageManager.PERMISSION_DENIED:
+            case PermissionChecker.PERMISSION_DENIED:
             default:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "checkFilePermissionsNR: PERMISSION_DENIED");
@@ -498,13 +511,13 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkContactGroupPermissionsNR");
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.GET_ACCOUNTS)) {
-                case PackageManager.PERMISSION_GRANTED:
+            switch (hasSelfPermission(ctx, android.Manifest.permission.GET_ACCOUNTS)) {
+                case PermissionChecker.PERMISSION_GRANTED:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "checkContactGroupPermissionsNR: PERMISSION_GRANTED");
                     }
                     return true;
-                case PackageManager.PERMISSION_DENIED:
+                case PermissionChecker.PERMISSION_DENIED:
                 default:
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "checkContactGroupPermissionsNR: PERMISSION_DENIED");
@@ -528,7 +541,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkReadContactPermissionNR");
         }
-        if (hasSelfPermission(context, Manifest.permission.READ_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.READ_CONTACTS) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkReadContactPermissionNR: PERMISSION_GRANTED");
             }
@@ -544,7 +557,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkAccountsPermissionNR");
         }
-        if (hasSelfPermission(context, Manifest.permission.GET_ACCOUNTS) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.GET_ACCOUNTS) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkAccountsPermissionNR: PERMISSION_GRANTED");
             }
@@ -560,7 +573,7 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkWriteContactsPermissionNR");
         }
-        if (hasSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PackageManager.PERMISSION_GRANTED) {
+        if (hasSelfPermission(context, Manifest.permission.WRITE_CONTACTS) == PermissionChecker.PERMISSION_GRANTED) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "checkWriteContactsPermissionNR: PERMISSION_GRANTED");
             }
@@ -585,13 +598,13 @@ public class PermissionHelper {
         }
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
-            switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.GET_ACCOUNTS)) {
-                case PackageManager.PERMISSION_GRANTED:
+            switch (hasSelfPermission(ctx, android.Manifest.permission.GET_ACCOUNTS)) {
+                case PermissionChecker.PERMISSION_GRANTED:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "checkContactGroupPermissions: PERMISSION_GRANTED");
                     }
                     return true;
-                case PackageManager.PERMISSION_DENIED:
+                case PermissionChecker.PERMISSION_DENIED:
                 default:
                     break;
             }
@@ -659,13 +672,13 @@ public class PermissionHelper {
             MyLog.i(CLS_NAME, "checkBluetoothPermissions");
         }
 
-        switch (ContextCompat.checkSelfPermission(ctx, android.Manifest.permission.BLUETOOTH_CONNECT)) {
-            case PackageManager.PERMISSION_GRANTED:
+        switch (hasSelfPermission(ctx, android.Manifest.permission.BLUETOOTH_CONNECT)) {
+            case PermissionChecker.PERMISSION_GRANTED:
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "checkBluetoothPermissions: PERMISSION_GRANTED");
                 }
                 return true;
-            case PackageManager.PERMISSION_DENIED:
+            case PermissionChecker.PERMISSION_DENIED:
             default:
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "checkBluetoothPermissions: PERMISSION_DENIED");
@@ -678,7 +691,7 @@ public class PermissionHelper {
                     bundle = new Bundle();
                 }
                 bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.BLUETOOTH_CONNECT});
-                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_AUDIO);
+                bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_BLUETOOTH_CONNECT);
 
                 intent.putExtras(bundle);
 

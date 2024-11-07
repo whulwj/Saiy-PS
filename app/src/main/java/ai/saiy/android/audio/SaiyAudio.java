@@ -24,6 +24,8 @@ import android.media.audiofx.AcousticEchoCanceler;
 import android.media.audiofx.AutomaticGainControl;
 import android.media.audiofx.NoiseSuppressor;
 
+import androidx.annotation.RequiresPermission;
+
 import ai.saiy.android.utils.MyLog;
 
 /**
@@ -61,6 +63,7 @@ public class SaiyAudio extends AudioRecord {
      *                          smaller than getMinBufferSize() will result in an initialization failure.
      * @param enhance           if audio enhancers should be added
      */
+    @RequiresPermission(android.Manifest.permission.RECORD_AUDIO)
     public SaiyAudio(final int audioSource, final int sampleRateInHz, final int channelConfig,
                      final int audioFormat, final int bufferSizeInBytes, final boolean enhance)
             throws IllegalArgumentException {

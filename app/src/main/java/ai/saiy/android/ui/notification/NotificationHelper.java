@@ -286,10 +286,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_menu_info_details)
+            final int icon = android.R.drawable.ic_menu_info_details;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.tasker_notification_ticker)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(ai.saiy.android.R.string.tasker_notification_text))
                     .setAutoCancel(true);
 
@@ -330,10 +331,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_btn_speak_now)
+            final int icon = android.R.drawable.ic_btn_speak_now;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.notification_listening)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(ai.saiy.android.R.string.notification_listening) + "... "
                             + ctx.getString(ai.saiy.android.R.string.notification_tap_cancel))
                     .setAutoCancel(true);
@@ -395,10 +397,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_media_pause)
+            final int icon = android.R.drawable.ic_media_pause;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(R.string.notification_speaking)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(R.string.notification_speaking) + "... "
                             + ctx.getString(R.string.notification_tap_stop))
                     .setAutoCancel(true);
@@ -453,10 +456,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.stat_sys_upload)
+            final int icon = android.R.drawable.stat_sys_upload;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.notification_fetching)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(ai.saiy.android.R.string.notification_fetching) + "... "
                             + ctx.getString(ai.saiy.android.R.string.notification_tap_cancel))
                     .setAutoCancel(true);
@@ -512,11 +516,12 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_popup_sync)
+            final int icon = android.R.drawable.ic_popup_sync;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.notification_initialising_tts))
                     .setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(ai.saiy.android.R.string.notification_initialising_tts) + "... "
                             + ctx.getString(ai.saiy.android.R.string.notification_tap_cancel))
                     .setAutoCancel(true);
@@ -572,10 +577,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_popup_sync)
+            final int icon = android.R.drawable.ic_popup_sync;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.notification_computing)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(ai.saiy.android.R.string.notification_computing) + "... "
                             + ctx.getString(ai.saiy.android.R.string.notification_tap_cancel))
                     .setAutoCancel(true);
@@ -633,10 +639,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_menu_info_details)
+            final int icon = android.R.drawable.ic_menu_info_details;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.permission_notification_ticker)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(ai.saiy.android.R.string.permission_notification_text))
                     .setAutoCancel(true);
 
@@ -677,10 +684,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_menu_info_details)
+            final int icon = android.R.drawable.ic_menu_info_details;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(R.string.emotion_notification_ticker)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(R.string.emotion_notification_text))
                     .setAutoCancel(true);
 
@@ -735,10 +743,11 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
-
-            builder.setContentIntent(pendingIntent).setSmallIcon(android.R.drawable.ic_menu_info_details)
+            final int icon = android.R.drawable.ic_menu_info_details;
+            final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(R.string.vocal_notification_ticker)).setWhen(System.currentTimeMillis())
-                    .setContentTitle(ctx.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(ctx.getString(R.string.vocal_notification_text))
                     .setAutoCancel(true);
 
@@ -769,11 +778,14 @@ public final class NotificationHelper {
             actionIntent.setPackage(context.getPackageName());
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_RATE_ME);
             final PendingIntent pendingIntent = PendingIntent.getService(context, NotificationService.NOTIFICATION_RATE_ME, actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_INFORMATION);
-            builder.setContentIntent(pendingIntent).setSmallIcon(ai.saiy.android.R.drawable.ic_stat_gift)
+            final int icon = ai.saiy.android.R.drawable.ic_stat_gift;
+            final String contentTitle = context.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(context.getString(ai.saiy.android.R.string.birthday_notification_ticker))
                     .setWhen(System.currentTimeMillis())
-                    .setContentTitle(context.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(context.getString(ai.saiy.android.R.string.birthday_notification_text))
                     .setAutoCancel(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -798,11 +810,14 @@ public final class NotificationHelper {
             actionIntent.setPackage(context.getPackageName());
             actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_BIRTHDAY);
             final PendingIntent pendingIntent = PendingIntent.getService(context, NotificationService.NOTIFICATION_BIRTHDAY, actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_INFORMATION);
-            builder.setContentIntent(pendingIntent).setSmallIcon(ai.saiy.android.R.drawable.ic_stat_gift)
+            final int icon = ai.saiy.android.R.drawable.ic_stat_gift;
+            final String contentTitle = context.getString(ai.saiy.android.R.string.app_name);
+            builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(context.getString(ai.saiy.android.R.string.birthday_notification_ticker))
                     .setWhen(System.currentTimeMillis())
-                    .setContentTitle(context.getString(ai.saiy.android.R.string.app_name))
+                    .setContentTitle(contentTitle)
                     .setContentText(context.getString(ai.saiy.android.R.string.birthday_notification_text))
                     .setAutoCancel(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {

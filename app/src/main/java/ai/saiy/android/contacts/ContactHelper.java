@@ -1105,7 +1105,7 @@ public class ContactHelper {
                     MyLog.d(CLS_NAME, "getUserProfileName cursor count: " + cursor.getCount());
                 }
                 if (cursor.moveToFirst()) {
-                    displayName = cursor.getString(cursor.getColumnIndex(ContactsContract.Profile.DISPLAY_NAME));
+                    displayName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.Profile.DISPLAY_NAME));
                 }
                 if (DEBUG) {
                     MyLog.v(CLS_NAME, "getUserProfileName cursor empty");
@@ -1116,20 +1116,25 @@ public class ContactHelper {
             if (DEBUG) {
                 MyLog.getElapsed(CLS_NAME, "getUserProfileName", then);
             }
-        } catch (SQLiteException sqLiteException) {
+        } catch (SQLiteException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getUserProfileName: SQLiteException");
-                sqLiteException.printStackTrace();
+                e.printStackTrace();
             }
-        } catch (IllegalStateException illegalStateException) {
+        } catch (IllegalStateException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
-                illegalStateException.printStackTrace();
+                e.printStackTrace();
             }
-        } catch (Exception exception) {
+        } catch (IllegalArgumentException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "getUserProfileName: IllegalArgumentException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "getUserProfileName: Exception");
-                exception.printStackTrace();
+                e.printStackTrace();
             }
         } finally {
             if (cursor != null) {

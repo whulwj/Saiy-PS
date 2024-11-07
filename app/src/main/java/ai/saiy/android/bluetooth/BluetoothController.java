@@ -11,6 +11,8 @@ import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.os.Build;
 
+import androidx.core.content.PermissionChecker;
+
 import java.util.List;
 
 import ai.saiy.android.permissions.PermissionHelper;
@@ -38,7 +40,14 @@ public class BluetoothController {
                 MyLog.i(CLS_NAME, "onServiceConnected");
             }
             mConnectedHeadset = (BluetoothHeadset) bluetoothProfile;
-            List<BluetoothDevice> connectedDevices = mConnectedHeadset.getConnectedDevices();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && PermissionChecker.checkSelfPermission(mContext, android.Manifest.permission.BLUETOOTH_CONNECT) != PermissionChecker.PERMISSION_GRANTED) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onServiceConnected no permission");
+                }
+                profileRegistered = false;
+                return;
+            }
+            final List<BluetoothDevice> connectedDevices = mConnectedHeadset.getConnectedDevices();
             if (connectedDevices.isEmpty()) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onServiceConnected mConnectedHeadset not currently registered");
@@ -126,7 +135,7 @@ public class BluetoothController {
                         MyLog.i(CLS_NAME, "onReceive: ACTION_ACL_CONNECTED");
                     }
                     bluetoothDevice = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                    if (bluetoothDevice == null && DEBUG) {
+                    if (DEBUG && bluetoothDevice == null) {
                         MyLog.w(CLS_NAME, "connectionState: STATE_CONNECTING: mConnectedHeadset null");
                     }
                     break;
@@ -378,9 +387,17 @@ public class BluetoothController {
                 }
                 recognitionStarted = false;
             } else {
-                recognitionStarted = mConnectedHeadset.startVoiceRecognition(bluetoothDevice);
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "startBluetoothVoiceRecognition: recognitionStarted: " + recognitionStarted);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && PermissionChecker.checkSelfPermission(mContext, android.Manifest.permission.BLUETOOTH_CONNECT) != PermissionChecker.PERMISSION_GRANTED
+                        && PermissionChecker.checkSelfPermission(mContext, android.Manifest.permission.MODIFY_PHONE_STATE) != PermissionChecker.PERMISSION_GRANTED) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "startBluetoothVoiceRecognition no permissions");
+                    }
+                    recognitionStarted = false;
+                } else {
+                    recognitionStarted = mConnectedHeadset.startVoiceRecognition(bluetoothDevice);
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "startBluetoothVoiceRecognition: recognitionStarted: " + recognitionStarted);
+                    }
                 }
             }
             if (recognitionStarted) {
@@ -411,7 +428,12 @@ public class BluetoothController {
                 return false;
             }
             boolean recognitionStopped;
-            if (mConnectedHeadset.isAudioConnected(bluetoothDevice)) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && PermissionChecker.checkSelfPermission(mContext, android.Manifest.permission.BLUETOOTH_CONNECT) != PermissionChecker.PERMISSION_GRANTED) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "stopBluetoothVoiceRecognition: " + (mConnectedHeadset != null) + ", " + (bluetoothDevice != null));
+                }
+                recognitionStopped = true;
+            } else if (mConnectedHeadset.isAudioConnected(bluetoothDevice)) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "stopBluetoothVoiceRecognition: headset remains connected");
                 }

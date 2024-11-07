@@ -17,6 +17,7 @@
 
 package ai.saiy.android.ui.service;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Build;
 import android.service.quicksettings.TileService;
@@ -41,6 +42,7 @@ public class SaiyTileService extends TileService {
     public SaiyTileService() {
     }
 
+    @SuppressLint("MissingPermission")
     @Override
     public void onClick() {
         super.onClick();
@@ -52,8 +54,16 @@ public class SaiyTileService extends TileService {
         lr.prepareIntro();
         lr.execute();
 
-        final Intent closeShadeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
-        sendBroadcast(closeShadeIntent);
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
+            try {
+                final Intent closeShadeIntent = new Intent(Intent.ACTION_CLOSE_SYSTEM_DIALOGS);
+                sendBroadcast(closeShadeIntent);
+            } catch (SecurityException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "onClick: " + e.getMessage());
+                }
+            }
+        }
 
 //        final Intent preferenceIntent = new Intent(getApplicationContext(), ActivityTilePreferences.class);
 //        startActivityAndCollapse(preferenceIntent);

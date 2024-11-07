@@ -676,7 +676,7 @@ public abstract class StandOutWindow extends Service {
 				.setWhen(when)
 				.setContentTitle(contentTitle)
 				.setContentText(contentText)
-				.setContentIntent(contentIntent).build();
+				.addAction(icon, contentTitle, contentIntent).build();
 	}
 
 	/**
@@ -723,7 +723,7 @@ public abstract class StandOutWindow extends Service {
 				.setWhen(when)
 				.setContentTitle(contentTitle)
 				.setContentText(contentText)
-				.setContentIntent(contentIntent).build();
+				.addAction(icon, contentTitle, contentIntent).build();
 	}
 
 	/**
@@ -818,7 +818,7 @@ public abstract class StandOutWindow extends Service {
 
 		for (final DropDownListItem item : items) {
 			ViewGroup listItem = (ViewGroup) mLayoutInflater.inflate(
-					R.layout.drop_down_list_item, null);
+					R.layout.drop_down_list_item, list, false);
 			list.addView(listItem);
 
 			ImageView icon = (ImageView) listItem.findViewById(R.id.icon);

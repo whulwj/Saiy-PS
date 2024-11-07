@@ -1939,13 +1939,13 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
 
         if (servingRemote()) {
 
-            return new RecognitionGoogleChromium(recognitionListener,
+            return new RecognitionGoogleChromium(mContext, recognitionListener,
                     getCallback().getParcel().getVRLanguageGoogle(),
                     getCallback().getParcel().getGOOGLE_CHROMIUM_API_KEY(), true, saiySoundPool);
 
         } else {
 
-            return new RecognitionGoogleChromium(recognitionListener,
+            return new RecognitionGoogleChromium(mContext, recognitionListener,
                     VRLanguageGoogle.getLanguage(getVRLocale()),
                     GoogleConfiguration.GOOGLE_SPEECH_API_KEY, true, saiySoundPool);
         }
@@ -2089,7 +2089,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         }
 
         if (servingRemote()) {
-            return new RecognitionRemote(recognitionListener, getVRLocale().toString(),
+            return new RecognitionRemote(mContext, recognitionListener, getVRLocale().toString(),
                     getCallback().getParcel().getREMOTE_SERVER_URI(),
                     getCallback().getParcel().getREMOTE_ACCESS_TOKEN(), saiySoundPool);
         } else {

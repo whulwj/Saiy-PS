@@ -17,6 +17,7 @@
 
 package ai.saiy.android.recognition.provider.google.chromium;
 
+import android.content.Context;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
@@ -127,10 +128,12 @@ public class RecognitionGoogleChromium implements PauseListener {
     private final VRLanguageGoogle language;
     private final String apiKey;
     private final boolean pauseDetection;
+    private final Context mContext;
 
     /**
      * Constructor
      *
+     * @param context      the application context
      * @param listener       the associated {@link SaiyRecognitionListener}
      * @param language       the Locale we are using to analyse the voice data. This is not necessarily the
      *                       Locale of the device, as the user may be multi-lingual and have set a custom
@@ -138,9 +141,10 @@ public class RecognitionGoogleChromium implements PauseListener {
      * @param apiKey         the Chromium Google API key
      * @param pauseDetection if pause detection is required
      */
-    public RecognitionGoogleChromium(@NonNull final SaiyRecognitionListener listener,
+    public RecognitionGoogleChromium(@NonNull final Context context, @NonNull final SaiyRecognitionListener listener,
                                      @NonNull final VRLanguageGoogle language, @NonNull final String apiKey,
                                      final boolean pauseDetection, @NonNull final SaiySoundPool ssp) {
+        this.mContext = context;
         this.listener = listener;
         this.language = language;
         this.apiKey = apiKey;
@@ -331,7 +335,7 @@ public class RecognitionGoogleChromium implements PauseListener {
 
                 final byte[] buffer = new byte[bufferSize];
 
-                switch (saiyRecorder.initialise()) {
+                switch (saiyRecorder.initialise(mContext)) {
 
                     case AudioRecord.STATE_INITIALIZED:
 

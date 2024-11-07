@@ -187,7 +187,7 @@ public class RecognitionMic implements PauseListener {
 
                 final byte[] buffer = new byte[bufferSize];
 
-                switch (saiyRecorder.initialise()) {
+                switch (saiyRecorder.initialise(mContext)) {
 
                     case AudioRecord.STATE_INITIALIZED:
 

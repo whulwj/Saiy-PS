@@ -376,7 +376,7 @@ public class Window extends FrameLayout {
 	 */
 	private View getSystemDecorations() {
 		final View decorations = mLayoutInflater.inflate(
-				R.layout.system_window_decorators, null);
+				R.layout.system_window_decorators, this, false);
 
 		// icon
 		final ImageView icon = (ImageView) decorations
