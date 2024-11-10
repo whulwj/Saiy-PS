@@ -15,7 +15,7 @@
   ~ along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--Firebase Google Sign-In Authentication-->
     <string name="default_web_client_id" translatable="false">997068182928-rv7vtailtqrup3hdenre58gu5r56rim6.apps.googleusercontent.com</string>
     <string name="facebook_app_id" translatable="false">151121772049980</string>

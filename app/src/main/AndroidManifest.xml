@@ -174,9 +174,9 @@
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <!-- Protection Privileged  -->
-    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE"/>
-    <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE"/>
-    <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
+    <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE" tools:ignore="ProtectedPermissions"/>
+    <uses-permission android:name="android.permission.WRITE_SETTINGS" tools:ignore="ProtectedPermissions"/>
 
     <!-- Non-Standard -->
 	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>

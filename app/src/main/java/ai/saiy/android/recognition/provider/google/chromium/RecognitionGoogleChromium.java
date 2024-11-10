@@ -36,6 +36,7 @@ import org.json.JSONTokener;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
@@ -92,11 +93,11 @@ public class RecognitionGoogleChromium implements PauseListener {
     private static final String CONTENT_TYPE = "Content-Type";
     private static final String CONTENT_TYPE_AUDIO_PARAMS = "audio/l16; rate=8000";
 
-    private static final int ERROR_HTTP = 1;
-    private static final int ERROR_STREAM = 2;
-    private static final int ERROR_AUDIO = 3;
-    private static final int ERROR_API = 4;
-    private static final int ERROR_TIMEOUT = 5;
+    private static final int ERROR_HTTP = SpeechRecognizer.ERROR_NETWORK_TIMEOUT;
+    private static final int ERROR_STREAM = SpeechRecognizer.ERROR_NETWORK;
+    private static final int ERROR_AUDIO = SpeechRecognizer.ERROR_AUDIO;
+    private static final int ERROR_API = SpeechRecognizer.ERROR_SERVER;
+    private static final int ERROR_TIMEOUT = SpeechRecognizer.ERROR_CLIENT;
 
     private static final String GOOGLE_DUPLEX_SPEECH_BASE = "https://www.google.com/speech-api/full-duplex/v1/";
     private static final String RESULTS_URL = GOOGLE_DUPLEX_SPEECH_BASE + "down?maxresults=1&pair=";
@@ -273,10 +274,10 @@ public class RecognitionGoogleChromium implements PauseListener {
 
                         switch (responseCode) {
 
-                            case 400:
+                            case HttpURLConnection.HTTP_BAD_REQUEST:
                                 handleError(ERROR_STREAM);
                                 break;
-                            case 403:
+                            case HttpURLConnection.HTTP_FORBIDDEN:
                                 handleError(ERROR_API);
                                 break;
                             default:

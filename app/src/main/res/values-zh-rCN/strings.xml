@@ -19,7 +19,8 @@
     <string name="error" translatable="true">错误</string>
     <string name="enabled" translatable="true">已启用</string>
     <string name="disabled" translatable="true">未启用</string>
-    <string name="success" translatable="true">成功！</string>
+    <string name="success" translatable="true">成功</string>
+    <string name="success_">成功！</string>
     <string name="failed" translatable="true">失败</string>
     <string name="chooser_share_via" translatable="true">通过以下方式分享：</string>
     <string name="feedback" translatable="true">反馈</string>
@@ -28,6 +29,7 @@
     <string name="save" translatable="true">保存</string>
     <string name="close" translatable="true">关闭</string>
     <string name="engine" translatable="true">引擎</string>
+    <string name="engines">引擎</string>
     <string name="ask_repeat" translatable="true">请您重复</string>
     <string name="menu_tts">文本转语音</string>
     <string name="menu_web_search">执行网页搜索</string>
