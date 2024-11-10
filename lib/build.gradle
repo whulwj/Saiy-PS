@@ -3,20 +3,18 @@ plugins {
 }
 
 android {
-    namespace 'wei.mark.standout'
+    namespace 'ai.saiy.android'
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        minSdkVersion 14
+        minSdk 16
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
     }
 
     buildTypes {
         release {
             minifyEnabled false
-            consumerProguardFiles 'proguard-rules-library.pro'
+            consumerProguardFiles "proguard-rules-library.pro"
         }
     }
     compileOptions {
@@ -26,9 +24,5 @@ android {
 }
 
 dependencies {
-    implementation libs.collection
-    implementation (libs.core) {
-        exclude group: 'androidx.core', module: 'core-ktx'
-    }
-    implementation project(':lib')
+    coreLibraryDesugaring libs.desugar.jdk.libs
 }

@@ -36,6 +36,7 @@ import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 
 import java.io.IOException;
 
+import ai.saiy.android.ProcessStateOwner;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.processing.Condition;
@@ -53,7 +54,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
  * Created by benrandall76@gmail.com on 23/02/2016.
  */
 @HiltAndroidApp
-public class Global extends MultiDexApplication implements Application.ActivityLifecycleCallbacks {
+public class Global extends MultiDexApplication implements Application.ActivityLifecycleCallbacks, ProcessStateOwner {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
     public static final Install.Location installLocation = PLAYSTORE;

@@ -239,6 +239,7 @@ dependencies {
     // https://github.com/cmusphinx/pocketsphinx-android
     implementation project(':pocketsphinx-android-5prealpha-nolib')
     implementation project(':ToastCompat')
+    implementation project(':lib')
     implementation project(':StandOut')
 
     annotationProcessor libs.hilt.compiler
