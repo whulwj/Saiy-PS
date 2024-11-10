@@ -33,6 +33,15 @@
             <action android:name="android.intent.action.MAIN"/>
             <category android:name="android.intent.category.LAUNCHER"/>
         </intent>
+        <!-- In order to check which app is the device's default SMS handler, if targeting Android 11 -->
+        <intent>
+            <action android:name="android.provider.Telephony.SMS_DELIVER"/>
+        </intent>
+        <!-- In order to show custom text selection actions from other apps, if targeting Android 11 -->
+        <intent>
+            <action android:name="android.intent.action.PROCESS_TEXT" />
+            <data android:mimeType="text/plain" />
+        </intent>
     </queries>
     <queries>
         <!-- In order to use the PackageManager API, if targeting Android 11 -->

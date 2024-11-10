@@ -297,7 +297,7 @@ public class PermissionHelper {
         }
         if (hasSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) == PermissionChecker.PERMISSION_GRANTED ||
                 hasSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && hasSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) == PermissionChecker.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && hasSelfPermission(context, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PermissionChecker.PERMISSION_GRANTED) {
                 final Intent intent = new Intent(context, ActivityPermissionDialog.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 if (!UtilsBundle.notNaked(bundle)) {
