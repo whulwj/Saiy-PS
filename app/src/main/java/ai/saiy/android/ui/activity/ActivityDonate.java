@@ -9,9 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
@@ -36,7 +36,7 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreate");
         }
-        final AdRequest adRequest = new AdRequest.Builder().build();
+        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         RewardedAd.load(this, getString(R.string.reward_id),
                 adRequest, rewardedAdLoadCallback);
     }

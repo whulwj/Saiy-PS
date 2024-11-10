@@ -124,7 +124,7 @@ public class CommandHardware {
                     break;
                 case WIFI:
                     final String wifi = context.getString(R.string.wifi);
-                    WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                    WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     if (wifiManager == null) {
                         outcome.setOutcome(Outcome.FAILURE);
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
@@ -280,7 +280,7 @@ public class CommandHardware {
                     break;
                 case HOTSPOT:
                     final String theHotspot = context.getString(R.string.the) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.hotspot);
-                    WifiManager wifiManager2 = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+                    WifiManager wifiManager2 = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     if (wifiManager2 == null) {
                         outcome.setOutcome(Outcome.FAILURE);
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));

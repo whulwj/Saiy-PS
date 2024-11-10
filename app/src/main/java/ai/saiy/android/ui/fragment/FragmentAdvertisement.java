@@ -20,11 +20,11 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.gms.ads.AdListener;
-import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
+import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.rewarded.RewardItem;
@@ -111,7 +111,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
                                     return;
                                 }
                                 try {
-                                    final AdRequest adRequest = new AdRequest.Builder().build();
+                                    final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
                                     adView.loadAd(adRequest);
                                 } catch (Throwable t) {
                                     if (DEBUG) {
@@ -222,7 +222,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
             MyLog.i(CLS_NAME, "setupAdView");
         }
         adView.setAdListener(adListener);
-        final AdRequest adRequest = new AdRequest.Builder().build();
+        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         adView.loadAd(adRequest);
     }
 
@@ -237,7 +237,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
             return;
         }
 
-        final AdRequest adRequest = new AdRequest.Builder().build();
+        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         InterstitialAd.load(getApplicationContext(), getString(R.string.interstitial_fragment_id), adRequest, new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
@@ -329,7 +329,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
         if (DEBUG) {
             MyLog.i(CLS_NAME, "loadReward");
         }
-        final AdRequest adRequest = new AdRequest.Builder().build();
+        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         isRewardLoading.set(true);
         RewardedAd.load(getParentActivity(), getString(R.string.reward_id),
                 adRequest, rewardedAdLoadCallback);

@@ -177,11 +177,11 @@ public class JaroWinklerDistance implements EditDistance<Double> {
 
         // Determine which String is longer.
         if (first.length() > second.length()) {
-            longer = first.toString().toLowerCase();
-            shorter = second.toString().toLowerCase();
+            longer = first.toString();
+            shorter = second.toString();
         } else {
-            longer = second.toString().toLowerCase();
-            shorter = first.toString().toLowerCase();
+            longer = second.toString();
+            shorter = first.toString();
         }
 
         // Calculate the half length() distance of the shorter String.

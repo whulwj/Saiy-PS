@@ -84,6 +84,16 @@ configurations {
 }
 
 dependencies {
+    //Duplicate class kotlin-stblib vs kotlin-stdlib-jdk7/8
+    constraints {
+        add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk7") {
+            version { require("1.9.24") }
+        }
+        add("implementation", "org.jetbrains.kotlin:kotlin-stdlib-jdk8") {
+            version { require("1.9.24") }
+        }
+    }
+
     implementation fileTree(include: ['*.aar', '*.jar', '*.so'], dir: 'libs')
     implementation libs.multidex
     coreLibraryDesugaring libs.desugar.jdk.libs

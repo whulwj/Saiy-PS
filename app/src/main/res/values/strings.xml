@@ -1845,8 +1845,8 @@
     <string name="exclamation_point">exclamation point</string>
     <string name="question_mark">question mark</string>
     <string name="kiss">kiss</string>
-    <string name="kiss_kiss">kiss kiss</string>
-    <string name="kiss_kiss_kiss">kiss kiss kiss</string>
+    <string name="kiss_kiss" tools:ignore="Typos">kiss kiss</string>
+    <string name="kiss_kiss_kiss" tools:ignore="Typos">kiss kiss kiss</string>
 
     <string name="error_answer_call">Failed to answer call…</string>
     <string name="sms_error_1">There was a problem accessing the last message content</string>

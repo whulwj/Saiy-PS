@@ -32,7 +32,7 @@ public class VoiceEngineInfo {
 
     public boolean hasSupportedLanguage() {
         for (Locale locale : this.localeArray) {
-            if (locale.toString().startsWith(Locale.ENGLISH.getLanguage()) || locale.toString().startsWith(Locale.ENGLISH.getLanguage().toUpperCase())) {
+            if (locale.toString().startsWith(Locale.ENGLISH.getLanguage()) || locale.toString().startsWith(Locale.ENGLISH.getLanguage().toUpperCase(ai.saiy.android.utils.UtilsLocale.getDefaultLocale()))) {
                 return true;
             }
         }
