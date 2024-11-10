@@ -1,4 +1,4 @@
-package ai.saiy.android;
+package ai.saiy.android.lib;
 
 @FunctionalInterface
 public interface ProcessStateOwner {

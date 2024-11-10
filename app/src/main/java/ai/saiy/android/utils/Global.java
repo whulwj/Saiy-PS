@@ -36,9 +36,9 @@ import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 
 import java.io.IOException;
 
-import ai.saiy.android.ProcessStateOwner;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.configuration.GoogleConfiguration;
+import ai.saiy.android.lib.ProcessStateOwner;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.recognition.provider.wit.RecognitionWitHybrid;
 import ai.saiy.android.service.helper.LocalRequest;

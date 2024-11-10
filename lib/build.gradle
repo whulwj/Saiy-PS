@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'ai.saiy.android'
+    namespace 'ai.saiy.android.lib'
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
