@@ -262,11 +262,11 @@ dependencies {
 // https://github.com/grpc/grpc-java
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.25.4'
+        artifact = 'com.google.protobuf:protoc:3.25.5'
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.64.0'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.64.2'
         }
     }
     generateProtoTasks {

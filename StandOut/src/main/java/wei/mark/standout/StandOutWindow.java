@@ -1,11 +1,13 @@
 package wei.mark.standout;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ServiceInfo;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -33,6 +35,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
+import androidx.core.app.ServiceCompat;
 import androidx.core.content.res.ResourcesCompat;
 
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import ai.saiy.android.lib.ProcessStateOwner;
 import wei.mark.standout.constants.StandOutFlags;
 import wei.mark.standout.ui.Window;
 
@@ -1153,10 +1157,20 @@ public abstract class StandOutWindow extends Service {
 			// only show notification if not shown before
 			if (!startedForeground) {
 				// tell Android system to show notification
-				startForeground(
-						getClass().hashCode() + ONGOING_NOTIFICATION_ID,
-						notification);
-				startedForeground = true;
+				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || isApplicationForeground()) {
+					try {
+						ServiceCompat.startForeground(this, getClass().hashCode() + ONGOING_NOTIFICATION_ID, notification,
+								(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST : 0);
+						startedForeground = true;
+					} catch (IllegalStateException e) {
+						// The process is running in the background, and is not allowed to start a foreground
+						// service due to foreground service launch restrictions
+						// (https://developer.android.com/about/versions/12/foreground-services).
+						Log.e(TAG, "Failed to start (foreground launch restriction)");
+					}
+				} else {
+					Log.w(TAG, "Not start (foreground launch restriction)");
+				}
 			} else {
 				// update notification if shown before
 				mNotificationManager.notify(getClass().hashCode()
@@ -1786,6 +1800,14 @@ public abstract class StandOutWindow extends Service {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	private boolean isApplicationForeground() {
+		final Application application = getApplication();
+		if (application instanceof ProcessStateOwner) {
+			return ((ProcessStateOwner) application).isForeground();
+		}
+		return false;
 	}
 
 	/**

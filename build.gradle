@@ -19,7 +19,7 @@
 buildscript {
     ext {
         compileSdkVersion = 34
-        targetSdkVersion = 30
+        targetSdkVersion = 32
     }
 }
 plugins {

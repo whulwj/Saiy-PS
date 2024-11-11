@@ -17,6 +17,7 @@
 
 package ai.saiy.android.service;
 
+import android.app.Application;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
@@ -39,6 +40,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
+import androidx.core.app.ServiceCompat;
 
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 import com.google.gson.GsonBuilder;
@@ -70,6 +72,7 @@ import ai.saiy.android.command.translate.provider.bing.BingCredentials;
 import ai.saiy.android.configuration.MicrosoftConfiguration;
 import ai.saiy.android.contacts.ContactHelper;
 import ai.saiy.android.intent.ExecuteIntent;
+import ai.saiy.android.lib.ProcessStateOwner;
 import ai.saiy.android.nlu.apiai.ApiRequest;
 import ai.saiy.android.nlu.apiai.ResolveAPIAI;
 import ai.saiy.android.nlu.local.InitStrings;
@@ -1661,17 +1664,31 @@ public class SelfAware extends Service {
         final Notification not = NotificationHelper.getForegroundNotification(SelfAware.this, notificationConstant);
 
         try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                startForeground(NotificationService.NOTIFICATION_FOREGROUND, not, ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST);
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || isApplicationForeground()) {
+                ServiceCompat.startForeground(this, NotificationService.NOTIFICATION_FOREGROUND, not,
+                        (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST : 0);
             } else {
-                startForeground(NotificationService.NOTIFICATION_FOREGROUND, not);
+                MyLog.w(CLS_NAME, "Failed to start (foreground launch restriction)");
             }
+        } catch (IllegalStateException e) {
+            // The process is running in the background, and is not allowed to start a foreground
+            // service due to foreground service launch restrictions
+            // (https://developer.android.com/about/versions/12/foreground-services).
+            MyLog.e(CLS_NAME, "Not start (foreground launch restriction)");
         } catch (final Exception e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "beginForeground failure");
                 e.printStackTrace();
             }
         }
+    }
+
+    private boolean isApplicationForeground() {
+        final Application application = getApplication();
+        if (application instanceof ProcessStateOwner) {
+            return ((ProcessStateOwner) application).isForeground();
+        }
+        return false;
     }
 
     /**
