@@ -688,24 +688,29 @@ public class BluetoothController {
     }
 
     public boolean startController() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && (!SPH.isAutoConnectHeadset(mContext) || audioManager.isBluetoothScoAvailableOffCall()) && !PermissionHelper.checkBluetoothPermissions(mContext, null)) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "startController");
-            }
-            return false;
-        } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "startController");
-            }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "startController");
         }
         if (!SPH.isAutoConnectHeadset(mContext)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "startController: auto connect disabled");
             }
-            receiverRegistered = registerReceiver();
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !PermissionHelper.checkBluetoothPermissions(mContext, null)) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "startController");
+                }
+            } else {
+                receiverRegistered = registerReceiver();
+            }
             return false;
         }
         if (audioManager.isBluetoothScoAvailableOffCall()) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !PermissionHelper.checkBluetoothPermissions(mContext, null)) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "startController: isBluetoothScoAvailableOffCall");
+                }
+                return false;
+            }
             profileRegistered = registerProfile();
             receiverRegistered = registerReceiver();
             return profileRegistered && receiverRegistered;

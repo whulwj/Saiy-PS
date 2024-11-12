@@ -1,6 +1,7 @@
 package wei.mark.standout;
 
 import android.app.Application;
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -1157,19 +1158,19 @@ public abstract class StandOutWindow extends Service {
 			// only show notification if not shown before
 			if (!startedForeground) {
 				// tell Android system to show notification
-				if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || isApplicationForeground()) {
-					try {
-						ServiceCompat.startForeground(this, getClass().hashCode() + ONGOING_NOTIFICATION_ID, notification,
-								(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST : 0);
-						startedForeground = true;
-					} catch (IllegalStateException e) {
-						// The process is running in the background, and is not allowed to start a foreground
-						// service due to foreground service launch restrictions
-						// (https://developer.android.com/about/versions/12/foreground-services).
-						Log.e(TAG, "Failed to start (foreground launch restriction)");
+				try {
+					ServiceCompat.startForeground(this, getClass().hashCode() + ONGOING_NOTIFICATION_ID, notification,
+							(Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST : 0);
+					startedForeground = true;
+				} catch (IllegalStateException e) {
+					// The process is running in the background, and is not allowed to start a foreground
+					// service due to foreground service launch restrictions
+					// (https://developer.android.com/about/versions/12/foreground-services).
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e instanceof ForegroundServiceStartNotAllowedException) {
+						Log.w(TAG, "Failed to start (foreground launch restriction): " + isApplicationForeground());
+					} else {
+						Log.e(TAG, "Failed to start foreground");
 					}
-				} else {
-					Log.w(TAG, "Not start (foreground launch restriction)");
 				}
 			} else {
 				// update notification if shown before

@@ -18,6 +18,7 @@
 package ai.saiy.android.service;
 
 import android.app.Application;
+import android.app.ForegroundServiceStartNotAllowedException;
 import android.app.Notification;
 import android.app.Service;
 import android.content.Context;
@@ -1674,10 +1675,10 @@ public class SelfAware extends Service {
             // The process is running in the background, and is not allowed to start a foreground
             // service due to foreground service launch restrictions
             // (https://developer.android.com/about/versions/12/foreground-services).
-            if (isApplicationForeground()) {
-                MyLog.e(CLS_NAME, "Not start (foreground launch restriction)");
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && e instanceof ForegroundServiceStartNotAllowedException) {
+                MyLog.w(CLS_NAME, "Failed to start (foreground launch restriction): " + isApplicationForeground());
             } else {
-                MyLog.w(CLS_NAME, "Failed to start (foreground launch restriction)");
+                MyLog.e(CLS_NAME, "Failed to start foreground");
             }
         } catch (final Exception e) {
             if (DEBUG) {

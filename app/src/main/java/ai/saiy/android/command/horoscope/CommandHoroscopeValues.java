@@ -1,5 +1,11 @@
 package ai.saiy.android.command.horoscope;
 
+import androidx.annotation.Nullable;
+
+import org.apache.commons.lang3.StringUtils;
+
+import ai.saiy.android.utils.UtilsString;
+
 public class CommandHoroscopeValues {
     private Sign sign;
     private String name;
@@ -27,6 +33,44 @@ public class CommandHoroscopeValues {
 
         public String getName() {
             return this.name;
+        }
+
+        /**
+         * Get the {@link CommandHoroscopeValues.Sign} from the string equivalent
+         *
+         * @param name the string
+         * @return the equivalent {@link CommandHoroscopeValues.Sign}
+         */
+        public static CommandHoroscopeValues.Sign getSign(@Nullable final String name) {
+            if (UtilsString.notNaked(name)) {
+                if (StringUtils.containsIgnoreCase(CAPRICORN.name(), name)) {
+                    return CAPRICORN;
+                } else if (StringUtils.containsIgnoreCase(AQUARIUS.name(), name)) {
+                    return AQUARIUS;
+                } else if (StringUtils.containsIgnoreCase(PISCES.name(), name)) {
+                    return PISCES;
+                } else if (StringUtils.containsIgnoreCase(ARIES.name(), name)) {
+                    return ARIES;
+                } else if (StringUtils.containsIgnoreCase(TAURUS.name(), name)) {
+                    return TAURUS;
+                } else if (StringUtils.containsIgnoreCase(GEMINI.name(), name)) {
+                    return GEMINI;
+                } else if (StringUtils.containsIgnoreCase(CANCER.name(), name)) {
+                    return CANCER;
+                } else if (StringUtils.containsIgnoreCase(LEO.name(), name)) {
+                    return LEO;
+                } else if (StringUtils.containsIgnoreCase(VIRGO.name(), name)) {
+                    return VIRGO;
+                } else if (StringUtils.containsIgnoreCase(SCORPIO.name(), name)) {
+                    return SCORPIO;
+                } else if (StringUtils.containsIgnoreCase(SAGITTARIUS.name(), name)) {
+                    return SAGITTARIUS;
+                } else if (StringUtils.containsIgnoreCase(LIBRA.name(), name)) {
+                    return LIBRA;
+                }
+            }
+
+            return UNKNOWN;
         }
     }
 

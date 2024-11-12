@@ -2431,7 +2431,7 @@ public class SPH {
     }
 
     public static CommandHoroscopeValues.Sign getStarSign(Context context) {
-        return CommandHoroscopeValues.Sign.valueOf(getPref(context).getString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name()));
+        return CommandHoroscopeValues.Sign.getSign(getPref(context).getString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name()));
     }
 
     public static int getDobDay(Context context) {
