@@ -34,11 +34,13 @@ import android.os.RemoteException;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech.OnInitListener;
 import android.telephony.PhoneStateListener;
+import android.telephony.TelephonyCallback;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.annotation.WorkerThread;
 import androidx.core.app.ServiceCompat;
 
@@ -77,6 +79,7 @@ import ai.saiy.android.nlu.apiai.ApiRequest;
 import ai.saiy.android.nlu.apiai.ResolveAPIAI;
 import ai.saiy.android.nlu.local.InitStrings;
 import ai.saiy.android.partial.PartialHelper;
+import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.recognition.Recognition;
 import ai.saiy.android.recognition.RecognitionAction;
@@ -191,6 +194,7 @@ public class SelfAware extends Service {
     private static SelfAware instance = null;
 
     private TelephonyManager telephonyManager;
+    private boolean callStateListenerRegistered = false;
 
     /**
      * Exposed instance for local binding.
@@ -1664,17 +1668,17 @@ public class SelfAware extends Service {
         final Notification not = NotificationHelper.getForegroundNotification(SelfAware.this, notificationConstant);
 
         try {
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S || isApplicationForeground()) {
-                ServiceCompat.startForeground(this, NotificationService.NOTIFICATION_FOREGROUND, not,
-                        (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST : 0);
-            } else {
-                MyLog.w(CLS_NAME, "Failed to start (foreground launch restriction)");
-            }
+            ServiceCompat.startForeground(this, NotificationService.NOTIFICATION_FOREGROUND, not,
+                    (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) ? ServiceInfo.FOREGROUND_SERVICE_TYPE_MANIFEST : 0);
         } catch (IllegalStateException e) {
             // The process is running in the background, and is not allowed to start a foreground
             // service due to foreground service launch restrictions
             // (https://developer.android.com/about/versions/12/foreground-services).
-            MyLog.e(CLS_NAME, "Not start (foreground launch restriction)");
+            if (isApplicationForeground()) {
+                MyLog.e(CLS_NAME, "Not start (foreground launch restriction)");
+            } else {
+                MyLog.w(CLS_NAME, "Failed to start (foreground launch restriction)");
+            }
         } catch (final Exception e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "beginForeground failure");
@@ -2430,6 +2434,12 @@ public class SelfAware extends Service {
         }
     };
 
+    // https://stackoverflow.com/questions/71285519/telephonymanager-listen-not-working-after-targetsdkversion-is-set-to-31-or-andro
+    @RequiresApi(api = Build.VERSION_CODES.S)
+    private static abstract class CallStateListener extends TelephonyCallback implements TelephonyCallback.CallStateListener {
+        @Override
+        public abstract void onCallStateChanged(int state);
+    }
     /**
      * Our {@link PhoneStateListener} to monitor the device radio and handle situations where the
      * speech or recognition would need to be stopped.
@@ -2441,7 +2451,6 @@ public class SelfAware extends Service {
             super.onCallStateChanged(state, incomingNumber);
 
             switch (state) {
-
                 case TelephonyManager.CALL_STATE_OFFHOOK:
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "PhoneStateListener: TelephonyManager.CALL_STATE_OFFHOOK");
@@ -2457,9 +2466,13 @@ public class SelfAware extends Service {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PhoneStateListener: not announcing calls or within quiet times");
                         }
-                    } else if (!UtilsString.notNaked(incomingNumber) || !ai.saiy.android.permissions.PermissionHelper.checkAnnounceCallerPermissionsNR(SelfAware.this.getApplicationContext())) {
+                    } else if (!UtilsString.notNaked(incomingNumber)) {
+                        if (DEBUG && Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+                            MyLog.i(CLS_NAME, "PhoneStateListener: incoming number null");
+                        }
+                    } else if (!ai.saiy.android.permissions.PermissionHelper.checkAnnounceCallerPermissionsNR(getApplicationContext())) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "PhoneStateListener: incoming number null or permission denied");
+                            MyLog.i(CLS_NAME, "PhoneStateListener: permission denied");
                         }
                     } else {
                         if (disposable == null) {
@@ -2550,6 +2563,12 @@ public class SelfAware extends Service {
             }
         }
     };
+    private final CallStateListener mCallStateListener = (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ? new CallStateListener() {
+        @Override
+        public void onCallStateChanged(int state) {
+            mPhoneStateListener.onCallStateChanged(state, null);
+        }
+    } : null;
 
     @WorkerThread
     private boolean waitGoogleCloud() {
@@ -2856,10 +2875,19 @@ public class SelfAware extends Service {
      * @return a {@link TelephonyManager} instance
      */
     private TelephonyManager getTelephonyManager() {
-
         if (telephonyManager == null) {
             telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+        }
+        if (!callStateListenerRegistered) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                if (PermissionHelper.checkReadPhoneStatePermission(getApplicationContext())) {
+                    telephonyManager.registerTelephonyCallback(getMainExecutor(), mCallStateListener);
+                    callStateListenerRegistered = true;
+                }
+            } else {
+                telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_CALL_STATE);
+                callStateListenerRegistered = true;
+            }
         }
 
         return telephonyManager;
@@ -2903,7 +2931,14 @@ public class SelfAware extends Service {
         conditions.releaseWakeLock();
 
         if (telephonyManager != null) {
-            telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+            if (callStateListenerRegistered) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                    telephonyManager.unregisterTelephonyCallback(mCallStateListener);
+                } else {
+                    telephonyManager.listen(mPhoneStateListener, PhoneStateListener.LISTEN_NONE);
+                }
+                callStateListenerRegistered = false;
+            }
         }
 
         destroyInstance();

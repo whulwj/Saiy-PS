@@ -122,7 +122,6 @@ import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.BluetoothConstants;
-import ai.saiy.android.utils.conditions.Network;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -130,6 +129,7 @@ import ai.saiy.android.utils.UtilsBundle;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
+import ai.saiy.android.utils.conditions.Network;
 
 /**
  * A utility Class that provides methods to {@link SelfAware} mainly to avoid

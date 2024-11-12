@@ -42,8 +42,8 @@ android {
     compileOptions {
         // Flag to enable support for the new language APIs
         coreLibraryDesugaringEnabled = true // <- this flag is required
-        sourceCompatibility JavaVersion.VERSION_1_10
-        targetCompatibility JavaVersion.VERSION_1_10
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
         incremental true
     }
 
@@ -266,7 +266,7 @@ protobuf {
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.64.2'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.67.1'
         }
     }
     generateProtoTasks {

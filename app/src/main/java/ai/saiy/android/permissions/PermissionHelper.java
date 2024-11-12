@@ -61,8 +61,9 @@ public class PermissionHelper {
     public static final int REQUEST_SMS_READ = 8;
     public static final int REQUEST_SMS_SEND = 9;
     public static final int REQUEST_PHONE_STATE = 10;
-    public static final int REQUEST_BACKGROUND_LOCATION = 11;
-    public static final int REQUEST_BLUETOOTH_CONNECT = 12;
+    public static final int REQUEST_READ_PHONE_STATE = 11;
+    public static final int REQUEST_BACKGROUND_LOCATION = 12;
+    public static final int REQUEST_BLUETOOTH_CONNECT = 13;
 
     /**
      * Check if the calling application has the correct permission to control Saiy.
@@ -445,6 +446,34 @@ public class PermissionHelper {
             return true;
         }
         checkContactGroupPermissions(context, null);
+        return false;
+    }
+
+    /**
+     * Check to see if we have the read phone state permission
+     *
+     * @return true if the permission has been granted
+     */
+    public static boolean checkReadPhoneStatePermission(@NonNull final Context ctx) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkReadPhoneStatePermission");
+        }
+        if (checkPhoneStatePermissionsNR(ctx)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkReadPhoneStatePermission: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkReadPhoneStatePermission: PERMISSION_DENIED");
+        }
+        final Intent intent = new Intent(ctx, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        final Bundle bundle = new Bundle();
+        bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.READ_PHONE_STATE});
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_READ_PHONE_STATE);
+        intent.putExtras(bundle);
+        ctx.startActivity(intent);
         return false;
     }
 

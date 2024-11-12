@@ -190,6 +190,7 @@
     <!-- Non-Standard -->
 	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT"/>
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" android:maxSdkVersion="28"/>
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
     <uses-permission android:name="net.dinglisch.android.tasker.PERMISSION_RUN_TASKS"/>
 
     <!-- HTC Idiosyncrasies -->
@@ -259,7 +260,8 @@
 
         <property
             android:name="android.adservices.AD_SERVICES_CONFIG"
-            android:resource="@xml/ad_services_config" />
+            android:resource="@xml/ad_services_config"
+            tools:replace="android:resource"/>
         <!-- The Application ID for the app. The UMP requires an app ID. -->
         <!-- See this guide for more details: https://developers.google.com/interactive-media-ads/ump/android/quick-start#add_app_id_to -->
         <meta-data

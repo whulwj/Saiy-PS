@@ -260,6 +260,12 @@ public class NotificationService extends IntentService {
                                         }
                                         permissionContent = getString(ai.saiy.android.R.string.permission_sms_send);
                                         break;
+                                    case PermissionHelper.REQUEST_READ_PHONE_STATE:
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_READ_PHONE_STATE");
+                                        }
+                                        permissionContent = getString(ai.saiy.android.R.string.permission_read_phone_state);
+                                        break;
                                     case PermissionHelper.REQUEST_PHONE_STATE:
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_PHONE_STATE");
