@@ -29,9 +29,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.command.alexa.AlexaPartial;
@@ -42,6 +39,11 @@ import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.CompositeDisposable;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -58,7 +60,7 @@ public class PartialHelper {
 
     private static final long THREADS_TIMEOUT = 100L;
 
-    private final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
+    private final CompositeDisposable compositeDisposable = new CompositeDisposable();
     private final List<Callable<Pair<Boolean, Integer>>> callableList = new ArrayList<>();
     private final CancelPartial cancelPartial;
     private volatile TranslatePartial translatePartial;
@@ -124,47 +126,59 @@ public class PartialHelper {
                     alexaPartial.setPartialData(partialResults);
                 }
 
-                try {
-
-                    final List<Future<Pair<Boolean, Integer>>> futures = executorService.invokeAll(callableList,
-                            THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
-
-                    for (final Future<Pair<Boolean, Integer>> future : futures) {
-                        resultList.add(future.get());
-                    }
-
-                } catch (final ExecutionException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "future: ExecutionException");
-                        e.printStackTrace();
-                    }
-                } catch (final CancellationException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "future: CancellationException");
-                        e.printStackTrace();
-                    }
-                } catch (final InterruptedException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "future: InterruptedException");
-                        e.printStackTrace();
-                    }
+                final List<Single<Pair<Boolean, Integer>>> singleList = new ArrayList<>(callableList.size());
+                for (Callable<Pair<Boolean, Integer>> callable : callableList) {
+                    singleList.add(Single.fromCallable(callable));
                 }
-
-                for (final Pair<Boolean, Integer> result : resultList) {
-                    if (result.first) {
-                        switch (result.second) {
-                            case Partial.CANCEL:
-                                iPartial.onCancelDetected();
-                                break;
-                            case Partial.TRANSLATE:
-                                iPartial.onTranslateDetected();
-                                break;
-                            case Partial.ALEXA:
-                                iPartial.onAlexaDetected();
-                                break;
-                        }
-                    }
-                }
+                final Disposable disposable = Single.merge(singleList)
+                        .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
+                        .subscribeOn(Schedulers.io())
+                        .subscribe(new Consumer<Pair<Boolean, Integer>>() {
+                            @Override
+                            public void accept(Pair<Boolean, Integer> pair) throws Throwable {
+                                resultList.add(pair);
+                            }
+                        }, new Consumer<Throwable>() {
+                            @Override
+                            public void accept(Throwable throwable) throws Throwable {
+                                if (throwable instanceof ExecutionException) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "call: ExecutionException");
+                                    }
+                                } else if (throwable instanceof CancellationException) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "call: CancellationException");
+                                    }
+                                } else if (throwable instanceof InterruptedException) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "call: InterruptedException");
+                                    }
+                                } else {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                                    }
+                                }
+                            }
+                        }, new Action() {
+                            @Override
+                            public void run() {
+                                for (final Pair<Boolean, Integer> result : resultList) {
+                                    if (result.first) {
+                                        switch (result.second) {
+                                            case Partial.CANCEL:
+                                                iPartial.onCancelDetected();
+                                                break;
+                                            case Partial.TRANSLATE:
+                                                iPartial.onTranslateDetected();
+                                                break;
+                                            case Partial.ALEXA:
+                                                iPartial.onAlexaDetected();
+                                                break;
+                                        }
+                                    }
+                                }
+                            }
+                        }, compositeDisposable);
             }
         });
     }
@@ -176,19 +190,12 @@ public class PartialHelper {
 
         try {
 
-            executorService.shutdown();
-
-            if (!executorService.awaitTermination(THREADS_TIMEOUT, TimeUnit.MILLISECONDS)) {
-                executorService.shutdownNow();
+            if (!compositeDisposable.isDisposed()) {
+                compositeDisposable.dispose();
             }
         } catch (final CancellationException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "shutdownNow: CancellationException");
-                e.printStackTrace();
-            }
-        } catch (final InterruptedException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "shutdownNow: InterruptedException");
                 e.printStackTrace();
             }
         } finally {
@@ -202,6 +209,6 @@ public class PartialHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "isShutdown");
         }
-        return executorService.isShutdown();
+        return compositeDisposable.isDisposed();
     }
 }

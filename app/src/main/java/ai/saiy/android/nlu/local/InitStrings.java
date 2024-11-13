@@ -16,9 +16,6 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
@@ -96,6 +93,12 @@ import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.disposables.Disposable;
+import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.internal.functions.Functions;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 public final class InitStrings {
 
@@ -210,39 +213,41 @@ public final class InitStrings {
         }
 
         final long then = System.nanoTime();
-
-        final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
-
-        try {
-
-            final List<Future<ArrayList<Pair<CC, Float>>>> futures = executorService.invokeAll(callableList,
-                    THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
-
-            for (final Future<ArrayList<Pair<CC, Float>>> future : futures) {
-                future.get();
-            }
-
-        } catch (final ExecutionException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "future: ExecutionException");
-                e.printStackTrace();
-            }
-        } catch (final CancellationException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "future: CancellationException");
-                e.printStackTrace();
-            }
-        } catch (final InterruptedException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "future: InterruptedException");
-                e.printStackTrace();
-            }
-        } finally {
-            executorService.shutdown();
+        final List<Single<ArrayList<Pair<CC, Float>>>> singleList = new ArrayList<>(callableList.size());
+        for (Callable<ArrayList<Pair<CC, Float>>> callable : callableList) {
+            singleList.add(Single.fromCallable(callable));
         }
-
-        if (DEBUG) {
-            MyLog.getElapsed(CLS_NAME, then);
-        }
+        final Disposable disposable = Single.merge(singleList)
+                .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
+                .subscribeOn(Schedulers.io())
+                .subscribe(Functions.emptyConsumer(), new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) throws Throwable {
+                        if (throwable instanceof ExecutionException) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: ExecutionException");
+                            }
+                        } else if (throwable instanceof CancellationException) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: CancellationException");
+                            }
+                        } else if (throwable instanceof InterruptedException) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: InterruptedException");
+                            }
+                        } else {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                            }
+                        }
+                    }
+                }, new Action() {
+                    @Override
+                    public void run() {
+                        if (DEBUG) {
+                            MyLog.getElapsed(CLS_NAME, then);
+                        }
+                    }
+                });
     }
 }

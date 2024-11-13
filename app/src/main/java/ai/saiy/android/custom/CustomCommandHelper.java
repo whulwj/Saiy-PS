@@ -40,9 +40,6 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.algorithms.Algorithm;
@@ -64,6 +61,10 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Predicate;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Class to extract any custom commands the user has created from {@link DBCustomCommand} and compare
@@ -162,7 +163,6 @@ public class CustomCommandHelper {
                     + cccArrayContains.size() + cccArrayCustom.size()));
         }
 
-        final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
         final Algorithm[] algorithms = Algorithm.getAlgorithms(ctx, sl);
 
         final int callableListSize;
@@ -280,41 +280,42 @@ public class CustomCommandHelper {
         }
 
 
-        final ArrayList<CustomCommand> customCommandArray = new ArrayList<>();
-
-        try {
-
-            final List<Future<CustomCommand>> futures = executorService.invokeAll(callableList,
-                    THREADS_TIMEOUT, TimeUnit.MILLISECONDS);
-
-            CustomCommand customCommand;
-            for (final Future<CustomCommand> future : futures) {
-                customCommand = future.get();
-                if (customCommand != null) {
-                    customCommandArray.add(customCommand);
-                }
-            }
-
-        } catch (final ExecutionException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "future: ExecutionException");
-                e.printStackTrace();
-            }
-        } catch (final CancellationException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "future: CancellationException");
-                e.printStackTrace();
-            }
-        } catch (final InterruptedException e) {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "future: InterruptedException");
-                e.printStackTrace();
-            }
-        } finally {
-            executorService.shutdown();
+        final List<Single<CustomCommand>> singleList = new ArrayList<>(callableList.size());
+        for (Callable<CustomCommand> callable : callableList) {
+            singleList.add(Single.fromCallable(callable));
         }
+        final @Nullable List<CustomCommand> customCommandArray = Single.merge(singleList)
+                .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
+                .subscribeOn(Schedulers.io())
+                .doOnError(new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        if (throwable instanceof ExecutionException) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: ExecutionException");
+                            }
+                        } else if (throwable instanceof CancellationException) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: CancellationException");
+                            }
+                        } else if (throwable instanceof InterruptedException) {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: InterruptedException");
+                            }
+                        } else {
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                            }
+                        }
+                    }
+                }).filter(new Predicate<CustomCommand>() {
+                    @Override
+                    public boolean test(CustomCommand customCommand) throws Throwable {
+                        return customCommand != null;
+                    }
+                }).toList().blockingGet();
 
-        if (!customCommandArray.isEmpty()) {
+        if (customCommandArray != null && !customCommandArray.isEmpty()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "algorithms returned " + customCommandArray.size() + " matches");
                 for (final CustomCommand c : customCommandArray) {
@@ -346,7 +347,7 @@ public class CustomCommandHelper {
             }
         }
 
-        if (customCommand == null && !customCommandArray.isEmpty()) {
+        if (customCommand == null && customCommandArray != null && !customCommandArray.isEmpty()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "No exact match, but have " + customCommandArray.size() + " commands");
                 for (final CustomCommand c : customCommandArray) {

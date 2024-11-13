@@ -31,8 +31,6 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import ai.saiy.android.R;
@@ -45,6 +43,8 @@ import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
+import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 27/01/2017.
@@ -71,12 +71,11 @@ public class CustomHelper {
             ArrayList<CustomCommandContainer> customCommandContainerArray = null;
             ArrayList<CustomReplacement> customReplacementArray = null;
 
-            final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             try {
-                final Future<ArrayList<CustomNickname>> customNicknameFuture = executorService.submit(new DBCustomNicknameCallable(ctx));
-                final Future<ArrayList<CustomPhrase>> customPhraseFuture = executorService.submit(new DBCustomPhraseCallable(ctx));
-                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = executorService.submit(new DBCustomCommandCallable(ctx));
-                final Future<ArrayList<CustomReplacement>> customReplacementFuture = executorService.submit(new DBCustomReplacementCallable(ctx));
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
                 customNicknameArray = customNicknameFuture.get();
                 customPhraseArray = customPhraseFuture.get();
                 customCommandContainerArray = customCommandContainerFuture.get();
@@ -96,8 +95,6 @@ public class CustomHelper {
                     MyLog.w(CLS_NAME, "future: InterruptedException");
                     e.printStackTrace();
                 }
-            } finally {
-                executorService.shutdown();
             }
 
             if (DEBUG) {
@@ -167,12 +164,11 @@ public class CustomHelper {
             final ArrayList<CustomCommandContainer> customCommandContainerArray = new ArrayList<>();
             final ArrayList<CustomReplacement> customReplacementArray = new ArrayList<>();
 
-            final ExecutorService executorService = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
             try {
-                final Future<ArrayList<CustomNickname>> customNicknameFuture = executorService.submit(new DBCustomNicknameCallable(ctx));
-                final Future<ArrayList<CustomPhrase>> customPhraseFuture = executorService.submit(new DBCustomPhraseCallable(ctx));
-                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = executorService.submit(new DBCustomCommandCallable(ctx));
-                final Future<ArrayList<CustomReplacement>> customReplacementFuture = executorService.submit(new DBCustomReplacementCallable(ctx));
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
                 customNicknameArray.addAll(customNicknameFuture.get());
                 customPhraseArray.addAll(customPhraseFuture.get());
                 customCommandContainerArray.addAll(customCommandContainerFuture.get());
@@ -192,8 +188,6 @@ public class CustomHelper {
                     MyLog.w(CLS_NAME, "future: InterruptedException");
                     e.printStackTrace();
                 }
-            } finally {
-                executorService.shutdown();
             }
 
             if (DEBUG) {
