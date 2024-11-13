@@ -117,10 +117,12 @@ dependencies {
     implementation libs.documentfile
     implementation libs.drawerlayout
     implementation(libs.fragment) {
+        exclude group: 'androidx.core', module: 'core-ktx'
         exclude group: 'androidx.fragment', module: 'fragment-ktx'
     }
-    implementation libs.core.common
+    implementation libs.core.runtime
     implementation(libs.lifecycle.runtime) {
+        exclude group: 'androidx.core', module: 'core-ktx'
         exclude group: 'androidx.lifecycle', module: 'lifecycle-runtime-ktx'
     }
     implementation(libs.lifecycle.livedata) {
@@ -129,7 +131,9 @@ dependencies {
     implementation(libs.lifecycle.viewmodel) {
         exclude group: 'androidx.lifecycle', module: 'lifecycle-viewmodel-ktx'
     }
-    implementation libs.lifecycle.viewmodel.savedstate
+    implementation(libs.lifecycle.viewmodel.savedstate) {
+        exclude group: 'androidx.core', module: 'core-ktx'
+    }
     annotationProcessor libs.common.java8
     implementation libs.recyclerview
     implementation libs.print
@@ -153,7 +157,9 @@ dependencies {
     implementation libs.play.services.wearable
     implementation libs.speechkit
     implementation libs.guava
+    // https://github.com/google/gson
     implementation libs.gson
+    // https://github.com/googleapis/google-http-java-client
     implementation libs.google.http.client.gson
     implementation libs.speechrecognition
     implementation libs.billing
@@ -167,6 +173,7 @@ dependencies {
         exclude group: 'commons-logging', module: 'commons-logging'
     }
     implementation libs.simmetrics.core
+    // https://github.com/googleapis/java-cloud-bom
     implementation(platform(libs.libraries.bom)) {
         exclude group: 'com.google.protobuf', module: 'protobuf-java'
         exclude group: 'com.google.protobuf', module: 'protobuf-java-util'
@@ -266,7 +273,7 @@ protobuf {
     }
     plugins {
         grpc {
-            artifact = 'io.grpc:protoc-gen-grpc-java:1.67.1'
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.65.1'
         }
     }
     generateProtoTasks {

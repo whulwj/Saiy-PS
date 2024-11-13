@@ -205,6 +205,22 @@ public class ServiceConnector {
             }
             selfAwareService = null;
         }
+
+        @Override
+        public void onBindingDied(ComponentName name) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onBindingDied");
+            }
+            selfAwareService = null;
+        }
+
+        @Override
+        public void onNullBinding(ComponentName name) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "onNullBinding");
+            }
+            selfAwareService = null;
+        }
     };
 
     private void completeRequest() {
