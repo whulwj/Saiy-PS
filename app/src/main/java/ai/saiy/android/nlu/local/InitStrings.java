@@ -209,7 +209,7 @@ public final class InitStrings {
 
     public void init() {
         if (DEBUG) {
-            MyLog.d(CLS_NAME, "init: availableProcessors: " + Runtime.getRuntime().availableProcessors());
+            MyLog.d(CLS_NAME, "init: availableProcessors");
         }
 
         final long then = System.nanoTime();
@@ -218,8 +218,8 @@ public final class InitStrings {
             singleList.add(Single.fromCallable(callable));
         }
         final Disposable disposable = Single.merge(singleList)
-                .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
-                .subscribeOn(Schedulers.io())
+                .timeout(THREADS_TIMEOUT / singleList.size(), TimeUnit.MILLISECONDS, Schedulers.computation())
+                .subscribeOn(Schedulers.computation())
                 .subscribe(Functions.emptyConsumer(), new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Throwable {

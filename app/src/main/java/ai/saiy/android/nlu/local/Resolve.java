@@ -21,7 +21,6 @@ import android.content.Context;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.command.agenda.Agenda;
@@ -105,7 +105,6 @@ import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.functions.Consumer;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -275,40 +274,37 @@ public final class Resolve {
         }
 
         final long then = System.nanoTime();
-        final List<Single<ArrayList<Pair<CC, Float>>>> singleList = new ArrayList<>(callableList.size());
-        for (Callable<ArrayList<Pair<CC, Float>>> callable : callableList) {
-            singleList.add(Single.fromCallable(callable));
+
+        final ArrayList<ArrayList<Pair<CC, Float>>> pairList = new ArrayList<>();
+
+        try {
+            final List<Future<ArrayList<Pair<CC, Float>>>> futures = new ArrayList<>(callableList.size());
+            final long timeout = THREADS_TIMEOUT / callableList.size();
+            for (Callable<ArrayList<Pair<CC, Float>>> callable : callableList) {
+                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.computation()).toFuture());
+            }
+
+            for (final Future<ArrayList<Pair<CC, Float>>> future : futures) {
+                pairList.add(future.get());
+            }
+
+        } catch (final ExecutionException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: ExecutionException" + ", " + e.getMessage());
+            }
+        } catch (final CancellationException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: CancellationException" + ", " + e.getMessage());
+            }
+        } catch (final InterruptedException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: InterruptedException" + ", " + e.getMessage());
+            }
         }
-        final @Nullable List<ArrayList<Pair<CC, Float>>> pairList = Single.merge(singleList)
-                .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
-                .subscribeOn(Schedulers.io())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        if (throwable instanceof ExecutionException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: ExecutionException");
-                            }
-                        } else if (throwable instanceof CancellationException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: CancellationException");
-                            }
-                        } else if (throwable instanceof InterruptedException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: InterruptedException");
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
-                            }
-                        }
-                    }
-                })
-                .toList().blockingGet();
 
         final ArrayList<Pair<CC, Float>> toReturn = new ArrayList<>();
 
-        if (pairList != null && !pairList.isEmpty()) {
+        if (!pairList.isEmpty()) {
 
             for (final ArrayList<Pair<CC, Float>> pairs : pairList) {
                 toReturn.addAll(pairs);

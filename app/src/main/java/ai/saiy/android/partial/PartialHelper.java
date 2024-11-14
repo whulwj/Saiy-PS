@@ -130,9 +130,10 @@ public class PartialHelper {
                 for (Callable<Pair<Boolean, Integer>> callable : callableList) {
                     singleList.add(Single.fromCallable(callable));
                 }
+                final long timeout = THREADS_TIMEOUT / callableList.size();
                 final Disposable disposable = Single.merge(singleList)
-                        .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
-                        .subscribeOn(Schedulers.io())
+                        .timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation())
+                        .subscribeOn(Schedulers.computation())
                         .subscribe(new Consumer<Pair<Boolean, Integer>>() {
                             @Override
                             public void accept(Pair<Boolean, Integer> pair) throws Throwable {

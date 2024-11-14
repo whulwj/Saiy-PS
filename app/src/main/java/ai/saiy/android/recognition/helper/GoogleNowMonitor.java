@@ -73,7 +73,7 @@ public class GoogleNowMonitor {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "foreground remains google");
                             }
-                            Schedulers.io().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
+                            Schedulers.trampoline().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
                             return;
                         } else {
                             GoogleNowMonitor.this.restartHotword(ctx);
@@ -83,7 +83,7 @@ public class GoogleNowMonitor {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "foreground package null");
                         }
-                        Schedulers.io().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
+                        Schedulers.trampoline().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
                         return;
                     }
                 }

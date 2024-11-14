@@ -20,7 +20,6 @@ package ai.saiy.android.nlu.local;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -31,6 +30,7 @@ import java.util.Locale;
 import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.algorithms.Algorithm;
@@ -45,8 +45,6 @@ import ai.saiy.android.algorithms.needlemanwunch.NeedlemanWunschHelper;
 import ai.saiy.android.algorithms.soundex.SoundexHelper;
 import ai.saiy.android.utils.MyLog;
 import io.reactivex.rxjava3.core.Single;
-import io.reactivex.rxjava3.functions.Consumer;
-import io.reactivex.rxjava3.functions.Predicate;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -147,42 +145,37 @@ public class AlgorithmicResolver<T> {
             }
         }
 
-        final List<Single<AlgorithmicContainer>> singleList = new ArrayList<>(callableList.size());
-        for (Callable<AlgorithmicContainer> callable : callableList) {
-            singleList.add(Single.fromCallable(callable));
-        }
-        final @Nullable List<AlgorithmicContainer> algorithmicContainerArray = Single.merge(singleList)
-                .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
-                .subscribeOn(Schedulers.io())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        if (throwable instanceof ExecutionException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: ExecutionException");
-                            }
-                        } else if (throwable instanceof CancellationException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: CancellationException");
-                            }
-                        } else if (throwable instanceof InterruptedException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: InterruptedException");
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
-                            }
-                        }
-                    }
-                }).filter(new Predicate<AlgorithmicContainer>() {
-                    @Override
-                    public boolean test(AlgorithmicContainer algorithmicContainer) throws Throwable {
-                        return algorithmicContainer != null;
-                    }
-                }).toList().blockingGet();
+        final ArrayList<AlgorithmicContainer> algorithmicContainerArray = new ArrayList<>();
 
-        if (algorithmicContainerArray != null && !algorithmicContainerArray.isEmpty()) {
+        try {
+            final List<Future<AlgorithmicContainer>> futures = new ArrayList<>(callableList.size());
+            final long timeout = THREADS_TIMEOUT / callableList.size();
+            for (Callable<AlgorithmicContainer> callable : callableList) {
+                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture());
+            }
+
+            AlgorithmicContainer algorithmicContainer;
+            for (final Future<AlgorithmicContainer> future : futures) {
+                algorithmicContainer = future.get();
+                if (algorithmicContainer != null) {
+                    algorithmicContainerArray.add(algorithmicContainer);
+                }
+            }
+        } catch (final ExecutionException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: ExecutionException" + ", " + e.getMessage());
+            }
+        } catch (final CancellationException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: CancellationException" + ", " + e.getMessage());
+            }
+        } catch (final InterruptedException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: InterruptedException" + ", " + e.getMessage());
+            }
+        }
+
+        if (!algorithmicContainerArray.isEmpty()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "algorithms returned " + algorithmicContainerArray.size() + " matches");
                 for (final AlgorithmicContainer a : algorithmicContainerArray) {
@@ -214,7 +207,7 @@ public class AlgorithmicResolver<T> {
             }
         }
 
-        if (algorithmicContainer == null && algorithmicContainerArray != null && !algorithmicContainerArray.isEmpty()) {
+        if (algorithmicContainer == null && !algorithmicContainerArray.isEmpty()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "No exact match, but have " + algorithmicContainerArray.size() + " commands");
                 for (final AlgorithmicContainer c : algorithmicContainerArray) {
@@ -322,47 +315,33 @@ public class AlgorithmicResolver<T> {
             }
         }
 
-        final List<Single<List<AlgorithmicContainer>>> singleList = new ArrayList<>(callableList.size());
-        for (Callable<List<AlgorithmicContainer>> callable : callableList) {
-            singleList.add(Single.fromCallable(callable));
-        }
-        final @Nullable List<List<AlgorithmicContainer>> algorithmicContainersArray = Single.merge(singleList)
-                .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
-                .subscribeOn(Schedulers.io())
-                .doOnError(new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) {
-                        if (throwable instanceof ExecutionException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: ExecutionException");
-                            }
-                        } else if (throwable instanceof CancellationException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: CancellationException");
-                            }
-                        } else if (throwable instanceof InterruptedException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: InterruptedException");
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
-                            }
-                        }
-                    }
-                }).filter(new Predicate<List<AlgorithmicContainer>>() {
-                    @Override
-                    public boolean test(List<AlgorithmicContainer> algorithmicContainers) throws Throwable {
-                        return algorithmicContainers != null && !algorithmicContainers.isEmpty();
-                    }
-                }).toList().blockingGet();
         final ArrayList<AlgorithmicContainer> algorithmicContainerArray = new ArrayList<>();
-        if (algorithmicContainersArray != null) {
-            for (List<AlgorithmicContainer> algorithmicContainers : algorithmicContainersArray) {
+        try {
+            final List<Future<List<AlgorithmicContainer>>> futures = new ArrayList<>(callableList.size());
+            final long timeout = THREADS_TIMEOUT / callableList.size();
+            for (Callable<List<AlgorithmicContainer>> callable : callableList) {
+                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture());
+            }
+
+            List<AlgorithmicContainer> algorithmicContainers;
+            for (final Future<List<AlgorithmicContainer>> future : futures) {
+                algorithmicContainers = future.get();
                 if (algorithmicContainers == null || algorithmicContainers.isEmpty()) {
                     continue;
                 }
                 algorithmicContainerArray.addAll(algorithmicContainers);
+            }
+        } catch (final ExecutionException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: ExecutionException" + ", " + e.getMessage());
+            }
+        } catch (final CancellationException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: CancellationException" + ", " + e.getMessage());
+            }
+        } catch (final InterruptedException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "future: InterruptedException" + ", " + e.getMessage());
             }
         }
 
