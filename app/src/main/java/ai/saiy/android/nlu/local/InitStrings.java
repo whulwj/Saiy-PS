@@ -93,10 +93,13 @@ import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
+import io.reactivex.rxjava3.functions.BiFunction;
 import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.internal.functions.Functions;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
@@ -209,39 +212,49 @@ public final class InitStrings {
 
     public void init() {
         if (DEBUG) {
-            MyLog.d(CLS_NAME, "init: availableProcessors");
+            MyLog.d(CLS_NAME, "init");
         }
 
         final long then = System.nanoTime();
-        final List<Single<ArrayList<Pair<CC, Float>>>> singleList = new ArrayList<>(callableList.size());
+        final int size = callableList.size();
+        final List<Single<ArrayList<Pair<CC, Float>>>> singleList = new ArrayList<>(size);
         for (Callable<ArrayList<Pair<CC, Float>>> callable : callableList) {
             singleList.add(Single.fromCallable(callable));
         }
-        final Disposable disposable = Single.merge(singleList)
-                .timeout(THREADS_TIMEOUT / singleList.size(), TimeUnit.MILLISECONDS, Schedulers.computation())
-                .subscribeOn(Schedulers.computation())
-                .subscribe(Functions.emptyConsumer(), new Consumer<Throwable>() {
+        final Consumer<Throwable> onError = new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) {
+                if (!DEBUG) {
+                    return;
+                }
+                if (throwable instanceof ExecutionException) {
+                    MyLog.w(CLS_NAME, "call: ExecutionException");
+                } else if (throwable instanceof CancellationException) {
+                    MyLog.w(CLS_NAME, "call: CancellationException");
+                } else if (throwable instanceof InterruptedException) {
+                    MyLog.w(CLS_NAME, "call: InterruptedException");
+                } else {
+                    MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                }
+            }
+        };
+        final Disposable disposable = Flowable.fromIterable(singleList)
+                .parallel().runOn(Schedulers.computation())
+                .map(new Function<Single<ArrayList<Pair<CC, Float>>>, Byte>() {
                     @Override
-                    public void accept(Throwable throwable) throws Throwable {
-                        if (throwable instanceof ExecutionException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: ExecutionException");
-                            }
-                        } else if (throwable instanceof CancellationException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: CancellationException");
-                            }
-                        } else if (throwable instanceof InterruptedException) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: InterruptedException");
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
-                            }
-                        }
+                    public Byte apply(@NonNull Single<ArrayList<Pair<CC, Float>>> single) {
+                        return (byte) (single.doOnError(onError).blockingGet() != null ? 1 : 0);
                     }
-                }, new Action() {
+                })
+                .reduce(new BiFunction<Byte, Byte, Byte>() {
+                    @Override
+                    public Byte apply(Byte left, Byte right) throws Throwable {
+                        return (byte) (left + right);
+                    }
+                })
+                .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
+                .subscribeOn(Schedulers.computation())
+                .subscribe(Functions.emptyConsumer(), onError, new Action() {
                     @Override
                     public void run() {
                         if (DEBUG) {

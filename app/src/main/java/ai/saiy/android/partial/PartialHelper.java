@@ -30,6 +30,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BinaryOperator;
+import java.util.stream.Collector;
 
 import ai.saiy.android.command.alexa.AlexaPartial;
 import ai.saiy.android.command.cancel.CancelPartial;
@@ -39,11 +41,13 @@ import ai.saiy.android.localisation.SaiyResources;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.disposables.Disposable;
 import io.reactivex.rxjava3.functions.Action;
 import io.reactivex.rxjava3.functions.Consumer;
+import io.reactivex.rxjava3.functions.Function;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -116,7 +120,7 @@ public class PartialHelper {
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_MORE_FAVORABLE);
 
-                final List<Pair<Boolean, Integer>> resultList = new ArrayList<>(callableList.size());
+                final long then = System.nanoTime();
                 cancelPartial.setPartialData(partialResults);
 
                 if (translatePartial != null) {
@@ -130,40 +134,45 @@ public class PartialHelper {
                 for (Callable<Pair<Boolean, Integer>> callable : callableList) {
                     singleList.add(Single.fromCallable(callable));
                 }
-                final long timeout = THREADS_TIMEOUT / callableList.size();
-                final Disposable disposable = Single.merge(singleList)
-                        .timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation())
-                        .subscribeOn(Schedulers.computation())
-                        .subscribe(new Consumer<Pair<Boolean, Integer>>() {
+                final Consumer<Throwable> onError =  new Consumer<Throwable>() {
+                    @Override
+                    public void accept(Throwable throwable) {
+                        if (!DEBUG) {
+                            return;
+                        }
+                        if (throwable instanceof ExecutionException) {
+                            MyLog.w(CLS_NAME, "call: ExecutionException");
+                        } else if (throwable instanceof CancellationException) {
+                            MyLog.w(CLS_NAME, "call: CancellationException");
+                        } else if (throwable instanceof InterruptedException) {
+                            MyLog.w(CLS_NAME, "call: InterruptedException");
+                        } else {
+                            MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                        }
+                    }
+                };
+                final Disposable disposable = Flowable.fromIterable(singleList)
+                        .parallel().runOn(Schedulers.computation())
+                        .map(new Function<Single<Pair<Boolean, Integer>>, Pair<Boolean, Integer>>() {
                             @Override
-                            public void accept(Pair<Boolean, Integer> pair) throws Throwable {
-                                resultList.add(pair);
+                            public Pair<Boolean, Integer> apply(@NonNull Single<Pair<Boolean, Integer>> single) {
+                                return single.doOnError(onError).blockingGet();
                             }
-                        }, new Consumer<Throwable>() {
+                        })
+                        .collect(Collector.of(ArrayList::new, ArrayList::add, new BinaryOperator<ArrayList<Pair<Boolean, Integer>>>() {
                             @Override
-                            public void accept(Throwable throwable) throws Throwable {
-                                if (throwable instanceof ExecutionException) {
-                                    if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "call: ExecutionException");
-                                    }
-                                } else if (throwable instanceof CancellationException) {
-                                    if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "call: CancellationException");
-                                    }
-                                } else if (throwable instanceof InterruptedException) {
-                                    if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "call: InterruptedException");
-                                    }
-                                } else {
-                                    if (DEBUG) {
-                                        MyLog.w(CLS_NAME, "call: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
-                                    }
-                                }
+                            public ArrayList<Pair<Boolean, Integer>> apply(ArrayList<Pair<Boolean, Integer>> left, ArrayList<Pair<Boolean, Integer>> right) {
+                                final ArrayList<Pair<Boolean, Integer>> resultList = new ArrayList<>(left.size() + right.size());
+                                resultList.addAll(left);
+                                resultList.addAll(right);
+                                return resultList;
                             }
-                        }, new Action() {
+                        }))
+                        .timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation())
+                        .subscribe(new Consumer<ArrayList<Pair<Boolean, Integer>>>() {
                             @Override
-                            public void run() {
-                                for (final Pair<Boolean, Integer> result : resultList) {
+                            public void accept(ArrayList<Pair<Boolean, Integer>> resultList) {
+                                for (Pair<Boolean, Integer> result : resultList) {
                                     if (result.first) {
                                         switch (result.second) {
                                             case Partial.CANCEL:
@@ -177,6 +186,13 @@ public class PartialHelper {
                                                 break;
                                         }
                                     }
+                                }
+                            }
+                        }, onError, new Action() {
+                            @Override
+                            public void run() {
+                                if (DEBUG) {
+                                    MyLog.getElapsed(CLS_NAME, then);
                                 }
                             }
                         }, compositeDisposable);
