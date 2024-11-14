@@ -2323,7 +2323,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         return bundle != null && bundle.containsKey(LocalRequest.EXTRA_WEAR);
     }
 
-    public String getWearContent() {
+    public @Nullable String getWearableNodeId() {
         return bundle != null? bundle.getString(LocalRequest.EXTRA_WEAR) : null;
     }
 

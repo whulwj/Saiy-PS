@@ -9,6 +9,7 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.wearable.MessageApi;
 import com.google.android.gms.wearable.Wearable;
@@ -25,7 +26,10 @@ import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.wear.containers.WearMessageEvent;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-public class WearListenerService extends WearableListenerService {
+/**
+ * Listens to Messages from the local node.
+ */
+public final class WearListenerService extends WearableListenerService implements GoogleApiClient.OnConnectionFailedListener {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = WearListenerService.class.getSimpleName();
     private static final String MESSAGE_PATH = "/saiy_request";
@@ -45,25 +49,11 @@ public class WearListenerService extends WearableListenerService {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "sendMessage: gsonString: " + gsonString);
                 }
-                if (!googleApiClient.isConnected()) {
-                    if (!googleApiClient.isConnecting()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "sendMessage: isConnecting: false");
-                        }
-                        googleApiClient.connect();
-                    }
-                    for (int i = 1; !googleApiClient.isConnected() && i < 15; i++) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "sendMessage: sleeping " + i);
-                        }
-                        try {
-                            Thread.sleep(200L);
-                        } catch (InterruptedException e) {
-                            if (DEBUG) {
-                                MyLog.w(CLS_NAME, "sendMessage: InterruptedException");
-                                e.printStackTrace();
-                            }
-                        }
+                if (!googleApiClient.isConnected() || !googleApiClient.isConnecting()) {
+                    final ConnectionResult connectionResult = googleApiClient.blockingConnect(3, TimeUnit.SECONDS);
+                    if (DEBUG && !connectionResult.isSuccess()) {
+                        MyLog.w(CLS_NAME, "DataLayerListenerService failed to connect to GoogleApiClient, "
+                                + "error code: " + connectionResult.getErrorCode());
                     }
                 }
                 if (googleApiClient.isConnected()) {
@@ -254,8 +244,18 @@ public class WearListenerService extends WearableListenerService {
             MyLog.i(CLS_NAME, "onCreate");
         }
         this.then = System.nanoTime();
-        this.googleApiClient = new GoogleApiClient.Builder(getApplicationContext()).addApi(Wearable.API).build();
+        this.googleApiClient = new GoogleApiClient.Builder(getApplicationContext()).addApi(Wearable.API).addOnConnectionFailedListener(this).build();
         googleApiClient.connect();
+    }
+
+    @Override
+    public void onConnectionFailed(ConnectionResult result) {
+        if (result.getErrorCode() == ConnectionResult.API_UNAVAILABLE) {
+            // The Wearable API is unavailable
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "onConnectionFailed");
+            }
+        }
     }
 
     @Override

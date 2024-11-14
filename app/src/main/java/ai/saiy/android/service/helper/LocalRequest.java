@@ -539,7 +539,7 @@ public class LocalRequest {
         return bundle != null && bundle.getBoolean(EXTRA_PREVENT_RECOGNITION, false);
     }
 
-    public void setWear(String str) {
-        bundle.putString(EXTRA_WEAR, str);
+    public void setWear(String nodeId) {
+        bundle.putString(EXTRA_WEAR, nodeId);
     }
 }

@@ -679,7 +679,7 @@ public class SelfAware extends Service {
                                     if (DEBUG) {
                                         MyLog.i(CLS_NAME, "speak: isWearRequest");
                                     }
-                                    UtilsWearMessage.sendMessage(getApplicationContext(), conditions.getUtterance(), conditions.getWearContent(), conditions.getVRLocale(false), ai.saiy.android.wear.containers.WearMessageEvent.EVENT_DISPLAY, null);
+                                    UtilsWearMessage.sendMessage(getApplicationContext(), conditions.getUtterance(), conditions.getWearableNodeId(), conditions.getVRLocale(false), ai.saiy.android.wear.containers.WearMessageEvent.EVENT_DISPLAY, null);
                                 }
 
                                 switch (conditions.getDefaultTTS()) {
@@ -1224,7 +1224,7 @@ public class SelfAware extends Service {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "WEAR");
                             }
-                            UtilsWearMessage.sendMessage(getApplicationContext(), conditions.getUtterance(), conditions.getWearContent(), conditions.getVRLocale(false), ai.saiy.android.wear.containers.WearMessageEvent.EVENT_SPEECH, conditions.getBundle());
+                            UtilsWearMessage.sendMessage(getApplicationContext(), conditions.getUtterance(), conditions.getWearableNodeId(), conditions.getVRLocale(false), ai.saiy.android.wear.containers.WearMessageEvent.EVENT_SPEECH, conditions.getBundle());
                             break;
                         case WIT_HYBRID:
                             if (DEBUG) {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.ParseException;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
@@ -109,7 +110,7 @@ public class ChatBotHelper {
         }
     }
 
-    private void speak(Context context, SupportedLanguage supportedLanguage, String utterance, Locale vrLocale, Locale ttsLocale, boolean isConversation, String wearContent) {
+    private void speak(Context context, SupportedLanguage supportedLanguage, String utterance, Locale vrLocale, Locale ttsLocale, boolean isConversation, @Nullable String nodeId) {
         final ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(context);
         localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, supportedLanguage, vrLocale, ttsLocale, utterance);
         if (isConversation) {
@@ -118,8 +119,8 @@ public class ChatBotHelper {
             localRequest.setAction(LocalRequest.ACTION_SPEAK_ONLY);
             localRequest.setCondition(Condition.CONDITION_NONE);
         }
-        if (UtilsString.notNaked(wearContent)) {
-            localRequest.setWear(wearContent);
+        if (UtilsString.notNaked(nodeId)) {
+            localRequest.setWear(nodeId);
         }
         localRequest.execute();
     }
@@ -144,7 +145,7 @@ public class ChatBotHelper {
         return arrayList.get(new Random().nextInt(arrayList.size() - 1));
     }
 
-    public String validate(Context context, SupportedLanguage supportedLanguage, Locale vrLocale, Locale ttsLocale, String voiceDatum, boolean tts, String wearContent) {
+    public String validate(Context context, SupportedLanguage supportedLanguage, Locale vrLocale, Locale ttsLocale, String voiceDatum, boolean tts, @Nullable String nodeId) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "validate");
         }
@@ -154,12 +155,12 @@ public class ChatBotHelper {
         voiceData.add(voiceDatum);
         if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage), true).detectCancel(voiceData)) {
             if (tts) {
-                speak(context, supportedLanguage, SaiyRequestParams.SILENCE, vrLocale, ttsLocale, false, wearContent);
+                speak(context, supportedLanguage, SaiyRequestParams.SILENCE, vrLocale, ttsLocale, false, nodeId);
             }
             return SaiyRequestParams.SILENCE;
         } else if (isGoodbye(voiceDatum.toLowerCase(supportedLanguage.getLocale()))) {
             if (tts) {
-                speak(context, supportedLanguage, goodbye(context), vrLocale, ttsLocale, false, wearContent);
+                speak(context, supportedLanguage, goodbye(context), vrLocale, ttsLocale, false, nodeId);
             }
             return goodbye(context);
         }
@@ -239,12 +240,12 @@ public class ChatBotHelper {
             final String result = new ResolveChatBot().resolve(response);
             if (UtilsString.notNaked(result)) {
                 if (tts) {
-                    speak(context, supportedLanguage, revise(context, supportedLanguage.getLocale(), result), vrLocale, ttsLocale, true, wearContent);
+                    speak(context, supportedLanguage, revise(context, supportedLanguage.getLocale(), result), vrLocale, ttsLocale, true, nodeId);
                 }
                 return revise(context, supportedLanguage.getLocale(), result);
             }
             if (tts) {
-                speak(context, supportedLanguage, unknownError(), vrLocale, ttsLocale, true, wearContent);
+                speak(context, supportedLanguage, unknownError(), vrLocale, ttsLocale, true, nodeId);
             }
             return revise(context, supportedLanguage.getLocale(), unknownError());
         }
@@ -252,7 +253,7 @@ public class ChatBotHelper {
             MyLog.w(CLS_NAME, "response: failed");
         }
         if (tts) {
-            speak(context, supportedLanguage, unknownError(), vrLocale, ttsLocale, false, wearContent);
+            speak(context, supportedLanguage, unknownError(), vrLocale, ttsLocale, false, nodeId);
         }
         return revise(context, supportedLanguage.getLocale(), unknownError());
     }
