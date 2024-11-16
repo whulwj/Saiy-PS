@@ -269,7 +269,7 @@ dependencies {
 // https://github.com/grpc/grpc-java
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:3.25.5'
+        artifact = 'com.google.protobuf:protoc:4.28.3'
     }
     plugins {
         grpc {

@@ -504,7 +504,7 @@
             android:name="ai.saiy.android.ui.service.FloatingCommandsService"
             android:enabled="true"
             android:exported="false"
-            android:foregroundServiceType="microphone"
+            android:foregroundServiceType="shortService"
             android:protectionLevel="signature">
         </service>
 
