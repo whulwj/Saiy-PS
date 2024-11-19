@@ -52,6 +52,7 @@ public enum Algorithm {
     public static final double JWD_UPPER_THRESHOLD = 0.93;
     public static final double JWD_MAX_THRESHOLD = 1.0;
     public static final double LEV_UPPER_THRESHOLD = 3.9;
+    public static final double LEV_UPPER_THRESHOLD_SINGLE = 2.9d;
     public static final double LEV_MAX_THRESHOLD = 0.0;
     public static final double ME_UPPER_THRESHOLD = 0.90;
     public static final double ME_MAX_THRESHOLD = 1.0;

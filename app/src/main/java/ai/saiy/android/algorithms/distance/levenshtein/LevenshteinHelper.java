@@ -102,7 +102,7 @@ public class LevenshteinHelper<T> implements Resolvable {
                 vd = vd.toLowerCase(loc).trim();
                 distance = ld.apply(phrase, vd);
 
-                if (distance <= levUpperThreshold) {
+                if (distance <= ((phrase.split("\\s+").length > 1)? levUpperThreshold : Algorithm.LEV_UPPER_THRESHOLD_SINGLE)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "Keeping " + phrase);
                     }

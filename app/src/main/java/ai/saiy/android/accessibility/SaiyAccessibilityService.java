@@ -66,7 +66,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
     private static final int GMAIL = 1;
     private static final int TEXT_MESSAGE = 2;
 
-    private static final long COMMAND_UPDATE_DELAY = 3000L;
+    private static final long COMMAND_UPDATE_DELAY = 5000L;
     private static final long UPDATE_TIMEOUT = 250L;
     private long previousCommandTime;
     private String previousCommandProcessed = null;
@@ -154,7 +154,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
             MyLog.i(CLS_NAME, "updateServiceInfo");
         }
 
-        if (initAnnounceNotifications != announceNotifications || initIgnoreRestrictedContent != ignoreRestrictedContent) {
+        if (initAnnounceNotifications != announceNotifications) {
             initAnnounceNotifications = announceNotifications;
             initIgnoreRestrictedContent = ignoreRestrictedContent;
             setDynamicContent();
@@ -313,7 +313,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "TEXT_MESSAGE");
                         }
-                        boolean announceSMS = SPH.getAnnounceNotificationsSMS(getApplicationContext());
+                        final boolean announceSMS = SPH.getAnnounceNotificationsSMS(getApplicationContext());
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "TEXT_MESSAGE: announce content: " + announceSMS);
                         }
@@ -358,9 +358,9 @@ public class SaiyAccessibilityService extends AccessibilityService {
                 } else {
                     this.previousCommandTime = event.getEventTime();
                     this.previousCommandProcessed = utterance;
-                    LocalRequest localRequest = new LocalRequest(getApplicationContext());
+                    final LocalRequest localRequest = new LocalRequest(getApplicationContext());
                     localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, SPH.getVRLocale(getApplicationContext()), SPH.getTTSLocale(getApplicationContext()), utterance);
-                    localRequest.setSpeechPriority(SpeechPriority.PRIORITY_MAX);
+                    localRequest.setSpeechPriority(SpeechPriority.PRIORITY_NOTIFICATION);
                     localRequest.execute();
                 }
             } else {
@@ -370,33 +370,35 @@ public class SaiyAccessibilityService extends AccessibilityService {
 
                 if (EXTRA_VERBOSE) {
                     source = event.getSource();
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted contentDesc: " + source.getContentDescription());
-                    }
-                    if (source.getText() != null) {
+                    if (source != null) {
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: " + source.getText().toString());
+                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted contentDesc: " + source.getContentDescription());
                         }
-                    } else {
+                        if (source.getText() != null) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: " + source.getText().toString());
+                            }
+                        } else {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: null");
+                            }
+                        }
+
+                        final int childCount = source.getChildCount();
                         if (DEBUG) {
-                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted text: null");
+                            MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted childCount: " + childCount);
                         }
-                    }
 
-                    final int childCount = source.getChildCount();
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted childCount: " + childCount);
-                    }
+                        if (childCount > 0) {
 
-                    if (childCount > 0) {
+                            for (int i = 0; i < childCount; i++) {
 
-                        for (int i = 0; i < childCount; i++) {
+                                final String childText = examineChild(source.getChild(i));
 
-                            final String childText = examineChild(source.getChild(i));
-
-                            if (childText != null) {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted child text: " + childText);
+                                if (childText != null) {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "onAccessibilityEvent: unwanted child text: " + childText);
+                                    }
                                 }
                             }
                         }
@@ -482,12 +484,12 @@ public class SaiyAccessibilityService extends AccessibilityService {
             List<ApplicationBasic> applicationArray = blockedApplications.getApplicationArray();
             if (UtilsList.notNaked(applicationArray)) {
                 String packageName;
-                for (ApplicationBasic next : applicationArray) {
-                    packageName = next.getPackageName();
+                for (ApplicationBasic applicationBasic : applicationArray) {
+                    packageName = applicationBasic.getPackageName();
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "isPackageRestrictedPackage: " + packageName + " ~ " + name);
                     }
-                    if (UtilsString.notNaked(packageName) && next.getPackageName().matches(name)) {
+                    if (UtilsString.notNaked(packageName) && applicationBasic.getPackageName().matches(name)) {
                         return true;
                     }
                 }
