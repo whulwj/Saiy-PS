@@ -139,13 +139,12 @@ public class Installed {
             if (appNameChar != null) {
                 appName = appNameChar.toString();
 
-                if (!UtilsString.notNaked(appName)) {
+                if (UtilsString.notNaked(appName)) {
+                    if (!pSAIY_PACKAGE.matcher(packageInfo.packageName).matches()) {
+                        holdsPermission.add(new Pair<>(appName, packageInfo.packageName));
+                    }
                     continue;
                 }
-                if (pSAIY_PACKAGE.matcher(packageInfo.packageName).matches()) {
-                    continue;
-                }
-                holdsPermission.add(new Pair<>(appName, packageInfo.packageName));
             }
 
             holdsPermission.add(new Pair<>(packageInfo.packageName, packageInfo.packageName));
@@ -321,7 +320,7 @@ public class Installed {
                             appNameChar = packageInfo.applicationInfo.loadLabel(pm);
 
                             if (appNameChar != null) {
-                                appName = packageInfo.applicationInfo.loadLabel(pm).toString();
+                                appName = appNameChar.toString();
 
                                 if (UtilsString.notNaked(appName)) {
                                     if (!pSAIY_PACKAGE.matcher(packageInfo.packageName).matches()) {
