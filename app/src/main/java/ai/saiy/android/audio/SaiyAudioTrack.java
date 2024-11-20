@@ -28,8 +28,10 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
+import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.tts.SaiyProgressListener;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.UtilsString;
 
 /**
  * Wrapper class around the {@link AudioTrack} object to handle application specific eventualities
@@ -212,7 +214,7 @@ public class SaiyAudioTrack extends AudioTrack {
             if (byteQueue.isEmpty()) {
                 stop(false);
             }
-            listener.onDone(utteranceId);
+            listener.onDone(UtilsString.notNaked(utteranceId)? utteranceId : String.valueOf(LocalRequest.ACTION_SPEAK_ONLY));
         }
 
         if (DEBUG) {

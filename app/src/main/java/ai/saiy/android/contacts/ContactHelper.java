@@ -244,6 +244,7 @@ public class ContactHelper {
         for (int i = 0; i < contacts.size(); i++) {
             switch (weighting) {
                 case NONE:
+                case NAME:
                     if (contacts.get(i).hasPhoneNumber()) {
                         return new Pair<>(true, contacts.get(i));
                     }
@@ -251,9 +252,12 @@ public class ContactHelper {
                         return new Pair<>(true, contacts.get(0));
                     }
                     break;
-                case NAME:
-                    break;
                 case NUMBER:
+                    String number = getNumber(context, contacts.get(i).getID(), type);
+                    if (number != null) {
+                        contacts.get(i).setNumber(number);
+                        return new Pair<>(true, contacts.get(i));
+                    }
                     break;
                 case ADDRESS:
                     String address = getAddress(context, contacts.get(i).getID(), type);
@@ -261,30 +265,19 @@ public class ContactHelper {
                         contacts.get(i).setAddress(address);
                         return new Pair<>(true, contacts.get(i));
                     }
-                    continue;
+                    break;
                 case EMAIL:
                     String email = getEmail(context, contacts.get(i).getID(), type);
                     if (email != null) {
                         contacts.get(i).setEmailAddress(email);
                         return new Pair<>(true, contacts.get(i));
                     }
-                    continue;
+                    break;
                 case IM:
                     if (getIM(context, contacts.get(i).getID(), type) != null) {
                         return new Pair<>(true, contacts.get(i));
                     }
-                    continue;
-            }
-            if (contacts.get(i).hasPhoneNumber()) {
-                return new Pair<>(true, contacts.get(i));
-            }
-            if (i == contacts.size() - 1) {
-                return new Pair<>(true, contacts.get(0));
-            }
-            String number = getNumber(context, contacts.get(i).getID(), type);
-            if (number != null) {
-                contacts.get(i).setNumber(number);
-                return new Pair<>(true, contacts.get(i));
+                    break;
             }
         }
         return !contacts.isEmpty() ? new Pair<>(false, contacts.get(0)) : new Pair<>(false, null);

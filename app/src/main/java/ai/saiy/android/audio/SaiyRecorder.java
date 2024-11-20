@@ -320,10 +320,9 @@ public class SaiyRecorder {
                 }
 
                 if (bufferSize < minBuff) {
-                    bufferSize = minBuff;
-
                     // Unused for now
-                    framePeriod = bufferSize / (2 * bSamples * nChannels / 8);
+                    this.framePeriod = minBuff / 4;
+                    bufferSize = minBuff;
                 }
 
                 break;
