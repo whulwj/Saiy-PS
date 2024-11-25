@@ -89,7 +89,6 @@ public class UtilsDevice {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private static boolean isScreenOffDeprecated(@NonNull final Context ctx) {
         return !((PowerManager) ctx.getSystemService(Context.POWER_SERVICE)).isScreenOn();
     }

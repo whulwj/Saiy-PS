@@ -1915,7 +1915,7 @@ public class Quantum extends Tunnelling {
         NotificationHelper.cancelComputingNotification(mContext);
 
         if (DEBUG) {
-            MyLog.getElapsed(Quantum.class.getSimpleName(), then);
+            MyLog.getElapsed(CLS_NAME, then);
         }
 
         request.execute();

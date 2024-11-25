@@ -32,6 +32,7 @@ import java.util.ArrayList;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.UtilsApplication;
@@ -61,6 +62,7 @@ public class CustomHelper {
     public static final int CUSTOM_COMMAND_RESOURCE_ID = R.drawable.ic_shape_plus;
     public static final int CUSTOM_REPLACEMENT_RESOURCE_ID = R.drawable.ic_swap_horizontal;
 
+    private static final long THREADS_TIMEOUT = 1000L;
     private static final Object lock = new Object();
 
     public CustomHelperHolder getCustomisationHolder(@NonNull final Context ctx) {
@@ -72,10 +74,10 @@ public class CustomHelper {
             ArrayList<CustomReplacement> customReplacementArray = null;
 
             try {
-                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
                 customNicknameArray = customNicknameFuture.get();
                 customPhraseArray = customPhraseFuture.get();
                 customCommandContainerArray = customCommandContainerFuture.get();
@@ -120,7 +122,7 @@ public class CustomHelper {
         boolean hasPhrase = false;
         if (objectArray != null) {
             holder.setCustomPhraseArray(objectArray);
-            hasPhrase = true;
+            hasPhrase = UtilsList.notNaked(objectArray);
         }
         SPH.setHasPhrase(ctx, hasPhrase);
     }
@@ -130,7 +132,7 @@ public class CustomHelper {
         boolean hasCustomisation = false;
         if (objectArray != null) {
             holder.setCustomCommandArray(objectArray);
-            hasCustomisation = true;
+            hasCustomisation = UtilsList.notNaked(objectArray);
         }
         SPH.setHasCustomisation(ctx, hasCustomisation);
     }
@@ -140,7 +142,7 @@ public class CustomHelper {
         boolean hasReplacement = false;
         if (objectArray != null) {
             holder.setCustomReplacementArray(objectArray);
-            hasReplacement = true;
+            hasReplacement = UtilsList.notNaked(objectArray);
         }
         SPH.setHasReplacement(ctx, hasReplacement);
     }
@@ -150,7 +152,7 @@ public class CustomHelper {
         boolean hasNickname = false;
         if (objectArray != null) {
             holder.setCustomNicknameArray(objectArray);
-            hasNickname = true;
+            hasNickname = UtilsList.notNaked(objectArray);
         }
         SPH.setHasNickname(ctx, hasNickname);
     }
@@ -165,10 +167,10 @@ public class CustomHelper {
             final ArrayList<CustomReplacement> customReplacementArray = new ArrayList<>();
 
             try {
-                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
                 customNicknameArray.addAll(customNicknameFuture.get());
                 customPhraseArray.addAll(customPhraseFuture.get());
                 customCommandContainerArray.addAll(customCommandContainerFuture.get());

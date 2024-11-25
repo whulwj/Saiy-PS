@@ -113,7 +113,7 @@ public class CustomCommandHelper {
         if (!UtilsList.notNaked(cccArray)) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "no custom commands");
-                MyLog.getElapsed(CustomCommandHelper.class.getSimpleName(), then);
+                MyLog.getElapsed(CLS_NAME, then);
             }
             return false;
         } else {
@@ -372,7 +372,7 @@ public class CustomCommandHelper {
         }
 
         if (DEBUG) {
-            MyLog.getElapsed(CustomCommandHelper.class.getSimpleName(), then);
+            MyLog.getElapsed(CLS_NAME, then);
         }
 
         return customCommand != null;
