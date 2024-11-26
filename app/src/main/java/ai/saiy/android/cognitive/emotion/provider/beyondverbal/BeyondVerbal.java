@@ -31,7 +31,7 @@ import ai.saiy.android.cognitive.emotion.provider.beyondverbal.http.BVStartReque
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.http.BVStreamAudio;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.language.SupportedLanguageBV;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.user.MetaData;
-import ai.saiy.android.configuration.BeyondVerbalConfiguration;
+import ai.saiy.android.firebase.database.reference.BeyondVerbalReference;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.recognition.Recognition;
@@ -136,15 +136,19 @@ public class BeyondVerbal {
             MyLog.i(CLS_NAME, "getID");
         }
 
-        final Pair<Boolean, BVCredentials> tokenPair = BVCredentials.refreshTokenIfRequired(mContext,
-                BeyondVerbalConfiguration.API_KEY);
+        final Pair<Boolean, String> keyPair = new BeyondVerbalReference().getKey(mContext);
+        if (keyPair.first) {
+            final Pair<Boolean, BVCredentials> tokenPair = BVCredentials.refreshTokenIfRequired(mContext, keyPair.second);
 
-        if (tokenPair.first) {
-            return tokenPair.second.getAccessToken();
-        } else {
-            if (DEBUG) {
-                MyLog.w(CLS_NAME, "failed to get token");
+            if (tokenPair.first) {
+                return tokenPair.second.getAccessToken();
+            } else {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "failed to get token");
+                }
             }
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "failed to get tokenRequest");
         }
 
         return null;

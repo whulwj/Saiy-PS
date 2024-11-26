@@ -71,7 +71,7 @@ public class BVStreamAudio implements IMic {
     private volatile HttpsURLConnection urlConnection;
     private volatile OutputStream outputStream;
 
-    private volatile int retryCount;
+    private volatile byte retryCount;
 
     private final String token;
     private final String recordingId;
@@ -247,35 +247,38 @@ public class BVStreamAudio implements IMic {
     }
 
     private void proceedAndNotify() {
-
-        if (retryCount < 2) {
-
-            if (retryCount == 0) {
-                final LocalRequest localRequest = new LocalRequest(mic.getContext());
-                localRequest.setSupportedLanguage(sl);
-                localRequest.setAction(LocalRequest.ACTION_SPEAK_ONLY);
-                localRequest.setTTSLocale(SPH.getTTSLocale(mic.getContext()));
-                localRequest.setVRLocale(SPH.getVRLocale(mic.getContext()));
-                localRequest.setUtterance(PersonalityResponse.getBVAnalysisCompleteResponse(mic.getContext(), sl));
-                localRequest.execute();
+        final boolean isTheFirstTry;
+        synchronized (BVStreamAudio.this) {
+            if (retryCount >= 2) {
+                return;
             }
-
+            isTheFirstTry = (retryCount == 0);
             retryCount++;
-
-            Schedulers.io().scheduleDirect(new Runnable() {
-                @Override
-                public void run() {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "timerTask: fetching analysis");
-                    }
-
-                    if (!new BVEmotionAnalysis(mic.getContext(), sl, token).getAnalysis(recordingId, 0)
-                            .first) {
-                        proceedAndNotify();
-                    }
-                }
-            }, BeyondVerbal.FETCH_ANALYSIS_DELAY, TimeUnit.MILLISECONDS);
         }
+
+        if (isTheFirstTry) {
+            final LocalRequest localRequest = new LocalRequest(mic.getContext());
+            localRequest.setSupportedLanguage(sl);
+            localRequest.setAction(LocalRequest.ACTION_SPEAK_ONLY);
+            localRequest.setTTSLocale(SPH.getTTSLocale(mic.getContext()));
+            localRequest.setVRLocale(SPH.getVRLocale(mic.getContext()));
+            localRequest.setUtterance(PersonalityResponse.getBVAnalysisCompleteResponse(mic.getContext(), sl));
+            localRequest.execute();
+        }
+
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
+            public void run() {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "timerTask: fetching analysis");
+                }
+
+                if (!new BVEmotionAnalysis(mic.getContext(), sl, token).getAnalysis(recordingId, 0)
+                        .first) {
+                    proceedAndNotify();
+                }
+            }
+        }, BeyondVerbal.FETCH_ANALYSIS_DELAY, TimeUnit.MILLISECONDS);
     }
 
     @Override

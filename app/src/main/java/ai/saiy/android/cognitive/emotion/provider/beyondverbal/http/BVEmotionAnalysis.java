@@ -118,7 +118,7 @@ public class BVEmotionAnalysis {
         final RequestQueue queue = new RequestQueue(cache, network);
         queue.start();
 
-        final String url = ANALYSIS_URL + recordingId + FROM_MS + String.valueOf(offset);
+        final String url = ANALYSIS_URL + recordingId + FROM_MS + offset;
 
         final StringRequest request = new StringRequest(Request.Method.GET, url, future,
                 new Response.ErrorListener() {
