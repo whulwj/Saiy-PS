@@ -1,5 +1,7 @@
 package ai.saiy.android.diagnostic;
 
+import androidx.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -72,7 +74,7 @@ public class DiagnosticsInfo {
         this.passedCount = i;
     }
 
-    public ArrayList<VoiceEngineInfo> getVoiceEngineInfos() {
+    public @NonNull ArrayList<VoiceEngineInfo> getVoiceEngineInfos() {
         return this.voiceEngineInfos;
     }
 

@@ -117,7 +117,9 @@ public class FileCreator {
                     public void run() {
                         try {
                             fWriter.write(buff);
-                            payloadSize += buff.length;
+                            synchronized (FileCreator.this) {
+                                FileCreator.this.payloadSize += buff.length;
+                            }
                         } catch (final IOException e) {
                             if (DEBUG) {
                                 MyLog.w(CLS_NAME, "IOException: recording is aborted");
@@ -140,6 +142,10 @@ public class FileCreator {
             try {
 
                 fWriter.seek(4);
+                final int payloadSize;
+                synchronized (FileCreator.this) {
+                    payloadSize = FileCreator.this.payloadSize;
+                }
                 fWriter.writeInt(Integer.reverseBytes(36 + payloadSize));
                 fWriter.seek(40);
                 fWriter.writeInt(Integer.reverseBytes(payloadSize));

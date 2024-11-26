@@ -38,7 +38,7 @@ public class RecommendationHelper {
     }
 
     public ArrayList<String> recommend(Context context, DiagnosticsInfo diagnosticsInfo) {
-        long nanoTime = System.nanoTime();
+        final long then = System.nanoTime();
         ArrayList<String> arrayList = new ArrayList<>();
         ArrayList<VoiceEngineInfo> voiceEngineInfos = diagnosticsInfo.getVoiceEngineInfos();
         debug(voiceEngineInfos);
@@ -125,6 +125,7 @@ public class RecommendationHelper {
                 }
             }
         }
+
         if (!newLine) {
             arrayList.add(context.getString(R.string.diagnostics_perfect));
             arrayList.add(context.getString(R.string.diagnostics_no_changes) + " ✔ ✔ ✔");
@@ -168,7 +169,7 @@ public class RecommendationHelper {
             arrayList.add("----------------------------------------");
         }
         if (DEBUG) {
-            MyLog.getElapsed(CLS_NAME, nanoTime);
+            MyLog.getElapsed(CLS_NAME, then);
         }
         return arrayList;
     }

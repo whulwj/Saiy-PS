@@ -120,6 +120,7 @@ public class DiagnosticsHelper {
                                     for (int i = 0; i < availableLocales.length && !isCancelled.get(); ++i) {
                                         Locale locale = availableLocales[i];
                                         try {
+                                            locale.getISO3Country();
                                             switch (tts.isLanguageAvailable(locale)) {
                                                 case TextToSpeech.LANG_AVAILABLE:
                                                 case TextToSpeech.LANG_COUNTRY_AVAILABLE:
@@ -142,6 +143,14 @@ public class DiagnosticsHelper {
                                 List<Locale> localeArray = diagnosticsInfo.getVoiceEngineInfos().get(diagnosticIndex.get()).getLocaleArray();
                                 for (int i = 0; i < localeArray.size() && !isCancelled.get(); i++) {
                                     diagnosticInfoListener.appendDiagnosticInfo(localeArray.get(i).toString());
+                                    try { // Temporarily add the delay back
+                                        Thread.sleep(7L);
+                                    } catch (InterruptedException e) {
+                                        if (DEBUG) {
+                                            MyLog.e(CLS_NAME, "ttsLoc InterruptedException");
+                                            e.printStackTrace();
+                                        }
+                                    }
                                 }
                             } catch (NullPointerException e) {
                                 if (DEBUG) {
@@ -410,10 +419,10 @@ public class DiagnosticsHelper {
             }
         }
         switch (mode) {
-            case 1:
+            case SET_MODE:
                 populateASRCount();
                 break;
-            case 2:
+            case APPEND_MODE:
                 populateTTSCount();
                 break;
             default:
@@ -554,7 +563,7 @@ public class DiagnosticsHelper {
         voiceEngineInfo.setApplicationName(containerVoiceEngine.get(diagnosticIndex.get()).getApplicationName());
         voiceEngineInfo.setPackageName(containerVoiceEngine.get(diagnosticIndex.get()).getPackageName());
         diagnosticsInfo.getVoiceEngineInfos().add(voiceEngineInfo);
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
+        handler.post(new Runnable() {
             @Override
             public void run() {
                 Process.setThreadPriority(Process.THREAD_PRIORITY_URGENT_AUDIO);
