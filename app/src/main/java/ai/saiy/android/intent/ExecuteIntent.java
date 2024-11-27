@@ -32,6 +32,7 @@ import android.speech.RecognizerIntent;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
@@ -627,7 +628,7 @@ public class ExecuteIntent {
         }
 
         final Intent intent = new Intent(com.google.android.gms.actions.ReserveIntents.ACTION_RESERVE_TAXI_RESERVATION);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
         try {
             ctx.startActivity(intent);
@@ -836,6 +837,30 @@ public class ExecuteIntent {
         } catch (Exception e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "Exception");
+                e.printStackTrace();
+            }
+        }
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
+    public static boolean defaultApplicationSettings(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "defaultApplicationSettings");
+        }
+        final Intent intent = new Intent(Settings.ACTION_MANAGE_DEFAULT_APPS_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            context.startActivity(intent);
+            return true;
+        } catch (ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "defaultApplicationSettings: ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "defaultApplicationSettings: Exception");
                 e.printStackTrace();
             }
         }
@@ -1082,7 +1107,7 @@ public class ExecuteIntent {
     public static void showInstallOfflineVoiceFiles(Context context) {
         final Intent intent = new Intent();
         intent.setComponent(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, "com.google.android.voicesearch.greco3.languagepack.InstallActivity"));
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
             context.startActivity(intent);
         } catch (ActivityNotFoundException e) {

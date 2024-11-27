@@ -12,6 +12,7 @@ import java.lang.annotation.RetentionPolicy;
 
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.command.search.CommandSearchValues;
+import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.utils.MyLog;
 
 public class AppSearchHelper {
@@ -64,7 +65,7 @@ public class AppSearchHelper {
                     intent.setData(Uri.parse(GOOGLE_STORE_COLLECTION + "topgrossing"));
                     break;
                 default:
-                    intent.setData(Uri.parse("market://search?q=" + commandSearchValues.getQuery() + "&c=apps"));
+                    intent.setData(Uri.parse(IntentConstants.PLAY_STORE_SEARCH_URL_LEGACY + commandSearchValues.getQuery() + "&c=apps"));
                     break;
             }
             context.startActivity(intent);

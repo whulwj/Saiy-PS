@@ -522,7 +522,7 @@ public class SaiyAccountHelper {
 
         } catch (final UnsupportedEncodingException e) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "encode UnsupportedEncodingException");
+                MyLog.w(CLS_NAME, "decode UnsupportedEncodingException");
                 e.printStackTrace();
             }
         }
