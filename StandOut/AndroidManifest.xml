@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="7"
         android:targetSdkVersion="15" />
+    <!--Add the permissions manually to the host application's manifest-->
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
