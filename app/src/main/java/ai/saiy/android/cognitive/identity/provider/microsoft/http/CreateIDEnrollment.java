@@ -113,7 +113,7 @@ public class CreateIDEnrollment {
                 try {
 
                     final String url = ENROLLMENT_URL + URLEncoder.encode(profileId, Constants.ENCODING_UTF8)
-                            + ENROLLMENT_URL_EXTRA + String.valueOf(shortAudio);
+                            + ENROLLMENT_URL_EXTRA + shortAudio;
 
                     urlConnection = (HttpsURLConnection) new URL(url).openConnection();
                     urlConnection.setRequestMethod(Constants.HTTP_POST);

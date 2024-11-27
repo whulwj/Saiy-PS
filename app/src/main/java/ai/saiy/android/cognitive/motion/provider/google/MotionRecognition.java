@@ -134,11 +134,11 @@ public class MotionRecognition implements ResultCallback<Status> {
                         .build());
                 transitions.add(new ActivityTransition.Builder()
                         .setActivityType(DetectedActivity.ON_BICYCLE)
-                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
                         .build());
                 transitions.add(new ActivityTransition.Builder()
                         .setActivityType(DetectedActivity.ON_FOOT)
-                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_EXIT)
+                        .setActivityTransition(ActivityTransition.ACTIVITY_TRANSITION_ENTER)
                         .build());
                 transitions.add(new ActivityTransition.Builder()
                         .setActivityType(DetectedActivity.RUNNING)

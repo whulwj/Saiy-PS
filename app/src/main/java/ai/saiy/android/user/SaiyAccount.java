@@ -34,7 +34,7 @@ import ai.saiy.android.applications.Install;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.EnrollmentID;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem;
 import ai.saiy.android.cognitive.identity.provider.microsoft.http.CreateIDProfile;
-import ai.saiy.android.configuration.MicrosoftConfiguration;
+import ai.saiy.android.firebase.database.reference.BingSpeakerRecognitionReference;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
@@ -155,9 +155,16 @@ public class SaiyAccount {
             Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
-
+                    final Pair<Boolean, String> keyPair = new BingSpeakerRecognitionReference().getCredential(ctx);
+                    if (!keyPair.first || !UtilsString.notNaked(keyPair.second)) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "setAccountId: credentials error");
+                        }
+                        listener.onAccountInitialisation(SaiyAccount.this);
+                        return;
+                    }
                     final Pair<Boolean, EnrollmentID> enrollmentPair = new CreateIDProfile(ctx,
-                            MicrosoftConfiguration.OCP_APIM_KEY_1, UtilsLocale.getDefaultLocale()).getID();
+                            keyPair.second, UtilsLocale.getDefaultLocale()).getID();
 
                     if (enrollmentPair.first) {
                         profileItem = new ProfileItem(enrollmentPair.second.getId());

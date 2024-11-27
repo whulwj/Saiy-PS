@@ -72,8 +72,8 @@ import ai.saiy.android.cognitive.motion.provider.google.MotionRecognition;
 import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.translate.provider.bing.BingCredentials;
-import ai.saiy.android.configuration.MicrosoftConfiguration;
 import ai.saiy.android.contacts.ContactHelper;
+import ai.saiy.android.firebase.database.reference.BingSpeakerRecognitionReference;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.lib.ProcessStateOwner;
 import ai.saiy.android.nlu.apiai.ApiRequest;
@@ -1460,12 +1460,15 @@ public class SelfAware extends Service {
                                             Schedulers.io().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
-
-                                                    new SpeakerEnrollment(recogMic,
-                                                            conditions.getSupportedLanguage(false),
-                                                            MicrosoftConfiguration.OCP_APIM_KEY_1,
-                                                            conditions.getIdentityProfile(), true).record();
-
+                                                    final Pair<Boolean, String> keyPair = new BingSpeakerRecognitionReference().getCredential(getApplicationContext());
+                                                    if (keyPair.first && UtilsString.notNaked(keyPair.second)) {
+                                                        new SpeakerEnrollment(recogMic,
+                                                                conditions.getSupportedLanguage(false),
+                                                                keyPair.second,
+                                                                conditions.getIdentityProfile(), true).record();
+                                                    } else {
+                                                        conditions.handleVRError();
+                                                    }
                                                 }
                                             });
 
@@ -1483,11 +1486,15 @@ public class SelfAware extends Service {
                                             Schedulers.io().scheduleDirect(new Runnable() {
                                                 @Override
                                                 public void run() {
-
-                                                    new SpeakerIdentification(recogMic,
-                                                            conditions.getSupportedLanguage(false),
-                                                            MicrosoftConfiguration.OCP_APIM_KEY_1,
-                                                            conditions.getIdentityProfile(), true).record();
+                                                    final Pair<Boolean, String> keyPair = new BingSpeakerRecognitionReference().getCredential(getApplicationContext());
+                                                    if (keyPair.first && UtilsString.notNaked(keyPair.second)) {
+                                                        new SpeakerIdentification(recogMic,
+                                                                conditions.getSupportedLanguage(false),
+                                                                keyPair.second,
+                                                                conditions.getIdentityProfile(), true).record();
+                                                    } else {
+                                                        conditions.handleVRError();
+                                                    }
                                                 }
                                             });
                                             break;

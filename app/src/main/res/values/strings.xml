@@ -1263,8 +1263,7 @@
     <string name="add_new" translatable="true">add new</string>
     <string name="vocal_notification_text" translatable="true">"Verification Complete - click for details"</string>
     <string name="vocal_notification_ticker" translatable="true">"Verification Complete"</string>
-    <string name="vocal_notify_enroll" translatable="true">"Thank you. I'll notify you shortly when I've
-        finished analysing the audio"</string>
+    <string name="vocal_notify_enroll" translatable="true">"Thank you. I\'ll notify you shortly when I\'ve finished analysing the audio"</string>
     <string name="vocal_notify_verify" translatable="true">"Okay. I'll notify you when I've analysed the audio."</string>
 
     <!-- Command - Tasker -->

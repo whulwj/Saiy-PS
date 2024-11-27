@@ -19,6 +19,7 @@ package ai.saiy.android.user;
 
 import android.content.Context;
 import android.util.Base64;
+import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -35,7 +36,7 @@ import java.util.regex.Pattern;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.OperationStatus;
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem;
 import ai.saiy.android.cognitive.identity.provider.microsoft.http.DeleteIDProfile;
-import ai.saiy.android.configuration.MicrosoftConfiguration;
+import ai.saiy.android.firebase.database.reference.BingSpeakerRecognitionReference;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -465,8 +466,12 @@ public class SaiyAccountHelper {
             Schedulers.io().scheduleDirect(new Runnable() {
                 @Override
                 public void run() {
-                    new DeleteIDProfile(ctx, MicrosoftConfiguration.OCP_APIM_KEY_1,
-                            profileId).delete();
+                    final Pair<Boolean, String> keyPair = new BingSpeakerRecognitionReference().getCredential(ctx);
+                    if (keyPair.first && UtilsString.notNaked(keyPair.second)) {
+                        new DeleteIDProfile(ctx, keyPair.second, profileId).delete();
+                    } else if (DEBUG) {
+                        MyLog.w(CLS_NAME, "removeProfile: credentials error");
+                    }
                 }
             });
         }

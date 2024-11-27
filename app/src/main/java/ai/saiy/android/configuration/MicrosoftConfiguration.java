@@ -37,8 +37,4 @@ public class MicrosoftConfiguration {
     public static final String OXFORD_KEY_2 = "_your_value_here_";
     public static final String LUIS_APP_ID = "_your_value_here_";
     public static final String LUIS_SUBSCRIPTION_ID = "_your_value_here_";
-
-    public static final String OCP_APIM_KEY_1 = "_your_value_here_";
-    public static final String OCP_APIM_KEY_2 = "_your_value_here_";
-
 }
