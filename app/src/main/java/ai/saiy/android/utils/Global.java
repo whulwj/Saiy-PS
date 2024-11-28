@@ -30,12 +30,15 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
+import com.google.android.material.color.ColorContrast;
+import com.google.android.material.color.ColorContrastOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
 import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
 
 import java.io.IOException;
 
+import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.lib.ProcessStateOwner;
@@ -79,6 +82,12 @@ public class Global extends MultiDexApplication implements Application.ActivityL
                 DebugAppCheckProviderFactory.getInstance());
         registerActivityLifecycleCallbacks(this);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+        ColorContrast.applyToActivitiesIfAvailable(
+                this,
+                new ColorContrastOptions.Builder()
+                        .setMediumContrastThemeOverlay(R.style.ThemeOverlay_AppTheme_MediumContrast)
+                        .setHighContrastThemeOverlay(R.style.ThemeOverlay_AppTheme_HighContrast)
+                        .build());
         RxJavaPlugins.setFailOnNonBlockingScheduler(true);
         // TODO
         setGlobalId();

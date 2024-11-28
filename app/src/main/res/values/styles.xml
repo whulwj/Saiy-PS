@@ -17,12 +17,12 @@
 
 <resources>
 
-    <style name="AppTheme.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppTheme.NoActionBar" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.ActivityDialogTheme" parent="@style/Theme.MaterialComponents.DayNight.Dialog">
+    <style name="AppTheme.ActivityDialogTheme" parent="@style/Theme.Material3.DayNight.Dialog">
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
@@ -35,7 +35,7 @@
         <item name="android:colorBackgroundCacheHint">@null</item>
     </style>
 
-    <style name="AppTheme.Translucent.NoActionBar.Fullscreen" parent="@style/Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="AppTheme.Translucent.NoActionBar.Fullscreen" parent="@style/Theme.Material3.DayNight.NoActionBar">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowIsTranslucent">true</item>
@@ -48,7 +48,7 @@
         <item name="android:windowFullscreen">true</item>
     </style>
 
-    <style name="Theme.MaterialDialog.Transparent" parent="@style/Theme.MaterialComponents.DayNight.Dialog">
+    <style name="Theme.MaterialDialog.Transparent" parent="@style/Theme.Material3.DayNight.Dialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowNoTitle">true</item>
         <item name="android:windowIsFloating">true</item>
@@ -59,9 +59,9 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.Material3.Dark.ActionBar" />
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.Material3.Light" />
 
     <style name="dialog_animation_left">
         <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
@@ -86,5 +86,5 @@
         <item name="android:gravity">center_vertical</item>
     </style>
 
-    <style name="AppTheme.Button.Bug" parent="Widget.MaterialComponents.Button"/>
+    <style name="AppTheme.Button.Bug" parent="Widget.Material3.Button"/>
 </resources>
