@@ -128,7 +128,6 @@ public class NLUCoerce {
                             if (commandRequest.isResolved()) {
                                 break;
                             }
-                            break;
                         } else {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "coerce: COMMAND_UNKNOWN");
@@ -276,7 +275,6 @@ public class NLUCoerce {
                         if (commandRequest.isResolved()) {
                             break;
                         }
-                        break;
                     } else {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "coerce: COMMAND_UNKNOWN");

@@ -30,33 +30,16 @@ public class NLUWit {
     @SerializedName("_text")
     private final String text;
 
-    @SerializedName("msg_id")
-    private final String messageId;
-
     @SerializedName("confidence")
     private final float confidence;
 
-    @SerializedName("entities")
-    private final Entity entities;
-
-    public NLUWit(final float confidence, @NonNull final String text, @NonNull final String messageId,
-                  @NonNull final Entity entities) {
+    public NLUWit(final float confidence, @NonNull final String text) {
         this.confidence = confidence;
         this.text = text;
-        this.messageId = messageId;
-        this.entities = entities;
     }
 
     public float getConfidence() {
         return confidence;
-    }
-
-    public Entity getEntities() {
-        return entities;
-    }
-
-    public String getMessageId() {
-        return messageId;
     }
 
     public String getText() {

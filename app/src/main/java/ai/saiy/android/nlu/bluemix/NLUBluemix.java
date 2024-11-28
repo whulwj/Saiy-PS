@@ -32,20 +32,12 @@ public class NLUBluemix {
     @SerializedName("state")
     private final String state;
 
-    @SerializedName("result_index")
-    private final long resultIndex;
-
     @SerializedName("results")
     private final List<Result> results;
 
-    public NLUBluemix(final long resultIndex, @Nullable final String state, @Nullable final List<Result> results) {
-        this.resultIndex = resultIndex;
+    public NLUBluemix(@Nullable final String state, @Nullable final List<Result> results) {
         this.state = state;
         this.results = results;
-    }
-
-    public long getResultIndex() {
-        return resultIndex;
     }
 
     public List<Result> getResults() {
