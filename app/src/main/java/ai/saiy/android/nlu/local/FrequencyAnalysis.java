@@ -193,7 +193,7 @@ public final class FrequencyAnalysis {
                                     MyLog.v(CLS_NAME, "dead-heat: Selecting priority commands or first-come-first-serve");
                                 }
 
-                                if (secondCommand == CC.COMMAND_USER_NAME || secondCommand == CC.COMMAND_ALEXA) {
+                                if (secondCommand == CC.COMMAND_USER_NAME || secondCommand == CC.COMMAND_SEARCH || secondCommand == CC.COMMAND_ALEXA) {
                                     commandInt = secondCommand;
                                 } else {
                                     commandInt = firstCommand;

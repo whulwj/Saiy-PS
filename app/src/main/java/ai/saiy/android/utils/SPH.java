@@ -97,6 +97,7 @@ public class SPH {
     private static final String SPELL_COMMAND_VERBOSE = "calculate_command_verbose";
     private static final String CALCULATE_COMMAND_VERBOSE = "spell_command_verbose";
     private static final String EMOTION_COMMAND_VERBOSE = "emotion_command_verbose";
+    private static final String SECURE_COMMAND_VERBOSE = "secure_command_verbose";
     private static final String TRANSLATE_COMMAND_VERBOSE = "translate_command_verbose";
     private static final String EASTER_EGG_STAGE = "easter_egg_stage";
     private static final String EMOTION_PERMISSION = "emotion_permission";
@@ -1664,6 +1665,19 @@ public class SPH {
     public static void setInactivityToast(Context context, boolean condition) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(INACTIVITY_TOAST, condition);
+        edit.apply();
+    }
+
+    public static int getSecureCommandVerbose(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        return pref.getInt(SECURE_COMMAND_VERBOSE, ZERO);
+    }
+
+    public static void incrementSecureCommandVerbose(@NonNull final Context ctx) {
+        final SharedPreferences pref = getPref(ctx);
+        final SharedPreferences.Editor edit = getEditor(pref);
+
+        edit.putInt(SECURE_COMMAND_VERBOSE, (getSecureCommandVerbose(ctx) + 1));
         edit.apply();
     }
 

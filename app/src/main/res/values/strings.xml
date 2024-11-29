@@ -1127,6 +1127,7 @@
 
     <!-- App - Generic error Strings -->
     <string name="error_no_application" translatable="true">"No application is installed to handle this request?"</string>
+    <string name="error_secure_verbose">You can configure this behaviour in the Superuser Settings, by selecting the, Override Secure Commands, option.</string>
 
     <!-- Speech - Specific error Strings -->
     <string name="error_empty_voice_data" translatable="true">"I didn't receive any voice data from the recognition provider."</string>

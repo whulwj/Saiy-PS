@@ -1021,6 +1021,7 @@
 
     <!-- App - Generic error Strings -->
     <string name="error_no_application" translatable="true">"没有安装处理此请求的应用程序吗？"</string>
+    <string name="error_secure_verbose">You can configure this behaviour in the Superuser Settings, by selecting the, Override Secure Commands, option.</string>
 
     <!-- Speech - Specific error Strings -->
     <string name="error_empty_voice_data" translatable="true">"我没有从识别程序接收到任何语音数据。"</string>

@@ -354,6 +354,29 @@ public class PermissionHelper {
         return false;
     }
 
+    public static boolean checkPhoneStatePermission(Context context) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "checkPhoneStatePermission");
+        }
+        if (checkPhoneStatePermissionsNR(context)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "checkPhoneStatePermission: PERMISSION_GRANTED");
+            }
+            return true;
+        }
+        if (DEBUG) {
+            MyLog.w(CLS_NAME, "checkPhoneStatePermission: PERMISSION_DENIED");
+        }
+        final Intent intent = new Intent(context, ActivityPermissionDialog.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        final Bundle bundle = new Bundle();
+        bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.READ_PHONE_STATE});
+        bundle.putInt(REQUESTED_PERMISSION_ID, REQUEST_PHONE_STATE);
+        intent.putExtras(bundle);
+        context.startActivity(intent);
+        return false;
+    }
+
     public static boolean checkPhoneStatePermissions(Context context) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "checkPhoneStatePermissions");
@@ -367,9 +390,9 @@ public class PermissionHelper {
         if (DEBUG) {
             MyLog.w(CLS_NAME, "checkPhoneStatePermissions: PERMISSION_DENIED");
         }
-        Intent intent = new Intent(context, ActivityPermissionDialog.class);
+        final Intent intent = new Intent(context, ActivityPermissionDialog.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        Bundle bundle = new Bundle();
+        final Bundle bundle = new Bundle();
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             bundle.putStringArray(REQUESTED_PERMISSION, new String[]{android.Manifest.permission.READ_PHONE_STATE, android.Manifest.permission.ANSWER_PHONE_CALLS});
         } else {
@@ -554,7 +577,7 @@ public class PermissionHelper {
                     return false;
             }
         }
-        if (!checkReadContactPermissionNR(ctx) || !checkAccountsPermissionNR(ctx) || !checkWriteContactsPermissionNR(ctx)) {
+        if (!checkReadContactPermissionNR(ctx) || !checkWriteContactsPermissionNR(ctx) || !checkAccountsPermissionNR(ctx) ) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "checkContactGroupPermissionsNR: PERMISSION_DENIED");
             }

@@ -22,6 +22,8 @@ import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
 
+import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -452,7 +454,7 @@ public final class PersonalityResponse {
         final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_no_comprende);
         final String[] noNetworkArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_alexa_no_network);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
-                noNetworkArray[new Random().nextInt(noNetworkArray.length)]));
+                PersonalityHelper.getUserNameOrNot(ctx) + XMLResultsHandler.SEP_SPACE + noNetworkArray[new Random().nextInt(noNetworkArray.length)]));
     }
 
     /**
@@ -521,8 +523,9 @@ public final class PersonalityResponse {
      */
     public static String getSecureErrorResponse(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
         final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_error_secure);
+        SPH.incrementSecureCommandVerbose(ctx);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
-                PersonalityHelper.getUserNameOrNot(ctx)));
+                PersonalityHelper.getUserNameOrNot(ctx) + ((SPH.getSecureCommandVerbose(ctx) > 2)? "" : SaiyResourcesHelper.getStringResource(ctx, sl, R.string.error_secure_verbose))));
     }
 
     /**
@@ -1021,7 +1024,7 @@ public final class PersonalityResponse {
 
     public static String getCalculateWolframAlpha(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_calculate_wolfram_alpha);
-        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getAddressUnknownError(Context context, SupportedLanguage supportedLanguage) {
@@ -1041,12 +1044,12 @@ public final class PersonalityResponse {
 
     public static String getLocateVehicle(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_locate_vehicle);
-        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getParkedVehicle(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_parked_vehicle);
-        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context)));
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getForegroundUnknownError(Context context, SupportedLanguage supportedLanguage) {
@@ -1230,7 +1233,7 @@ public final class PersonalityResponse {
 
     public static String getTwitterAcknowledge(Context context, SupportedLanguage supportedLanguage) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_twitter_acknowledge);
-        return String.format(stringArray[new Random().nextInt(stringArray.length)], PersonalityHelper.getUserNameOrNot(context));
+        return stringArray[new Random().nextInt(stringArray.length)];
     }
 
     public static String getTwitterPostError(Context context, SupportedLanguage supportedLanguage) {
@@ -1250,7 +1253,7 @@ public final class PersonalityResponse {
 
     public static String getMessageContentRequest(Context context, SupportedLanguage supportedLanguage, String contactName) {
         String[] stringArray = SaiyResourcesHelper.getArrayResource(context, supportedLanguage, R.array.array_message_content_request);
-        return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)], contactName));
+        return String.format(stringArray[new Random().nextInt(stringArray.length)], contactName);
     }
 
     public static String getContactResponsePart2(Context context, SupportedLanguage supportedLanguage, String date, String time) {

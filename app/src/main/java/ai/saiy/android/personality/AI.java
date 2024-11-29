@@ -26,7 +26,6 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import ai.saiy.android.R;
-import ai.saiy.android.algorithms.Algorithm;
 import ai.saiy.android.command.unknown.Unknown;
 import ai.saiy.android.user.SaiyAccount;
 import ai.saiy.android.user.SaiyAccountHelper;
@@ -77,7 +76,7 @@ public class AI {
 
     private static double scoreOfUserName(Context context) {
         if (ai.saiy.android.utils.SPH.getUserName(context) == null || ai.saiy.android.utils.SPH.getUserName(context).matches(context.getString(R.string.master))) {
-            return Algorithm.LEV_MAX_THRESHOLD;
+            return 0;
         }
         return 0.23d;
     }
@@ -86,77 +85,77 @@ public class AI {
         if (ai.saiy.android.utils.SPH.hasPhrase(context)) {
             return 0.23d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfNickname(Context context) {
         if (ai.saiy.android.utils.SPH.hasNickname(context)) {
             return 0.23d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfReplacement(Context context) {
         if (ai.saiy.android.utils.SPH.hasReplacement(context)) {
             return 0.23d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfCustomisation(Context context) {
         if (ai.saiy.android.utils.SPH.hasCustomisation(context)) {
             return 0.36d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfTaskerVariables(Context context) {
         if (ai.saiy.android.utils.SPH.hasTaskerVariables(context)) {
             return 0.3d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfCustomIntro(Context context) {
         if (ai.saiy.android.utils.SPH.getCustomIntro(context) != null) {
             return 0.23d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfRunDiagnostics(Context context) {
         if (ai.saiy.android.utils.SPH.getRunDiagnostics(context)) {
             return 0.23d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfDefaultTTSVoice(Context context) {
         if (ai.saiy.android.utils.SPH.getDefaultTTSVoice(context) != null) {
             return 0.23d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfCommandUnknownAction(Context context) {
         if (ai.saiy.android.utils.SPH.getCommandUnknownAction(context) != Unknown.UNKNOWN_STATE) {
             return 0.23d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfAccount(Context context) {
         final SaiyAccountList saiyAccountList = SaiyAccountHelper.getAccounts(context);
         if (saiyAccountList == null || saiyAccountList.size() <= 0) {
-            return Algorithm.LEV_MAX_THRESHOLD;
+            return 0;
         }
         final SaiyAccount saiyAccount = saiyAccountList.getSaiyAccountList().get(0);
         if (saiyAccount == null) {
-            return Algorithm.LEV_MAX_THRESHOLD;
+            return 0;
         }
         final ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem profileItem = saiyAccount.getProfileItem();
         if (profileItem == null || !UtilsString.notNaked(profileItem.getId())) {
-            return Algorithm.LEV_MAX_THRESHOLD;
+            return 0;
         }
         return 0.39d;
     }
@@ -165,14 +164,14 @@ public class AI {
         if (new com.facebook.share.ShareApi(new ShareLinkContent.Builder().build()).canShare()) {
             return 0.3d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfTwitter(Context context) {
         if (UtilsString.notNaked(ai.saiy.android.utils.SPH.getTwitterSecret(context)) && UtilsString.notNaked(ai.saiy.android.utils.SPH.getTwitterToken(context))) {
             return 0.3d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfTasker(Context context) {
@@ -180,13 +179,13 @@ public class AI {
         if (taskerStatusPair.first && taskerStatusPair.second) {
             return 0.3d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 
     private static double scoreOfUsage(Context context) {
         if (ai.saiy.android.utils.SPH.getUsedIncrement(context) > 250) {
             return 0.99d;
         }
-        return Algorithm.LEV_MAX_THRESHOLD;
+        return 0;
     }
 }

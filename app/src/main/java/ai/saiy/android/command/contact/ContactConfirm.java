@@ -248,7 +248,7 @@ public class ContactConfirm {
                             Schedulers.computation().scheduleDirect(new Runnable() {
                                 @Override
                                 public void run() {
-                                    ai.saiy.android.permissions.PermissionHelper.checkPhoneStatePermissions(mContext);
+                                    ai.saiy.android.permissions.PermissionHelper.checkPhoneStatePermission(mContext);
                                 }
                             }, 2000L, TimeUnit.MILLISECONDS);
                         }
