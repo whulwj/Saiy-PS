@@ -56,6 +56,8 @@ import java.util.Set;
 public class UtilsBundle {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = UtilsBundle.class.getSimpleName();
+
+    public static final String KEY_URI_PREFIX = "URI:";
     /**
      * Prevent instantiation
      */
@@ -195,7 +197,7 @@ public class UtilsBundle {
                     }
                 } else if (DEBUG) {
                     MyLog.i(CLS_NAME, "resolved to: Uri: " + value);
-                    bundle.putString("URI:" + key, value);
+                    bundle.putString(KEY_URI_PREFIX + key, value);
                 }
             } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "F")) {
                 try {

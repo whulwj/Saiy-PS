@@ -252,6 +252,37 @@ public class ExecuteIntent {
 
     }
 
+    public static boolean launchSearchable(@NonNull final Context ctx, @NonNull final String packageName, String query, String action) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "launchSearchable: " + packageName + ", action=" + action);
+        }
+        final Intent intent = new Intent();
+        if (UtilsString.notNaked(action)) {
+            intent.setAction(action);
+        } else {
+            intent.setAction(Intent.ACTION_SEARCH);
+        }
+        intent.setPackage(packageName);
+        intent.putExtra(SearchManager.QUERY, query);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        try {
+            ctx.startActivity(intent);
+            return true;
+        } catch (final ActivityNotFoundException e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "launchSearchable: ActivityNotFoundException");
+                e.printStackTrace();
+            }
+        } catch (final Exception e) {
+            if (DEBUG) {
+                MyLog.e(CLS_NAME, "launchSearchable: Exception");
+                e.printStackTrace();
+            }
+        }
+
+        return false;
+    }
+
     /**
      * Perform a web search from the device.
      *

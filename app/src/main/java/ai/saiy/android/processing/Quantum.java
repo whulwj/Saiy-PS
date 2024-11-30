@@ -247,7 +247,7 @@ public class Quantum extends Tunnelling {
                 MyLog.i(CLS_NAME, "DT device secure: " + UtilsDevice.isDeviceLocked(this.mContext));
             }
 
-            secure = COMMAND.isSecure() && cr.wasSecure() && UtilsDevice.isDeviceLocked(this.mContext);
+            secure = UtilsDevice.satisfySecureConditions(this.mContext, COMMAND, cr);
             if (cr.isAlexaTTS()) {
                 COMMAND = CC.COMMAND_UNKNOWN;
             }
@@ -1334,7 +1334,7 @@ public class Quantum extends Tunnelling {
                                                     if (DEBUG) {
                                                         MyLog.i(CLS_NAME, "Unknown.UNKNOWN_ALEXA: DIRECTIVE_ABANDON");
                                                     }
-                                                    alexaBundle.putString(SaiyRecognitionListener.ALEX_FILE, null);
+                                                    alexaBundle.putString(SaiyRecognitionListener.ALEX_FILE, "");
                                                     break;
                                                 case DIRECTIVE_VOLUME:
                                                     if (DEBUG) {
@@ -1356,7 +1356,7 @@ public class Quantum extends Tunnelling {
                                             }
                                         }
                                     }
-                                    final String pathOfFile = alexaBundle.getString(SaiyRecognitionListener.ALEX_FILE, null);
+                                    final String pathOfFile = alexaBundle.getString(SaiyRecognitionListener.ALEX_FILE, "");
                                     if (UtilsString.notNaked(pathOfFile)) {
                                         request.setAlexaFilePath(pathOfFile);
                                         request.setUtterance(SaiyRecognitionListener.ALEX_SPEECH);
@@ -1417,7 +1417,7 @@ public class Quantum extends Tunnelling {
                                 request.setUtterance(PersonalityResponse.getNoComprende(mContext, sl));
                                 SPH.setCommandUnknownAction(mContext, Unknown.UNKNOWN_STATE);
 
-                                final EntangledPair entangledPair = new EntangledPair(Position.TOAST_SHORT, CC.COMMAND_UNKNOWN);
+                                final EntangledPair entangledPair = new EntangledPair(Position.TOAST_LONG, CC.COMMAND_UNKNOWN);
                                 entangledPair.setToastContent(mContext.getString(R.string.error_tasker_broadcast));
                                 publishProgress(entangledPair);
                             }
@@ -1440,7 +1440,7 @@ public class Quantum extends Tunnelling {
 
                     if (!secure) {
 
-                        outcome = new CommandCustom().getResponse(mContext, cch.getCommand(), sl, cr);
+                        outcome = new CommandCustom().getResponse(mContext, cch.getCommand(), sl, cr, toResolve);
 
                         request.setUtterance(outcome.getUtterance());
                         request.setAction(outcome.getAction());

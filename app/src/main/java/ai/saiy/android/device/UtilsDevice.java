@@ -50,15 +50,15 @@ public class UtilsDevice {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1 ? ((KeyguardManager) ctx.getSystemService(Context.KEYGUARD_SERVICE)).isDeviceLocked() : ((KeyguardManager) ctx.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardLocked() && ((KeyguardManager) ctx.getSystemService(Context.KEYGUARD_SERVICE)).isKeyguardSecure();
     }
 
-    public static boolean satisfySecureConditions(Context context, CC cc, ai.saiy.android.command.helper.CommandRequest cr) {
+    public static boolean satisfySecureConditions(@NonNull Context context, @NonNull CC cc, @NonNull ai.saiy.android.command.helper.CommandRequest cr) {
         boolean headsetSecure;
         if (SPH.getOverrideSecureHeadset(context)) {
-            AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            final AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
             headsetSecure = audioManager.isBluetoothA2dpOn() || audioManager.isWiredHeadsetOn();
         } else {
             headsetSecure = false;
         }
-        boolean drivingSecure = SPH.getOverrideSecureDriving(context) && (DrivingProfileHelper.isEnabled(context) || !ai.saiy.android.cognitive.motion.provider.google.MotionHelper.isOverDrivingThreshold(context, 300000L));
+        final boolean drivingSecure = SPH.getOverrideSecureDriving(context) && (DrivingProfileHelper.isEnabled(context) || !ai.saiy.android.cognitive.motion.provider.google.MotionHelper.isOverDrivingThreshold(context, 300000L));
         if (DEBUG) {
             MyLog.i(CLS_NAME, "satisfySecureConditions: getOverrideSecureHeadset: " + SPH.getOverrideSecureHeadset(context));
             MyLog.i(CLS_NAME, "satisfySecureConditions: headsetSecure: " + headsetSecure);
