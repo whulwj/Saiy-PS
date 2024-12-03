@@ -61,7 +61,7 @@ public class RecognitionWit implements PauseListener {
     private static final String CHUNKED = "chunked";
     private static final String ACCEPT_HEADER = "Accept";
     private static final String N_HEADER = "n";
-    private static final String ACCEPT_VERSION = "application/vnd.wit." + "20160526";
+    private static final String ACCEPT_VERSION = "application/vnd.wit." + WitConfiguration.WIT_SPEECH_VERSION;
 
     // May become part of the constructor.
     private static final short nChannels = 1;

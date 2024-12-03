@@ -156,8 +156,22 @@ public class RecognitionSphinx {
         if (recognizer != null) {
             Recognition.setState(Recognition.State.LISTENING);
             System.gc();
-            recognizer.startListening(HOTWORD_SEARCH);
-            listener.onHotwordStarted();
+            try {
+                recognizer.startListening(HOTWORD_SEARCH);
+                listener.onHotwordStarted();
+            } catch (final NullPointerException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "startListening NullPointerException");
+                    e.printStackTrace();
+                }
+                onError(SaiyHotwordListener.ERROR_NULL);
+            } catch (final Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "startListening Exception");
+                    e.printStackTrace();
+                }
+                onError(SaiyHotwordListener.ERROR_NULL);
+            }
         } else {
             onError(SaiyHotwordListener.ERROR_NULL);
         }

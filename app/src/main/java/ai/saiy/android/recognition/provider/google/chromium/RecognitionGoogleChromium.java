@@ -103,8 +103,8 @@ public class RecognitionGoogleChromium implements PauseListener {
     private static final String RESULTS_URL = GOOGLE_DUPLEX_SPEECH_BASE + "down?maxresults=1&pair=";
     private static final String AUDIO_URL = GOOGLE_DUPLEX_SPEECH_BASE + "up?lm=dictation&interim&client=chromium&key=";
 
-    private final String LANGUAGE = "&lang=";
-    private final String PAIR = "&pair=";
+    private static final String LANGUAGE = "&lang=";
+    private static final String PAIR = "&pair=";
 
     private final Object audioLock = new Object();
     private final Object errorLock = new Object();
@@ -273,13 +273,10 @@ public class RecognitionGoogleChromium implements PauseListener {
                         audioShutdown(RESULTS_THREAD);
 
                         switch (responseCode) {
-
-                            case HttpURLConnection.HTTP_BAD_REQUEST:
-                                handleError(ERROR_STREAM);
-                                break;
                             case HttpURLConnection.HTTP_FORBIDDEN:
                                 handleError(ERROR_API);
                                 break;
+                            case HttpURLConnection.HTTP_BAD_REQUEST:
                             default:
                                 handleError(ERROR_STREAM);
                                 break;

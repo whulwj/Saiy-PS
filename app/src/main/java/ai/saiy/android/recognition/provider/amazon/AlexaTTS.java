@@ -259,20 +259,20 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             Global.setAlexDirectiveBundle(null);
             return;
         }
-        Bundle bundle = new Bundle();
+        final Bundle results = new Bundle();
         if (directiveList.getFile() != null) {
-            bundle.putString(SaiyRecognitionListener.ALEX_FILE, directiveList.getFile().getPath());
+            results.putString(SaiyRecognitionListener.ALEX_FILE, directiveList.getFile().getPath());
         }
         if (directiveList.hasDirectiveType()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "saveResults: hasDirectiveType: true: " + directiveList.getDirectiveType().name());
             }
-            bundle.putParcelable(SaiyRecognitionListener.ALEXA_DIRECTIVE, directiveList.getDirectiveType());
+            results.putParcelable(SaiyRecognitionListener.ALEXA_DIRECTIVE, directiveList.getDirectiveType());
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "saveResults: hasDirectiveType: false");
         }
-        bundle.putInt(LocalRequest.EXTRA_ACTION, directiveList.getAction());
-        Global.setAlexDirectiveBundle(bundle);
+        results.putInt(LocalRequest.EXTRA_ACTION, directiveList.getAction());
+        Global.setAlexDirectiveBundle(results);
     }
 
     private void shutdownTTS() {

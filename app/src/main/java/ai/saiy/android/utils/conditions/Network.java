@@ -36,6 +36,7 @@ import java.net.URL;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import ai.saiy.android.command.helper.CC;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -97,7 +98,7 @@ public final class Network {
             httpURLConnection.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Safari/537.36");
             httpURLConnection.addRequestProperty("Accept-Encoding", "identity");
             httpURLConnection.setConnectTimeout(SPH.getPingTimeout(ctx));
-            httpURLConnection.setRequestMethod("HEAD");
+            httpURLConnection.setRequestMethod(Constants.HTTP_HEAD);
             httpURLConnection.connect();
             final int responseCode = httpURLConnection.getResponseCode();
             if (DEBUG) {

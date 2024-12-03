@@ -24,6 +24,6 @@ package ai.saiy.android.configuration;
 public class WitConfiguration {
 
     public static final String WIT_ACCESS_TOKEN = "_your_value_here_";
-    public static final String WIT_SPEECH_URL = "https://api.wit.ai/speech?v=20160526";
-
+    public static final String WIT_SPEECH_VERSION = "20160526";
+    public static final String WIT_SPEECH_URL = "https://api.wit.ai/speech?v=" + WitConfiguration.WIT_SPEECH_VERSION;
 }

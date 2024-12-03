@@ -56,6 +56,7 @@ public final class Constants {
     public static final String ENCODING_UTF8 = "UTF-8";
     public static final String HTTP_DELETE = "DELETE";
     public static final String HTTP_GET = "GET";
+    public static final String HTTP_HEAD = "HEAD";
     public static final String HTTP_POST = "POST";
     public static final String HTTP_PUT = "PUT";
 

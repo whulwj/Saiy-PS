@@ -24,11 +24,11 @@ public class UtilsNetwork {
         switch (ai.saiy.android.utils.SPH.getAlexaRegion(context, ALEXA_NORTH_AMERICA)) {
             case ALEXA_REGION_EUROPE:
                 return "https://avs-alexa-eu.amazon.com/v20160207/events";
+            case ALEXA_ASIA:
+                return "https://avs-alexa-fe.amazon.com/v20160207/events";
             case ALEXA_NORTH_AMERICA:
             default:
                 return "https://avs-alexa-na.amazon.com/v20160207/events";
-            case ALEXA_ASIA:
-                return "https://avs-alexa-fe.amazon.com/v20160207/events";
         }
     }
 
