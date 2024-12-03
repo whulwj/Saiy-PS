@@ -112,25 +112,35 @@ public class SelfAwareParameters extends HashMap<String, String> {
                 MyLog.i(CLS_NAME, "getVolume: volumePair.second: " + volumePair.second);
             }
 
-            if (volumePair.second < 0.25F) {
+            if (volumePair.second < 0.25F && ai.saiy.android.utils.SPH.getToastVolumeWarnings(mContext)) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
                             UtilsToast.showToast(mContext,
-                                    mContext.getString(R.string.error_tts_volume), Toast.LENGTH_SHORT);
+                                    mContext.getString(R.string.error_tts_volume_low), Toast.LENGTH_SHORT);
                         }
                     });
             }
-
-            return volumePair.second;
-        } else {
+            if (ai.saiy.android.utils.SPH.getToastDebug(mContext)) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
                         UtilsToast.showToast(mContext,
-                                mContext.getString(R.string.error_tts_volume), Toast.LENGTH_SHORT);
+                                "Volume level: " + volumePair.second, Toast.LENGTH_SHORT);
                     }
                 });
+            }
+            return volumePair.second;
+        } else {
+            if (ai.saiy.android.utils.SPH.getToastVolumeWarnings(mContext)) {
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
+                    @Override
+                    public void run() {
+                        UtilsToast.showToast(mContext,
+                                mContext.getString(R.string.error_tts_volume_muted), Toast.LENGTH_SHORT);
+                    }
+                });
+            }
         }
 
         return 1F;

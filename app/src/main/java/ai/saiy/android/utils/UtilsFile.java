@@ -336,6 +336,32 @@ public class UtilsFile {
         return null;
     }
 
+    /**
+     * Get a default temporary file to write mp3 to
+     *
+     * @param ctx the application context
+     * @return the created file
+     */
+    public static File getTempMp3File(@NonNull final Context ctx) {
+
+        final File tempFile = getPrivateDir(ctx);
+
+        if (tempFile != null) {
+
+            try {
+                return File.createTempFile(Constants.DEFAULT_AUDIO_FILE_PREFIX,
+                        "." + Constants.MP3_AUDIO_FILE_SUFFIX, tempFile);
+            } catch (final IOException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getTempAudioFile: IOException");
+                    e.printStackTrace();
+                }
+            }
+        }
+
+        return null;
+    }
+
     private static boolean createNewFile(String str) {
         File file = new File(str);
         if (!file.exists()) {

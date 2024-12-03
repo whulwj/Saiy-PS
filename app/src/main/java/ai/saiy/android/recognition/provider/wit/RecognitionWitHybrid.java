@@ -348,7 +348,7 @@ public class RecognitionWitHybrid implements IAlexaToken, PauseListener {
                                     handleError(android.speech.SpeechRecognizer.ERROR_NO_MATCH);
                                     return;
                                 }
-                                final DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse();
+                                final DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempMp3File(mContext)).parse();
                                 response.body().close();
                                 Schedulers.io().scheduleDirect(new Runnable() {
                                     @Override

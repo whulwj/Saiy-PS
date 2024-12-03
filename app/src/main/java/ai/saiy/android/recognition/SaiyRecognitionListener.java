@@ -42,33 +42,21 @@ public class SaiyRecognitionListener implements RecognitionListener, IPartial {
     public static final String ALEX_FILE = "alex_file";
     public static final String ALEX_SPEECH = "alex_speech";
 
-    /** Too many requests from the same client. See {@link SpeechRecognizer} API 31 */
-    private static final int ERROR_TOO_MANY_REQUESTS = 10;
-    /** Server has been disconnected, e.g. because the app has crashed. See {@link SpeechRecognizer} API 31 */
-    private static final int ERROR_SERVER_DISCONNECTED = 11;
-    /** Requested language is not available to be used with the current recognizer. See {@link SpeechRecognizer} API 31 */
-    private static final int ERROR_LANGUAGE_NOT_SUPPORTED = 12;
-    /** Requested language is supported, but not available currently (e.g. not downloaded yet). See {@link SpeechRecognizer} API 31 */
-    private static final int ERROR_LANGUAGE_UNAVAILABLE = 13;
-    /** The service does not allow to check for support. See {@link SpeechRecognizer} API 33 */
-    private static final int ERROR_CANNOT_CHECK_SUPPORT = 14;
-    /** The service does not support listening to model downloads events. See {@link SpeechRecognizer} API 34 */
-    private static final int ERROR_CANNOT_LISTEN_TO_DOWNLOAD_EVENTS = 15;
     public static final int JB_TIMEOUT_ERROR = 134;
 
     public static String getDescription(int error) {
         switch (error) {
-            case SaiyRecognitionListener.ERROR_TOO_MANY_REQUESTS:
+            case SpeechRecognizer.ERROR_TOO_MANY_REQUESTS:
                 return "ERROR_TOO_MANY_REQUESTS";
-            case SaiyRecognitionListener.ERROR_SERVER_DISCONNECTED:
+            case SpeechRecognizer.ERROR_SERVER_DISCONNECTED:
                 return "ERROR_SERVER_DISCONNECTED";
-            case SaiyRecognitionListener.ERROR_LANGUAGE_NOT_SUPPORTED:
+            case SpeechRecognizer.ERROR_LANGUAGE_NOT_SUPPORTED:
                 return "ERROR_LANGUAGE_NOT_SUPPORTED";
-            case SaiyRecognitionListener.ERROR_LANGUAGE_UNAVAILABLE:
+            case SpeechRecognizer.ERROR_LANGUAGE_UNAVAILABLE:
                 return "ERROR_LANGUAGE_UNAVAILABLE";
-            case SaiyRecognitionListener.ERROR_CANNOT_CHECK_SUPPORT:
+            case SpeechRecognizer.ERROR_CANNOT_CHECK_SUPPORT:
                 return "ERROR_CANNOT_CHECK_SUPPORT";
-            case SaiyRecognitionListener.ERROR_CANNOT_LISTEN_TO_DOWNLOAD_EVENTS:
+            case SpeechRecognizer.ERROR_CANNOT_LISTEN_TO_DOWNLOAD_EVENTS:
                 return "ERROR_CANNOT_LISTEN_TO_DOWNLOAD_EVENTS";
             case SaiyRecognitionListener.JB_TIMEOUT_ERROR:
                 return "JB_TIMEOUT_ERROR";

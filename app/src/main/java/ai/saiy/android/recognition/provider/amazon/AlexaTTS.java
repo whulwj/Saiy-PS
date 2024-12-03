@@ -72,7 +72,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "writeTo: fileBytes: " + fileBytes.length);
             }
-            long nanoTime = System.nanoTime();
+            final long then = System.nanoTime();
             int offset = MIN_FILE_SIZE;
             while (offset < fileBytes.length) {
                 int byteCount = Math.min(320, fileBytes.length - offset);
@@ -81,7 +81,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             }
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "processing complete. Queue empty");
-                MyLog.getElapsed(CLS_NAME, "writeTo", nanoTime);
+                MyLog.getElapsed(CLS_NAME, "writeTo", then);
             }
             AlexaTTS.this.requestTime = System.nanoTime();
         }
@@ -205,7 +205,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
                                     response.body().close();
                                     return;
                                 }
-                                final ResolveAmazon resolveAmazon = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext));
+                                final ResolveAmazon resolveAmazon = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempMp3File(mContext));
                                 final DirectiveList directiveList = resolveAmazon.parse();
                                 response.body().close();
                                 AlexaTTS.this.isWorking = false;
@@ -226,24 +226,16 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
                             }
                         }
                     });
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "sendAudio: finally");
-                    }
-                    if (isWorking) {
-                        shutdownTTS();
-                    }
                 } catch (Exception e) {
                     if (DEBUG) {
                         MyLog.e(CLS_NAME, "sendAudio: Exception");
                         e.printStackTrace();
                     }
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "sendAudio: finally");
-                    }
-                    if (isWorking) {
-                        shutdownTTS();
-                    }
                 } catch (Throwable th) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "sendAudio: " + th.getClass().getSimpleName() + ", " + th.getMessage());
+                    }
+                } finally {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "sendAudio: finally");
                     }
@@ -255,7 +247,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
         });
     }
 
-    private void saveResults(DirectiveList directiveList) {
+    private void saveResults(@NonNull DirectiveList directiveList) {
         if (DEBUG) {
             MyLog.getElapsed(CLS_NAME, "saveResults start", requestTime);
         }
@@ -305,7 +297,7 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
                 MyLog.w(CLS_NAME, "shutdownTTS: tempFile null");
             }
         } else {
-            boolean delete = audioCacheFile.delete();
+            final boolean delete = audioCacheFile.delete();
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "shutdownTTS: tempFile deleted: " + delete);
             }
@@ -327,10 +319,6 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
             e.printStackTrace();
         }
         shutdownTTS();
-    }
-
-    @Override
-    public void onAudioAvailable(String utteranceId, byte[] audio) {
     }
 
     @Override
@@ -445,28 +433,26 @@ public class AlexaTTS extends ai.saiy.android.tts.SaiyProgressListener implement
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "doAudioCache: " + audioCacheFile.getAbsolutePath());
                     }
-                    HashMap<String, String> hashMap = new HashMap<>();
-                    hashMap.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "alexa_utt_id");
-                    hashMap.put(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS, String.valueOf(false));
+                    final HashMap<String, String> params = new HashMap<>();
+                    params.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID, "alexa_utt_id");
+                    params.put(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS, String.valueOf(false));
                     tts.setLanguage(Locale.ENGLISH);
                     this.responseTime = System.nanoTime();
-                    tts.synthesizeToFile(recognitionResult, hashMap, audioCacheFile.getPath());
-                    return;
+                    tts.synthesizeToFile(recognitionResult, params, audioCacheFile.getPath());
                 } catch (NullPointerException e) {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "synthesizeToFile: NullPointerException");
                         e.printStackTrace();
                     }
                     shutdownTTS();
-                    return;
                 } catch (Exception e) {
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "synthesizeToFile: IOException");
                         e.printStackTrace();
                     }
                     shutdownTTS();
-                    return;
                 }
+                break;
             default:
                 break;
         }

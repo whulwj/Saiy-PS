@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.exceptions.WebsocketNotConnectedException;
+import org.java_websocket.framing.CloseFrame;
 import org.java_websocket.handshake.ServerHandshake;
 
 import java.net.URI;
@@ -143,6 +144,14 @@ public class TrustAllBluemixWebSocketClient extends WebSocketClient {
             } catch (final Exception e) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "disconnect: close: Exception");
+                    e.printStackTrace();
+                }
+            }
+            try {
+                getConnection().closeConnection(CloseFrame.NORMAL, "ended");
+            } catch (final Exception e) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "disconnect: closeConnection: Exception");
                     e.printStackTrace();
                 }
             }

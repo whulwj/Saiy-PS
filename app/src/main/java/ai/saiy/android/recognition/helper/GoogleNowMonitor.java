@@ -45,6 +45,7 @@ public class GoogleNowMonitor {
 
     private static final long MAX_DURATION = 180000L;
     private static final long HISTORY = 10000L;
+    private static final int INTERVAL = 5000;
     private final long then = System.currentTimeMillis();
 
     /**
@@ -73,7 +74,7 @@ public class GoogleNowMonitor {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "foreground remains google");
                             }
-                            Schedulers.trampoline().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
+                            Schedulers.trampoline().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), INTERVAL)), TimeUnit.MILLISECONDS);
                             return;
                         } else {
                             GoogleNowMonitor.this.restartHotword(ctx);
@@ -83,7 +84,7 @@ public class GoogleNowMonitor {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "foreground package null");
                         }
-                        Schedulers.trampoline().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), 5000)), TimeUnit.MILLISECONDS);
+                        Schedulers.trampoline().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), INTERVAL)), TimeUnit.MILLISECONDS);
                         return;
                     }
                 }
@@ -96,7 +97,7 @@ public class GoogleNowMonitor {
                     GoogleNowMonitor.this.shutdownHotword(ctx);
                 }
             }
-        }, 5000, TimeUnit.MILLISECONDS);
+        }, INTERVAL, TimeUnit.MILLISECONDS);
     }
 
     /**

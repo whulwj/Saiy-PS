@@ -39,9 +39,9 @@ public class SaiyHotwordListener implements RecognitionListener {
     protected static final String WAKEUP_SAIY = "wakeupsay";
     protected static final String STOP_LISTENING = "stoplistening";
 
-    private static final Pattern pOKAY_GOOGLE = Pattern.compile(OKAY_GOOGLE);
-    private static final Pattern pWAKEUP_SAIY = Pattern.compile(WAKEUP_SAIY);
-    private static final Pattern pSTOP_LISTENING = Pattern.compile(STOP_LISTENING);
+    private static final Pattern pOKAY_GOOGLE = Pattern.compile(".*\\b" + OKAY_GOOGLE + "\\b.*");
+    private static final Pattern pWAKEUP_SAIY = Pattern.compile(".*\\b" + WAKEUP_SAIY+ "\\b.*");
+    private static final Pattern pSTOP_LISTENING = Pattern.compile(".*\\b" + STOP_LISTENING+ "\\b.*");
 
     public static final int ERROR_NULL = 1;
     public static final int ERROR_INITIALISE = 2;

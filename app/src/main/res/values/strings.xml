@@ -1146,7 +1146,8 @@
     <string name="error_tts_initialisation" translatable="true">"There is a problem with your Text to Speech engine."</string>
     <string name="error_tts_progress" translatable="true">"There was a problem with the Text to Speech playback."</string>
     <string name="error_tts_voice" translatable="true">"Unable to set TTS language."</string>
-    <string name="error_tts_volume" translatable="true">"The media volume is muted."</string>
+    <string name="error_tts_volume_low">The media volume is very low.</string>
+    <string name="error_tts_volume_muted">The Text to Speech volume may be muted?</string>
 
     <!-- Issue Strings -->
     <string name="issue_vr_text" translatable="true">"In order for the application to function, you need to have a

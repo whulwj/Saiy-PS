@@ -128,11 +128,30 @@ public class TestRecognitionAction {
                         toast(ctx, CustomCommandHelper.deleteAllCommands(ctx) ? ctx.getString(R.string.success)
                                 : ctx.getString(R.string.failed));
                         break;
+                    case DebugAction.DEBUG_CLEAR_BLOCKED_APPS:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "runDebug: DEBUG_CLEAR_BLOCKED_APPS");
+                        }
+                        ai.saiy.android.utils.SPH.setBlockedNotificationApplications(ctx, null);
+                        toast(ctx, ctx.getString(R.string.success));
+                        break;
                     case DebugAction.DEBUG_AUTHENTICATION:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "runDebug: DEBUG_AUTHENTICATION");
                         }
                         toast(ctx, "IAP: " + ai.saiy.android.utils.SPH.getPremiumContentVerbose(ctx) + " - Auth: " + (ai.saiy.android.utils.SPH.getFirebaseAnonymousUid(ctx) != null));
+                        break;
+                    case DebugAction.DEBUG_VOLUME:
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "runDebug: DEBUG_VOLUME");
+                        }
+                        if (ai.saiy.android.utils.SPH.getToastDebug(ctx)) {
+                            ai.saiy.android.utils.SPH.setToastDebug(ctx, false);
+                            toast(ctx, "Volume debugging disabled");
+                        } else {
+                            ai.saiy.android.utils.SPH.setToastDebug(ctx, true);
+                            toast(ctx, "Volume debugging enabled");
+                        }
                         break;
                     case DebugAction.REPORT_BILLING:
                         if (DEBUG) {

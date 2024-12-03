@@ -66,11 +66,11 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         @Override
         public void writeTo(@NonNull BufferedSink sink) {
             try {
-                int bufferSize = saiyRecorder.getBufferSize();
+                final int bufferSize = saiyRecorder.getBufferSize();
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "writeTo: bufferSize: " + bufferSize);
                 }
-                byte[] bytes = new byte[bufferSize];
+                final byte[] bytes = new byte[bufferSize];
                 boolean isRecordingStarted = false;
                 while (isRecording.get() && saiyRecorder != null && saiyRecorder.getRecordingState() == AudioRecord.RECORDSTATE_RECORDING) {
                     if (!isRecordingStarted) {
@@ -83,7 +83,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
                         isRecordingStarted = true;
                     }
                     if (saiyRecorder != null) {
-                        int count = saiyRecorder.read(bytes);
+                        final int count = saiyRecorder.read(bytes);
                         listener.onBufferReceived(bytes);
                         if (servingRemote && !pauseDetector.hasDetected()) {
                             pauseDetector.addLength(bytes, count);
@@ -165,7 +165,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
         }
     }
 
-    private void sendResults(DirectiveList directiveList) {
+    private void sendResults(@NonNull DirectiveList directiveList) {
         if (directiveList.getErrorCode() != 0) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "sendResults: error: " + directiveList.getErrorCode());
@@ -256,7 +256,7 @@ public class RecognitionAmazon implements IAlexaToken, PauseListener {
                                     handleError(android.speech.SpeechRecognizer.ERROR_NO_MATCH);
                                     return;
                                 }
-                                DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempAudioFile(mContext)).parse();
+                                DirectiveList directiveList = new ResolveAmazon(response.body().byteStream(), response, ai.saiy.android.utils.UtilsFile.getTempMp3File(mContext)).parse();
                                 response.body().close();
                                 sendResults(directiveList);
                                 if (DEBUG) {

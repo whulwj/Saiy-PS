@@ -91,6 +91,7 @@ public class SPH {
     private static final String ASSUME_GLOBAL_VOLUME = "assume_global_volume";
     private static final String TOAST_VOLUME_WARNINGS = "toast_volume_warnings";
     private static final String SYSTEM_MANAGED_VOLUME = "system_managed_volume";
+    private static final String DEBUG_VOLUME = "debug_volume";
     private static final String CUSTOM_INTRO = "custom_intro";
     private static final String CUSTOM_INTRO_RANDOM = "custom_intro_random";
     private static final String DEFAULT_TTS_VOICE = "default_tts_voice";
@@ -450,6 +451,15 @@ public class SPH {
     public static void setToastVolumeWarnings(Context context, boolean condition) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(TOAST_VOLUME_WARNINGS, condition);
+        edit.apply();
+    }
+    public static boolean getToastDebug(Context context) {
+        return getPref(context).getBoolean(DEBUG_VOLUME, false);
+    }
+
+    public static void setToastDebug(Context context, boolean condition) {
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(DEBUG_VOLUME, condition);
         edit.apply();
     }
 
@@ -2108,7 +2118,7 @@ public class SPH {
         return getPref(context).getString(BLOCKED_NOTIFICATION_APPLICATIONS, null);
     }
 
-    public static void setBlockedNotificationApplications(Context context, String str) {
+    public static void setBlockedNotificationApplications(Context context, @Nullable String str) {
         SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(BLOCKED_NOTIFICATION_APPLICATIONS, str);
         edit.apply();
