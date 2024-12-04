@@ -108,7 +108,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
             MyLog.i(CLS_NAME, "onServiceConnected");
         }
 
-        initAnnounceNotifications = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isAnnounceNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext()))));
+        initAnnounceNotifications = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isProfileNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext()))));
         blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
         initIgnoreRestrictedContent = SPH.getIgnoreRestrictedContent(getApplicationContext());
 
@@ -177,7 +177,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
             return;
         }
 
-        updateServiceInfo(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isAnnounceNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext())))), SPH.getIgnoreRestrictedContent(getApplicationContext()));
+        updateServiceInfo(Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isProfileNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext())))), SPH.getIgnoreRestrictedContent(getApplicationContext()));
 
         if (!initAnnounceNotifications) {
             if (DEBUG) {
@@ -757,7 +757,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
             MyLog.i(CLS_NAME, "onStartCommand");
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N || intent == null || !intent.hasExtra(EXTRA_START_COMMAND_KEY)) {
-            initAnnounceNotifications = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isAnnounceNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext()))));
+            initAnnounceNotifications = Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT && (DrivingProfileHelper.isProfileNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext()))));
             blockedApplications = BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
             initIgnoreRestrictedContent = SPH.getIgnoreRestrictedContent(getApplicationContext());
             setDynamicContent();

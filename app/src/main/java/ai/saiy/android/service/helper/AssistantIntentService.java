@@ -234,6 +234,7 @@ public class AssistantIntentService extends IntentService {
                         || action.equals(RecognizerIntent.ACTION_WEB_SEARCH) || action.equals(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE)
                         || action.equals(ACTION_WIDGET_ASSIST) || action.equals(ACTION_QL_ASSIST)) {
                     if (DEBUG) {
+                        MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_ASSIST");
                         if (intent.hasExtra(EXTRA_ASSIST_CONTEXT)) {
                             final Bundle assistBundle = intent.getBundleExtra(EXTRA_ASSIST_CONTEXT);
 
@@ -251,10 +252,10 @@ public class AssistantIntentService extends IntentService {
                         if (!UtilsString.notNaked(stringExtra) || stringExtra.trim().matches("intro")) {
                             actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
                         } else {
-                            ArrayList<String> arrayList = new ArrayList<>(1);
-                            arrayList.add(stringExtra);
+                            final ArrayList<String> resultsRecognition = new ArrayList<>(1);
+                            resultsRecognition.add(stringExtra);
                             actionBundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
-                            actionBundle.putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, arrayList);
+                            actionBundle.putStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION, resultsRecognition);
                             actionBundle.putFloatArray(SpeechRecognizer.CONFIDENCE_SCORES, new float[]{0.9f});
                         }
                     } else {
@@ -372,18 +373,14 @@ public class AssistantIntentService extends IntentService {
 
         if (!actionBundle.containsKey(LocalRequest.EXTRA_RECOGNITION_LANGUAGE)) {
             actionBundle.putString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE, SPH.getVRLocale(getApplicationContext()).toString());
-        } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onHandleIntent: actionBundle: auto adding EXTRA_RECOGNITION_LANGUAGE");
-            }
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "onHandleIntent: actionBundle: auto adding EXTRA_RECOGNITION_LANGUAGE");
         }
 
         if (!actionBundle.containsKey(LocalRequest.EXTRA_TTS_LANGUAGE)) {
             actionBundle.putString(LocalRequest.EXTRA_TTS_LANGUAGE, SPH.getTTSLocale(getApplicationContext()).toString());
-        } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onHandleIntent: actionBundle: auto adding EXTRA_TTS_LANGUAGE");
-            }
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "onHandleIntent: actionBundle: auto adding EXTRA_TTS_LANGUAGE");
         }
 
         if (!actionBundle.containsKey(LocalRequest.EXTRA_SUPPORTED_LANGUAGE)) {
@@ -391,10 +388,8 @@ public class AssistantIntentService extends IntentService {
                     UtilsLocale.stringToLocale(actionBundle.getString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE)));
             actionBundle.putSerializable(LocalRequest.EXTRA_SUPPORTED_LANGUAGE, sl);
             actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));
-        } else {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "onHandleIntent: actionBundle: auto adding EXTRA_SUPPORTED_LANGUAGE");
-            }
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "onHandleIntent: actionBundle: auto adding EXTRA_SUPPORTED_LANGUAGE");
         }
 
         new LocalRequest(getApplicationContext(), actionBundle).execute();

@@ -537,6 +537,20 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
 
         final Pair<Boolean, Integer> isSpeakingPair = isSpeaking(tts);
         final boolean isListening = isListening();
+        if (!shouldSpeak()) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "proceedPriority: shouldSpeak: false");
+            }
+            if (requestBundle.getInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_NONE) != Condition.CONDITION_ANNOUNCE_CALLER) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "proceedPriority: shouldSpeak: false: announceCaller: false: preventing");
+                }
+                return new Pair<>(new Pair<>(false, false), new Pair<>(isSpeakingPair.first, isListening));
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "proceedPriority: shouldSpeak: false: announceCaller: true: proceeding");
+            }
+        }
 
         if (isSpeakingPair.first || isListening) {
 
@@ -2220,6 +2234,9 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_COMPLETE_SILENCE_LENGTH_MILLIS, timeout);
         intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_MINIMUM_LENGTH_MILLIS, timeout);
         intent.putExtra(RecognizerIntent.EXTRA_SPEECH_INPUT_POSSIBLY_COMPLETE_SILENCE_LENGTH_MILLIS, timeout);
+        // secret parameters that when added provide audio url in the result
+        intent.putExtra("android.speech.extra.GET_AUDIO", true);
+        intent.putExtra("android.speech.extra.GET_AUDIO_FORMAT", "audio/AMR");
 
         if (servingRemote()) {
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getCallback().getParcel()

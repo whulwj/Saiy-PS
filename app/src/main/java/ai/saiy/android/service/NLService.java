@@ -77,71 +77,76 @@ public class NLService extends NotificationListenerService {
         if (DEBUG) {
             MyLog.d(CLS_NAME, "handleNotificationRemoved");
         }
-        if (!isAnnounceNotificationRequired) {
-            if (DEBUG) {
-                MyLog.d(CLS_NAME, "handleNotificationRemoved: not required");
-            }
-            return;
-        }
-        if (!SPH.getSelfAwareEnabled(getApplicationContext())) {
-            if (DEBUG) {
-                MyLog.d(CLS_NAME, "handleNotificationRemoved: self aware disabled by user");
-            }
-            return;
-        }
-        if (DEBUG) {
-            MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getId: " + statusBarNotification.getId());
-            MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getPostTime: " + statusBarNotification.getPostTime());
-            MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getTag: " + statusBarNotification.getTag());
-            MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getPackageName: " + statusBarNotification.getPackageName());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
-                MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getKey: " + statusBarNotification.getKey());
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getGroupKey: " + statusBarNotification.getGroupKey());
-                final UserHandle user = statusBarNotification.getUser();
-                if (user != null) {
-                    MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: userHandle: " + user);
-                } else {
-                    MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: userHandle: null");
+        Schedulers.computation().scheduleDirect(new Runnable() {
+            @Override
+            public void run() {
+                if (!isAnnounceNotificationRequired) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "handleNotificationRemoved: not required");
+                    }
+                    return;
+                }
+                if (!SPH.getSelfAwareEnabled(getApplicationContext())) {
+                    if (DEBUG) {
+                        MyLog.d(CLS_NAME, "handleNotificationRemoved: self aware disabled by user");
+                    }
+                    return;
+                }
+                if (DEBUG) {
+                    MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getId: " + statusBarNotification.getId());
+                    MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getPostTime: " + statusBarNotification.getPostTime());
+                    MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getTag: " + statusBarNotification.getTag());
+                    MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getPackageName: " + statusBarNotification.getPackageName());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT_WATCH) {
+                        MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getKey: " + statusBarNotification.getKey());
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getGroupKey: " + statusBarNotification.getGroupKey());
+                        final UserHandle user = statusBarNotification.getUser();
+                        if (user != null) {
+                            MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: userHandle: " + user);
+                        } else {
+                            MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: userHandle: null");
+                        }
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getOverrideGroupKey: " + statusBarNotification.getOverrideGroupKey());
+                    }
+                }
+                if (UtilsString.notNaked(statusBarNotification.getPackageName())) {
+                    final String packageName = statusBarNotification.getPackageName();
+                    switch (packageName) {
+                        case Installed.PACKAGE_ANDROID_MESSAGING:
+                        case Installed.PACKAGE_GOOGLE_MESSAGE:
+                            if (DEBUG) {
+                                MyLog.d(CLS_NAME, "onNotificationRemoved: MESSAGING: purging array");
+                            }
+                            synchronized (NLService.messageLock) {
+                                messages.clear();
+                            }
+                            break;
+                        case Installed.PACKAGE_GOOGLE_HANGOUT:
+                            if (DEBUG) {
+                                MyLog.d(CLS_NAME, "onNotificationRemoved: PACKAGE_HANGOUTS: purging array");
+                            }
+                            synchronized (NLService.hangoutLock) {
+                                hangoutTickerText.clear();
+                            }
+                            break;
+                        case Installed.PACKAGE_WHATSAPP:
+                            if (DEBUG) {
+                                MyLog.d(CLS_NAME, "onNotificationRemoved: PACKAGE_WHATSAPP: purging array");
+                            }
+                            synchronized (NLService.whatsAppLock) {
+                                whatsAppContent.clear();
+                            }
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                MyLog.d(CLS_NAME, "onNotificationRemoved: sbn: getOverrideGroupKey: " + statusBarNotification.getOverrideGroupKey());
-            }
-        }
-        if (UtilsString.notNaked(statusBarNotification.getPackageName())) {
-            final String packageName = statusBarNotification.getPackageName();
-            switch (packageName) {
-                case Installed.PACKAGE_ANDROID_MESSAGING:
-                case Installed.PACKAGE_GOOGLE_MESSAGE:
-                    if (DEBUG) {
-                        MyLog.d(CLS_NAME, "onNotificationRemoved: MESSAGING: purging array");
-                    }
-                    synchronized (NLService.messageLock) {
-                        messages.clear();
-                    }
-                    break;
-                case Installed.PACKAGE_GOOGLE_HANGOUT:
-                    if (DEBUG) {
-                        MyLog.d(CLS_NAME, "onNotificationRemoved: PACKAGE_HANGOUTS: purging array");
-                    }
-                    synchronized (NLService.hangoutLock) {
-                        hangoutTickerText.clear();
-                    }
-                    break;
-                case Installed.PACKAGE_WHATSAPP:
-                    if (DEBUG) {
-                        MyLog.d(CLS_NAME, "onNotificationRemoved: PACKAGE_WHATSAPP: purging array");
-                    }
-                    synchronized (NLService.whatsAppLock) {
-                        whatsAppContent.clear();
-                    }
-                    break;
-                default:
-                    break;
-            }
-        }
+        });
     }
 
     private void updateServiceInfo(boolean condition) {
@@ -216,8 +221,6 @@ public class NLService extends NotificationListenerService {
 
         @Override
         public void run() {
-
-
             final Context context = nlService.getApplicationContext();
             if (!SPH.getSelfAwareEnabled(context)) {
                 if (DEBUG) {
@@ -226,13 +229,13 @@ public class NLService extends NotificationListenerService {
                 return;
             }
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "onNotificationPosted: DrivingProfileHelper.areProfileNotificationsEnabled: " + ai.saiy.android.command.driving.DrivingProfileHelper.isAnnounceNotificationsEnabled(context));
+                MyLog.i(CLS_NAME, "onNotificationPosted: DrivingProfileHelper.isProfileNotificationsEnabled: " + ai.saiy.android.command.driving.DrivingProfileHelper.isProfileNotificationsEnabled(context));
                 MyLog.i(CLS_NAME, "onNotificationPosted: getAnnounceNotifications: " + SPH.getAnnounceNotifications(context));
                 MyLog.i(CLS_NAME, "onNotificationPosted: QuietTimesHelper.canProceed: " + ai.saiy.android.quiet.QuietTimeHelper.canProceed(context));
                 MyLog.i(CLS_NAME, "onNotificationPosted: getSuppressNotificationsSecure: " + SPH.getAnnounceNotificationsSecure(context));
             }
             boolean isAnnounceNotificationRequired = false;
-            if (ai.saiy.android.command.driving.DrivingProfileHelper.isAnnounceNotificationsEnabled(context)) {
+            if (ai.saiy.android.command.driving.DrivingProfileHelper.isProfileNotificationsEnabled(context)) {
                 isAnnounceNotificationRequired = true;
             } else if (SPH.getAnnounceNotifications(context)) {
                 if (ai.saiy.android.quiet.QuietTimeHelper.canProceed(context)) {
@@ -962,7 +965,7 @@ public class NLService extends NotificationListenerService {
         this.is_typing = sr.getString(R.string.is_typing);
         this.an_unknown_application = sr.getString(R.string.an_unknown_application);
         sr.reset();
-        this.isAnnounceNotificationRequired = ai.saiy.android.command.driving.DrivingProfileHelper.isAnnounceNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext())));
+        this.isAnnounceNotificationRequired = ai.saiy.android.command.driving.DrivingProfileHelper.isProfileNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext())));
         this.blockedApplications = ai.saiy.android.accessibility.BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
         this.messages = new ArrayList<>();
         this.hangoutTickerText = new ArrayList<>();

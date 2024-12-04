@@ -129,7 +129,7 @@ public class NotificationService extends IntentService {
 
                 if (UtilsString.notNaked(action)) {
 
-                    if (intent.getAction().equals(INTENT_CLICK)) {
+                    if (INTENT_CLICK.equals(action)) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "onHandleIntent: INTENT_CLICK");
                         }
@@ -138,7 +138,7 @@ public class NotificationService extends IntentService {
                                 SPH.getVRLocale(getApplicationContext()));
                         bundle.putSerializable(LocalRequest.EXTRA_SUPPORTED_LANGUAGE, sl);
 
-                        switch (bundle.getInt(CLICK_ACTION, 0)) {
+                        switch (bundle.getInt(CLICK_ACTION, LocalRequest.ACTION_UNKNOWN)) {
 
                             case NOTIFICATION_FOREGROUND:
                                 if (DEBUG) {
@@ -205,7 +205,7 @@ public class NotificationService extends IntentService {
 
                                 String permissionContent;
 
-                                switch (bundle.getInt(PermissionHelper.REQUESTED_PERMISSION, 0)) {
+                                switch (bundle.getInt(PermissionHelper.REQUESTED_PERMISSION, PermissionHelper.REQUEST_UNKNOWN)) {
                                     case PermissionHelper.REQUEST_AUDIO:
                                         if (DEBUG) {
                                             MyLog.i(CLS_NAME, "onHandleIntent: REQUEST_AUDIO");
@@ -320,6 +320,7 @@ public class NotificationService extends IntentService {
                                     MyLog.i(CLS_NAME, "onHandleIntent: NOTIFICATION_HOTWORD");
                                 }
 
+                                SPH.setDrivingCooldownTime(getApplicationContext(), System.currentTimeMillis());
                                 bundle.putInt(LocalRequest.EXTRA_ACTION, LocalRequest.ACTION_STOP_HOTWORD);
                                 final LocalRequest request = new LocalRequest(getApplicationContext(), bundle);
                                 request.setShutdownHotword();
@@ -550,12 +551,12 @@ public class NotificationService extends IntentService {
                     }
                 } else {
                     if (DEBUG) {
-                        MyLog.w(CLS_NAME, "onHandleIntent: Bundle null");
+                        MyLog.w(CLS_NAME, "onHandleIntent: Action null");
                     }
                 }
             } else {
                 if (DEBUG) {
-                    MyLog.w(CLS_NAME, "onHandleIntent: Action null");
+                    MyLog.w(CLS_NAME, "onHandleIntent: Bundle null");
                 }
             }
         } else {
@@ -578,7 +579,6 @@ public class NotificationService extends IntentService {
         final Bundle bundle = intent.getExtras();
         if (bundle != null) {
             final Set<String> keys = bundle.keySet();
-            //noinspection Convert2streamapi
             for (final String key : keys) {
                 if (DEBUG) {
                     MyLog.v(CLS_NAME, "examineIntent: " + key + " ~ " + bundle.get(key));

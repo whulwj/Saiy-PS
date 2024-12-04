@@ -63,6 +63,7 @@ public class SelfAwareCache extends SaiyProgressListener {
     private volatile TextToSpeech ttsCache;
     private volatile SpeechCachePrepare scp;
     private volatile File tempFile;
+    private long then;
 
     /**
      * Constructor
@@ -146,7 +147,7 @@ public class SelfAwareCache extends SaiyProgressListener {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private void doAudioCache(@NonNull final SpeechCachePrepare scp, @NonNull final SelfAwareParameters params) {
         this.scp = scp;
-
+        this.then = System.currentTimeMillis();
         Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
@@ -157,20 +158,30 @@ public class SelfAwareCache extends SaiyProgressListener {
                     public void onInit(final int status) {
                         switch (status) {
                             case TextToSpeech.SUCCESS:
+                                try {
+                                    ttsCache.setVoice(scp.getVoice());
+                                    ttsCache.setOnUtteranceProgressListener(SelfAwareCache.this);
 
-                                ttsCache.setVoice(scp.getVoice());
-                                ttsCache.setOnUtteranceProgressListener(SelfAwareCache.this);
+                                    tempFile = UtilsFile.getTempAudioFile(mContext);
+                                    if (tempFile == null) {
+                                        shutdownTTS();
+                                        return;
+                                    }
 
-                                tempFile = UtilsFile.getTempAudioFile(mContext);
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "doAudioCache: " + tempFile.getAbsolutePath());
+                                    }
 
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "doAudioCache: " + tempFile.getAbsolutePath());
+                                    ttsCache.synthesizeToFile(scp.getUtterance(), params.getBundle(), tempFile, params.getUtteranceId());
+                                } catch (Exception e) {
+                                    if (DEBUG) {
+                                        MyLog.w(CLS_NAME, "doAudioCache: " + e.getClass().getSimpleName() + ", " + e.getMessage());
+                                    }
+                                    shutdownTTS();
                                 }
-
-                                ttsCache.synthesizeToFile(scp.getUtterance(), params.getBundle(), tempFile, params.getUtteranceId());
-
                                 break;
                             case TextToSpeech.ERROR:
+                                shutdownTTS();
                                 break;
                         }
                     }
@@ -191,6 +202,7 @@ public class SelfAwareCache extends SaiyProgressListener {
                                  final int channelCount) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onBeginSynthesis");
+            MyLog.getElapsed(CLS_NAME, "onBeginSynthesis", then);
         }
     }
 
@@ -198,6 +210,7 @@ public class SelfAwareCache extends SaiyProgressListener {
     public void onStart(final String utteranceId) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onStart");
+            MyLog.getElapsed(CLS_NAME, "onStart", then);
         }
     }
 
@@ -205,6 +218,7 @@ public class SelfAwareCache extends SaiyProgressListener {
     public void onDone(final String utteranceId) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onDone");
+            MyLog.getElapsed(CLS_NAME, "onDone", then);
         }
 
         try {

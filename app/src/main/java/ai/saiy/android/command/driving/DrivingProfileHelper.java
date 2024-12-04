@@ -66,7 +66,7 @@ public class DrivingProfileHelper {
         return drivingProfile.isEnabled() && drivingProfile.getStartHotword();
     }
 
-    public static boolean isAnnounceNotificationsEnabled(Context context) {
+    public static boolean isProfileNotificationsEnabled(Context context) {
         DrivingProfile drivingProfile = getCheckedDrivingProfile(context);
         return drivingProfile.isEnabled() && drivingProfile.getAnnounceNotifications();
     }

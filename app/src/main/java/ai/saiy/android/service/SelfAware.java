@@ -1834,6 +1834,7 @@ public class SelfAware extends Service {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "hotwordListener: onHotwordDetected: STOP_LISTENING");
                     }
+                    SPH.setDrivingCooldownTime(getApplicationContext(), System.currentTimeMillis());
                     stopListening(true);
                     conditions.getSaiySoundPool().play(conditions.getSaiySoundPool().getBeepStop());
                     break;

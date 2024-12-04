@@ -48,7 +48,7 @@ public final class GoogleConfiguration {
     private static final String GOOGLE_SPEECH_CLOUD_API_KEY = "_your_value_here_";
 
     public static AccessToken sAccessToken = new AccessToken(GoogleConfiguration.GOOGLE_SPEECH_CLOUD_API_KEY,
-            new Date(System.currentTimeMillis() - 30 * 3600000L));
+            new Date(System.currentTimeMillis() - 3600000L));
 
     public static final String CLOUD_PROJECT_ID = "plucky-sound-315505";
 
