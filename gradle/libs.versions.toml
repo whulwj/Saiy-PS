@@ -26,7 +26,6 @@ playServicesAds = "22.6.0"
 playServicesWearable = "18.1.0"
 protobufGradlePlugin = "0.9.4"
 junit = "4.13.2"
-junitVersion = "1.1.5"
 
 material = "1.12.0" #https://github.com/material-components/material-components-android/releases May 3, 2024
 appcompat = "1.6.1"
@@ -96,7 +95,6 @@ google-http-client-gson = { group = "com.google.http-client", name = "google-htt
 gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
 guava = { group = "com.google.guava", name = "guava", version.ref = "guava" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
-ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 licensesdialog = { group = "de.psdev.licensesdialog", name = "licensesdialog", version.ref = "licensesdialog" }
 play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
 play-services-location = { group = "com.google.android.gms", name = "play-services-location", version.ref = "playServicesLocation" }

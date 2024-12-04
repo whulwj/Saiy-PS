@@ -263,8 +263,6 @@ dependencies {
 
     annotationProcessor libs.hilt.compiler
     testImplementation libs.junit
-    androidTestImplementation libs.junit
-    androidTestImplementation libs.ext.junit
 }
 
 // https://github.com/google/protobuf-gradle-plugin
