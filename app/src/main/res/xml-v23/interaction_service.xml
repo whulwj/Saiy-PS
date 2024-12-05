@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<voice-interaction-service xmlns:android="http://schemas.android.com/apk/res/android"
-    android:settingsActivity="ai.saiy.android.ui.activity.ActivityAssistSettings"
-    android:sessionService="ai.saiy.android.recognition.provider.saiy.assist.SaiyInteractionSessionService"
-    android:recognitionService=""
-    android:supportsAssist="true"/>
