@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorSaiyPurpleDark"
+    android:padding="@dimen/box_inset_layout_padding">
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:ns1="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:duplicateParentState="true"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        ns1:boxedEdges="all">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="false"
+            android:duplicateParentState="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:orientation="vertical">
+
+            <ProgressBar
+                android:id="@+id/pbSpeech"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_margin="@dimen/inner_frame_layout_padding"
+                android:clickable="false"
+                android:duplicateParentState="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:indeterminateTint="#ffffffff"
+                android:indeterminateTintMode="src_atop"
+                android:visibility="invisible" />
+
+            <ImageButton
+                android:id="@+id/ibSaiyLogo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?android:attr/selectableItemBackground"
+                android:clickable="false"
+                android:duplicateParentState="true"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:padding="@dimen/inner_frame_layout_padding"
+                android:scaleType="fitCenter"
+                android:src="@drawable/saiy_logo" />
+
+            <TextView
+                android:id="@+id/tvMessage"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:clickable="false"
+                android:duplicateParentState="true"
+                android:ellipsize="marquee"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:fontFamily="sans-serif-smallcaps"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="@dimen/inner_frame_layout_padding"
+                android:scrollHorizontally="true"
+                android:singleLine="true"
+                android:text="@string/self_aware"
+                android:textAlignment="center"
+                android:textColor="@color/ambient_mode_text"
+                android:textSize="10sp" />
+        </RelativeLayout>
+    </FrameLayout>
+</androidx.wear.widget.BoxInsetLayout>

@@ -112,6 +112,7 @@ dependencies {
     implementation libs.browser
     implementation libs.cardview
     implementation libs.constraintlayout
+    implementation libs.customview
     implementation libs.collection
     implementation (libs.core) {
         exclude group: 'androidx.core', module: 'core-ktx'
@@ -152,10 +153,13 @@ dependencies {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'com.google.guava'
     }
-    implementation libs.play.services.location
+    implementation libs.play.services.base
+    implementation libs.play.services.basement
     implementation libs.play.services.auth
+    implementation libs.play.services.location
     implementation libs.play.services.ads.identifier
     implementation libs.play.services.ads
+    implementation libs.play.services.tasks
     implementation libs.play.services.wearable
     implementation libs.speechkit
     implementation libs.guava
@@ -260,6 +264,7 @@ dependencies {
     implementation project(':ToastCompat')
     implementation project(':lib')
     implementation project(':StandOut')
+    wearApp project(':Saiy-Wear')
 
     annotationProcessor libs.hilt.compiler
     testImplementation libs.junit

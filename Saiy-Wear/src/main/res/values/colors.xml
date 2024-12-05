@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorSaiyPurpleDark">#5330CE</color>
+    <color name="white">#FFFFFF</color>
+    <color name="primary_text_dark">@color/white</color>
+    <color name="ambient_mode_text">@color/primary_text_dark</color>
+</resources>

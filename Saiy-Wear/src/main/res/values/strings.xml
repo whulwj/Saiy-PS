@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Saiy</string>
+    <string name="error_speech_provider">No speech provider?</string>
+    <string name="self_aware">Self-aware…</string>
+    <string name="title_waiting_google">Waiting for Google…</string>
+</resources>
