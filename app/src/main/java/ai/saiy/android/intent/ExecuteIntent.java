@@ -33,7 +33,6 @@ import android.speech.RecognizerIntent;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
-import androidx.core.content.FileProvider;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
@@ -55,7 +54,6 @@ import ai.saiy.android.ui.activity.ActivityLauncherShortcut;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsBundle;
-import ai.saiy.android.utils.UtilsFile;
 import ai.saiy.android.utils.UtilsString;
 
 /**
@@ -67,7 +65,6 @@ public class ExecuteIntent {
 
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = ExecuteIntent.class.getSimpleName();
-    private static final String PACKAGE_MIME_TYPE = "application/vnd.android.package-archive";
 
     /**
      * Execute a given intent
@@ -1239,36 +1236,6 @@ public class ExecuteIntent {
         intent.setPackage(context.getPackageName());
         ShortcutManagerCompat.requestPinShortcut(context, new ShortcutInfoCompat.Builder(context, "start_recognition_shortcut").setShortLabel(context.getString(R.string.app_name)).setLongLabel(context.getString(R.string.launcher_shortcut_description)).setIcon(IconCompat.createWithResource(context, R.drawable.ic_shortcut_record_voice_over)).setIntent(intent).build(), null);
         return true;
-    }
-
-    public static boolean installQL(@NonNull Context context) {
-        try {
-            final Intent intent = new Intent(Intent.ACTION_VIEW);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                intent.setDataAndType(FileProvider.getUriForFile(context, UtilsFile.FILE_PROVIDER, UtilsFile.quickLaunchFile(context)), PACKAGE_MIME_TYPE);
-            } else {
-                intent.setDataAndType(Uri.fromFile(UtilsFile.quickLaunchFile(context)), PACKAGE_MIME_TYPE);
-            }
-            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
-            return true;
-        } catch (ActivityNotFoundException e) {
-            if (DEBUG) {
-                MyLog.e(CLS_NAME, "installQL ActivityNotFoundException");
-                e.printStackTrace();
-            }
-        } catch (NullPointerException e) {
-            if (DEBUG) {
-                MyLog.e(CLS_NAME, "installQL NullPointerException");
-                e.printStackTrace();
-            }
-        } catch (Exception e) {
-            if (DEBUG) {
-                MyLog.e(CLS_NAME, "installQL Exception");
-                e.printStackTrace();
-            }
-        }
-        return false;
     }
 
     public static boolean launchShortcut(Context context, String str) {

@@ -171,40 +171,23 @@ public final class FragmentSuperUser extends Fragment implements View.OnClickLis
                 getParentActivity().toast(getString(R.string.menu_root), Toast.LENGTH_SHORT);
                 break;
             case 1:
-                if (ai.saiy.android.permissions.PermissionHelper.checkFilePermissions(getApplicationContext())) {
-                    Schedulers.io().scheduleDirect(new Runnable() {
-                        @Override
-                        public void run() {
-                            if (!ai.saiy.android.utils.UtilsFile.createDirs(getApplicationContext())) {
-                                toast(getString(R.string.failed), Toast.LENGTH_SHORT);
-                            } else {
-                                if (ai.saiy.android.intent.ExecuteIntent.installQL(getApplicationContext())) {
-                                    return;
-                                }
-                                toast(getString(R.string.failed), Toast.LENGTH_SHORT);
-                            }
-                        }
-                    });
-                }
-                break;
-            case 2:
                 getParentActivity().vibrate();
                 SPH.setStartAtBoot(getApplicationContext(), !SPH.getStartAtBoot(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getStartAtBoot(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 3:
+            case 2:
                 helper.showVocalVerificationDialog();
                 break;
-            case 4:
+            case 3:
                 getParentActivity().vibrate();
                 SPH.setPingCheck(getApplicationContext(), !SPH.getPingCheck(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getPingCheck(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 5:
+            case 4:
                 Schedulers.computation().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
@@ -215,70 +198,70 @@ public final class FragmentSuperUser extends Fragment implements View.OnClickLis
                     }
                 });
                 break;
-            case 6:
+            case 5:
                 helper.showMemorySlider();
                 break;
-            case 7:
+            case 6:
                 helper.showAlgorithmSelector();
                 break;
-            case 8:
+            case 7:
                 helper.showNoteProviderSelector();
                 break;
-            case 9:
+            case 8:
                 getParentActivity().vibrate();
                 SPH.setSmsBodyFix(getApplicationContext(), !SPH.getSmsBodyFix(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getSmsBodyFix(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 10:
+            case 9:
                 getParentActivity().vibrate();
                 SPH.setSmsIdFix(getApplicationContext(), !SPH.getSmsIdFix(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getSmsIdFix(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 11:
+            case 10:
                 getParentActivity().vibrate();
                 SPH.setRecogniserBusyFix(getApplicationContext(), !SPH.getRecogniserBusyFix(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getRecogniserBusyFix(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 12:
+            case 11:
                 getParentActivity().vibrate();
                 SPH.setOkayGoogleFix(getApplicationContext(), !SPH.getOkayGoogleFix(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getOkayGoogleFix(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 13:
+            case 12:
                 getParentActivity().vibrate();
                 SPH.setDoubleBeepFix(getApplicationContext(), !SPH.getDoubleBeepFix(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getDoubleBeepFix(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 14:
+            case 13:
                 getParentActivity().vibrate();
                 SPH.setTorchFix(getApplicationContext(), !SPH.getTorchFix(getApplicationContext()));
                 mObjects.get(position).setIconExtra(SPH.getTorchFix(getApplicationContext()) ?
                         FragmentHome.CHECKED : FragmentHome.UNCHECKED);
                 mAdapter.notifyItemChanged(position);
                 break;
-            case 15:
+            case 14:
                 getParentActivity().vibrate();
                 ai.saiy.android.intent.ExecuteIntent.voiceSearchHandsFree(getParentActivity());
                 break;
-            case 16:
+            case 15:
                 getParentActivity().vibrate();
                 SettingsIntent.clearPackagePreferredActivities(getApplicationContext());
                 toast(getString(R.string.success_), Toast.LENGTH_SHORT);
                 break;
-            case 17:
+            case 16:
                 helper.showResetDialog();
                 break;
-            case 18:
+            case 17:
                 if (SPH.getOverrideSecure(getApplicationContext()) || SPH.getOverrideSecureDriving(getApplicationContext()) || SPH.getOverrideSecureHeadset(getApplicationContext())) {
                     helper.showOverrideSecureSelector();
                 } else {
@@ -311,57 +294,54 @@ public final class FragmentSuperUser extends Fragment implements View.OnClickLis
                 getParentActivity().speak(R.string.lp_root, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             case 1:
-                getParentActivity().speak(R.string.lp_install_ql, LocalRequest.ACTION_SPEAK_ONLY);
-                break;
-            case 2:
                 getParentActivity().speak(R.string.lp_start_boot, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 3:
+            case 2:
                 getParentActivity().speak(R.string.lp_vocal_verification, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 4:
+            case 3:
                 getParentActivity().speak(R.string.lp_ping, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 5:
+            case 4:
                 getParentActivity().speak(R.string.lp_blacklist, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 6:
+            case 5:
                 getParentActivity().speak(R.string.lp_memory_usage, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 7:
+            case 6:
                 getParentActivity().speak(R.string.lp_algorithms_2, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 8:
+            case 7:
                 getParentActivity().speak(R.string.lp_note_provider, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 9:
+            case 8:
                 getParentActivity().speak(R.string.lp_sms_body_fix, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 10:
+            case 9:
                 getParentActivity().speak(R.string.lp_sms_id_fix, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 11:
+            case 10:
                 getParentActivity().speak(R.string.lp_recogniser_busy_fix, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 12:
+            case 11:
                 getParentActivity().speak(R.string.lp_okay_google_fix, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 13:
+            case 12:
                 getParentActivity().speak(R.string.lp_double_beep_fix, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 14:
+            case 13:
                 getParentActivity().speak(R.string.lp_flashlight_fix, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 15:
+            case 14:
                 getParentActivity().speak(R.string.lp_wired_headset_fix, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 16:
+            case 15:
                 getParentActivity().speak(R.string.lp_reset_saiy_defaults, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 17:
+            case 16:
                 getParentActivity().speak(R.string.lp_reset_default, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
-            case 18:
+            case 17:
                 getParentActivity().speak(R.string.lp_override_secure, LocalRequest.ACTION_SPEAK_ONLY);
                 break;
             default:

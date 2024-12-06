@@ -211,7 +211,6 @@
     <string name="menu_alexa_shortcut">Alexa Shortcut</string>
     <string name="menu_launcher_shortcut">启动器快捷方式</string>
     <string name="launcher_shortcut_description">点击激活Saiy</string>
-    <string name="menu_install_shortcut_app">Install Shortcut App</string>
     <string name="menu_shortcut_failed">创建快捷方式失败！?</string>
     <string name="hint_bugs_command" translatable="true">输入要运行的命…</string>
     <string name="menu_recogniser_busy_fix" translatable="true">识别器忙修复</string>
@@ -231,7 +230,6 @@
     <string name="lp_blacklist">安装在您设备上的其它应用程序，可以请求我代表他们发言或注册执行针对他们内容进行操作的关键词。 任何此类应用程序都需要请求您的许可才能这样做。 如果你发现有滥用这个权限的，你可以将它列入黑名单，并阻止它跟我连载。</string>
     <string name="lp_double_beep_fix">因为谷歌热词检测服务出现缺陷，它们占有麦克风而不共享。在您试图激活我的时候，我可能只是不停地多次发出哔哔声。启动此选项将让我能够识别它何时发生并愉快地杀死谷歌助理。</string>
     <string name="lp_flashlight_fix">某些安卓设备不喜欢我试图启动手电筒的方式。如果您遇到此问题请切换该设置。我的开发人员知道导致显示器关闭的时候手电筒被禁用的问题。他正在努力解决中。</string>
-    <string name="lp_install_ql">If you require a stand alone application to launch me in listening mode. Perhaps for your car unit, or a button mapping app. Then this is the option for you.</string>
     <string name="lp_memory_usage">为了发挥职能，我需要同时绑定文本转语音引擎和语音识别引擎。我自己以及他们的内存使用量组合将显示在 Android 运行进程列表中，作为一个统计值。该使用量可能会让某些用户惊慌，并导致他们错误地相信内存分配和我的电池消耗成正比。这是个错误的假设。无论如何，在此您可以设置我能多快解除和两个引擎的绑定。在您考虑减少此时间跨度之前，请在故障排除和缺陷部分阅读进一步信息。</string>
     <string name="lp_note_provider">If your preferred note provider is not appearing as a choice, then this is the place for you. There are many ways different note apps expect to receive the content and title, and here I do my best to provide you with as many options as possible to make your favourite app work correctly. Select an option and then press test. If the note app you want appears as a choice, then select them and check the test content and title are populated correctly. If you exhaust all of the options, then it may be that the app you want, simply isn\'t handling the request correctly. Drop my developer a quick email from the Development Section, and he\'ll do his best to give them a nudge.</string>
     <string name="lp_okay_google_fix">由于谷歌的热词检测服务出现缺陷，okay Google 命令可能无法正确运行。启动此选项应该能暂时解决此问题。</string>

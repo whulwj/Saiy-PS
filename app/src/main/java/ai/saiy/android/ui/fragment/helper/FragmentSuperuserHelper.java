@@ -131,13 +131,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
-        containerUI.setTitle(getParent().getString(R.string.menu_install_shortcut_app));
-        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_install));
-        containerUI.setIconMain(R.drawable.ic_voice_over);
-        containerUI.setIconExtra(FragmentHome.CHEVRON);
-        mObjects.add(containerUI);
-
-        containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_start_boot));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
         containerUI.setIconMain(R.drawable.ic_fan);

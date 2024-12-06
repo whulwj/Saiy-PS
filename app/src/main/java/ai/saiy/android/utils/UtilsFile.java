@@ -54,7 +54,6 @@ public class UtilsFile {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = UtilsFile.class.getSimpleName();
 
-    public static final String FILE_PROVIDER = "ai.saiy.android.fileprovider";
     private static final String SAIY_DIRECTORY = "/Saiy";
     private static final String SOUND_DIRECTORY = "/Sounds";
     private static final String RELATIVE_SOUND_DIRECTORY = SAIY_DIRECTORY + SOUND_DIRECTORY;
@@ -64,7 +63,6 @@ public class UtilsFile {
     private static final String RELATIVE_EXPORT_DIRECTORY = SAIY_DIRECTORY + EXPORT_DIRECTORY;
     public static final String OLD_EXPORT_FILE_SUFFIX = ".saiy";
     public static final String EXPORT_FILE_SUFFIX = ".json";
-    private static final String QUICK_LAUNCH_FILE = "/saiy_ql.apk";
     private static final String NO_MEDIA_FILE = "/.nomedia";
 
     /**
@@ -411,10 +409,6 @@ public class UtilsFile {
         return files;
     }
 
-    public static File quickLaunchFile(@NonNull final Context ctx) {
-        return new File(saiyDirectory(ctx) + QUICK_LAUNCH_FILE);
-    }
-
     public static boolean isExternalStorageReadable(@NonNull final Context ctx) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             final File file = ctx.getExternalFilesDir(null);
@@ -482,11 +476,6 @@ public class UtilsFile {
         return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_SOUND_DIRECTORY);
     }
 
-    private static boolean createQuickLaunchFile(@NonNull Context context) {
-        final File file = resourceToFile(context, ai.saiy.android.R.raw.saiy_ql, quickLaunchFile(context));
-        return file != null && file.exists();
-    }
-
     private static boolean isImportDirectoryExists(@NonNull final Context ctx) {
         final File file = new File(getExternalStorageDirectory(ctx, null) + RELATIVE_IMPORT_DIRECTORY);
         return file.exists() && file.isDirectory();
@@ -531,7 +520,7 @@ public class UtilsFile {
         }
         if (isSaiyDirectoryExists(ctx) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || isImportDirectoryExists(ctx)) &&
                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || isExportDirectoryExists(ctx)) &&
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q || isSoundDirectoryExists(ctx) && isNoMediaFileExists(ctx)) && isQuickLaunchFileExists(ctx)) {
+                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q || isSoundDirectoryExists(ctx) && isNoMediaFileExists(ctx))) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "createDirs: all dirs exist: true");
             }
@@ -562,16 +551,6 @@ public class UtilsFile {
             }
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "createDirs: createSaiyDir: success");
-            }
-        }
-
-        if (!isQuickLaunchFileExists(ctx)) {
-            if (createQuickLaunchFile(ctx)) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "createDirs: createQL: success");
-                }
-            } else if (DEBUG) {
-                MyLog.w(CLS_NAME, "createDirs: createQL: failed");
             }
         }
 
@@ -689,10 +668,6 @@ public class UtilsFile {
 
     private static org.apache.commons.io.filefilter.IOFileFilter soundFileFilter() {
         return FileFilterUtils.or(FileFilterUtils.suffixFileFilter(Constants.DEFAULT_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE), FileFilterUtils.suffixFileFilter(Constants.OGG_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE), FileFilterUtils.suffixFileFilter(Constants.MP3_AUDIO_FILE_SUFFIX, IOCase.INSENSITIVE));
-    }
-
-    private static boolean isQuickLaunchFileExists(@NonNull final Context ctx) {
-        return new File(saiyDirectory(ctx) + QUICK_LAUNCH_FILE).exists();
     }
 
     private static boolean isNoMediaFileExists(@NonNull final Context ctx) {

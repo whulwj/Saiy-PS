@@ -70,7 +70,6 @@ public class AssistantIntentService extends IntentService {
     private static final String EXTRA_ASSIST_CONTEXT = "android.intent.extra.ASSIST_CONTEXT";
     private static final String ACTION_ASSIST_SEARCH = "com.google.android.gms.actions.SEARCH_ACTION";
     public static final String ACTION_WIDGET_ASSIST = "ai.saiy.android.action.WIDGET_ASSIST";
-    private static final String ACTION_QL_ASSIST = "ai.saiy.android.action.QL_ASSIST";
     private static final String ACTION_ALEXA = "ai.saiy.android.action.ALEXA";
     private static final String ACTION_HOTWORD = "ai.saiy.android.HOTWORD";
     private static final String ACTION_DRIVING ="ai.saiy.android.DRIVING";
@@ -232,7 +231,7 @@ public class AssistantIntentService extends IntentService {
                 actionBundle.putSerializable(LocalRequest.EXTRA_SUPPORTED_LANGUAGE, sl);
                 if (action.equals(Intent.ACTION_ASSIST) || action.equals(Intent.ACTION_MAIN) || action.equals(Intent.ACTION_VOICE_COMMAND)
                         || action.equals(RecognizerIntent.ACTION_WEB_SEARCH) || action.equals(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE)
-                        || action.equals(ACTION_WIDGET_ASSIST) || action.equals(ACTION_QL_ASSIST)) {
+                        || action.equals(ACTION_WIDGET_ASSIST)) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onHandleIntent: action: Intent.ACTION_ASSIST");
                         if (intent.hasExtra(EXTRA_ASSIST_CONTEXT)) {
