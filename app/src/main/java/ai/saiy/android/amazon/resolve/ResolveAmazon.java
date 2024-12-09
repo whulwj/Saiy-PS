@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import org.apache.commons.fileupload.MultipartStream;
+import org.apache.commons.fileupload2.core.MultipartInput;
 import org.apache.commons.lang3.StringUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -66,10 +66,10 @@ public class ResolveAmazon {
         return UtilsString.notNaked(contentId) ? contentId : "";
     }
 
-    private String readHeaders(MultipartStream multipartStream) {
+    private String readHeaders(MultipartInput multipartInput) {
         try {
-            return multipartStream.readHeaders();
-        } catch (MultipartStream.MalformedStreamException e) {
+            return multipartInput.readHeaders();
+        } catch (MultipartInput.MalformedStreamException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "readHeaders: MalformedStreamException" + ", " + e.getMessage());
             }
@@ -95,21 +95,21 @@ public class ResolveAmazon {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "parse: responseToString: " + responseString);
             }
-            MultipartStream multipartStream = new MultipartStream(new ByteArrayInputStream(bytes), boundaryIdentifier.getBytes(), 512, null);
+            MultipartInput multipartInput = MultipartInput.builder().setInputStream(new ByteArrayInputStream(bytes)).setBoundary(boundaryIdentifier.getBytes()).setBufferSize(512).get();
             Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-            if (multipartStream.skipPreamble()) {
+            if (multipartInput.skipPreamble()) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "parse: initial boundary: true");
                 }
                 boolean isFirst = true;
                 while (true) {
-                    if (!isFirst && !multipartStream.readBoundary()) {
+                    if (!isFirst && !multipartInput.readBoundary()) {
                         break;
                     }
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "parse: first: " + isFirst);
                     }
-                    String headers = readHeaders(multipartStream);
+                    String headers = readHeaders(multipartInput);
                     if (!UtilsString.notNaked(headers)) {
                         break;
                     }
@@ -117,7 +117,7 @@ public class ResolveAmazon {
                         MyLog.i(CLS_NAME, "headers:\n" + headers);
                     }
                     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-                    multipartStream.readBodyData(byteArrayOutputStream);
+                    multipartInput.readBodyData(byteArrayOutputStream);
                     if (headers.contains(UtilsNetwork.JSON_UTF_8)) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "parse: json");

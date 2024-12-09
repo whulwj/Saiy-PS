@@ -2,10 +2,10 @@
 gradlePlugin = "8.7.3"
 googleAuthLibraryOauth2Http = "1.24.1" #Don't update it unless you update the google-http-client-gson first
 billing = "6.0.1"
-commonsIo = "2.16.1"
+commonsIo = "2.18.0"
 commonsCodec = "1.17.1"
 commonsLang3 = "3.17.0"
-commonsFileUpload = "1.5"
+commonsFileUpload = "2.0.0-M2"
 commonsText = "1.12.0"
 commonsValidator = "1.9.0"
 googleGoogleApiServicesTranslate = "v2-rev51-1.25.0"
@@ -85,7 +85,7 @@ billing = { group = "com.android.billingclient", name = "billing", version.ref =
 commons-io = { group = "commons-io", name = "commons-io", version.ref = "commonsIo" }
 commons-codec = { group = "commons-codec", name = "commons-codec", version.ref = "commonsCodec" }
 commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commonsLang3" }
-commons-fileupload = { group = "commons-fileupload", name = "commons-fileupload", version.ref = "commonsFileUpload" }
+commons-fileupload = { group = "org.apache.commons", name = "commons-fileupload2-core", version.ref = "commonsFileUpload" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commonsText" }
 commons-validator = { group = "commons-validator", name = "commons-validator", version.ref = "commonsValidator" }
 google-google-api-services-translate = { group = "com.google.apis", name = "google-api-services-translate", version.ref = "googleGoogleApiServicesTranslate" }
