@@ -134,7 +134,7 @@ public class UserFirebaseHelper {
                 }
                 premiumUser.setTimeout(submissionCredits);
                 premiumUser.setCredits(submissionTimeout);
-                com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(userFirebase.getUid()).setValue(premiumUser).addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+                com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ_WRITE).child(UtilsFirebase.PATH_USERS).child(userFirebase.getUid()).setValue(premiumUser).addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
                         if (DEBUG) {
@@ -184,7 +184,7 @@ public class UserFirebaseHelper {
 
     public void migrateUser(final String anonymousUid, String uid, PremiumUser premiumUser) {
         if (!hasExistingAuthAccount(uid)) {
-            com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(uid).setValue(premiumUser).addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+            com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ_WRITE).child(UtilsFirebase.PATH_USERS).child(uid).setValue(premiumUser).addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
                 @Override
                 public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
                     if (DEBUG) {
@@ -208,7 +208,7 @@ public class UserFirebaseHelper {
     public @Nullable PremiumUser getRequestPremiumUser(String uid) {
         final com.google.android.gms.tasks.TaskCompletionSource<PremiumUser> taskCompletionSource = new com.google.android.gms.tasks.TaskCompletionSource<>();
         final com.google.android.gms.tasks.Task<PremiumUser> task = taskCompletionSource.getTask();
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ_WRITE).child(UtilsFirebase.PATH_USERS).child(uid).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot snapshot) {
                 if (DEBUG) {

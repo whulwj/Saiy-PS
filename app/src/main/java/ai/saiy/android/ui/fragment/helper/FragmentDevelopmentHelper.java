@@ -41,6 +41,7 @@ import java.util.concurrent.TimeUnit;
 import ai.saiy.android.R;
 import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.firebase.FirebaseInstallationsHelper;
+import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.firebase.database.read.PremiumUser;
 import ai.saiy.android.firebase.database.write.Design;
 import ai.saiy.android.firebase.database.write.EmotionAnalysis;
@@ -982,7 +983,7 @@ public class FragmentDevelopmentHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendSubmissionDesign: userSignedIn: " + getParentActivity().userSignedIn());
         }
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("design").child(design.getType()).setValue(design).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_WRITE).child("design").child(design.getType()).setValue(design).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (DEBUG) {
@@ -999,7 +1000,7 @@ public class FragmentDevelopmentHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendSubmissionNaturalLanguage: userSignedIn: " + getParentActivity().userSignedIn());
         }
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("natural_language").getRef().setValue(naturalLanguage).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_WRITE).child("natural_language").getRef().setValue(naturalLanguage).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (DEBUG) {
@@ -1016,7 +1017,7 @@ public class FragmentDevelopmentHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendSubmissionBug: userSignedIn: " + getParentActivity().userSignedIn());
         }
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("enhancement").getRef().setValue(enhancement).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_WRITE).child("enhancement").getRef().setValue(enhancement).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (DEBUG) {
@@ -1033,7 +1034,7 @@ public class FragmentDevelopmentHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendSubmissionVocalVerification: userSignedIn: " + getParentActivity().userSignedIn());
         }
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("vocal_verification").getRef().setValue(vocalVerification).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_WRITE).child("vocal_verification").getRef().setValue(vocalVerification).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (DEBUG) {
@@ -1050,7 +1051,7 @@ public class FragmentDevelopmentHelper {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "sendSubmissionEmotionAnalysis: userSignedIn: " + getParentActivity().userSignedIn());
         }
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("emotion_analysis").getRef().setValue(emotionAnalysis).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_WRITE).child("emotion_analysis").getRef().setValue(emotionAnalysis).addOnCompleteListener(getParentActivity(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (DEBUG) {

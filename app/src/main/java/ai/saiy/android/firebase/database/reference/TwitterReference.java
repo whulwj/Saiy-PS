@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.firebase.database.read.Twitter;
 import ai.saiy.android.utils.MyLog;
 
@@ -19,7 +20,7 @@ public class TwitterReference {
     private Twitter getRequestTwitter() {
         final com.google.android.gms.tasks.TaskCompletionSource<Twitter> taskCompletionSource = new com.google.android.gms.tasks.TaskCompletionSource<>();
         final com.google.android.gms.tasks.Task<Twitter> task = taskCompletionSource.getTask();
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read").child("twitter").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ).child("twitter").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
                 if (DEBUG) {

@@ -13,9 +13,11 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+
+import javax.inject.Inject;
 
 import ai.saiy.android.firebase.FirebaseInstallationsHelper;
 import ai.saiy.android.firebase.UserFirebaseListener;
@@ -23,9 +25,11 @@ import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
+@HiltViewModel
 public final class ViewModelFirebaseAuth extends AndroidViewModel implements LifecycleEventObserver,
         UserFirebaseListener {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -36,6 +40,7 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
     private final MutableLiveData<Boolean> isAddFree = new MutableLiveData<>();
     private volatile boolean havePersisted;
     private final CompositeDisposable mLocalDisposable = new CompositeDisposable();
+    @Inject ExecutorService executorService;
 
     private final AtomicInteger signInCount = new AtomicInteger();
     private final FirebaseAuth.AuthStateListener mAuth = new FirebaseAuth.AuthStateListener() {
@@ -67,7 +72,7 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
         }
     };
 
-    public ViewModelFirebaseAuth(@NonNull Application application) {
+    public @Inject ViewModelFirebaseAuth(@NonNull Application application) {
         super(application);
         this.firebaseAuth = FirebaseAuth.getInstance();
     }
@@ -95,11 +100,11 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
             @Override
             public void run() {
                 com.google.firebase.database.FirebaseDatabase.getInstance().setPersistenceEnabled(true);
-/*                final com.google.firebase.database.DatabaseReference databaseReference = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read");
+/*                final com.google.firebase.database.DatabaseReference databaseReference = com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ);
                 databaseReference.child("bing").child("translate").keepSynced(true);
                 databaseReference.child("bing").child("speaker_recognition").keepSynced(true);
-                databaseReference.child("provider").child("translation").keepSynced(true);
-                databaseReference.child("provider").child("weather").keepSynced(true);
+                databaseReference.child(UtilsFirebase.PATH_PROVIDER).child("translation").keepSynced(true);
+                databaseReference.child(UtilsFirebase.PATH_PROVIDER).child("weather").keepSynced(true);
                 databaseReference.child("bugs").child("known_bugs").keepSynced(true);
                 databaseReference.child("google").child("translate").keepSynced(true);
                 databaseReference.child("google").child("geo").keepSynced(true);
@@ -113,7 +118,7 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
                 databaseReference.child("iap").keepSynced(true);*/
                 final ai.saiy.android.firebase.UserFirebase userFirebase = UtilsFirebase.getUserFirebase(getApplication());
                 if (userFirebase != null) {
-                    com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read_write").child("users").child(userFirebase.getUid()).keepSynced(true);
+                    com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ_WRITE).child(UtilsFirebase.PATH_USERS).child(userFirebase.getUid()).keepSynced(true);
                 } else if (DEBUG) {
                     MyLog.i(CLS_NAME, "persistFirebase: userFirebase null");
                 }
@@ -126,7 +131,7 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
      * function to sign in to Firebase Anonymously
      */
     private void signInAnonymously() {
-        firebaseAuth.signInAnonymously().addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<com.google.firebase.auth.AuthResult>() {
+        firebaseAuth.signInAnonymously().addOnCompleteListener(executorService, new com.google.android.gms.tasks.OnCompleteListener<com.google.firebase.auth.AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (DEBUG) {

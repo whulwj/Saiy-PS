@@ -41,6 +41,7 @@ import javax.inject.Inject;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.device.DeviceInfo;
+import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.firebase.database.write.IAPPurchase;
 import ai.saiy.android.iba_util.Security;
 import ai.saiy.android.ui.activity.CurrentActivityProvider;
@@ -428,7 +429,7 @@ public final class ViewModelBilling extends AndroidViewModel implements Lifecycl
         }
         final boolean isFreedomInstalled = Installed.isPackageInstalled(getApplication(), Installed.PACKAGE_FREEDOM);
         final IAPPurchase userIap = new IAPPurchase(purchase.getOrderId(), purchase.getOriginalJson(), purchase.getPackageName(), purchase.getPurchaseTime(), purchase.getSignature(), purchase.getProducts(), purchase.getPurchaseToken(), isFreedomInstalled, hashCode, hexCertificate);
-        final Task<Void> task = com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_write").child("user_iap").getRef().setValue(userIap);
+        final Task<Void> task = com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_WRITE).child("user_iap").getRef().setValue(userIap);
         if (DEBUG) {
             final com.google.android.gms.tasks.OnCompleteListener<Void> onCompleteListener = new com.google.android.gms.tasks.OnCompleteListener<Void>() {
                 @Override

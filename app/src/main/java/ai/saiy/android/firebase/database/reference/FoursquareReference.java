@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.firebase.database.read.Foursquare;
 import ai.saiy.android.utils.MyLog;
 
@@ -19,7 +20,7 @@ public class FoursquareReference {
     private Foursquare getRequestFoursquare() {
         final com.google.android.gms.tasks.TaskCompletionSource<Foursquare> taskCompletionSource = new com.google.android.gms.tasks.TaskCompletionSource<>();
         final com.google.android.gms.tasks.Task<Foursquare> task = taskCompletionSource.getTask();
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read").child("foursquare").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ).child("foursquare").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
                 if (DEBUG) {

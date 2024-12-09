@@ -22,6 +22,12 @@ public class UtilsFirebase {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = UtilsFirebase.class.getSimpleName();
 
+    public static final String DATABASE_READ_WRITE = "db_read_write";
+    public static final String DATABASE_READ = "db_read";
+    public static final String DATABASE_WRITE = "db_write";
+    public static final String PATH_PROVIDER = "provider";
+    public static final String PATH_USERS = "users";
+
     public static UserFirebase getUserFirebase(Context context) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getUserFirebase");

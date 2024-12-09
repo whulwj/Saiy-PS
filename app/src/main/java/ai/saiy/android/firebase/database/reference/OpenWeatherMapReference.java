@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.firebase.database.read.OpenWeatherMap;
 import ai.saiy.android.utils.MyLog;
 
@@ -19,7 +20,7 @@ public class OpenWeatherMapReference {
     private OpenWeatherMap getRequestOpenWeatherMap() {
         final com.google.android.gms.tasks.TaskCompletionSource<OpenWeatherMap> taskCompletionSource = new com.google.android.gms.tasks.TaskCompletionSource<>();
         com.google.android.gms.tasks.Task<OpenWeatherMap> task = taskCompletionSource.getTask();
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read").child("open_weather_map").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ).child("open_weather_map").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
                 if (DEBUG) {

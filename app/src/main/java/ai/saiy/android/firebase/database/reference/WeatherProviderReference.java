@@ -7,6 +7,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
+import ai.saiy.android.firebase.UtilsFirebase;
 import ai.saiy.android.firebase.database.read.WeatherProvider;
 import ai.saiy.android.utils.MyLog;
 
@@ -17,7 +18,7 @@ public class WeatherProviderReference {
     public @Nullable WeatherProvider getRequestWeatherProvider() {
         final com.google.android.gms.tasks.TaskCompletionSource<WeatherProvider> taskCompletionSource = new com.google.android.gms.tasks.TaskCompletionSource<>();
         final com.google.android.gms.tasks.Task<WeatherProvider> task = taskCompletionSource.getTask();
-        com.google.firebase.database.FirebaseDatabase.getInstance().getReference("db_read").child("provider").child("weather").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
+        com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ).child(UtilsFirebase.PATH_PROVIDER).child("weather").addListenerForSingleValueEvent(new com.google.firebase.database.ValueEventListener() {
             @Override
             public void onDataChange(@NonNull com.google.firebase.database.DataSnapshot dataSnapshot) {
                 if (DEBUG) {

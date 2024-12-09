@@ -386,6 +386,7 @@ public final class ActivityWearHome extends FragmentActivity implements Activity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQ_AUDIO_PERMISSION) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onRequestPermissionsResult: REQ_AUDIO_PERMISSION");
