@@ -159,7 +159,7 @@ public class SelfAware extends Service {
 
     private static final long OKAY_GOOGLE_DELAY = 500L;
 
-    private static final long MONITOR_ENGINE = 10000L;
+    private static final long MONITOR_ENGINE = 15000L;
 
     private volatile SaiyTextToSpeech tts;
 
@@ -883,8 +883,8 @@ public class SelfAware extends Service {
                     if (ai.saiy.android.command.easter_egg.EasterEggHunter.STAGE_4 == SPH.getEasterEggState(getApplicationContext())) {
                         SPH.setEasterEggState(getApplicationContext(), ai.saiy.android.command.easter_egg.EasterEggHunter.STAGE_5);
                         ai.saiy.android.command.easter_egg.EasterEggLocal.shareIntent(getApplicationContext());
-                        break;
                     }
+                    break;
                 case Condition.CONDITION_NONE:
                 default:
                     if (DEBUG) {
@@ -1267,6 +1267,7 @@ public class SelfAware extends Service {
                                         MyLog.i(CLS_NAME, "IBM: IDLE");
                                     }
 
+                                    recognitionListener.resetBugVariables();
                                     conditions.setFetchingCountdown();
                                     Schedulers.io().scheduleDirect(new Runnable() {
                                         @Override
@@ -1591,6 +1592,40 @@ public class SelfAware extends Service {
         initTTS();
     }
 
+    private void initTTSSleep() {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "initTTSSleep: pending: " + initPending.get() + " ~ count: " + (initCount.get() + 1));
+        }
+        try {
+            Thread.sleep(1000L);
+        } catch (InterruptedException e) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "initTTSSleep: InterruptedException");
+            }
+        }
+        if (this.tts == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "initTTSSleep: null pending: " + initPending.get() + " ~ count: " + (initCount.get() + 1));
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "initTTSSleep: not null pending: " + initPending.get() + " ~ count: " + (initCount.get() + 1));
+            }
+            if (initPending.get()) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "initTTSSleep: not null pending: true: retying");
+                }
+            } else {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "initTTSSleep: not null pending: false: abandoning");
+                }
+                return;
+            }
+        }
+        this.initPending.set(false);
+        initTTS();
+    }
+
     /**
      * The TTS engine has failed to initialise correctly or has falsely reported that it has. Here we
      * give it a chance to recover, up to a certain amount of times, before toasting an error to the user.
@@ -1727,6 +1762,7 @@ public class SelfAware extends Service {
                         if (DEBUG) {
                             MyLog.e(CLS_NAME, "onInit: SUCCESS: tts null. Threading error");
                         }
+                        initTTSSleep();
                         return;
                     }
 
@@ -1764,7 +1800,7 @@ public class SelfAware extends Service {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "onInit: ERROR");
                     }
-                    initTTS();
+                    initTTSSleep();
                     break;
             }
         }
@@ -1808,13 +1844,13 @@ public class SelfAware extends Service {
 
                     conditions.acquireDisplayWakeLock();
 
-                    new Handler().postDelayed(new Runnable() {
+                    Schedulers.trampoline().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
                             ExecuteIntent.googleNowListen(getApplicationContext(), conditions.isSecure());
                             new GoogleNowMonitor().start(getApplicationContext());
                         }
-                    }, OKAY_GOOGLE_DELAY);
+                    }, OKAY_GOOGLE_DELAY, TimeUnit.MILLISECONDS);
 
                     break;
                 case SaiyHotwordListener.WAKEUP_SAIY:
@@ -2179,7 +2215,6 @@ public class SelfAware extends Service {
                                 default:
                                     if (DEBUG) {
                                         MyLog.i(CLS_NAME, "onResults: DIRECTIVE_NONE");
-                                        break;
                                     }
                                     break;
                             }
@@ -2218,6 +2253,9 @@ public class SelfAware extends Service {
                     break;
                 case MICROSOFT:
                     recogOxford = null;
+                    break;
+                default:
+                    Global.setAlexDirectiveBundle(null);
                     break;
             }
 

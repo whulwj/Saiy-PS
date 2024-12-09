@@ -181,6 +181,7 @@ public class SelfAwareHelper {
                     MyLog.i(CLS_NAME, "Condition.CONDITION_TUTORIAL");
                 }
                 showToast("The tutorial has shutdown", Toast.LENGTH_SHORT);
+                showToast = false;
                 break;
             case Condition.CONDITION_NONE:
             default:

@@ -28,6 +28,7 @@ import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
 import java.util.HashMap;
 
@@ -112,7 +113,7 @@ public class SelfAwareParameters extends HashMap<String, String> {
                 MyLog.i(CLS_NAME, "getVolume: volumePair.second: " + volumePair.second);
             }
 
-            if (volumePair.second < 0.25F && ai.saiy.android.utils.SPH.getToastVolumeWarnings(mContext)) {
+            if (volumePair.second < 0.25F && SPH.getToastVolumeWarnings(mContext)) {
                     new Handler(Looper.getMainLooper()).post(new Runnable() {
                         @Override
                         public void run() {
@@ -121,7 +122,7 @@ public class SelfAwareParameters extends HashMap<String, String> {
                         }
                     });
             }
-            if (ai.saiy.android.utils.SPH.getToastDebug(mContext)) {
+            if (SPH.getToastDebug(mContext)) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -132,7 +133,7 @@ public class SelfAwareParameters extends HashMap<String, String> {
             }
             return volumePair.second;
         } else {
-            if (ai.saiy.android.utils.SPH.getToastVolumeWarnings(mContext)) {
+            if (SPH.getToastVolumeWarnings(mContext)) {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
@@ -339,6 +340,15 @@ public class SelfAwareParameters extends HashMap<String, String> {
             }
         } else {
             super.put(key, String.valueOf(value));
+        }
+    }
+
+    @Override
+    public boolean containsKey(@Nullable Object key) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return key != null && bundle.get(key) != null;
+        } else {
+            return super.containsKey(key);
         }
     }
 
