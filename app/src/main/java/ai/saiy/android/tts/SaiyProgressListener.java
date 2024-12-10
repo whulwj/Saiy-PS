@@ -38,7 +38,7 @@ public abstract class SaiyProgressListener extends UtteranceProgressListener {
 
     public void onBeginSynthesis(final String utteranceId, final int sampleRateInHz, final int audioFormat,
                                  final int channelCount) {
-     }
+    }
 
     /**
      * Called when an utterance "starts" as perceived by the caller. This will

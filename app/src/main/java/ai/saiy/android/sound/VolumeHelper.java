@@ -18,6 +18,8 @@
 package ai.saiy.android.sound;
 
 import android.content.Context;
+import android.media.AudioAttributes;
+import android.media.AudioFocusRequest;
 import android.media.AudioManager;
 import android.os.Build;
 import android.util.Pair;
@@ -247,10 +249,14 @@ public class VolumeHelper {
         try {
 
             final AudioManager audioManager = (AudioManager) ctx.getSystemService(Context.AUDIO_SERVICE);
-
-            switch (audioManager.requestAudioFocus(audioFocus, AudioManager.STREAM_MUSIC,
-                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK)) {
-
+            final int result;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                result = audioManager.requestAudioFocus(audioFocus, AudioManager.STREAM_MUSIC,
+                        AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK);
+            } else {
+                result = audioManager.requestAudioFocus(new AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_MAY_DUCK).setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).setLegacyStreamType(AudioManager.STREAM_MUSIC).build()).setAcceptsDelayedFocusGain(false).setWillPauseWhenDucked(true).setOnAudioFocusChangeListener(audioFocus).build());
+            }
+            switch (result) {
                 case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "AudioManager duckAudioMedia AUDIOFOCUS_REQUEST_FAILED");
@@ -302,9 +308,14 @@ public class VolumeHelper {
             } else {
                 requestType = AudioManager.AUDIOFOCUS_GAIN_TRANSIENT;
             }
+            final int result;
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
+                result = audioManager.requestAudioFocus(audioFocus, AudioManager.STREAM_MUSIC, requestType);
+            } else {
+                result = audioManager.requestAudioFocus(new AudioFocusRequest.Builder(requestType).setAudioAttributes(new AudioAttributes.Builder().setUsage(AudioAttributes.USAGE_MEDIA).setContentType(AudioAttributes.CONTENT_TYPE_SPEECH).setLegacyStreamType(AudioManager.STREAM_MUSIC).build()).setAcceptsDelayedFocusGain(false).setWillPauseWhenDucked(true).setOnAudioFocusChangeListener(audioFocus).build());
+            }
 
-            switch (audioManager.requestAudioFocus(audioFocus, AudioManager.STREAM_MUSIC, requestType)) {
-
+            switch (result) {
                 case AudioManager.AUDIOFOCUS_REQUEST_FAILED:
                     if (DEBUG) {
                         MyLog.w(CLS_NAME, "AudioManager pauseAudioMedia AUDIOFOCUS_REQUEST_FAILED");
@@ -397,13 +408,13 @@ public class VolumeHelper {
 
             final boolean volumeProfileEnabled = volumeProfileEnabled(audioManager);
 
-            if (volumeProfileEnabled) {
+            if (volumeProfileEnabled || !SPH.getAssumeGlobalVolume(ctx)) {
 
                 final int currentPercentage = getMediaVolumePercentage(audioManager);
                 final int userPercentage = SPH.getTTSVolume(ctx);
-                final int combinedPercentage = currentPercentage + userPercentage;
 
                 if (currentPercentage > 0) {
+                    final int combinedPercentage = currentPercentage + userPercentage;
                     if (combinedPercentage > 0) {
                         if (combinedPercentage > 100) {
                             if (DEBUG) {

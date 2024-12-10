@@ -182,7 +182,7 @@ public class TaskerHelper {
 
         if (DEBUG) {
             MyLog.i(CLS_NAME, "Tasks count: " + taskArrayList.size());
-            MyLog.getElapsed(TaskerHelper.class.getSimpleName(), then);
+            MyLog.getElapsed(CLS_NAME, then);
         }
 
         return taskArrayList;
@@ -273,7 +273,7 @@ public class TaskerHelper {
         }
 
         if (DEBUG) {
-            MyLog.getElapsed(TaskerHelper.class.getSimpleName(), then);
+            MyLog.getElapsed(CLS_NAME, then);
         }
 
         return toReturn;
@@ -402,7 +402,7 @@ public class TaskerHelper {
                     MyLog.w(CLS_NAME, "canRequestPackageInstalls:" + e.getMessage() + ", " + e.getClass().getSimpleName());
                 }
             }
-            // This setting moved from Secure to Global in JELLY_BEAN_MR1 and then moved it back to Global in LOLLIPOP.
+            // This setting moved from Secure to Global in JELLY_BEAN_MR1 and then moved it back to Secure in LOLLIPOP.
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1 || Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                 return Settings.Secure.getInt(ctx.getContentResolver(), Settings.Secure.INSTALL_NON_MARKET_APPS, 0) == 1;
             } else {
