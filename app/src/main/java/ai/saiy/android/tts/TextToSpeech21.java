@@ -574,6 +574,9 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                 userDefaultSaiyVoice = getUserDefaultSaiyVoice();
 
                 if (userDefaultSaiyVoice == null) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "setVoice21: userDefaultSaiyVoice null");
+                    }
                     Schedulers.io().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
@@ -929,9 +932,9 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
     /**
      * Examine TTS objects in an overly verbose way. Debugging only.
      */
-    private void getInfo() {
-        MyLog.i(CLS_NAME, "getQuickInfo");
-
+    @Override
+    protected void getInfo() {
+        super.getInfo();
         Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
@@ -951,29 +954,27 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                 } catch (final Exception e) {
                     MyLog.w(CLS_NAME, "Exception");
                     e.printStackTrace();
-                } finally {
+                }
 
-                    try {
-                        final Locale defaultLanguage = getDefaultLanguage();
-                        MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage.toString());
-                    } catch (final NullPointerException e) {
-                        MyLog.w(CLS_NAME, "NullPointerException");
-                        e.printStackTrace();
-                    } catch (final Exception e) {
-                        MyLog.w(CLS_NAME, "Exception");
-                        e.printStackTrace();
-                    } finally {
-                        try {
-                            final Locale languageLocale = getLanguage();
-                            MyLog.v(CLS_NAME, "languageLocale toString: " + languageLocale.toString());
-                        } catch (final NullPointerException e) {
-                            MyLog.w(CLS_NAME, "NullPointerException");
-                            e.printStackTrace();
-                        } catch (final Exception e) {
-                            MyLog.w(CLS_NAME, "Exception");
-                            e.printStackTrace();
-                        }
-                    }
+                try {
+                    final Locale defaultLanguage = getDefaultLanguage();
+                    MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage.toString());
+                } catch (final NullPointerException e) {
+                    MyLog.w(CLS_NAME, "NullPointerException");
+                    e.printStackTrace();
+                } catch (final Exception e) {
+                    MyLog.w(CLS_NAME, "Exception");
+                    e.printStackTrace();
+                }
+                try {
+                    final Locale languageLocale = getLanguage();
+                    MyLog.v(CLS_NAME, "languageLocale toString: " + languageLocale.toString());
+                } catch (final NullPointerException e) {
+                    MyLog.w(CLS_NAME, "NullPointerException");
+                    e.printStackTrace();
+                } catch (final Exception e) {
+                    MyLog.w(CLS_NAME, "Exception");
+                    e.printStackTrace();
                 }
 
                 getVerboseInfo();
@@ -1070,9 +1071,11 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                 final Set<SaiyVoice> voices = mTextToSpeech.getSaiyVoices();
                 requiredLocale = new Locale(language, region);
 
-                if (conditions.getCondition() != Condition.CONDITION_TRANSLATION) {
-
-                    if (currentVoice != null && mTextToSpeech.getInitialisedEngine().startsWith(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
+                if (currentVoice != null && conditions.getCondition() != Condition.CONDITION_TRANSLATION) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "Have a current voice");
+                    }
+                    if (mTextToSpeech.getInitialisedEngine().startsWith(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "Have a current google voice");
                         }
@@ -1122,11 +1125,12 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
                                 MyLog.w(CLS_NAME, "parent google null");
                             }
                         }
+                    } else if (DEBUG) {
+                        MyLog.w(CLS_NAME, "not Google TTS");
                     }
-
                 } else {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "buildVoice: CONDITION_TRANSLATION");
+                        MyLog.i(CLS_NAME, "buildVoice: CONDITION_TRANSLATION or currentVoice null");
                     }
 
                     final ArrayList<SaiyVoice> voiceArray = new ArrayList<>();

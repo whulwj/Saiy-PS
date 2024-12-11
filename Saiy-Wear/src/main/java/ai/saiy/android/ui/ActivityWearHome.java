@@ -55,6 +55,7 @@ public final class ActivityWearHome extends FragmentActivity implements Activity
     private static final int REQ_SPEECH = 77;
     private static final String INTENT_STRING = "intent_string";
     private static final String MESSAGE_REQUEST_LOCALE = "requesting locale";
+    private static final int VIBRATE_MIN = 40;
     private static final class SingleHolder {
         private static final ExecutorService DEFAULT = Executors.newSingleThreadExecutor();
     }
@@ -172,7 +173,7 @@ public final class ActivityWearHome extends FragmentActivity implements Activity
      * Utility method to provide haptic feedback
      */
     private void vibrate() {
-        ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(40L);
+        ((Vibrator) getSystemService(Context.VIBRATOR_SERVICE)).vibrate(VIBRATE_MIN);
     }
 
     @Override

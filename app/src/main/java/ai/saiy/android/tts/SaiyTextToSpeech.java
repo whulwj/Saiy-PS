@@ -616,9 +616,8 @@ public abstract class SaiyTextToSpeech extends TextToSpeech {
 
         int result;
 
-        final String initialisedEngine = getInitialisedEngine();
-
         if (DEBUG) {
+            final String initialisedEngine = getInitialisedEngine();
             MyLog.i(CLS_NAME, "setVoice: initialisedEngine: " + initialisedEngine);
         }
 
@@ -712,38 +711,61 @@ public abstract class SaiyTextToSpeech extends TextToSpeech {
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "setVoiceDeprecated: comparing current: " + getLanguage() + " with " + locale);
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: getLanguage: " + getLanguage());
                 }
             } else {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "setVoiceDeprecated: comparing current: " + getDefaultLanguage() + " with " + locale);
-                    MyLog.i(CLS_NAME, "setVoiceDeprecated: getDefaultLanguage: " + getDefaultLanguage());
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: getDefaultLanguage: " + getDefaultLanguage() + " getLanguage: " + getLanguage());
                 }
             }
-            MyLog.i(CLS_NAME, "setVoiceDeprecated: getLanguage: " + getLanguage());
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                if (conditions.getCondition() == Condition.CONDITION_TRANSLATION) {
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP || conditions.getCondition() == Condition.CONDITION_TRANSLATION) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: setting request Locale");
                     }
+                }
+                if (!UtilsLocale.localesMatch(getLanguage(), locale)) {
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: locales not matched");
+                    }
+                    try {
+                        locale.getCountry();
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "setVoiceDeprecated: isLanguageAvailable: "
+                                    + resolveSuccess(super.isLanguageAvailable(new Locale(locale.getLanguage(),
+                                    locale.getCountry()))));
+                        }
+                    } catch (final MissingResourceException e) {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "MissingResourceException: Just using language");
+                            e.printStackTrace();
+                        }
+                        locale = new Locale(locale.getLanguage());
+                    }
+
+                    return resolveSuccess(super.setLanguage(locale));
                 } else {
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "setVoiceDeprecated: checking standard match");
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: Current matches");
+                        } else {
+                            MyLog.i(CLS_NAME, "setVoiceDeprecated: Current matches");
+                        }
                     }
-                    locale = SupportedLanguage.getSupportedLanguage(getDefaultLanguage()).getLocale();
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "setVoiceDeprecated: SupportedLanguage: defaultEngineLocale: " + locale);
-                    }
+                    return SUCCESS;
                 }
             }
 
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "setVoiceDeprecated: checking standard match");
+            }
+            locale = SupportedLanguage.getSupportedLanguage(getDefaultLanguage()).getLocale();
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "setVoiceDeprecated: SupportedLanguage: defaultEngineLocale: " + locale);
+            }
             if (!UtilsLocale.localesMatch(getLanguage(), locale)) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    if (conditions.getCondition() == Condition.CONDITION_TRANSLATION) {
-                        MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: locales not matched");
-                    } else {
-                        MyLog.i(CLS_NAME, "setVoiceDeprecated: locales not matched");
-                    }
-                }
+                MyLog.i(CLS_NAME, "setVoiceDeprecated: locales not matched");
                 try {
                     locale.getCountry();
                     if (DEBUG) {
@@ -762,11 +784,7 @@ public abstract class SaiyTextToSpeech extends TextToSpeech {
                 return resolveSuccess(super.setLanguage(locale));
             } else {
                 if (DEBUG) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && conditions.getCondition() == Condition.CONDITION_TRANSLATION) {
-                        MyLog.i(CLS_NAME, "setVoiceDeprecated: CONDITION_TRANSLATION: Current matches");
-                    } else {
-                        MyLog.i(CLS_NAME, "setVoice: Current matches");
-                    }
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: Current matches");
                 }
                 return SUCCESS;
             }
@@ -887,7 +905,18 @@ public abstract class SaiyTextToSpeech extends TextToSpeech {
             }
         }
 
+        if (DEBUG) {
+            getInfo();
+        }
         addSoundEffects();
+    }
+
+    /**
+     * Examine TTS objects in an overly verbose way. Debugging only.
+     */
+    @CallSuper
+    protected void getInfo() {
+        MyLog.i(CLS_NAME, "getQuickInfo");
     }
 
     /**

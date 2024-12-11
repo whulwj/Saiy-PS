@@ -78,9 +78,9 @@ public final class TextToSpeechLegacy extends SaiyTextToSpeech {
     /**
      * Examine TTS objects in an overly verbose way. Debugging only.
      */
-    private void getInfo() {
-        MyLog.i(CLS_NAME, "getQuickInfo");
-
+    @Override
+    protected void getInfo() {
+        super.getInfo();
         Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
@@ -94,29 +94,18 @@ public final class TextToSpeechLegacy extends SaiyTextToSpeech {
                     } catch (final Exception e) {
                         MyLog.w(CLS_NAME, "Exception");
                         e.printStackTrace();
-                    } finally {
-                        try {
-                            final Locale languageLocale = TextToSpeechLegacy.this.getLanguage();
-                            MyLog.v(CLS_NAME, "languageLocale toString: " + languageLocale.toString());
-                        } catch (final NullPointerException e) {
-                            MyLog.w(CLS_NAME, "NullPointerException");
-                            e.printStackTrace();
-                        } catch (final Exception e) {
-                            MyLog.w(CLS_NAME, "Exception");
-                            e.printStackTrace();
-                        }
                     }
-                } else {
-                    try {
-                        final Locale languageLocale = TextToSpeechLegacy.this.getLanguage();
-                        MyLog.v(CLS_NAME, "languageLocale toString: " + languageLocale.toString());
-                    } catch (final NullPointerException e) {
-                        MyLog.w(CLS_NAME, "NullPointerException");
-                        e.printStackTrace();
-                    } catch (final Exception e) {
-                        MyLog.w(CLS_NAME, "Exception");
-                        e.printStackTrace();
-                    }
+                }
+
+                try {
+                    final Locale languageLocale = TextToSpeechLegacy.this.getLanguage();
+                    MyLog.v(CLS_NAME, "languageLocale toString: " + languageLocale.toString());
+                } catch (final NullPointerException e) {
+                    MyLog.w(CLS_NAME, "NullPointerException");
+                    e.printStackTrace();
+                } catch (final Exception e) {
+                    MyLog.w(CLS_NAME, "Exception");
+                    e.printStackTrace();
                 }
 
                 TextToSpeechLegacy.this.getVerboseInfo();
