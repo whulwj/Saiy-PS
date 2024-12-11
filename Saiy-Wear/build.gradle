@@ -12,7 +12,7 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0.3"
-		resConfigs "en", "zh-rCN"
+        resourceConfigurations += ["en", "zh-rCN"]
     }
 
     buildTypes {
@@ -46,6 +46,7 @@ dependencies {
     implementation libs.play.services.wearable
     implementation libs.wear
 
+    implementation libs.appcompat
     implementation(libs.activity) {
         exclude group: 'androidx.activity', module: 'activity-ktx'
     }
