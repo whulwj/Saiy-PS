@@ -314,7 +314,7 @@ public class Tutorial {
                     nextAction = LocalRequest.ACTION_SPEAK_LISTEN;
                 } else if (this.vrRetry) {
                     String oldUserName = SPH.getUserName(context);
-                    if ((UtilsString.notNaked(oldUserName) && !oldUserName.matches(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.master)))) {
+                    if (UtilsString.notNaked(oldUserName) && !oldUserName.matches(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.master))) {
                         utterance = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_10e) + XMLResultsHandler.SEP_SPACE + String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_10a), oldUserName);
                         nextTutorialStage = STAGE_ANSWER_5;
                     } else {

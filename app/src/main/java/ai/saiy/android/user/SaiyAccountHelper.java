@@ -27,7 +27,7 @@ import androidx.annotation.Nullable;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
@@ -37,7 +37,6 @@ import ai.saiy.android.cognitive.identity.provider.microsoft.containers.Operatio
 import ai.saiy.android.cognitive.identity.provider.microsoft.containers.ProfileItem;
 import ai.saiy.android.cognitive.identity.provider.microsoft.http.DeleteIDProfile;
 import ai.saiy.android.firebase.database.reference.BingSpeakerRecognitionReference;
-import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
@@ -233,10 +232,8 @@ public class SaiyAccountHelper {
             final SaiyAccountList accountList = getAccountList(ctx);
 
             for (final SaiyAccount account : accountList.getSaiyAccountList()) {
-
-                if (account.getProfileItem() != null) {
-
-                    final ProfileItem item = account.getProfileItem();
+                final ProfileItem item = account.getProfileItem();
+                if (item != null) {
                     final String id = item.getId();
 
                     if (UtilsString.notNaked(id)) {
@@ -254,10 +251,8 @@ public class SaiyAccountHelper {
                             save = true;
                             break;
                         }
-                    } else {
-                        if (DEBUG) {
-                            MyLog.w(CLS_NAME, "updateEnrollmentStatus: id naked");
-                        }
+                    } else if (DEBUG) {
+                        MyLog.w(CLS_NAME, "updateEnrollmentStatus: id naked");
                     }
                 } else {
                     if (DEBUG) {
@@ -405,8 +400,8 @@ public class SaiyAccountHelper {
                             || (UtilsString.notNaked(account.getAccountId())
                             && account.getAccountId().matches(Pattern.quote(accountId)))) {
 
-                        if (account.getProfileItem() != null) {
-                            profileItem = account.getProfileItem();
+                        profileItem = account.getProfileItem();
+                        if (profileItem != null) {
                             profileId = profileItem.getId();
                             removeProfile(ctx, profileId);
                         }
@@ -416,8 +411,8 @@ public class SaiyAccountHelper {
                 } else if (accountName != null) {
                     if (account.getAccountName().matches(Pattern.quote(accountName))) {
 
-                        if (account.getProfileItem() != null) {
-                            profileItem = account.getProfileItem();
+                        profileItem = account.getProfileItem();
+                        if (profileItem != null) {
                             profileId = profileItem.getId();
                             removeProfile(ctx, profileId);
                         }
@@ -428,8 +423,8 @@ public class SaiyAccountHelper {
                     if (accountId != null && UtilsString.notNaked(account.getAccountId())) {
                         if (account.getAccountId().matches(Pattern.quote(accountId))) {
 
-                            if (account.getProfileItem() != null) {
-                                profileItem = account.getProfileItem();
+                            profileItem = account.getProfileItem();
+                            if (profileItem != null) {
                                 profileId = profileItem.getId();
                                 removeProfile(ctx, profileId);
                             }
@@ -492,13 +487,12 @@ public class SaiyAccountHelper {
 
             for (final SaiyAccount account : accountList.getSaiyAccountList()) {
                 account.setAccountName(Base64.encodeToString(account.getAccountName().getBytes(
-                        Constants.ENCODING_UTF8), Base64.NO_WRAP));
+                        StandardCharsets.UTF_8), Base64.NO_WRAP));
             }
 
-        } catch (final UnsupportedEncodingException e) {
+        } catch (final Exception e) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "encode UnsupportedEncodingException");
-                e.printStackTrace();
+                MyLog.w(CLS_NAME, "encode " + e.getClass().getSimpleName() + ", " + e.getMessage());
             }
         }
 
@@ -517,13 +511,12 @@ public class SaiyAccountHelper {
 
             for (final SaiyAccount account : accountList.getSaiyAccountList()) {
                 account.setAccountName(new String(Base64.decode(account.getAccountName(), Base64.NO_WRAP),
-                        Constants.ENCODING_UTF8));
+                        StandardCharsets.UTF_8));
             }
 
-        } catch (final UnsupportedEncodingException e) {
+        } catch (final Exception e) {
             if (DEBUG) {
-                MyLog.w(CLS_NAME, "decode UnsupportedEncodingException");
-                e.printStackTrace();
+                MyLog.w(CLS_NAME, "decode " + e.getClass().getSimpleName() + ", " + e.getMessage());
             }
         }
 

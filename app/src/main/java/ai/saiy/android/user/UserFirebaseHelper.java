@@ -132,8 +132,8 @@ public class UserFirebaseHelper {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "updateUser: submissionTimeout: " + submissionTimeout);
                 }
-                premiumUser.setTimeout(submissionCredits);
-                premiumUser.setCredits(submissionTimeout);
+                premiumUser.setCredits(submissionCredits);
+                premiumUser.setTimeout(submissionTimeout);
                 com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ_WRITE).child(UtilsFirebase.PATH_USERS).child(userFirebase.getUid()).setValue(premiumUser).addOnCompleteListener(Executors.newSingleThreadExecutor(), new com.google.android.gms.tasks.OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull com.google.android.gms.tasks.Task<Void> task) {
@@ -169,7 +169,6 @@ public class UserFirebaseHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "isAdFree: RequestPremiumUser null");
             }
-            listener.onDetermineAdFree(ai.saiy.android.utils.SPH.getPremiumContentVerbose(context));
         } else {
             if (isWithinAdFreePeriod(premiumUserPair.second)) {
                 listener.onDetermineAdFree(true);
@@ -178,8 +177,8 @@ public class UserFirebaseHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "isAdFree: outside of ad free period");
             }
-            listener.onDetermineAdFree(ai.saiy.android.utils.SPH.getPremiumContentVerbose(context));
         }
+        listener.onDetermineAdFree(ai.saiy.android.utils.SPH.getPremiumContentVerbose(context));
     }
 
     public void migrateUser(final String anonymousUid, String uid, PremiumUser premiumUser) {

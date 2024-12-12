@@ -70,7 +70,7 @@ public class BillingValidator implements AcknowledgePurchaseResponseListener {
                                 if (DEBUG) {
                                     MyLog.d(CLS_NAME, "validate: has LEVEL: TRUE");
                                 }
-                                if (billingClient != null && !TextUtils.isEmpty(purchaseHistoryRecord.getPurchaseToken()) && !SPH.getPremiumContentVerbose(mContext)) {//Non-consumable Products
+                                if (billingClient != null && !TextUtils.isEmpty(purchaseHistoryRecord.getPurchaseToken()) && !SPH.getPremiumContentVerbose(mContext)) { //Non-consumable Products
                                     final AcknowledgePurchaseParams acknowledgePurchaseParams =
                                             AcknowledgePurchaseParams.newBuilder()
                                                     .setPurchaseToken(purchaseHistoryRecord.getPurchaseToken())

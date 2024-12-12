@@ -4,7 +4,6 @@ import android.content.Context;
 import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
-import androidx.core.os.EnvironmentCompat;
 
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
@@ -31,6 +30,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 public class BillingReporter implements PurchaseHistoryResponseListener, PurchasesResponseListener {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = BillingReporter.class.getSimpleName();
+    private static final String UNKNOWN = "unknown";
 
     private final StringBuilder content = new StringBuilder();
     private final Context context;
@@ -52,7 +52,7 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
         BillingReporter.this.content.setLength(0);
         String accountName = SPH.getUserAccount(context);
         if (!UtilsString.notNaked(accountName)) {
-            accountName = EnvironmentCompat.MEDIA_UNKNOWN;
+            accountName = UNKNOWN;
         }
         ai.saiy.android.intent.ExecuteIntent.sendEmail(context, new String[]{Constants.SAIY_BILLING_EMAIL}, context.getString(R.string.title_debugging),content + "\n" + ("IAP: " + SPH.getPremiumContentVerbose(context) + "\nAnon: " + (SPH.getFirebaseAnonymousUid(context) != null) + "\nAuth: " + (SPH.getFirebaseUid(context) != null) + "\nMigrate: " + (SPH.getFirebaseMigratedUid(context) != null) + "\nAccount: " + accountName));
     }
