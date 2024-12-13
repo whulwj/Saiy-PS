@@ -212,7 +212,7 @@ public class UtilsBundle {
                 }
             } else if (org.apache.commons.lang3.StringUtils.endsWithIgnoreCase(value, "L")) {
                 try {
-                    Long.parseLong(value.substring(0, value.length() - 1));
+                    bundle.putLong(key, Long.parseLong(value.substring(0, value.length() - 1)));
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "resolved to: long: " + value);
                     }

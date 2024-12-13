@@ -62,7 +62,7 @@ public class Global extends MultiDexApplication implements Application.ActivityL
     private final String CLS_NAME = RecognitionWitHybrid.class.getSimpleName();
     public static final Install.Location installLocation = PLAYSTORE;
     private static boolean sIsInVoiceTutorial;
-    private static String sGlobalAmazonID;
+    private static String sGlobalAmazonID = "";
     private static volatile Bundle alexDirectiveBundle;
 
     private int mStartedCounter = 0;

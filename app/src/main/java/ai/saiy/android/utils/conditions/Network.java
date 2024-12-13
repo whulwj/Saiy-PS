@@ -259,17 +259,14 @@ public final class Network {
                     case TelephonyManager.NETWORK_TYPE_HSPA: // ~ 700-1700 kbps
                     case TelephonyManager.NETWORK_TYPE_EVDO_B: // ~ 5 Mbps
                     case TelephonyManager.NETWORK_TYPE_EHRPD: // ~ 1-2 Mbps
+                    case TelephonyManager.NETWORK_TYPE_HSPAP: // ~ 10-20 Mbps
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getConnectionType: CONNECTION_TYPE_3G");
                         }
                         return CONNECTION_TYPE_3G;
 
                     case TelephonyManager.NETWORK_TYPE_LTE: // ~ 10+ Mbps
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getConnectionType: CONNECTION_TYPE_4G");
-                        }
-                        return CONNECTION_TYPE_4G;
-                    case TelephonyManager.NETWORK_TYPE_HSPAP: // ~ 10-20 Mbps
+                    case TelephonyManager.NETWORK_TYPE_NR:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getConnectionType: CONNECTION_TYPE_4G");
                         }
@@ -432,7 +429,8 @@ public final class Network {
      */
     public static boolean shouldTTSNetwork(@NonNull final Context ctx) {
         return SPH.getNetworkSynthesis(ctx) && Network.connectivityPass(ctx)
-                && (!SPH.getPingCheck(ctx) || pingSuccessSynchronous(ctx));
+                && ((SPH.isNetworkSynthesisWifi(ctx) && getConnectionType(ctx) == CONNECTION_TYPE_WIFI)
+                || (SPH.isNetworkSynthesis4g(ctx) && getConnectionType(ctx) == CONNECTION_TYPE_4G));
     }
 
     /**
