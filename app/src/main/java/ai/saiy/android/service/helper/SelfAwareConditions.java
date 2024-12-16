@@ -2224,7 +2224,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, mContext.getPackageName());
         intent.putExtra(RecognizerIntent.EXTRA_PARTIAL_RESULTS, true);
-        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, mContext.getString(R.string.app_name));
+        intent.putExtra(RecognizerIntent.EXTRA_PROMPT, mContext.getString(ai.saiy.android.R.string.app_name));
         intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, RecognitionNative.MAX_RESULTS);
         intent.putExtra(RecognitionDefaults.PREFER_OFFLINE, SPH.getUseOffline(mContext));
         intent.putExtra(RecognizerIntent.EXTRA_SECURE,

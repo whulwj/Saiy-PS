@@ -54,18 +54,18 @@ public class UtilsLocale {
     public static String convertToIETF(Locale locale) {
         if (locale != null) {
             try {
-                return locale.toString().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                return locale.toString().replaceAll(LOCALE_DELIMITER_2, LOCALE_DELIMITER_1);
             } catch (NullPointerException e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "convertToIETF: NullPointerException");
                 }
-            } catch (Exception e2) {
+            } catch (Exception e) {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "convertToIETF: Exception");
                 }
             }
         }
-        return SupportedLanguage.ENGLISH_US.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+        return SupportedLanguage.ENGLISH_US.getLanguageCountry().replaceAll(LOCALE_DELIMITER_2, LOCALE_DELIMITER_1);
     }
 
     /**

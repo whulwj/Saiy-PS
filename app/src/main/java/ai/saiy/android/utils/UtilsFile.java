@@ -465,7 +465,7 @@ public class UtilsFile {
         if (isSaiyDirectoryExists(ctx)) {
             return new File(getExternalStorageDirectory(ctx, null) + RELATIVE_SOUND_DIRECTORY).mkdir();
         }
-        final boolean result = createSaiyDirectory(ctx) && new File(getExternalStorageDirectory(ctx, null) + SAIY_DIRECTORY + SOUND_DIRECTORY).mkdir();
+        final boolean result = createSaiyDirectory(ctx) && new File(getExternalStorageDirectory(ctx, null) + RELATIVE_SOUND_DIRECTORY).mkdir();
         if (result) {
             createNewFile(soundDirectory(ctx) + NO_MEDIA_FILE);
         }
