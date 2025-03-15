@@ -242,6 +242,7 @@ public final class Network {
                 switch (networkType) {
 
                     case TelephonyManager.NETWORK_TYPE_GPRS: // ~ 100 kbps
+                    case TelephonyManager.NETWORK_TYPE_GSM: // ~ 30-50 kbps
                     case TelephonyManager.NETWORK_TYPE_EDGE: // ~ 50-100 kbps
                     case TelephonyManager.NETWORK_TYPE_CDMA: // ~ 14-64 kbps
                     case TelephonyManager.NETWORK_TYPE_1xRTT: // ~ 50-100 kbps
@@ -260,13 +261,15 @@ public final class Network {
                     case TelephonyManager.NETWORK_TYPE_EVDO_B: // ~ 5 Mbps
                     case TelephonyManager.NETWORK_TYPE_EHRPD: // ~ 1-2 Mbps
                     case TelephonyManager.NETWORK_TYPE_HSPAP: // ~ 10-20 Mbps
+                    case TelephonyManager.NETWORK_TYPE_TD_SCDMA:
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getConnectionType: CONNECTION_TYPE_3G");
                         }
                         return CONNECTION_TYPE_3G;
 
                     case TelephonyManager.NETWORK_TYPE_LTE: // ~ 10+ Mbps
-                    case TelephonyManager.NETWORK_TYPE_NR:
+                    case TelephonyManager.NETWORK_TYPE_IWLAN:
+                    case TelephonyManager.NETWORK_TYPE_NR: // 5G
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getConnectionType: CONNECTION_TYPE_4G");
                         }
@@ -404,10 +407,15 @@ public final class Network {
                         return true; // ~ 5 Mbps
                     case TelephonyManager.NETWORK_TYPE_HSPAP: // API level 13
                         return true; // ~ 10-20 Mbps
+                    case TelephonyManager.NETWORK_TYPE_TD_SCDMA: // API level 25
+                        return true;
                     case TelephonyManager.NETWORK_TYPE_IDEN: // API level 8
                         return false; // ~25 kbps
                     case TelephonyManager.NETWORK_TYPE_LTE: // API level 11
                         return true; // ~ 10+ Mbps
+                    case TelephonyManager.NETWORK_TYPE_IWLAN: // API level 25
+                    case TelephonyManager.NETWORK_TYPE_NR: // API level 29
+                        return true;
                     // Unknown
                     case TelephonyManager.NETWORK_TYPE_UNKNOWN:
 
