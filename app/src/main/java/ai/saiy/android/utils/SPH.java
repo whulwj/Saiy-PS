@@ -2572,9 +2572,9 @@ public class SPH {
     }
 
     public static void setPremiumContentVerbose(Context context, boolean condition) {
-        SharedPreferences.Editor a2 = getEditor(getPref(context));
-        a2.putBoolean(PREMIUM_CONTENT_VERBOSE, condition);
-        a2.apply();
+        SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putBoolean(PREMIUM_CONTENT_VERBOSE, condition);
+        edit.apply();
     }
 
     public static long getHoroscopeIncrement(Context context) {

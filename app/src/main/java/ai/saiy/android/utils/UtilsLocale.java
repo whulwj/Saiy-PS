@@ -23,8 +23,6 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.Comparator;
 import java.util.Locale;
 import java.util.MissingResourceException;

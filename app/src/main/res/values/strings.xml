@@ -18,8 +18,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
     <!--Firebase Google Sign-In Authentication-->
     <string name="default_web_client_id" translatable="false">997068182928-rv7vtailtqrup3hdenre58gu5r56rim6.apps.googleusercontent.com</string>
-    <string name="facebook_app_id" translatable="false">151121772049980</string>
-    <string name="facebook_application_id" translatable="false">CHANGE-ME-for-firebase</string>
+    <!--https://developers.facebook.com/docs/android/getting-started-->
+    <!--https://developers.facebook.com/apps-->
+    <string name="facebook_application_id" translatable="false">151121772049980</string>
+    <string name="facebook_client_token" translatable="false">CHANGE-ME-for-firebase-ui</string>
 
     <string name="reward_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
     <string name="interstitial_fragment_id" translatable="false">ca-app-pub-8646607296202594/1809438227</string>

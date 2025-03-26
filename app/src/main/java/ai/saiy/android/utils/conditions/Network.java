@@ -436,9 +436,33 @@ public final class Network {
      * @return true if the network conditions are suitable, false otherwise
      */
     public static boolean shouldTTSNetwork(@NonNull final Context ctx) {
-        return SPH.getNetworkSynthesis(ctx) && Network.connectivityPass(ctx)
-                && ((SPH.isNetworkSynthesisWifi(ctx) && getConnectionType(ctx) == CONNECTION_TYPE_WIFI)
-                || (SPH.isNetworkSynthesis4g(ctx) && getConnectionType(ctx) == CONNECTION_TYPE_4G));
+        if (SPH.getNetworkSynthesis(ctx)) {
+            if (Network.connectivityPass(ctx)) {
+                if (SPH.isNetworkSynthesisWifi(ctx) && getConnectionType(ctx) == CONNECTION_TYPE_WIFI) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "shouldTTSNetwork: getNetworkSynthesisWiFi: passed");
+                    }
+                    return true;
+                }
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "shouldTTSNetwork: getNetworkSynthesisWiFi: false");
+                }
+                if (SPH.isNetworkSynthesis4g(ctx) && getConnectionType(ctx) == CONNECTION_TYPE_4G) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "shouldTTSNetwork: getNetworkSynthesis4g: passed");
+                    }
+                    return true;
+                }
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "shouldTTSNetwork: getNetworkSynthesis4g: false");
+                }
+            } else if (DEBUG) {
+                MyLog.w(CLS_NAME, "shouldTTSNetwork: connectivityPass: false");
+            }
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "shouldTTSNetwork: getNetworkSynthesis: false");
+        }
+        return false;
     }
 
     /**

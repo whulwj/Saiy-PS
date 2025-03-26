@@ -275,6 +275,8 @@
             android:name="com.google.android.gms.ads.flag.OPTIMIZE_AD_LOADING"
             android:value="true" />
 
+        <meta-data android:name="com.facebook.sdk.ClientToken" android:value="@string/facebook_client_token"/>
+
         <activity
             android:name="ai.saiy.android.ui.activity.ActivityHome"
             android:clearTaskOnLaunch="true"

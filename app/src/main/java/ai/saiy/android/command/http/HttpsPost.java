@@ -58,7 +58,7 @@ public class HttpsPost {
                 httpsURLConnection.setDoInput(true);
                 String userInfo = currentUrl.getUserInfo();
                 if (UtilsString.notNaked(userInfo)) {
-                    String decode = URLDecoder.decode(userInfo, "UTF-8");
+                    String decode = URLDecoder.decode(userInfo, Constants.ENCODING_UTF8);
                     if (UtilsString.notNaked(decode)) {
                         String encodeToString = Base64.encodeToString(decode.getBytes(StandardCharsets.UTF_8), Base64.NO_WRAP);
                         if (UtilsString.notNaked(encodeToString)) {

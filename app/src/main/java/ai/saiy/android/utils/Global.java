@@ -90,6 +90,8 @@ public class Global extends MultiDexApplication implements Application.ActivityL
                         .build());
         RxJavaPlugins.setFailOnNonBlockingScheduler(true);
         // TODO
+        com.facebook.FacebookSdk.sdkInitialize(this);
+        com.facebook.appevents.AppEventsLogger.activateApp(this);
         setGlobalId();
         authenticateGoogleCloud();
     }
