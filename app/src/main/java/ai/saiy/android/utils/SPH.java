@@ -71,8 +71,10 @@ public class SPH {
     private static final String SAIY_PREF = "saiyPref";
 
     private static final int ZERO = 0;
-    private static final int ONE = 1;
+    public static final int ONE = 1;
     public static final int TRESS = 3;
+    public static final int ONE_HUNDRED = 100;
+    public static final int TTS_DEFAULT_VALUE = 100;
 
     private static final String DEFAULT_RECOGNITION = "default_recognition";
     private static final String DEFAULT_LANGUAGE_MODEL = "default_language_model";
@@ -419,7 +421,7 @@ public class SPH {
     }
 
     public static void setJwdUpperThresholdForContact(Context context, boolean useDefault) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(JWD_UPPER_THRESHOLD_CONTACT, useDefault);
         edit.apply();
     }
@@ -429,7 +431,7 @@ public class SPH {
     }
 
     public static void setSystemManagedVolume(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(SYSTEM_MANAGED_VOLUME, condition);
         edit.apply();
     }
@@ -439,7 +441,7 @@ public class SPH {
     }
 
     public static void setAssumeGlobalVolume(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ASSUME_GLOBAL_VOLUME, condition);
         edit.apply();
     }
@@ -449,7 +451,7 @@ public class SPH {
     }
 
     public static void setToastVolumeWarnings(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(TOAST_VOLUME_WARNINGS, condition);
         edit.apply();
     }
@@ -458,7 +460,7 @@ public class SPH {
     }
 
     public static void setToastDebug(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(DEBUG_VOLUME, condition);
         edit.apply();
     }
@@ -493,7 +495,7 @@ public class SPH {
     }
 
     public static void setMessageSignature(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(MESSAGE_SIGNATURE, str);
         edit.apply();
     }
@@ -503,9 +505,9 @@ public class SPH {
     }
 
     public static void setMessageSignatureCondition(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(MESSAGE_SIGNATURE_CONDITION, condition);
-        edit.commit();
+        edit.apply();
     }
 
     /**
@@ -594,7 +596,7 @@ public class SPH {
     }
 
     public static void setPlaylistVerbose(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(PLAYLIST_VERBOSE, getPlaylistVerbose(context) + 1);
         edit.apply();
     }
@@ -604,7 +606,7 @@ public class SPH {
     }
 
     public static void setRadioVerbose(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(RADIO_VERBOSE, getRadioVerbose(context) + 1);
         edit.apply();
     }
@@ -614,7 +616,7 @@ public class SPH {
     }
 
     public static void setFacebookCommandVerbose(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(FACEBOOK_COMMAND_VERBOSE, getFacebookCommandVerbose(context) + 1);
         edit.apply();
     }
@@ -624,7 +626,7 @@ public class SPH {
     }
 
     public static void setTwitterToken(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(TWITTER_TOKEN, str);
         edit.apply();
     }
@@ -634,7 +636,7 @@ public class SPH {
     }
 
     public static void setTwitterSecret(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(TWITTER_SECRET, str);
         edit.apply();
     }
@@ -669,7 +671,7 @@ public class SPH {
     }
 
     public static void setFoursquareToken(Context context, String token) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(FOURSQUARE_TOKEN, token);
         edit.apply();
     }
@@ -959,11 +961,11 @@ public class SPH {
     }
 
     public static long getLastDrivingTime(Context context) {
-        return getPref(context).getLong(LAST_DRIVING_TIME, 1L);
+        return getPref(context).getLong(LAST_DRIVING_TIME, ONE);
     }
 
     public static void setLastDrivingTime(Context context, long timestamp) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(LAST_DRIVING_TIME, timestamp);
         edit.apply();
     }
@@ -1055,7 +1057,7 @@ public class SPH {
 
     public static long getRateMe(@NonNull final Context ctx) {
         final SharedPreferences pref = getPref(ctx);
-        return pref.getLong(RATE_ME, 101L);
+        return pref.getLong(RATE_ME, (ONE_HUNDRED + ONE));
     }
 
     public static void setRateMe(@NonNull final Context ctx, final long count) {
@@ -1422,7 +1424,7 @@ public class SPH {
     }
 
     public static void setCallConfirmation(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(CALL_CONFIRMATION, condition);
         edit.apply();
     }
@@ -1432,7 +1434,7 @@ public class SPH {
     }
 
     public static void setWeatherProvider(Context context, int provider) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(WEATHER_PROVIDER, provider);
         edit.apply();
     }
@@ -1442,7 +1444,7 @@ public class SPH {
     }
 
     public static void setHasPhrase(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HAS_PHRASE, condition);
         edit.apply();
     }
@@ -1452,7 +1454,7 @@ public class SPH {
     }
 
     public static void setHasNickname(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HAS_NICKNAME, condition);
         edit.apply();
     }
@@ -1462,7 +1464,7 @@ public class SPH {
     }
 
     public static void setHasReplacement(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HAS_REPLACEMENT, condition);
         edit.apply();
     }
@@ -1472,7 +1474,7 @@ public class SPH {
     }
 
     public static void setHasCustomisation(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HAS_CUSTOM, condition);
         edit.apply();
     }
@@ -1673,7 +1675,7 @@ public class SPH {
     }
 
     public static void setInactivityToast(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(INACTIVITY_TOAST, condition);
         edit.apply();
     }
@@ -1832,7 +1834,7 @@ public class SPH {
     }
 
     public static void setAnnounceNotificationsSecure(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ANNOUNCE_NOTIFICATIONS_SECURE, condition);
         edit.apply();
     }
@@ -1842,7 +1844,7 @@ public class SPH {
     }
 
     public static void setAnnounceNotificationsSMS(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ANNOUNCE_NOTIFICATIONS_SMS, condition);
         edit.apply();
     }
@@ -1852,7 +1854,7 @@ public class SPH {
     }
 
     public static void setAnnounceNotificationsHangouts(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ANNOUNCE_NOTIFICATIONS_HANGOUTS, condition);
         edit.apply();
     }
@@ -1862,7 +1864,7 @@ public class SPH {
     }
 
     public static void setAnnounceNotificationsWhatsapp(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ANNOUNCE_NOTIFICATIONS_WHATSAPP, condition);
         edit.apply();
     }
@@ -1872,7 +1874,7 @@ public class SPH {
     }
 
     public static void setAutoConnectHeadset(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(AUTO_CONNECT_HEADSET, condition);
         edit.apply();
     }
@@ -1882,7 +1884,7 @@ public class SPH {
     }
 
     public static void setHeadsetSystem(Context context, @BluetoothConstants.HeadsetSystem int i) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_SYSTEM, i);
         edit.apply();
     }
@@ -1892,7 +1894,7 @@ public class SPH {
     }
 
     public static void setHeadsetStreamType(Context context, @BluetoothConstants.HeadsetStreamType int i) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_STREAM_TYPE, i);
         edit.apply();
     }
@@ -1902,7 +1904,7 @@ public class SPH {
     }
 
     public static void setHeadsetConnectionType(Context context, @BluetoothConstants.HeadsetConnectionType int i) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_CONNECTION_TYPE, i);
         edit.apply();
     }
@@ -1962,7 +1964,7 @@ public class SPH {
     }
 
     public static void setHotwordOkayGoogle(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HOTWORD_OKAY_GOOGLE, condition);
         edit.apply();
     }
@@ -1997,7 +1999,7 @@ public class SPH {
     }
 
     public static void setHotwordStartDriving(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HOTWORD_START_DRIVING, condition);
         edit.apply();
     }
@@ -2007,7 +2009,7 @@ public class SPH {
     }
 
     public static void setHotwordStopDriving(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(HOTWORD_STOP_DRIVING, condition);
         edit.apply();
     }
@@ -2079,7 +2081,7 @@ public class SPH {
     }
 
     public static void setResetSpeaker(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(RESET_SPEAKER, condition);
         edit.apply();
     }
@@ -2089,7 +2091,7 @@ public class SPH {
     }
 
     public static void markDesignOverviewShown(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(DESIGN_OVERVIEW, true);
         edit.apply();
     }
@@ -2099,7 +2101,7 @@ public class SPH {
     }
 
     public static void autoIncreaseFragment(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(FRAGMENT_INCREMENT, 1 + getFragmentIncrement(context));
         edit.apply();
     }
@@ -2109,7 +2111,7 @@ public class SPH {
     }
 
     public static void markUnknownShown(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(SHOWN_UNKNOWN, true);
         edit.apply();
     }
@@ -2119,7 +2121,7 @@ public class SPH {
     }
 
     public static void setBlockedNotificationApplications(Context context, @Nullable String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(BLOCKED_NOTIFICATION_APPLICATIONS, str);
         edit.apply();
     }
@@ -2168,7 +2170,7 @@ public class SPH {
     }
 
     public static void setNetworkSynthesisWifi(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(NETWORK_SYNTHESIS_WIFI, condition);
         edit.apply();
     }
@@ -2178,7 +2180,7 @@ public class SPH {
     }
 
     public static void setNetworkSynthesis4g(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(NETWORK_SYNTHESIS_4G, condition);
         edit.apply();
     }
@@ -2188,7 +2190,7 @@ public class SPH {
     }
 
     public static void setFirebaseAnonymousUid(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(FIREBASE_ANONYMOUS_UID, str);
         edit.apply();
     }
@@ -2198,7 +2200,7 @@ public class SPH {
     }
 
     public static void setFirebaseUid(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(FIREBASE_AUTH_UID, str);
         edit.apply();
     }
@@ -2208,7 +2210,7 @@ public class SPH {
     }
 
     public static void setFirebaseMigratedUid(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(FIREBASE_MIGRATED_UID, str);
         edit.apply();
     }
@@ -2225,7 +2227,7 @@ public class SPH {
     }
 
     public static void markNoteProviderVerbose(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(NOTE_PROVIDER_VERBOSE, true);
         edit.apply();
     }
@@ -2264,7 +2266,7 @@ public class SPH {
     }
 
     public static void setDrivingCooldownTime(Context context, long timestamp) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(DRIVING_COOLDOWN_TIME, timestamp);
         edit.apply();
     }
@@ -2425,7 +2427,7 @@ public class SPH {
     }
 
     public static void setTorchFix(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(TORCH_FIX, condition);
         edit.apply();
     }
@@ -2435,7 +2437,7 @@ public class SPH {
     }
 
     public static void setLocation(Context context, @NonNull Location location) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(VEHICLE_LOCATION_LAT, String.valueOf(location.getLatitude()));
         edit.putString(VEHICLE_LOCATION_LONG, String.valueOf(location.getLongitude()));
         edit.apply();
@@ -2475,7 +2477,7 @@ public class SPH {
     }
 
     public static void autoIncreaseUnknownContactVerbose(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(UNKNOWN_CONTACT_VERBOSE, getUnknownContactVerbose(context) + 1);
         edit.apply();
     }
@@ -2485,13 +2487,13 @@ public class SPH {
     }
 
     public static void autoIncreaseEmailAutoVerbose(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(EMAIL_AUTO_VERBOSE, getEmailAutoVerbose(context) + 1);
         edit.apply();
     }
 
-    public static void setHoroscope(Context context, int dayOfMonth, int month, int year, CommandHoroscopeValues.Sign sign) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+    public static void setHoroscope(Context context, int dayOfMonth, int month, int year, @Nullable CommandHoroscopeValues.Sign sign) {
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(DOB_DAY, dayOfMonth);
         edit.putInt(DOB_MONTH, month - 1);
         edit.putInt(DOB_YEAR, year);
@@ -2508,7 +2510,7 @@ public class SPH {
     }
 
     public static void setUserAttendeeName(Context context, String name) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(USER_ATTENDEE_NAME, name);
         edit.apply();
     }
@@ -2518,7 +2520,7 @@ public class SPH {
     }
 
     public static void setLastContactUpdate(Context context, long timeStamp) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(LAST_CONTACT_UPDATE, timeStamp);
         edit.apply();
     }
@@ -2539,7 +2541,7 @@ public class SPH {
     }
 
     public static void markAccountOverview(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ACCOUNT_OVERVIEW, true);
         edit.apply();
     }
@@ -2549,7 +2551,7 @@ public class SPH {
     }
 
     public static void markAdvertisementOverview(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(AD_OVERVIEW, true);
         edit.apply();
     }
@@ -2572,7 +2574,7 @@ public class SPH {
     }
 
     public static void setPremiumContentVerbose(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(PREMIUM_CONTENT_VERBOSE, condition);
         edit.apply();
     }
@@ -2582,7 +2584,7 @@ public class SPH {
     }
 
     public static void horoscopeAutoIncrease(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(HOROSCOPE_INCREMENT, getHoroscopeIncrement(context) + 1);
         edit.apply();
     }
@@ -2592,27 +2594,27 @@ public class SPH {
     }
 
     public static void setCacheSpeech(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(CACHE_SPEECH, condition);
         edit.apply();
     }
 
     public static int getTTSPitch(Context context) {
-        return getPref(context).getInt(TTS_PITCH, 100);
+        return getPref(context).getInt(TTS_PITCH, TTS_DEFAULT_VALUE);
     }
 
     public static void setTTSPitch(Context context, int value) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(TTS_PITCH, value);
         edit.apply();
     }
 
     public static int getTTSRate(Context context) {
-        return getPref(context).getInt(TTS_RATE, 100);
+        return getPref(context).getInt(TTS_RATE, TTS_DEFAULT_VALUE);
     }
 
     public static void setTTSRate(Context context, int value) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(TTS_RATE, value);
         edit.apply();
     }
@@ -2622,7 +2624,7 @@ public class SPH {
     }
 
     public static void setIgnoreRestrictedContent(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(IGNORE_RESTRICTED_CONTENT, condition);
         edit.apply();
     }
@@ -2632,7 +2634,7 @@ public class SPH {
     }
 
     public static void setSmsIdFix(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(SMS_ID_FIX, condition);
         edit.apply();
     }
@@ -2642,7 +2644,7 @@ public class SPH {
     }
 
     public static void setSmsBodyFix(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(SMS_BODY_FIX, condition);
         edit.apply();
     }
@@ -2702,13 +2704,13 @@ public class SPH {
     }
 
     public static void recognizerBusyAutoIncrease(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(RECOGNIZER_BUSY_INCREMENT, getRecognizerBusyIncrement(context) + 1);
         edit.apply();
     }
 
     public static void resetRecognizerBusyIncrement(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(RECOGNIZER_BUSY_INCREMENT, 0L);
         edit.apply();
     }
@@ -2718,7 +2720,7 @@ public class SPH {
     }
 
     public static void setAnonymousUsageStats(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ANONYMOUS_USAGE_STATS, condition);
         edit.apply();
     }
@@ -2728,7 +2730,7 @@ public class SPH {
     }
 
     public static void setDoubleBeepFix(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(DOUBLE_BEEP_FIX, condition);
         edit.apply();
     }
@@ -2738,7 +2740,7 @@ public class SPH {
     }
 
     public static void markOldUser(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(NEW_USER, false);
         edit.apply();
     }
@@ -2749,7 +2751,7 @@ public class SPH {
     }
 
     public static void markImportWarning(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(IMPORT_WARNING, true);
         edit.apply();
     }
@@ -2759,7 +2761,7 @@ public class SPH {
     }
 
     public static void markExportWarning(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(EXPORT_WARNING, true);
         edit.apply();
     }
@@ -2773,13 +2775,13 @@ public class SPH {
     }
 
     public static void headsetOverviewCountAutoIncrease(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_OVERVIEW_COUNT, getHeadsetOverviewCount(context) + 1);
         edit.apply();
     }
 
     public static void setAccessibilityChange(Context context) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ACCESSIBILITY_CHANGE, true);
         edit.apply();
     }
@@ -2789,7 +2791,7 @@ public class SPH {
     }
 
     public static void setDebugBilling(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(DEBUG_BILLING, condition);
         edit.apply();
     }
@@ -2803,7 +2805,7 @@ public class SPH {
     }
 
     public static void setDefaultNote(Context context, int action) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(DEFAULT_NOTE, action);
         edit.apply();
     }
@@ -2813,7 +2815,7 @@ public class SPH {
     }
 
     public static void getCodeVerifier(Context context, String codeVerifier) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(ALEXA_CODE_VERIFIER, codeVerifier);
         edit.apply();
     }
@@ -2823,7 +2825,7 @@ public class SPH {
     }
 
     public static void setAlexaAccessToken(Context context, String accessToken) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(ALEXA_ACCESS_TOKEN, accessToken);
         edit.apply();
     }
@@ -2833,7 +2835,7 @@ public class SPH {
     }
 
     public static void setAlexaRefreshToken(Context context, String refreshToken) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(ALEXA_REFRESH_TOKEN, refreshToken);
         edit.apply();
     }
@@ -2843,7 +2845,7 @@ public class SPH {
     }
 
     public static void setAlexaAccessTokenExpiry(Context context, long expiryTime) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putLong(ALEXA_ACCESS_TOKEN_EXPIRY, expiryTime);
         edit.apply();
     }
@@ -2853,7 +2855,7 @@ public class SPH {
     }
 
     public static void setAlexaRegion(Context context, int i) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(ALEXA_REGION, i);
         edit.apply();
     }
@@ -2863,7 +2865,7 @@ public class SPH {
     }
 
     public static void setUniqueID(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(UNIQUE_ID, str);
         edit.apply();
     }
@@ -2873,7 +2875,7 @@ public class SPH {
     }
 
     public static void setAlexaNotification(Context context, boolean showNotification) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ALEXA_NOTIFICATION_BUTTON, showNotification);
         edit.apply();
     }
@@ -2883,7 +2885,7 @@ public class SPH {
     }
 
     public static void setShownVolumeBug(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(SHOWN_VOLUME_BUG, condition);
         edit.apply();
     }
@@ -2893,7 +2895,7 @@ public class SPH {
     }
 
     public static void setShownPauseBug(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(SHOWN_PAUSE_BUG, condition);
         edit.apply();
     }
@@ -2903,7 +2905,7 @@ public class SPH {
     }
 
     public static void setCheckReinstallationNeeded(Context context, boolean isNeeded) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(REINSTALLATION_PROCESS, isNeeded);
         edit.apply();
     }
@@ -2913,7 +2915,7 @@ public class SPH {
     }
 
     public static void setCheckUnknownSourcesSettingNeeded(Context context, boolean isNeeded) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(UNKNOWN_SOURCES, isNeeded);
         edit.apply();
     }
@@ -2923,7 +2925,7 @@ public class SPH {
     }
 
     public static void setAnnounceCaller(Context context, boolean enable) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(ANNOUNCE_CALLER, enable);
         edit.apply();
     }
@@ -2933,7 +2935,7 @@ public class SPH {
     }
 
     public static void setDrivingProfile(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(DRIVING_PROFILE, str);
         edit.apply();
     }
@@ -2943,7 +2945,7 @@ public class SPH {
     }
 
     public static void setQuietTimes(Context context, String str) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(QUIET_TIMES, str);
         edit.apply();
     }
@@ -2953,7 +2955,7 @@ public class SPH {
     }
 
     public static void setOverrideSecure(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(OVERRIDE_SECURE, condition);
         edit.apply();
     }
@@ -2963,7 +2965,7 @@ public class SPH {
     }
 
     public static void setOverrideSecureHeadset(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(OVERRIDE_SECURE_HEADSET, condition);
         edit.apply();
     }
@@ -2973,7 +2975,7 @@ public class SPH {
     }
 
     public static void setOverrideSecureDriving(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(OVERRIDE_SECURE_DRIVING, condition);
         edit.apply();
     }
@@ -2983,7 +2985,7 @@ public class SPH {
     }
 
     public static void setRunDiagnostics(Context context, boolean condition) {
-        SharedPreferences.Editor edit = getEditor(getPref(context));
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putBoolean(RUN_DIAGNOSTICS, condition);
         edit.apply();
     }

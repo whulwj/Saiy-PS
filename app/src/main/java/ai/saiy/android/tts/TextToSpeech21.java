@@ -454,7 +454,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getPitch");
         }
-        final int pitch = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.TTS_DEFAULT_PITCH, 100);
+        final int pitch = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.TTS_DEFAULT_PITCH, SPH.TTS_DEFAULT_VALUE);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "pitch: " + pitch);
         }
@@ -465,9 +465,9 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getSpeechRate");
         }
-        final int rate = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.TTS_DEFAULT_RATE, 100);
+        final int rate = Settings.Secure.getInt(mContext.getContentResolver(), Settings.Secure.TTS_DEFAULT_RATE, SPH.TTS_DEFAULT_VALUE);
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "pitch: " + rate);
+            MyLog.i(CLS_NAME, "rate: " + rate);
         }
         return rate;
     }

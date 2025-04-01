@@ -518,8 +518,7 @@ public class UtilsFile {
             }
             return false;
         }
-        if (isSaiyDirectoryExists(ctx) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || isImportDirectoryExists(ctx)) &&
-                (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP || isExportDirectoryExists(ctx)) &&
+        if (isSaiyDirectoryExists(ctx) && isImportDirectoryExists(ctx) && isExportDirectoryExists(ctx) &&
                 (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q || isSoundDirectoryExists(ctx) && isNoMediaFileExists(ctx))) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "createDirs: all dirs exist: true");
@@ -581,39 +580,35 @@ public class UtilsFile {
             }
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            if (isImportDirectoryExists(ctx)) {
+        if (isImportDirectoryExists(ctx)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: importDirExists: true");
+            }
+        } else {
+            if (!createImportDirectory(ctx)) {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "createDirs: importDirExists: true");
+                    MyLog.w(CLS_NAME, "createDirs: createImportDir: failed");
                 }
-            } else {
-                if (!createImportDirectory(ctx)) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "createDirs: createImportDir: failed");
-                    }
-                    return false;
-                }
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "createDirs: createImportDir: success");
-                }
+                return false;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: createImportDir: success");
             }
         }
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
-            if (isExportDirectoryExists(ctx)) {
+        if (isExportDirectoryExists(ctx)) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: exportDirExists: true");
+            }
+        } else {
+            if (!createExportDirectory(ctx)) {
                 if (DEBUG) {
-                    MyLog.i(CLS_NAME, "createDirs: exportDirExists: true");
+                    MyLog.w(CLS_NAME, "createDirs: createExportDir: failed");
                 }
-            } else {
-                if (!createExportDirectory(ctx)) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "createDirs: createExportDir: failed");
-                    }
-                    return false;
-                }
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "createDirs: createExportDir: success");
-                }
+                return false;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "createDirs: createExportDir: success");
             }
         }
         return true;

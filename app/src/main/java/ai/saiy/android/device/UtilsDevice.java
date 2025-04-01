@@ -40,6 +40,7 @@ import ai.saiy.android.utils.SPH;
 public class UtilsDevice {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = UtilsDevice.class.getSimpleName();
+    private static final long SECURE_DRIVING_TIMEOUT = 300000L;
 
     /**
      * Check if the device is currently locked
@@ -58,13 +59,13 @@ public class UtilsDevice {
         } else {
             headsetSecure = false;
         }
-        final boolean drivingSecure = SPH.getOverrideSecureDriving(context) && (DrivingProfileHelper.isEnabled(context) || !ai.saiy.android.cognitive.motion.provider.google.MotionHelper.isOverDrivingThreshold(context, 300000L));
+        final boolean drivingSecure = SPH.getOverrideSecureDriving(context) && (DrivingProfileHelper.isEnabled(context) || !ai.saiy.android.cognitive.motion.provider.google.MotionHelper.isOverDrivingThreshold(context, SECURE_DRIVING_TIMEOUT));
         if (DEBUG) {
             MyLog.i(CLS_NAME, "satisfySecureConditions: getOverrideSecureHeadset: " + SPH.getOverrideSecureHeadset(context));
             MyLog.i(CLS_NAME, "satisfySecureConditions: headsetSecure: " + headsetSecure);
             MyLog.i(CLS_NAME, "satisfySecureConditions: getOverrideSecureDriving: " + SPH.getOverrideSecureDriving(context));
             MyLog.i(CLS_NAME, "satisfySecureConditions: DrivingProfileHelper.isProfileEnabled: " + DrivingProfileHelper.isEnabled(context));
-            MyLog.i(CLS_NAME, "satisfySecureConditions: MotionHelper.isOverDrivingThreshold: " + ai.saiy.android.cognitive.motion.provider.google.MotionHelper.isOverDrivingThreshold(context, 300000L));
+            MyLog.i(CLS_NAME, "satisfySecureConditions: MotionHelper.isOverDrivingThreshold: " + ai.saiy.android.cognitive.motion.provider.google.MotionHelper.isOverDrivingThreshold(context, SECURE_DRIVING_TIMEOUT));
             MyLog.i(CLS_NAME, "satisfySecureConditions: drivingSecure: " + drivingSecure);
             MyLog.i(CLS_NAME, "satisfySecureConditions: command.isSecure(): " + cc.isSecure());
             MyLog.i(CLS_NAME, "satisfySecureConditions: cr.wasSecure(): " + cr.wasSecure());

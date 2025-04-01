@@ -318,7 +318,7 @@ public class ActivityHomeHelper {
         if (isNewUser) {
             SPH.markOldUser(context);
         } else {
-            SPH.setRateMe(context, SPH.getUsedIncrement(context) + 101);
+            SPH.setRateMe(context, SPH.getUsedIncrement(context) + (SPH.ONE_HUNDRED + SPH.ONE));
         }
     }
 
