@@ -44,6 +44,7 @@ import ai.saiy.android.service.NotificationService;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
 
 /**
@@ -92,37 +93,37 @@ public final class NotificationHelper {
                 return;
             }
 
-            NotificationChannel mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_PERMANENT,
+            NotificationChannel notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_PERMANENT,
                     ctx.getString(R.string.menu_not_channel_permanent), NotificationManager.IMPORTANCE_LOW);
 
-            mChannel.setDescription(ctx.getString(R.string.menu_not_channel_permanent_description));
-            mChannel.enableLights(false);
-            mChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
-            notificationManager.createNotificationChannel(mChannel);
+            notificationChannel.setDescription(ctx.getString(R.string.menu_not_channel_permanent_description));
+            notificationChannel.enableLights(false);
+            notificationChannel.setLockscreenVisibility(Notification.VISIBILITY_PUBLIC);
+            notificationManager.createNotificationChannel(notificationChannel);
 
-            mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_PRIORITY,
+            notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_PRIORITY,
                     ctx.getString(R.string.menu_not_channel_priority), NotificationManager.IMPORTANCE_DEFAULT);
 
-            mChannel.setDescription(ctx.getString(R.string.menu_not_channel_priority_description));
-            mChannel.enableLights(false);
-            mChannel.enableVibration(false);
-            mChannel.setSound(null, null);
-            notificationManager.createNotificationChannel(mChannel);
+            notificationChannel.setDescription(ctx.getString(R.string.menu_not_channel_priority_description));
+            notificationChannel.enableLights(false);
+            notificationChannel.enableVibration(false);
+            notificationChannel.setSound(null, null);
+            notificationManager.createNotificationChannel(notificationChannel);
 
-            mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_INTERACTION,
+            notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_INTERACTION,
                     ctx.getString(R.string.menu_not_channel_interaction), NotificationManager.IMPORTANCE_LOW);
 
-            mChannel.setDescription(ctx.getString(R.string.menu_not_channel_interaction_description));
-            mChannel.enableLights(false);
-            notificationManager.createNotificationChannel(mChannel);
+            notificationChannel.setDescription(ctx.getString(R.string.menu_not_channel_interaction_description));
+            notificationChannel.enableLights(false);
+            notificationManager.createNotificationChannel(notificationChannel);
 
-            mChannel = new NotificationChannel(NOTIFICATION_CHANNEL_INFORMATION,
+            notificationChannel = new NotificationChannel(NOTIFICATION_CHANNEL_INFORMATION,
                     ctx.getString(R.string.menu_not_channel_information), NotificationManager.IMPORTANCE_HIGH);
 
-            mChannel.setDescription(ctx.getString(R.string.menu_not_channel_information_description));
-            mChannel.enableLights(true);
-            mChannel.setLightColor(Color.BLUE);
-            notificationManager.createNotificationChannel(mChannel);
+            notificationChannel.setDescription(ctx.getString(R.string.menu_not_channel_information_description));
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.BLUE);
+            notificationManager.createNotificationChannel(notificationChannel);
 
         } else {
             if (DEBUG) {
@@ -219,7 +220,7 @@ public final class NotificationHelper {
                     builder.setPriority(Notification.PRIORITY_MAX);
                 } else {
                     builder.setColorized(true);
-                    builder.setColor(Color.RED);
+                    builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorHotWord));
                 }
 
                 break;
@@ -233,7 +234,7 @@ public final class NotificationHelper {
                     builder.setPriority(Notification.PRIORITY_MAX);
                 } else {
                     builder.setColorized(true);
-                    builder.setColor(Color.RED);
+                    builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorHotWord));
                 }
                 break;
             case NOTIFICATION_TUTORIAL:
@@ -255,9 +256,12 @@ public final class NotificationHelper {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "getForegroundNotification: NOTIFICATION_SELF_AWARE");
                 }
-
+                if (SPH.showAlexaNotification(ctx)) {
+                    actionIntent.putExtra(NotificationService.CLICK_ACTION, NotificationService.NOTIFICATION_ALEXA);
+                    builder.addAction(ai.saiy.android.R.drawable.ic_alexa, ctx.getString(ai.saiy.android.R.string.menu_alexa), PendingIntent.getService(ctx, NotificationService.NOTIFICATION_ALEXA, actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
+                }
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
 
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                     builder.setPriority(Notification.PRIORITY_MIN);
@@ -286,7 +290,7 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-            final int icon = android.R.drawable.ic_menu_info_details;
+            final int icon = ai.saiy.android.R.drawable.ic_not_info;
             final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
             builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.tasker_notification_ticker)).setWhen(System.currentTimeMillis())
@@ -296,7 +300,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -331,7 +335,7 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INTERACTION);
-            final int icon = android.R.drawable.ic_btn_speak_now;
+            final int icon = ai.saiy.android.R.drawable.ic_mic_wired;
             final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
             builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.notification_listening)).setWhen(System.currentTimeMillis())
@@ -342,7 +346,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -408,7 +412,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -467,7 +471,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -528,7 +532,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -588,7 +592,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -639,7 +643,7 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
-            final int icon = android.R.drawable.ic_menu_info_details;
+            final int icon = ai.saiy.android.R.drawable.ic_not_info;
             final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
             builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(ai.saiy.android.R.string.permission_notification_ticker)).setWhen(System.currentTimeMillis())
@@ -649,7 +653,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -684,7 +688,7 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
-            final int icon = android.R.drawable.ic_menu_info_details;
+            final int icon = ai.saiy.android.R.drawable.ic_not_info;
             final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
             builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(R.string.emotion_notification_ticker)).setWhen(System.currentTimeMillis())
@@ -694,7 +698,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -743,7 +747,7 @@ public final class NotificationHelper {
                     actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(ctx, NOTIFICATION_CHANNEL_INFORMATION);
-            final int icon = android.R.drawable.ic_menu_info_details;
+            final int icon = ai.saiy.android.R.drawable.ic_not_info;
             final String contentTitle = ctx.getString(ai.saiy.android.R.string.app_name);
             builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
                     .setTicker(ctx.getString(R.string.vocal_notification_ticker)).setWhen(System.currentTimeMillis())
@@ -753,7 +757,7 @@ public final class NotificationHelper {
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(ctx, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
 
             final Notification not = builder.build();
@@ -780,17 +784,17 @@ public final class NotificationHelper {
             final PendingIntent pendingIntent = PendingIntent.getService(context, NotificationService.NOTIFICATION_RATE_ME, actionIntent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
             final NotificationCompat.Builder builder = new NotificationCompat.Builder(context, NOTIFICATION_CHANNEL_INFORMATION);
-            final int icon = ai.saiy.android.R.drawable.ic_stat_gift;
+            final int icon = ai.saiy.android.R.drawable.ic_not_info;
             final String contentTitle = context.getString(ai.saiy.android.R.string.app_name);
             builder.addAction(icon, contentTitle, pendingIntent).setSmallIcon(icon)
-                    .setTicker(context.getString(ai.saiy.android.R.string.birthday_notification_ticker))
+                    .setTicker(context.getString(ai.saiy.android.R.string.rate_me_notification_ticker))
                     .setWhen(System.currentTimeMillis())
                     .setContentTitle(contentTitle)
-                    .setContentText(context.getString(ai.saiy.android.R.string.birthday_notification_text))
+                    .setContentText(context.getString(ai.saiy.android.R.string.rate_me_notification_text))
                     .setAutoCancel(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(context, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(NotificationService.NOTIFICATION_RATE_ME, builder.build());
         } catch (Exception e) {
@@ -822,7 +826,7 @@ public final class NotificationHelper {
                     .setAutoCancel(true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 builder.setColorized(false);
-                builder.setColor(Color.RED);
+                builder.setColor(ContextCompat.getColor(context, ai.saiy.android.R.color.colorSaiyPurpleLight));
             }
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).notify(NotificationService.NOTIFICATION_BIRTHDAY, builder.build());
         } catch (Exception e) {

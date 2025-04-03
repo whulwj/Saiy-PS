@@ -161,13 +161,13 @@
 
     <!-- Notification channels -->
     <string name="menu_not_channel_permanent" translatable="true">"Permanent"</string>
-    <string name="menu_not_channel_permanent_description" translatable="true">"Blar"</string>
+    <string name="menu_not_channel_permanent_description" translatable="true">"Displays the permanent notification that you\'ll click on to activate Saiy"</string>
     <string name="menu_not_channel_interaction" translatable="true">"Interaction"</string>
-    <string name="menu_not_channel_interaction_description" translatable="true">"Blar."</string>
+    <string name="menu_not_channel_interaction_description" translatable="true">"Displays notifications, such as listening, computing and speaking."</string>
     <string name="menu_not_channel_information" translatable="true">"Information"</string>
-    <string name="menu_not_channel_information_description" translatable="true">"Blar"</string>
+    <string name="menu_not_channel_information_description" translatable="true">"Displays notifications, that will speak information when clicked"</string>
     <string name="menu_not_channel_priority" translatable="true">"Priority"</string>
-    <string name="menu_not_channel_priority_description" translatable="true">"Blar"</string>
+    <string name="menu_not_channel_priority_description" translatable="true">"Displays the permanent priority notifications, such as for the hotword detection. Don\'t want you to forget it\'s on!"</string>
 
     <!-- UI Strings -->
     <string name="menu_tap_begin" translatable="true">tap to begin</string>
@@ -1591,6 +1591,9 @@
     <string name="birthday_notification_text">Saiy interaction - click for details</string>
     <string name="birthday_notification_ticker">Saiy interaction</string>
     <string name="content_birthday">Hey, %1$s. I just wanted to wish you a very happy birthday. I hope you have a fantastic day.</string>
+
+    <string name="rate_me_notification_text">Saiy interaction - click for details</string>
+    <string name="rate_me_notification_ticker">Saiy interaction</string>
 
     <string name="acs_app_icon">The application icon</string>
     <string name="acs_chevron_icon">A chevron icon</string>

@@ -163,4 +163,6 @@
     <color name="colorPrimary">#607d8b</color>
     <color name="colorPrimaryDark">#546e7a</color>
     <color name="colorFade">#78909c</color>
+    <color name="colorHotWord">#f2ced2</color>
+    <color name="colorSaiyPurpleLight">#5b22fe</color>
 </resources>
