@@ -116,7 +116,7 @@ public class FragmentHomeHelper {
         containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_development));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_contribute));
-        containerUI.setIconMain(R.drawable.ic_pulse);
+        containerUI.setIconMain(R.drawable.ic_ai);
         containerUI.setIconExtra(FragmentHome.CHEVRON);
         mObjects.add(containerUI);
 

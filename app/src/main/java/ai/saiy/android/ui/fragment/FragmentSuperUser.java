@@ -168,7 +168,7 @@ public final class FragmentSuperUser extends Fragment implements View.OnClickLis
         }
         switch (position) {
             case 0:
-                getParentActivity().toast(getString(R.string.menu_root), Toast.LENGTH_SHORT);
+                getParentActivity().toast(getString(R.string.content_disabled_for_this_release), Toast.LENGTH_SHORT);
                 break;
             case 1:
                 getParentActivity().vibrate();

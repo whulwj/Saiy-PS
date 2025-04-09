@@ -482,6 +482,13 @@ public class FragmentSettingsHelper {
         mObjects.add(containerUI);
 
         containerUI = new ContainerUI();
+        containerUI.setTitle(getParent().getString(R.string.menu_wear_os));
+        containerUI.setSubtitle(getParent().getString(R.string.menu_tap_options));
+        containerUI.setIconMain(R.drawable.ic_watch);
+        containerUI.setIconExtra(FragmentHome.CHEVRON);
+        mObjects.add(containerUI);
+
+        containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_volume_settings));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_set));
         containerUI.setIconMain(R.drawable.ic_volume_high);
@@ -989,6 +996,24 @@ public class FragmentSettingsHelper {
                 });
             }
         });
+    }
+
+    public void showWearOS() {
+        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
+                .setTitle(R.string.menu_wear_os)
+                .setMessage(R.string.content_wear_overview)
+                .setIcon(R.drawable.ic_watch)
+                .setNeutralButton(R.string.menu_hurry_exclamation, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showWearOS: onNeutral");
+                        }
+                    }
+                })
+                .create();
+        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
+        materialDialog.show();
     }
 
     /**

@@ -141,6 +141,9 @@
     <string name="menu_select" translatable="true">"Select"</string>
     <string name="menu_unknown_commands" translatable="true">Unknown Commands</string>
     <string name="menu_bluetooth_headsets">Bluetooth Headsets</string>
+    <string name="menu_wear_os">Wear OS</string>
+    <string name="menu_hurry_exclamation">Hurry up!</string>
+    <string name="content_wear_overview">Very basic integration with your Wear OS watch should already be functioning.\n\nOver the next couple of releases, configurable options will begin to appear here - such as how speech responses are handled and how verbose information is displayed on the watch itself.\n\nCome back soon!</string>
     <string name="custom_intro_text" translatable="true">How should I address you?</string>
     <string name="custom_intro_hint" translatable="true">I\'m listening your greatness</string>
     <string name="custom_intro_checkbox_title" translatable="true">Use randomly</string>
@@ -889,6 +892,7 @@
     <string name="lp_tts_voice">If your device and text to speech engine supports it, you can select the voice I will speak in here.</string>
     <string name="lp_unknown_commands">Rather than me simply announcing when I don\'t understand your voice input, you can select alternative options here. You could select passing unknown commands to the Google Assistant. That way, you can deliberately ask me something I won\'t understand, and Google will take over. Click to check out the other options.</string>
     <string name="lp_headset">Click here for more headset options, than there are atoms in the Universe.</string>
+    <string name="lp_wear">A number of options for you to configure my behaviour on your connected smart watch.</string>
     <string name="lp_volume_settings">If you\'d like me to speak at a fixed level above or below your media stream, then you can apply this setting here. Unfortunately it\'s not working correctly on some Android versions, but my developer is on the case of that. There are two other options. One to show a toast when I believe my text to speech output might be set too low, and another to set which volume streams I check. On some Android devices, the global device volume profile overrides your media stream. On others, it doesn\'t. If I seem to be reporting incorrectly that your volume is too low, try un-ticking the, assume global volume, option.</string>
     <string name="lp_alexa_shortcut">If you\'d like to show or remove the shortcut button on the permanent notification to directly speak to Alexa, you can do so by tapping here.</string>
     <string name="lp_launcher_shortcut">If you\'d like to place a shortcut on your launcher that activates me, you can do so by tapping here.</string>
@@ -1989,6 +1993,7 @@
     <string name="menu_tasker_task_not_found">Tasker task not found?</string>
     <string name="menu_tasker_variable_not_found">Tasker variable not found?</string>
     <string name="action_export">Export</string>
+    <string name="content_disabled_for_this_release">Disabled for this release</string>
     <string name="content_call_contact">Call contact %1$s on %2$s</string>
     <string name="content_custom_command">Select custom command action</string>
     <string name="content_automate_flow">Automate Flow %1$s</string>

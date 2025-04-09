@@ -148,7 +148,7 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
         containerUI = new ContainerUI();
         containerUI.setTitle(getParent().getString(R.string.menu_ping));
         containerUI.setSubtitle(getParent().getString(R.string.menu_tap_toggle));
-        containerUI.setIconMain(R.drawable.ic_radio_tower);
+        containerUI.setIconMain(R.drawable.ic_network_speed);
         containerUI.setIconExtra(SPH.getPingCheck(getApplicationContext())
                 ? FragmentHome.CHECKED : FragmentHome.UNCHECKED);
         mObjects.add(containerUI);

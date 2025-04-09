@@ -50,6 +50,9 @@
     <string name="menu_select" translatable="true">"选择"</string>
     <string name="menu_unknown_commands" translatable="true">未知命令</string>
     <string name="menu_bluetooth_headsets">Bluetooth Headsets</string>
+    <string name="menu_wear_os">Wear OS</string>
+    <string name="menu_hurry_exclamation">Hurry up!</string>
+    <string name="content_wear_overview">Very basic integration with your Wear OS watch should already be functioning.\n\nOver the next couple of releases, configurable options will begin to appear here - such as how speech responses are handled and how verbose information is displayed on the watch itself.\n\nCome back soon!</string>
     <string name="custom_intro_text" translatable="true">我该怎样称呼您?</string>
     <string name="custom_intro_hint" translatable="true">我在等您的回复</string>
     <string name="custom_intro_checkbox_title" translatable="true">随机使用</string>
@@ -789,6 +792,7 @@
     <string name="lp_tts_voice">如果您的设备以及文字转语音引擎支持它，您可以在此选择我要说的语音。</string>
     <string name="lp_unknown_commands">与其我只是播报我不明白您的语音输入，您可以在此选择其它选项。您可以选择传递未知命令给谷歌助手。那样，您可以故意问一些我不明白的事情，谷歌就会把问题接手过去。请点击查看其它选项。</string>
     <string name="lp_headset">Click here for more headset options, than there are atoms in the Universe.</string>
+    <string name="lp_wear">A number of options for you to configure my behaviour on your connected smart watch.</string>
     <string name="lp_volume_settings">如果您希望我以媒体流左右的固定音量发言，那么，您可以在此采用此设置。 不幸的是，在一些安卓版本里，它无法正常运作，但是我的开发人员在处理此事。 这里有两个选择：一个是当我的文字转语音输出可能设置太低的时候、显示提示，另一个是设置我检查的音量流。在一些安卓设备，全局设备音量配置文件会覆盖您的媒体流；而在其它的设备上，则不会。 如果我似乎错误地报告您的音量太低，请尝试取消勾选\'假定全局音量选项\'。</string>
     <string name="lp_alexa_shortcut">If you\'d like to show or remove the shortcut button on the permanent notification to directly speak to Alexa, you can do so by tapping here.</string>
     <string name="lp_launcher_shortcut">如果你想在桌面上放置一个激活快捷键，你可以点击这里来完成。</string>
@@ -1851,6 +1855,7 @@
     <string name="menu_tasker_task_not_found">Tasker task not found?</string>
     <string name="menu_tasker_variable_not_found">Tasker variable not found?</string>
     <string name="action_export">Export</string>
+    <string name="content_disabled_for_this_release">Disabled for this release</string>
     <string name="content_call_contact">Call contact %1$s on %2$s</string>
     <string name="content_custom_command">选择自定义命令操作</string>
     <string name="content_automate_flow">Automate Flow %1$s</string>

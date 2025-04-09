@@ -170,13 +170,16 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
                 }
                 break;
             case 4:
+                helper.showWearOS();
+                break;
+            case 5:
                 if (!SPH.haveShownVolumeBug(getApplicationContext())) {
                     SPH.setShownVolumeBug(getApplicationContext(), true);
                     getParentActivity().toast(getString(R.string.content_android_bug), Toast.LENGTH_LONG);
                 }
                 helper.showVolumeSettingsSlider();
                 break;
-            case 5:
+            case 6:
                 if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                     if (isActive()) {
                         getParentActivity().toast(getString(R.string.title_error_alexa_android_5), Toast.LENGTH_SHORT);
@@ -188,17 +191,17 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
                 this.getAdapter().notifyItemChanged(position);
                 ai.saiy.android.service.helper.SelfAwareHelper.restartService(getApplicationContext());
                 break;
-            case 6:
+            case 7:
                 if (!ai.saiy.android.intent.ExecuteIntent.launcherShortcut(getContext())) {
                     getParentActivity().toast(getString(R.string.menu_shortcut_failed), Toast.LENGTH_SHORT);
                 } else if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) {
                     getParentActivity().toast(getString(R.string.success_), Toast.LENGTH_SHORT);
                 }
                 break;
-            case 7:
+            case 8:
                 helper.showNetworkSynthesisDialog();
                 break;
-            case 8:
+            case 9:
                 helper.showTemperatureUnitsSelector();
                 break;
             default:
@@ -236,18 +239,21 @@ public class FragmentSettings extends Fragment implements View.OnClickListener, 
                 getParentActivity().toast(getString(R.string.lp_headset), Toast.LENGTH_SHORT);
                 break;
             case 4:
-                getParentActivity().toast(getString(R.string.lp_volume_settings), Toast.LENGTH_SHORT);
+                getParentActivity().toast(getString(R.string.lp_wear), Toast.LENGTH_SHORT);
                 break;
             case 5:
-                getParentActivity().toast(getString(R.string.lp_alexa_shortcut), Toast.LENGTH_SHORT);
+                getParentActivity().toast(getString(R.string.lp_volume_settings), Toast.LENGTH_SHORT);
                 break;
             case 6:
-                getParentActivity().toast(getString(R.string.lp_launcher_shortcut), Toast.LENGTH_SHORT);
+                getParentActivity().toast(getString(R.string.lp_alexa_shortcut), Toast.LENGTH_SHORT);
                 break;
             case 7:
-                getParentActivity().toast(getString(R.string.lp_network_synthesis), Toast.LENGTH_SHORT);
+                getParentActivity().toast(getString(R.string.lp_launcher_shortcut), Toast.LENGTH_SHORT);
                 break;
             case 8:
+                getParentActivity().toast(getString(R.string.lp_network_synthesis), Toast.LENGTH_SHORT);
+                break;
+            case 9:
                 getParentActivity().toast(getString(R.string.lp_temperature_units), Toast.LENGTH_SHORT);
                 break;
             default:
