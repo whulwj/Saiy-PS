@@ -23,6 +23,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
@@ -39,8 +42,15 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
+import ai.saiy.android.applications.UtilsApplication;
+import ai.saiy.android.command.settings.SettingsIntent;
+import ai.saiy.android.firebase.database.read.KnownBug;
+import ai.saiy.android.firebase.database.read.KnownBugs;
+import ai.saiy.android.firebase.database.reference.KnownBugsReference;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.recognition.TestRecognitionAction;
@@ -53,6 +63,7 @@ import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import dagger.hilt.android.AndroidEntryPoint;
+import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
  * Created by benrandall76@gmail.com on 18/07/2016.
@@ -92,7 +103,9 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreate");
         }
+        setHasOptionsMenu(true);
         helper = new FragmentBugsHelper(this);
+        requestKnownBugs(false);
     }
 
     @Override
@@ -134,6 +147,15 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "onCreateOptionsMenu");
+        }
+        menuInflater.inflate(R.menu.menu_bugs, menu);
+        super.onCreateOptionsMenu(menu, menuInflater);
+    }
+
+    @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, final ViewGroup container, final Bundle savedInstanceState) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreateView");
@@ -150,6 +172,19 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
         mRecyclerView.setAdapter(mAdapter);
 
         return rootView;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem menuItem) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME,  "oonOptionsItemSelected");
+        }
+        if (R.id.action_bugs == menuItem.getItemId()) {
+            requestKnownBugs(true);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(menuItem);
+        }
     }
 
     private int getPosition(View view) {
@@ -182,6 +217,24 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
             }
             switch (position) {
                 case 0:
+                case 18:
+                case 33:
+                case 37:
+                    if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT))) {
+                        getParentActivity().doFragmentReplaceTransaction(FragmentDevelopment.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT), ActivityHome.ANIMATION_FADE);
+                    } else {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_DEVELOPMENT being added");
+                        }
+                    }
+                    break;
+                case 6:
+                    if (ExecuteIntent.showInstallOfflineVoiceFiles(getApplicationContext())) {
+                        return;
+                    }
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: SETTINGS_OFFLINE");
+                    }
                     if (!ExecuteIntent.settingsIntent(getApplicationContext(),
                             IntentConstants.SETTINGS_VOICE_SEARCH)) {
                         if (DEBUG) {
@@ -191,14 +244,78 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
                                 IntentConstants.SETTINGS_INPUT_METHOD);
                     }
                     break;
-                case 1:
+                case 7:
+                case 23:
                     ExecuteIntent.settingsIntent(getApplicationContext(),
                             IntentConstants.SETTINGS_TEXT_TO_SPEECH);
                     break;
-                case 2:
-                    getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
-                            String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS), ActivityHome.ANIMATION_FADE,
-                            ActivityHome.INDEX_FRAGMENT_BUGS);
+                case 8:
+                case 36:
+                    if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS))) {
+                        getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
+                                String.valueOf(ActivityHome.INDEX_FRAGMENT_SETTINGS), ActivityHome.ANIMATION_FADE,
+                                ActivityHome.INDEX_FRAGMENT_BUGS);
+                    } else {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_SETTINGS being added");
+                        }
+                    }
+                    break;
+                case 10:
+                case 14:
+                case 15:
+                case 16:
+                case 26:
+                case 29:
+                    if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPER_USER))) {
+                        getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
+                                String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPER_USER), ActivityHome.ANIMATION_FADE,
+                                ActivityHome.INDEX_FRAGMENT_BUGS);
+                    } else {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_SUPER_USER being added");
+                        }
+                    }
+                    break;
+                case 11:
+                    SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.ACCESSIBILITY);
+                    break;
+                case 22:
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                        toast(getString(R.string.device_not_supported), Toast.LENGTH_SHORT);
+                    } else {
+                        if (ExecuteIntent.showInstallOfflineVoiceFiles(getApplicationContext())) {
+                            break;
+                        }
+                        SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.APPLICATION);
+                        toast(getString(R.string.error_assistant_settings), Toast.LENGTH_LONG);
+                    }
+                    break;
+                case 24:
+                case 30:
+                    if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_CUSTOMISATION))) {
+                        getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
+                                String.valueOf(ActivityHome.INDEX_FRAGMENT_CUSTOMISATION), ActivityHome.ANIMATION_FADE,
+                                ActivityHome.INDEX_FRAGMENT_BUGS);
+                    } else {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_CUSTOMISATION being added");
+                        }
+                    }
+                    break;
+                case 27:
+                    if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS))) {
+                        getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
+                                String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS), ActivityHome.ANIMATION_FADE,
+                                ActivityHome.INDEX_FRAGMENT_BUGS);
+                    } else {
+                        if (DEBUG) {
+                            MyLog.w(CLS_NAME, "onClick: INDEX_FRAGMENT_SUPPORTED_APPS being added");
+                        }
+                    }
+                    break;
+                case 28:
+                    SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.VOICE_SEARCH);
                     break;
                 default:
                     break;
@@ -223,16 +340,42 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
         switch (position) {
             case 0:
                 return false;
-            case 1:
+            case 7:
                 ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_VOLUME);
                 break;
-            case 2:
-                getParentActivity().doFragmentAddTransaction(FragmentSuperUser.newInstance(null),
-                        String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPER_USER), ActivityHome.ANIMATION_FADE,
-                        ActivityHome.INDEX_FRAGMENT_BUGS);
+            case 8:
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPER_USER))) {
+                    getParentActivity().doFragmentAddTransaction(FragmentSettings.newInstance(null),
+                            String.valueOf(ActivityHome.INDEX_FRAGMENT_SUPER_USER), ActivityHome.ANIMATION_FADE,
+                            ActivityHome.INDEX_FRAGMENT_BUGS);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onLongClick: INDEX_FRAGMENT_SUPER_USER being added");
+                    }
+                }
+                break;
+            case 14:
+                UtilsApplication.openApplicationSpecificSettings(getApplicationContext(), "com.google.android.googlequicksearchbox");
+                break;
+            case 22:
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
+                    toast(getString(R.string.device_not_supported), Toast.LENGTH_SHORT);
+                } else if (!SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.QUICK_LAUNCH)) {
+                    SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.SETTINGS);
+                }
+                break;
+            case 24:
+            case 28:
+                if (isActive() && !getParentActivity().isFragmentLoading(String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT))) {
+                    getParentActivity().doFragmentReplaceTransaction(FragmentDevelopment.newInstance(null), String.valueOf(ActivityHome.INDEX_FRAGMENT_DEVELOPMENT), ActivityHome.ANIMATION_FADE);
+                } else {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onLongClick: INDEX_FRAGMENT_DEVELOPMENT being added");
+                    }
+                }
                 break;
             default:
-                break;
+                return false;
         }
 
         return true;
@@ -322,6 +465,104 @@ public class FragmentBugs extends Fragment implements View.OnClickListener, View
                 getApplicationContext().getSystemService(Context.INPUT_METHOD_SERVICE))
                 .hideSoftInputFromWindow(editText.getApplicationWindowToken(),
                         InputMethodManager.HIDE_NOT_ALWAYS);
+    }
+
+    public void toast(String text, int duration) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "makeToast: " + text);
+        }
+        if (isActive()) {
+            getParentActivity().toast(text, duration);
+        } else if (DEBUG) {
+            MyLog.w(CLS_NAME, "toast Fragment detached");
+        }
+    }
+
+    private void requestKnownBugs(boolean forceUpdate) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "requestKnownBugs: " + forceUpdate);
+        }
+        Schedulers.io().scheduleDirect(new Runnable() {
+            @Override
+            public void run() {
+                final KnownBugs requestKnownBugsList = new KnownBugsReference().getRequestKnownBugsList();
+                if (requestKnownBugsList == null) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "requestKnownBugs: requestKnownBugsList: null");
+                    }
+                    return;
+                }
+                final List<KnownBug> knownBugsList = requestKnownBugsList.getBugs();
+                if (!ai.saiy.android.utils.UtilsList.notNaked(knownBugsList)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "requestKnownBugs: knownBugsList: naked");
+                    }
+                    return;
+                }
+                final String previousContent = ai.saiy.android.utils.SPH.getLatestBugs(getApplicationContext());
+                final String currentContent = requestKnownBugsList.toString();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "requestKnownBugs: currentContent: " + currentContent);
+                }
+                if (forceUpdate) {
+                    ai.saiy.android.utils.SPH.setLatestBugs(getApplicationContext(), currentContent);
+                } else if (ai.saiy.android.utils.UtilsString.notNaked(previousContent)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "requestKnownBugs: previousContent: " + previousContent);
+                    }
+                    if (previousContent.matches(Pattern.quote(currentContent))) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "requestKnownBugs: previous content matches");
+                        }
+                        int shownCount = ai.saiy.android.utils.SPH.getLatestBugsCount(getApplicationContext());
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "requestKnownBugs: shownCount: " + shownCount);
+                        }
+                        if (shownCount > 1) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "requestKnownBugs: seen twice already");
+                            }
+                            return;
+                        }
+                        ai.saiy.android.utils.SPH.updateLatestBugsCount(getApplicationContext());
+                    } else {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "requestKnownBugs: previous content doesn't match");
+                        }
+                        ai.saiy.android.utils.SPH.setLatestBugs(getApplicationContext(), currentContent);
+                        ai.saiy.android.utils.SPH.resetLatestBugsCount(getApplicationContext());
+                        ai.saiy.android.utils.SPH.updateLatestBugsCount(getApplicationContext());
+                    }
+                } else {
+                    ai.saiy.android.utils.SPH.updateLatestBugsCount(getApplicationContext());
+                    ai.saiy.android.utils.SPH.setLatestBugs(getApplicationContext(), currentContent);
+                }
+                final int size = knownBugsList.size();
+                final ArrayList<String> bugs = new ArrayList<>();
+                for (int i = 0; i < size; i++) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "bug: getTitle: " + knownBugsList.get(i).getTitle());
+                        MyLog.i(CLS_NAME, "bug: getContent: " + knownBugsList.get(i).getContent());
+                        MyLog.i(CLS_NAME, "---------------------------------");
+                    }
+                    bugs.add(("• " + knownBugsList.get(i).getTitle() + "\n\n" + knownBugsList.get(i).getContent()).replaceAll("_b", "\n"));
+                }
+                if (!ai.saiy.android.utils.UtilsList.notNaked(bugs)) {
+                    if (DEBUG) {
+                        MyLog.i(CLS_NAME, "requestKnownBugs: content: naked");
+                    }
+                } else if (isActive()) {
+                    getParentActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            helper.showLatestBugsDialog(bugs);
+                        }
+                    });
+                } else if (DEBUG) {
+                    MyLog.i(CLS_NAME, "requestKnownBugs: no longer active");
+                }
+            }
+        });
     }
 
     public boolean isActive() {

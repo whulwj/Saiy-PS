@@ -1052,37 +1052,46 @@
     <string name="issue_usage_stats_bug" translatable="true">"可惜的是，你的设备正面临一个已知的Android (安卓）错误，我无法打开使用统计设置来让你授权我来进入他们。 这将导致和应用程序使用相关的指令出现一些问题。请在设备设置里查看更新Android（安卓）版本，也许设备生产商已经推出了修复程序来解决此问题。"</string>
 
     <!-- Troubleshooting and bugs Strings -->
-
+    <string name="menu_latest_bugs">Latest Bugs</string>
+    <string name="menu_squash_them">Squash them!</string>
+    <string name="action_bugs">Bugs</string>
     <string name="bug_title_offline_recognition" translatable="true">"离线识别失败"</string>
-    <string name="bug_content_offline_recognition" translatable="true">This feature is only available if you are
-        using Google Voice Recognition.\n\nYou\'ll need to make sure you have correctly downloaded and installed
-        the offline recognition files from the Android Voice Search Settings.\n\nIt is often necessary to reboot
-        your device once you have done this.\n\nClick to go to the Settings.</string>
+    <string name="bug_content_offline_recognition" translatable="true">You\'ll need to make sure you have correctly downloaded and installed
+    the offline recognition files from the Android Voice Search Settings.\n\nIt is often necessary to reboot
+    your device once you have done this, sometimes more than once…\n\nIf the problem persists, you can try downloading
+    the English UK offline files and temporarily switching your device Locale to the same. Quite why this should kick start Google to recognise
+    the offline files, remains a mystery…\n\nTap for the Offline Files Settings.</string>
 
     <string name="bug_title_no_speech" translatable="true">"我没有听到任何发言？"</string>
     <string name="bug_content_no_speech" translatable="true">First thing to check is your media volume. On some
         devices it may not be obvious that this stream alone is set too low or muted.\n\nA more likely problem
         is your voice engine is in error; this happens all too often… In the Android Text to Speech
-        Settings double check any additional download files are installed and up to date.
-        There\'s an option to \'listen to a sample\' which you can test too.\n\nIt\'s highly recommended to
-        use the Google text to speech engine as at the time of writing,
-        despite taking a little longer to initially warm up, it is the only one that seems to work at least
-        relatively reliably…\n\nIf all else fails, try rebooting your device, as this can sometimes fix weird
-        and wonderful problems for no apparent reason at all…\n\nTap for Text to Speech Settings. Tap and hold
-        for Volume Settings</string>
+        Settings double check any additional download files are installed correctly and up to date.
+        If you have recently upgraded your device, the existing files may no longer be compatible, it\'s advised to
+        clear them from the device storage, so the download will complete in its entirety again. Once you\'re done,
+        test the \'listen to a sample\' option to make sure everything is working correctly.\n\nIf this problem is
+        only occurring on translation commands, it may well be that your voice engine is reporting that it is able
+        to speak the requested language, but actually can\'t. Continue reading…\n\nIt\'s highly recommended to use
+        Google\'s text to speech engine, as at the time of writing, despite taking a little longer to initially warm up,
+        it is the only one that seems to work at least relatively reliably…\n\nIf all else fails, try rebooting your device,
+        as this can sometimes fix weird and wonderful problems, for no apparent reason at all…\n\nTap for Text to Speech Settings.
+        Tap and hold for Volume Settings</string>
 
     <string name="bug_title_delay_speech" translatable="true">"说话前有延迟"</string>
     <string name="bug_content_delay_speech" translatable="true">Text to speech engines take up a lot of resource
         and consequently can take a while to initialise and be ready to speak. This is more common on higher
         quality engines, regardless of whether they are downloaded and installed on the device or not.\n\nIn the
         Superuser Settings, under Memory Usage, you can adjust how long the text to speech engine is bound to
-        Saiy and kept in the memory. The longer allowed time, the less likely the initialisation process
+        Saiy and kept in the memory. The longer allocated time, the less often the initialisation process
         will be required for subsequent commands\n\nThis additional memory usage
         should be negligible to the performance of any modern device. If Android needs the memory back,
         it will take it!\n\nIn the Saiy Settings, if you have selected to use the network synthesised voices
         (available via Google\'s text to speech engine), a delay can occur due to the speed of your network
         connection. If your mobile connectivity is a little hit and miss, disabling this feature unless you are
-        connected to WiFi, could certainly help…\n\nTap for settings. Tap and hold for Superuser Settings</string>
+        connected to WiFi, could certainly help…\n\nTap for Settings. Tap and hold for Superuser Settings</string>
+
+    <string name="device_not_supported">Your device does not support this feature</string>
+    <string name="error_assistant_settings">Apps &gt; Default Apps &gt; Assist &amp; voice input</string>
 
     <!-- App announcement strings -->
 

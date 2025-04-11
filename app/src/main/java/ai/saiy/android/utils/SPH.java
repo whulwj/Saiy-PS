@@ -126,6 +126,8 @@ public class SPH {
     private static final String USER_NAME = "user_name";
     private static final String USER_GENDER = "user_gender";
     private static final String USER_ACCOUNT = "user_account";
+    private static final String LATEST_BUGS_COUNT = "latest_bugs_count";
+    private static final String LATEST_BUGS_CONTENT = "latest_bugs_content";
     private static final String TORCH_FIX = "torch_fix";
     private static final String UNKNOWN_CONTACT_VERBOSE = "unknown_contact_verbose";
     private static final String EMAIL_AUTO_VERBOSE = "email_auto_verbose";
@@ -2419,6 +2421,38 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(pref);
 
         edit.putString(USER_ACCOUNT, account);
+        edit.apply();
+    }
+
+    public static @NonNull int getLatestBugsCount(Context context) {
+        return getPref(context).getInt(LATEST_BUGS_CONTENT, 0);
+    }
+
+    public static void updateLatestBugsCount(Context context) {
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(LATEST_BUGS_CONTENT, getLatestBugsCount(context) + 1);
+        edit.apply();
+    }
+
+    public static void resetLatestBugsCount(Context context) {
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(LATEST_BUGS_CONTENT, 0);
+        edit.apply();
+    }
+
+    public static void setLatestBugsCount(Context context, int count) {
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putInt(LATEST_BUGS_CONTENT, count);
+        edit.apply();
+    }
+
+    public static @NonNull String getLatestBugs(Context context) {
+        return getPref(context).getString(LATEST_BUGS_CONTENT, "");
+    }
+
+    public static void setLatestBugs(Context context, String content) {
+        final SharedPreferences.Editor edit = getEditor(getPref(context));
+        edit.putString(LATEST_BUGS_CONTENT, content);
         edit.apply();
     }
 

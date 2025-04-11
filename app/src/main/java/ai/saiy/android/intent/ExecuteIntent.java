@@ -1132,12 +1132,13 @@ public class ExecuteIntent {
         return false;
     }
 
-    public static void showInstallOfflineVoiceFiles(Context context) {
+    public static boolean showInstallOfflineVoiceFiles(Context context) {
         final Intent intent = new Intent();
         intent.setComponent(new ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW, "com.google.android.voicesearch.greco3.languagepack.InstallActivity"));
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
             context.startActivity(intent);
+            return true;
         } catch (ActivityNotFoundException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "showInstallOfflineVoiceFiles: ActivityNotFoundException");
@@ -1149,6 +1150,7 @@ public class ExecuteIntent {
                 e.printStackTrace();
             }
         }
+        return false;
     }
 
     /**
