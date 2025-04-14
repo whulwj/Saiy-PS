@@ -54,6 +54,7 @@ public class DebugAction {
     public static final int DEBUG_CLEAR_BLOCKED_APPS = 4;
     public static final int DEBUG_AUTHENTICATION = 5;
     public static final int DEBUG_VOLUME = 6;
+    public static final int DEBUG_CONTACT = 7;
     public static final int REPORT_BILLING = 8;
     public static final int DEBUG_BILLING = 10;
 

@@ -21,6 +21,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Pair;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -30,6 +31,7 @@ import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CommandRequest;
+import ai.saiy.android.contacts.Contact;
 import ai.saiy.android.custom.CustomCommandHelper;
 import ai.saiy.android.database.DBSpeech;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -94,6 +96,10 @@ public class TestRecognitionAction {
     private void runDebug(@NonNull final Context ctx, ViewModelBilling viewModelBilling, @NonNull final String commandText) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "runDebug: " + commandText);
+        }
+        if (commandText.startsWith("DEBUG:" + DebugAction.DEBUG_CONTACT)) {
+            debugContactId(ctx, commandText);
+            return;
         }
 
         final String[] instructionArray = commandText.split(MyLog.DO_DEBUG);
@@ -227,5 +233,76 @@ public class TestRecognitionAction {
                 UtilsToast.showToast(ctx, toastWords, Toast.LENGTH_SHORT);
             }
         });
+    }
+
+    private void debugContactId(@NonNull final Context ctx, @NonNull String str) {
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "debugContactId");
+        }
+        String sms;
+        String contactIDs = null;
+        if (ai.saiy.android.permissions.PermissionHelper.checkSMSReadPermissions(ctx, null) && ai.saiy.android.permissions.PermissionHelper.checkContactGroupPermissions(ctx, null)) {
+            String contactName = str.replaceFirst("DEBUG:" + DebugAction.DEBUG_CONTACT + ":", "").trim();
+            final ai.saiy.android.contacts.ContactHelper contactHelper = new ai.saiy.android.contacts.ContactHelper();
+            ArrayList<String> arrayList = new ArrayList<>();
+            arrayList.add(contactName);
+            ArrayList<Contact> contacts = contactHelper.getContactFromName(ctx, Locale.getDefault(), arrayList, false);
+            if (!ai.saiy.android.utils.UtilsList.notNaked(contacts)) {
+                toast(ctx, "Could not find contact by name?");
+                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                return;
+            }
+            if (DEBUG) {
+                for (Contact contact : contacts) {
+                    MyLog.i(CLS_NAME, "contact name: " + contact.getName());
+                    MyLog.i(CLS_NAME, "contact id: " + contact.getID());
+                    MyLog.i(CLS_NAME, "contact has number: " + contact.hasPhoneNumber());
+                }
+            }
+            Pair<Boolean, Contact> contactPair = contactHelper.getContact(ctx, contacts, Contact.Weighting.NUMBER, 0);
+            if (!(Boolean) contactPair.first) {
+                toast(ctx, "Could not find contact number?");
+                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                return;
+            }
+            Contact contact = contactPair.second;
+            if (!ai.saiy.android.utils.UtilsString.notNaked(contact.getNumber())) {
+                toast(ctx, "Required number missing?");
+                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                return;
+            }
+            ArrayList<String> rawIdArray = contactHelper.getRawIdArray(ctx, contact.getID());
+            if (!ai.saiy.android.utils.UtilsList.notNaked(rawIdArray)) {
+                toast(ctx, "Failed to get raw ids?");
+                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                return;
+            }
+            String rawIdArrayString = rawIdArray.toString();
+            String contactID = contactHelper.getIdFromNumber(ctx, contact.getNumber());
+            if (!ai.saiy.android.utils.UtilsString.notNaked(contactID)) {
+                toast(ctx, "Failed to get id from number?");
+                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                return;
+            }
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "idFromNumberString: " + contactID);
+            }
+            for (Contact c : contacts) {
+                contactIDs = contactIDs != null ? contactIDs + c.getID() + " : " : c.getID() + " : ";
+            }
+            final ai.saiy.android.command.sms.Message recentMessage = new ai.saiy.android.command.sms.SmsHelper().getMostRecentMessage(ctx);
+            if (recentMessage == null) {
+                sms = "message null";
+            } else if (ai.saiy.android.utils.UtilsString.notNaked(recentMessage.getPerson())) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "getPerson : " + recentMessage.getPerson());
+                }
+                sms = recentMessage.getPerson();
+            } else {
+                sms = "message person null";
+            }
+            ai.saiy.android.command.clipboard.ClipboardHelper.setClipboardContent(ctx, "Contact id collection: " + contactIDs + "\nRaw id collection: " + rawIdArrayString + "\nExtracted id: " + contactID + "\nLast SMS id: " + sms);
+            toast(ctx, "Success! Results copied to clipboard");
+        }
     }
 }
