@@ -17,15 +17,19 @@
 
 package ai.saiy.android.device;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.content.pm.ServiceInfo;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.provider.Settings;
 import android.speech.RecognitionService;
+import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
+import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Pair;
 
@@ -136,13 +140,86 @@ public class DeviceInfo {
     /**
      * Get the default voice recognition provider
      *
+     * {@link <a href="https://www.jianshu.com/p/a46c0bd8f961">...</a>}
      * @param ctx the application context
      * @return the default or an empty string if one is not present
      */
     public static String getDefaultVRProvider(@NonNull final Context ctx) {
-        final List<ResolveInfo> services = ctx.getPackageManager().queryIntentServices(
-                new Intent(RecognitionService.SERVICE_INTERFACE), 0);
-        return UtilsList.notNaked(services) ? UtilsApplication.getPackageName(services.get(0)) : "";
+        // 查找当前系统的内置使用的语音识别服务
+        // com.huawei.vassistant/com.huawei.ziri.service.FakeRecognitionService
+        String serviceComponent = Settings.Secure.getString(ctx.getContentResolver(),
+                "voice_recognition_service");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "voice_recognition_service : " + serviceComponent);
+        }
+        if (TextUtils.isEmpty(serviceComponent)) {
+            return "";
+        }
+        ComponentName component = ComponentName.unflattenFromString(serviceComponent);
+        if (component == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "voice_recognition_service component == null");
+            }
+            return "";
+        }
+
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "serviceComponent : " + component.toShortString());
+        }
+        boolean isRecognizerServiceValid = false;
+        ComponentName currentRecognitionCmp = null;
+
+        // 查找得到的 "可用的" 语音识别服务
+        final List<ResolveInfo> recognitionServices = ctx.getPackageManager().queryIntentServices(new Intent(RecognitionService.SERVICE_INTERFACE), Build.VERSION.SDK_INT >= Build.VERSION_CODES.M? PackageManager.MATCH_ALL : 0);
+        if (UtilsList.notNaked(recognitionServices)) {
+            for (ResolveInfo info : recognitionServices) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "\t" + info.loadLabel(ctx.getPackageManager()) + ": "
+                            + info.serviceInfo.packageName + "/" + info.serviceInfo.name);
+                }
+
+                if (info.serviceInfo.packageName.equals(component.getPackageName())) {
+                    isRecognizerServiceValid = true;
+                    break;
+                }
+            }
+
+            if (!isRecognizerServiceValid) {
+                String packageName;
+                String serviceName;
+                ServiceInfo serviceInfo;
+                for (final ResolveInfo info : recognitionServices) {
+                    serviceInfo = info.serviceInfo;
+                    packageName = UtilsApplication.getPackageName(info);
+                    serviceName = serviceInfo.name;
+                    if (packageName != null && serviceName != null) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "getDefaultVRProvider: Recognizer: " + packageName + " : " + serviceName);
+                        }
+
+                        if (UtilsString.notNaked(packageName)) {
+                            currentRecognitionCmp = new ComponentName(info.serviceInfo.packageName, info.serviceInfo.name);
+                            break;
+                        }
+                    }
+                }
+            }
+        } else {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "No recognition services installed");
+            }
+            return "";
+        }
+
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(ctx));
+        }
+        if (isRecognizerServiceValid) {
+            return component.getPackageName();
+        } else if (currentRecognitionCmp != null) {
+            return currentRecognitionCmp.getPackageName();
+        }
+        return "";
     }
 
     private static String getDefaultTTSProviderIntent(Context context) {

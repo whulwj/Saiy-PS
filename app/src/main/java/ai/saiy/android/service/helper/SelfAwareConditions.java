@@ -17,11 +17,10 @@
 
 package ai.saiy.android.service.helper;
 
-import static ai.saiy.android.applications.Installed.PACKAGE_NAME_GOOGLE;
-
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.net.Uri;
@@ -35,6 +34,7 @@ import android.os.Process;
 import android.os.RemoteCallbackList;
 import android.os.RemoteException;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.speech.RecognitionListener;
 import android.speech.RecognitionService;
 import android.speech.RecognizerIntent;
@@ -2150,40 +2150,73 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
     /**
      * Utility method to construct the {@link SpeechRecognizer} instance
      *
+     * @param ctx the application context
      * @param recognitionListener the {@link SaiyRecognitionListener}
      * @return the {@link Pair} containing the {@link SpeechRecognizer} and Intent with extras
      */
     public Pair<SpeechRecognizer, Intent> getNativeRecognition(
-            @NonNull final SaiyRecognitionListener recognitionListener) {
+            Context ctx, @NonNull final SaiyRecognitionListener recognitionListener) {
 
         final long then = System.nanoTime();
 
+        // 查找当前系统的内置使用的语音识别服务
+        // com.huawei.vassistant/com.huawei.ziri.service.FakeRecognitionService
+        String serviceComponent = Settings.Secure.getString(ctx.getContentResolver(),
+                "voice_recognition_service");
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "voice_recognition_service : " + serviceComponent);
+        }
+
         SpeechRecognizer recognizer = null;
 
-        final List<ResolveInfo> recognitionServices = mContext.getPackageManager().queryIntentServices(
-                new Intent(RecognitionService.SERVICE_INTERFACE), 0);
+        ComponentName component = ComponentName.unflattenFromString(serviceComponent);
+        if (component == null) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "voice_recognition_service component == null");
+            }
+            return null;
+        }
+        if (DEBUG) {
+            MyLog.i(CLS_NAME, "serviceComponent : " + component.toShortString());
+        }
+        boolean isRecognizerServiceValid = false;
 
+        // 查找得到的 "可用的" 语音识别服务
+        List<ResolveInfo> recognitionServices = ctx.getPackageManager().queryIntentServices(new Intent(RecognitionService.SERVICE_INTERFACE), Build.VERSION.SDK_INT >= Build.VERSION_CODES.M? PackageManager.MATCH_ALL : 0);
         if (UtilsList.notNaked(recognitionServices)) {
+            for (ResolveInfo info : recognitionServices) {
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "\t" + info.loadLabel(ctx.getPackageManager()) + ": "
+                            + info.serviceInfo.packageName + "/" + info.serviceInfo.name);
+                }
 
-            String packageName;
-            String serviceName;
-            ServiceInfo serviceInfo;
+                if (info.serviceInfo.packageName.equals(component.getPackageName())) {
+                    isRecognizerServiceValid = true;
+                    recognizer = SpeechRecognizer.createSpeechRecognizer(ctx, component);;
+                    break;
+                }
+            }
 
-            for (final ResolveInfo info : recognitionServices) {
+            if (!isRecognizerServiceValid) {
+                String packageName;
+                String serviceName;
+                ServiceInfo serviceInfo;
 
-                serviceInfo = info.serviceInfo;
-                packageName = UtilsApplication.getPackageName(info);
-                serviceName = serviceInfo.name;
+                for (final ResolveInfo info : recognitionServices) {
+                    serviceInfo = info.serviceInfo;
+                    packageName = UtilsApplication.getPackageName(info);
+                    serviceName = serviceInfo.name;
 
-                if (packageName != null && serviceName != null) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "getNativeRecognition: Recognizer: " + packageName + " : " + serviceName);
-                    }
+                    if (packageName != null && serviceName != null) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "getNativeRecognition: Recognizer: " + packageName + " : " + serviceName);
+                        }
 
-                    if (packageName.startsWith(PACKAGE_NAME_GOOGLE)) {
-                        recognizer = SpeechRecognizer.createSpeechRecognizer(mContext,
-                                new ComponentName(packageName, serviceName));
-                        break;
+                        if (UtilsString.notNaked(packageName)) {
+                            recognizer = SpeechRecognizer.createSpeechRecognizer(mContext,
+                                    new ComponentName(packageName, serviceName));
+                            break;
+                        }
                     }
                 }
             }
@@ -2202,6 +2235,8 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
             }
 
             return null;
+        } else if (DEBUG) {
+            MyLog.i(CLS_NAME, "isRecognitionAvailable: " + SpeechRecognizer.isRecognitionAvailable(ctx));
         }
 
         recognizer.setRecognitionListener(recognitionListener);

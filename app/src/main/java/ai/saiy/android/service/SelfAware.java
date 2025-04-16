@@ -73,6 +73,7 @@ import ai.saiy.android.command.driving.DrivingProfileHelper;
 import ai.saiy.android.command.translate.provider.TranslationProvider;
 import ai.saiy.android.command.translate.provider.bing.BingCredentials;
 import ai.saiy.android.contacts.ContactHelper;
+import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.firebase.database.reference.BingSpeakerRecognitionReference;
 import ai.saiy.android.intent.ExecuteIntent;
 import ai.saiy.android.lib.ProcessStateOwner;
@@ -1330,7 +1331,7 @@ public class SelfAware extends Service {
                                             }
 
                                             final Pair<SpeechRecognizer, Intent> nativePair =
-                                                    conditions.getNativeRecognition(recognitionListener);
+                                                    conditions.getNativeRecognition(getApplicationContext(), recognitionListener);
 
                                             if (nativePair != null) {
                                                 recogNative = nativePair.first;
@@ -2061,7 +2062,7 @@ public class SelfAware extends Service {
                                     MyLog.i(CLS_NAME, "recognitionListener: ERROR_RECOGNIZER_BUSY count: " + count);
                                 }
                             } else {
-                                ExecuteIntent.openApplicationSpecificSettings(getApplicationContext(), Installed.PACKAGE_NAME_GOOGLE_NOW);
+                                ExecuteIntent.openApplicationSpecificSettings(getApplicationContext(), DeviceInfo.getDefaultVRProvider(getApplicationContext()));
                                 final boolean servingRemote = conditions.servingRemote();
                                 LocalRequest localRequest = new LocalRequest(getApplicationContext());
                                 localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, conditions.getSupportedLanguage(servingRemote), conditions.getVRLocale(servingRemote), conditions.getTTSLocale(servingRemote), getString(R.string.error_recogniser_busy));

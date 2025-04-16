@@ -32,8 +32,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import ai.saiy.android.R;
-import ai.saiy.android.applications.Installed;
 import ai.saiy.android.applications.UtilsApplication;
+import ai.saiy.android.device.DeviceInfo;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -848,7 +848,7 @@ public class DiagnosticsHelper {
                 if (resolveInfo != null) {
                     detailsIntent.setPackage(UtilsApplication.getPackageName(resolveInfo));
                 } else {
-                    detailsIntent.setPackage(Installed.PACKAGE_NAME_GOOGLE_NOW);
+                    detailsIntent.setPackage(DeviceInfo.getDefaultVRProvider(mContext));
                 }
             }
             mContext.sendOrderedBroadcast(detailsIntent, null, new BroadcastReceiver() {

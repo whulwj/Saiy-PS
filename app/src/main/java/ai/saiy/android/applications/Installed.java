@@ -99,7 +99,6 @@ public class Installed {
     @Deprecated
     public static final String PACKAGE_TRACK_ID = "com.sonyericsson.trackid";
     public static final String PACKAGE_GOOGLE_SOUND_SEARCH = "com.google.android.ears";
-    public static final String PACKAGE_NAME_GOOGLE = "com.google.android";
     public static final String PACKAGE_NAME_GOOGLE_NOW = "com.google.android.googlequicksearchbox";
     public static final String PACKAGE_NAME_GOOGLE_NOW_LAUNCHER = "com.google.android.googlequicksearchbox";
     public static final String PACKAGE_PHONE = "com.android.phone";
