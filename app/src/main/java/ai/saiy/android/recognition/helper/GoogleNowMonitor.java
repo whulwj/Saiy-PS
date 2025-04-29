@@ -19,14 +19,13 @@ package ai.saiy.android.recognition.helper;
 
 import android.content.Context;
 import android.os.Process;
+import android.text.TextUtils;
 
 import androidx.annotation.NonNull;
 
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 
 import ai.saiy.android.applications.UtilsApplication;
-import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
@@ -41,21 +40,20 @@ public class GoogleNowMonitor {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = GoogleNowMonitor.class.getSimpleName();
 
-    private static final Pattern pPACKAGE_NAME_GOOGLE_NOW = Pattern.compile(IntentConstants.PACKAGE_NAME_GOOGLE_NOW);
-
     private static final long MAX_DURATION = 180000L;
     private static final long HISTORY = 10000L;
     private static final int INTERVAL = 5000;
     private final long then = System.currentTimeMillis();
 
     /**
-     * Start monitoring the foreground application to see if/when the user leaves Google Now. Once they do,
+     * Start monitoring the foreground application to see if/when the user leaves voice recognition. Once they do,
      * the hotword detection can restart. A time limit to keep this process running is defined by
      * {@link #MAX_DURATION}
      *
      * @param ctx the application context
+     * @param targetPackageName the target package
      */
-    public void start(@NonNull final Context ctx) {
+    public void start(@NonNull final Context ctx, final String targetPackageName) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "start");
         }
@@ -70,9 +68,9 @@ public class GoogleNowMonitor {
                     final String foregroundPackage = UtilsApplication.getForegroundPackage(ctx, HISTORY);
 
                     if (UtilsString.notNaked(foregroundPackage)) {
-                        if (pPACKAGE_NAME_GOOGLE_NOW.matcher(foregroundPackage).matches()) {
+                        if (TextUtils.equals(targetPackageName, foregroundPackage)) {
                             if (DEBUG) {
-                                MyLog.i(CLS_NAME, "foreground remains google");
+                                MyLog.i(CLS_NAME, "foreground remains " + targetPackageName);
                             }
                             Schedulers.trampoline().scheduleDirect(this, Math.max(0, Math.min(then + MAX_DURATION - System.currentTimeMillis(), INTERVAL)), TimeUnit.MILLISECONDS);
                             return;

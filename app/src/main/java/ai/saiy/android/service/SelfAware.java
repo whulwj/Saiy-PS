@@ -62,7 +62,6 @@ import ai.saiy.android.api.SaiyDefaults;
 import ai.saiy.android.api.helper.CallbackType;
 import ai.saiy.android.api.remote.Request;
 import ai.saiy.android.api.request.SaiyRequestParams;
-import ai.saiy.android.applications.Installed;
 import ai.saiy.android.audio.AudioParameters;
 import ai.saiy.android.audio.RecognitionMic;
 import ai.saiy.android.cognitive.emotion.provider.beyondverbal.BeyondVerbal;
@@ -1769,7 +1768,7 @@ public class SelfAware extends Service {
 
                     tts.initialised();
                     tts.setOnUtteranceProgressListener(progressListener);
-                    conditions.setVoice(tts, params);
+                    conditions.setVoice(tts, params); //TODO should delay
 
                     if (pendingTTS != null) {
                         if (DEBUG) {
@@ -1848,8 +1847,10 @@ public class SelfAware extends Service {
                     Schedulers.trampoline().scheduleDirect(new Runnable() {
                         @Override
                         public void run() {
-                            ExecuteIntent.googleNowListen(getApplicationContext(), conditions.isSecure());
-                            new GoogleNowMonitor().start(getApplicationContext());
+                            final String packageName = ExecuteIntent.googleNowListen(getApplicationContext(), conditions.isSecure());
+                            if (packageName != null) {
+                                new GoogleNowMonitor().start(getApplicationContext(), packageName);
+                            }
                         }
                     }, OKAY_GOOGLE_DELAY, TimeUnit.MILLISECONDS);
 

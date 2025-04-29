@@ -428,25 +428,26 @@ public class ExecuteIntent {
     }
 
     /**
-     * Start Google Now in listening mode
+     * Start voice recognition in listening mode
      *
      * @param ctx    the application context
      * @param secure true if the device is in secure mode
-     * @return true if the intent was successful, false otherwise
+     * @return the package name if the intent was successful, null otherwise
      */
-    public static boolean googleNowListen(@NonNull final Context ctx, final boolean secure) {
+    public static String googleNowListen(@NonNull final Context ctx, final boolean secure) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "googleNowListen");
         }
 
         final Intent intent = new Intent(RecognizerIntent.ACTION_VOICE_SEARCH_HANDS_FREE);
-        intent.setPackage(IntentConstants.PACKAGE_NAME_GOOGLE_NOW);
+        final String packageName = DeviceInfo.getDefaultVRProvider(ctx);
+        intent.setPackage(packageName);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         intent.putExtra(RecognizerIntent.EXTRA_SECURE, secure);
 
         try {
             ctx.startActivity(intent);
-            return true;
+            return packageName;
         } catch (final ActivityNotFoundException e) {
             if (DEBUG) {
                 MyLog.e(CLS_NAME, "googleNowListen: ActivityNotFoundException");
@@ -459,7 +460,7 @@ public class ExecuteIntent {
             }
         }
 
-        return false;
+        return null;
 
     }
 
