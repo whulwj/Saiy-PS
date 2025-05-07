@@ -891,8 +891,6 @@ public class SelfAware extends Service {
                         MyLog.i(CLS_NAME, "soRun: Condition.NONE");
                     }
 
-                    System.gc();
-
                     if (conditions.restartHotword()) {
                         startHotwordDetection(conditions.getBundle());
                     }
@@ -1653,7 +1651,7 @@ public class SelfAware extends Service {
      * In order to combat lag, initialise the Engine on a background thread. In isolation, the
      * performance of doing this should make no difference, however:
      * <p/>
-     * <a href="http://stackoverflow.com/q/36013611/1256219">Initialising the TextToSpeech object on a worker thread/a>
+     * <a href="http://stackoverflow.com/q/36013611/1256219">Initialising the TextToSpeech object on a worker thread</a>
      */
     private void initSaiyTTS() {
         if (DEBUG) {
@@ -2091,8 +2089,6 @@ public class SelfAware extends Service {
             }
 
             releaseRecognition();
-
-            System.gc();
 
             if (conditions.restartHotword()) {
                 startHotwordDetection(conditions.getBundle());
@@ -2807,9 +2803,6 @@ public class SelfAware extends Service {
 
             resetPendingConditions();
         }
-
-        // hint
-        System.gc();
     }
 
     /**
@@ -2859,9 +2852,6 @@ public class SelfAware extends Service {
             resetPendingConditions();
             releaseVoiceEngine();
             conditions.manageCallback(CallbackType.CB_ERROR_SAIY, null);
-
-            // hint
-            System.gc();
         }
     };
 
@@ -2893,7 +2883,6 @@ public class SelfAware extends Service {
             releaseRecognition();
             conditions.removeRunnableCallback(null);
             releasePartialHelper();
-            System.gc();
         }
     };
 

@@ -392,9 +392,6 @@ public class RecognitionNuance {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "tidyUp");
         }
-
-        // Signal to clean up
-        System.gc();
     }
 
     /**

@@ -23,12 +23,12 @@
     <string name="facebook_application_id" translatable="false">151121772049980</string>
     <string name="facebook_client_token" translatable="false">CHANGE-ME-for-firebase-ui</string>
 
-    <string name="reward_id" translatable="false">ca-app-pub-3940256099942544/5224354917</string>
-    <string name="interstitial_fragment_id" translatable="false">ca-app-pub-8646607296202594/1809438227</string>
-    <string name="smart_banner_activity_picker_id" translatable="false">ca-app-pub-8646607296202594/4998407028</string>
-    <string name="smart_banner_app_picker_id" translatable="false">ca-app-pub-8646607296202594/3800875425</string>
-    <string name="smart_banner_app_picker_multi_id" translatable="false">ca-app-pub-8646607296202594/6475140228</string>
-    <string name="smart_banner_main_id" translatable="false">ca-app-pub-8646607296202594/7731547424</string>
+    <string name="reward_id" translatable="false">ca-app-pub-2988542829837428/4063099553</string>
+    <string name="interstitial_fragment_id" translatable="false">ca-app-pub-2988542829837428/8011751723</string>
+    <string name="smart_banner_activity_picker_id" translatable="false">ca-app-pub-2988542829837428/5106386789</string>
+    <string name="smart_banner_app_picker_id" translatable="false">ca-app-pub-2988542829837428/6497691209</string>
+    <string name="smart_banner_app_picker_multi_id" translatable="false">ca-app-pub-2988542829837428/9133261708</string>
+    <string name="smart_banner_main_id" translatable="false">ca-app-pub-2988542829837428/3793305110</string>
     <!-- SPEECH STRINGS -->
 
     <!-- PLEASE NOTE -->

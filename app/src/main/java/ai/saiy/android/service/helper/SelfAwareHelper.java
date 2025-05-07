@@ -816,7 +816,7 @@ public class SelfAwareHelper {
      * When using Nuance Mix.nlu we need to make sure we use the right server host.
      *
      * @return the corresponding Uri
-     * @see <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=15&t=1159&sid=b03f0098fdc1cc5078929b4f39237a0f">Which host/a>
+     * @see <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=15&t=1159&sid=b03f0098fdc1cc5078929b4f39237a0f">Which host</a>
      */
     public Uri getNuanceUri(final boolean isTTS) {
 
@@ -856,7 +856,7 @@ public class SelfAwareHelper {
      * The SelfAware.instance has provided erroneous results in low memory conditions.
      *
      * @param ctx the application context to use to start the service
-     * @see <a href="http://stackoverflow.com/q/16153674/1256219">Service MemoryPrepare Objects/a>
+     * @see <a href="http://stackoverflow.com/q/16153674/1256219">Service MemoryPrepare Objects</a>
      */
     public static void startSelfAwareIfRequired(@NonNull final Context ctx) {
         if (DEBUG) {

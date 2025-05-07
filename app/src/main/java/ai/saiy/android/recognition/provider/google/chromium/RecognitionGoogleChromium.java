@@ -255,8 +255,6 @@ public class RecognitionGoogleChromium implements PauseListener {
                                 }
                             }
 
-                            System.gc();
-
                         } else {
                             if (DEBUG) {
                                 MyLog.w(CLS_NAME, "resultsThread inStream: null");

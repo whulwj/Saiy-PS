@@ -179,7 +179,6 @@ public class DiagnosticsHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "engineMonitor: notifying error");
             }
-            System.gc();
             progressListener.onError(UTTERANCE_ID);
             try {
                 if (!disposable.isDisposed()) {

@@ -82,7 +82,6 @@ public class SaiyHotwordListener implements RecognitionListener {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onEndOfSpeech");
         }
-        System.gc();
     }
 
     @Override

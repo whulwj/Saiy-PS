@@ -357,7 +357,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
     /**
      * At present, only one remote callback at a time will be allowed to register. This might
      * seem sensible given the nature of the interaction, but when other features are exposed, this
-     * will need to be rethought see <a href="http://stackoverflow.com/q/35734112/1256219">Managing remote callbacks/a>
+     * will need to be rethought see <a href="http://stackoverflow.com/q/35734112/1256219">Managing remote callbacks</a>
      * <p/>
      * This method can be used to check if we should register a further callback, or to direct any
      * results or interaction to a callback, rather than allowing Saiy to handle it internally.
@@ -1379,8 +1379,6 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
                         MyLog.w(CLS_NAME, "manageCallback: Exception");
                         e.printStackTrace();
                     }
-                } finally {
-                    System.gc();
                 }
             } else {
                 if (DEBUG) {

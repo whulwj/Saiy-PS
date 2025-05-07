@@ -304,8 +304,6 @@ public class RecognitionMic implements PauseListener {
                     MyLog.v(CLS_NAME, "forceAudioShutdown: saiyRecorder already null");
                 }
             }
-
-            System.gc();
         }
     }
 
@@ -342,8 +340,6 @@ public class RecognitionMic implements PauseListener {
             if (DEBUG) {
                 MyLog.v(CLS_NAME, "audioShutdown: finished synchronisation");
             }
-
-            System.gc();
         }
     }
 

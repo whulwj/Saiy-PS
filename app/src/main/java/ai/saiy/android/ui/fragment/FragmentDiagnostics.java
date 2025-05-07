@@ -470,7 +470,6 @@ public class FragmentDiagnostics extends Fragment implements DiagnosticInfoListe
                                 e.printStackTrace();
                             }
                         }
-                        System.gc();
                         Collections.shuffle(containerVEArray, new Random(System.nanoTime()));
                         if (!helper.isCancelled()) {
                             helper.doInBackground(containerVEArray);

@@ -155,7 +155,6 @@ public class RecognitionSphinx {
 
         if (recognizer != null) {
             Recognition.setState(Recognition.State.LISTENING);
-            System.gc();
             try {
                 recognizer.startListening(HOTWORD_SEARCH);
                 listener.onHotwordStarted();
@@ -200,7 +199,6 @@ public class RecognitionSphinx {
             } finally {
                 listener.onHotwordShutdown();
                 recognizer = null;
-                System.gc();
             }
         }
     }

@@ -40,10 +40,10 @@ import ai.saiy.android.utils.MyLog;
  * flexible option, but requires an expensive Gold Membership.
  * <p>
  * BUG - The ability to pause or stop the TTS playback is currently broken
- * <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=16&t=1151&sid=f35fca93a9a735e4fa2ef85abd6d2b64">Pause Stop TTS Playback/a>
+ * <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=16&t=1151&sid=f35fca93a9a735e4fa2ef85abd6d2b64">Pause Stop TTS Playback</a>
  * <p>
  * BUG - Must call Looper.getMainLooper() - Handles Nuance Speech kit failing to call Looper.getMainLooper()
- * <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=16&t=1152&sid=b166db2117e306f594dcacc3972c955b">Can't create handler not called Looper.prepare()/a>
+ * <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=16&t=1152&sid=b166db2117e306f594dcacc3972c955b">Can't create handler not called Looper.prepare()</a>
  * <p>
  * Created by benrandall76@gmail.com on 09/03/2016.
  */
@@ -108,7 +108,7 @@ public class EngineNuance implements AudioPlayer.Listener {
      * Stop the speech
      * <p>
      * BUG - this functionality is broken in the latest SDK
-     * <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=16&t=1151&sid=f35fca93a9a735e4fa2ef85abd6d2b64">Pause Stop TTS Playback/a>
+     * <a href="https://developer.nuance.com/phpbb/viewtopic.php?f=16&t=1151&sid=f35fca93a9a735e4fa2ef85abd6d2b64">Pause Stop TTS Playback</a>
      */
     public void stopSpeech() {
         if (DEBUG) {
