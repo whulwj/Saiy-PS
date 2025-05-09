@@ -82,27 +82,27 @@
     <string name="menu_not_channel_priority_description" translatable="true">"Displays the permanent priority notifications, such as for the hotword detection. Don\'t want you to forget it\'s on!"</string>
 
     <!-- UI Strings -->
-    <string name="menu_tap_begin" translatable="true">点击开始</string>
-    <string name="menu_tap_edit">点击编辑</string>
-    <string name="menu_tap_view" translatable="true">点击查看</string>
-    <string name="menu_tap_topics" translatable="true">点击查看主题</string>
-    <string name="menu_tap_contribute" translatable="true">如何做出贡献</string>
-    <string name="menu_tap_create" translatable="true">点击创建</string>
-    <string name="menu_tap_options" translatable="true">点击查看选项</string>
-    <string name="menu_tap_toggle" translatable="true">点击切换</string>
-    <string name="menu_tap_set" translatable="true">点击去设置</string>
-    <string name="menu_tap_configure" translatable="true">点击配置</string>
-    <string name="menu_tap_tweak" translatable="true">点击微调</string>
-    <string name="menu_tap_legends" translatable="true">点击获取图例</string>
-    <string name="menu_tap_send" translatable="true">点击发送</string>
-    <string name="menu_tap_help" translatable="true">点击寻求帮助</string>
-    <string name="menu_tap_manage">点击管理</string>
-    <string name="menu_tap_export">点击导出</string>
-    <string name="menu_tap_import">点击导入</string>
-    <string name="menu_tap_play">点击播放</string>
-    <string name="menu_tap_reset">tap to reset</string>
-    <string name="menu_tap_restore">点击还原</string>
-    <string name="menu_tap_run">点击运行</string>
+    <string name="menu_tap_begin" translatable="true">点击开始&#160;</string>
+    <string name="menu_tap_edit">点击编辑&#160;</string>
+    <string name="menu_tap_view" translatable="true">点击查看&#160;</string>
+    <string name="menu_tap_topics" translatable="true">点击查看主题&#160;</string>
+    <string name="menu_tap_contribute" translatable="true">如何做出贡献&#160;</string>
+    <string name="menu_tap_create" translatable="true">点击创建&#160;</string>
+    <string name="menu_tap_options" translatable="true">点击查看选项&#160;</string>
+    <string name="menu_tap_toggle" translatable="true">点击切换&#160;</string>
+    <string name="menu_tap_set" translatable="true">点击去设置&#160;</string>
+    <string name="menu_tap_configure" translatable="true">点击配置&#160;</string>
+    <string name="menu_tap_tweak" translatable="true">点击微调&#160;</string>
+    <string name="menu_tap_legends" translatable="true">点击获取图例&#160;</string>
+    <string name="menu_tap_send" translatable="true">点击发送&#160;</string>
+    <string name="menu_tap_help" translatable="true">点击寻求帮助&#160;</string>
+    <string name="menu_tap_manage">点击管理&#160;</string>
+    <string name="menu_tap_export">点击导出&#160;</string>
+    <string name="menu_tap_import">点击导入&#160;</string>
+    <string name="menu_tap_play">点击播放&#160;</string>
+    <string name="menu_tap_reset">点击重置&#160;</string>
+    <string name="menu_tap_restore">点击还原&#160;</string>
+    <string name="menu_tap_run">点击运行&#160;</string>
 
     <string name="title_home" translatable="true">首页</string>
     <string name="title_settings" translatable="true">设置</string>

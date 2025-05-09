@@ -173,27 +173,27 @@
     <string name="menu_not_channel_priority_description" translatable="true">"Displays the permanent priority notifications, such as for the hotword detection. Don\'t want you to forget it\'s on!"</string>
 
     <!-- UI Strings -->
-    <string name="menu_tap_begin" translatable="true">tap to begin</string>
-    <string name="menu_tap_edit" translatable="true">tap to edit</string>
-    <string name="menu_tap_view" translatable="true">tap to view</string>
-    <string name="menu_tap_topics" translatable="true">tap for topics</string>
-    <string name="menu_tap_contribute" translatable="true">tap to contribute</string>
-    <string name="menu_tap_create" translatable="true">tap to create</string>
-    <string name="menu_tap_options" translatable="true">tap for options</string>
-    <string name="menu_tap_toggle" translatable="true">tap to toggle</string>
-    <string name="menu_tap_set" translatable="true">tap to set</string>
-    <string name="menu_tap_configure" translatable="true">tap to configure</string>
-    <string name="menu_tap_tweak" translatable="true">tap to tweak</string>
-    <string name="menu_tap_legends" translatable="true">tap for legends</string>
-    <string name="menu_tap_send" translatable="true">tap to send</string>
-    <string name="menu_tap_help" translatable="true">tap for help</string>
-    <string name="menu_tap_manage" translatable="true">tap to manage</string>
-    <string name="menu_tap_export" translatable="true">tap to export</string>
-    <string name="menu_tap_import" translatable="true">tap to import</string>
-    <string name="menu_tap_play" translatable="true">tap to play</string>
-    <string name="menu_tap_reset" translatable="true">tap to reset</string>
-    <string name="menu_tap_restore" translatable="true">tap to restore</string>
-    <string name="menu_tap_run" translatable="true">tap to run</string>
+    <string name="menu_tap_begin" translatable="true">tap to begin&#160;</string>
+    <string name="menu_tap_edit" translatable="true">tap to edit&#160;</string>
+    <string name="menu_tap_view" translatable="true">tap to view&#160;</string>
+    <string name="menu_tap_topics" translatable="true">tap for topics&#160;</string>
+    <string name="menu_tap_contribute" translatable="true">tap to contribute&#160;</string>
+    <string name="menu_tap_create" translatable="true">tap to create&#160;</string>
+    <string name="menu_tap_options" translatable="true">tap for options&#160;</string>
+    <string name="menu_tap_toggle" translatable="true">tap to toggle&#160;</string>
+    <string name="menu_tap_set" translatable="true">tap to set&#160;</string>
+    <string name="menu_tap_configure" translatable="true">tap to configure&#160;</string>
+    <string name="menu_tap_tweak" translatable="true">tap to tweak&#160;</string>
+    <string name="menu_tap_legends" translatable="true">tap for legends&#160;</string>
+    <string name="menu_tap_send" translatable="true">tap to send&#160;</string>
+    <string name="menu_tap_help" translatable="true">tap for help&#160;</string>
+    <string name="menu_tap_manage" translatable="true">tap to manage&#160;</string>
+    <string name="menu_tap_export" translatable="true">tap to export&#160;</string>
+    <string name="menu_tap_import" translatable="true">tap to import&#160;</string>
+    <string name="menu_tap_play" translatable="true">tap to play&#160;</string>
+    <string name="menu_tap_reset" translatable="true">tap to reset&#160;</string>
+    <string name="menu_tap_restore" translatable="true">tap to restore&#160;</string>
+    <string name="menu_tap_run" translatable="true">tap to run&#160;</string>
 
     <string name="title_home" translatable="true">Home</string>
     <string name="title_settings" translatable="true">Settings</string>
