@@ -465,7 +465,7 @@ public class ExecuteIntent {
     }
 
     /**
-     * Launch Google Now with a specific search term to resolve
+     * Launch voice recognition with a specific search term to resolve
      *
      * @param ctx        the application context
      * @param searchTerm the search term to resolve
@@ -477,9 +477,7 @@ public class ExecuteIntent {
         }
 
         final Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-        intent.setComponent(new ComponentName(IntentConstants.PACKAGE_NAME_GOOGLE_NOW,
-                IntentConstants.PACKAGE_NAME_GOOGLE_NOW + IntentConstants.ACTIVITY_GOOGLE_NOW_SEARCH));
-
+        intent.setPackage(DeviceInfo.getDefaultVRProvider(ctx));
         intent.putExtra(SearchManager.QUERY, searchTerm);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP
                 | Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -820,8 +818,7 @@ public class ExecuteIntent {
             MyLog.i(CLS_NAME, "googleNowOrGoogleWeb");
         }
         final Intent intent = new Intent(Intent.ACTION_WEB_SEARCH);
-        intent.setComponent(new android.content.ComponentName(Installed.PACKAGE_NAME_GOOGLE_NOW,
-                IntentConstants.PACKAGE_NAME_GOOGLE_NOW + IntentConstants.ACTIVITY_GOOGLE_NOW_SEARCH));
+        intent.setPackage(DeviceInfo.getDefaultVRProvider(ctx));
         intent.putExtra(SearchManager.QUERY, searchTerm);
         intent.setFlags(Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_RECEIVER_FOREGROUND);
         try {

@@ -45,9 +45,6 @@ public class IntentConstants {
     public static final String PLAY_STORE_SEARCH_URL_LEGACY = "market://search?q=";
     public static final String PLAY_STORE_APPS_EXTENSION = "&c=apps";
 
-    public static final String PACKAGE_NAME_GOOGLE_NOW = "com.google.android.googlequicksearchbox";
-    public static final String ACTIVITY_GOOGLE_NOW_SEARCH = ".SearchActivity";
-
     public static final String PACKAGE_NAME_WOLFRAM_ALPHA = "com.wolfram.android.alpha";
     public static final String ACTIVITY_WOLFRAM_ALPHA_SEARCH = ".activity.SearchResultsActivity";
     public static final String INTENT_SEARCH_WOLFRAM_ALPHA = "com.wolfram.android.alpha.intent.action.DO_QUERY_SUGGESTION";
