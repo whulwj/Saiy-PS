@@ -391,7 +391,63 @@ public class FragmentCustomisationHelper {
                 .setView(R.layout.custom_command_input_dialog_layout)
                 .setTitle(R.string.menu_custom_commands)
                 .setIcon(R.drawable.ic_shape_plus)
-                .setPositiveButton(R.string.create, null)
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showCustomCommandInputDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            EditText editTextKeyphrase = ((AlertDialog) dialog).findViewById(R.id.etKeyphrase);
+                            EditText editTextSuccessResponse = ((AlertDialog) dialog).findViewById(R.id.etSuccessResponse);
+                            EditText editTextErrorResponse = ((AlertDialog) dialog).findViewById(R.id.etErrorResponse);
+                            if (editTextKeyphrase.getText() == null || editTextSuccessResponse.getText() == null || editTextErrorResponse.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            String keyphrase = editTextKeyphrase.getText().toString().trim();
+                            String successResponse = editTextSuccessResponse.getText().toString().trim();
+                            String errorResponse = editTextErrorResponse.getText().toString().trim();
+                            if (!ai.saiy.android.utils.UtilsString.notNaked(keyphrase)) {
+                                toast(getString(R.string.custom_naked_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            if (!ai.saiy.android.utils.UtilsString.regexCheck(keyphrase)) {
+                                toast(getString(R.string.custom_format_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                            final CustomCommand cc = new CustomCommand(ccc, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
+                            switch (ccc) {
+                                case CUSTOM_TASKER_TASK:
+                                    cc.setExtraText(extraText);
+
+                                    break;
+                                case CUSTOM_DISPLAY_CONTACT:
+                                case CUSTOM_CALL_CONTACT:
+                                case CUSTOM_LAUNCH_APPLICATION:
+                                case CUSTOM_LAUNCH_SHORTCUT:
+                                case CUSTOM_AUTOMATE_FLOW:
+                                    cc.setExtraText(extraText);
+                                    cc.setExtraText2(extraText2);
+                                    break;
+                                case CUSTOM_ACTIVITY:
+                                    cc.setIntent(extraText);
+                                    cc.setExtraText(extraText2);
+                                    break;
+                                case CUSTOM_SEARCHABLE:
+                                    cc.setExtraText(extraText);
+                                    cc.setExtraText(extraText2);
+                                    cc.setActionOfIntent(actionOfIntent);
+                                    cc.setRegex(Regex.STARTS_WITH);
+                                    break;
+                            }
+                            setCommand(cc);
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -411,61 +467,6 @@ public class FragmentCustomisationHelper {
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showCustomCommandInputDialog: onPositive");
-                }
-                EditText editTextKeyphrase = materialDialog.findViewById(R.id.etKeyphrase);
-                EditText editTextSuccessResponse = materialDialog.findViewById(R.id.etSuccessResponse);
-                EditText editTextErrorResponse = materialDialog.findViewById(R.id.etErrorResponse);
-                if (editTextKeyphrase.getText() == null || editTextSuccessResponse.getText() == null || editTextErrorResponse.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                String keyphrase = editTextKeyphrase.getText().toString().trim();
-                String successResponse = editTextSuccessResponse.getText().toString().trim();
-                String errorResponse = editTextErrorResponse.getText().toString().trim();
-                if (!ai.saiy.android.utils.UtilsString.notNaked(keyphrase)) {
-                    toast(getString(R.string.custom_naked_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (!ai.saiy.android.utils.UtilsString.regexCheck(keyphrase)) {
-                    toast(getString(R.string.custom_format_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                final CustomCommand cc = new CustomCommand(ccc, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) materialDialog.findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
-                switch (ccc) {
-                    case CUSTOM_TASKER_TASK:
-                        cc.setExtraText(extraText);
-
-                        break;
-                    case CUSTOM_DISPLAY_CONTACT:
-                    case CUSTOM_CALL_CONTACT:
-                    case CUSTOM_LAUNCH_APPLICATION:
-                    case CUSTOM_LAUNCH_SHORTCUT:
-                    case CUSTOM_AUTOMATE_FLOW:
-                        cc.setExtraText(extraText);
-                        cc.setExtraText2(extraText2);
-                        break;
-                    case CUSTOM_ACTIVITY:
-                        cc.setIntent(extraText);
-                        cc.setExtraText(extraText2);
-                        break;
-                    case CUSTOM_SEARCHABLE:
-                        cc.setExtraText(extraText);
-                        cc.setExtraText(extraText2);
-                        cc.setActionOfIntent(actionOfIntent);
-                        cc.setRegex(Regex.STARTS_WITH);
-                        break;
-                }
-                setCommand(cc);
-            }
-        });
         EditText editTextKeyphrase = materialDialog.getWindow().findViewById(R.id.etKeyphrase);
         editTextKeyphrase.setHint(hintForKeyphrase);
         if (keyphrase != null) {
@@ -523,7 +524,38 @@ public class FragmentCustomisationHelper {
                                 .setView(R.layout.text_input_dialog_layout)
                                 .setTitle(R.string.menu_nicknames)
                                 .setIcon(R.drawable.ic_account_switch)
-                                .setPositiveButton(R.string.save, null)
+                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final EditText editText = ((AlertDialog) dialog).findViewById(android.R.id.input);
+                                            CharSequence charSequence = (editText == null) ? null : editText.getText();
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNicknameDialog: onInput: " + charSequence);
+                                            }
+
+                                            if (charSequence == null) {
+                                                toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
+                                                return;
+                                            }
+                                            String nickName = charSequence.toString().trim();
+                                            if (!ai.saiy.android.utils.UtilsString.notNaked(nickName)) {
+                                                toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
+                                                return;
+                                            }
+                                            if (!ai.saiy.android.utils.UtilsString.regexCheck(nickName)) {
+                                                toast(getString(R.string.nickname_format_error), Toast.LENGTH_SHORT);
+                                                return;
+                                            }
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNicknameDialog: creating: " + contactName + " ~ " + nickName);
+                                            }
+                                            dialog.dismiss();
+                                            toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                                            setNickname(new CustomNickname(nickName, contactName));
+                                        }
+                                    }
+                                })
                                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -543,36 +575,6 @@ public class FragmentCustomisationHelper {
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
 
-                        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final EditText editText = materialDialog.findViewById(android.R.id.input);
-                                CharSequence charSequence = (editText == null) ? null : editText.getText();
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showNicknameDialog: onInput: " + charSequence);
-                                }
-
-                                if (charSequence == null) {
-                                    toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
-                                    return;
-                                }
-                                String nickName = charSequence.toString().trim();
-                                if (!ai.saiy.android.utils.UtilsString.notNaked(nickName)) {
-                                    toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
-                                    return;
-                                }
-                                if (!ai.saiy.android.utils.UtilsString.regexCheck(nickName)) {
-                                    toast(getString(R.string.nickname_format_error), Toast.LENGTH_SHORT);
-                                    return;
-                                }
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showNicknameDialog: creating: " + contactName + " ~ " + nickName);
-                                }
-                                materialDialog.dismiss();
-                                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                                setNickname(new CustomNickname(nickName, contactName));
-                            }
-                        });
                         final TextInputLayout textInputLayout = materialDialog.getWindow().findViewById(android.R.id.inputArea);
                         textInputLayout.setHint(getString(R.string.title_enter_nickname_for) + XMLResultsHandler.SEP_SPACE + contactName);
                         final EditText editText = textInputLayout.findViewById(android.R.id.input);
@@ -621,7 +623,112 @@ public class FragmentCustomisationHelper {
                 .setView(R.layout.custom_intent_dialog_layout)
                 .setTitle(R.string.menu_custom_intent)
                 .setIcon(R.drawable.ic_memory)
-                .setPositiveButton(R.string.save, null)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showCustomIntentDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            EditText editTextKeyphrase = ((AlertDialog) dialog).getWindow().findViewById(R.id.etKeyphrase);
+                            EditText editTextSuccessResponse = ((AlertDialog) dialog).getWindow().findViewById(R.id.etSuccessResponse);
+                            EditText editTextErrorResponse = ((AlertDialog) dialog).getWindow().findViewById(R.id.etErrorResponse);
+                            if (editTextKeyphrase.getText() == null || editTextSuccessResponse.getText() == null || editTextErrorResponse.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            String keyphrase = editTextKeyphrase.getText().toString().trim();
+                            String successResponse = editTextSuccessResponse.getText().toString().trim();
+                            String errorResponse = editTextErrorResponse.getText().toString().trim();
+                            if (!UtilsString.notNaked(keyphrase)) {
+                                toast(getString(R.string.custom_naked_error), Toast.LENGTH_SHORT);
+                                return;
+                            } else if (!UtilsString.regexCheck(keyphrase)) {
+                                toast(getString(R.string.custom_format_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            switch (((Spinner) ((AlertDialog) dialog).getWindow().findViewById(R.id.spIntentTarget)).getSelectedItemPosition()) {
+                                case 1:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showCustomIntentDialog: TARGET_BROADCAST_RECEIVER");
+                                    }
+                                    customIntent.setTarget(CustomIntent.TARGET_BROADCAST_RECEIVER);
+                                    break;
+                                case 2:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showCustomIntentDialog: TARGET_SERVICE");
+                                    }
+                                    customIntent.setTarget(CustomIntent.TARGET_SERVICE);
+                                    break;
+                                default:
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showCustomIntentDialog: TARGET_ACTIVITY");
+                                    }
+                                    customIntent.setTarget(CustomIntent.TARGET_ACTIVITY);
+                                    break;
+                            }
+                            EditText editTextIntentAction = ((AlertDialog) dialog).getWindow().findViewById(R.id.etIntentAction);
+                            if (editTextIntentAction.getText() != null) {
+                                customIntent.setAction(editTextIntentAction.getText().toString().trim());
+                            } else {
+                                customIntent.setAction("");
+                            }
+                            EditText editTextIntentCategory = ((AlertDialog) dialog).getWindow().findViewById(R.id.etIntentCategory);
+                            if (editTextIntentCategory.getText() != null) {
+                                customIntent.setCategory(editTextIntentCategory.getText().toString().trim());
+                            } else {
+                                customIntent.setCategory("");
+                            }
+                            EditText editTextIntentPackage = ((AlertDialog) dialog).getWindow().findViewById(R.id.etIntentPackage);
+                            if (editTextIntentPackage.getText() != null) {
+                                customIntent.setPackageName(editTextIntentPackage.getText().toString().trim());
+                            } else {
+                                customIntent.setPackageName("");
+                            }
+                            EditText editTextIntentClass = ((AlertDialog) dialog).getWindow().findViewById(R.id.etIntentClass);
+                            if (editTextIntentClass.getText() != null) {
+                                customIntent.setClassName(editTextIntentClass.getText().toString().trim());
+                            } else {
+                                customIntent.setClassName("");
+                            }
+                            EditText editTextIntentData = ((AlertDialog) dialog).getWindow().findViewById(R.id.etIntentData);
+                            if (editTextIntentData.getText() != null) {
+                                customIntent.setData(editTextIntentData.getText().toString().trim());
+                            } else {
+                                customIntent.setData("");
+                            }
+                            EditText editTextIntentMimeType = ((AlertDialog) dialog).getWindow().findViewById(R.id.etIntentMimeType);
+                            if (editTextIntentMimeType.getText() != null) {
+                                customIntent.setMimeType(editTextIntentMimeType.getText().toString().trim());
+                            } else {
+                                customIntent.setMimeType("");
+                            }
+                            EditText editTextIntentExtras = ((AlertDialog) dialog).getWindow().findViewById(R.id.etIntentExtras);
+                            final String intentExtras = (editTextIntentExtras.getText() == null)? null: editTextIntentExtras.getText().toString().trim();
+                            if (!UtilsString.notNaked(intentExtras)) {
+                                customIntent.setExtras("");
+                                dialog.dismiss();
+                                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                                CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
+                                String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
+                                cc.setExtraText(gsonString);
+                                setCommand(cc);
+                                return;
+                            }
+                            if (!ai.saiy.android.utils.UtilsBundle.stringExtrasToBundle(intentExtras)) {
+                                toast(getString(R.string.content_extras_format_incorrect), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            customIntent.setExtras(intentExtras);
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                            CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
+                            String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
+                            cc.setExtraText(gsonString);
+                            setCommand(cc);
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -640,111 +747,6 @@ public class FragmentCustomisationHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
-
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showCustomIntentDialog: onPositive");
-                }
-                EditText editTextKeyphrase = materialDialog.getWindow().findViewById(R.id.etKeyphrase);
-                EditText editTextSuccessResponse = materialDialog.getWindow().findViewById(R.id.etSuccessResponse);
-                EditText editTextErrorResponse = materialDialog.getWindow().findViewById(R.id.etErrorResponse);
-                if (editTextKeyphrase.getText() == null || editTextSuccessResponse.getText() == null || editTextErrorResponse.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                String keyphrase = editTextKeyphrase.getText().toString().trim();
-                String successResponse = editTextSuccessResponse.getText().toString().trim();
-                String errorResponse = editTextErrorResponse.getText().toString().trim();
-                if (!UtilsString.notNaked(keyphrase)) {
-                    toast(getString(R.string.custom_naked_error), Toast.LENGTH_SHORT);
-                    return;
-                } else if (!UtilsString.regexCheck(keyphrase)) {
-                    toast(getString(R.string.custom_format_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                switch (((Spinner) materialDialog.getWindow().findViewById(R.id.spIntentTarget)).getSelectedItemPosition()) {
-                    case 1:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showCustomIntentDialog: TARGET_BROADCAST_RECEIVER");
-                        }
-                        customIntent.setTarget(CustomIntent.TARGET_BROADCAST_RECEIVER);
-                        break;
-                    case 2:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showCustomIntentDialog: TARGET_SERVICE");
-                        }
-                        customIntent.setTarget(CustomIntent.TARGET_SERVICE);
-                        break;
-                    default:
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showCustomIntentDialog: TARGET_ACTIVITY");
-                        }
-                        customIntent.setTarget(CustomIntent.TARGET_ACTIVITY);
-                        break;
-                }
-                EditText editTextIntentAction = materialDialog.getWindow().findViewById(R.id.etIntentAction);
-                if (editTextIntentAction.getText() != null) {
-                    customIntent.setAction(editTextIntentAction.getText().toString().trim());
-                } else {
-                    customIntent.setAction("");
-                }
-                EditText editTextIntentCategory = materialDialog.getWindow().findViewById(R.id.etIntentCategory);
-                if (editTextIntentCategory.getText() != null) {
-                    customIntent.setCategory(editTextIntentCategory.getText().toString().trim());
-                } else {
-                    customIntent.setCategory("");
-                }
-                EditText editTextIntentPackage = materialDialog.getWindow().findViewById(R.id.etIntentPackage);
-                if (editTextIntentPackage.getText() != null) {
-                    customIntent.setPackageName(editTextIntentPackage.getText().toString().trim());
-                } else {
-                    customIntent.setPackageName("");
-                }
-                EditText editTextIntentClass = materialDialog.getWindow().findViewById(R.id.etIntentClass);
-                if (editTextIntentClass.getText() != null) {
-                    customIntent.setClassName(editTextIntentClass.getText().toString().trim());
-                } else {
-                    customIntent.setClassName("");
-                }
-                EditText editTextIntentData = materialDialog.getWindow().findViewById(R.id.etIntentData);
-                if (editTextIntentData.getText() != null) {
-                    customIntent.setData(editTextIntentData.getText().toString().trim());
-                } else {
-                    customIntent.setData("");
-                }
-                EditText editTextIntentMimeType = materialDialog.getWindow().findViewById(R.id.etIntentMimeType);
-                if (editTextIntentMimeType.getText() != null) {
-                    customIntent.setMimeType(editTextIntentMimeType.getText().toString().trim());
-                } else {
-                    customIntent.setMimeType("");
-                }
-                EditText editTextIntentExtras = materialDialog.getWindow().findViewById(R.id.etIntentExtras);
-                final String intentExtras = (editTextIntentExtras.getText() == null)? null: editTextIntentExtras.getText().toString().trim();
-                if (!UtilsString.notNaked(intentExtras)) {
-                    customIntent.setExtras("");
-                    materialDialog.dismiss();
-                    toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                    CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
-                    String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
-                    cc.setExtraText(gsonString);
-                    setCommand(cc);
-                    return;
-                }
-                if (!ai.saiy.android.utils.UtilsBundle.stringExtrasToBundle(intentExtras)) {
-                    toast(getString(R.string.content_extras_format_incorrect), Toast.LENGTH_SHORT);
-                    return;
-                }
-                customIntent.setExtras(intentExtras);
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                CustomCommand cc = new CustomCommand(CCC.CUSTOM_SEND_INTENT, CC.COMMAND_USER_CUSTOM, keyphrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbVoiceRecognition)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
-                String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customIntent);
-                cc.setExtraText(gsonString);
-                setCommand(cc);
-            }
-        });
     }
 
     private void showCustomHttpDialog() {
@@ -754,7 +756,172 @@ public class FragmentCustomisationHelper {
                 .setView(R.layout.custom_http_dialog_layout)
                 .setTitle(R.string.menu_custom_http)
                 .setIcon(R.drawable.ic_language)
-                .setPositiveButton(R.string.save, null)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showCustomHttpDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            EditText editTextUrl = ((AlertDialog) dialog).getWindow().findViewById(R.id.etUrl);
+                            if (editTextUrl.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String url = editTextUrl.getText().toString().trim();
+                            if (!UtilsString.notNaked(url)) {
+                                toast(getString(R.string.custom_url_naked_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            customHttp.setUrlString(url);
+                            customHttp.setHttps(((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbHttps)).isChecked());
+                            final int checkedId = ((RadioGroup) (((AlertDialog) dialog).getWindow()).findViewById(R.id.rgHttpType)).getCheckedRadioButtonId();
+                            if (R.id.rbDelete == checkedId) {
+                                customHttp.setType(CustomHttp.TYPE_DELETE);
+                            } else if (R.id.rbGet == checkedId) {
+                                customHttp.setType(CustomHttp.TYPE_GET);
+                            } else if (R.id.rbPost == checkedId) {
+                                customHttp.setType(CustomHttp.TYPE_POST);
+                            } else if (R.id.rbPut == checkedId) {
+                                customHttp.setType(CustomHttp.TYPE_PUT);
+                            }
+                            EditText editTextPhrase = (((AlertDialog) dialog).getWindow()).findViewById(R.id.etKeyphrase);
+                            if (editTextPhrase.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String phrase = editTextPhrase.getText().toString().trim();
+                            if (!UtilsString.notNaked(phrase)) {
+                                toast(getString(R.string.custom_naked_error), Toast.LENGTH_SHORT);
+                                return;
+                            } else if (!UtilsString.regexCheck(phrase)) {
+                                toast(getString(R.string.custom_format_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+
+                            String successResponse;
+                            String errorResponse;
+                            if (!((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbUseHttpOutputSuccess)).isChecked()) {
+                                EditText editTextSuccessResponse = (((AlertDialog) dialog).getWindow()).findViewById(R.id.etSuccessResponse);
+                                successResponse = editTextSuccessResponse.getText() != null ? editTextSuccessResponse.getText().toString().trim() : "";
+                                if (((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked()) {
+                                    customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK_LISTEN);
+                                } else {
+                                    customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK);
+                                }
+                            } else if (((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked()) {
+                                customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK_LISTEN_OUTPUT);
+                                successResponse = "";
+                            } else {
+                                customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK_OUTPUT);
+                                successResponse = "";
+                            }
+                            if (!((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbUseHttpOutputError)).isChecked()) {
+                                EditText editTextErrorResponse = (((AlertDialog) dialog).getWindow()).findViewById(R.id.etErrorResponse);
+                                errorResponse = editTextErrorResponse.getText() != null ? editTextErrorResponse.getText().toString().trim() : "";
+                                if (((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbVoiceRecognitionError)).isChecked()) {
+                                    customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK_LISTEN);
+                                } else {
+                                    customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK);
+                                }
+                            } else if (((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbVoiceRecognitionError)).isChecked()) {
+                                customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK_LISTEN_OUTPUT);
+                                errorResponse = "";
+                            } else {
+                                customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK_OUTPUT);
+                                errorResponse = "";
+                            }
+                            customHttp.setTasker(((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbOutputTasker)).isChecked());
+                            if (customHttp.getSuccessHandling() == CustomHttp.SUCCESS_SPEAK_OUTPUT || customHttp.getSuccessHandling() == CustomHttp.SUCCESS_SPEAK_LISTEN_OUTPUT || customHttp.getErrorHandling() == CustomHttp.ERROR_SPEAK_OUTPUT || customHttp.getErrorHandling() == CustomHttp.ERROR_SPEAK_LISTEN_OUTPUT || customHttp.isTasker()) {
+                                customHttp.setOutputType(CustomHttp.OUTPUT_TYPE_STRING);
+                            }
+                            if (!customHttp.isTasker()) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showCustomHttpDialog: cbSaveOutput: false");
+                                }
+                                dialog.dismiss();
+                                final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) (((AlertDialog) dialog).getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
+                                final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
+                                cc.setExtraText(gsonString);
+                                setCommand(cc);
+                                return;
+                            }
+
+                            EditText editTextTaskerName = (((AlertDialog) dialog).getWindow()).findViewById(R.id.etTaskName);
+                            if (editTextTaskerName.getText() != null) {
+                                String taskerName = editTextTaskerName.getText().toString().trim();
+                                if (UtilsString.notNaked(taskerName)) {
+                                    final ArrayList<ai.saiy.android.thirdparty.tasker.TaskerTask> taskerTasks = new ai.saiy.android.thirdparty.tasker.TaskerHelper().getTasks(getApplicationContext());
+                                    if (ai.saiy.android.utils.UtilsList.notNaked(taskerTasks)) {
+                                        boolean matchWithATask = false;
+                                        for (ai.saiy.android.thirdparty.tasker.TaskerTask taskerTask : taskerTasks) {
+                                            if (taskerTask.getTaskName().matches(taskerName)) {
+                                                matchWithATask = true;
+                                                break;
+                                            }
+                                        }
+                                        if (matchWithATask) {
+                                            customHttp.setTaskerTaskName(taskerName);
+                                        } else {
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: task not matched");
+                                            }
+                                            toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
+                                            editTextTaskerName.requestFocus();
+                                        }
+                                    } else {
+                                        if (DEBUG) {
+                                            MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: no tasks found");
+                                        }
+                                        toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
+                                        editTextTaskerName.requestFocus();
+                                    }
+                                } else {
+                                    if (DEBUG) {
+                                        MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: task naked");
+                                    }
+                                    toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
+                                    editTextTaskerName.requestFocus();
+                                }
+                            } else {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: etTaskName null");
+                                }
+                                toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
+                                editTextTaskerName.requestFocus();
+                            }
+                            EditText editTextVariableName = (((AlertDialog) dialog).getWindow()).findViewById(R.id.etVariableName);
+                            if (editTextVariableName.getText() == null) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: etVariableName null");
+                                }
+                                toast(getString(R.string.menu_tasker_variable_not_found), Toast.LENGTH_SHORT);
+                                editTextTaskerName.requestFocus();
+                                return;
+                            }
+                            String variableName = editTextVariableName.getText().toString().trim();
+                            if (!UtilsString.notNaked(variableName)) {
+                                if (DEBUG) {
+                                    MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: variable naked");
+                                }
+                                toast(getString(R.string.menu_tasker_variable_not_found), Toast.LENGTH_SHORT);
+                                editTextTaskerName.requestFocus();
+                                return;
+                            }
+                            String variable = !variableName.startsWith("%") ? "%" + variableName : variableName;
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                                customHttp.setTaskerVariableName(variable.toLowerCase(Locale.getDefault(Locale.Category.DISPLAY)));
+                            } else {
+                                customHttp.setTaskerVariableName(variable.toLowerCase(UtilsLocale.getDefaultLocale()));
+                            }
+                            dialog.dismiss();
+                            final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) ((AlertDialog) dialog).getWindow().findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
+                            final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
+                            cc.setExtraText(gsonString);
+                            setCommand(cc);
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -774,170 +941,6 @@ public class FragmentCustomisationHelper {
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showCustomHttpDialog: onPositive");
-                }
-                EditText editTextUrl = materialDialog.getWindow().findViewById(R.id.etUrl);
-                if (editTextUrl.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String url = editTextUrl.getText().toString().trim();
-                if (!UtilsString.notNaked(url)) {
-                    toast(getString(R.string.custom_url_naked_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                customHttp.setUrlString(url);
-                customHttp.setHttps(((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbHttps)).isChecked());
-                final int checkedId = ((RadioGroup) (materialDialog.getWindow()).findViewById(R.id.rgHttpType)).getCheckedRadioButtonId();
-                if (R.id.rbDelete == checkedId) {
-                    customHttp.setType(CustomHttp.TYPE_DELETE);
-                } else if (R.id.rbGet == checkedId) {
-                    customHttp.setType(CustomHttp.TYPE_GET);
-                } else if (R.id.rbPost == checkedId) {
-                    customHttp.setType(CustomHttp.TYPE_POST);
-                } else if (R.id.rbPut == checkedId) {
-                    customHttp.setType(CustomHttp.TYPE_PUT);
-                }
-                EditText editTextPhrase = (materialDialog.getWindow()).findViewById(R.id.etKeyphrase);
-                if (editTextPhrase.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String phrase = editTextPhrase.getText().toString().trim();
-                if (!UtilsString.notNaked(phrase)) {
-                    toast(getString(R.string.custom_naked_error), Toast.LENGTH_SHORT);
-                    return;
-                } else if (!UtilsString.regexCheck(phrase)) {
-                    toast(getString(R.string.custom_format_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-
-                String successResponse;
-                String errorResponse;
-                if (!((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbUseHttpOutputSuccess)).isChecked()) {
-                    EditText editTextSuccessResponse = (materialDialog.getWindow()).findViewById(R.id.etSuccessResponse);
-                    successResponse = editTextSuccessResponse.getText() != null ? editTextSuccessResponse.getText().toString().trim() : "";
-                    if (((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked()) {
-                        customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK_LISTEN);
-                    } else {
-                        customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK);
-                    }
-                } else if (((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked()) {
-                    customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK_LISTEN_OUTPUT);
-                    successResponse = "";
-                } else {
-                    customHttp.setSuccessHandling(CustomHttp.SUCCESS_SPEAK_OUTPUT);
-                    successResponse = "";
-                }
-                if (!((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbUseHttpOutputError)).isChecked()) {
-                    EditText editTextErrorResponse = (materialDialog.getWindow()).findViewById(R.id.etErrorResponse);
-                    errorResponse = editTextErrorResponse.getText() != null ? editTextErrorResponse.getText().toString().trim() : "";
-                    if (((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbVoiceRecognitionError)).isChecked()) {
-                        customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK_LISTEN);
-                    } else {
-                        customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK);
-                    }
-                } else if (((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbVoiceRecognitionError)).isChecked()) {
-                    customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK_LISTEN_OUTPUT);
-                    errorResponse = "";
-                } else {
-                    customHttp.setErrorHandling(CustomHttp.ERROR_SPEAK_OUTPUT);
-                    errorResponse = "";
-                }
-                customHttp.setTasker(((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbOutputTasker)).isChecked());
-                if (customHttp.getSuccessHandling() == CustomHttp.SUCCESS_SPEAK_OUTPUT || customHttp.getSuccessHandling() == CustomHttp.SUCCESS_SPEAK_LISTEN_OUTPUT || customHttp.getErrorHandling() == CustomHttp.ERROR_SPEAK_OUTPUT || customHttp.getErrorHandling() == CustomHttp.ERROR_SPEAK_LISTEN_OUTPUT || customHttp.isTasker()) {
-                    customHttp.setOutputType(CustomHttp.OUTPUT_TYPE_STRING);
-                }
-                if (!customHttp.isTasker()) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "showCustomHttpDialog: cbSaveOutput: false");
-                    }
-                    materialDialog.dismiss();
-                    final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) (materialDialog.getWindow()).findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
-                    final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
-                    cc.setExtraText(gsonString);
-                    setCommand(cc);
-                    return;
-                }
-
-                EditText editTextTaskerName = (materialDialog.getWindow()).findViewById(R.id.etTaskName);
-                if (editTextTaskerName.getText() != null) {
-                    String taskerName = editTextTaskerName.getText().toString().trim();
-                    if (UtilsString.notNaked(taskerName)) {
-                        final ArrayList<ai.saiy.android.thirdparty.tasker.TaskerTask> taskerTasks = new ai.saiy.android.thirdparty.tasker.TaskerHelper().getTasks(getApplicationContext());
-                        if (ai.saiy.android.utils.UtilsList.notNaked(taskerTasks)) {
-                            boolean matchWithATask = false;
-                            for (ai.saiy.android.thirdparty.tasker.TaskerTask taskerTask : taskerTasks) {
-                                if (taskerTask.getTaskName().matches(taskerName)) {
-                                    matchWithATask = true;
-                                    break;
-                                }
-                            }
-                            if (matchWithATask) {
-                                customHttp.setTaskerTaskName(taskerName);
-                            } else {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: task not matched");
-                                }
-                                toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
-                                editTextTaskerName.requestFocus();
-                            }
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: no tasks found");
-                            }
-                            toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
-                            editTextTaskerName.requestFocus();
-                        }
-                    } else {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: task naked");
-                        }
-                        toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
-                        editTextTaskerName.requestFocus();
-                    }
-                } else {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: etTaskName null");
-                    }
-                    toast(getString(R.string.menu_tasker_task_not_found), Toast.LENGTH_SHORT);
-                    editTextTaskerName.requestFocus();
-                }
-                EditText editTextVariableName = (materialDialog.getWindow()).findViewById(R.id.etVariableName);
-                if (editTextVariableName.getText() == null) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: etVariableName null");
-                    }
-                    toast(getString(R.string.menu_tasker_variable_not_found), Toast.LENGTH_SHORT);
-                    editTextTaskerName.requestFocus();
-                    return;
-                }
-                String variableName = editTextVariableName.getText().toString().trim();
-                if (!UtilsString.notNaked(variableName)) {
-                    if (DEBUG) {
-                        MyLog.i(CLS_NAME, "showCustomHttpDialog: onSave: variable naked");
-                    }
-                    toast(getString(R.string.menu_tasker_variable_not_found), Toast.LENGTH_SHORT);
-                    editTextTaskerName.requestFocus();
-                    return;
-                }
-                String variable = !variableName.startsWith("%") ? "%" + variableName : variableName;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    customHttp.setTaskerVariableName(variable.toLowerCase(Locale.getDefault(Locale.Category.DISPLAY)));
-                } else {
-                    customHttp.setTaskerVariableName(variable.toLowerCase(UtilsLocale.getDefaultLocale()));
-                }
-                materialDialog.dismiss();
-                final CustomCommand cc = new CustomCommand(CCC.CUSTOM_HTTP, CC.COMMAND_USER_CUSTOM, phrase, successResponse, errorResponse, SPH.getTTSLocale(getApplicationContext()).toString(), SPH.getVRLocale(getApplicationContext()).toString(), ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbVoiceRecognitionSuccess)).isChecked() ? LocalRequest.ACTION_SPEAK_LISTEN : LocalRequest.ACTION_SPEAK_ONLY);
-                final String gsonString = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().toJson(customHttp);
-                cc.setExtraText(gsonString);
-                setCommand(cc);
-            }
-        });
         ((EditText) materialDialog.getWindow().findViewById(R.id.etUrl)).setText(customHttp.getUrlString());
         ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbHttps)).setChecked(customHttp.isHttps());
         switch (customHttp.getType()) {
@@ -1485,7 +1488,28 @@ public class FragmentCustomisationHelper {
                 .setTitle(R.string.menu_custom_name)
                 .setMessage(R.string.custom_user_name)
                 .setIcon(R.drawable.ic_person)
-                .setPositiveButton(R.string.save, null)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editText = ((AlertDialog) dialog).findViewById(android.R.id.input);
+                            CharSequence charSequence = (editText == null) ? null : editText.getText();
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "showUserNameDialog: input: " + charSequence);
+                            }
+
+                            if (charSequence == null) {
+                                return;
+                            }
+                            final String nickName = charSequence.toString().trim();
+                            if (!ai.saiy.android.utils.UtilsString.notNaked(nickName)) {
+                                return;
+                            }
+                            dialog.dismiss();
+                            ai.saiy.android.utils.SPH.setUserName(getApplicationContext(), nickName);
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1505,27 +1529,6 @@ public class FragmentCustomisationHelper {
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final EditText editText = materialDialog.findViewById(android.R.id.input);
-                CharSequence charSequence = (editText == null) ? null : editText.getText();
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showUserNameDialog: input: " + charSequence);
-                }
-
-                if (charSequence == null) {
-                    return;
-                }
-                final String nickName = charSequence.toString().trim();
-                if (!ai.saiy.android.utils.UtilsString.notNaked(nickName)) {
-                    return;
-                }
-                materialDialog.dismiss();
-                ai.saiy.android.utils.SPH.setUserName(getApplicationContext(), nickName);
-
-            }
-        });
         final TextInputLayout textInputLayout = materialDialog.getWindow().findViewById(android.R.id.inputArea);
         final EditText editText = textInputLayout.findViewById(android.R.id.input);
         editText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -1540,7 +1543,35 @@ public class FragmentCustomisationHelper {
                 .setView(R.layout.replacements_dialog_layout)
                 .setTitle(R.string.menu_replace_words)
                 .setIcon(R.drawable.ic_swap_horizontal)
-                .setPositiveButton(R.string.save, null)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showCustomReplacementDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            EditText editTextKeyphrase = ((AlertDialog) dialog).findViewById(R.id.etPhrase);
+                            EditText editTextReplacement = ((AlertDialog) dialog).findViewById(R.id.etReplacement);
+                            if (editTextKeyphrase.getText() == null || editTextReplacement.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String newKeyphrase = editTextKeyphrase.getText().toString().trim();
+                            final String newReplacement = editTextReplacement.getText().toString().trim();
+                            if (!UtilsString.notNaked(newKeyphrase) || !UtilsString.notNaked(newReplacement)) {
+                                toast(getString(R.string.replace_words_naked_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            if (!UtilsString.regexCheck(newKeyphrase) || !UtilsString.regexCheck(newReplacement)) {
+                                toast(getString(R.string.replace_words_format_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                            setReplacement(new CustomReplacement(newKeyphrase, newReplacement));
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1559,34 +1590,6 @@ public class FragmentCustomisationHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
-
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showCustomReplacementDialog: onPositive");
-                }
-                EditText editTextKeyphrase = materialDialog.findViewById(R.id.etPhrase);
-                EditText editTextReplacement = materialDialog.findViewById(R.id.etReplacement);
-                if (editTextKeyphrase.getText() == null || editTextReplacement.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String newKeyphrase = editTextKeyphrase.getText().toString().trim();
-                final String newReplacement = editTextReplacement.getText().toString().trim();
-                if (!UtilsString.notNaked(newKeyphrase) || !UtilsString.notNaked(newReplacement)) {
-                    toast(getString(R.string.replace_words_naked_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (!UtilsString.regexCheck(newKeyphrase) || !UtilsString.regexCheck(newReplacement)) {
-                    toast(getString(R.string.replace_words_format_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                setReplacement(new CustomReplacement(newKeyphrase, newReplacement));
-            }
-        });
     }
 
     public void showCustomPhrasesDialog() {
@@ -1595,7 +1598,35 @@ public class FragmentCustomisationHelper {
                 .setView(R.layout.phrase_dialog_layout)
                 .setTitle(R.string.menu_custom_phrases)
                 .setIcon(R.drawable.ic_format_quote)
-                .setPositiveButton(R.string.save, null)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showCustomPhrasesDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            EditText editTextKeyphrase = ((AlertDialog) dialog).findViewById(R.id.etInput);
+                            EditText editTextResponse = ((AlertDialog) dialog).findViewById(R.id.etResponse);
+                            if (editTextKeyphrase.getText() == null || editTextResponse.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String newKeyphrase = editTextKeyphrase.getText().toString().trim();
+                            final String newResponse = editTextResponse.getText().toString().trim();
+                            if (!UtilsString.notNaked(newKeyphrase) || !UtilsString.notNaked(newResponse)) {
+                                toast(getString(R.string.custom_phrase_naked_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            if (!UtilsString.regexCheck(newKeyphrase) || !UtilsString.regexCheck(newResponse)) {
+                                toast(getString(R.string.custom_phrase_format_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                            setPhrase(new CustomPhrase(newKeyphrase, newResponse, ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbVoiceRecognition)).isChecked()));
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1614,34 +1645,6 @@ public class FragmentCustomisationHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
-
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showCustomPhrasesDialog: onPositive");
-                }
-                EditText editTextKeyphrase = materialDialog.findViewById(R.id.etInput);
-                EditText editTextResponse = materialDialog.findViewById(R.id.etResponse);
-                if (editTextKeyphrase.getText() == null || editTextResponse.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String newKeyphrase = editTextKeyphrase.getText().toString().trim();
-                final String newResponse = editTextResponse.getText().toString().trim();
-                if (!UtilsString.notNaked(newKeyphrase) || !UtilsString.notNaked(newResponse)) {
-                    toast(getString(R.string.custom_phrase_naked_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (!UtilsString.regexCheck(newKeyphrase) || !UtilsString.regexCheck(newResponse)) {
-                    toast(getString(R.string.custom_phrase_format_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                setPhrase(new CustomPhrase(newKeyphrase, newResponse, ((CheckBox) materialDialog.findViewById(R.id.cbVoiceRecognition)).isChecked()));
-            }
-        });
     }
 
     public void showCustomCommandsDialog() {

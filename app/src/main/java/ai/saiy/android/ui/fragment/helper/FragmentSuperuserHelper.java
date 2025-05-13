@@ -373,7 +373,28 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                 checkedItems[which] = isChecked;
                             }
                         })
-                        .setNeutralButton(R.string.clear, null)
+                        .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                if (dialog instanceof AlertDialog) {
+                                    final ListView listView = ((AlertDialog) dialog).getListView();
+                                    final ListAdapter adapter = listView.getAdapter();
+                                    if (adapter instanceof BaseAdapter) {
+                                        boolean isItemChecked;
+                                        for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                            isItemChecked = checkedItems[i];
+                                            checkedItems[i] = false;
+                                            if (isItemChecked) {
+                                                listView.setItemChecked(i, false);
+                                            }
+                                        }
+                                        ((BaseAdapter) adapter).notifyDataSetChanged();
+                                    } else {
+                                        MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                    }
+                                }
+                            }
+                        })
                         .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -428,27 +449,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
                 materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                 materialDialog.show();
-
-                materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final ListView listView = materialDialog.getListView();
-                        final ListAdapter adapter = listView.getAdapter();
-                        if (adapter instanceof BaseAdapter) {
-                            boolean isItemChecked;
-                            for (int i = checkedItems.length - 1; i >= 0; --i) {
-                                isItemChecked = checkedItems[i];
-                                checkedItems[i] = false;
-                                if (isItemChecked) {
-                                    listView.setItemChecked(i, false);
-                                }
-                            }
-                            ((BaseAdapter) adapter).notifyDataSetChanged();
-                        } else {
-                            MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
-                        }
-                    }
-                });
             }
         });
 
@@ -637,7 +637,25 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         }
                                     }
                                 })
-                                .setNeutralButton(R.string.menu_test, null)
+                                .setNeutralButton(R.string.menu_test, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final int selected = ((AlertDialog) dialog).getListView().getCheckedItemPosition();
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNoteProviderSelector: onNeutral: " + selected);
+                                            }
+                                            final NoteValues noteValues = new NoteValues();
+                                            noteValues.setNoteBody(getString(R.string.test_note_content));
+                                            noteValues.setNoteTitle(getString(R.string.test_note_title));
+                                            if (NoteProvider.publishNoteTest(getApplicationContext(), noteValues, selected)) {
+                                                return;
+                                            }
+                                            toast(getString(R.string.title_no_note_response), Toast.LENGTH_SHORT);
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                })
                                 .setPositiveButton(R.string.menu_select, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -670,24 +688,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
-
-                        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final int selected = materialDialog.getListView().getCheckedItemPosition();
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showNoteProviderSelector: onNeutral: " + selected);
-                                }
-                                final NoteValues noteValues = new NoteValues();
-                                noteValues.setNoteBody(getString(R.string.test_note_content));
-                                noteValues.setNoteTitle(getString(R.string.test_note_title));
-                                if (NoteProvider.publishNoteTest(getApplicationContext(), noteValues, selected)) {
-                                    return;
-                                }
-                                toast(getString(R.string.title_no_note_response), Toast.LENGTH_SHORT);
-                                materialDialog.dismiss();
-                            }
-                        });
                     }
                 });
             }
@@ -1283,7 +1283,28 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
                                         checkedItems[which] = isChecked;
                                     }
                                 })
-                                .setNeutralButton(R.string.clear, null)
+                                .setNeutralButton(R.string.clear, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final ListView listView = ((AlertDialog) dialog).getListView();
+                                            final ListAdapter adapter = listView.getAdapter();
+                                            if (adapter instanceof BaseAdapter) {
+                                                boolean isItemChecked;
+                                                for (int i = checkedItems.length - 1; i >= 0; --i) {
+                                                    isItemChecked = checkedItems[i];
+                                                    checkedItems[i] = false;
+                                                    if (isItemChecked) {
+                                                        listView.setItemChecked(i, false);
+                                                    }
+                                                }
+                                                ((BaseAdapter) adapter).notifyDataSetChanged();
+                                            } else {
+                                                MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
+                                            }
+                                        }
+                                    }
+                                })
                                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -1330,27 +1351,6 @@ public class FragmentSuperuserHelper implements ISaiyAccount {
 
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
-
-                        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final ListView listView = materialDialog.getListView();
-                                final ListAdapter adapter = listView.getAdapter();
-                                if (adapter instanceof BaseAdapter) {
-                                    boolean isItemChecked;
-                                    for (int i = checkedItems.length - 1; i >= 0; --i) {
-                                        isItemChecked = checkedItems[i];
-                                        checkedItems[i] = false;
-                                        if (isItemChecked) {
-                                            listView.setItemChecked(i, false);
-                                        }
-                                    }
-                                    ((BaseAdapter) adapter).notifyDataSetChanged();
-                                } else {
-                                    MyLog.e(CLS_NAME, "onNeutral:" + (adapter == null ? "adapter null" : "adapter not BaseAdapter"));
-                                }
-                            }
-                        });
                     }
                 });
             }

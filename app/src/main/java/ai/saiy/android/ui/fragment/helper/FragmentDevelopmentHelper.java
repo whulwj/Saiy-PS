@@ -556,7 +556,31 @@ public class FragmentDevelopmentHelper {
                 .setView(R.layout.design_dialog_layout)
                 .setTitle(R.string.menu_design)
                 .setIcon(R.drawable.ic_palette)
-                .setPositiveButton(R.string.send, null)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showDesignDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editTextWebLink = ((AlertDialog) dialog).getWindow().findViewById(R.id.etWebLink);
+                            final EditText editTextSummary = ((AlertDialog) dialog).getWindow().findViewById(R.id.etDesignSummary);
+                            if (editTextWebLink.getText() == null || editTextSummary.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String webLink = editTextWebLink.getText().toString().trim();
+                            final String summary = editTextSummary.getText().toString().trim();
+                            if (!UtilsString.notNaked(webLink)) {
+                                toast(getString(R.string.design_web_link_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_thanks_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionDesign(new Design(Design.getType(((Spinner) ((AlertDialog) dialog).getWindow().findViewById(R.id.spDesign)).getSelectedItemPosition()), webLink, summary, DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -575,30 +599,6 @@ public class FragmentDevelopmentHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
-
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showDesignDialog: onPositive");
-                }
-                final EditText editTextWebLink = materialDialog.getWindow().findViewById(R.id.etWebLink);
-                final EditText editTextSummary = materialDialog.getWindow().findViewById(R.id.etDesignSummary);
-                if (editTextWebLink.getText() == null || editTextSummary.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String webLink = editTextWebLink.getText().toString().trim();
-                final String summary = editTextSummary.getText().toString().trim();
-                if (!UtilsString.notNaked(webLink)) {
-                    toast(getString(R.string.design_web_link_empty), Toast.LENGTH_SHORT);
-                    return;
-                }
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_thanks_exclamation), Toast.LENGTH_SHORT);
-                sendSubmissionDesign(new Design(Design.getType(((Spinner) materialDialog.getWindow().findViewById(R.id.spDesign)).getSelectedItemPosition()), webLink, summary, DateFormat.getDateTimeInstance().format(new Date())));
-            }
-        });
     }
 
     public void showReportBugDialog() {
@@ -649,7 +649,31 @@ public class FragmentDevelopmentHelper {
                 .setView(R.layout.natural_language_dialog_layout)
                 .setTitle(R.string.menu_suggest_natural_language)
                 .setIcon(R.drawable.ic_routes)
-                .setPositiveButton(R.string.send, null)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showNaturalLanguageDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editTextNaturalLanguage = ((AlertDialog) dialog).getWindow().findViewById(R.id.etNaturalLanguage);
+                            final EditText editTextOutcome = ((AlertDialog) dialog).getWindow().findViewById(R.id.etOutcome);
+                            if (editTextNaturalLanguage.getText() == null || editTextOutcome.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String trim = editTextNaturalLanguage.getText().toString().trim();
+                            final String outcome = editTextOutcome.getText().toString().trim();
+                            if (!UtilsString.notNaked(trim) || !UtilsString.notNaked(outcome)) {
+                                toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_understood_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionNaturalLanguage(new NaturalLanguage(trim, outcome, DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -668,30 +692,6 @@ public class FragmentDevelopmentHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
-
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showNaturalLanguageDialog: onPositive");
-                }
-                final EditText editTextNaturalLanguage = ((AlertDialog) materialDialog).getWindow().findViewById(R.id.etNaturalLanguage);
-                final EditText editTextOutcome = ((AlertDialog) materialDialog).getWindow().findViewById(R.id.etOutcome);
-                if (editTextNaturalLanguage.getText() == null || editTextOutcome.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String trim = editTextNaturalLanguage.getText().toString().trim();
-                final String outcome = editTextOutcome.getText().toString().trim();
-                if (!UtilsString.notNaked(trim) || !UtilsString.notNaked(outcome)) {
-                    toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
-                    return;
-                }
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_understood_exclamation), Toast.LENGTH_SHORT);
-                sendSubmissionNaturalLanguage(new NaturalLanguage(trim, outcome, DateFormat.getDateTimeInstance().format(new Date())));
-            }
-        });
     }
 
     public void showEnhancementDialog() {
@@ -738,7 +738,29 @@ public class FragmentDevelopmentHelper {
                 .setView(R.layout.rating_dialog_layout)
                 .setTitle(R.string.menu_vocal_verification_feedback)
                 .setIcon(R.drawable.ic_account_key)
-                .setPositiveButton(R.string.send, null)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showVocalVerificationFeedbackDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etFeedback);
+                            if (editText.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String feedback = editText.getText().toString().trim();
+                            if (!UtilsString.notNaked(feedback)) {
+                                toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_hear_you_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionVocalVerification(new VocalVerification(feedback, Math.round(((RatingBar) ((AlertDialog) dialog).getWindow().findViewById(R.id.ratingBar)).getRating()), DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -757,28 +779,6 @@ public class FragmentDevelopmentHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
-
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showVocalVerificationFeedbackDialog: onPositive");
-                }
-                final EditText editText = materialDialog.getWindow().findViewById(R.id.etFeedback);
-                if (editText.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String feedback = editText.getText().toString().trim();
-                if (!UtilsString.notNaked(feedback)) {
-                    toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
-                    return;
-                }
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_hear_you_exclamation), Toast.LENGTH_SHORT);
-                sendSubmissionVocalVerification(new VocalVerification(feedback, Math.round(((RatingBar) materialDialog.getWindow().findViewById(R.id.ratingBar)).getRating()), DateFormat.getDateTimeInstance().format(new Date())));
-            }
-        });
     }
 
     public void showEmotionAnalysisFeedbackDialog() {
@@ -786,7 +786,29 @@ public class FragmentDevelopmentHelper {
                 .setView(R.layout.rating_dialog_layout)
                 .setTitle(R.string.menu_emotion_analysis_feedback)
                 .setIcon(R.drawable.ic_yin_yang)
-                .setPositiveButton(R.string.send, null)
+                .setPositiveButton(R.string.send, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showEmotionAnalysisFeedbackDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            final EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etFeedback);
+                            if (editText.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String feedback = editText.getText().toString().trim();
+                            if (!UtilsString.notNaked(feedback)) {
+                                toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_happy_days_exclamation), Toast.LENGTH_SHORT);
+                            sendSubmissionEmotionAnalysis(new EmotionAnalysis(feedback, Math.round(((RatingBar) ((AlertDialog) dialog).getWindow().findViewById(R.id.ratingBar)).getRating()), DateFormat.getDateTimeInstance().format(new Date())));
+                        }
+                    }
+                })
                 .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -805,28 +827,6 @@ public class FragmentDevelopmentHelper {
                 }).create();
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
-
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showEmotionAnalysisFeedbackDialog: onPositive");
-                }
-                final EditText editText = materialDialog.getWindow().findViewById(R.id.etFeedback);
-                if (editText.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String feedback = editText.getText().toString().trim();
-                if (!UtilsString.notNaked(feedback)) {
-                    toast(getString(R.string.content_empty), Toast.LENGTH_SHORT);
-                    return;
-                }
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_happy_days_exclamation), Toast.LENGTH_SHORT);
-                sendSubmissionEmotionAnalysis(new EmotionAnalysis(feedback, Math.round(((RatingBar) materialDialog.getWindow().findViewById(R.id.ratingBar)).getRating()), DateFormat.getDateTimeInstance().format(new Date())));
-            }
-        });
     }
 
     public void showGenericDialog() {

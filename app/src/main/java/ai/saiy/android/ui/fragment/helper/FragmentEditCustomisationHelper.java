@@ -945,7 +945,38 @@ public class FragmentEditCustomisationHelper {
                                 .setView(R.layout.text_input_dialog_layout)
                                 .setTitle(R.string.menu_nicknames)
                                 .setIcon(R.drawable.ic_account_switch)
-                                .setPositiveButton(R.string.save, null)
+                                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        if (dialog instanceof AlertDialog) {
+                                            final EditText editText = ((AlertDialog) dialog).findViewById(android.R.id.input);
+                                            CharSequence charSequence = (editText == null) ? null : editText.getText();
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNicknameDialog: onInput: " + charSequence);
+                                            }
+
+                                            if (charSequence == null) {
+                                                toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
+                                                return;
+                                            }
+                                            String newNickName = charSequence.toString().trim();
+                                            if (!ai.saiy.android.utils.UtilsString.notNaked(newNickName)) {
+                                                toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
+                                                return;
+                                            }
+                                            if (!ai.saiy.android.utils.UtilsString.regexCheck(newNickName)) {
+                                                toast(getString(R.string.nickname_format_error), Toast.LENGTH_SHORT);
+                                                return;
+                                            }
+                                            if (DEBUG) {
+                                                MyLog.i(CLS_NAME, "showNicknameDialog: creating: " + contactName + " ~ " + newNickName);
+                                            }
+                                            dialog.dismiss();
+                                            toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                                            setNickname(new CustomNickname(newNickName, contactName), index, rowId);
+                                        }
+                                    }
+                                })
                                 .setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -974,36 +1005,6 @@ public class FragmentEditCustomisationHelper {
                         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
                         materialDialog.show();
 
-                        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                final EditText editText = materialDialog.findViewById(android.R.id.input);
-                                CharSequence charSequence = (editText == null) ? null : editText.getText();
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showNicknameDialog: onInput: " + charSequence);
-                                }
-
-                                if (charSequence == null) {
-                                    toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
-                                    return;
-                                }
-                                String newNickName = charSequence.toString().trim();
-                                if (!ai.saiy.android.utils.UtilsString.notNaked(newNickName)) {
-                                    toast(getString(R.string.nickname_naked_error), Toast.LENGTH_SHORT);
-                                    return;
-                                }
-                                if (!ai.saiy.android.utils.UtilsString.regexCheck(newNickName)) {
-                                    toast(getString(R.string.nickname_format_error), Toast.LENGTH_SHORT);
-                                    return;
-                                }
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "showNicknameDialog: creating: " + contactName + " ~ " + newNickName);
-                                }
-                                materialDialog.dismiss();
-                                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                                setNickname(new CustomNickname(newNickName, contactName), index, rowId);
-                            }
-                        });
                         final TextInputLayout textInputLayout = materialDialog.getWindow().findViewById(android.R.id.inputArea);
                         textInputLayout.setHint(getString(R.string.title_enter_nickname_for) + XMLResultsHandler.SEP_SPACE + contactName);
                         final EditText editText = textInputLayout.findViewById(android.R.id.input);
@@ -1023,7 +1024,35 @@ public class FragmentEditCustomisationHelper {
                 .setView(R.layout.phrase_dialog_layout)
                 .setTitle(R.string.menu_custom_phrases)
                 .setIcon(R.drawable.ic_format_quote)
-                .setPositiveButton(R.string.save, null)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "showCustomPhrasesDialog: onPositive");
+                        }
+                        if (dialog instanceof AlertDialog) {
+                            EditText editTextKeyphrase = ((AlertDialog) dialog).findViewById(R.id.etInput);
+                            EditText editTextResponse = ((AlertDialog) dialog).findViewById(R.id.etResponse);
+                            if (editTextKeyphrase.getText() == null || editTextResponse.getText() == null) {
+                                dialog.dismiss();
+                                return;
+                            }
+                            final String newKeyphrase = editTextKeyphrase.getText().toString().trim();
+                            final String newResponse = editTextResponse.getText().toString().trim();
+                            if (!ai.saiy.android.utils.UtilsString.notNaked(newKeyphrase) || !ai.saiy.android.utils.UtilsString.notNaked(newResponse)) {
+                                toast(getString(R.string.custom_phrase_naked_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            if (!ai.saiy.android.utils.UtilsString.regexCheck(newKeyphrase) || !ai.saiy.android.utils.UtilsString.regexCheck(newResponse)) {
+                                toast(getString(R.string.custom_phrase_format_error), Toast.LENGTH_SHORT);
+                                return;
+                            }
+                            dialog.dismiss();
+                            toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
+                            setPhrase(new CustomPhrase(newKeyphrase, newResponse, ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbVoiceRecognition)).isChecked()), index, rowId);
+                        }
+                    }
+                })
                 .setNeutralButton(R.string.delete, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1052,33 +1081,6 @@ public class FragmentEditCustomisationHelper {
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
-        materialDialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "showCustomPhrasesDialog: onPositive");
-                }
-                EditText editTextKeyphrase = materialDialog.findViewById(R.id.etInput);
-                EditText editTextResponse = materialDialog.findViewById(R.id.etResponse);
-                if (editTextKeyphrase.getText() == null || editTextResponse.getText() == null) {
-                    materialDialog.dismiss();
-                    return;
-                }
-                final String newKeyphrase = editTextKeyphrase.getText().toString().trim();
-                final String newResponse = editTextResponse.getText().toString().trim();
-                if (!ai.saiy.android.utils.UtilsString.notNaked(newKeyphrase) || !ai.saiy.android.utils.UtilsString.notNaked(newResponse)) {
-                    toast(getString(R.string.custom_phrase_naked_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                if (!ai.saiy.android.utils.UtilsString.regexCheck(newKeyphrase) || !ai.saiy.android.utils.UtilsString.regexCheck(newResponse)) {
-                    toast(getString(R.string.custom_phrase_format_error), Toast.LENGTH_SHORT);
-                    return;
-                }
-                materialDialog.dismiss();
-                toast(getString(R.string.menu_success_exclamation), Toast.LENGTH_SHORT);
-                setPhrase(new CustomPhrase(newKeyphrase, newResponse, ((CheckBox) materialDialog.findViewById(R.id.cbVoiceRecognition)).isChecked()), index, rowId);
-            }
-        });
         ((EditText) materialDialog.getWindow().findViewById(R.id.etInput)).setText(keyphrase);
         ((EditText) materialDialog.getWindow().findViewById(R.id.etResponse)).setText(response);
         ((CheckBox) materialDialog.getWindow().findViewById(R.id.cbVoiceRecognition)).setChecked(voiceRecognition);

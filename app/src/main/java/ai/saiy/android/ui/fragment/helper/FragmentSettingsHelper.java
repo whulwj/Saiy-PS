@@ -1026,7 +1026,18 @@ public class FragmentSettingsHelper {
                 .setCancelable(false)
                 .setTitle(R.string.menu_volume_settings)
                 .setIcon(R.drawable.ic_volume_high)
-                .setNeutralButton(R.string.text_default, null)
+                .setNeutralButton(R.string.text_default, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (dialog instanceof AlertDialog) {
+                            ((SeekBar) ((AlertDialog) dialog).findViewById(R.id.volumeSeekBar))
+                                    .setProgress(4);
+                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbSystemManagedVolume)).setChecked(true);
+                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbGlobalVolume)).setChecked(true);
+                            ((CheckBox) ((AlertDialog) dialog).findViewById(R.id.cbToastVolume)).setChecked(true);
+                        }
+                    }
+                })
                 .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -1064,16 +1075,6 @@ public class FragmentSettingsHelper {
         materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_left;
         materialDialog.show();
 
-        materialDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ((SeekBar) materialDialog.findViewById(R.id.volumeSeekBar))
-                        .setProgress(4);
-                ((CheckBox) materialDialog.findViewById(R.id.cbSystemManagedVolume)).setChecked(true);
-                ((CheckBox) materialDialog.findViewById(R.id.cbGlobalVolume)).setChecked(true);
-                ((CheckBox) materialDialog.findViewById(R.id.cbToastVolume)).setChecked(true);
-            }
-        });
         final int userVolume = SPH.getTTSVolume(getApplicationContext());
         final TextView seekText = materialDialog.findViewById(R.id.volumeSeekBarText);
         final SeekBar seekbar = materialDialog.findViewById(R.id.volumeSeekBar);
