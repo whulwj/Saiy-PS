@@ -207,7 +207,13 @@ public class RecognitionGoogleCloud implements IMic, StreamObserver<StreamingRec
                 break;
             default:
                 final GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
-                apiAvailability.showErrorNotification(mContext, errorCode);
+                try {
+                    apiAvailability.showErrorNotification(mContext, errorCode);
+                } catch (Throwable t) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "showPlayServicesError: " + t.getMessage() + "," + t.getClass().getSimpleName());
+                    }
+                }
                 break;
         }
     }

@@ -97,8 +97,13 @@ public class MotionRecognition implements ResultCallback<Status> {
                             if (DEBUG) {
                                 MyLog.w(CLS_NAME, "prepare: play services onProviderInstallFailed");
                             }
-
-                            apiAvailability.showErrorNotification(ctx, errorCode);
+                            try {
+                                apiAvailability.showErrorNotification(ctx, errorCode);
+                            } catch (Throwable t) {
+                                if (DEBUG) {
+                                    MyLog.w(CLS_NAME, "prepare: play services " + t.getMessage() + "," + t.getClass().getSimpleName());
+                                }
+                            }
 
                         } else {
                             // TODO - unrecoverable
@@ -115,7 +120,13 @@ public class MotionRecognition implements ResultCallback<Status> {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "prepare: play services unavailable");
             }
-            apiAvailability.showErrorNotification(ctx, connectionResult);
+            try {
+                apiAvailability.showErrorNotification(ctx, connectionResult);
+            } catch (Throwable t) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "prepare: " + t.getMessage() + "," + t.getClass().getSimpleName());
+                }
+            }
         }
     }
 

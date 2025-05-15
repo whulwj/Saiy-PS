@@ -439,7 +439,13 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                                             MyLog.i(CLS_NAME, "authAlexa: showing play services notification");
                                         }
                                         com.google.android.gms.common.GoogleApiAvailability googleApiAvailability = com.google.android.gms.common.GoogleApiAvailability.getInstance();
-                                        googleApiAvailability.showErrorNotification(getApplicationContext(), googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext()));
+                                        try {
+                                            googleApiAvailability.showErrorNotification(getApplicationContext(), googleApiAvailability.isGooglePlayServicesAvailable(getApplicationContext()));
+                                        } catch (Throwable t) {
+                                            if (DEBUG) {
+                                                MyLog.w(CLS_NAME, "showErrorNotification: " + t.getMessage() + "," + t.getClass().getSimpleName());
+                                            }
+                                        }
                                     }
                                 });
                             }

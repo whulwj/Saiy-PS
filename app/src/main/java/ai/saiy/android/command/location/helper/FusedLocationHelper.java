@@ -41,7 +41,13 @@ public class FusedLocationHelper implements ResultCallback<Status> {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "prepare: play services unavailable");
             }
-            googleApiAvailability.showErrorNotification(context, connectionResult);
+            try {
+                googleApiAvailability.showErrorNotification(context, connectionResult);
+            } catch (Throwable t) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "prepare: " + t.getMessage() + "," + t.getClass().getSimpleName());
+                }
+            }
         }
     }
 

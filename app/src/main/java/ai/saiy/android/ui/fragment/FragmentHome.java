@@ -325,7 +325,13 @@ public class FragmentHome extends Fragment implements View.OnClickListener, View
                 } else if (DEBUG) {
                     MyLog.i(CLS_NAME, "onClick: fragment detached");
                 }
-                googleApiAvailability.showErrorNotification(getApplicationContext(), connectionResult);
+                try {
+                    googleApiAvailability.showErrorNotification(getApplicationContext(), connectionResult);
+                } catch (Throwable t) {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onClick: " + t.getMessage() + "," + t.getClass().getSimpleName());
+                    }
+                }
                 break;
             default:
                 break;

@@ -540,7 +540,7 @@
     <string name="command_import_failed">Command import failed…</string>
     <string name="command_imported_successfully">Command imported successfully</string>
     <string name="command_key">Command Key</string>
-    <string name="command_key_content_1">•\t\tStart of command</string>
+    <string name="command_key_content_1">•\t\tStart of command&#160;</string>
     <string name="command_key_content_2">+\t\tContinue to say…</string>
     <string name="command_key_content_3">/\t\tSay only one of</string>
     <string name="command_key_content_4">()\t\tOptional</string>
