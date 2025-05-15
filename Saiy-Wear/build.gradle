@@ -7,7 +7,7 @@ android {
     compileSdk rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "ai.saiy.android"
+        applicationId "assistant.saiy.android"
         minSdk 23
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

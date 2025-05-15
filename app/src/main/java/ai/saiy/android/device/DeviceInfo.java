@@ -139,8 +139,7 @@ public class DeviceInfo {
 
     /**
      * Get the default voice recognition provider
-     *
-     * {@link <a href="https://www.jianshu.com/p/a46c0bd8f961">...</a>}
+     * <a href="https://www.jianshu.com/p/a46c0bd8f961">...</a>
      * @param ctx the application context
      * @return the default or an empty string if one is not present
      */
@@ -150,7 +149,7 @@ public class DeviceInfo {
         String serviceComponent = Settings.Secure.getString(ctx.getContentResolver(),
                 "voice_recognition_service");
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "voice_recognition_service : " + serviceComponent);
+            MyLog.i(CLS_NAME, "voice_recognition_service: " + serviceComponent);
         }
         if (TextUtils.isEmpty(serviceComponent)) {
             return "";
@@ -164,7 +163,7 @@ public class DeviceInfo {
         }
 
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "serviceComponent : " + component.toShortString());
+            MyLog.i(CLS_NAME, "serviceComponent: " + component.toShortString());
         }
         boolean isRecognizerServiceValid = false;
         ComponentName currentRecognitionCmp = null;
