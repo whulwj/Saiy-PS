@@ -112,12 +112,11 @@ public class BillingReporter implements PurchaseHistoryResponseListener, Purchas
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "validate: purchase getProducts:" + purchaseHistoryRecord.getProducts());
                     }
-                    if (!TextUtils.equals(Constants.SAIY, purchaseHistoryRecord.getDeveloperPayload())) {
+                    if (!TextUtils.isEmpty(purchaseHistoryRecord.getDeveloperPayload())) {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "validate: purchase payload:" + purchaseHistoryRecord.getDeveloperPayload() + ", " + purchaseHistoryRecord.getPurchaseTime());
                         }
                         content.append("\nHistory payload: ").append(purchaseHistoryRecord.getDeveloperPayload());
-                        continue;
                     }
                     productIds = purchaseHistoryRecord.getProducts();
                     if (UtilsList.notNaked(productIds)) {

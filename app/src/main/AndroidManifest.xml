@@ -122,10 +122,10 @@
 
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="28"/>
+        android:maxSdkVersion="29"/>
 
     <uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32"/>
 	<uses-permission
         android:name="android.permission.READ_MEDIA_AUDIO" />
 
@@ -181,9 +181,6 @@
     <uses-permission android:name="android.permission.NFC"/>
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS"/>
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
-
-    <!-- Protection Signature -->
-    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES"/>
 
     <!-- Protection Privileged  -->
     <uses-permission android:name="android.permission.MODIFY_PHONE_STATE" tools:ignore="ProtectedPermissions"/>
@@ -530,6 +527,7 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"
+            android:isAccessibilityTool="false"
             android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE">
             <intent-filter>
                 <action android:name="android.accessibilityservice.AccessibilityService"/>
