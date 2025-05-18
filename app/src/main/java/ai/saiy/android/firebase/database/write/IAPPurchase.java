@@ -4,12 +4,8 @@ import com.google.firebase.database.PropertyName;
 
 import java.util.List;
 
-import ai.saiy.android.utils.Constants;
-
 @com.google.firebase.database.IgnoreExtraProperties
 public class IAPPurchase {
-    @PropertyName("developer_payload")
-    public String developerPayload;
     @PropertyName("order_id")
     public String orderId;
     @PropertyName("original_json")
@@ -39,7 +35,6 @@ public class IAPPurchase {
     }
 
     public IAPPurchase(String orderId, String originalJson, String packageName, long purchaseTime, String signature, List<String> products, String token, boolean isFreedomInstalled, int hashCode, String hex) {
-        this.developerPayload = Constants.SAIY;
         this.orderId = orderId;
         this.originalJson = originalJson;
         this.packageName = packageName;

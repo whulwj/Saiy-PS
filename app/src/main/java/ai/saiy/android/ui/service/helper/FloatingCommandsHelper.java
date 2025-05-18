@@ -1,16 +1,15 @@
 package ai.saiy.android.ui.service.helper;
 
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 
-import java.util.ArrayList;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import java.util.ArrayList;
 
 import ai.saiy.android.R;
 import ai.saiy.android.ui.components.UIFloatingCommandsAdapter;
