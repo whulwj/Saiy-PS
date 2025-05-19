@@ -4,7 +4,7 @@
         android:icon="@drawable/ic_shortcut_ic_car"
         android:enabled="true">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.DRIVING"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -13,7 +13,7 @@
         android:icon="@drawable/ic_shortcut_ic_blur"
         android:enabled="true">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.HOTWORD"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -22,7 +22,7 @@
         android:icon="@drawable/ic_shortcut_record_voice_over"
         android:enabled="true">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="android.intent.action.ASSIST"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -31,7 +31,7 @@
         android:icon="@drawable/ic_shortcut_notifications"
         android:enabled="true">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.NOTIFICATIONS"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -40,7 +40,7 @@
         android:icon="@drawable/ic_shortcut_alexa"
         android:enabled="true">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.action.ALEXA"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>

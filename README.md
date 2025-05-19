@@ -1,4 +1,4 @@
-<a href="https://play.google.com/store/apps/details?id=ai.saiy.android" target="_blank">
+<a href="https://play.google.com/store/apps/details?id=assistant.saiy.android" target="_blank">
   <img alt="Get it on Google Play"
        src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png" height="60"/>
 </a>

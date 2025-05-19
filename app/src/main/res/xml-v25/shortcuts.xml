@@ -8,7 +8,7 @@
         android:shortcutLongLabel="@string/shortcut_toggle_driving"
         android:shortcutDisabledMessage="@string/disabled">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.DRIVING"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -21,7 +21,7 @@
         android:shortcutLongLabel="@string/shortcut_toggle_hotword"
         android:shortcutDisabledMessage="@string/disabled">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.HOTWORD"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -34,7 +34,7 @@
         android:shortcutLongLabel="@string/menu_start_voice_recognition"
         android:shortcutDisabledMessage="@string/disabled">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="android.intent.action.ASSIST"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -47,7 +47,7 @@
         android:shortcutLongLabel="@string/shortcut_toggle_notifications"
         android:shortcutDisabledMessage="@string/disabled">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.NOTIFICATIONS"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>
@@ -60,7 +60,7 @@
         android:shortcutLongLabel="@string/shortcut_start_alexa"
         android:shortcutDisabledMessage="@string/disabled">
         <intent
-            android:targetPackage="ai.saiy.android"
+            android:targetPackage="assistant.saiy.android"
             android:action="ai.saiy.android.action.ALEXA"
             android:targetClass="ai.saiy.android.ui.activity.ActivityLauncherShortcut"/>
         <categories android:name="android.shortcut.conversation"/>

@@ -71,7 +71,7 @@ public class SaiyAccessibilityService extends AccessibilityService {
     private long previousCommandTime;
     private String previousCommandProcessed = null;
 
-    private final Pattern saiy = Pattern.compile("ai\\.saiy\\.android", Pattern.CASE_INSENSITIVE);
+    private final Pattern saiy = Pattern.compile("assistant\\.saiy\\.android", Pattern.CASE_INSENSITIVE);
     private final Pattern phone = Pattern.compile("com\\.android\\.phone", Pattern.CASE_INSENSITIVE);
     private final Pattern googleDialer = Pattern.compile("com\\.google\\.android\\.dialer", Pattern.CASE_INSENSITIVE);
     private final Pattern dialer = Pattern.compile("com\\.android\\.dialer", Pattern.CASE_INSENSITIVE);

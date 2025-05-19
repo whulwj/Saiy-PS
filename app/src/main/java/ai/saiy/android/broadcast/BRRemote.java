@@ -59,7 +59,7 @@ import ai.saiy.android.utils.UtilsString;
  * one of {@link Activity#RESULT_OK} or {@link Activity#RESULT_CANCELED} is returned to the
  * requesting application.
  * <p>
- * adb shell am broadcast -a "assistant.saiy.android.SAIY_REQUEST_RECEIVER" --ei request_type "1" --es requesting_package "ai.saiy.android" --es keyphrase xxx -n "ai.saiy.android/ai.saiy.android.broadcast.BRRemote" "ai.saiy.android"
+ * adb shell am broadcast -a "assistant.saiy.android.SAIY_REQUEST_RECEIVER" --ei request_type "1" --es requesting_package "assistant.saiy.android" --es keyphrase xxx -n "assistant.saiy.android/ai.saiy.android.broadcast.BRRemote" -p "assistant.saiy.android"
  * Created by benrandall76@gmail.com on 25/03/2016.
  */
 public class BRRemote extends BroadcastReceiver {
@@ -67,7 +67,7 @@ public class BRRemote extends BroadcastReceiver {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BRRemote.class.getSimpleName();
 
-    private static final String SAIY_INTENT_RECEIVER = "ai.saiy.android.SAIY_INTENT_RECEIVER";
+    private static final String SAIY_INTENT_RECEIVER = "assistant.saiy.android.SAIY_INTENT_RECEIVER";
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
