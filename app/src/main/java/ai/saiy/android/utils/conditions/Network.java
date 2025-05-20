@@ -54,7 +54,7 @@ public final class Network {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = Network.class.getSimpleName();
 
-    private static final String PING_URL = "http://connectivitycheck.gstatic.com/generate_204";
+    private static final String PING_URL = "https://www.google-analytics.com/generate_204";
     private static final String USER_AGENT = "User-Agent";
     private static final String USER_AGENT_ANDROID = "Android";
     private static final String CONNECTION = "Connection";

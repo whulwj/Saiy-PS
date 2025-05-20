@@ -50,6 +50,7 @@ import ai.saiy.android.command.chatbot.ChatBot;
 import ai.saiy.android.command.clipboard.Clipboard;
 import ai.saiy.android.command.coin.Coin;
 import ai.saiy.android.command.contact.Contact;
+import ai.saiy.android.command.date.Date;
 import ai.saiy.android.command.definition.Define;
 import ai.saiy.android.command.dice.Dice;
 import ai.saiy.android.command.donate.Donate;
@@ -166,6 +167,7 @@ public final class Resolve {
         callableList.add(new VocalRecognition(sr, sl, voiceData, confidence));
         callableList.add(new Contact(sr, sl, voiceData, confidence));
         callableList.add(new Navigation(sr, sl, voiceData, confidence));
+        callableList.add(new Date(sr, sl, voiceData, confidence));
         callableList.add(new Time(sr, sl, voiceData, confidence));
         callableList.add(new Hardware(sr, sl, voiceData, confidence));
         callableList.add(new Toast(sr, sl, voiceData, confidence));

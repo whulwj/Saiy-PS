@@ -35,7 +35,7 @@ public final class Constants {
 
     public static final String SAIY = "Saiy";
     public static final String SAIY_WEB_URL = "http://saiy.ai";
-    public static final String SAIY_PRIVACY_URL = "http://saiy.ai/privacy.html";
+    public static final String SAIY_PRIVACY_URL = "https://sites.google.com/view/privacy-policy-saiy";
     public static final String SAIY_TOU_URL = "http://saiy.ai/terms.html";
     public static final String SAIY_BILLING_EMAIL = "billing@saiy.ai";
     public static final String SAIY_ENQUIRIES_EMAIL = "commercial@saiy.ai";
