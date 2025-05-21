@@ -836,7 +836,7 @@ public class ExecuteIntent {
         if (extra == null) {
             extra = "";
         }
-        return webSearch(ctx, "http://google." + ai.saiy.android.localisation.SaiyWebHelper.extension(SaiyWebHelper.GOOGLE, sl) + "/search?q=" + searchTerm.trim().replaceAll("\\s", "%20") + extra);
+        return webSearch(ctx, "https://google." + ai.saiy.android.localisation.SaiyWebHelper.extension(SaiyWebHelper.GOOGLE, sl) + "/search?q=" + searchTerm.trim().replaceAll("\\s", "%20") + extra);
     }
 
     public static boolean searchSky(Context context, CommandSearchValues commandSearchValues) {

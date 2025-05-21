@@ -17,16 +17,12 @@
 
 package ai.saiy.android.ui.activity;
 
-import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-import androidx.core.content.PermissionChecker;
 
 import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.service.helper.LocalRequest;
@@ -244,14 +240,6 @@ public class ActivityPermissionDialog extends AppCompatActivity implements Activ
                         }
                         bundle.putBoolean(LocalRequest.EXTRA_RESOLVED, true);
                         new LocalRequest(getApplicationContext(), bundle).execute();
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q && PermissionChecker.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PermissionChecker.PERMISSION_GRANTED) {
-                        final Intent intent = new Intent(this, ActivityPermissionDialog.class);
-                        final Bundle newBundle = new Bundle(bundle);
-                        newBundle.putStringArray(PermissionHelper.REQUESTED_PERMISSION, new String[]{Manifest.permission.ACCESS_BACKGROUND_LOCATION});
-                        newBundle.putInt(PermissionHelper.REQUESTED_PERMISSION_ID, PermissionHelper.REQUEST_BACKGROUND_LOCATION);
-                        intent.putExtras(newBundle);
-                        startActivity(intent);
                     }
                 } else {
                     if (DEBUG) {

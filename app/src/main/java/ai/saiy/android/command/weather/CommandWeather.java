@@ -6,6 +6,8 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
@@ -63,12 +65,12 @@ public class CommandWeather {
         }
         authPair = new OpenWeatherMapReference().getAPIKey(context);
         if (authPair.first) {
-            return "http://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&appid=" + authPair.second;
+            return "https://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&appid=" + authPair.second;
         }
         if (DEBUG) {
             MyLog.w(CLS_NAME, "authPair error");
         }
-        return "http://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&appid=";
+        return "https://api.openweathermap.org/data/2.5/weather?lat=" + location.getLatitude() + "&lon=" + location.getLongitude() + "&appid=";
     }
 
     private String getUrl(Context context, String query) {
@@ -85,12 +87,12 @@ public class CommandWeather {
         }
         authPair = new OpenWeatherMapReference().getAPIKey(context);
         if (authPair.first) {
-            return "http://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20") + "&appid=" + authPair.second;
+            return "https://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20") + "&appid=" + authPair.second;
         }
         if (DEBUG) {
             MyLog.w(CLS_NAME, "authPair error");
         }
-        return "http://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20") + "&appid=";
+        return "https://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20");
     }
 
     public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
@@ -127,7 +129,7 @@ public class CommandWeather {
             return returnOutcome(outcome);
         } else {
             Location location;
-            if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER) {
+            if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER || GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
                 final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
                 location = locationHelper.getLastKnownLocation(context);
             } else {

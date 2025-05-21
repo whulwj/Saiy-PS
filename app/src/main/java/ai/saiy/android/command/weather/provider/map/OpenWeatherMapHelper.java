@@ -49,7 +49,7 @@ public class OpenWeatherMapHelper {
             MyLog.i(CLS_NAME, "execute");
         }
         final long then = System.nanoTime();
-        for (int i = 0; i < urls.size();) {
+        for (int i = 0; i < urls.size(); i++) {
             try {
                 this.httpURLConnection = (HttpURLConnection) new URL(urls.get(i)).openConnection();
                 httpURLConnection.setRequestMethod(Constants.HTTP_GET);
@@ -67,7 +67,6 @@ public class OpenWeatherMapHelper {
                     if (DEBUG) {
                         MyLog.e(CLS_NAME, "error stream: " + UtilsString.streamToString(httpURLConnection.getErrorStream()));
                     }
-                    i++;
                 } else {
                     this.response = UtilsString.streamToString(httpURLConnection.getInputStream());
                     if (DEBUG) {
