@@ -439,7 +439,7 @@
             android:noHistory="true"
             android:theme="@style/AppTheme.NoActionBar"/>
         <activity
-            android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+            android:theme="@style/AppTheme.Translucent.NoActionBar.Fullscreen"
             android:name="ai.saiy.android.ui.activity.ActivityDonate"
             android:excludeFromRecents="true"
             android:exported="false"

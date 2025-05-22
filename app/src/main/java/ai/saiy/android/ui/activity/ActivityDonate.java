@@ -122,5 +122,6 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
         localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, format);
         localRequest.execute();
         updateFirebase();
+        finish();
     }
 }

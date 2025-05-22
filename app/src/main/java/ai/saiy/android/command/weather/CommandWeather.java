@@ -92,7 +92,7 @@ public class CommandWeather {
         if (DEBUG) {
             MyLog.w(CLS_NAME, "authPair error");
         }
-        return "https://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20");
+        return "https://api.openweathermap.org/data/2.5/weather?q=" + query.trim().replaceAll("\\s", "%20") + "&appid=";
     }
 
     public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
