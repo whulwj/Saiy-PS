@@ -61,7 +61,7 @@ public class ActivityFacebook extends AppCompatActivity {
                         MyLog.i(CLS_NAME, "TYPE_AUTH");
                     }
                     this.callbackManager = CallbackManager.Factory.create();
-                    LoginManager.getInstance().logInWithReadPermissions(this, Collections.singletonList("publish_actions"));
+                    LoginManager.getInstance().logInWithPublishPermissions(this, Collections.singletonList("publish_actions"));
                     LoginManager.getInstance().registerCallback(callbackManager, new com.facebook.FacebookCallback<com.facebook.login.LoginResult>() {
                         @Override
                         public void onError(@NonNull FacebookException facebookException) {
