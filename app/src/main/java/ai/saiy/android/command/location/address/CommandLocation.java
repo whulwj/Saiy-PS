@@ -6,6 +6,9 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
@@ -24,7 +27,7 @@ public class CommandLocation {
         if (ai.saiy.android.permissions.PermissionHelper.checkLocationPermissions(context, cr.getBundle())) {
             final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
             Location location;
-            if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER) {
+            if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER || GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
                 location = locationHelper.getLastKnownLocation(context);
             } else {
                 final ai.saiy.android.command.location.helper.FusedLocationHelper fusedLocationHelper = new ai.saiy.android.command.location.helper.FusedLocationHelper();

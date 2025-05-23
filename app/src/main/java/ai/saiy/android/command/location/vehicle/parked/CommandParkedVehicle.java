@@ -5,6 +5,9 @@ import android.location.Location;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+
 import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.command.location.LocationHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
@@ -21,7 +24,7 @@ public class CommandParkedVehicle {
         final Outcome outcome = new Outcome();
         if (ai.saiy.android.permissions.PermissionHelper.checkLocationPermissions(context, cr.getBundle())) {
             Location location;
-            if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER) {
+            if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER || GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
                 final LocationHelper locationHelper = new LocationHelper();
                 location = locationHelper.getLastKnownLocation(context);
             } else {

@@ -6,6 +6,8 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
@@ -87,7 +89,7 @@ public class CommandFoursquare {
         }
 
         Location location;
-        if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER) {
+        if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER || GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
             final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
             location = locationHelper.getLastKnownLocation(context);
         } else {

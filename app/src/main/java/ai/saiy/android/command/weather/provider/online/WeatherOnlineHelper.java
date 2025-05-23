@@ -47,7 +47,7 @@ public class WeatherOnlineHelper {
             MyLog.i(CLS_NAME, "execute");
         }
         final long then = System.nanoTime();
-        for (int i = 0; i < urls.size();) {
+        for (int i = 0; i < urls.size(); i++) {
             try {
                 this.httpsURLConnection = (HttpsURLConnection) new URL(urls.get(i)).openConnection();
                 httpsURLConnection.setRequestMethod(Constants.HTTP_GET);
@@ -63,7 +63,6 @@ public class WeatherOnlineHelper {
                     if (DEBUG) {
                         MyLog.e(CLS_NAME, "error stream: " + UtilsString.streamToString(httpsURLConnection.getErrorStream()));
                     }
-                    i++;
                 } else {
                     this.response = UtilsString.streamToString(httpsURLConnection.getInputStream());
                     if (DEBUG) {
