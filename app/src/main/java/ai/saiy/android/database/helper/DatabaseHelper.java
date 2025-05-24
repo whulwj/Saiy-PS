@@ -38,7 +38,7 @@ public class DatabaseHelper {
         }
     }
 
-    public void deteleContacts(final Context context) {
+    public void deleteContacts(final Context context) {
         synchronized (contactLock) {
             Schedulers.io().scheduleDirect(new Runnable() {
                 @Override

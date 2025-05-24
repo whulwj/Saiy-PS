@@ -21,6 +21,7 @@ import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.Looper;
+import android.provider.ContactsContract;
 import android.util.Pair;
 import android.widget.Toast;
 
@@ -249,7 +250,7 @@ public class TestRecognitionAction {
             ArrayList<Contact> contacts = contactHelper.getContactFromName(ctx, Locale.getDefault(), arrayList, false);
             if (!ai.saiy.android.utils.UtilsList.notNaked(contacts)) {
                 toast(ctx, "Could not find contact by name?");
-                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                new ai.saiy.android.database.helper.DatabaseHelper().deleteContacts(ctx);
                 return;
             }
             if (DEBUG) {
@@ -259,29 +260,29 @@ public class TestRecognitionAction {
                     MyLog.i(CLS_NAME, "contact has number: " + contact.hasPhoneNumber());
                 }
             }
-            Pair<Boolean, Contact> contactPair = contactHelper.getContact(ctx, contacts, Contact.Weighting.NUMBER, 0);
+            Pair<Boolean, Contact> contactPair = contactHelper.getContact(ctx, contacts, Contact.Weighting.NUMBER, ContactsContract.CommonDataKinds.BaseTypes.TYPE_CUSTOM);
             if (!(Boolean) contactPair.first) {
                 toast(ctx, "Could not find contact number?");
-                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                new ai.saiy.android.database.helper.DatabaseHelper().deleteContacts(ctx);
                 return;
             }
             Contact contact = contactPair.second;
             if (!ai.saiy.android.utils.UtilsString.notNaked(contact.getNumber())) {
                 toast(ctx, "Required number missing?");
-                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                new ai.saiy.android.database.helper.DatabaseHelper().deleteContacts(ctx);
                 return;
             }
             ArrayList<String> rawIdArray = contactHelper.getRawIdArray(ctx, contact.getID());
             if (!ai.saiy.android.utils.UtilsList.notNaked(rawIdArray)) {
                 toast(ctx, "Failed to get raw ids?");
-                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                new ai.saiy.android.database.helper.DatabaseHelper().deleteContacts(ctx);
                 return;
             }
             String rawIdArrayString = rawIdArray.toString();
             String contactID = contactHelper.getIdFromNumber(ctx, contact.getNumber());
             if (!ai.saiy.android.utils.UtilsString.notNaked(contactID)) {
                 toast(ctx, "Failed to get id from number?");
-                new ai.saiy.android.database.helper.DatabaseHelper().deteleContacts(ctx);
+                new ai.saiy.android.database.helper.DatabaseHelper().deleteContacts(ctx);
                 return;
             }
             if (DEBUG) {

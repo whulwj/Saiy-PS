@@ -90,7 +90,7 @@ public class CommandContact {
                         }
                         break;
                     case EDIT:
-                        contactPair = contactHelper.getContact(context, contacts, ai.saiy.android.contacts.Contact.Weighting.NUMBER, 0);
+                        contactPair = contactHelper.getContact(context, contacts, ai.saiy.android.contacts.Contact.Weighting.NUMBER, ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM);
                         if (!contactPair.first) {
                             outcome.setOutcome(Outcome.FAILURE);
                             outcome.setUtterance(context.getString(R.string.error_detecting_contact));
@@ -298,7 +298,7 @@ public class CommandContact {
                         if (Installed.isPackageInstalled(context, Installed.PACKAGE_GOOGLE_MAPS)) {
                             switch (commandContactValues.getNavigationType()) {
                                 case UNKNOWN:
-                                    contactPair = contactHelper.getContact(context, contacts, ai.saiy.android.contacts.Contact.Weighting.ADDRESS, 0);
+                                    contactPair = contactHelper.getContact(context, contacts, ai.saiy.android.contacts.Contact.Weighting.ADDRESS, ContactsContract.CommonDataKinds.BaseTypes.TYPE_CUSTOM);
                                     contact = contactPair.second;
                                     if (!(Boolean) contactPair.first) {
                                         outcome.setOutcome(Outcome.FAILURE);
@@ -418,7 +418,7 @@ public class CommandContact {
                         }
                         break;
                     case EMAIL:
-                        contactPair = contactHelper.getContact(context, contacts, ai.saiy.android.contacts.Contact.Weighting.EMAIL, 0);
+                        contactPair = contactHelper.getContact(context, contacts, ai.saiy.android.contacts.Contact.Weighting.EMAIL, ContactsContract.CommonDataKinds.BaseTypes.TYPE_CUSTOM);
                         contact = contactPair.second;
                         if (!contactPair.first) {
                             outcome.setOutcome(Outcome.FAILURE);
@@ -486,7 +486,7 @@ public class CommandContact {
             outcome.setUtterance(SaiyRequestParams.SILENCE);
         }
         if (outcome.getOutcome() == Outcome.FAILURE) {
-            new DatabaseHelper().deteleContacts(context);
+            new DatabaseHelper().deleteContacts(context);
         }
         return outcome;
     }

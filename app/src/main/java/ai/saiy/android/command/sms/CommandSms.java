@@ -103,7 +103,7 @@ public class CommandSms {
             } else {
                 sb.append(context.getString(R.string.an_unknown_sender));
                 sb.append(", ");
-                new DatabaseHelper().deteleContacts(context);
+                new DatabaseHelper().deleteContacts(context);
             }
             sb.append(context.getString(R.string.saying));
             sb.append(". ");
@@ -119,7 +119,7 @@ public class CommandSms {
             if (message == null) {
                 outcome.setUtterance(PersonalityResponse.getContactNotDetectedError(context, supportedLanguage));
                 outcome.setOutcome(Outcome.FAILURE);
-                new DatabaseHelper().deteleContacts(context);
+                new DatabaseHelper().deleteContacts(context);
                 return returnOutcome(outcome);
             }
             if (!UtilsString.notNaked(message.getBody())) {
@@ -151,7 +151,7 @@ public class CommandSms {
             if (message == null) {
                 outcome.setUtterance(context.getString(R.string.sms_error_5));
                 outcome.setOutcome(Outcome.FAILURE);
-                new DatabaseHelper().deteleContacts(context);
+                new DatabaseHelper().deleteContacts(context);
                 return returnOutcome(outcome);
             }
             if (!UtilsString.notNaked(message.getBody())) {
@@ -175,7 +175,7 @@ public class CommandSms {
         if (!UtilsList.notNaked(rawIDs)) {
             outcome.setUtterance(PersonalityResponse.getNoContactForSms(context, supportedLanguage, contact.getName()));
             outcome.setOutcome(Outcome.FAILURE);
-            new DatabaseHelper().deteleContacts(context);
+            new DatabaseHelper().deleteContacts(context);
             return returnOutcome(outcome);
         }
         Message message;
@@ -202,13 +202,13 @@ public class CommandSms {
         if (message == null) {
             outcome.setUtterance(PersonalityResponse.getNoRecordForSms(context, supportedLanguage, contact.getName()));
             outcome.setOutcome(Outcome.FAILURE);
-            new DatabaseHelper().deteleContacts(context);
+            new DatabaseHelper().deleteContacts(context);
             return returnOutcome(outcome);
         }
         if (!UtilsString.notNaked(message.getBody())) {
             outcome.setUtterance(context.getString(R.string.sms_error_1));
             outcome.setOutcome(Outcome.FAILURE);
-            new DatabaseHelper().deteleContacts(context);
+            new DatabaseHelper().deleteContacts(context);
             return returnOutcome(outcome);
         }
         if (DEBUG) {

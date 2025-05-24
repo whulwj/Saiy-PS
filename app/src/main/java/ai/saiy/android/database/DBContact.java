@@ -77,7 +77,7 @@ public class DBContact extends SQLiteOpenHelper {
                 this.database.beginTransaction();
                 final SQLiteStatement compileStatement = this.database.compileStatement("insert into " + TABLE_CONTACTS + "(" + COLUMN_CONTACT_ID + ", " + COLUMN_CONTACT_NAME
                         + ", " + COLUMN_CONTACT_NAME_PHONETIC + ", " + COLUMN_CONTACT_FORENAME + ", " + COLUMN_CONTACT_SURNAME + ", " + COLUMN_CONTACT_WORD_COUNT
-                        + ", " + COLUMN_CONTACT_FREQUENCY + ", " + COLUMN_CONTACT_HAS_NUMBER + ", " + COLUMN_CONTACT_HAS_ADDRESS + ", " + COLUMN_CONTACT_HAS_EMAIL + ") values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+                        + ", " + COLUMN_CONTACT_FREQUENCY + ", " + COLUMN_CONTACT_HAS_NUMBER + ", " + COLUMN_CONTACT_HAS_ADDRESS + ", " + COLUMN_CONTACT_HAS_EMAIL + ") values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
                 for (Contact contact : contacts) {
                     compileStatement.bindString(1, contact.getID());
                     compileStatement.bindString(2, contact.getName());
@@ -113,7 +113,7 @@ public class DBContact extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (this.database.isOpen()) {
+                if (this.database != null && this.database.isOpen()) {
                     close();
                 }
             } catch (IllegalStateException e) {
@@ -173,7 +173,7 @@ public class DBContact extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -210,15 +210,15 @@ public class DBContact extends SQLiteOpenHelper {
         }
         final long then = System.nanoTime();
         final ArrayList<Contact> contacts = new ArrayList<>();
-        Cursor cursor = null;
         try {
             open();
             if (this.database.isOpen()) {
-                cursor = this.database.query(TABLE_CONTACTS, ALL_COLUMNS, null, null, null, null, null);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    contacts.add(new Contact(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6), cursor.getInt(7), cursor.getInt(8) == 1, cursor.getInt(9) == 1, cursor.getInt(10) == 1));
-                    cursor.moveToNext();
+                try (Cursor cursor = this.database.query(TABLE_CONTACTS, ALL_COLUMNS, null, null, null, null, null)) {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        contacts.add(new Contact(cursor.getString(1), cursor.getString(2), cursor.getString(3), cursor.getString(4), cursor.getString(5), cursor.getInt(6), cursor.getInt(7), cursor.getInt(8) == 1, cursor.getInt(9) == 1, cursor.getInt(10) == 1));
+                        cursor.moveToNext();
+                    }
                 }
             }
         } catch (IllegalStateException e) {
@@ -238,31 +238,23 @@ public class DBContact extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (cursor != null && cursor.isClosed()) {
-                    cursor.close();
+                if (this.database != null && this.database.isOpen()) {
+                    close();
                 }
-            } catch (Throwable t) {
-                MyLog.w(CLS_NAME, "getContacts: Throwable");
-            } finally {
-                try {
-                    if (this.database.isOpen()) {
-                        close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getContacts: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getContacts: SQLException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getContacts: Exception");
-                        e.printStackTrace();
-                    }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getContacts: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getContacts: SQLException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getContacts: Exception");
+                    e.printStackTrace();
                 }
             }
         }

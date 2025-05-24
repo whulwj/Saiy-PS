@@ -154,17 +154,11 @@ public class ContactHelper {
         if (!UtilsList.notNaked(contacts) || this.isBusy.get()) {
             return;
         }
-        Schedulers.io().scheduleDirect(new Runnable() {
-            @Override
-            public void run() {
-                Process.setThreadPriority(Process.THREAD_PRIORITY_LESS_FAVORABLE);
-                ContactHelper.this.isBusy.set(true);
-                synchronized (ContactHelper.this.lock) {
-                    new DBContact(context).insertData(contacts);
-                }
-                ContactHelper.this.isBusy.set(false);
-            }
-        });
+        ContactHelper.this.isBusy.set(true);
+        synchronized (ContactHelper.this.lock) {
+            new DBContact(context).insertData(contacts);
+        }
+        ContactHelper.this.isBusy.set(false);
     }
 
     private ArrayList<Contact> setEmail(Context context, ArrayList<Contact> contacts, String str) {
@@ -459,7 +453,7 @@ public class ContactHelper {
             int columnIsPrimaryIndex = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.IS_PRIMARY);
             while (cursor.moveToNext()) {
                 String number = cursor.getString(columnNumberIndex);
-                if (UtilsString.notNaked(number)) {
+                if (!UtilsString.notNaked(number)) {
                     continue;
                 }
                 if (type != ContactsContract.CommonDataKinds.Phone.TYPE_CUSTOM) {
@@ -690,24 +684,22 @@ public class ContactHelper {
                 exception.printStackTrace();
             }
         } finally {
-            if (cursor != null) {
-                try {
-                    if (!cursor.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getNameAndNumberFromUri: finally closing");
-                        }
-                        cursor.close();
-                    }
-                } catch (IllegalStateException e) {
+            try {
+                if (cursor != null && !cursor.isClosed()) {
                     if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getNameAndNumberFromUri: IllegalStateException");
-                        e.printStackTrace();
+                        MyLog.i(CLS_NAME, "getNameAndNumberFromUri: finally closing");
                     }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getNameAndNumberFromUri: Exception");
-                        e.printStackTrace();
-                    }
+                    cursor.close();
+                }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getNameAndNumberFromUri: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getNameAndNumberFromUri: Exception");
+                    e.printStackTrace();
                 }
             }
         }
@@ -1130,24 +1122,22 @@ public class ContactHelper {
                 e.printStackTrace();
             }
         } finally {
-            if (cursor != null) {
-                try {
-                    if (!cursor.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getUserProfileName: finally closing");
-                        }
-                        cursor.close();
-                    }
-                } catch (IllegalStateException e) {
+            try {
+                if (cursor != null && !cursor.isClosed()) {
                     if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
-                        e.printStackTrace();
+                        MyLog.i(CLS_NAME, "getUserProfileName: finally closing");
                     }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getUserProfileName: Exception");
-                        e.printStackTrace();
-                    }
+                    cursor.close();
+                }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getUserProfileName: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getUserProfileName: Exception");
+                    e.printStackTrace();
                 }
             }
         }
@@ -1390,24 +1380,22 @@ public class ContactHelper {
                 exception.printStackTrace();
             }
         } finally {
-            if (cursor != null) {
-                try {
-                    if (!cursor.isClosed()) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "getRawIdArray: finally closing");
-                        }
-                        cursor.close();
-                    }
-                } catch (IllegalStateException e) {
+            try {
+                if (cursor != null && !cursor.isClosed()) {
                     if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: IllegalStateException");
-                        e.printStackTrace();
+                        MyLog.i(CLS_NAME, "getRawIdArray: finally closing");
                     }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getRawIdArray: Exception");
-                        e.printStackTrace();
-                    }
+                    cursor.close();
+                }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getRawIdArray: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getRawIdArray: Exception");
+                    e.printStackTrace();
                 }
             }
         }
