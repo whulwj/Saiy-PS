@@ -48,7 +48,7 @@ public class DefinitionHelper {
         final Pair<Boolean, String> authPair = new DefinitionReference().getAPIKey(context);
         try {
             if (authPair.first) {
-                this.httpURLConnection = (HttpURLConnection) new URL(("http://api.wordnik.com/v4/word.json/" + str + "/definitions?limit=1&includeRelated=false&useCanonical=true&includeTags=false&api_key=" + authPair.second).replaceAll("\\s", "%20")).openConnection();
+                this.httpURLConnection = (HttpURLConnection) new URL(("https://api.wordnik.com/v4/word.json/" + str + "/definitions?limit=1&includeRelated=false&useCanonical=true&includeTags=false&api_key=" + authPair.second).replaceAll("\\s", "%20")).openConnection();
                 httpURLConnection.setRequestMethod(Constants.HTTP_GET);
                 httpURLConnection.setDoInput(true);
                 httpURLConnection.setRequestProperty(CONTENT_TYPE, JSON_HEADER_VALUE_ACCEPT);

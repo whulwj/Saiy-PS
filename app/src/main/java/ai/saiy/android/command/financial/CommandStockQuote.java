@@ -35,7 +35,7 @@ public class CommandStockQuote {
     }
 
     private String getUrl(String query) {
-        return "http://autoc.finance.yahoo.com/autoc?query=" + query.trim().replaceAll("\\s", "%20").trim() + "&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback";
+        return "https://autoc.finance.yahoo.com/autoc?query=" + query.trim().replaceAll("\\s", "%20").trim() + "&region=1&lang=en&callback=YAHOO.Finance.SymbolSuggest.ssCallback";
     }
 
     public @NonNull Outcome getResponse(@NonNull Context context, @NonNull ArrayList<String> voiceData, @NonNull SupportedLanguage supportedLanguage, @NonNull ai.saiy.android.command.helper.CommandRequest cr) {

@@ -139,7 +139,7 @@ public class HoroscopeHelper {
         }
         final long startTime = System.nanoTime();
         try {
-            urlConnection = (HttpURLConnection) new URL("http://www.findyourfate.com/rss/dailyhoroscope-feed.php?sign=" + sign.getName() + "&id=45").openConnection();
+            urlConnection = (HttpURLConnection) new URL("https://www.findyourfate.com/rss/dailyhoroscope-feed.php?sign=" + sign.getName() + "&id=45").openConnection();
             urlConnection.setRequestMethod(Constants.HTTP_GET);
             urlConnection.setDoInput(true);
             urlConnection.connect();

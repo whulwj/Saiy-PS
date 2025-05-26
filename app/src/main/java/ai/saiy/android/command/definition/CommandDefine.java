@@ -34,18 +34,18 @@ public class CommandDefine {
         return outcome;
     }
 
-    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest aVar) {
+    public @NonNull Outcome getResponse(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.command.helper.CommandRequest cr) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "voiceData: " + voiceData.size() + " : " + voiceData);
         }
         this.then = System.nanoTime();
         final Outcome outcome = new Outcome();
         String word;
-        if (aVar.isResolved()) {
+        if (cr.isResolved()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "isResolved: true");
             }
-            word = ((CommandDefineValues) aVar.getVariableData()).getWord();
+            word = ((CommandDefineValues) cr.getVariableData()).getWord();
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "isResolved: false");

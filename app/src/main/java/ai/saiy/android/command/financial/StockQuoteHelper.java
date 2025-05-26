@@ -131,7 +131,7 @@ public class StockQuoteHelper {
             MyLog.i(CLS_NAME, "getSymbol");
         }
         final long then = System.nanoTime();
-        for (int i = 0; i < urls.size();) {
+        for (int i = 0; i < urls.size(); i++) {
             try {
                 this.httpURLConnection = (HttpURLConnection) new URL(urls.get(i)).openConnection();
                 httpURLConnection.setRequestMethod(Constants.HTTP_GET);
@@ -146,14 +146,23 @@ public class StockQuoteHelper {
                 if (responseCode == HttpURLConnection.HTTP_OK) {
                     this.response = org.apache.commons.lang3.StringUtils.removeEnd(UtilsString.streamToString(httpURLConnection.getInputStream()).replaceFirst("YAHOO.Finance.SymbolSuggest.ssCallback\\(", "").trim(), "\\(\\;").trim();
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "response: " + new JSONObject(response).toString(4));
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(response);
+                        } catch (Throwable t) {
+                            MyLog.w(CLS_NAME, "parse response: " + t.getClass().getSimpleName() + ", " + t.getMessage());
+                        }
+                        if (jsonObject != null) {
+                            MyLog.i(CLS_NAME, "response: " + jsonObject.toString(4));
+                        } else {
+                            MyLog.i(CLS_NAME, "response: " + response);
+                        }
                     }
                     break;
                 } else {
                     if (DEBUG) {
                         MyLog.e(CLS_NAME, "error stream: " + UtilsString.streamToString(httpURLConnection.getErrorStream()));
                     }
-                    i++;
                 }
             } catch (MalformedURLException e) {
                 if (DEBUG) {
@@ -206,7 +215,7 @@ public class StockQuoteHelper {
             MyLog.getElapsed(CLS_NAME, then);
         }
         if (UtilsString.notNaked(response)) {
-            return a(response);
+            return parseStockQuoteResponse(response);
         }
         if (DEBUG) {
             MyLog.w(CLS_NAME, "response: failed");
@@ -214,43 +223,43 @@ public class StockQuoteHelper {
         return new Pair<>(null, null);
     }
 
-    private Pair<String, String> a(String str) {
-        final JsonReader jsonReader = new JsonReader(new StringReader(str));
-        jsonReader.setLenient(true);
-        final StockQuoteResponse stockQuoteResponse = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().fromJson(jsonReader, StockQuoteResponse.class);
-        if (stockQuoteResponse != null) {
-            try {
+    private Pair<String, String> parseStockQuoteResponse(String str) {
+        try {
+            final JsonReader jsonReader = new JsonReader(new StringReader(str));
+            jsonReader.setLenient(true);
+            final StockQuoteResponse stockQuoteResponse = new com.google.gson.GsonBuilder().disableHtmlEscaping().create().fromJson(jsonReader, StockQuoteResponse.class);
+            if (stockQuoteResponse != null) {
                 final Company company = stockQuoteResponse.getResultSet().getResult().get(0);
                 if (DEBUG) {
                     MyLog.d(CLS_NAME, "getCompany: " + company.getName());
                     MyLog.d(CLS_NAME, "getSymbol: " + company.getSymbol());
                 }
                 return new Pair<>(company.getName(), company.getSymbol());
-            } catch (JsonIOException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "JsonIOException");
-                    e.printStackTrace();
-                }
-            } catch (JsonSyntaxException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "JsonSyntaxException");
-                    e.printStackTrace();
-                }
-            } catch (IndexOutOfBoundsException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "IndexOutOfBoundsException");
-                    e.printStackTrace();
-                }
-            } catch (NullPointerException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "NullPointerException");
-                    e.printStackTrace();
-                }
-            } catch (Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "Exception");
-                    e.printStackTrace();
-                }
+            }
+        } catch (JsonIOException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "JsonIOException");
+                e.printStackTrace();
+            }
+        } catch (JsonSyntaxException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "JsonSyntaxException");
+                e.printStackTrace();
+            }
+        } catch (IndexOutOfBoundsException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "IndexOutOfBoundsException");
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "NullPointerException");
+                e.printStackTrace();
+            }
+        } catch (Exception e) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "Exception");
+                e.printStackTrace();
             }
         }
         return new Pair<>(null, null);
