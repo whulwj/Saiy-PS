@@ -8,7 +8,7 @@ commonsLang3 = "3.17.0"
 commonsFileUpload = "2.0.0-M2"
 commonsText = "1.12.0"
 commonsValidator = "1.9.0"
-googleGoogleApiServicesTranslate = "v2-rev51-1.25.0"
+googleCloudTranslate = "2.44.0"  #Don't update it unless you update the Gson first
 grpcAuth = "1.65.1"  #Don't update it unless you update the Gson first
 grpcJava = "1.65.1" #Don't update it unless you update the Gson first
 protobufJava = "4.28.3"
@@ -88,7 +88,7 @@ commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.
 commons-fileupload = { group = "org.apache.commons", name = "commons-fileupload2-core", version.ref = "commonsFileUpload" }
 commons-text = { group = "org.apache.commons", name = "commons-text", version.ref = "commonsText" }
 commons-validator = { group = "commons-validator", name = "commons-validator", version.ref = "commonsValidator" }
-google-google-api-services-translate = { group = "com.google.apis", name = "google-api-services-translate", version.ref = "googleGoogleApiServicesTranslate" }
+google-cloud-translate = { group = "com.google.cloud", name = "google-cloud-translate", version.ref = "googleCloudTranslate" }
 grpc-auth = { group = "io.grpc", name = "grpc-auth", version.ref = "grpcAuth" }
 grpc-okhttp = { group = "io.grpc", name = "grpc-okhttp", version.ref = "grpcJava" }
 grpc-protobuf = { group = "io.grpc", name = "grpc-protobuf", version.ref = "grpcJava" }

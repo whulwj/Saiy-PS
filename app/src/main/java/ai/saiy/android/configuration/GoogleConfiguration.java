@@ -43,7 +43,7 @@ public final class GoogleConfiguration {
     }
 
     public static final String GOOGLE_SPEECH_API_KEY = "_your_value_here_";
-    public static final String GOOGLE_TRANSLATE_API_KEY = "_your_value_here_";
+    public static final String GOOGLE_TRANSLATE_PROJECT_ID = "_your_value_here_";
 
     private static final String GOOGLE_SPEECH_CLOUD_API_KEY = "_your_value_here_";
 

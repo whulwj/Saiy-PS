@@ -150,7 +150,7 @@ dependencies {
         exclude group: 'androidx.activity', module: 'activity-ktx'
     }
 
-    implementation(libs.google.google.api.services.translate) {
+    implementation(libs.google.cloud.translate) {
         exclude group: 'org.apache.httpcomponents', module: 'httpclient'
         exclude group: 'com.google.guava'
     }

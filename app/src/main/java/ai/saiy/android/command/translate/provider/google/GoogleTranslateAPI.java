@@ -22,19 +22,16 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
-import com.google.api.services.translate.Translate;
-import com.google.api.services.translate.model.TranslationsListResponse;
-import com.google.api.services.translate.model.TranslationsResource;
+import com.google.cloud.translate.v3.LocationName;
+import com.google.cloud.translate.v3.TranslateTextRequest;
+import com.google.cloud.translate.v3.TranslateTextResponse;
+import com.google.cloud.translate.v3.Translation;
+import com.google.cloud.translate.v3.TranslationServiceClient;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
-import ai.saiy.android.R;
 import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.utils.MyLog;
 
@@ -62,23 +59,29 @@ public class GoogleTranslateAPI {
 
         final long then = System.nanoTime();
 
-        try {
+        // Initialize client that will be used to send requests. This client only needs to be created
+        // once, and can be reused for multiple requests. After completing all of your requests, call
+        // the "close" method on the client to safely clean up any remaining background resources.
+        try (TranslationServiceClient client = TranslationServiceClient.create()) {
+            // Supported Locations: `global`, [glossary location], or [model location]
+            // Glossaries must be hosted in `us-central1`
+            // Custom Models must use the same location as your model. (us-central1)
+            LocationName parent = LocationName.of(GoogleConfiguration.GOOGLE_TRANSLATE_PROJECT_ID, "global");
 
-            final Translate translate = new Translate.Builder(new NetHttpTransport(),
-                    GsonFactory.getDefaultInstance(), null).setApplicationName(ctx.getString(R.string.app_name)).build();
+            // Supported Mime Types: https://cloud.google.com/translate/docs/supported-formats
+            TranslateTextRequest request =
+                    TranslateTextRequest.newBuilder()
+                            .setParent(parent.toString())
+                            .setMimeType("text/plain")
+                            .setTargetLanguageCode(language.getLanguage())
+                            .addContents(text)
+                            .build();
 
-            final List<String> textList = new ArrayList<>();
-            textList.add(text);
+            final TranslateTextResponse response = client.translateText(request);
 
-            final Translate.Translations.List list = translate.new Translations().list(textList,
-                    language.toString());
-            list.setKey(GoogleConfiguration.GOOGLE_TRANSLATE_API_KEY);
-
-            final TranslationsListResponse response = list.execute();
-
-            if (response != null && !response.isEmpty()) {
+            if (response != null && !response.getTranslationsList().isEmpty()) {
                 if (DEBUG) {
-                    for (final TranslationsResource resource : response.getTranslations()) {
+                    for (final Translation resource : response.getTranslationsList()) {
                         MyLog.i(CLS_NAME, "resource: " + resource.getTranslatedText());
                     }
                 }
@@ -87,7 +90,7 @@ public class GoogleTranslateAPI {
                     MyLog.getElapsed(CLS_NAME, then);
                 }
 
-                return new Pair<>(true, StringEscapeUtils.unescapeHtml4(response.getTranslations().get(0).getTranslatedText()));
+                return new Pair<>(true, StringEscapeUtils.unescapeHtml4(response.getTranslationsList().get(0).getTranslatedText()));
             }
         } catch (final IOException e) {
             if (DEBUG) {
