@@ -111,11 +111,11 @@ public class DBCustomPhrase extends SQLiteOpenHelper {
                 values.put(COLUMN_SERIALISED, serialised);
 
                 insertId = database.insert(TABLE_CUSTOM_PHRASE, null, values);
-                final Cursor cursor = database.query(TABLE_CUSTOM_PHRASE, ALL_COLUMNS,
+                try (Cursor cursor = database.query(TABLE_CUSTOM_PHRASE, ALL_COLUMNS,
                         COLUMN_ID + " = " + insertId, null, null,
-                        null, null);
-                cursor.moveToFirst();
-                cursor.close();
+                        null, null)) {
+                    cursor.moveToFirst();
+                }
                 success = true;
             }
 
@@ -136,7 +136,7 @@ public class DBCustomPhrase extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "insertPopulatedRow: finally closing");
                     }
@@ -198,7 +198,7 @@ public class DBCustomPhrase extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     close();
                 }
             } catch (IllegalStateException e) {
@@ -260,7 +260,7 @@ public class DBCustomPhrase extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -298,15 +298,15 @@ public class DBCustomPhrase extends SQLiteOpenHelper {
             MyLog.i(CLS_NAME, "getPhrases");
         }
         final ArrayList<CustomPhrase> phrases = new ArrayList<>();
-        Cursor cursor = null;
         try {
             open();
             if (database.isOpen()) {
-                cursor = database.query(TABLE_CUSTOM_PHRASE, ALL_COLUMNS, null, null, null, null, null);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    phrases.add(new CustomPhrase(cursor.getString(1), cursor.getString(2), cursor.getLong(3) == 1, cursor.getLong(0), cursor.getString(4)));
-                    cursor.moveToNext();
+                try (Cursor cursor = database.query(TABLE_CUSTOM_PHRASE, ALL_COLUMNS, null, null, null, null, null)){
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        phrases.add(new CustomPhrase(cursor.getString(1), cursor.getString(2), cursor.getLong(3) == 1, cursor.getLong(0), cursor.getString(4)));
+                        cursor.moveToNext();
+                    }
                 }
             }
         } catch (IllegalStateException e) {
@@ -326,31 +326,23 @@ public class DBCustomPhrase extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (cursor != null && cursor.isClosed()) {
-                    cursor.close();
+                if (database != null && database.isOpen()) {
+                    close();
                 }
-            } catch (Throwable t) {
-                MyLog.w(CLS_NAME, "getApplications: Throwable");
-            } finally {
-                try {
-                    if (database.isOpen()) {
-                        close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getPhrases: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getPhrases: SQLException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getPhrases: Exception");
-                        e.printStackTrace();
-                    }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getPhrases: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getPhrases: SQLException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getPhrases: Exception");
+                    e.printStackTrace();
                 }
             }
         }

@@ -183,7 +183,7 @@ public class DBSpeech extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -250,7 +250,7 @@ public class DBSpeech extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteEntry: finally closing");
                     }
@@ -307,24 +307,22 @@ public class DBSpeech extends SQLiteOpenHelper {
                         + "' AND " + COLUMN_VOICE_NAME + "='" + voice
                         + "' AND " + COLUMN_UTTERANCE + "='" + utterance.trim().replaceAll("[^a-zA-Z0-9]", "") + "'";
 
-                final Cursor cursor = database.query(TABLE_SPEECH, new String[]{COLUMN_ID, COLUMN_ENGINE_PACKAGE,
+                try (Cursor cursor = database.query(TABLE_SPEECH, new String[]{COLUMN_ID, COLUMN_ENGINE_PACKAGE,
                                 COLUMN_VOICE_NAME, COLUMN_UTTERANCE, COLUMN_BINARY}, whereClause, null, null, null,
-                        null);
+                        null)) {
+                    if (cursor != null && cursor.getCount() > 0) {
+                        if (DEBUG) {
+                            MyLog.v(CLS_NAME, "entryExists: true");
+                        }
 
-                if (cursor != null && cursor.getCount() > 0) {
-                    if (DEBUG) {
-                        MyLog.v(CLS_NAME, "entryExists: true");
-                    }
+                        if (cursor.moveToFirst()) {
+                            exists = true;
+                        }
 
-                    if (cursor.moveToFirst()) {
-                        exists = true;
-                    }
-
-                    cursor.close();
-
-                } else {
-                    if (DEBUG) {
-                        MyLog.v(CLS_NAME, ": entryExists: false");
+                    } else {
+                        if (DEBUG) {
+                            MyLog.v(CLS_NAME, ": entryExists: false");
+                        }
                     }
                 }
             }
@@ -345,7 +343,7 @@ public class DBSpeech extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "entryExists: finally closing");
                     }
@@ -406,33 +404,32 @@ public class DBSpeech extends SQLiteOpenHelper {
                         + "' AND " + COLUMN_VOICE_NAME + "='" + voice
                         + "' AND " + COLUMN_UTTERANCE + "='" + utterance.trim().replaceAll("[^a-zA-Z0-9]", "") + "'";
 
-                final Cursor cursor = database.query(TABLE_SPEECH, new String[]{COLUMN_ID, COLUMN_ENGINE_PACKAGE,
+                try (Cursor cursor = database.query(TABLE_SPEECH, new String[]{COLUMN_ID, COLUMN_ENGINE_PACKAGE,
                                 COLUMN_VOICE_NAME, COLUMN_UTTERANCE, COLUMN_BINARY}, whereClause, null, null, null,
-                        null);
+                        null)) {
 
-                if (cursor != null && cursor.getCount() > 0) {
+                    if (cursor != null && cursor.getCount() > 0) {
 
-                    if (DEBUG) {
-                        MyLog.v(CLS_NAME, "speechExists: true");
-                    }
+                        if (DEBUG) {
+                            MyLog.v(CLS_NAME, "speechExists: true");
+                        }
 
-                    if (cursor.moveToFirst()) {
-                        compressedBytes = cursor.getBlob(4);
+                        if (cursor.moveToFirst()) {
+                            compressedBytes = cursor.getBlob(4);
 
-                        final ContentValues values = new ContentValues();
-                        values.put(COLUMN_DATE, String.valueOf(System.currentTimeMillis()));
+                            final ContentValues values = new ContentValues();
+                            values.put(COLUMN_DATE, String.valueOf(System.currentTimeMillis()));
 
-                        database.update(TABLE_SPEECH, values, COLUMN_ID + "=?",
-                                new String[]{String.valueOf(cursor.getLong(0))});
+                            database.update(TABLE_SPEECH, values, COLUMN_ID + "=?",
+                                    new String[]{String.valueOf(cursor.getLong(0))});
 
-                        rowId = cursor.getLong(0);
-                    }
+                            rowId = cursor.getLong(0);
+                        }
 
-                    cursor.close();
-
-                } else {
-                    if (DEBUG) {
-                        MyLog.v(CLS_NAME, "speechExists: false");
+                    } else {
+                        if (DEBUG) {
+                            MyLog.v(CLS_NAME, "speechExists: false");
+                        }
                     }
                 }
             }
@@ -453,7 +450,7 @@ public class DBSpeech extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "getBytes: finally closing");
                     }
@@ -540,7 +537,7 @@ public class DBSpeech extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "shouldRunMaintenance: finally closing");
                     }
@@ -587,54 +584,53 @@ public class DBSpeech extends SQLiteOpenHelper {
         try {
             open();
             if (database.isOpen()) {
-                final Cursor cursor = database.query(TABLE_SPEECH,
-                        new String[]{COLUMN_ID, COLUMN_UTTERANCE, COLUMN_DATE}, null, null, null, null, null);
+                try (Cursor cursor = database.query(TABLE_SPEECH,
+                        new String[]{COLUMN_ID, COLUMN_UTTERANCE, COLUMN_DATE}, null, null, null, null, null)) {
 
-                if (cursor != null && cursor.getCount() > 0) {
-                    cursor.moveToFirst();
+                    if (cursor != null && cursor.getCount() > 0) {
+                        cursor.moveToFirst();
 
-                    final long lastUsedApp = SPH.getLastUsed(ctx);
-                    long lastUsedEntry;
-                    long usageGap;
-                    int deleteCount = 0;
+                        final long lastUsedApp = SPH.getLastUsed(ctx);
+                        long lastUsedEntry;
+                        long usageGap;
+                        int deleteCount = 0;
 
-                    while (!cursor.isAfterLast()) {
+                        while (!cursor.isAfterLast()) {
 
-                        lastUsedEntry = cursor.getLong(2);
-                        usageGap = lastUsedApp - lastUsedEntry;
+                            lastUsedEntry = cursor.getLong(2);
+                            usageGap = lastUsedApp - lastUsedEntry;
+
+                            if (DEBUG) {
+                                MyLog.v(CLS_NAME, "utterance: " + cursor.getString(1));
+                                MyLog.d(CLS_NAME, "lastUsedApp: " + lastUsedApp);
+                                MyLog.d(CLS_NAME, "lastUsedEntry: " + lastUsedEntry);
+                                MyLog.d(CLS_NAME, "usageGap: " + usageGap);
+                            }
+
+                            if (usageGap > MAX_UNUSED_THRESHOLD) {
+                                if (DEBUG) {
+                                    MyLog.v(CLS_NAME, "deleting: true");
+                                }
+                                database.delete(TABLE_SPEECH, COLUMN_ID + "=?",
+                                        new String[]{String.valueOf(cursor.getLong(0))});
+                                deleteCount++;
+                            } else {
+                                if (DEBUG) {
+                                    MyLog.v(CLS_NAME, "deleting: false");
+                                }
+                            }
+
+                            cursor.moveToNext();
+                        }
 
                         if (DEBUG) {
-                            MyLog.v(CLS_NAME, "utterance: " + cursor.getString(1));
-                            MyLog.d(CLS_NAME, "lastUsedApp: " + lastUsedApp);
-                            MyLog.d(CLS_NAME, "lastUsedEntry: " + lastUsedEntry);
-                            MyLog.d(CLS_NAME, "usageGap: " + usageGap);
+                            MyLog.d(CLS_NAME, "deleteCount: " + deleteCount);
                         }
 
-                        if (usageGap > MAX_UNUSED_THRESHOLD) {
-                            if (DEBUG) {
-                                MyLog.v(CLS_NAME, "deleting: true");
-                            }
-                            database.delete(TABLE_SPEECH, COLUMN_ID + "=?",
-                                    new String[]{String.valueOf(cursor.getLong(0))});
-                            deleteCount++;
-                        } else {
-                            if (DEBUG) {
-                                MyLog.v(CLS_NAME, "deleting: false");
-                            }
+                        if (deleteCount > VACUUM_THRESHOLD) {
+                            database.execSQL("VACUUM");
                         }
-
-                        cursor.moveToNext();
                     }
-
-                    if (DEBUG) {
-                        MyLog.d(CLS_NAME, "deleteCount: " + deleteCount);
-                    }
-
-                    if (deleteCount > VACUUM_THRESHOLD) {
-                        database.execSQL("VACUUM");
-                    }
-
-                    cursor.close();
                 }
             }
         } catch (final IllegalStateException e) {
@@ -654,7 +650,7 @@ public class DBSpeech extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "runMaintenance: finally closing");
                     }
@@ -711,11 +707,11 @@ public class DBSpeech extends SQLiteOpenHelper {
                     values.put(COLUMN_DATE, String.valueOf(System.currentTimeMillis()));
 
                     final long insertId = database.insert(TABLE_SPEECH, null, values);
-                    final Cursor cursor = database.query(TABLE_SPEECH, ALL_COLUMNS,
+                    try (Cursor cursor = database.query(TABLE_SPEECH, ALL_COLUMNS,
                             COLUMN_ID + " = " + insertId, null, null,
-                            null, null);
-                    cursor.moveToFirst();
-                    cursor.close();
+                            null, null)) {
+                        cursor.moveToFirst();
+                    }
                 }
 
             } catch (final IllegalStateException e) {
@@ -735,7 +731,7 @@ public class DBSpeech extends SQLiteOpenHelper {
                 }
             } finally {
                 try {
-                    if (database.isOpen()) {
+                    if (database != null && database.isOpen()) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "insertRow: finally closing");
                         }

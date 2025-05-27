@@ -106,11 +106,11 @@ public class DBCustomReplacement extends SQLiteOpenHelper {
                 values.put(COLUMN_SERIALISED, serialised);
 
                 insertId = database.insert(TABLE_CUSTOM_REPLACEMENT, null, values);
-                final Cursor cursor = database.query(TABLE_CUSTOM_REPLACEMENT, ALL_COLUMNS,
+                try (Cursor cursor = database.query(TABLE_CUSTOM_REPLACEMENT, ALL_COLUMNS,
                         COLUMN_ID + " = " + insertId, null, null,
-                        null, null);
-                cursor.moveToFirst();
-                cursor.close();
+                        null, null)) {
+                    cursor.moveToFirst();
+                }
                 success = true;
             }
 
@@ -131,7 +131,7 @@ public class DBCustomReplacement extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "insertPopulatedRow: finally closing");
                     }
@@ -193,7 +193,7 @@ public class DBCustomReplacement extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     close();
                 }
             } catch (IllegalStateException e) {
@@ -255,7 +255,7 @@ public class DBCustomReplacement extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -293,15 +293,15 @@ public class DBCustomReplacement extends SQLiteOpenHelper {
             MyLog.i(CLS_NAME, "getReplacements");
         }
         final ArrayList<CustomReplacement> replacements = new ArrayList<>();
-        Cursor cursor = null;
         try {
             open();
             if (database.isOpen()) {
-                cursor = database.query(TABLE_CUSTOM_REPLACEMENT, ALL_COLUMNS, null, null, null, null, null);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    replacements.add(new CustomReplacement(cursor.getString(1), cursor.getString(2), cursor.getLong(0), cursor.getString(3)));
-                    cursor.moveToNext();
+                try (Cursor cursor = database.query(TABLE_CUSTOM_REPLACEMENT, ALL_COLUMNS, null, null, null, null, null)) {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        replacements.add(new CustomReplacement(cursor.getString(1), cursor.getString(2), cursor.getLong(0), cursor.getString(3)));
+                        cursor.moveToNext();
+                    }
                 }
             }
         } catch (IllegalStateException e) {
@@ -321,31 +321,23 @@ public class DBCustomReplacement extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (cursor != null && cursor.isClosed()) {
-                    cursor.close();
+                if (database != null && database.isOpen()) {
+                    close();
                 }
-            } catch (Throwable t) {
-                MyLog.w(CLS_NAME, "getApplications: Throwable");
-            } finally {
-                try {
-                    if (database.isOpen()) {
-                        close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getReplacements: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getReplacements: SQLException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getReplacements: Exception");
-                        e.printStackTrace();
-                    }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getReplacements: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getReplacements: SQLException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getReplacements: Exception");
+                    e.printStackTrace();
                 }
             }
         }

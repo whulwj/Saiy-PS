@@ -103,11 +103,11 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
                 values.put(COLUMN_VALUE, value);
 
                 insertId = database.insert(TABLE_TASKER_VARIABLE, null, values);
-                final Cursor cursor = database.query(TABLE_TASKER_VARIABLE, ALL_COLUMNS,
+                try (Cursor cursor = database.query(TABLE_TASKER_VARIABLE, ALL_COLUMNS,
                         COLUMN_ID + " = " + insertId, null, null,
-                        null, null);
-                cursor.moveToFirst();
-                cursor.close();
+                        null, null)) {
+                    cursor.moveToFirst();
+                }
                 success = true;
             }
 
@@ -128,7 +128,7 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "insertPopulatedRow: finally closing");
                     }
@@ -190,7 +190,7 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     close();
                 }
             } catch (IllegalStateException e) {
@@ -252,7 +252,7 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -290,15 +290,15 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
             MyLog.i(CLS_NAME, "getVariables");
         }
         final ArrayList<TaskerVariable> variables = new ArrayList<>();
-        Cursor cursor = null;
         try {
             open();
             if (database.isOpen()) {
-                cursor = database.query(TABLE_TASKER_VARIABLE, ALL_COLUMNS, null, null, null, null, null);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    variables.add(new TaskerVariable(cursor.getString(1), cursor.getString(2), cursor.getLong(0)));
-                    cursor.moveToNext();
+                try (Cursor cursor = database.query(TABLE_TASKER_VARIABLE, ALL_COLUMNS, null, null, null, null, null)) {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        variables.add(new TaskerVariable(cursor.getString(1), cursor.getString(2), cursor.getLong(0)));
+                        cursor.moveToNext();
+                    }
                 }
             }
         } catch (IllegalStateException e) {
@@ -318,31 +318,23 @@ public class DBTaskerVariable extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (cursor != null && cursor.isClosed()) {
-                    cursor.close();
+                if (database != null && database.isOpen()) {
+                    close();
                 }
-            } catch (Throwable t) {
-                MyLog.w(CLS_NAME, "getApplications: Throwable");
-            } finally {
-                try {
-                    if (database.isOpen()) {
-                        close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getVariables: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getVariables: SQLException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getVariables: Exception");
-                        e.printStackTrace();
-                    }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getVariables: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getVariables: SQLException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getVariables: Exception");
+                    e.printStackTrace();
                 }
             }
         }

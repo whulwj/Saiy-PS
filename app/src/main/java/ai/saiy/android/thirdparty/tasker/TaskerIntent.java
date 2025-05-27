@@ -418,19 +418,16 @@ public class TaskerIntent extends Intent {
 
         String[] proj = new String[]{col};
 
-        Cursor c = context.getContentResolver().query(Uri.parse(TASKER_PREFS_URI), proj, null, null, null);
-
         boolean acceptingFlag = false;
+        try (Cursor c = context.getContentResolver().query(Uri.parse(TASKER_PREFS_URI), proj, null, null, null)) {
+            if (c == null) {
+                Log.w(TAG, "no cursor for " + TASKER_PREFS_URI);
+            } else {
+                c.moveToFirst();
 
-        if (c == null) {
-            Log.w(TAG, "no cursor for " + TASKER_PREFS_URI);
-        } else {
-            c.moveToFirst();
-
-            if (Boolean.TRUE.toString().equals(c.getString(0)))
-                acceptingFlag = true;
-
-            c.close();
+                if (Boolean.TRUE.toString().equals(c.getString(0)))
+                    acceptingFlag = true;
+            }
         }
 
         return acceptingFlag;

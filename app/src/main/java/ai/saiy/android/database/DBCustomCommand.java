@@ -161,7 +161,7 @@ public class DBCustomCommand extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -220,11 +220,11 @@ public class DBCustomCommand extends SQLiteOpenHelper {
                 values.put(COLUMN_SERIALISED, serialised);
 
                 insertId = database.insert(TABLE_CUSTOM_COMMANDS, null, values);
-                final Cursor cursor = database.query(TABLE_CUSTOM_COMMANDS, ALL_COLUMNS,
+                try (Cursor cursor = database.query(TABLE_CUSTOM_COMMANDS, ALL_COLUMNS,
                         COLUMN_ID + " = " + insertId, null, null,
-                        null, null);
-                cursor.moveToFirst();
-                cursor.close();
+                        null, null)) {
+                    cursor.moveToFirst();
+                }
                 success = true;
             }
 
@@ -245,7 +245,7 @@ public class DBCustomCommand extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "insertPopulatedRow: finally closing");
                     }
@@ -324,7 +324,7 @@ public class DBCustomCommand extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     close();
                 }
             } catch (final IllegalStateException e) {
@@ -384,7 +384,7 @@ public class DBCustomCommand extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     close();
                 }
             } catch (final IllegalStateException e) {
@@ -418,19 +418,19 @@ public class DBCustomCommand extends SQLiteOpenHelper {
         }
 
         final ArrayList<CustomCommandContainer> keyPhrases = new ArrayList<>();
-        Cursor cursor = null;
         try {
             open();
 
             if (database.isOpen()) {
-                cursor = database.query(TABLE_CUSTOM_COMMANDS,
-                        ALL_COLUMNS, null, null, null, null, null);
+                try (Cursor cursor = database.query(TABLE_CUSTOM_COMMANDS,
+                        ALL_COLUMNS, null, null, null, null, null)) {
 
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    keyPhrases.add(new CustomCommandContainer(cursor.getLong(0), cursor.getString(1),
-                            cursor.getString(2), cursor.getString(3)));
-                    cursor.moveToNext();
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        keyPhrases.add(new CustomCommandContainer(cursor.getLong(0), cursor.getString(1),
+                                cursor.getString(2), cursor.getString(3)));
+                        cursor.moveToNext();
+                    }
                 }
             }
         } catch (final IllegalStateException e) {
@@ -450,31 +450,23 @@ public class DBCustomCommand extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (cursor != null && cursor.isClosed()) {
-                    cursor.close();
+                if (database != null && database.isOpen()) {
+                    close();
                 }
-            } catch (Throwable t) {
-                MyLog.w(CLS_NAME, "getContacts: Throwable");
-            } finally {
-                try {
-                    if (database.isOpen()) {
-                        close();
-                    }
-                } catch (final IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getKeyphrases: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (final SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getKeyphrases: SQLException");
-                        e.printStackTrace();
-                    }
-                } catch (final Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getKeyphrases: Exception");
-                        e.printStackTrace();
-                    }
+            } catch (final IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getKeyphrases: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (final SQLException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getKeyphrases: SQLException");
+                    e.printStackTrace();
+                }
+            } catch (final Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getKeyphrases: Exception");
+                    e.printStackTrace();
                 }
             }
         }
@@ -526,9 +518,8 @@ public class DBCustomCommand extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
         } finally {
-
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     close();
                 }
             } catch (final IllegalStateException e) {

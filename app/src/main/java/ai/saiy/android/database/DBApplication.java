@@ -84,7 +84,7 @@ public class DBApplication extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     close();
                 }
             } catch (IllegalStateException e) {
@@ -140,7 +140,7 @@ public class DBApplication extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (database.isOpen()) {
+                if (database != null && database.isOpen()) {
                     if (DEBUG) {
                         MyLog.i(CLS_NAME, "deleteTable: finally closing");
                     }
@@ -178,15 +178,15 @@ public class DBApplication extends SQLiteOpenHelper {
         }
         final long then = System.nanoTime();
         final ArrayList<Pair<String, String>> applications = new ArrayList<>();
-        Cursor cursor = null;
         try {
             open();
             if (database.isOpen()) {
-                cursor = database.query(TABLE_APPLICATION, ALL_COLUMNS, null, null, null, null, null);
-                cursor.moveToFirst();
-                while (!cursor.isAfterLast()) {
-                    applications.add(new Pair<>(cursor.getString(1), cursor.getString(2)));
-                    cursor.moveToNext();
+                try (Cursor cursor = database.query(TABLE_APPLICATION, ALL_COLUMNS, null, null, null, null, null)) {
+                    cursor.moveToFirst();
+                    while (!cursor.isAfterLast()) {
+                        applications.add(new Pair<>(cursor.getString(1), cursor.getString(2)));
+                        cursor.moveToNext();
+                    }
                 }
             }
         } catch (IllegalStateException illegalStateException) {
@@ -206,31 +206,23 @@ public class DBApplication extends SQLiteOpenHelper {
             }
         } finally {
             try {
-                if (cursor != null && cursor.isClosed()) {
-                    cursor.close();
+                if (database != null && database.isOpen()) {
+                    close();
                 }
-            } catch (Throwable t) {
-                MyLog.w(CLS_NAME, "getApplications: Throwable");
-            } finally {
-                try {
-                    if (database.isOpen()) {
-                        close();
-                    }
-                } catch (IllegalStateException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
-                        e.printStackTrace();
-                    }
-                } catch (SQLException e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getApplications: SQLException");
-                        e.printStackTrace();
-                    }
-                } catch (Exception e) {
-                    if (DEBUG) {
-                        MyLog.w(CLS_NAME, "getApplications: Exception");
-                        e.printStackTrace();
-                    }
+            } catch (IllegalStateException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getApplications: IllegalStateException");
+                    e.printStackTrace();
+                }
+            } catch (SQLException e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getApplications: SQLException");
+                    e.printStackTrace();
+                }
+            } catch (Exception e) {
+                if (DEBUG) {
+                    MyLog.w(CLS_NAME, "getApplications: Exception");
+                    e.printStackTrace();
                 }
             }
         }

@@ -100,7 +100,6 @@ public class CalendarHelper {
             MyLog.i(CLS_NAME, "getEvents");
         }
         final long startTime = System.nanoTime();
-        final ArrayList<Cursor> cursors = new ArrayList<>();
         final ContentResolver contentResolver = context.getContentResolver();
         final Uri.Builder buildUpon = CalendarContract.Instances.CONTENT_URI.buildUpon();
         ContentUris.appendId(buildUpon, beginTimestamp);
@@ -113,9 +112,10 @@ public class CalendarHelper {
         try {
             ArrayList<String> attendees = new ArrayList<>();
             for (Account account : arrayList) {
-                Cursor cursor = contentResolver.query(buildUpon.build(), eventProjection, CalendarContract.Instances.CALENDAR_ID + "=" + account.getCalendarID(), null, CalendarContract.Instances.START_DAY + " ASC, " + CalendarContract.Instances.START_MINUTE + " ASC");
-                if (cursor != null) {
-                    cursors.add(cursor);
+                try (Cursor cursor = contentResolver.query(buildUpon.build(), eventProjection, CalendarContract.Instances.CALENDAR_ID + "=" + account.getCalendarID(), null, CalendarContract.Instances.START_DAY + " ASC, " + CalendarContract.Instances.START_MINUTE + " ASC")) {
+                    if (cursor == null) {
+                        continue;
+                    }
                     int columnBeginIndex = cursor.getColumnIndex(CalendarContract.Instances.BEGIN);
                     int columnEndIndex = cursor.getColumnIndex(CalendarContract.Instances.END);
                     int columnTitleIndex = cursor.getColumnIndex(CalendarContract.Instances.TITLE);
@@ -136,27 +136,23 @@ public class CalendarHelper {
                             MyLog.d(CLS_NAME, "allDay: " + cursor.getInt(columnAllDayIndex));
                             MyLog.d(CLS_NAME, "Location: " + cursor.getString(columnLocationIndex));
                         }
-                        Cursor attendeeCursor = CalendarContract.Attendees.query(contentResolver, cursor.getLong(columnEventIdIndex), attendeesProjection);
                         attendees.clear();
-                        if (attendeeCursor != null) {
-                            cursors.add(attendeeCursor);
-                            int columnNameIndex = attendeeCursor.getColumnIndex(CalendarContract.Attendees.ATTENDEE_NAME);
-                            while (attendeeCursor.moveToNext()) {
-                                String name = attendeeCursor.getString(columnNameIndex);
-                                if (UtilsString.notNaked(name)) {
-                                    attendees.add(name);
+                        try (Cursor attendeeCursor = CalendarContract.Attendees.query(contentResolver, cursor.getLong(columnEventIdIndex), attendeesProjection)) {
+                            if (attendeeCursor != null) {
+                                int columnNameIndex = attendeeCursor.getColumnIndex(CalendarContract.Attendees.ATTENDEE_NAME);
+                                while (attendeeCursor.moveToNext()) {
+                                    String name = attendeeCursor.getString(columnNameIndex);
+                                    if (UtilsString.notNaked(name)) {
+                                        attendees.add(name);
+                                    }
                                 }
                             }
-                            attendeeCursor.close();
-                            cursors.remove(attendeeCursor);
                         }
                         if (DEBUG) {
                             MyLog.d(CLS_NAME, "attendees: " + attendees.size() + " : " + attendees);
                         }
                         events.add(new Event(cursor.getString(columnTitleIndex), beginTimeCalendar.getTime(), endTimeCalendar.getTime(), cursor.getInt(columnAllDayIndex) > 0, attendees, cursor.getString(columnLocationIndex)));
                     }
-                    cursor.close();
-                    cursors.remove(cursor);
                 }
             }
         } catch (IllegalStateException e) {
@@ -172,18 +168,6 @@ public class CalendarHelper {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "Exception");
                 e.printStackTrace();
-            }
-        } finally {
-            for (Cursor cursor: cursors) {
-                try {
-                    if (cursor != null && !cursor.isClosed()) {
-                        cursor.close();
-                    }
-                } catch (Throwable ignored) {
-                }
-            }
-            if (DEBUG && !cursors.isEmpty()) {
-                MyLog.d(CLS_NAME, "getEvents finally closed" );
             }
         }
         if (DEBUG) {
