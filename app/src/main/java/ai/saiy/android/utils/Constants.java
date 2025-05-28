@@ -40,7 +40,7 @@ public final class Constants {
     public static final String SAIY_BILLING_EMAIL = "billing@saiy.ai";
     public static final String SAIY_ENQUIRIES_EMAIL = "commercial@saiy.ai";
     public static final String SAIY_FEEDBACK_EMAIL = "feedback@saiy.ai";
-    public static final String SAIY_GITHUB_URL = "https://github.com/brandall76/saiy";
+    public static final String SAIY_GITHUB_URL = "https://github.com/whulwj/Saiy-PS/";
     public static final String SAIY_TWITTER_HANDLE = "http://twitter.com/brandall76";
     public static final String SAIY_GOOGLE_PLUS_URL = "https://plus.google.com/100131487913427971091";
     public static final String SAIY_XDA_URL = "http://forum.xda-developers.com/showthread.php?t=1508195";

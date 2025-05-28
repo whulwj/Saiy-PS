@@ -20,8 +20,8 @@
     <string name="default_web_client_id" translatable="false">997068182928-rv7vtailtqrup3hdenre58gu5r56rim6.apps.googleusercontent.com</string>
     <!--https://developers.facebook.com/docs/android/getting-started-->
     <!--https://developers.facebook.com/apps-->
-    <string name="facebook_application_id" translatable="false">151121772049980</string>
-    <string name="facebook_client_token" translatable="false">CHANGE-ME-for-firebase-ui</string>
+    <string name="facebook_application_id" translatable="false">715835957796601</string>
+    <string name="facebook_client_token" translatable="false">b4a46918ca2077ac16f452f338c5c0ef</string>
 
     <string name="reward_id" translatable="false">ca-app-pub-2988542829837428/4063099553</string>
     <string name="interstitial_fragment_id" translatable="false">ca-app-pub-2988542829837428/8011751723</string>
