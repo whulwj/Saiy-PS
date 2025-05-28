@@ -59,7 +59,7 @@ public class BingTranslateAPI {
     private static final boolean DEBUG = MyLog.DEBUG;
     private final String CLS_NAME = BingTranslateAPI.class.getSimpleName();
 
-    private static final String SERVICE_URL = "http://api.microsofttranslator.com/V2/Ajax.svc/Translate?";
+    private static final String SERVICE_URL = "https://api.microsofttranslator.com/V2/Ajax.svc/Translate?";
     private static final String HEADER_CONTENT_TYPE = "application/x-www-form-urlencoded; charset=UTF-8";
     private static final String ENCODING = "UTF-8";
     private static final String PARAM_TO_LANGUAGE = "&to=";
