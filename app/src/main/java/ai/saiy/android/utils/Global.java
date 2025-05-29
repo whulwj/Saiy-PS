@@ -34,7 +34,7 @@ import com.google.android.material.color.ColorContrast;
 import com.google.android.material.color.ColorContrastOptions;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.appcheck.FirebaseAppCheck;
-import com.google.firebase.appcheck.debug.DebugAppCheckProviderFactory;
+import com.google.firebase.appcheck.playintegrity.PlayIntegrityAppCheckProviderFactory;
 
 import java.io.IOException;
 
@@ -79,7 +79,7 @@ public class Global extends MultiDexApplication implements Application.ActivityL
         FirebaseApp.initializeApp(this);
         final FirebaseAppCheck firebaseAppCheck = FirebaseAppCheck.getInstance();
         firebaseAppCheck.installAppCheckProviderFactory(
-                DebugAppCheckProviderFactory.getInstance());
+                PlayIntegrityAppCheckProviderFactory.getInstance());
         registerActivityLifecycleCallbacks(this);
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
         ColorContrast.applyToActivitiesIfAvailable(
@@ -92,6 +92,7 @@ public class Global extends MultiDexApplication implements Application.ActivityL
         // TODO
         com.facebook.FacebookSdk.sdkInitialize(this);
         com.facebook.appevents.AppEventsLogger.activateApp(this);
+        com.google.firebase.database.FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         setGlobalId();
         authenticateGoogleCloud();
     }

@@ -99,7 +99,6 @@ public final class ViewModelFirebaseAuth extends AndroidViewModel implements Lif
         Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                com.google.firebase.database.FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 /*                final com.google.firebase.database.DatabaseReference databaseReference = com.google.firebase.database.FirebaseDatabase.getInstance().getReference(UtilsFirebase.DATABASE_READ);
                 databaseReference.child("bing").child("translate").keepSynced(true);
                 databaseReference.child("bing").child("speaker_recognition").keepSynced(true);
