@@ -136,6 +136,7 @@
     <string name="title_start_listening">Start Listening</string>
     <string name="action_save">保存</string>
     <string name="action_select_all">全部选择</string>
+    <string name="privacy_options_form_for_gdpr">GDPR隐私选项表</string>
     <string name="menu_voice_tutorial" translatable="true">语音教程</string>
     <string name="content_start_voice_tutorial">Would you like to start the Voice Tutorial?</string>
     <string name="menu_yes_please">Yes please!</string>

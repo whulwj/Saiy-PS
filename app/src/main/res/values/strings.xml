@@ -227,6 +227,7 @@
     <string name="title_start_listening">Start Listening</string>
     <string name="action_save">Save</string>
     <string name="action_select_all">Select All</string>
+    <string name="privacy_options_form_for_gdpr">GDPR Privacy Options Form</string>
     <string name="menu_voice_tutorial" translatable="true">Voice Tutorial</string>
     <string name="content_start_voice_tutorial">Would you like to start the Voice Tutorial?</string>
     <string name="menu_yes_please">Yes please!</string>

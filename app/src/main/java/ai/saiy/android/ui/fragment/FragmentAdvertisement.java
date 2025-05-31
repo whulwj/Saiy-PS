@@ -24,7 +24,6 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.FullScreenContentCallback;
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.interstitial.InterstitialAd;
 import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback;
 import com.google.android.gms.ads.rewarded.RewardItem;
@@ -39,6 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import javax.inject.Inject;
 
 import ai.saiy.android.R;
+import ai.saiy.android.advertisement.ViewModelConsent;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityHome;
@@ -46,6 +46,7 @@ import ai.saiy.android.ui.viewmodel.ViewModelAdvertisement;
 import ai.saiy.android.ui.viewmodel.ViewModelFirebaseAuth;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.PrivacyRepository;
 import ai.saiy.android.utils.SPH;
 import dagger.hilt.android.AndroidEntryPoint;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -63,6 +64,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
     private ProgressBar adProgress;
     private ViewModelFirebaseAuth viewModelFirebaseAuth;
     private ViewModelAdvertisement viewModelAdvertisement;
+    private ViewModelConsent mViewModelConsent;
     private volatile Disposable disposable;
 
     private boolean isAdLoaded;
@@ -95,7 +97,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
                             }
                             return;
                         }
-                        if (Boolean.TRUE.equals(viewModelFirebaseAuth.isAddFree().getValue())) {
+                        if (isAdFree()) {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "userAdFree true");
                             }
@@ -111,8 +113,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
                                     return;
                                 }
                                 try {
-                                    final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
-                                    adView.loadAd(adRequest);
+                                    adView.loadAd(PrivacyRepository.buildAdRequest(getApplicationContext()));
                                 } catch (Throwable t) {
                                     if (DEBUG) {
                                         MyLog.w(CLS_NAME, "onAdFailedToLoad retrying " + t.getClass().getSimpleName() + ", " + t.getMessage());
@@ -143,6 +144,10 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
         }
     };
 
+    private boolean isAdFree() {
+        return Boolean.TRUE.equals(viewModelFirebaseAuth.isAddFree().getValue()) || Boolean.TRUE.equals(mViewModelConsent.isEEAAdFree().getValue());
+    }
+
     @Override
     public void onAttach(@NonNull final Context context) {
         super.onAttach(context);
@@ -163,6 +168,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
         final ViewModelProvider viewModelProvider = new ViewModelProvider(getActivity());
         this.viewModelFirebaseAuth = viewModelProvider.get(ViewModelFirebaseAuth.class);
         this.viewModelAdvertisement = viewModelProvider.get(ViewModelAdvertisement.class);
+        this.mViewModelConsent = viewModelProvider.get(ViewModelConsent.class);
         return view;
     }
 
@@ -175,6 +181,14 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
             @Override
             public void onChanged(Boolean value) {
                 onDetermineAdFree(value);
+            }
+        });
+        mViewModelConsent.isEEAAdFree().observe(getViewLifecycleOwner(), new Observer<Boolean>() {
+            @Override
+            public void onChanged(Boolean value) {
+                if (Boolean.TRUE.equals(value)) {
+                    onDetermineAdFree(true);
+                }
             }
         });
     }
@@ -222,23 +236,21 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
             MyLog.i(CLS_NAME, "setupAdView");
         }
         adView.setAdListener(adListener);
-        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
-        adView.loadAd(adRequest);
+        adView.loadAd(PrivacyRepository.buildAdRequest(getApplicationContext()));
     }
 
     public void runInterstitial() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "runInterstitial");
         }
-        if (Boolean.TRUE.equals(viewModelFirebaseAuth.isAddFree().getValue())) {
+        if (isAdFree()) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "runInterstitial: userAdFree: true");
             }
             return;
         }
 
-        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
-        InterstitialAd.load(getApplicationContext(), getString(R.string.interstitial_fragment_id), adRequest, new InterstitialAdLoadCallback() {
+        InterstitialAd.load(getApplicationContext(), getString(R.string.interstitial_fragment_id), PrivacyRepository.buildAdRequest(getApplicationContext()), new InterstitialAdLoadCallback() {
             @Override
             public void onAdLoaded(@NonNull InterstitialAd interstitialAd) {
                 super.onAdLoaded(interstitialAd);
@@ -246,7 +258,7 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onAdLoaded: interstitial");
                 }
-                if (!Boolean.TRUE.equals(viewModelFirebaseAuth.isAddFree().getValue())) {
+                if (!isAdFree()) {
                     try {
                         interstitialAd.show(getParentActivity());
                     } catch (Throwable t) {
@@ -329,10 +341,9 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
         if (DEBUG) {
             MyLog.i(CLS_NAME, "loadReward");
         }
-        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         isRewardLoading.set(true);
         RewardedAd.load(getParentActivity(), getString(R.string.reward_id),
-                adRequest, rewardedAdLoadCallback);
+                PrivacyRepository.buildAdRequest(getApplicationContext()), rewardedAdLoadCallback);
     }
 
     private final RewardedAdLoadCallback rewardedAdLoadCallback = new RewardedAdLoadCallback() {

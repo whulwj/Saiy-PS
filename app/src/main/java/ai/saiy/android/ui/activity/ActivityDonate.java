@@ -11,7 +11,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.ads.LoadAdError;
 import com.google.android.gms.ads.OnUserEarnedRewardListener;
-import com.google.android.gms.ads.admanager.AdManagerAdRequest;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
@@ -22,6 +21,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.user.UserFirebaseHelper;
 import ai.saiy.android.utils.MyLog;
+import ai.saiy.android.utils.PrivacyRepository;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsToast;
@@ -36,9 +36,8 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onCreate");
         }
-        final AdManagerAdRequest adRequest = new AdManagerAdRequest.Builder().build();
         RewardedAd.load(this, getString(R.string.reward_id),
-                adRequest, rewardedAdLoadCallback);
+                PrivacyRepository.buildAdRequest(getApplicationContext()), rewardedAdLoadCallback);
     }
 
     private boolean isActive() {

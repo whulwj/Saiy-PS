@@ -2537,6 +2537,7 @@ public class SPH {
             edit.putString(STAR_SIGN, CommandHoroscopeValues.Sign.UNKNOWN.name());
         }
         edit.apply();
+        PrivacyRepository.setDateOfBirth(year, month, dayOfMonth);
     }
 
     public static String getUserAttendeeName(Context context) {

@@ -54,6 +54,7 @@ import com.google.android.material.snackbar.Snackbar;
 import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
+import ai.saiy.android.advertisement.ViewModelConsent;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.configuration.GoogleConfiguration;
 import ai.saiy.android.intent.ExecuteIntent;
@@ -138,6 +139,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     private ProgressBar progressBar;
     private NavigationView navigationView;
     private Menu menu;
+    private ViewModelConsent mViewModelConsent;
     private FragmentAdvertisement fragmentAdvertisement;
 
     private final ActivityHomeHelper helper = new ActivityHomeHelper();
@@ -150,6 +152,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         final ViewModelProvider viewModelProvider = new ViewModelProvider(this);
         this.viewModelFirebaseAuth = viewModelProvider.get(ViewModelFirebaseAuth.class);
         this.viewModelBilling = viewModelProvider.get(ViewModelBilling.class);
+        this.mViewModelConsent = viewModelProvider.get(ViewModelConsent.class);
         final Lifecycle lifecycle = getLifecycle();
         lifecycle.addObserver(viewModelFirebaseAuth);
         lifecycle.addObserver(viewModelBilling);
@@ -167,6 +170,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
                     ANIMATION_NONE);
         }
 
+        mViewModelConsent.getConsentStatus(this);
         setupUI();
     }
 
@@ -669,6 +673,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             menu.findItem(R.id.action_power).setVisible(true);
             menu.findItem(R.id.action_mic).setVisible(true);
         }
+        menu.findItem(R.id.action_privacy_options_for_gdpr).setVisible(mViewModelConsent.getConsentManager().areGDPRConsentMessagesRequired());
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -717,6 +722,9 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
             final LocalRequest localRequest = new LocalRequest(getApplicationContext());
             localRequest.prepareIntro();
             localRequest.execute();
+            return true;
+        } else if (item.getItemId() == R.id.action_privacy_options_for_gdpr) {
+            mViewModelConsent.showPrivacyOptionsForm(this, findViewById(R.id.toolbar));
             return true;
         }
         return super.onOptionsItemSelected(item);
