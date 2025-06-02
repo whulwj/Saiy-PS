@@ -472,7 +472,7 @@
             android:name="ai.saiy.android.service.SelfAware"
             android:enabled="true"
             android:exported="true"
-            android:foregroundServiceType="shortService"
+            android:foregroundServiceType="microphone"
             android:permission="ai.saiy.android.permission.CONTROL_SAIY">
         </service>
 
