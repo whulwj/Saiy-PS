@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 
 import java.io.File;
@@ -760,9 +761,17 @@ public abstract class SaiyTextToSpeech extends TextToSpeech {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "setVoiceDeprecated: checking standard match");
             }
-            locale = SupportedLanguage.getSupportedLanguage(getDefaultLanguage()).getLocale();
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "setVoiceDeprecated: SupportedLanguage: defaultEngineLocale: " + locale);
+            final @Nullable Locale defaultLanguage = getDefaultLanguage();
+            if (defaultLanguage != null) {
+                locale = SupportedLanguage.getSupportedLanguage(defaultLanguage).getLocale();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: SupportedLanguage: defaultEngineLocale: " + locale);
+                }
+            } else {
+                locale = SupportedLanguage.getSupportedLanguage(locale).getLocale();
+                if (DEBUG) {
+                    MyLog.i(CLS_NAME, "setVoiceDeprecated: SupportedLanguage: locale: " + locale);
+                }
             }
             if (!UtilsLocale.localesMatch(getLanguage(), locale)) {
                 MyLog.i(CLS_NAME, "setVoiceDeprecated: locales not matched");

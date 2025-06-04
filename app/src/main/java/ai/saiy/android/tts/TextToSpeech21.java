@@ -958,7 +958,7 @@ public final class TextToSpeech21 extends SaiyTextToSpeech {
 
                 try {
                     final Locale defaultLanguage = getDefaultLanguage();
-                    MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage.toString());
+                    MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage);
                 } catch (final NullPointerException e) {
                     MyLog.w(CLS_NAME, "NullPointerException");
                     e.printStackTrace();

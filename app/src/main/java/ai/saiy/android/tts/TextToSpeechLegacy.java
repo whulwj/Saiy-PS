@@ -87,7 +87,7 @@ public final class TextToSpeechLegacy extends SaiyTextToSpeech {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
                     try {
                         final Locale defaultLanguage = TextToSpeechLegacy.this.getDefaultLanguage();
-                        MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage.toString());
+                        MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage);
                     } catch (final NullPointerException e) {
                         MyLog.w(CLS_NAME, "NullPointerException");
                         e.printStackTrace();
