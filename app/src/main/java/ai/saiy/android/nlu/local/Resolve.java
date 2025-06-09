@@ -283,13 +283,21 @@ public final class Resolve {
             final List<Future<ArrayList<Pair<CC, Float>>>> futures = new ArrayList<>(callableList.size());
             final long timeout = THREADS_TIMEOUT / callableList.size();
             for (Callable<ArrayList<Pair<CC, Float>>> callable : callableList) {
-                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.computation()).toFuture());
+                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.computation()).onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).toFuture());
             }
 
+            ArrayList<Pair<CC, Float>> pairs;
             for (final Future<ArrayList<Pair<CC, Float>>> future : futures) {
-                pairList.add(future.get());
+                pairs = future.get();
+                if (pairs != null) {
+                    pairList.add(pairs);
+                }
             }
-
         } catch (final ExecutionException e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "future: ExecutionException" + ", " + e.getMessage());

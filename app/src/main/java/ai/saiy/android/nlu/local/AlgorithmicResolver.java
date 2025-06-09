@@ -44,7 +44,7 @@ import ai.saiy.android.algorithms.mongeelkan.MongeElkanHelper;
 import ai.saiy.android.algorithms.needlemanwunch.NeedlemanWunschHelper;
 import ai.saiy.android.algorithms.soundex.SoundexHelper;
 import ai.saiy.android.utils.MyLog;
-import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -151,7 +151,12 @@ public class AlgorithmicResolver<T> {
             final List<Future<AlgorithmicContainer>> futures = new ArrayList<>(callableList.size());
             final long timeout = THREADS_TIMEOUT / callableList.size();
             for (Callable<AlgorithmicContainer> callable : callableList) {
-                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture());
+                futures.add(Maybe.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).toFuture());
             }
 
             AlgorithmicContainer algorithmicContainer;
@@ -320,7 +325,12 @@ public class AlgorithmicResolver<T> {
             final List<Future<List<AlgorithmicContainer>>> futures = new ArrayList<>(callableList.size());
             final long timeout = THREADS_TIMEOUT / callableList.size();
             for (Callable<List<AlgorithmicContainer>> callable : callableList) {
-                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture());
+                futures.add(Maybe.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return Collections.emptyList();
+                }).toFuture());
             }
 
             List<AlgorithmicContainer> algorithmicContainers;

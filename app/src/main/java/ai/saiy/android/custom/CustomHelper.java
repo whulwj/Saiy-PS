@@ -44,7 +44,7 @@ import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
-import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -74,10 +74,30 @@ public class CustomHelper {
             ArrayList<CustomReplacement> customReplacementArray = null;
 
             try {
-                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = Maybe.fromCallable(new DBCustomNicknameCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).toFuture();
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Maybe.fromCallable(new DBCustomPhraseCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).toFuture();
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Maybe.fromCallable(new DBCustomCommandCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).toFuture();
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Maybe.fromCallable(new DBCustomReplacementCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).subscribeOn(Schedulers.io()).toFuture();
                 customNicknameArray = customNicknameFuture.get();
                 customPhraseArray = customPhraseFuture.get();
                 customCommandContainerArray = customCommandContainerFuture.get();
@@ -167,10 +187,30 @@ public class CustomHelper {
             final ArrayList<CustomReplacement> customReplacementArray = new ArrayList<>();
 
             try {
-                final Future<ArrayList<CustomNickname>> customNicknameFuture = Single.fromCallable(new DBCustomNicknameCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Single.fromCallable(new DBCustomPhraseCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Single.fromCallable(new DBCustomCommandCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
-                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Single.fromCallable(new DBCustomReplacementCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture();
+                final Future<ArrayList<CustomNickname>> customNicknameFuture = Maybe.fromCallable(new DBCustomNicknameCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return new ArrayList<>();
+                }).toFuture();
+                final Future<ArrayList<CustomPhrase>> customPhraseFuture = Maybe.fromCallable(new DBCustomPhraseCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return new ArrayList<>();
+                }).toFuture();
+                final Future<ArrayList<CustomCommandContainer>> customCommandContainerFuture = Maybe.fromCallable(new DBCustomCommandCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return new ArrayList<>();
+                }).toFuture();
+                final Future<ArrayList<CustomReplacement>> customReplacementFuture = Maybe.fromCallable(new DBCustomReplacementCallable(ctx)).timeout(THREADS_TIMEOUT, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorReturn(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return new ArrayList<>();
+                }).toFuture();
                 customNicknameArray.addAll(customNicknameFuture.get());
                 customPhraseArray.addAll(customPhraseFuture.get());
                 customCommandContainerArray.addAll(customCommandContainerFuture.get());

@@ -62,7 +62,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
-import io.reactivex.rxjava3.core.Single;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
 /**
@@ -285,7 +285,12 @@ public class CustomCommandHelper {
             final List<Future<CustomCommand>> futures = new ArrayList<>(callableList.size());
             final long timeout = THREADS_TIMEOUT / callableList.size();
             for (Callable<CustomCommand> callable : callableList) {
-                futures.add(Single.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).toFuture());
+                futures.add(Maybe.fromCallable(callable).timeout(timeout, TimeUnit.MILLISECONDS, Schedulers.computation()).subscribeOn(Schedulers.io()).onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "future: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).toFuture());
             }
 
             CustomCommand customCommand;
