@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.location.Location;
 import android.net.ParseException;
 import android.net.Uri;
 import android.util.Pair;
@@ -29,6 +28,7 @@ import java.util.TimeZone;
 import javax.net.ssl.HttpsURLConnection;
 
 import ai.saiy.android.applications.Installed;
+import ai.saiy.android.location.LocalLocation;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsLocale;
@@ -92,7 +92,7 @@ public class FoursquareHelper {
         }
     }
 
-    public Pair<Boolean, VenuesResponse> searchVenues(@NonNull Location location, String token) {
+    public Pair<Boolean, VenuesResponse> searchVenues(@NonNull LocalLocation location, String token) {
         final long then = System.nanoTime();
         try {
             this.httpURLConnection = (HttpURLConnection) new URL("https://api.foursquare.com/v2/venues/search?ll=" + (location.getLatitude() + XMLResultsHandler.SEP_COMMA + location.getLongitude()) + "&oauth_token=" + token + "&v=" + time(System.currentTimeMillis())).openConnection();

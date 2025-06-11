@@ -1,7 +1,6 @@
 package ai.saiy.android.command.weather;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -25,6 +24,7 @@ import ai.saiy.android.firebase.database.read.WeatherProvider;
 import ai.saiy.android.firebase.database.reference.OpenWeatherMapReference;
 import ai.saiy.android.firebase.database.reference.WeatherOnlineReference;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.location.LocalLocation;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
@@ -51,7 +51,7 @@ public class CommandWeather {
         return outcome;
     }
 
-    private String getUrl(Context context, @NonNull Location location) {
+    private String getUrl(Context context, @NonNull LocalLocation location) {
         Pair<Boolean, String> authPair;
         if (SPH.getWeatherProvider(context) == WeatherProvider.WEATHER_ONLINE) {
             authPair = new WeatherOnlineReference().getAPIKey(context);
@@ -128,17 +128,17 @@ public class CommandWeather {
             outcome.setOutcome(Outcome.FAILURE);
             return returnOutcome(outcome);
         } else {
-            Location location;
+            LocalLocation location;
             if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER || GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
                 final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
-                location = locationHelper.getLastKnownLocation(context);
+                location = locationHelper.getLocation(context);
             } else {
                 final FusedLocationHelper fusedLocationHelper = new FusedLocationHelper();
                 fusedLocationHelper.prepare(context);
-                location = fusedLocationHelper.getLastLocation();
+                location = fusedLocationHelper.getLocation();
                 fusedLocationHelper.destroy();
             }
-            if (location != null) {
+            if (location != null && !location.isFake()) {
                 urls.add(getUrl(context, location));
                 isIndoor = true;
             } else {

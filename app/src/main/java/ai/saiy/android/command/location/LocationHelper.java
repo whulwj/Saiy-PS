@@ -1,24 +1,31 @@
 package ai.saiy.android.command.location;
 
+import android.Manifest;
 import android.content.Context;
 import android.location.Address;
-import android.location.Location;
 import android.location.LocationManager;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.PermissionChecker;
+import androidx.core.location.LocationManagerCompat;
 
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import ai.saiy.android.R;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.location.AndroidLocationService;
+import ai.saiy.android.location.LocalLocation;
+import ai.saiy.android.location.LocationService;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 
 public class LocationHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
@@ -61,29 +68,29 @@ public class LocationHelper {
         return new Pair<>(false, null);
     }
 
-    public @Nullable Location getLastKnownLocation(Context context) {
+    public @Nullable LocalLocation getLocation(Context context) {
         if (DEBUG) {
-            MyLog.i(CLS_NAME, "getLastKnownLocation");
+            MyLog.i(CLS_NAME, "getLocation");
         }
-        final LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-        final List<String> providers = locationManager.getProviders(true);
-        Location location = null;
-        for (int i = providers.size() - 1; i >= 0; --i) {
-            try {
-                location = locationManager.getLastKnownLocation(providers.get(i));
-            } catch (SecurityException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "SecurityException");
-                }
+        if (PermissionChecker.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PermissionChecker.PERMISSION_GRANTED &&
+                PermissionChecker.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PermissionChecker.PERMISSION_GRANTED) {
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "no location permission");
             }
-            if (location != null) {
-                return location;
-            }
+            return null;
         }
-        return null;
+        final LocationService locationService = new AndroidLocationService(context);
+        return locationService.getCurrentLocation(true, LocationHelper.isLocationEnabled(context)? LocationService.LOCATION_REQUEST_TIME_OUT:LocationService.LOCAL_LOCATION_REQUEST_TIME_OUT, TimeUnit.MILLISECONDS)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .onErrorComplete(throwable -> {
+                    if (DEBUG) {
+                        MyLog.w(CLS_NAME, "onError: " + throwable.getClass().getSimpleName() + ", " + throwable.getMessage());
+                    }
+                    return true;
+                }).blockingGet();
     }
 
-    public @NonNull Pair<Boolean, String> getAddress(Context context, SupportedLanguage sl, @NonNull Location location) {
+    public @NonNull Pair<Boolean, String> getAddress(Context context, SupportedLanguage sl, @NonNull LocalLocation location) {
         final long then = System.nanoTime();
         try {
             final android.location.Geocoder geocoder = new android.location.Geocoder(context, UtilsLocale.getDefaultLocale());
@@ -112,5 +119,13 @@ public class LocationHelper {
             MyLog.getElapsed(CLS_NAME, then);
         }
         return new Pair<>(false, null);
+    }
+
+    /**
+     * Adapted from <a href="http://stackoverflow.com/a/22980843/4248895" />.
+     */
+    public static boolean isLocationEnabled(Context context) {
+        final LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
+        return LocationManagerCompat.isLocationEnabled(lm);
     }
 }

@@ -1,7 +1,6 @@
 package ai.saiy.android.command.location.address;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -11,6 +10,7 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.location.LocalLocation;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
@@ -26,16 +26,16 @@ public class CommandLocation {
         final Outcome outcome = new Outcome();
         if (ai.saiy.android.permissions.PermissionHelper.checkLocationPermissions(context, cr.getBundle())) {
             final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
-            Location location;
+            LocalLocation location;
             if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER || GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
-                location = locationHelper.getLastKnownLocation(context);
+                location = locationHelper.getLocation(context);
             } else {
                 final ai.saiy.android.command.location.helper.FusedLocationHelper fusedLocationHelper = new ai.saiy.android.command.location.helper.FusedLocationHelper();
                 fusedLocationHelper.prepare(context);
-                location = fusedLocationHelper.getLastLocation();
+                location = fusedLocationHelper.getLocation();
                 fusedLocationHelper.destroy();
             }
-            if (location != null) {
+            if (location != null && !location.isFake()) {
                 final Pair<Boolean, String> addressPair = locationHelper.getAddress(context, supportedLanguage, location);
                 if (addressPair.first && UtilsString.notNaked(addressPair.second)) {
                     outcome.setUtterance(addressPair.second);

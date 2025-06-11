@@ -20,7 +20,6 @@ package ai.saiy.android.utils;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
-import android.location.Location;
 import android.os.Build;
 import android.util.Pair;
 
@@ -50,6 +49,7 @@ import ai.saiy.android.defaults.notes.NoteProvider;
 import ai.saiy.android.defaults.songrecognition.SongRecognitionProvider;
 import ai.saiy.android.firebase.database.read.WeatherProvider;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.location.LocalLocation;
 import ai.saiy.android.memory.Memory;
 import ai.saiy.android.recognition.provider.android.RecognitionNative;
 import ai.saiy.android.service.SelfAware;
@@ -2470,7 +2470,7 @@ public class SPH {
         return getPref(context).getInt(LOCATION_PROVIDER, Constants.FUSED_LOCATION_PROVIDER);
     }
 
-    public static void setLocation(Context context, @NonNull Location location) {
+    public static void setLocation(Context context, @NonNull LocalLocation location) {
         final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putString(VEHICLE_LOCATION_LAT, String.valueOf(location.getLatitude()));
         edit.putString(VEHICLE_LOCATION_LONG, String.valueOf(location.getLongitude()));

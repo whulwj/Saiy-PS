@@ -1,7 +1,6 @@
 package ai.saiy.android.command.foursquare;
 
 import android.content.Context;
-import android.location.Location;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -18,6 +17,7 @@ import ai.saiy.android.algorithms.Algorithm;
 import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.command.location.helper.FusedLocationHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.location.LocalLocation;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
@@ -88,17 +88,17 @@ public class CommandFoursquare {
             return returnOutcome(outcome);
         }
 
-        Location location;
+        LocalLocation location;
         if (SPH.getLocationProvider(context) == Constants.DEFAULT_LOCATION_PROVIDER || GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context) != ConnectionResult.SUCCESS) {
             final ai.saiy.android.command.location.LocationHelper locationHelper = new ai.saiy.android.command.location.LocationHelper();
-            location = locationHelper.getLastKnownLocation(context);
+            location = locationHelper.getLocation(context);
         } else {
             final FusedLocationHelper fusedLocationHelper = new FusedLocationHelper();
             fusedLocationHelper.prepare(context);
-            location = fusedLocationHelper.getLastLocation();
+            location = fusedLocationHelper.getLocation();
             fusedLocationHelper.destroy();
         }
-        if (location == null) {
+        if (location == null || location.isFake()) {
             outcome.setUtterance(ai.saiy.android.personality.PersonalityResponse.getLocationAccessError(context, supportedLanguage));
             outcome.setOutcome(Outcome.FAILURE);
             return returnOutcome(outcome);
