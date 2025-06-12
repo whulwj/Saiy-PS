@@ -537,7 +537,7 @@ public class Quantum extends Tunnelling {
                     }
                     publishProgress(new EntangledPair(Position.CLIPBOARD, CC.COMMAND_TOAST));
                     try {
-                        Thread.sleep(175);
+                        Thread.sleep(CLIPBOARD_DELAY);
                     } catch (InterruptedException e) {
                         if (DEBUG) {
                             MyLog.w(CLS_NAME, "InterruptedException");
@@ -570,6 +570,7 @@ public class Quantum extends Tunnelling {
                     }
                     final Pair<Boolean, String> clipboardPair = ClipboardHelper.getClipboardContentPair(mContext, sl);
                     request.setCondition(Condition.CONDITION_CONVERSATION);
+                    request.setAction(LocalRequest.ACTION_SPEAK_ONLY);
                     request.setUtterance(clipboardPair.second);
                     result = clipboardPair.first? Outcome.SUCCESS : Outcome.FAILURE;
                 }
@@ -1969,10 +1970,8 @@ public class Quantum extends Tunnelling {
                         MyLog.i(CLS_NAME, "Position " + entangledPair.getCC().name());
                     }
 
-                    ClipboardHelper.saveClipboardContent(mContext);
-
                     if (DEBUG) {
-                        MyLog.i(CLS_NAME, "Position: CLIPBOARD content: " + ClipboardHelper.getClipboardContent());
+                        MyLog.i(CLS_NAME, "Position: CLIPBOARD content: " + ClipboardHelper.getClipboardContent(mContext));
                     }
                     break;
                 case SHOW_COMPUTING:

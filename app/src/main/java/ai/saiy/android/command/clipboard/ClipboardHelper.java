@@ -42,12 +42,6 @@ public final class ClipboardHelper {
     private static final boolean DEBUG = MyLog.DEBUG;
     private static final String CLS_NAME = ClipboardHelper.class.getSimpleName();
 
-    private static String clipboardContent;
-
-    public static String getClipboardContent() {
-        return clipboardContent;
-    }
-
     /**
      * Prevent instantiation
      */
@@ -56,12 +50,12 @@ public final class ClipboardHelper {
     }
 
     @MainThread
-    public static void saveClipboardContent(@NonNull final Context ctx) {
+    public static String getClipboardContent(@NonNull final Context ctx) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "saveClipboardContent");
         }
 
-        clipboardContent = null;
+        String clipboardContent = null;
 
         try {
 
@@ -72,8 +66,6 @@ public final class ClipboardHelper {
 
                 clipboardContent = clipboard.getPrimaryClip().getItemAt(0).getText().toString();
 
-            } else {
-                clipboardContent = null;
             }
 
 
@@ -82,18 +74,17 @@ public final class ClipboardHelper {
                 MyLog.w(CLS_NAME, "saveClipboardContent NullPointerException");
                 e.printStackTrace();
             }
-            clipboardContent = null;
         } catch (final Exception e) {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "saveClipboardContent Exception");
                 e.printStackTrace();
             }
-            clipboardContent = null;
         }
 
         if (DEBUG) {
             MyLog.i(CLS_NAME, "saveClipboardContent complete");
         }
+        return clipboardContent;
     }
 
     /**
@@ -185,7 +176,7 @@ public final class ClipboardHelper {
     @MainThread
     public static Pair<Boolean, String> getClipboardContentPair(@NonNull final Context ctx, @NonNull final SupportedLanguage sl) {
 
-        final String content = getClipboardContent();
+        final String content = getClipboardContent(ctx);
 
         if (UtilsString.notNaked(content)) {
             return new Pair<>(true, content);
