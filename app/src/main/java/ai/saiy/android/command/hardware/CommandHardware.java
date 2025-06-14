@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
+import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
@@ -191,26 +192,43 @@ public class CommandHardware {
                         outcome.setOutcome(Outcome.SUCCESS);
                         outcome.setUtterance(theDataConnection + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
+                        boolean isFailed = false;
                         switch (hardwarePair.second) {
                             case ON:
-                                mobileDataHelper.enable(context);
-                                outcome.setOutcome(Outcome.SUCCESS);
-                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.on)));
+                                if (mobileDataHelper.enable(context)) {
+                                    outcome.setOutcome(Outcome.SUCCESS);
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.on)));
+                                } else {
+                                    isFailed = true;
+                                }
                                 break;
                             case OFF:
-                                mobileDataHelper.disable(context);
-                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.off)));
+                                if (mobileDataHelper.disable(context)) {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.off)));
+                                } else {
+                                    isFailed = true;
+                                }
                                 break;
                             case TOGGLE:
                             case UNRESOLVED:
                                 if (mobileDataHelper.isEnabled(context)) {
-                                    mobileDataHelper.disable(context);
-                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.off)));
+                                    if (mobileDataHelper.disable(context)) {
+                                        outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.off)));
+                                    } else {
+                                        isFailed = true;
+                                    }
                                 } else {
-                                    mobileDataHelper.enable(context);
-                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.on)));
+                                    if (mobileDataHelper.enable(context)) {
+                                        outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, theDataConnection, context.getString(R.string.on)));
+                                    } else {
+                                        isFailed = true;
+                                    }
                                 }
                                 break;
+                        }
+                        if (isFailed) {
+                            outcome.setOutcome(Outcome.FAILURE);
+                            outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
                         }
                     }
                     break;
@@ -274,6 +292,39 @@ public class CommandHardware {
                     }
                     break;
                 case GPS:
+                    final String gps = context.getString(R.string.gps);
+                    final LocationManager locationManager = (LocationManager) context.getApplicationContext().getSystemService(Context.LOCATION_SERVICE);
+                    if (locationManager == null || !context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_LOCATION_GPS)) {
+                        outcome.setOutcome(Outcome.FAILURE);
+                        outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
+                    }else if (hardwarePair.second == OnOff.Result.ON && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        outcome.setOutcome(Outcome.SUCCESS);
+                        outcome.setUtterance(gps + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                    } else if (hardwarePair.second == OnOff.Result.OFF && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                        outcome.setOutcome(Outcome.SUCCESS);
+                        outcome.setUtterance(gps + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                    } else {
+                        switch (hardwarePair.second) {
+                            case ON:
+                                locationSettings(context);
+                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, gps, context.getString(R.string.on)));
+                                break;
+                            case OFF:
+                                locationSettings(context);
+                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, gps, context.getString(R.string.off)));
+                                break;
+                            case TOGGLE:
+                            case UNRESOLVED:
+                                locationSettings(context);
+                                if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, gps, context.getString(R.string.off)));
+                                } else {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, gps, context.getString(R.string.on)));
+                                }
+                                break;
+                        }
+                    }
+                    break;
                 case NFC:
                     outcome.setOutcome(Outcome.FAILURE);
                     outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
@@ -436,16 +487,19 @@ public class CommandHardware {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && !PermissionHelper.checkBluetoothPermissions(ctx, bundle)) {
             return SaiyRequestParams.SILENCE;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            final Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            enableBtIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            ctx.startActivity(enableBtIntent);
-        } else {
-            if (enabled) {
-                defaultAdapter.enable();
+        if (enabled) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                final Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                enableBtIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                ctx.startActivity(enableBtIntent);
             } else {
-                defaultAdapter.disable();
+                defaultAdapter.enable();
             }
+        } else {
+            final Intent disableBtIntent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+            disableBtIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            ctx.startActivity(disableBtIntent);
+            defaultAdapter.disable(); // User need manually disable it
         }
 
         //https://developer.android.com/reference/android/bluetooth/BluetoothAdapter#ACTION_STATE_CHANGED
@@ -469,5 +523,11 @@ public class CommandHardware {
             }
         }
         return 0;
+    }
+
+    private void locationSettings(final Context ctx) {
+        final Intent locationIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        locationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(locationIntent);
     }
 }

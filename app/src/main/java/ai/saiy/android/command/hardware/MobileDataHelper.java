@@ -18,7 +18,7 @@ public class MobileDataHelper {
 
     private static final String SET_MOBILE_DATA_ENABLED = "setMobileDataEnabled";
 
-    private void switchState(@NonNull Context context, boolean enabled) {
+    private boolean switchState(@NonNull Context context, boolean enabled) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "switchState");
         }
@@ -40,7 +40,7 @@ public class MobileDataHelper {
             for (int i = 0; i < 10; i++) {
                 Thread.sleep(100L);
                 if (isEnabled(connectivityManager) == enabled) {
-                    return;
+                    return true;
                 }
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "Attempt: " + i);
@@ -51,6 +51,7 @@ public class MobileDataHelper {
                 MyLog.e(CLS_NAME, "switchState: Exception " + e.getMessage());
             }
         }
+        return false;
     }
 
     private boolean isEnabled(@NonNull ConnectivityManager connectivityManager) {
@@ -72,18 +73,18 @@ public class MobileDataHelper {
         return isEnabled(connectivityManager);
     }
 
-    public void disable(@NonNull Context context) {
+    public boolean disable(@NonNull Context context) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "disable");
         }
-        switchState(context, false);
+        return switchState(context, false);
     }
 
-    public void enable(@NonNull Context context) {
+    public boolean enable(@NonNull Context context) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "enable");
         }
-        switchState(context, true);
+        return switchState(context, true);
     }
 
     public boolean hasTelephonyFeature(@NonNull Context context) {
