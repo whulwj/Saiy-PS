@@ -9,6 +9,7 @@ import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
+import android.nfc.NfcAdapter;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -304,18 +305,16 @@ public class CommandHardware {
                         outcome.setOutcome(Outcome.SUCCESS);
                         outcome.setUtterance(gps + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
+                        locationSettings(context);
                         switch (hardwarePair.second) {
                             case ON:
-                                locationSettings(context);
                                 outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, gps, context.getString(R.string.on)));
                                 break;
                             case OFF:
-                                locationSettings(context);
                                 outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, gps, context.getString(R.string.off)));
                                 break;
                             case TOGGLE:
                             case UNRESOLVED:
-                                locationSettings(context);
                                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                                     outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, gps, context.getString(R.string.off)));
                                 } else {
@@ -326,8 +325,36 @@ public class CommandHardware {
                     }
                     break;
                 case NFC:
-                    outcome.setOutcome(Outcome.FAILURE);
-                    outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
+                    final String nfc = context.getString(R.string.nfc);
+                    final NfcAdapter nfcAdapter = NfcAdapter.getDefaultAdapter(context);
+                    if (nfcAdapter == null || !context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_NFC)) {
+                        outcome.setOutcome(Outcome.FAILURE);
+                        outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
+                    }else if (hardwarePair.second == OnOff.Result.ON && nfcAdapter.isEnabled()) {
+                        outcome.setOutcome(Outcome.SUCCESS);
+                        outcome.setUtterance(nfc + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                    } else if (hardwarePair.second == OnOff.Result.OFF && !nfcAdapter.isEnabled()) {
+                        outcome.setOutcome(Outcome.SUCCESS);
+                        outcome.setUtterance(nfc + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                    } else {
+                        nfcSettings(context);
+                        switch (hardwarePair.second) {
+                            case ON:
+                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, nfc, context.getString(R.string.on)));
+                                break;
+                            case OFF:
+                                outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, nfc, context.getString(R.string.off)));
+                                break;
+                            case TOGGLE:
+                            case UNRESOLVED:
+                                if (nfcAdapter.isEnabled()) {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, nfc, context.getString(R.string.off)));
+                                } else {
+                                    outcome.setUtterance(PersonalityResponse.getHardwareToggle(context, supportedLanguage, nfc, context.getString(R.string.on)));
+                                }
+                                break;
+                        }
+                    }
                     break;
                 case HOTSPOT:
                     final String theHotspot = context.getString(R.string.the) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.hotspot);
@@ -529,5 +556,11 @@ public class CommandHardware {
         final Intent locationIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
         locationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         ctx.startActivity(locationIntent);
+    }
+
+    private void nfcSettings(final Context ctx) {
+        final Intent intent = new Intent(Settings.ACTION_NFCSHARING_SETTINGS);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        ctx.startActivity(intent);
     }
 }
