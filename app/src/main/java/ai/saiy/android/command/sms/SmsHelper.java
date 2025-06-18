@@ -3,8 +3,6 @@ package ai.saiy.android.command.sms;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
 import android.net.Uri;
@@ -20,7 +18,6 @@ import java.util.List;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
-import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.contacts.ContactHelper;
 import ai.saiy.android.utils.MyLog;
 
@@ -141,27 +138,6 @@ public class SmsHelper {
             MyLog.i(CLS_NAME, "isLengthWithinMax: messageParts: " + SmsManager.getDefault().divideMessage(str).size());
         }
         return SmsManager.getDefault().divideMessage(str).size() < 7;
-    }
-
-    public static String getDefaultSMSPackage(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "getDefaultSMSPackage: getDefaultSmsPackage: " + Telephony.Sms.getDefaultSmsPackage(context));
-            }
-            return Telephony.Sms.getDefaultSmsPackage(context);
-        }
-        final List<ResolveInfo> queryIntentActivities = context.getPackageManager().queryIntentActivities(new Intent(Intent.ACTION_VIEW).addCategory(Intent.CATEGORY_DEFAULT).setType(VND_ANDROID_DIR_MMS_SMS), PackageManager.MATCH_DEFAULT_ONLY);
-        if (ai.saiy.android.utils.UtilsList.notNaked(queryIntentActivities)) {
-            final String packageName = UtilsApplication.getPackageName(queryIntentActivities.get(0));
-            if (DEBUG) {
-                MyLog.i(CLS_NAME, "getDefaultSMSPackage: resolveInfoList: " + packageName);
-            }
-            return packageName;
-        }
-        if (DEBUG) {
-            MyLog.w(CLS_NAME, "getDefaultSMSPackage: not resolved");
-        }
-        return null;
     }
 
     private static void initStrings(Context context) {

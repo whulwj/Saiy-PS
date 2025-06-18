@@ -250,46 +250,39 @@ public class FragmentAdvancedSettings extends Fragment implements View.OnClickLi
                 }
                 break;
             case 11:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                    helper.showAnnounceNotificationsDialog();
-                } else if (SPH.getAccessibilityChange(getApplicationContext()) || !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
-                    Schedulers.computation().scheduleDirect(new Runnable() {
-                        @Override
-                        public void run() {
-                            boolean isNotificationListenerEnabled = false;
-                            for (String s : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
-                                if (s.equals(getApplicationContext().getPackageName())) {
-                                    isNotificationListenerEnabled = true;
-                                    break;
-                                }
-                            }
-                            if (isNotificationListenerEnabled) {
-                                if (DEBUG) {
-                                    MyLog.i(CLS_NAME, "notification listener service running");
-                                }
-                                getParentActivity().runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        helper.showAnnounceNotificationsDialog();
-                                    }
-                                });
-                            } else {
-                                if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
-                                    getParentActivity().speak(R.string.notifications_enable, LocalRequest.ACTION_SPEAK_ONLY);
-                                    return;
-                                }
-                                if (DEBUG) {
-                                    MyLog.w(CLS_NAME, "notification listener: settings location unknown");
-                                }
-                                ai.saiy.android.applications.UtilsApplication.openApplicationSpecificSettings(getApplicationContext(), getApplicationContext().getPackageName());
-                                getParentActivity().speak(getString(R.string.settings_missing, getString(R.string.notification_access)), LocalRequest.ACTION_SPEAK_ONLY);
+                Schedulers.computation().scheduleDirect(new Runnable() {
+                    @Override
+                    public void run() {
+                        boolean isNotificationListenerEnabled = false;
+                        for (String s : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
+                            if (s.equals(getApplicationContext().getPackageName())) {
+                                isNotificationListenerEnabled = true;
+                                break;
                             }
                         }
-                    });
-                } else {
-                    SPH.setAccessibilityChange(getApplicationContext());
-                    helper.showAccessibilityChangeDialog();
-                }
+                        if (isNotificationListenerEnabled) {
+                            if (DEBUG) {
+                                MyLog.i(CLS_NAME, "notification listener service running");
+                            }
+                            getParentActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    helper.showAnnounceNotificationsDialog();
+                                }
+                            });
+                        } else {
+                            if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
+                                getParentActivity().speak(R.string.notifications_enable, LocalRequest.ACTION_SPEAK_ONLY);
+                                return;
+                            }
+                            if (DEBUG) {
+                                MyLog.w(CLS_NAME, "notification listener: settings location unknown");
+                            }
+                            ai.saiy.android.applications.UtilsApplication.openApplicationSpecificSettings(getApplicationContext(), getApplicationContext().getPackageName());
+                            getParentActivity().speak(getString(R.string.settings_missing, getString(R.string.notification_access)), LocalRequest.ACTION_SPEAK_ONLY);
+                        }
+                    }
+                });
                 break;
             case 12:
                 helper.showSignatureDialog();

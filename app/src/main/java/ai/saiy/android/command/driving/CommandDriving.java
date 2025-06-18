@@ -42,13 +42,6 @@ public class CommandDriving {
     }
 
     public static boolean haveDrivingProfilePermissions(@NonNull Context context, @NonNull DrivingProfile drivingProfile) {
-        final boolean announceNotifications = drivingProfile.getAnnounceNotifications();
-        if (announceNotifications && !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(context)) {
-            return false;
-        }
-        if (announceNotifications) {
-            ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(context);
-        }
         final boolean announceCallerId = drivingProfile.getAnnounceCallerId();
         if (!announceCallerId || ai.saiy.android.permissions.PermissionHelper.checkNotificationPolicyPermission(context)) {
             return !announceCallerId || ai.saiy.android.permissions.PermissionHelper.checkAnnounceCallerPermissionsNR(context);

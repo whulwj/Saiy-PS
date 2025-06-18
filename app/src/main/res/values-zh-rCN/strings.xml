@@ -13,7 +13,6 @@
     <string name="control_saiy_permission_description" translatable="true">控制 Saiy 的某些功能。这些功能包括录制音频, 将此语音数据上传到远程应用程序, 更改使用的语音引擎类型。</string>
     <string name="error_missing_permissions" translatable="true">Your application is missing permission.CONTROL_SAIY</string>
     <string name="tile_label" translatable="true">Saiy 识别</string>
-    <string name="accessibility_description" translatable="true">读取并显示通知内容。与用户输入参数进行交互。</string>
     <string name="accessibility_enable" translatable="true">请启用 "Say 辅助功能服务" 以使用此功能。</string>
     <string name="accessibility_setting_description">Nothing to see here</string>
     <string name="error" translatable="true">错误</string>
@@ -275,7 +274,6 @@
     <string name="menu_blocked_apps">已屏蔽的应用</string>
     <string name="menu_blocked_content">屏蔽的内容</string>
     <string name="menu_blocked_content_hint">GPS定位，输入法</string>
-    <string name="menu_ignore_restricted_content">忽略受限内容</string>
     <string name="menu_sms_content">播报短信内容</string>
     <string name="menu_hangout_content">Announce Hangout content</string>
     <string name="menu_whatsapp_content">Announce WhatsApp content</string>
@@ -716,7 +714,6 @@
     <string name="an_unknown_application" translatable="true">"一个未知应用程序"</string>
     <string name="blocked_input_method">输入法</string>
     <string name="blocked_location">GPS 定位</string>
-    <string name="new_messages">新消息</string>
 
     <string name="menu_headset_woes">Headset Woes</string>
     <string name="content_headset_overview">My developer has aged considerably, whilst attempting to get headsets to work correctly. The behaviour of each varies exponentially depending on the following:\n\n• Headset manufacturer\n• Headset protocol\n• Android device manufacturer\n• Android version\n• Text to Speech engine\n\nThe next dialog will provide you with a vast number of options, that can independently be changed in order to cover as manually eventualities as possible.\n\nFinding the right combination that works best for you, may take a little trial and error. Please do attempt each combination a few times, as often there can be a delay applying the chosen configuration. You\'ll need to press \'Save\' after each change you make.\n\nIf weird and wonderful things start happening, disconnecting and reconnecting your headset should resolve the newly created problem!\n\nWhilst testing different configurations, you will notice the following behavioural changes, for better or for worse…\n\n• TTS audio output\n• Audio output quality\n• Audio input quality\n• Audio prompts (beeps)\n\nHopefully you will find the configuration combination that accomplishes all! If you don\'t, please feel free to send my developer an email containing your headset details. They are his favourite kind!\n\nNote: Google settled for the low quality audio option for their Assistant…</string>
@@ -951,19 +948,9 @@
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 
     <!-- Accessibility Content descriptions -->
-    <string name="menu_accessibility">无障碍功能</string>
-    <string name="menu_accessibility_disable">Disable Accessibility</string>
     <string name="ac_button_done" translatable="true">完成按钮</string>
-    <string name="content_accessibility_change">UPDATE!\n\nThe way in which I announce notifications has changed and therefore, if you only have my Accessibility Service enabled for this reason, you can now disable it to save some battery.</string>
-    <string name="announce_not_no_content">含有受限内容</string>
     <string name="saying">saying</string>
-    <string name="structured_default">通知来自</string>
-    <string name="structured_email_1">您收到另一封电子邮件</string>
-    <string name="structured_email_2">您现在有</string>
-    <string name="structured_email_3">需要阅读</string>
-    <string name="structured_email_4">您已收到一封电子邮件来自</string>
     <string name="structured_sms_1">您收到一条新的短信来自</string>
-    <string name="structured_sms_1a">您收到一条新短信</string>
 
     <!-- Permission Strings -->
     <string name="permission_notification_ticker" translatable="true">权限请求</string>

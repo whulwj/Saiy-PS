@@ -33,7 +33,6 @@ import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 
-@RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
 public class NLService extends NotificationListenerService {
     private static final int MAX_PREVIOUS_CONTENT = 30;
     private static final Object messageLock = new Object();

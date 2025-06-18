@@ -219,14 +219,12 @@ public class SPH {
     private static final String RECOGNISER_BUSY_FIX = "recogniser_busy_fix";
     private static final String RECOGNIZER_BUSY_INCREMENT = "recognizer_busy_increment";
     private static final String ANONYMOUS_USAGE_STATS = "anonymous_usage_stats";
-    private static final String IGNORE_RESTRICTED_CONTENT = "ignore_restricted_content";
     private static final String OKAY_GOOGLE_FIX = "okay_google_fix";
     private static final String DOUBLE_BEEP_FIX = "double_beep_fix";
     private static final String NEW_USER = "new_user";
     private static final String IMPORT_WARNING = "import_warning";
     private static final String EXPORT_WARNING = "export_warning";
     private static final String HEADSET_OVERVIEW_COUNT = "headset_overview_count";
-    private static final String ACCESSIBILITY_CHANGE = "accessibility_change";
     private static final String DEBUG_BILLING = "debug_billing";
     private static final String DEFAULT_NOTE = "default_note";
     private static final String ALEXA_CODE_VERIFIER = "alexa_code_verifier";
@@ -2654,16 +2652,6 @@ public class SPH {
         edit.apply();
     }
 
-    public static boolean getIgnoreRestrictedContent(Context context) {
-        return getPref(context).getBoolean(IGNORE_RESTRICTED_CONTENT, true);
-    }
-
-    public static void setIgnoreRestrictedContent(Context context, boolean condition) {
-        final SharedPreferences.Editor edit = getEditor(getPref(context));
-        edit.putBoolean(IGNORE_RESTRICTED_CONTENT, condition);
-        edit.apply();
-    }
-
     public static boolean getSmsIdFix(Context context) {
         return getPref(context).getBoolean(SMS_ID_FIX, false);
     }
@@ -2813,16 +2801,6 @@ public class SPH {
         final SharedPreferences.Editor edit = getEditor(getPref(context));
         edit.putInt(HEADSET_OVERVIEW_COUNT, getHeadsetOverviewCount(context) + 1);
         edit.apply();
-    }
-
-    public static void setAccessibilityChange(Context context) {
-        final SharedPreferences.Editor edit = getEditor(getPref(context));
-        edit.putBoolean(ACCESSIBILITY_CHANGE, true);
-        edit.apply();
-    }
-
-    public static boolean getAccessibilityChange(Context context) {
-        return getPref(context).getBoolean(ACCESSIBILITY_CHANGE, false);
     }
 
     public static void setDebugBilling(Context context, boolean condition) {

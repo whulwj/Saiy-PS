@@ -352,10 +352,6 @@ public class AssistantIntentService extends IntentService {
                             }
                             actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, String.format(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.settings_missing), ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.notification_access)));
                         }
-                    } else if (SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
-                        SelfAwareHelper.startAccessibilityService(getApplicationContext());
-                        showToast(getString(R.string.enabled), Toast.LENGTH_SHORT);
-                        return;
                     } else {
                         ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
                         actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.accessibility_enable));

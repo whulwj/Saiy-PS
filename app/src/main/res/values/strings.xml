@@ -100,8 +100,6 @@
         the recording of audio, passing of this speech data to the remote application and varying the type of voice engine used.</string>
     <string name="error_missing_permissions" translatable="true">Your application is missing permission.CONTROL_SAIY</string>
     <string name="tile_label" translatable="true">Saiy Recognition</string>
-    <string name="accessibility_description" translatable="true">Read and announce notification content.
-        Interact with user input parameters.</string>
     <string name="accessibility_enable" translatable="true">Please enable the Say accessibility service to use
         this feature.</string>
     <string name="accessibility_setting_description">Nothing to see here</string>
@@ -375,7 +373,6 @@
     <string name="menu_blocked_apps">Blocked apps</string>
     <string name="menu_blocked_content">Blocked content</string>
     <string name="menu_blocked_content_hint">location set by GPS, input method</string>
-    <string name="menu_ignore_restricted_content">Ignore restricted content</string>
     <string name="menu_sms_content">Announce SMS content</string>
     <string name="menu_hangout_content">Announce Hangout content</string>
     <string name="menu_whatsapp_content">Announce WhatsApp content</string>
@@ -816,7 +813,6 @@
     <string name="an_unknown_application" translatable="true">"an unknown application"</string>
     <string name="blocked_input_method">input method</string>
     <string name="blocked_location">location set by GPS</string>
-    <string name="new_messages">new messages</string>
 
     <string name="menu_headset_woes">Headset Woes</string>
     <string name="content_headset_overview">My developer has aged considerably, whilst attempting to get headsets to work correctly. The behaviour of each varies exponentially depending on the following:\n\n• Headset manufacturer\n• Headset protocol\n• Android device manufacturer\n• Android version\n• Text to Speech engine\n\nThe next dialog will provide you with a vast number of options, that can independently be changed in order to cover as manually eventualities as possible.\n\nFinding the right combination that works best for you, may take a little trial and error. Please do attempt each combination a few times, as often there can be a delay applying the chosen configuration. You\'ll need to press \'Save\' after each change you make.\n\nIf weird and wonderful things start happening, disconnecting and reconnecting your headset should resolve the newly created problem!\n\nWhilst testing different configurations, you will notice the following behavioural changes, for better or for worse…\n\n• TTS audio output\n• Audio output quality\n• Audio input quality\n• Audio prompts (beeps)\n\nHopefully you will find the configuration combination that accomplishes all! If you don\'t, please feel free to send my developer an email containing your headset details. They are his favourite kind!\n\nNote: Google settled for the low quality audio option for their Assistant…</string>
@@ -1051,19 +1047,9 @@
     <string name="test_string" translatable="true">"asdasdasdasdashalsfhakhfssadasdaasdsagdsafgfghffhdsasdddfdghhgfhsdfdsad"</string>
 
     <!-- Accessibility Content descriptions -->
-    <string name="menu_accessibility">Accessibility</string>
-    <string name="menu_accessibility_disable">Disable Accessibility</string>
     <string name="ac_button_done" translatable="true">Done button</string>
-    <string name="content_accessibility_change">UPDATE!\n\nThe way in which I announce notifications has changed and therefore, if you only have my Accessibility Service enabled for this reason, you can now disable it to save some battery.</string>
-    <string name="announce_not_no_content">With restricted content</string>
     <string name="saying">saying</string>
-    <string name="structured_default">Notification from</string>
-    <string name="structured_email_1">You\'ve received another email</string>
-    <string name="structured_email_2">You now have</string>
-    <string name="structured_email_3">to read</string>
-    <string name="structured_email_4">You\'ve received an email from</string>
     <string name="structured_sms_1">You\'ve received a new text message from</string>
-    <string name="structured_sms_1a">You\'ve received a new text message</string>
 
     <!-- Permission Strings -->
     <string name="permission_notification_ticker" translatable="true">Permission Request</string>

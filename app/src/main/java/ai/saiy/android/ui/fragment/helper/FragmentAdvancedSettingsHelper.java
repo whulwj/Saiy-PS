@@ -697,9 +697,6 @@ public class FragmentAdvancedSettingsHelper {
                                                     checkAnnounceCallerId = false;
                                                 }
                                             }
-                                        } else if (ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
-                                            ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
-                                            checkAnnounceCallerId = true;
                                         } else {
                                             ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
                                             getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
@@ -748,40 +745,6 @@ public class FragmentAdvancedSettingsHelper {
         });
     }
 
-    public void showAccessibilityChangeDialog() {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "showAccessibilityChangeDialog");
-        }
-        final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
-                .setTitle(R.string.menu_accessibility)
-                .setMessage(R.string.content_accessibility_change)
-                .setIcon(R.drawable.ic_information)
-                .setPositiveButton(R.string.menu_accessibility_disable, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showAccessibilityChangeDialog: onPositive");
-                        }
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                            SelfAwareHelper.disableAccessibilityService(getApplicationContext());
-                            toast(getString(R.string.success), Toast.LENGTH_SHORT);
-                        } else {
-                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
-                        }
-                    }
-                })
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(final DialogInterface dialog) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "showAccessibilityChangeDialog: onCancel");
-                        }
-                    }
-                }).create();
-        materialDialog.getWindow().getAttributes().windowAnimations = R.style.dialog_animation_right;
-        materialDialog.show();
-    }
-
     public void showAnnounceNotificationsDialog() {
         final View view = LayoutInflater.from(getParent().getContext()).inflate(R.layout.announce_notifications_dialog_layout, null);
         final AlertDialog materialDialog = new MaterialAlertDialogBuilder(getParentActivity())
@@ -818,7 +781,6 @@ public class FragmentAdvancedSettingsHelper {
                             EditText editText = ((AlertDialog) dialog).getWindow().findViewById(R.id.etBlockedContent);
                             final CheckBox cbEnabled = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbEnabled);
                             final CheckBox cbDeviceLocked = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbDeviceLocked);
-                            final CheckBox cbRestricted = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbRestricted);
                             final CheckBox cbSMSContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbSMSContent);
                             final CheckBox cbHangoutContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbHangoutContent);
                             final CheckBox cbWhatsAppContent = ((AlertDialog) dialog).getWindow().findViewById(R.id.cbWhatsAppContent);
@@ -838,18 +800,9 @@ public class FragmentAdvancedSettingsHelper {
                                     BlockedApplicationsHelper.save(getApplicationContext(), blockedApplications);
                                     SPH.setAnnounceNotifications(getApplicationContext(), cbEnabled.isChecked());
                                     SPH.setAnnounceNotificationsSecure(getApplicationContext(), cbDeviceLocked.isChecked());
-                                    SPH.setIgnoreRestrictedContent(getApplicationContext(), cbRestricted.isChecked());
                                     SPH.setAnnounceNotificationsSMS(getApplicationContext(), cbSMSContent.isChecked());
                                     SPH.setAnnounceNotificationsHangouts(getApplicationContext(), cbHangoutContent.isChecked());
                                     SPH.setAnnounceNotificationsWhatsapp(getApplicationContext(), cbWhatsAppContent.isChecked());
-                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                                        if (SPH.getAnnounceNotifications(getApplicationContext()) && !ai.saiy.android.service.helper.SelfAwareHelper.saiyAccessibilityRunning(getApplicationContext())) {
-                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
-                                            getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
-                                        } else if (SPH.getAnnounceNotifications(getApplicationContext())) {
-                                            ai.saiy.android.service.helper.SelfAwareHelper.startAccessibilityService(getApplicationContext());
-                                        }
-                                    }
                                 }
                             });
                             dialog.dismiss();
@@ -881,7 +834,6 @@ public class FragmentAdvancedSettingsHelper {
         }
         ((CheckBox) view.findViewById(R.id.cbEnabled)).setChecked(SPH.getAnnounceNotifications(getApplicationContext()));
         ((CheckBox) view.findViewById(R.id.cbDeviceLocked)).setChecked(SPH.getAnnounceNotificationsSecure(getApplicationContext()));
-        ((CheckBox) view.findViewById(R.id.cbRestricted)).setChecked(SPH.getIgnoreRestrictedContent(getApplicationContext()));
         ((CheckBox) view.findViewById(R.id.cbSMSContent)).setChecked(SPH.getAnnounceNotificationsSMS(getApplicationContext()));
         final CheckBox cbHangoutContent = view.findViewById(R.id.cbHangoutContent);
         if (Installed.isPackageInstalled(getApplicationContext(), Installed.PACKAGE_GOOGLE_HANGOUT)) {

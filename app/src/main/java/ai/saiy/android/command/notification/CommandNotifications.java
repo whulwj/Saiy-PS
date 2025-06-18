@@ -1,7 +1,6 @@
 package ai.saiy.android.command.notification;
 
 import android.content.Context;
-import android.os.Build;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationManagerCompat;
@@ -11,12 +10,10 @@ import java.util.ArrayList;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.command.settings.SettingsIntent;
-import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
-import ai.saiy.android.service.helper.SelfAwareHelper;
 import ai.saiy.android.utils.MyLog;
 
 public final class CommandNotifications {
@@ -48,41 +45,31 @@ public final class CommandNotifications {
         outcome.setOutcome(Outcome.SUCCESS);
         final boolean announceNotifications = ai.saiy.android.utils.SPH.getAnnounceNotifications(context);
         boolean isAnnounceNotificationRunning = false;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(context)) {
-                if (packageName.equals(context.getPackageName())) {
-                    isAnnounceNotificationRunning = true;
-                    break;
-                }
+        for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(context)) {
+            if (packageName.equals(context.getPackageName())) {
+                isAnnounceNotificationRunning = true;
+                break;
             }
-            if (isAnnounceNotificationRunning) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "notification listener service running");
-                }
-                if (announceNotifications) {
-                    outcome.setUtterance(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notification_response), SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.no_longer)));
-                } else {
-                    outcome.setUtterance(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notification_response), ""));
-                }
-            } else if (announceNotifications) {
+        }
+        if (isAnnounceNotificationRunning) {
+            if (DEBUG) {
+                MyLog.i(CLS_NAME, "notification listener service running");
+            }
+            if (announceNotifications) {
                 outcome.setUtterance(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notification_response), SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.no_longer)));
-            } else if (SettingsIntent.settingsIntent(context, SettingsIntent.Type.NOTIFICATION_ACCESS)) {
-                outcome.setUtterance(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notifications_enable));
             } else {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "notification listener: settings location unknown");
-                }
-                UtilsApplication.openApplicationSpecificSettings(context, context.getPackageName());
-                outcome.setUtterance(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.settings_missing));
+                outcome.setUtterance(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notification_response), ""));
             }
-        } else if (!announceNotifications && !SelfAwareHelper.saiyAccessibilityRunning(context)) {
-            ai.saiy.android.intent.ExecuteIntent.settingsIntent(context, IntentConstants.SETTINGS_ACCESSIBILITY);
-            outcome.setUtterance(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.accessibility_enable));
         } else if (announceNotifications) {
             outcome.setUtterance(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notification_response), SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.no_longer)));
+        } else if (SettingsIntent.settingsIntent(context, SettingsIntent.Type.NOTIFICATION_ACCESS)) {
+            outcome.setUtterance(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notifications_enable));
         } else {
-            SelfAwareHelper.startAccessibilityService(context);
-            outcome.setUtterance(String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.notification_response), ""));
+            if (DEBUG) {
+                MyLog.w(CLS_NAME, "notification listener: settings location unknown");
+            }
+            UtilsApplication.openApplicationSpecificSettings(context, context.getPackageName());
+            outcome.setUtterance(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.settings_missing));
         }
         ai.saiy.android.utils.SPH.setAnnounceNotifications(context, !announceNotifications);
         return returnOutcome(outcome);

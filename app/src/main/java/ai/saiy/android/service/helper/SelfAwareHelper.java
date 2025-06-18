@@ -17,7 +17,6 @@
 
 package ai.saiy.android.service.helper;
 
-import android.accessibilityservice.AccessibilityServiceInfo;
 import android.app.ActivityManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,7 +31,6 @@ import android.provider.Settings;
 import android.speech.SpeechRecognizer;
 import android.telephony.TelephonyManager;
 import android.util.Pair;
-import android.view.accessibility.AccessibilityManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -44,7 +42,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ai.saiy.android.accessibility.SaiyAccessibilityService;
 import ai.saiy.android.api.Defaults;
 import ai.saiy.android.api.RequestParcel;
 import ai.saiy.android.api.SaiyDefaults;
@@ -944,79 +941,7 @@ public class SelfAwareHelper {
         }
     }
 
-    /**
-     * Start the {@link SaiyAccessibilityService} service
-     *
-     * @param ctx the application context
-     */
-    public static void startAccessibilityService(@NonNull final Context ctx) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "startAccessibilityService");
-        }
-
-        final Intent intent = new Intent(ctx, SaiyAccessibilityService.class);
-        intent.setAction(ctx.getApplicationContext().getPackageName());
-        ctx.getApplicationContext().startService(intent);
-    }
-
-    public static void disableAccessibilityService(Context context) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "disableAccessibilityService");
-        }
-        Intent intent = new Intent(context, SaiyAccessibilityService.class);
-        intent.putExtra(SaiyAccessibilityService.EXTRA_START_COMMAND_KEY, 1);
-        intent.setAction(context.getApplicationContext().getPackageName());
-        context.getApplicationContext().startService(intent);
-    }
-
-    /**
-     * Check the running condition of {@link SaiyAccessibilityService}
-     *
-     * @param ctx the application context
-     */
-    public static boolean saiyAccessibilityRunning(@NonNull final Context ctx) {
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "saiyAccessibilityRunning");
-        }
-
-        final AccessibilityManager aManager = (AccessibilityManager) ctx.getSystemService(Context.ACCESSIBILITY_SERVICE);
-
-        String className;
-        for (final AccessibilityServiceInfo service : aManager.getEnabledAccessibilityServiceList(
-                AccessibilityServiceInfo.FEEDBACK_ALL_MASK)) {
-
-            try {
-
-                className = service.getId();
-
-                if (className != null) {
-                    if (className.trim().endsWith(SaiyAccessibilityService.class.getSimpleName())) {
-                        if (DEBUG) {
-                            MyLog.i(CLS_NAME, "SaiyAccessibilityService running");
-                        }
-                        return true;
-                    }
-                }
-
-            } catch (final NullPointerException e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "NullPointerException");
-                }
-            } catch (final Exception e) {
-                if (DEBUG) {
-                    MyLog.w(CLS_NAME, "Exception");
-                }
-            }
-        }
-
-        if (DEBUG) {
-            MyLog.i(CLS_NAME, "SaiyAccessibilityService not running");
-        }
-
-        return false;
-    }
-
-    /**
+    /**n
      * Check the running condition of {@link SelfAware}
      *
      * @param ctx the application context
