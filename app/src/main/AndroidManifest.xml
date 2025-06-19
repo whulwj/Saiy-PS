@@ -295,18 +295,6 @@
         </activity>
 
         <activity
-            android:name=".ui.activity.ActivityAssistSettings"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:excludeFromRecents="false"
-            android:exported="true"
-            android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-            </intent-filter>
-        </activity>
-
-        <activity
             android:name="ai.saiy.android.ui.activity.ActivityPermissionDialog"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:excludeFromRecents="true"

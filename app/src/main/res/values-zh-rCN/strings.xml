@@ -13,8 +13,6 @@
     <string name="control_saiy_permission_description" translatable="true">控制 Saiy 的某些功能。这些功能包括录制音频, 将此语音数据上传到远程应用程序, 更改使用的语音引擎类型。</string>
     <string name="error_missing_permissions" translatable="true">Your application is missing permission.CONTROL_SAIY</string>
     <string name="tile_label" translatable="true">Saiy 识别</string>
-    <string name="accessibility_enable" translatable="true">请启用 "Say 辅助功能服务" 以使用此功能。</string>
-    <string name="accessibility_setting_description">Nothing to see here</string>
     <string name="error" translatable="true">错误</string>
     <string name="enabled" translatable="true">已启用</string>
     <string name="disabled" translatable="true">未启用</string>

@@ -100,9 +100,6 @@
         the recording of audio, passing of this speech data to the remote application and varying the type of voice engine used.</string>
     <string name="error_missing_permissions" translatable="true">Your application is missing permission.CONTROL_SAIY</string>
     <string name="tile_label" translatable="true">Saiy Recognition</string>
-    <string name="accessibility_enable" translatable="true">Please enable the Say accessibility service to use
-        this feature.</string>
-    <string name="accessibility_setting_description">Nothing to see here</string>
     <string name="error" translatable="true">error</string>
     <string name="enabled" translatable="true">Enabled</string>
     <string name="disabled" translatable="true">Disabled</string>

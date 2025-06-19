@@ -321,40 +321,35 @@ public class AssistantIntentService extends IntentService {
                         showToast(getString(R.string.disabled), Toast.LENGTH_SHORT);
                         return;
                     }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        boolean notificationEnabled = false;
-                        for (String s : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
-                            if (s.equals(getApplicationContext().getPackageName())) {
-                                notificationEnabled = true;
-                                break;
-                            }
+                    boolean notificationEnabled = false;
+                    for (String s : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
+                        if (s.equals(getApplicationContext().getPackageName())) {
+                            notificationEnabled = true;
+                            break;
                         }
-                        if (notificationEnabled) {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "notification listener service running");
-                            }
-                            SPH.setAnnounceNotifications(getApplicationContext(), true);
-                            if (ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext())) {
-                                showToast(getString(R.string.enabled), Toast.LENGTH_SHORT);
-                                return;
-                            }
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "notification listener service running: quiet times active");
-                            }
-                            showToast(getString(R.string.enabled) + " - " + getString(R.string.title_quiet_time_active), Toast.LENGTH_SHORT);
+                    }
+                    if (notificationEnabled) {
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "notification listener service running");
+                        }
+                        SPH.setAnnounceNotifications(getApplicationContext(), true);
+                        if (ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext())) {
+                            showToast(getString(R.string.enabled), Toast.LENGTH_SHORT);
                             return;
                         }
-                        if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
-                            actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.notifications_enable));
-                        } else {
-                            if (DEBUG) {
-                                MyLog.i(CLS_NAME, "notification listener: settings location unknown");
-                            }
-                            actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, String.format(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.settings_missing), ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.notification_access)));
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "notification listener service running: quiet times active");
                         }
+                        showToast(getString(R.string.enabled) + " - " + getString(R.string.title_quiet_time_active), Toast.LENGTH_SHORT);
+                        return;
+                    }
+                    if (SettingsIntent.settingsIntent(getApplicationContext(), SettingsIntent.Type.NOTIFICATION_ACCESS)) {
+                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.notifications_enable));
                     } else {
-                        ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
-                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.accessibility_enable));
+                        if (DEBUG) {
+                            MyLog.i(CLS_NAME, "notification listener: settings location unknown");
+                        }
+                        actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, String.format(SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.settings_missing), SaiyResourcesHelper.getStringResource(getApplicationContext(), sl, R.string.notification_access)));
                     }
                 } else if (DEBUG) {
                     MyLog.i(CLS_NAME, "onHandleIntent: action naked");

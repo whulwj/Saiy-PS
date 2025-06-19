@@ -21,7 +21,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -672,7 +671,7 @@ public class FragmentAdvancedSettingsHelper {
                                         boolean checkAnnounceCallerId;
                                         if (!announceNotifications) {
                                             checkAnnounceCallerId = true;
-                                        } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                                        } else {
                                             boolean isNotificationListenerRunning = false;
                                             for (String packageName : NotificationManagerCompat.getEnabledListenerPackages(getApplicationContext())) {
                                                 if (packageName.equals(getApplicationContext().getPackageName())) {
@@ -697,10 +696,6 @@ public class FragmentAdvancedSettingsHelper {
                                                     checkAnnounceCallerId = false;
                                                 }
                                             }
-                                        } else {
-                                            ai.saiy.android.intent.ExecuteIntent.settingsIntent(getApplicationContext(), IntentConstants.SETTINGS_ACCESSIBILITY);
-                                            getParentActivity().speak(R.string.accessibility_enable, LocalRequest.ACTION_SPEAK_ONLY);
-                                            checkAnnounceCallerId = false;
                                         }
                                         if (!checkAnnounceCallerId) {
                                             if (DEBUG) {

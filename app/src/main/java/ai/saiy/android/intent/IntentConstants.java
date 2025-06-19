@@ -22,6 +22,7 @@ package ai.saiy.android.intent;
  */
 public class IntentConstants {
 
+    @Deprecated
     public static final int SETTINGS_ACCESSIBILITY = 1;
     public static final int SETTINGS_VOICE_SEARCH = 2;
     public static final int SETTINGS_INPUT_METHOD = 3;
