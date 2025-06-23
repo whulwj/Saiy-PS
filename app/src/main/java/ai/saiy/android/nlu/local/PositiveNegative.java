@@ -52,8 +52,7 @@ public class PositiveNegative {
         Pattern doNot = Pattern.compile(".*\\b" + sr.getString(R.string.dont) + "\\b.*");
         Pattern do_not = Pattern.compile(".*\\b" + sr.getString(R.string.do_not) + "\\b.*");
         Pattern yeah = Pattern.compile(".*\\b" + sr.getString(R.string.yeah) + "\\b.*");
-        sr.reset();
-        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage), true).detectCancel(resultsRecognition)) {
+        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage)).detectCancel(resultsRecognition)) {
             return Result.CANCEL;
         }
         int negativeCount = 0;

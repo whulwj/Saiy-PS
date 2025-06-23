@@ -75,7 +75,6 @@ public class Music_en {
         final String from = sr.getString(R.string.from);
         final String a = sr.getString(R.string.a);
         final String an = sr.getString(R.string.an);
-        sr.reset();
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
             if (vdLower.startsWith(playStr)) {

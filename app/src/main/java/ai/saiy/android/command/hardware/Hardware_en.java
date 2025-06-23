@@ -73,7 +73,6 @@ public class Hardware_en {
             MyLog.i(CLS_NAME, "result: " + result.name());
             MyLog.i(CLS_NAME, "confidenceScore: " + onOff.getConfidence());
         }
-        sr.reset();
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
             if (vdLower.contains(bluetooth)) {

@@ -164,7 +164,7 @@ public class TwitterConfirm {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "TWITTER_CONTENT");
                 }
-                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl), true).detectCancel(resultsRecognition)) {
+                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl)).detectCancel(resultsRecognition)) {
                     localRequest = new LocalRequest(mContext);
                     localRequest.prepareCancelled(sl, vrLocale, ttsLocale);
                     localRequest.execute();

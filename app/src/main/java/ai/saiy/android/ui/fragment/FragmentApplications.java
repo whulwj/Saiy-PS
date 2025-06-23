@@ -684,7 +684,6 @@ public class FragmentApplications extends Fragment implements View.OnClickListen
                     SupportedLanguage supportedLanguage = SupportedLanguage.getSupportedLanguage(vrLocale);
                     ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(getApplicationContext(), supportedLanguage);
                     String utterance = sr.getString(R.string.content_tasker_reinstall_3);
-                    sr.reset();
                     ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(getApplicationContext());
                     localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, vrLocale, ai.saiy.android.utils.SPH.getTTSLocale(getApplicationContext()), utterance);
                     localRequest.setCondition(Condition.CONDITION_CHECK_REINSTALLATION);

@@ -92,14 +92,9 @@ public class Translate_en {
      * Constructor
      *
      * @param sr    the {@link SaiyResources}
-     * @param reset true if the {@link SaiyResources} should be reset immediately
      */
-    public Translate_en(@NonNull final SaiyResources sr, final boolean reset) {
+    public Translate_en(@NonNull final SaiyResources sr) {
         translate_ = sr.getString(ai.saiy.android.R.string.translate_);
-
-        if (reset) {
-            sr.reset();
-        }
     }
 
     /**
@@ -252,8 +247,6 @@ public class Translate_en {
                 MyLog.i(CLS_NAME, "strings initialised");
             }
         }
-
-        sr.reset();
 
         utterance = utterance.replaceFirst(translate_, "");
 

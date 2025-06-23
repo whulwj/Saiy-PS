@@ -95,7 +95,7 @@ public class OnOff {
     }
 
     public Result resolve(@NonNull ArrayList<String> voiceData, SupportedLanguage supportedLanguage, ai.saiy.android.localisation.SaiyResources sr) {
-        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, sr, true).detectCancel(voiceData)) {
+        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, sr).detectCancel(voiceData)) {
             return Result.CANCEL;
         }
         final Locale locale = supportedLanguage.getLocale();

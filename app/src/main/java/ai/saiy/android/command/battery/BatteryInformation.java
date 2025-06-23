@@ -168,8 +168,6 @@ public class BatteryInformation {
                     break;
             }
 
-            sr.reset();
-
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "batteryIntent: null");
@@ -240,8 +238,6 @@ public class BatteryInformation {
                     break;
             }
 
-            sr.reset();
-
         } else {
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "batteryIntent: null");
@@ -281,7 +277,6 @@ public class BatteryInformation {
 
                 final SaiyResources sr = new SaiyResources(mContext, sl);
                 setVoltageResponse(String.valueOf(voltage) + " " + sr.getString(ai.saiy.android.R.string.volts));
-                sr.reset();
             } else {
                 if (DEBUG) {
                     MyLog.w(CLS_NAME, "getVoltage reporting incorrectly");
@@ -387,8 +382,6 @@ public class BatteryInformation {
                         units = sr.getString(ai.saiy.android.R.string.fahrenheit);
                         break;
                 }
-
-                sr.reset();
 
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "getTemperature: " + temperature);

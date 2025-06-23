@@ -66,7 +66,6 @@ public class CommandDriving {
         final String drivingProfileResponse = sr.getString(R.string.driving_profile_response);
         final String drivingProfileAlreadyResponse = sr.getString(R.string.driving_profile_already_response);
         final String drivingProfileMissingPermissions = sr.getString(R.string.driving_profile_missing_permissions);
-        sr.reset();
         boolean toggleDrivingProfile = true;
         switch (commandDrivingValues.getAction()) {
             case ENABLE:

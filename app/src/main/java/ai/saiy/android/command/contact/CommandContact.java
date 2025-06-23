@@ -527,7 +527,6 @@ public class CommandContact {
         final String there = sr.getString(R.string.there);
         final String on = sr.getString(R.string.on);
         final String mobile = sr.getString(R.string.mobile);
-        sr.reset();
         if (result.startsWith(attacks_message + XMLResultsHandler.SEP_SPACE)) {
             result = result.replaceFirst(attacks_message, "").trim();
         }
@@ -597,7 +596,6 @@ public class CommandContact {
         String b53 = sr.getString(R.string.an_email);
         String an_email = sr.getString(R.string.an_email_message);
         String and = sr.getString(R.string.and);
-        sr.reset();
         if (result.startsWith(email + XMLResultsHandler.SEP_SPACE)) {
             result = result.replaceFirst(email_message, "").trim().replaceFirst(email, "").trim();
         }

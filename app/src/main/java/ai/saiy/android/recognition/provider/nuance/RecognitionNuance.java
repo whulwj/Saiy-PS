@@ -298,8 +298,8 @@ public class RecognitionNuance {
             } else {
                 // Due to Nuance not supporting partial results, we need to check for a cancel
                 // command so we can react quickly and not waste resource. This is a race condition.
-                isCancelled = !servingRemote && new Cancel(sl, new SaiyResources(mContext, sl),
-                        true).detectPartial(results);
+                isCancelled = !servingRemote && new Cancel(sl, new SaiyResources(mContext, sl)
+                        ).detectPartial(results);
 
                 if (isCancelled) {
                     listener.onResults(results);

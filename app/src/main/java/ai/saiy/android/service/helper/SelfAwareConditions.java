@@ -2738,7 +2738,6 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         } else {
             str = sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_5);
         }
-        sr.reset();
         LocalRequest localRequest = new LocalRequest(mContext);
         localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, getSupportedLanguage(false), getVRLocale(), getTTSLocale(), str);
         localRequest.setCondition(Condition.CONDITION_NONE);

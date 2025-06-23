@@ -57,7 +57,6 @@ public class Navigation_en {
         final String to = sr.getString(R.string.to);
         final String closest = sr.getString(R.string.closest);
         final String nearest = sr.getString(R.string.nearest);
-        sr.reset();
         final CommandNavigationValues commandNavigationValues = new CommandNavigationValues();
         commandNavigationValues.setType(CommandNavigationValues.Type.UNKNOWN);
         commandNavigationValues.setAction("");

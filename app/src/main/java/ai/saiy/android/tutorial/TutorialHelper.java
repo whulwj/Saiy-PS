@@ -62,7 +62,6 @@ public class TutorialHelper {
             }
             ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
             initStrings(sr);
-            sr.reset();
         }
     }
 

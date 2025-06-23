@@ -78,22 +78,20 @@ public class Translate implements Callable<ArrayList<Pair<CC, Float>>> {
      *
      * @param sl    the {@link SupportedLanguage}
      * @param sr    the {@link SaiyResources}
-     * @param reset true if the {@link SaiyResources} should be reset.
      */
-    public Translate(@NonNull final SupportedLanguage sl, @NonNull final SaiyResources sr,
-                     final boolean reset) {
+    public Translate(@NonNull final SupportedLanguage sl, @NonNull final SaiyResources sr) {
         this.sl = sl;
 
         switch (sl) {
 
             case ENGLISH:
-                translate = new Translate_en(sr, reset);
+                translate = new Translate_en(sr);
                 break;
             case ENGLISH_US:
-                translate = new Translate_en(sr, reset);
+                translate = new Translate_en(sr);
                 break;
             default:
-                translate = new Translate_en(sr, reset);
+                translate = new Translate_en(sr);
                 break;
         }
     }

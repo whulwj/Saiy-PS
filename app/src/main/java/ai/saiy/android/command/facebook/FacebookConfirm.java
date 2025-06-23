@@ -191,7 +191,7 @@ public class FacebookConfirm {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "FACEBOOK_CONTENT");
                 }
-                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl), true).detectCancel(resultsRecognition)) {
+                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl)).detectCancel(resultsRecognition)) {
                     localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext);
                     localRequest.prepareCancelled(sl, vrLocale, ttsLocale);
                     localRequest.execute();

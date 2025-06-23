@@ -207,7 +207,6 @@ public final class InitStrings {
         callableList.add(new Coin(sr, sl, voiceData, confidence));
         callableList.add(new Donate(sr, sl, voiceData, confidence));
         callableList.add(new Alexa(sr, sl, voiceData, confidence));
-        sr.reset();
     }
 
     public void init() {

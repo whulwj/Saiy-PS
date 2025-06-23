@@ -56,7 +56,6 @@ public class Launch_en {
         final String the = sr.getString(R.string.the);
         final String application = sr.getString(R.string.application);
         final String app = sr.getString(R.string.app);
-        sr.reset();
         final String launchPrefix = launch + XMLResultsHandler.SEP_SPACE;
         final String openPrefix = open + XMLResultsHandler.SEP_SPACE;
         String[] split = null;

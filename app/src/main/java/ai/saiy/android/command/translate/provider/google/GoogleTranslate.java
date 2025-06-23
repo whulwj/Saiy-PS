@@ -307,7 +307,6 @@ public class GoogleTranslate {
         if (pTranslate == null) {
             final SaiyResources sr = new SaiyResources(ctx, sl);
             initStrings(sr);
-            sr.reset();
         }
 
         final Locale loc = sl.getLocale();

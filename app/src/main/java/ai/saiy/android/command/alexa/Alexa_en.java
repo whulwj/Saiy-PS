@@ -45,11 +45,8 @@ public class Alexa_en {
         }
     }
 
-    public Alexa_en(ai.saiy.android.localisation.SaiyResources sr, boolean reset) {
+    public Alexa_en(ai.saiy.android.localisation.SaiyResources sr) {
         alexa = sr.getString(R.string.alexa);
-        if (reset) {
-            sr.reset();
-        }
     }
 
     public static ArrayList<String> sortAlexa(Context context, ArrayList<String> voiceData, SupportedLanguage supportedLanguage) {
@@ -62,7 +59,6 @@ public class Alexa_en {
             }
             final ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
             initStrings(sr);
-            sr.reset();
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }

@@ -78,21 +78,20 @@ public class Cancel implements Callable<ArrayList<Pair<CC, Float>>> {
      *
      * @param sl    the {@link SupportedLanguage}
      * @param sr    the {@link SaiyResources}
-     * @param reset set to true if the {@link SaiyResources} should be reset
      */
-    public Cancel(@NonNull final SupportedLanguage sl, @NonNull final SaiyResources sr, final boolean reset) {
+    public Cancel(@NonNull final SupportedLanguage sl, @NonNull final SaiyResources sr) {
         this.sl = sl;
 
         switch (sl) {
 
             case ENGLISH:
-                cancel = new Cancel_en(sr, reset);
+                cancel = new Cancel_en(sr);
                 break;
             case ENGLISH_US:
-                cancel = new Cancel_en(sr, reset);
+                cancel = new Cancel_en(sr);
                 break;
             default:
-                cancel = new Cancel_en(sr, reset);
+                cancel = new Cancel_en(sr);
                 break;
         }
     }

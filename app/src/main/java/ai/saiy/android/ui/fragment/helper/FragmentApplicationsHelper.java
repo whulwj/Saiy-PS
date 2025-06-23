@@ -484,7 +484,6 @@ public class FragmentApplicationsHelper {
                     SPH.setCheckUnknownSourcesSettingNeeded(FragmentApplicationsHelper.this.getApplicationContext(), true);
                     utterance = sr.getString(R.string.content_tasker_reinstall_1) + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.content_tasker_reinstall_2);
                 }
-                sr.reset();
                 ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(FragmentApplicationsHelper.this.getApplicationContext());
                 localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, vrLocale, SPH.getTTSLocale(FragmentApplicationsHelper.this.getApplicationContext()), utterance);
                 localRequest.setCondition(Condition.CONDITION_CHECK_REINSTALLATION);

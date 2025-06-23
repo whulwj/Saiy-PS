@@ -153,7 +153,7 @@ public class ChatBotHelper {
         Thread.currentThread().setContextClassLoader(getClass().getClassLoader());
         final ArrayList<String> voiceData = new ArrayList<>(1);
         voiceData.add(voiceDatum);
-        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage), true).detectCancel(voiceData)) {
+        if (new ai.saiy.android.command.cancel.Cancel(supportedLanguage, new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage)).detectCancel(voiceData)) {
             if (tts) {
                 speak(context, supportedLanguage, SaiyRequestParams.SILENCE, vrLocale, ttsLocale, false, nodeId);
             }

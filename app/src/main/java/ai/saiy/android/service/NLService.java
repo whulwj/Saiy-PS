@@ -367,7 +367,6 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_GMAIL: ticker naked: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     notificationPeople = notification.extras.getStringArray(Notification.EXTRA_PEOPLE);
@@ -375,7 +374,6 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_GMAIL: notificationPeople naked: discarding");
                         }
-                        sr.reset();
                         return;
                     }
 
@@ -431,7 +429,6 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_ANDROID_MESSAGING: multiple message: discarding");
                         }
-                        sr.reset();
                         return;
                     } else {
                         notificationText = notification.extras.getCharSequence(Notification.EXTRA_TEXT, "").toString();
@@ -439,7 +436,6 @@ public class NLService extends NotificationListenerService {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "PACKAGE_ANDROID_MESSAGING: previous content: discarding");
                             }
-                            sr.reset();
                             return;
                         }
                         synchronized (NLService.messageLock) {
@@ -519,14 +515,12 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_SNAPCHAT: ticker naked: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     if (notification.tickerText.toString().contains(nlService.is_typing)) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_SNAPCHAT: is typing: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     utterance = "New Snapchat. " + notification.tickerText;
@@ -559,7 +553,6 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_EBAY: content naked: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     break;
@@ -573,14 +566,12 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_ANDROID: title contains Saiy/Gmail: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     if (UtilsString.notNaked(notificationText) && (notificationText.contains(context.getString(R.string.app_name)) || notificationText.contains("Gmail"))) {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_ANDROID: text contains Saiy/Gmail: discarding");
                         }
-                        sr.reset();
                         return;
                     }
 
@@ -588,7 +579,6 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_ANDROID: text contains Vocalizer: discarding");
                         }
-                        sr.reset();
                         return;
                     }
 
@@ -611,7 +601,6 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_ANDROID: content naked: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     if (DEBUG) {
@@ -687,7 +676,6 @@ public class NLService extends NotificationListenerService {
                                 if (DEBUG) {
                                     MyLog.i(CLS_NAME, "PACKAGE_WHATSAPP: previous content: discarding");
                                 }
-                                sr.reset();
                                 return;
                             } else {
                                 synchronized (NLService.whatsAppLock) {
@@ -722,7 +710,6 @@ public class NLService extends NotificationListenerService {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "PACKAGE_HANGOUTS: ticker naked or previous: discarding");
                             }
-                            sr.reset();
                             return;
                         }
                         utterance = "You've received a Hangout from " + notification.tickerText;
@@ -732,7 +719,6 @@ public class NLService extends NotificationListenerService {
                             if (DEBUG) {
                                 MyLog.i(CLS_NAME, "PACKAGE_HANGOUTS: notificationTitle naked or previous: discarding");
                             }
-                            sr.reset();
                             return;
                         }
                         if (title.contains(":")) {
@@ -768,7 +754,6 @@ public class NLService extends NotificationListenerService {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "PACKAGE_TWITTER: ticker naked: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     utterance = "Notification from Twitter. " + notification.tickerText;
@@ -790,7 +775,6 @@ public class NLService extends NotificationListenerService {
                             MyLog.i(CLS_NAME, "PACKAGE_FACEBOOK: no content: discarding");
                             MyLog.i(CLS_NAME, "PACKAGE_FACEBOOK: can't structure: discarding");
                         }
-                        sr.reset();
                         return;
                     }
                     if (DEBUG) {
@@ -818,7 +802,6 @@ public class NLService extends NotificationListenerService {
                             MyLog.i(CLS_NAME, "PACKAGE_DEFAULT: no content: discarding");
                             MyLog.i(CLS_NAME, "PACKAGE_DEFAULT: can't structure: discarding");
                         }
-                        sr.reset();
                         return;
                     }
 
@@ -828,7 +811,6 @@ public class NLService extends NotificationListenerService {
                     break;
             }
 
-            sr.reset();
             if (nlService.isRestrictedContent(utterance)) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "restrictedContent: true");
@@ -952,7 +934,6 @@ public class NLService extends NotificationListenerService {
         this.blocked_location = sr.getString(R.string.blocked_location);
         this.is_typing = sr.getString(R.string.is_typing);
         this.an_unknown_application = sr.getString(R.string.an_unknown_application);
-        sr.reset();
         this.isAnnounceNotificationRequired = ai.saiy.android.command.driving.DrivingProfileHelper.isProfileNotificationsEnabled(getApplicationContext()) || (SPH.getAnnounceNotifications(getApplicationContext()) && ai.saiy.android.quiet.QuietTimeHelper.canProceed(getApplicationContext()) && !(ai.saiy.android.device.UtilsDevice.isDeviceLocked(getApplicationContext()) && SPH.getAnnounceNotificationsSecure(getApplicationContext())));
         this.blockedApplications = ai.saiy.android.accessibility.BlockedApplicationsHelper.getBlockedApplications(getApplicationContext());
         this.messages = new ArrayList<>();

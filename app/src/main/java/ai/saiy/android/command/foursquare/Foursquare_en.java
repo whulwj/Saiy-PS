@@ -57,7 +57,6 @@ public class Foursquare_en {
             }
             ai.saiy.android.localisation.SaiyResources aVar = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
             initStrings(aVar);
-            aVar.reset();
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }

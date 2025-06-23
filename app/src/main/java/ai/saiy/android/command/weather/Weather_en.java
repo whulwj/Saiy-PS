@@ -52,7 +52,6 @@ public class Weather_en {
            MyLog.i(CLS_NAME, "strings initialised");
         }
         final String in = sr.getString(R.string.in);
-        sr.reset();
         String vdLower;
         for (String vdDatum : voiceData) {
             vdLower = vdDatum.toLowerCase(locale).trim();

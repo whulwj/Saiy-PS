@@ -728,7 +728,6 @@ public class AnalysisResultHelper {
             MyLog.i(CLS_NAME, "constructResponse: response: " + response);
         }
 
-        sr.reset();
 
         return response;
 

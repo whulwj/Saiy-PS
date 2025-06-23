@@ -268,14 +268,12 @@ public class TimeHelper {
         final ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
         final String today = sr.getString(R.string.today);
         if (DateUtils.isToday(millis)) {
-            sr.reset();
             return today;
         }
         final String yesterday = sr.getString(R.string.yesterday);
         final String of = sr.getString(R.string.of);
         final String the = sr.getString(R.string.the);
         final String on = sr.getString(R.string.on);
-        sr.reset();
         final Calendar lastMonthCalendar = Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale());
         lastMonthCalendar.setTimeInMillis(millis);
         lastMonthCalendar.add(Calendar.DAY_OF_MONTH, -1);

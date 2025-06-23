@@ -52,13 +52,13 @@ public class CancelPartial implements Callable<Pair<Boolean, Integer>> {
         switch (sl) {
 
             case ENGLISH:
-                cancel = new Cancel_en(sr, false);
+                cancel = new Cancel_en(sr);
                 break;
             case ENGLISH_US:
-                cancel = new Cancel_en(sr, false);
+                cancel = new Cancel_en(sr);
                 break;
             default:
-                cancel = new Cancel_en(sr, false);
+                cancel = new Cancel_en(sr);
                 break;
         }
     }

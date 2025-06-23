@@ -63,9 +63,8 @@ public class Cancel_en {
      * Constructor
      *
      * @param sr    the {@link SaiyResources}
-     * @param reset true if the {@link SaiyResources} should be reset immediately
      */
-    public Cancel_en(@NonNull final SaiyResources sr, final boolean reset) {
+    public Cancel_en(@NonNull final SaiyResources sr) {
 
         if (cancel_ == null) {
             if (DEBUG) {
@@ -76,10 +75,6 @@ public class Cancel_en {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "strings initialised");
             }
-        }
-
-        if (reset) {
-            sr.reset();
         }
     }
 

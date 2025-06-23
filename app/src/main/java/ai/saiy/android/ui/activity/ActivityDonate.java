@@ -111,7 +111,6 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
         } else {
             format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24");
         }
-        sr.reset();
         final LocalRequest localRequest = new LocalRequest(getApplicationContext());
         localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, format);
         localRequest.execute();

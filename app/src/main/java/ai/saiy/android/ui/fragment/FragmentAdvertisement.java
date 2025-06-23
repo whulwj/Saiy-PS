@@ -398,7 +398,6 @@ public final class FragmentAdvertisement extends Fragment implements OnUserEarne
         } else {
             format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24");
         }
-        sr.reset();
         getParentActivity().speak(format, LocalRequest.ACTION_SPEAK_ONLY);
         updateFirebase();
         viewModelFirebaseAuth.isAddFree().postValue(true);

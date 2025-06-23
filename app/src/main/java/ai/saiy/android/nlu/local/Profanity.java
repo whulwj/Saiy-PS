@@ -73,7 +73,6 @@ public final class Profanity {
             }
             final SaiyResources sr = new SaiyResources(mContext, sl);
             initStrings(sr);
-            sr.reset();
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "strings initialised");

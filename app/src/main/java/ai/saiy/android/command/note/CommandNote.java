@@ -105,7 +105,6 @@ public class CommandNote {
                         if (voiceNoteProviders == null) {
                             final SaiyResources sr = new SaiyResources(context, supportedLanguage);
                             applicationName = sr.getString(R.string.note) + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.voice);
-                            sr.reset();
                         } else {
                             applicationName = voiceNoteProviders.second;
                         }

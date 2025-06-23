@@ -62,7 +62,6 @@ public class Horoscope_en {
         final String scorpio = sr.getString(R.string.scorpio);
         final String sagittarius = sr.getString(R.string.sagittarius);
         final String libra = sr.getString(R.string.libra);
-        sr.reset();
         String vdLower;
         for (String voiceDatum : voiceData) {
             vdLower = voiceDatum.toLowerCase(locale).trim();

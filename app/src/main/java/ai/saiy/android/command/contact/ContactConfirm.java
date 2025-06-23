@@ -78,7 +78,6 @@ public class ContactConfirm {
         final String home = sr.getString(R.string.home);
         final String mobile = sr.getString(R.string.mobile);
         final String cancel_ = sr.getString(R.string.cancel_).trim();
-        sr.reset();
         final Pattern pWork = Pattern.compile(".*\\b" + work + "\\b.*");
         final Pattern pOffice = Pattern.compile(".*\\b" + office + "\\b.*");
         final Pattern pHome = Pattern.compile(".*\\b" + home + "\\b.*");
@@ -270,7 +269,7 @@ public class ContactConfirm {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "TEXT_CONTENT");
                 }
-                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl), true).detectCancel(resultsRecognition)) {
+                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl)).detectCancel(resultsRecognition)) {
                     localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext);
                     localRequest.prepareCancelled(sl, vrLocale, ttsLocale);
                     localRequest.execute();
@@ -303,7 +302,7 @@ public class ContactConfirm {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "EMAIL_CONTENT");
                 }
-                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl), true).detectCancel(resultsRecognition)) {
+                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl)).detectCancel(resultsRecognition)) {
                     localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext);
                     localRequest.prepareCancelled(sl, vrLocale, ttsLocale);
                     localRequest.execute();
@@ -324,7 +323,7 @@ public class ContactConfirm {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "EMAIL_SUBJECT");
                 }
-                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl), true).detectCancel(resultsRecognition)) {
+                if (new ai.saiy.android.command.cancel.Cancel(sl, new ai.saiy.android.localisation.SaiyResources(mContext, sl)).detectCancel(resultsRecognition)) {
                     localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext);
                     localRequest.prepareCancelled(sl, vrLocale, ttsLocale);
                     localRequest.execute();

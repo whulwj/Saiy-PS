@@ -222,7 +222,6 @@ public final class Resolve {
         callableList.add(new Coin(sr, sl, voiceData, confidence));
         callableList.add(new Donate(sr, sl, voiceData, confidence));
         callableList.add(new Alexa(sr, sl, voiceData, confidence));
-        sr.reset();
     }
 
     /**
@@ -260,8 +259,6 @@ public final class Resolve {
         }
 
         // callableList.add(new Translate(sr, sl, voiceData, confidence));
-
-        sr.reset();
     }
 
     /**

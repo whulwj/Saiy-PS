@@ -41,9 +41,7 @@ public class SaiyResourcesHelper {
     public static String[] getArrayResource(@NonNull final Context ctx, @NonNull final SupportedLanguage sl,
                                             final int parentId) {
         final SaiyResources sr = new SaiyResources(ctx, sl);
-        final String[] resourceArray = sr.getStringArray(parentId);
-        sr.reset();
-        return resourceArray;
+        return sr.getStringArray(parentId);
     }
 
     /**
@@ -58,8 +56,6 @@ public class SaiyResourcesHelper {
     public static String getStringResource(@NonNull final Context ctx, @NonNull final SupportedLanguage sl,
                                            final int parentId) {
         final SaiyResources sr = new SaiyResources(ctx, sl);
-        final String resourceString = sr.getString(parentId);
-        sr.reset();
-        return resourceString;
+        return sr.getString(parentId);
     }
 }

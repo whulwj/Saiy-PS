@@ -173,7 +173,6 @@ public class Tasker_en {
 
         final String called_ = sr.getString(R.string.called_);
         final String named_ = sr.getString(R.string.named_);
-        sr.reset();
 
         String vdLower;
         String[] separated;

@@ -82,7 +82,6 @@ public final class CommandCalculate {
                     final String multiplied_by = sr.getString(R.string._MULTIPLIED_BY_);
                     final String divided_by = sr.getString(R.string._DIVIDED_BY_);
                     final String equals = sr.getString(R.string.EQUALS);
-                    sr.reset();
                     String utterance = calculation.replaceAll("\\*", multiplied_by).replaceAll("/", divided_by) + ". " + equals + XMLResultsHandler.SEP_SPACE + answer;
                     if (ai.saiy.android.utils.SPH.getCalculateCommandVerbose(context) >= 3) {
                         outcome.setUtterance(utterance);

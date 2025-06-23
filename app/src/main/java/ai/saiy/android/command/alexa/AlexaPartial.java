@@ -17,13 +17,13 @@ public class AlexaPartial implements Callable<Pair<Boolean, Integer>> {
         this.sl = supportedLanguage;
         switch (supportedLanguage) {
             case ENGLISH:
-                this.alexa = new Alexa_en(sr, false);
+                this.alexa = new Alexa_en(sr);
                 break;
             case ENGLISH_US:
-                this.alexa = new Alexa_en(sr, false);
+                this.alexa = new Alexa_en(sr);
                 break;
             default:
-                this.alexa = new Alexa_en(sr, false);
+                this.alexa = new Alexa_en(sr);
                 break;
         }
     }

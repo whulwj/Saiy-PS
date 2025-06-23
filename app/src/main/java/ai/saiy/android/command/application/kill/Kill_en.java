@@ -55,7 +55,6 @@ public class Kill_en {
         final String the = sr.getString(R.string.the);
         final String application = sr.getString(R.string.application);
         final String app = sr.getString(R.string.app);
-        sr.reset();
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
             if (vdLower.startsWith(killPrefix)) {

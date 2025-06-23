@@ -48,7 +48,6 @@ public final class Remember_en {
             }
             final ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(context, supportedLanguage);
             initStrings(sr);
-            sr.reset();
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }

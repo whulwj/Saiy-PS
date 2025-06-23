@@ -76,7 +76,6 @@ public final class Calculate_en {
         final String equals = sr.getString(R.string.EQUALS);
         final String equal = sr.getString(R.string.EQUAL);
         final String percent = sr.getString(R.string.PERCENT);
-        sr.reset();
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
             if (vdLower.startsWith(calculation)) {

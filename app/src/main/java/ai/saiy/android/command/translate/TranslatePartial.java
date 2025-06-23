@@ -52,13 +52,13 @@ public class TranslatePartial implements Callable<Pair<Boolean, Integer>> {
         switch (sl) {
 
             case ENGLISH:
-                translate = new Translate_en(sr, false);
+                translate = new Translate_en(sr);
                 break;
             case ENGLISH_US:
-                translate = new Translate_en(sr, false);
+                translate = new Translate_en(sr);
                 break;
             default:
-                translate = new Translate_en(sr, false);
+                translate = new Translate_en(sr);
                 break;
         }
     }

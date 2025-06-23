@@ -117,7 +117,6 @@ public class CommandBatteryValues {
             final String voltage = sr.getString(ai.saiy.android.R.string.voltage);
             final String status = sr.getString(ai.saiy.android.R.string.status);
             final String health = sr.getString(ai.saiy.android.R.string.health);
-            sr.reset();
 
             if (type.matches(temperature)) {
                 if (DEBUG) {

@@ -103,8 +103,6 @@ public class PartialHelper {
             this.alexaPartial = new AlexaPartial(sr, sl);
             callableList.add(alexaPartial);
         }
-
-        sr.reset();
     }
 
     /**

@@ -58,7 +58,6 @@ public final class Timer_en {
         final String hour = sr.getString(R.string.hour);
         final String minute = sr.getString(R.string.minute);
         final String second = sr.getString(R.string.second);
-        sr.reset();
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
             if (DEBUG) {

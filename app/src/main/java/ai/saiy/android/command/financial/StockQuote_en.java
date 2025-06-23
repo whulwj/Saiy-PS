@@ -56,7 +56,6 @@ public class StockQuote_en {
         }
         final String word_for = sr.getString(R.string.word_for);
         final String of = sr.getString(R.string.of);
-        sr.reset();
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
             if (DEBUG) {

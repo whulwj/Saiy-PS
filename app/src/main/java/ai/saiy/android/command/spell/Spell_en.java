@@ -164,7 +164,6 @@ public class Spell_en {
             }
             final SaiyResources sr = new SaiyResources(ctx, sl);
             initStrings(sr);
-            sr.reset();
         } else {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "strings initialised");
