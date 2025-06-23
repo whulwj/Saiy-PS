@@ -1,6 +1,5 @@
 package ai.saiy.android.ui.activity;
 
-import android.os.Build;
 import android.os.Bundle;
 import android.text.format.DateUtils;
 import android.widget.Toast;
@@ -41,11 +40,7 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
     }
 
     private boolean isActive() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return !isDestroyed() && !isFinishing();
-        } else {
-            return !isFinishing();
-        }
+        return !isDestroyed() && !isFinishing();
     }
 
     /**

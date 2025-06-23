@@ -1336,11 +1336,7 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
     }
 
     public boolean isActive() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-            return !isDestroyed() && !isFinishing();
-        } else {
-            return !isFinishing();
-        }
+        return !isDestroyed() && !isFinishing();
     }
 
     @Override

@@ -2,7 +2,6 @@ package ai.saiy.android.ui.viewmodel;
 
 import android.app.Activity;
 import android.app.Application;
-import android.os.Build;
 import android.util.Pair;
 
 import androidx.annotation.NonNull;
@@ -441,7 +440,7 @@ public final class ViewModelBilling extends AndroidViewModel implements Lifecycl
                 }
             };
             mActivityProvider.withActivity(activity -> {
-                if (activity == null || (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && activity.isDestroyed()) || activity.isFinishing() || activity.isChangingConfigurations()) {
+                if (activity == null || activity.isDestroyed() || activity.isFinishing() || activity.isChangingConfigurations()) {
                     task.addOnCompleteListener(onCompleteListener);
                     return;
                 }

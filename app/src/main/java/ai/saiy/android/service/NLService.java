@@ -10,7 +10,6 @@ import android.service.notification.StatusBarNotification;
 import android.util.Pair;
 
 import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
 
 import com.google.common.collect.Lists;
 import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
@@ -71,7 +70,6 @@ public class NLService extends NotificationListenerService {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void handleNotificationRemoved(final StatusBarNotification statusBarNotification) {
         if (DEBUG) {
             MyLog.d(CLS_NAME, "handleNotificationRemoved");
@@ -201,7 +199,6 @@ public class NLService extends NotificationListenerService {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private void handleNotificationPosted(final StatusBarNotification statusBarNotification) {
         if (DEBUG) {
             MyLog.d(CLS_NAME, "onNotificationPosted");
@@ -209,7 +206,6 @@ public class NLService extends NotificationListenerService {
         Schedulers.computation().scheduleDirect((new NotificationPostedTask(NLService.this, statusBarNotification)));
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     private static class NotificationPostedTask implements Runnable {
         private final NLService nlService;
         private final StatusBarNotification statusBarNotification;
@@ -276,9 +272,7 @@ public class NLService extends NotificationListenerService {
                 return;
             }
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                nlService.examineBundle(notification.extras);
-            }
+            nlService.examineBundle(notification.extras);
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "onNotificationPosted: notification: " + notification);
             }
@@ -303,12 +297,7 @@ public class NLService extends NotificationListenerService {
                 MyLog.i(CLS_NAME, "ticker: " + ((notification.tickerText == null)? "" : notification.tickerText));
             }
 
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.KITKAT) {
-                if (DEBUG) {
-                    MyLog.i(CLS_NAME, "no bundle");
-                }
-                return;
-            } else if (!ai.saiy.android.utils.UtilsBundle.notNaked(notification.extras)) {
+            if (!ai.saiy.android.utils.UtilsBundle.notNaked(notification.extras)) {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "bundle naked");
                 }
@@ -971,7 +960,6 @@ public class NLService extends NotificationListenerService {
         this.whatsAppContent = new ArrayList<>();
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onNotificationPosted(StatusBarNotification statusBarNotification) {
         if (isDelayTooShort()) {
@@ -990,7 +978,6 @@ public class NLService extends NotificationListenerService {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.JELLY_BEAN_MR2)
     @Override
     public void onNotificationRemoved(StatusBarNotification statusBarNotification) {
         if (isDelayTooShort()) {

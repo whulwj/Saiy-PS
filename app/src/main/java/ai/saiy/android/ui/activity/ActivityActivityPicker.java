@@ -2,7 +2,6 @@ package ai.saiy.android.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -94,7 +93,7 @@ public class ActivityActivityPicker extends AppCompatActivity implements UserFir
     }
 
     public boolean isActive() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 ? !isDestroyed() && !isFinishing() : !isFinishing();
+        return !isDestroyed() && !isFinishing();
     }
 
     @Override

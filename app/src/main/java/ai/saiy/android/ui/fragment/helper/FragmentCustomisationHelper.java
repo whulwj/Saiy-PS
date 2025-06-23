@@ -1355,11 +1355,9 @@ public class FragmentCustomisationHelper {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "onActivityResult: importUri: " + directoryUri);
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    if (takeFlags != 0) {
-                        getApplicationContext().getContentResolver().takePersistableUriPermission(directoryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                    }
+                final int takeFlags = data.getFlags() & (Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                if (takeFlags != 0) {
+                    getApplicationContext().getContentResolver().takePersistableUriPermission(directoryUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 }
                 final DocumentFile documentFile = DocumentFile.fromTreeUri(getApplicationContext(), directoryUri);
                 DocumentFile[] childDocuments = null;

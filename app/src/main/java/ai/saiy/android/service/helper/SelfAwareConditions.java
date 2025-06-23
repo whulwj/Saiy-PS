@@ -1150,7 +1150,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
 
                 addCallback(rl);
 
-                if (DEBUG && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                if (DEBUG) {
                     MyLog.v(CLS_NAME, "validateRemoteBundle: registered clients: "
                             + remoteCallbacks.getRegisteredCallbackCount());
                 }

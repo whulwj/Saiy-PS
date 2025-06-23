@@ -565,10 +565,8 @@ public class UtilsApplication {
         if (resolveInfo.serviceInfo != null && !TextUtils.isEmpty(resolveInfo.serviceInfo.packageName)) {
             return resolveInfo.serviceInfo.packageName;
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            if (resolveInfo.providerInfo != null && !TextUtils.isEmpty(resolveInfo.providerInfo.packageName)) {
-                return resolveInfo.providerInfo.packageName;
-            }
+        if (resolveInfo.providerInfo != null && !TextUtils.isEmpty(resolveInfo.providerInfo.packageName)) {
+            return resolveInfo.providerInfo.packageName;
         }
         return resolveInfo.resolvePackageName;
     }

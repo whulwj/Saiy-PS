@@ -18,7 +18,6 @@
 package ai.saiy.android.tts;
 
 import android.content.Context;
-import android.os.Build;
 
 import java.util.Locale;
 
@@ -84,17 +83,15 @@ public final class TextToSpeechLegacy extends SaiyTextToSpeech {
         Schedulers.io().scheduleDirect(new Runnable() {
             @Override
             public void run() {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                    try {
-                        final Locale defaultLanguage = TextToSpeechLegacy.this.getDefaultLanguage();
-                        MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage);
-                    } catch (final NullPointerException e) {
-                        MyLog.w(CLS_NAME, "NullPointerException");
-                        e.printStackTrace();
-                    } catch (final Exception e) {
-                        MyLog.w(CLS_NAME, "Exception");
-                        e.printStackTrace();
-                    }
+                try {
+                    final Locale defaultLanguage = TextToSpeechLegacy.this.getDefaultLanguage();
+                    MyLog.v(CLS_NAME, "defaultLanguage toString: " + defaultLanguage);
+                } catch (final NullPointerException e) {
+                    MyLog.w(CLS_NAME, "NullPointerException");
+                    e.printStackTrace();
+                } catch (final Exception e) {
+                    MyLog.w(CLS_NAME, "Exception");
+                    e.printStackTrace();
                 }
 
                 try {

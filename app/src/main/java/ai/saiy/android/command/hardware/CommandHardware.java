@@ -235,7 +235,7 @@ public class CommandHardware {
                     break;
                 case AEROPLANE:
                     final String flightMode = context.getString(R.string.flight) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mode);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1 && Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                         outcome.setOutcome(Outcome.FAILURE);
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
                     } else {
