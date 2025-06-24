@@ -4,8 +4,6 @@ import static ai.saiy.android.utils.UtilsDate.MONTH_OFFSET;
 
 import android.content.Context;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
 import ai.saiy.android.utils.UtilsLocale;
@@ -675,7 +674,7 @@ public class CalendarProcessHelper {
         if (DEBUG) {
             MyLog.d(CLS_NAME, "dissectTime hour: " + hourString);
         }
-        separated = hourString.split(XMLResultsHandler.SEP_SPACE);
+        separated = hourString.split(Constants.SEP_SPACE);
         if (separated.length <= 0) {
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "dissectTime number = 0 ");
@@ -1029,7 +1028,7 @@ public class CalendarProcessHelper {
                         case Calendar.THURSDAY:
                         case Calendar.FRIDAY:
                         case Calendar.SATURDAY:
-                            calendarProcess.extraWeekdayDescription = XMLResultsHandler.SEP_SPACE + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + UtilsDate.getWeekday(context, calendarProcess.weekday);
+                            calendarProcess.extraWeekdayDescription = Constants.SEP_SPACE + context.getString(R.string.not_a) + Constants.SEP_SPACE + UtilsDate.getWeekday(context, calendarProcess.weekday);
                             break;
                         default:
                             return false;
@@ -2176,7 +2175,7 @@ public class CalendarProcessHelper {
     }
 
     private static boolean hasHourOrMinute(String str) {
-        final String[] separated = str.trim().split(XMLResultsHandler.SEP_SPACE);
+        final String[] separated = str.trim().split(Constants.SEP_SPACE);
         final int length = separated.length;
         for (int i = 1; i < length; i++) {
             if (separated[i].contains(hour)) {

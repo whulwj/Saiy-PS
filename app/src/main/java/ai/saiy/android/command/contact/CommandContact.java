@@ -6,8 +6,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -25,6 +23,7 @@ import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
@@ -53,7 +52,7 @@ public class CommandContact {
             outcome.setOutcome(Outcome.SUCCESS);
             if (ai.saiy.android.permissions.PermissionHelper.checkTelephonyGroupPermissions(context, cr.getBundle())) {
                 final String vdTrimmed = commandContactValues.getVoiceDataTrimmed().get(0);
-                outcome.setUtterance(context.getString(R.string.dialing) + XMLResultsHandler.SEP_SPACE + vdTrimmed.replaceAll(".(?=.)", "$0 ").trim());
+                outcome.setUtterance(context.getString(R.string.dialing) + Constants.SEP_SPACE + vdTrimmed.replaceAll(".(?=.)", "$0 ").trim());
                 commandContactValues.setRequiredNumber(vdTrimmed);
                 new ContactHelper(context, commandContactValues, supportedLanguage, SPH.getVRLocale(context), SPH.getTTSLocale(context)).perform(false);
             } else {
@@ -85,7 +84,7 @@ public class CommandContact {
                                 outcome.setUtterance(context.getString(R.string.error_loading_contact));
                             } else {
                                 outcome.setOutcome(Outcome.SUCCESS);
-                                outcome.setUtterance(context.getString(R.string.displayed) + XMLResultsHandler.SEP_SPACE + contact.getName());
+                                outcome.setUtterance(context.getString(R.string.displayed) + Constants.SEP_SPACE + contact.getName());
                             }
                         }
                         break;
@@ -101,7 +100,7 @@ public class CommandContact {
                                 outcome.setUtterance(context.getString(R.string.error_loading_contact));
                             } else {
                                 outcome.setOutcome(Outcome.SUCCESS);
-                                outcome.setUtterance(context.getString(R.string.editing) + XMLResultsHandler.SEP_SPACE + contact.getName());
+                                outcome.setUtterance(context.getString(R.string.editing) + Constants.SEP_SPACE + contact.getName());
                             }
                         }
                         break;
@@ -113,7 +112,7 @@ public class CommandContact {
                                     ArrayList<Choice> choices = contactHelper.getChoices(context, contacts);
                                     if (choices.isEmpty()) {
                                         outcome.setOutcome(Outcome.SUCCESS);
-                                        outcome.setUtterance(contacts.get(0).getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.error_no_numbers));
+                                        outcome.setUtterance(contacts.get(0).getName() + Constants.SEP_SPACE + context.getString(R.string.error_no_numbers));
                                         UtilsContact.displayContact(context, contacts.get(0).getID());
                                     } else {
                                         outcome.setOutcome(Outcome.SUCCESS);
@@ -121,40 +120,40 @@ public class CommandContact {
                                         final @Choice.CombinedType int combinedType = Choice.getCombinedType(choices);
                                         final String name = contacts.get(0).getName();
                                         String where;
-                                        final String callConfirmation = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.call) + XMLResultsHandler.SEP_SPACE + name;
+                                        final String callConfirmation = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + Constants.SEP_SPACE + context.getString(R.string.call) + Constants.SEP_SPACE + name;
                                         switch (combinedType) {
                                             case Choice.MOBILE:
-                                                where = context.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mobile);
+                                                where = context.getString(R.string.on) + Constants.SEP_SPACE + context.getString(R.string.their) + Constants.SEP_SPACE + context.getString(R.string.mobile);
                                                 commandContactValues.setConfirmType(ContactConfirm.ConfirmType.CALL_CONFIRM);
                                                 commandContactValues.setCallType(CommandContactValues.CallType.MOBILE);
-                                                commandContactValues.setActionUtterance(context.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + name + XMLResultsHandler.SEP_SPACE + context.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mobile));
+                                                commandContactValues.setActionUtterance(context.getString(R.string.calling) + Constants.SEP_SPACE + name + Constants.SEP_SPACE + context.getString(R.string.on) + Constants.SEP_SPACE + context.getString(R.string.their) + Constants.SEP_SPACE + context.getString(R.string.mobile));
                                                 contacts.get(0).setNumber(getChoice(choices, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).getNumber());
                                                 break;
                                             case Choice.HOME:
-                                                where = context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home);
+                                                where = context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home);
                                                 commandContactValues.setConfirmType(ContactConfirm.ConfirmType.CALL_CONFIRM);
                                                 commandContactValues.setCallType(CommandContactValues.CallType.HOME);
-                                                commandContactValues.setActionUtterance(context.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + name + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home));
+                                                commandContactValues.setActionUtterance(context.getString(R.string.calling) + Constants.SEP_SPACE + name + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home));
                                                 contacts.get(0).setNumber(getChoice(choices, ContactsContract.CommonDataKinds.Phone.TYPE_HOME).getNumber());
                                                 break;
                                             case Choice.WORK:
-                                                where = context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work);
+                                                where = context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work);
                                                 commandContactValues.setConfirmType(ContactConfirm.ConfirmType.CALL_CONFIRM);
                                                 commandContactValues.setCallType(CommandContactValues.CallType.WORK);
-                                                commandContactValues.setActionUtterance(context.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + name + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work));
+                                                commandContactValues.setActionUtterance(context.getString(R.string.calling) + Constants.SEP_SPACE + name + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work));
                                                 contacts.get(0).setNumber(getChoice(choices, ContactsContract.CommonDataKinds.Phone.TYPE_WORK).getNumber());
                                                 break;
                                             case Choice.MOBILE_OR_HOME:
-                                                where = context.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mobile) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.or) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home);
+                                                where = context.getString(R.string.on) + Constants.SEP_SPACE + context.getString(R.string.their) + Constants.SEP_SPACE + context.getString(R.string.mobile) + Constants.SEP_SPACE + context.getString(R.string.or) + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home);
                                                 break;
                                             case Choice.MOBILE_OR_WORK:
-                                                where = context.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mobile) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.or) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work);
+                                                where = context.getString(R.string.on) + Constants.SEP_SPACE + context.getString(R.string.their) + Constants.SEP_SPACE + context.getString(R.string.mobile) + Constants.SEP_SPACE + context.getString(R.string.or) + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work);
                                                 break;
                                             case Choice.MOBILE_OR_HOME_OR_WORK:
-                                                where = context.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mobile) + ", " + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.or) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work);
+                                                where = context.getString(R.string.on) + Constants.SEP_SPACE + context.getString(R.string.their) + Constants.SEP_SPACE + context.getString(R.string.mobile) + ", " + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home) + Constants.SEP_SPACE + context.getString(R.string.or) + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work);
                                                 break;
                                             case Choice.HOME_OR_WORK:
-                                                where = context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.or) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work);
+                                                where = context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home) + Constants.SEP_SPACE + context.getString(R.string.or) + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work);
                                                 break;
                                             default:
                                                 where = "";
@@ -164,7 +163,7 @@ public class CommandContact {
                                         commandContactValues.setContact(contacts.get(0));
                                         outcome.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
                                         outcome.setCondition(Condition.CONDITION_CONTACT);
-                                        confirmationUtterance = callConfirmation + XMLResultsHandler.SEP_SPACE + where;
+                                        confirmationUtterance = callConfirmation + Constants.SEP_SPACE + where;
                                         outcome.setUtterance(confirmationUtterance);
                                         commandContactValues.setConfirmationUtterance(confirmationUtterance);
                                     }
@@ -177,20 +176,20 @@ public class CommandContact {
                                         if (contact == null) {
                                             outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                         } else {
-                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.home) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.number) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.home) + Constants.SEP_SPACE + context.getString(R.string.number) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                             UtilsContact.displayContact(context, contact.getID());
                                         }
                                     } else {
                                         outcome.setOutcome(Outcome.SUCCESS);
                                         commandContactValues.setContact(contact);
-                                        String actionUtterance = context.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home);
+                                        String actionUtterance = context.getString(R.string.calling) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home);
                                         if (!needCallConfirmation) {
                                             outcome.setUtterance(actionUtterance);
                                             new ContactHelper(context, commandContactValues, supportedLanguage, SPH.getVRLocale(context), SPH.getTTSLocale(context)).perform(false);
                                         } else {
                                             outcome.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
                                             outcome.setCondition(Condition.CONDITION_CONTACT);
-                                            confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.call) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home);
+                                            confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + Constants.SEP_SPACE + context.getString(R.string.call) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home);
                                             outcome.setUtterance(confirmationUtterance);
                                             commandContactValues.setConfirmationUtterance(confirmationUtterance);
                                             commandContactValues.setActionUtterance(actionUtterance);
@@ -205,20 +204,20 @@ public class CommandContact {
                                         if (contact == null) {
                                             outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                         } else {
-                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.work) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.number) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.work) + Constants.SEP_SPACE + context.getString(R.string.number) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                             UtilsContact.displayContact(context, contact.getID());
                                         }
                                     } else {
                                         outcome.setOutcome(Outcome.SUCCESS);
                                         commandContactValues.setContact(contact);
-                                        String actionUtterance = context.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work);
+                                        String actionUtterance = context.getString(R.string.calling) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work);
                                         if (!needCallConfirmation) {
                                             outcome.setUtterance(actionUtterance);
                                             new ContactHelper(context, commandContactValues, supportedLanguage, SPH.getVRLocale(context), SPH.getTTSLocale(context)).perform(false);
                                         } else {
                                             outcome.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
                                             outcome.setCondition(Condition.CONDITION_CONTACT);
-                                            confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.call) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work);
+                                            confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + Constants.SEP_SPACE + context.getString(R.string.call) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work);
                                             outcome.setUtterance(confirmationUtterance);
                                             commandContactValues.setConfirmationUtterance(confirmationUtterance);
                                             commandContactValues.setActionUtterance(actionUtterance);
@@ -233,20 +232,20 @@ public class CommandContact {
                                         if (contact == null) {
                                             outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                         } else {
-                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.mobile) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.number) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.mobile) + Constants.SEP_SPACE + context.getString(R.string.number) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                             UtilsContact.displayContact(context, contact.getID());
                                         }
                                     } else {
                                         outcome.setOutcome(Outcome.SUCCESS);
                                         commandContactValues.setContact(contact);
-                                        String actionUtterance = context.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mobile);
+                                        String actionUtterance = context.getString(R.string.calling) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.on) + Constants.SEP_SPACE + context.getString(R.string.their) + Constants.SEP_SPACE + context.getString(R.string.mobile);
                                         if (!needCallConfirmation) {
                                             outcome.setUtterance(actionUtterance);
                                             new ContactHelper(context, commandContactValues, supportedLanguage, SPH.getVRLocale(context), SPH.getTTSLocale(context)).perform(false);
                                         } else {
                                             outcome.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
                                             outcome.setCondition(Condition.CONDITION_CONTACT);
-                                            confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.call) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mobile);
+                                            confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + Constants.SEP_SPACE + context.getString(R.string.call) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.on) + Constants.SEP_SPACE + context.getString(R.string.their) + Constants.SEP_SPACE + context.getString(R.string.mobile);
                                             outcome.setUtterance(confirmationUtterance);
                                             commandContactValues.setConfirmationUtterance(confirmationUtterance);
                                             commandContactValues.setActionUtterance(actionUtterance);
@@ -262,20 +261,20 @@ public class CommandContact {
                                             if (contact == null) {
                                                 outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                             } else {
-                                                outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.text_default) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.skype_handle) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                                outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.text_default) + Constants.SEP_SPACE + context.getString(R.string.skype_handle) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                                 UtilsContact.displayContact(context, contact.getID());
                                             }
                                         } else {
                                             outcome.setOutcome(Outcome.SUCCESS);
                                             commandContactValues.setContact(contact);
-                                            String actionUtterance = context.getString(R.string.skyping) + XMLResultsHandler.SEP_SPACE + contact.getName();
+                                            String actionUtterance = context.getString(R.string.skyping) + Constants.SEP_SPACE + contact.getName();
                                             if (!needCallConfirmation) {
                                                 outcome.setUtterance(actionUtterance);
                                                 new ContactHelper(context, commandContactValues, supportedLanguage, SPH.getVRLocale(context), SPH.getTTSLocale(context)).perform(false);
                                             } else {
                                                 outcome.setAction(LocalRequest.ACTION_SPEAK_LISTEN);
                                                 outcome.setCondition(Condition.CONDITION_CONTACT);
-                                                confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.skype) + XMLResultsHandler.SEP_SPACE + contact.getName();
+                                                confirmationUtterance = PersonalityResponse.getCallConfirmation(context, supportedLanguage) + Constants.SEP_SPACE + context.getString(R.string.skype) + Constants.SEP_SPACE + contact.getName();
                                                 outcome.setUtterance(confirmationUtterance);
                                                 commandContactValues.setConfirmationUtterance(confirmationUtterance);
                                                 commandContactValues.setActionUtterance(actionUtterance);
@@ -305,7 +304,7 @@ public class CommandContact {
                                         if (contact == null) {
                                             outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                         } else {
-                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.an) + context.getString(R.string.address) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.an) + context.getString(R.string.address) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                             UtilsContact.displayContact(context, contact.getID());
                                         }
                                     } else {
@@ -314,7 +313,7 @@ public class CommandContact {
                                             outcome.setUtterance(context.getString(R.string.error_navigation));
                                         } else {
                                             outcome.setOutcome(Outcome.SUCCESS);
-                                            outcome.setUtterance(context.getString(R.string.navigating) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.to) + XMLResultsHandler.SEP_SPACE + contact.getName());
+                                            outcome.setUtterance(context.getString(R.string.navigating) + Constants.SEP_SPACE + context.getString(R.string.to) + Constants.SEP_SPACE + contact.getName());
                                         }
                                     }
                                     break;
@@ -326,7 +325,7 @@ public class CommandContact {
                                         if (contact == null) {
                                             outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                         } else {
-                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.text_default) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.address) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.text_default) + Constants.SEP_SPACE + context.getString(R.string.home) + Constants.SEP_SPACE + context.getString(R.string.address) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                             UtilsContact.displayContact(context, contact.getID());
                                         }
                                     } else {
@@ -335,7 +334,7 @@ public class CommandContact {
                                             outcome.setUtterance(context.getString(R.string.error_navigation));
                                         } else {
                                             outcome.setOutcome(Outcome.SUCCESS);
-                                            outcome.setUtterance(context.getString(R.string.navigating) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.to) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.home));
+                                            outcome.setUtterance(context.getString(R.string.navigating) + Constants.SEP_SPACE + context.getString(R.string.to) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.home));
                                         }
                                     }
                                     break;
@@ -347,12 +346,12 @@ public class CommandContact {
                                         if (contact == null) {
                                             outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                         } else {
-                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.text_default) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.address) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                            outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.text_default) + Constants.SEP_SPACE + context.getString(R.string.work) + Constants.SEP_SPACE + context.getString(R.string.address) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                             UtilsContact.displayContact(context, contact.getID());
                                         }
                                     } else {
                                         outcome.setOutcome(Outcome.SUCCESS);
-                                        outcome.setUtterance(context.getString(R.string.navigating) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.to) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.work));
+                                        outcome.setUtterance(context.getString(R.string.navigating) + Constants.SEP_SPACE + context.getString(R.string.to) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + context.getString(R.string.work));
                                         UtilsNavigation.navigateToAddress(context, contact.getAddress());
                                     }
                                     break;
@@ -376,7 +375,7 @@ public class CommandContact {
                                 if (contact == null) {
                                     outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                                 } else {
-                                    outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.mobile) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.number) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                    outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.text_default) + context.getString(R.string.mobile) + Constants.SEP_SPACE + context.getString(R.string.number) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                     UtilsContact.displayContact(context, contact.getID());
                                 }
                             } else {
@@ -425,7 +424,7 @@ public class CommandContact {
                             if (contact == null) {
                                 outcome.setUtterance(context.getString(R.string.error_detecting_contact));
                             } else {
-                                outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.an) + context.getString(R.string.email) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.address) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.listed));
+                                outcome.setUtterance(PersonalityResponse.getContactMissingData(context, supportedLanguage, contact.getName()) + Constants.SEP_SPACE + context.getString(R.string.an) + context.getString(R.string.email) + Constants.SEP_SPACE + context.getString(R.string.address) + Constants.SEP_SPACE + context.getString(R.string.listed));
                                 UtilsContact.displayContact(context, contact.getID());
                             }
                         } else {
@@ -527,46 +526,46 @@ public class CommandContact {
         final String there = sr.getString(R.string.there);
         final String on = sr.getString(R.string.on);
         final String mobile = sr.getString(R.string.mobile);
-        if (result.startsWith(attacks_message + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(attacks_message + Constants.SEP_SPACE)) {
             result = result.replaceFirst(attacks_message, "").trim();
         }
-        if (result.startsWith(text + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(text + Constants.SEP_SPACE)) {
             result = result.replaceFirst(text_message, "").trim().replaceFirst(text, "").trim();
         }
-        if (result.startsWith(sms + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(sms + Constants.SEP_SPACE)) {
             result = result.replaceFirst(sms_message, "").trim().replaceFirst(sms, "").trim();
         }
-        if (result.startsWith(text_default + XMLResultsHandler.SEP_SPACE)) {
-            result = result.replaceFirst(text_default + XMLResultsHandler.SEP_SPACE + text_message, "").trim().replaceFirst(a_text, "").trim().replaceFirst(a_message, "").trim().replaceFirst(tell_them, "").trim().replaceFirst(tell_her, "").trim().replaceFirst(tell_him, "").trim();
+        if (result.startsWith(text_default + Constants.SEP_SPACE)) {
+            result = result.replaceFirst(text_default + Constants.SEP_SPACE + text_message, "").trim().replaceFirst(a_text, "").trim().replaceFirst(a_message, "").trim().replaceFirst(tell_them, "").trim().replaceFirst(tell_her, "").trim().replaceFirst(tell_him, "").trim();
         }
-        if (result.startsWith(an + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(an + Constants.SEP_SPACE)) {
             result = result.replaceFirst(an_sms_message, "").trim().replaceFirst(an_sms, "").trim().replaceFirst(tell_them, "").trim().replaceFirst(tell_her, "").trim().replaceFirst(tell_him, "").trim();
         }
-        if (result.startsWith(on + XMLResultsHandler.SEP_SPACE)) {
-            result = result.replaceFirst(on + XMLResultsHandler.SEP_SPACE + his, "").trim().replaceFirst(on + XMLResultsHandler.SEP_SPACE + her, "").trim().replaceFirst(on + XMLResultsHandler.SEP_SPACE + their, "").trim().replaceFirst(on + XMLResultsHandler.SEP_SPACE + there, "").trim();
+        if (result.startsWith(on + Constants.SEP_SPACE)) {
+            result = result.replaceFirst(on + Constants.SEP_SPACE + his, "").trim().replaceFirst(on + Constants.SEP_SPACE + her, "").trim().replaceFirst(on + Constants.SEP_SPACE + their, "").trim().replaceFirst(on + Constants.SEP_SPACE + there, "").trim();
         }
-        if (result.startsWith(mobile + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(mobile + Constants.SEP_SPACE)) {
             result = result.replaceFirst(mobile, "").trim();
         }
         if (result.startsWith(to_tell)) {
             result = result.replaceFirst(to_tell_them, "").trim().replaceFirst(to_tell_her, "").trim().replaceFirst(to_tell_him, "").trim();
         }
-        if (result.startsWith(and + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(and + Constants.SEP_SPACE)) {
             result = result.replaceFirst(and, "").trim();
         }
         if (result.startsWith(tell)) {
             result = result.replaceFirst(telling_them, "").trim().replaceFirst(telling_her, "").trim().replaceFirst(telling_him, "").trim().replaceFirst(tell_them, "").trim().replaceFirst(tell_her, "").trim().replaceFirst(tell_him, "").trim();
         }
-        if (result.startsWith(saying + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(saying + Constants.SEP_SPACE)) {
             result = result.replaceFirst(saying, "").trim();
         }
-        if (result.startsWith(say + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(say + Constants.SEP_SPACE)) {
             result = result.replaceFirst(say, "").trim();
         }
-        if (result.startsWith(that_says + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(that_says + Constants.SEP_SPACE)) {
             result = result.replaceFirst(that_says, "").trim();
         }
-        if (result.startsWith(to_say + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(to_say + Constants.SEP_SPACE)) {
             result = result.replaceFirst(to_say, "").trim();
         }
         return result;
@@ -596,31 +595,31 @@ public class CommandContact {
         String b53 = sr.getString(R.string.an_email);
         String an_email = sr.getString(R.string.an_email_message);
         String and = sr.getString(R.string.and);
-        if (result.startsWith(email + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(email + Constants.SEP_SPACE)) {
             result = result.replaceFirst(email_message, "").trim().replaceFirst(email, "").trim();
         }
-        if (result.startsWith(an + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(an + Constants.SEP_SPACE)) {
             result = result.replaceFirst(an_email, "").trim().replaceFirst(b53, "").trim().replaceFirst(tell_them, "").trim().replaceFirst(tell_her, "").trim().replaceFirst(tell_him, "").trim();
         }
         if (result.startsWith(to_tell)) {
             result = result.replaceFirst(to_tell_them, "").trim().replaceFirst(to_tell_her, "").trim().replaceFirst(to_tell_him, "").trim();
         }
-        if (result.startsWith(and + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(and + Constants.SEP_SPACE)) {
             result = result.replaceFirst(and, "").trim();
         }
         if (result.startsWith(tell)) {
             result = result.replaceFirst(telling_them, "").trim().replaceFirst(telling_her, "").trim().replaceFirst(telling_him, "").trim().replaceFirst(tell_them, "").trim().replaceFirst(tell_her, "").trim().replaceFirst(tell_him, "").trim();
         }
-        if (result.startsWith(saying + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(saying + Constants.SEP_SPACE)) {
             result = result.replaceFirst(saying, "").trim();
         }
-        if (result.startsWith(say + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(say + Constants.SEP_SPACE)) {
             result = result.replaceFirst(say, "").trim();
         }
-        if (result.startsWith(that_says + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(that_says + Constants.SEP_SPACE)) {
             result = result.replaceFirst(that_says, "").trim();
         }
-        if (result.startsWith(to_say + XMLResultsHandler.SEP_SPACE)) {
+        if (result.startsWith(to_say + Constants.SEP_SPACE)) {
             result = result.replaceFirst(to_say, "").trim();
         }
         return result;

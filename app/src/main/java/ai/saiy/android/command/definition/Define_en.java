@@ -3,14 +3,13 @@ package ai.saiy.android.command.definition;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -50,7 +49,7 @@ public class Define_en {
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }
-        final String pDefine = define + XMLResultsHandler.SEP_SPACE;
+        final String pDefine = define + Constants.SEP_SPACE;
         String vdLower;
         for (String voiceDatum : voiceData) {
             vdLower = voiceDatum.toLowerCase(locale).trim();
@@ -72,7 +71,7 @@ public class Define_en {
         final long then = System.nanoTime();
         final ArrayList<Pair<CC, Float>> toReturn = new ArrayList<>();
         if (UtilsList.notNaked(voiceData) && UtilsList.notNaked(confidence) && voiceData.size() == confidence.length) {
-            final String pDefine = define + XMLResultsHandler.SEP_SPACE;
+            final String pDefine = define + Constants.SEP_SPACE;
             final Locale locale = sl.getLocale();
             final int size = voiceData.size();
             for (int i = 0; i < size; i++) {

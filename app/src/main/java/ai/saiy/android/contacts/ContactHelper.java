@@ -10,8 +10,6 @@ import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.text.CollationKey;
 import java.text.Collator;
 import java.util.ArrayList;
@@ -25,6 +23,7 @@ import ai.saiy.android.command.contact.Choice;
 import ai.saiy.android.custom.Phone;
 import ai.saiy.android.database.DBContact;
 import ai.saiy.android.nlu.local.AlgorithmicResolver;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
@@ -531,7 +530,7 @@ public class ContactHelper {
             contactIDarray[i] = contacts.get(i).getID();
         }
         final ArrayList<Choice> choices = new ArrayList<>();
-        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.IS_PRIMARY, ContactsContract.CommonDataKinds.Phone.CONTACT_ID}, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " IN (" + TextUtils.join(XMLResultsHandler.SEP_COMMA, contactIDarray) + ")", null, null);
+        Cursor cursor = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, new String[]{ContactsContract.CommonDataKinds.Phone.NUMBER, ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.IS_PRIMARY, ContactsContract.CommonDataKinds.Phone.CONTACT_ID}, ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " IN (" + TextUtils.join(Constants.SEP_COMMA, contactIDarray) + ")", null, null);
         if (cursor != null) {
             try {
                 if (DEBUG) {
@@ -1077,7 +1076,7 @@ public class ContactHelper {
         for (int i = 0; i < contacts.size(); ++i) {
             contactIDs[i] = contacts.get(i).getID();
         }
-        return setAddress(context, contacts, ContactsContract.Data.CONTACT_ID + " IN (" + TextUtils.join(XMLResultsHandler.SEP_COMMA, contactIDs) + ")");
+        return setAddress(context, contacts, ContactsContract.Data.CONTACT_ID + " IN (" + TextUtils.join(Constants.SEP_COMMA, contactIDs) + ")");
     }
 
     public String getUserProfileName(Context context) {

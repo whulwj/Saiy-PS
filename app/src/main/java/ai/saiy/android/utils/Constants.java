@@ -91,4 +91,8 @@ public final class Constants {
 
     public static final int FUSED_LOCATION_PROVIDER = 1;
     public static final int DEFAULT_LOCATION_PROVIDER = 2;
+
+    public static final String SEP_COMMA = ",";
+    public static final String SEP_HYPHEN = "-";
+    public static final String SEP_SPACE = " ";
 }

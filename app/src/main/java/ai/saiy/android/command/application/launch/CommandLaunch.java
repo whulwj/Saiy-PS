@@ -5,8 +5,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -14,6 +12,7 @@ import ai.saiy.android.algorithms.Algorithm;
 import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -130,7 +129,7 @@ public class CommandLaunch {
             MyLog.d(CLS_NAME, "applicationPair package: " + applicationPair.second);
         }
         if (UtilsApplication.launchAppFromPackageName(context, applicationPair.second)) {
-            outcome.setUtterance(context.getString(R.string.opened) + XMLResultsHandler.SEP_SPACE + applicationPair.first);
+            outcome.setUtterance(context.getString(R.string.opened) + Constants.SEP_SPACE + applicationPair.first);
             outcome.setOutcome(Outcome.SUCCESS);
             return returnOutcome(context, outcome, false);
         }

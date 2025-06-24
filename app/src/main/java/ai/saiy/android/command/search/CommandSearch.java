@@ -4,8 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -23,6 +21,7 @@ import ai.saiy.android.localisation.SaiyWebHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -90,10 +89,10 @@ public class CommandSearch {
                 String searchType = "";
                 if (CommandSearchValues.Type.IMAGE == commandSearchValues.getType() || GoogleHelper.IMAGE == commandSearchValues.getGoogleType()) {
                     searchType = "&tbm=isch";
-                    description = context.getString(R.string.images) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.of) + XMLResultsHandler.SEP_SPACE;
+                    description = context.getString(R.string.images) + Constants.SEP_SPACE + context.getString(R.string.of) + Constants.SEP_SPACE;
                 } else if (GoogleHelper.VIDEO == commandSearchValues.getGoogleType()) {
                     searchType = "&tbm=vid";
-                    description = context.getString(R.string.videos) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.of) + XMLResultsHandler.SEP_SPACE;
+                    description = context.getString(R.string.videos) + Constants.SEP_SPACE + context.getString(R.string.of) + Constants.SEP_SPACE;
                 } else {
                     description = "";
                 }
@@ -133,7 +132,7 @@ public class CommandSearch {
                 }
                 if (!Installed.isPackageInstalled(context, Installed.PACKAGE_IMDB)) {
                     ExecuteIntent.webSearch(context, IMDB_QUERY_URL + commandSearchValues.getQuery());
-                    outcome.setUtterance(PersonalityResponse.getSearchSuggestInstall(context, supportedLanguage, context.getString(R.string.netflix) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.or) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.imdb)));
+                    outcome.setUtterance(PersonalityResponse.getSearchSuggestInstall(context, supportedLanguage, context.getString(R.string.netflix) + Constants.SEP_SPACE + context.getString(R.string.or) + Constants.SEP_SPACE + context.getString(R.string.imdb)));
                     outcome.setOutcome(Outcome.SUCCESS);
                     return returnOutcome(outcome);
                 }
@@ -171,7 +170,7 @@ public class CommandSearch {
                     return returnOutcome(outcome);
                 }
                 if (ExecuteIntent.searchSky(context, commandSearchValues)) {
-                    outcome.setUtterance(PersonalityResponse.getSearchConfirm(context, supportedLanguage, context.getString(R.string.the) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.sky), commandSearchValues.getQuery()));
+                    outcome.setUtterance(PersonalityResponse.getSearchConfirm(context, supportedLanguage, context.getString(R.string.the) + Constants.SEP_SPACE + context.getString(R.string.sky), commandSearchValues.getQuery()));
                     outcome.setOutcome(Outcome.SUCCESS);
                     return returnOutcome(outcome);
                 }
@@ -186,7 +185,7 @@ public class CommandSearch {
                     return returnOutcome(outcome);
                 }
                 if (ExecuteIntent.searchEarth(context, commandSearchValues)) {
-                    outcome.setUtterance(PersonalityResponse.getSearchConfirm(context, supportedLanguage, context.getString(R.string.the) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.earth), commandSearchValues.getQuery()));
+                    outcome.setUtterance(PersonalityResponse.getSearchConfirm(context, supportedLanguage, context.getString(R.string.the) + Constants.SEP_SPACE + context.getString(R.string.earth), commandSearchValues.getQuery()));
                     outcome.setOutcome(Outcome.SUCCESS);
                     return returnOutcome(outcome);
                 }
@@ -309,11 +308,11 @@ public class CommandSearch {
                 switch (commandSearchValues.getYahooType()) {
                     case YahooHelper.IMAGE:
                         url = SaiyWebHelper.HTTP_PROTOCOL + SaiyWebHelper.yahooImage(supportedLanguage) + commandSearchValues.getQuery().trim().replaceAll(SPACE, ESCAPED_SPACE);
-                        description = context.getString(R.string.images) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.of) + XMLResultsHandler.SEP_SPACE;
+                        description = context.getString(R.string.images) + Constants.SEP_SPACE + context.getString(R.string.of) + Constants.SEP_SPACE;
                         break;
                     case YahooHelper.VIDEO:
                         url = SaiyWebHelper.HTTP_PROTOCOL + SaiyWebHelper.yahooVideo(supportedLanguage) + commandSearchValues.getQuery().trim().replaceAll(SPACE, ESCAPED_SPACE);
-                        description = context.getString(R.string.videos) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.of) + XMLResultsHandler.SEP_SPACE;
+                        description = context.getString(R.string.videos) + Constants.SEP_SPACE + context.getString(R.string.of) + Constants.SEP_SPACE;
                         break;
                     default:
                         url = SaiyWebHelper.HTTP_PROTOCOL + SaiyWebHelper.extension(SaiyWebHelper.YAHOO, supportedLanguage) + "/search?q=" + commandSearchValues.getQuery().trim().replaceAll(SPACE, ESCAPED_SPACE);
@@ -332,11 +331,11 @@ public class CommandSearch {
                 switch (commandSearchValues.getBingType()) {
                     case BingHelper.IMAGE:
                         url = SaiyWebHelper.HTTP_PROTOCOL + "bing.com/images/search?q=" + commandSearchValues.getQuery().trim().replaceAll(SPACE, ESCAPED_SPACE) + SaiyWebHelper.extension(SaiyWebHelper.BING, supportedLanguage);
-                        description = context.getString(R.string.images) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.of) + XMLResultsHandler.SEP_SPACE;
+                        description = context.getString(R.string.images) + Constants.SEP_SPACE + context.getString(R.string.of) + Constants.SEP_SPACE;
                         break;
                     case BingHelper.VIDEO:
                         url = SaiyWebHelper.HTTP_PROTOCOL + "bing.com/videos/search?q=" + commandSearchValues.getQuery().trim().replaceAll(SPACE, ESCAPED_SPACE) + SaiyWebHelper.extension(SaiyWebHelper.BING, supportedLanguage);
-                        description = context.getString(R.string.videos) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.of) + XMLResultsHandler.SEP_SPACE;
+                        description = context.getString(R.string.videos) + Constants.SEP_SPACE + context.getString(R.string.of) + Constants.SEP_SPACE;
                         break;
                     default:
                         url = SaiyWebHelper.HTTP_PROTOCOL + "bing.com/search?q=" + commandSearchValues.getQuery().trim().replaceAll(SPACE, ESCAPED_SPACE) + SaiyWebHelper.extension(SaiyWebHelper.BING, supportedLanguage);

@@ -6,8 +6,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -21,6 +19,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -95,7 +94,7 @@ public class CommandSms {
             sb.append(PersonalityResponse.getSmsResponsePart1(context, supportedLanguage, new TimeHelper().getDate(context, supportedLanguage, message.getDate()), new TimeHelper().getTime(context, message.getDate())));
             sb.append(", ");
             sb.append(context.getString(R.string.from));
-            sb.append(XMLResultsHandler.SEP_SPACE);
+            sb.append(Constants.SEP_SPACE);
             final String sender = smsHelper.resolveSender(context, message.getPerson(), message.getAddress());
             if (UtilsString.notNaked(sender)) {
                 sb.append(sender);

@@ -5,8 +5,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -16,6 +14,7 @@ import ai.saiy.android.command.weather.provider.online.WeatherOnlineHelper;
 import ai.saiy.android.firebase.database.reference.WeatherOnlineReference;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -96,7 +95,7 @@ public class CommandTime {
             final WeatherOnlineTimeResponse onlineTimeResponse = timeResponsePair.first? WeatherOnlineTimeResponse.getResponse(timeResponsePair.second) : null;
             if (onlineTimeResponse != null) {
                 final Pair<String, String> formattedSpokenTime = new TimeHelper().formatSpokenTimeIn(context, onlineTimeResponse.getTime());
-                outcome.setUtterance(context.getString(R.string.in) + XMLResultsHandler.SEP_SPACE + onlineTimeResponse.getLocation() + ", " + context.getString(R.string.it_s) + XMLResultsHandler.SEP_SPACE + formattedSpokenTime.first + XMLResultsHandler.SEP_SPACE + context.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + formattedSpokenTime.second);
+                outcome.setUtterance(context.getString(R.string.in) + Constants.SEP_SPACE + onlineTimeResponse.getLocation() + ", " + context.getString(R.string.it_s) + Constants.SEP_SPACE + formattedSpokenTime.first + Constants.SEP_SPACE + context.getString(R.string.at) + Constants.SEP_SPACE + formattedSpokenTime.second);
                 outcome.setOutcome(Outcome.SUCCESS);
                 return returnOutcome(outcome);
             }

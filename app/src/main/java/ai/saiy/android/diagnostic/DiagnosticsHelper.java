@@ -16,8 +16,6 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.speech.tts.TextToSpeech;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.UtilsApplication;
 import ai.saiy.android.device.DeviceInfo;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import io.reactivex.rxjava3.disposables.Disposable;
@@ -268,8 +267,8 @@ public class DiagnosticsHelper {
     private Locale stringToLocale(String str) {
         Locale locale;
         try {
-            if (str.contains(XMLResultsHandler.SEP_HYPHEN)) {
-                StringTokenizer stringTokenizer = new StringTokenizer(str, XMLResultsHandler.SEP_HYPHEN);
+            if (str.contains(Constants.SEP_HYPHEN)) {
+                StringTokenizer stringTokenizer = new StringTokenizer(str, Constants.SEP_HYPHEN);
                 switch (stringTokenizer.countTokens()) {
                     case 1:
                         locale = new Locale(stringTokenizer.nextToken());
@@ -508,9 +507,9 @@ public class DiagnosticsHelper {
             return;
         }
         if (containerVoiceEngine.size() == 1) {
-            diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_init_prepare) + XMLResultsHandler.SEP_SPACE + containerVoiceEngine.size() + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.engine));
+            diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_init_prepare) + Constants.SEP_SPACE + containerVoiceEngine.size() + Constants.SEP_SPACE + mContext.getString(R.string.engine));
         } else {
-            diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_init_prepare) + XMLResultsHandler.SEP_SPACE + containerVoiceEngine.size() + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.engines));
+            diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_init_prepare) + Constants.SEP_SPACE + containerVoiceEngine.size() + Constants.SEP_SPACE + mContext.getString(R.string.engines));
         }
         try {
             Thread.sleep(2500L);
@@ -557,7 +556,7 @@ public class DiagnosticsHelper {
             destroyTTS();
             return;
         }
-        diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_initialising) + XMLResultsHandler.SEP_SPACE + containerVoiceEngine.get(diagnosticIndex.get()).getApplicationName());
+        diagnosticInfoListener.appendDiagnosticInfo("\n" + mContext.getString(R.string.diagnostics_initialising) + Constants.SEP_SPACE + containerVoiceEngine.get(diagnosticIndex.get()).getApplicationName());
         VoiceEngineInfo voiceEngineInfo = new VoiceEngineInfo();
         voiceEngineInfo.setApplicationName(containerVoiceEngine.get(diagnosticIndex.get()).getApplicationName());
         voiceEngineInfo.setPackageName(containerVoiceEngine.get(diagnosticIndex.get()).getPackageName());

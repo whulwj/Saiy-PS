@@ -6,8 +6,6 @@ import android.text.format.DateFormat;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Random;
@@ -17,6 +15,7 @@ import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.tts.attributes.Gender;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
 import ai.saiy.android.utils.UtilsList;
@@ -563,7 +562,7 @@ public class CommandAgenda {
                 String hourString = DateFormat.format("h", event.getStartDate()).toString();
                 String minuteString = DateFormat.format("m", event.getStartDate()).toString();
                 String amPm = AgendaHelper.getAMPM(event.getStartDate());
-                String timeString = minuteString.matches("0") ? hourString + XMLResultsHandler.SEP_SPACE + amPm + XMLResultsHandler.SEP_SPACE : hourString + XMLResultsHandler.SEP_SPACE + minuteString + XMLResultsHandler.SEP_SPACE + amPm + XMLResultsHandler.SEP_SPACE;
+                String timeString = minuteString.matches("0") ? hourString + Constants.SEP_SPACE + amPm + Constants.SEP_SPACE : hourString + Constants.SEP_SPACE + minuteString + Constants.SEP_SPACE + amPm + Constants.SEP_SPACE;
                 sb.append(timeString);
             }
 

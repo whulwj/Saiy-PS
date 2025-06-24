@@ -11,14 +11,13 @@ import android.provider.Telephony;
 import android.telephony.SmsManager;
 import android.text.TextUtils;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.contacts.ContactHelper;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class SmsHelper {
@@ -227,7 +226,7 @@ public class SmsHelper {
         for (int i = 0; i < rawIDs.size(); ++i) {
             rawIdArray[i] = rawIDs.get(i);
         }
-        final String selection = PERSON + " IN " + "(" + TextUtils.join(XMLResultsHandler.SEP_COMMA, rawIdArray) + ")";
+        final String selection = PERSON + " IN " + "(" + TextUtils.join(Constants.SEP_COMMA, rawIdArray) + ")";
         Cursor cursor = context.getContentResolver().query(CONTENT_URI, new String[]{BODY, ADDRESS, READ, DATE, PERSON}, selection, null, DEFAULT_SORT_ORDER + " LIMIT 1");
         if (cursor == null) {
             if (DEBUG) {

@@ -11,8 +11,6 @@ import androidx.annotation.Nullable;
 import androidx.core.content.PermissionChecker;
 import androidx.core.location.LocationManagerCompat;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -21,6 +19,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.location.AndroidLocationService;
 import ai.saiy.android.location.LocalLocation;
 import ai.saiy.android.location.LocationService;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
@@ -57,7 +56,7 @@ public class LocationHelper {
                 final String thoroughfare = address.getThoroughfare();
                 final String locality = address.getLocality();
                 final String subAdminArea = address.getSubAdminArea();
-                return (UtilsString.notNaked(thoroughfare) && UtilsString.notNaked(locality)) ? new Pair<>(true, thoroughfare + XMLResultsHandler.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.in) + XMLResultsHandler.SEP_SPACE + locality) : (UtilsString.notNaked(thoroughfare) && UtilsString.notNaked(subAdminArea)) ? new Pair<>(true, thoroughfare + XMLResultsHandler.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.in) + XMLResultsHandler.SEP_SPACE + subAdminArea) : UtilsString.notNaked(thoroughfare) ? new Pair<>(true, thoroughfare) : UtilsString.notNaked(addressLine) ? new Pair<>(true, addressLine) : new Pair<>(false, null);
+                return (UtilsString.notNaked(thoroughfare) && UtilsString.notNaked(locality)) ? new Pair<>(true, thoroughfare + Constants.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.in) + Constants.SEP_SPACE + locality) : (UtilsString.notNaked(thoroughfare) && UtilsString.notNaked(subAdminArea)) ? new Pair<>(true, thoroughfare + Constants.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.in) + Constants.SEP_SPACE + subAdminArea) : UtilsString.notNaked(thoroughfare) ? new Pair<>(true, thoroughfare) : UtilsString.notNaked(addressLine) ? new Pair<>(true, addressLine) : new Pair<>(false, null);
             }
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "address naked");

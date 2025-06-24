@@ -6,10 +6,9 @@ import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.applications.UtilsApplication;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -38,13 +37,13 @@ public class UtilsNavigation {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         switch (getDefaultNavigationApplication(context)) {
             case WAZE:
-                intent.setData(Uri.parse("https://waze.com/ul?ll=" + latitude + XMLResultsHandler.SEP_COMMA + longitude + "&navigate=yes"));
+                intent.setData(Uri.parse("https://waze.com/ul?ll=" + latitude + Constants.SEP_COMMA + longitude + "&navigate=yes"));
                 break;
             case AURA:
                 intent.setData(Uri.parse("com.sygic.aura://coordinate|" + longitude + "|" + latitude + "|drive"));
                 break;
             default:
-                intent.setData(Uri.parse("google.navigation:q=" + latitude + XMLResultsHandler.SEP_COMMA + longitude + address));
+                intent.setData(Uri.parse("google.navigation:q=" + latitude + Constants.SEP_COMMA + longitude + address));
                 break;
         }
         try {
@@ -70,7 +69,7 @@ public class UtilsNavigation {
                 intent.setData(Uri.parse("https://waze.com/ul?q=" + address + "&navigate=yes"));
                 break;
             case AURA:
-                intent.setData(Uri.parse("geo:0,0?q=" + address.replaceAll(XMLResultsHandler.SEP_SPACE, "+")));
+                intent.setData(Uri.parse("geo:0,0?q=" + address.replaceAll(Constants.SEP_SPACE, "+")));
                 break;
             default:
                 intent.setData(Uri.parse("google.navigation:q=" + address));

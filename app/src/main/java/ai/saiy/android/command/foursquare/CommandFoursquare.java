@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -163,9 +162,9 @@ public class CommandFoursquare {
             MyLog.d(CLS_NAME, "foursquareVenue name: " + venue.getName());
             MyLog.d(CLS_NAME, "foursquareVenue id: " + venue.getId());
         }
-        final String distanceStr = isExactMatch ? "" : XMLResultsHandler.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.closest_match_extra);
+        final String distanceStr = isExactMatch ? "" : Constants.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.closest_match_extra);
         FoursquareHelper.fourSquareCheckIn(context, venue.getId());
-        outcome.setUtterance(ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.i_found) + XMLResultsHandler.SEP_SPACE + distanceStr + XMLResultsHandler.SEP_SPACE + venue.getName() + XMLResultsHandler.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.nearby));
+        outcome.setUtterance(ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.i_found) + Constants.SEP_SPACE + distanceStr + Constants.SEP_SPACE + venue.getName() + Constants.SEP_SPACE + ai.saiy.android.localisation.SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.nearby));
         outcome.setOutcome(Outcome.SUCCESS);
         return returnOutcome(outcome);
     }

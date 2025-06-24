@@ -3,8 +3,6 @@ package ai.saiy.android.diagnostic;
 import android.content.Context;
 import android.os.Build;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -12,6 +10,7 @@ import java.util.Locale;
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.tts.helper.TTSDefaults;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -103,9 +102,9 @@ public class RecommendationHelper {
                             arrayList.add("\n");
                         }
                         if (haveGoogleTTS) {
-                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_1) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_2));
+                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_1) + Constants.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_2));
                         } else {
-                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_1) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_3));
+                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_1) + Constants.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_3));
                         }
                         newLine = true;
                     }
@@ -116,9 +115,9 @@ public class RecommendationHelper {
                         if (voiceEngineInfo.getPackageName().matches(TTSDefaults.TTS_PKG_NAME_GOOGLE)) {
                             arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_5));
                         } else if (haveGoogleTTS) {
-                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_4) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_2));
+                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_4) + Constants.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_2));
                         } else {
-                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_4) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_3));
+                            arrayList.add("! " + context.getString(R.string.diagnostics_supported_language_4) + Constants.SEP_SPACE + context.getString(R.string.diagnostics_supported_language_3));
                         }
                         newLine = true;
                     }
@@ -139,13 +138,13 @@ public class RecommendationHelper {
             arrayList.add(context.getString(R.string.diagnostics_vr_installed) + " ❌");
         } else {
             arrayList.add(context.getString(R.string.diagnostics_vr_installed) + " ✔");
-            arrayList.add(context.getString(R.string.diagnostics_default_provider_) + XMLResultsHandler.SEP_SPACE + diagnosticsInfo.getApplicationName());
+            arrayList.add(context.getString(R.string.diagnostics_default_provider_) + Constants.SEP_SPACE + diagnosticsInfo.getApplicationName());
         }
         if (diagnosticsInfo.getTTSCount() == 0) {
             arrayList.add(context.getString(R.string.diagnostics_tts_installed) + " ❌");
         } else {
             arrayList.add(context.getString(R.string.diagnostics_tts_installed) + " ✔");
-            arrayList.add(context.getString(R.string.diagnostics_default_provider_) + XMLResultsHandler.SEP_SPACE + diagnosticsInfo.getEngineName());
+            arrayList.add(context.getString(R.string.diagnostics_default_provider_) + Constants.SEP_SPACE + diagnosticsInfo.getEngineName());
         }
         for (VoiceEngineInfo voiceEngineInfo : voiceEngineInfos) {
             arrayList.add("\n");

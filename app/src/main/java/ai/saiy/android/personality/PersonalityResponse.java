@@ -22,8 +22,6 @@ import android.content.res.Resources;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
@@ -33,6 +31,7 @@ import ai.saiy.android.api.request.SaiyRequestParams;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsString;
 
@@ -454,7 +453,7 @@ public final class PersonalityResponse {
         final String[] stringArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_no_comprende);
         final String[] noNetworkArray = SaiyResourcesHelper.getArrayResource(ctx, sl, R.array.array_alexa_no_network);
         return UtilsString.stripNameSpace(String.format(stringArray[new Random().nextInt(stringArray.length)],
-                PersonalityHelper.getUserNameOrNot(ctx) + XMLResultsHandler.SEP_SPACE + noNetworkArray[new Random().nextInt(noNetworkArray.length)]));
+                PersonalityHelper.getUserNameOrNot(ctx) + Constants.SEP_SPACE + noNetworkArray[new Random().nextInt(noNetworkArray.length)]));
     }
 
     /**

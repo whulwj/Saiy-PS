@@ -9,7 +9,6 @@ import androidx.documentfile.provider.DocumentFile;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -28,6 +27,7 @@ import ai.saiy.android.custom.CustomCommand;
 import ai.saiy.android.custom.CustomNickname;
 import ai.saiy.android.custom.CustomPhrase;
 import ai.saiy.android.custom.CustomReplacement;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsFile;
 
@@ -43,7 +43,7 @@ public final class ExportHelper {
     }
 
     private String buildFileName(String prefix) {
-        return StringUtils.substring(prefix.trim().replaceAll("[^a-zA-Z0-9]", ""), 0, 10).trim().replaceAll(XMLResultsHandler.SEP_SPACE, "_") + "_" + new SimpleDateFormat("yyyyMMddHHmmss", Locale.US).format(new Date()) + UtilsFile.EXPORT_FILE_SUFFIX;
+        return StringUtils.substring(prefix.trim().replaceAll("[^a-zA-Z0-9]", ""), 0, 10).trim().replaceAll(Constants.SEP_SPACE, "_") + "_" + new SimpleDateFormat("yyyyMMddHHmmss", Locale.US).format(new Date()) + UtilsFile.EXPORT_FILE_SUFFIX;
     }
 
     public boolean exportCustomNickname(@NonNull final Context ctx, @Nullable final DocumentFile documentFile, @NonNull CustomNickname customNickname) {

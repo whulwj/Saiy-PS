@@ -4,8 +4,6 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -14,6 +12,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.processing.Position;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -82,7 +81,7 @@ public final class CommandCalculate {
                     final String multiplied_by = sr.getString(R.string._MULTIPLIED_BY_);
                     final String divided_by = sr.getString(R.string._DIVIDED_BY_);
                     final String equals = sr.getString(R.string.EQUALS);
-                    String utterance = calculation.replaceAll("\\*", multiplied_by).replaceAll("/", divided_by) + ". " + equals + XMLResultsHandler.SEP_SPACE + answer;
+                    String utterance = calculation.replaceAll("\\*", multiplied_by).replaceAll("/", divided_by) + ". " + equals + Constants.SEP_SPACE + answer;
                     if (ai.saiy.android.utils.SPH.getCalculateCommandVerbose(context) >= 3) {
                         outcome.setUtterance(utterance);
                     } else {

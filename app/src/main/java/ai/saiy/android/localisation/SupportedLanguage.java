@@ -19,11 +19,10 @@ package ai.saiy.android.localisation;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
@@ -328,7 +327,7 @@ public enum SupportedLanguage {
                 MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: comparing: " + supportedLanguage.getLocale().toString() + " ~ " + locale);
             }
             if (supportedLanguage.getLocale().equals(locale)) {
-                return supportedLanguage.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                return supportedLanguage.getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN);
             }
         }
         ArrayList<SupportedLanguage> arrayList = new ArrayList<>();
@@ -352,13 +351,13 @@ public enum SupportedLanguage {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: full match: " + supportedLanguage.getLanguageCountry());
                         }
-                        return supportedLanguage.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                        return supportedLanguage.getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN);
                     }
                 }
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: no country match returning first: " + ((SupportedLanguage) arrayList.get(0)).getLocale().toString());
                 }
-                return arrayList.get(0).hasParent() ? arrayList.get(0).getParent().getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN) : ((SupportedLanguage) arrayList.get(0)).getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                return arrayList.get(0).hasParent() ? arrayList.get(0).getParent().getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN) : ((SupportedLanguage) arrayList.get(0)).getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN);
             }
 
             for (SupportedLanguage supportedLanguage : getLanguages()) {
@@ -378,17 +377,17 @@ public enum SupportedLanguage {
                         if (DEBUG) {
                             MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: full match: " + supportedLanguage.getLanguageCountryISO());
                         }
-                        return supportedLanguage.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                        return supportedLanguage.getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN);
                     }
                 }
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: no countryISO match returning first: " + ((SupportedLanguage) arrayList.get(0)).getLocale().toString());
                 }
-                return arrayList.get(0).hasParent() ? arrayList.get(0).getParent().getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN) : ((SupportedLanguage) arrayList.get(0)).getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+                return arrayList.get(0).hasParent() ? arrayList.get(0).getParent().getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN) : ((SupportedLanguage) arrayList.get(0)).getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN);
             }
         } else if (DEBUG) {
             MyLog.w(CLS_NAME, "getGoogleNativeVRSupportedLanguageString: language naked" + locale);
         }
-        return ENGLISH_US.getLanguageCountry().replaceAll("_", XMLResultsHandler.SEP_HYPHEN);
+        return ENGLISH_US.getLanguageCountry().replaceAll("_", Constants.SEP_HYPHEN);
     }
 }

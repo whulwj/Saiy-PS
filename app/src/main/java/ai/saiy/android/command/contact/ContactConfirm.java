@@ -5,8 +5,6 @@ import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.speech.SpeechRecognizer;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -21,6 +19,7 @@ import ai.saiy.android.nlu.local.PositiveNegative;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -165,21 +164,21 @@ public class ContactConfirm {
                     case ContactsContract.CommonDataKinds.Phone.TYPE_HOME:
                         contact.setNumber(getChoice(choiceArray, ContactsContract.CommonDataKinds.Phone.TYPE_HOME).getNumber());
                         commandContactValues.setCallType(CommandContactValues.CallType.HOME);
-                        commandContactValues.setActionUtterance(mContext.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.home));
+                        commandContactValues.setActionUtterance(mContext.getString(R.string.calling) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + mContext.getString(R.string.at) + Constants.SEP_SPACE + mContext.getString(R.string.home));
                         bundle.putParcelable(LocalRequest.EXTRA_OBJECT, commandContactValues);
                         new ContactHelper(mContext, bundle, vrLocale, ttsLocale).perform(true);
                         break;
                     case ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE:
                         contact.setNumber(getChoice(choiceArray, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).getNumber());
                         commandContactValues.setCallType(CommandContactValues.CallType.MOBILE);
-                        commandContactValues.setActionUtterance(mContext.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.on) + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.their) + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.mobile));
+                        commandContactValues.setActionUtterance(mContext.getString(R.string.calling) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + mContext.getString(R.string.on) + Constants.SEP_SPACE + mContext.getString(R.string.their) + Constants.SEP_SPACE + mContext.getString(R.string.mobile));
                         bundle.putParcelable(LocalRequest.EXTRA_OBJECT, commandContactValues);
                         new ContactHelper(mContext, bundle, vrLocale, ttsLocale).perform(true);
                         break;
                     case ContactsContract.CommonDataKinds.Phone.TYPE_WORK:
                         contact.setNumber(getChoice(choiceArray, ContactsContract.CommonDataKinds.Phone.TYPE_WORK).getNumber());
                         commandContactValues.setCallType(CommandContactValues.CallType.WORK);
-                        commandContactValues.setActionUtterance(mContext.getString(R.string.calling) + XMLResultsHandler.SEP_SPACE + contact.getName() + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.at) + XMLResultsHandler.SEP_SPACE + mContext.getString(R.string.work));
+                        commandContactValues.setActionUtterance(mContext.getString(R.string.calling) + Constants.SEP_SPACE + contact.getName() + Constants.SEP_SPACE + mContext.getString(R.string.at) + Constants.SEP_SPACE + mContext.getString(R.string.work));
                         bundle.putParcelable(LocalRequest.EXTRA_OBJECT, commandContactValues);
                         new ContactHelper(mContext, bundle, vrLocale, ttsLocale).perform(true);
                         break;

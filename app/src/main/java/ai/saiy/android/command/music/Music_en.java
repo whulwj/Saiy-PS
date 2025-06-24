@@ -5,14 +5,13 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -56,7 +55,7 @@ public class Music_en {
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }
-        final String playStr = play + XMLResultsHandler.SEP_SPACE;
+        final String playStr = play + Constants.SEP_SPACE;
         final String album = sr.getString(R.string.album);
         final String artist = sr.getString(R.string.artist);
         final String playlist = sr.getString(R.string.playlist);
@@ -82,37 +81,37 @@ public class Music_en {
                     commandMusicValues.setType(CommandMusicValues.Type.RADIO);
                     commandMusicValues.setQuery(radio);
                 } else {
-                    String query = vdLower.replaceFirst(playStr, "").replaceFirst(something + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(something + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(some + XMLResultsHandler.SEP_SPACE + music + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(some + XMLResultsHandler.SEP_SPACE + music + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(some + XMLResultsHandler.SEP_SPACE + songs + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(some + XMLResultsHandler.SEP_SPACE + songs + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(music + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(music + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(a + XMLResultsHandler.SEP_SPACE + song + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(a + XMLResultsHandler.SEP_SPACE + song + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(song + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(song + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(songs + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(songs + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(a + XMLResultsHandler.SEP_SPACE + track + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(a + XMLResultsHandler.SEP_SPACE + track + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(track + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(track + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "").replaceFirst(tracks + XMLResultsHandler.SEP_SPACE + by + XMLResultsHandler.SEP_SPACE, "").replaceFirst(tracks + XMLResultsHandler.SEP_SPACE + from + XMLResultsHandler.SEP_SPACE, "");
+                    String query = vdLower.replaceFirst(playStr, "").replaceFirst(something + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(something + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(some + Constants.SEP_SPACE + music + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(some + Constants.SEP_SPACE + music + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(some + Constants.SEP_SPACE + songs + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(some + Constants.SEP_SPACE + songs + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(music + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(music + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(a + Constants.SEP_SPACE + song + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(a + Constants.SEP_SPACE + song + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(song + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(song + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(songs + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(songs + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(a + Constants.SEP_SPACE + track + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(a + Constants.SEP_SPACE + track + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(track + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(track + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "").replaceFirst(tracks + Constants.SEP_SPACE + by + Constants.SEP_SPACE, "").replaceFirst(tracks + Constants.SEP_SPACE + from + Constants.SEP_SPACE, "");
                     if (query.contains(album)) {
                         commandMusicValues.setType(CommandMusicValues.Type.ALBUM);
-                        query = query.replaceFirst(an + XMLResultsHandler.SEP_SPACE + album + XMLResultsHandler.SEP_SPACE, "").replaceFirst(the + XMLResultsHandler.SEP_SPACE + album + XMLResultsHandler.SEP_SPACE, "").replaceFirst(album + XMLResultsHandler.SEP_SPACE, "");
-                        if (query.startsWith(by + XMLResultsHandler.SEP_SPACE)) {
-                            query = query.replaceFirst(by + XMLResultsHandler.SEP_SPACE, "");
+                        query = query.replaceFirst(an + Constants.SEP_SPACE + album + Constants.SEP_SPACE, "").replaceFirst(the + Constants.SEP_SPACE + album + Constants.SEP_SPACE, "").replaceFirst(album + Constants.SEP_SPACE, "");
+                        if (query.startsWith(by + Constants.SEP_SPACE)) {
+                            query = query.replaceFirst(by + Constants.SEP_SPACE, "");
                         } else if (UtilsString.occursInLastNWords(by, query, MAX_WORDS_COUNT)) {
                             query = UtilsString.replaceLast(query, by, "");
                         }
                         commandMusicValues.setQuery(query);
                     } else if (query.contains(artist)) {
                         commandMusicValues.setType(CommandMusicValues.Type.ARTIST);
-                        commandMusicValues.setQuery(query.replaceFirst(the + XMLResultsHandler.SEP_SPACE + artist + XMLResultsHandler.SEP_SPACE, "").replaceFirst(artist + XMLResultsHandler.SEP_SPACE, ""));
+                        commandMusicValues.setQuery(query.replaceFirst(the + Constants.SEP_SPACE + artist + Constants.SEP_SPACE, "").replaceFirst(artist + Constants.SEP_SPACE, ""));
                     } else if (query.contains(playlist) || query.contains(play_list)) {
                         commandMusicValues.setType(CommandMusicValues.Type.PLAYLIST);
-                        commandMusicValues.setQuery(query.replaceFirst(the + XMLResultsHandler.SEP_SPACE + playlist + XMLResultsHandler.SEP_SPACE, "").replaceFirst(playlist + XMLResultsHandler.SEP_SPACE, "").replaceFirst(the + XMLResultsHandler.SEP_SPACE + play_list + XMLResultsHandler.SEP_SPACE, "").replaceFirst(play_list + XMLResultsHandler.SEP_SPACE, ""));
+                        commandMusicValues.setQuery(query.replaceFirst(the + Constants.SEP_SPACE + playlist + Constants.SEP_SPACE, "").replaceFirst(playlist + Constants.SEP_SPACE, "").replaceFirst(the + Constants.SEP_SPACE + play_list + Constants.SEP_SPACE, "").replaceFirst(play_list + Constants.SEP_SPACE, ""));
                     } else if (query.contains(track) || query.contains(song)) {
                         commandMusicValues.setType(CommandMusicValues.Type.UNKNOWN);
-                        query = query.replaceFirst(the + XMLResultsHandler.SEP_SPACE + track + XMLResultsHandler.SEP_SPACE, "").replaceFirst(track + XMLResultsHandler.SEP_SPACE, "").replaceFirst(the + XMLResultsHandler.SEP_SPACE + song + XMLResultsHandler.SEP_SPACE, "").replaceFirst(song + XMLResultsHandler.SEP_SPACE, "");
-                        if (query.startsWith(by + XMLResultsHandler.SEP_SPACE)) {
-                            query = query.replaceFirst(by + XMLResultsHandler.SEP_SPACE, "");
+                        query = query.replaceFirst(the + Constants.SEP_SPACE + track + Constants.SEP_SPACE, "").replaceFirst(track + Constants.SEP_SPACE, "").replaceFirst(the + Constants.SEP_SPACE + song + Constants.SEP_SPACE, "").replaceFirst(song + Constants.SEP_SPACE, "");
+                        if (query.startsWith(by + Constants.SEP_SPACE)) {
+                            query = query.replaceFirst(by + Constants.SEP_SPACE, "");
                         } else if (UtilsString.occursInLastNWords(by, query, MAX_WORDS_COUNT)) {
                             query = UtilsString.replaceLast(query, by, "");
                         }
                         commandMusicValues.setQuery(query);
                     } else if (query.contains(genre)) {
                         commandMusicValues.setType(CommandMusicValues.Type.GENRE);
-                        commandMusicValues.setQuery(query.replaceFirst(the + XMLResultsHandler.SEP_SPACE + genre + XMLResultsHandler.SEP_SPACE, "").replaceFirst(genre + XMLResultsHandler.SEP_SPACE, ""));
+                        commandMusicValues.setQuery(query.replaceFirst(the + Constants.SEP_SPACE + genre + Constants.SEP_SPACE, "").replaceFirst(genre + Constants.SEP_SPACE, ""));
                     } else {
-                        if (query.startsWith(by + XMLResultsHandler.SEP_SPACE)) {
-                            query = query.replaceFirst(by + XMLResultsHandler.SEP_SPACE, "");
+                        if (query.startsWith(by + Constants.SEP_SPACE)) {
+                            query = query.replaceFirst(by + Constants.SEP_SPACE, "");
                         } else if (UtilsString.occursInLastNWords(by, query, MAX_WORDS_COUNT)) {
                             query = UtilsString.replaceLast(query, by, "");
                         }
@@ -135,7 +134,7 @@ public class Music_en {
         final long then = System.nanoTime();
         final ArrayList<Pair<CC, Float>> toReturn = new ArrayList<>();
         if (ai.saiy.android.utils.UtilsList.notNaked(voiceData) && ai.saiy.android.utils.UtilsList.notNaked(confidence) && voiceData.size() == confidence.length) {
-            final String playStr = play + XMLResultsHandler.SEP_SPACE;
+            final String playStr = play + Constants.SEP_SPACE;
             final Locale locale = sl.getLocale();
             final int size = voiceData.size();
             for (int i = 0; i < size; i++) {

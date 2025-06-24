@@ -3,14 +3,13 @@ package ai.saiy.android.command.weather;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -58,8 +57,8 @@ public class Weather_en {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "examining: " + vdLower);
             }
-            if (vdLower.contains(weather + XMLResultsHandler.SEP_SPACE)) {
-                String[] separated = vdLower.split(weather + XMLResultsHandler.SEP_SPACE);
+            if (vdLower.contains(weather + Constants.SEP_SPACE)) {
+                String[] separated = vdLower.split(weather + Constants.SEP_SPACE);
                 if (separated.length > 1) {
                     String trimmed = separated[1].trim();
                     if (trimmed.matches(".*\\b" + in + "\\b.*")) {

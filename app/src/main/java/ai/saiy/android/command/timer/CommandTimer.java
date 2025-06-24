@@ -5,8 +5,6 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -15,6 +13,7 @@ import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.processing.Position;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -77,30 +76,30 @@ public final class CommandTimer {
 
         final StringBuilder sb = new StringBuilder();
         sb.append(context.getString(R.string.timer_set_for));
-        sb.append(XMLResultsHandler.SEP_SPACE);
+        sb.append(Constants.SEP_SPACE);
         if (commandTimerValue.getHour() != 0) {
             sb.append(commandTimerValue.getHour());
-            sb.append(XMLResultsHandler.SEP_SPACE);
+            sb.append(Constants.SEP_SPACE);
             if (commandTimerValue.getHour() == 1) {
                 sb.append(context.getString(R.string.hour));
             } else {
                 sb.append(context.getString(R.string.hours));
             }
-            sb.append(XMLResultsHandler.SEP_SPACE);
+            sb.append(Constants.SEP_SPACE);
         }
         if (commandTimerValue.getMinute() != 0) {
             sb.append(commandTimerValue.getMinute());
-            sb.append(XMLResultsHandler.SEP_SPACE);
+            sb.append(Constants.SEP_SPACE);
             if (commandTimerValue.getMinute() == 1) {
                 sb.append(context.getString(R.string.minute));
             } else {
                 sb.append(context.getString(R.string.minutes));
             }
-            sb.append(XMLResultsHandler.SEP_SPACE);
+            sb.append(Constants.SEP_SPACE);
         }
         if (commandTimerValue.getSecond() != 0) {
             sb.append(commandTimerValue.getSecond());
-            sb.append(XMLResultsHandler.SEP_SPACE);
+            sb.append(Constants.SEP_SPACE);
             if (commandTimerValue.getSecond() == 1) {
                 sb.append(context.getString(R.string.second));
             } else {

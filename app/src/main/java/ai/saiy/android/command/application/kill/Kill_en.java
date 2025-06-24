@@ -3,8 +3,6 @@ package ai.saiy.android.command.application.kill;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -12,6 +10,7 @@ import java.util.Locale;
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -60,7 +59,7 @@ public class Kill_en {
             if (vdLower.startsWith(killPrefix)) {
                 String[] split = vdLower.split(killPrefix);
                 if (split.length > 1) {
-                    String applicationName = split[1].trim().replaceFirst(the + XMLResultsHandler.SEP_SPACE + application, "").trim().replaceFirst(the + XMLResultsHandler.SEP_SPACE + app, "").trim();
+                    String applicationName = split[1].trim().replaceFirst(the + Constants.SEP_SPACE + application, "").trim().replaceFirst(the + Constants.SEP_SPACE + app, "").trim();
                     if (applicationName.startsWith(application)) {
                         applicationName = applicationName.replaceFirst(application, "").trim();
                     } else if (applicationName.startsWith(app)) {
@@ -83,7 +82,7 @@ public class Kill_en {
 
     private static void initStrings(ai.saiy.android.localisation.SaiyResources sr) {
         kill = sr.getString(R.string.kill);
-        killPrefix = kill + XMLResultsHandler.SEP_SPACE;
+        killPrefix = kill + Constants.SEP_SPACE;
     }
 
     public ArrayList<Pair<CC, Float>> detectCallable() {

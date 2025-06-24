@@ -3,6 +3,7 @@ package ai.saiy.android.command.financial;
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -11,7 +12,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -62,12 +62,12 @@ public class StockQuote_en {
                 MyLog.i(CLS_NAME, "examining: " + vdLower);
             }
             String[] split = null;
-            if (vdLower.contains(stock_price + XMLResultsHandler.SEP_SPACE)) {
-                split = vdLower.split(stock_price + XMLResultsHandler.SEP_SPACE);
-            } else if (vdLower.contains(stock_quote + XMLResultsHandler.SEP_SPACE)) {
-                split = vdLower.split(stock_quote + XMLResultsHandler.SEP_SPACE);
-            } else if (vdLower.contains(share_price + XMLResultsHandler.SEP_SPACE)) {
-                split = vdLower.split(share_price + XMLResultsHandler.SEP_SPACE);
+            if (vdLower.contains(stock_price + Constants.SEP_SPACE)) {
+                split = vdLower.split(stock_price + Constants.SEP_SPACE);
+            } else if (vdLower.contains(stock_quote + Constants.SEP_SPACE)) {
+                split = vdLower.split(stock_quote + Constants.SEP_SPACE);
+            } else if (vdLower.contains(share_price + Constants.SEP_SPACE)) {
+                split = vdLower.split(share_price + Constants.SEP_SPACE);
             }
 
             if (split != null && split.length > 1) {

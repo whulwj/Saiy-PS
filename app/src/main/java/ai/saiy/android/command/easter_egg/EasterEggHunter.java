@@ -6,13 +6,12 @@ import android.speech.SpeechRecognizer;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.Locale;
 
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 
@@ -61,7 +60,7 @@ public final class EasterEggHunter {
                 boolean isSageOneFound = easterEggLocal.stageOneFound();
                 if (isSageOneFound) {
                     SPH.setEasterEggState(context, EasterEggHunter.STAGE_2);
-                    utterance = EasterEggLocal.stageOneAnswer() + XMLResultsHandler.SEP_SPACE + "[wand] " + XMLResultsHandler.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_2);
+                    utterance = EasterEggLocal.stageOneAnswer() + Constants.SEP_SPACE + "[wand] " + Constants.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_2);
                 } else {
                     utterance = EasterEggLocal.stageOneIncorrect(context, sl);
                     action = LocalRequest.ACTION_SPEAK_ONLY;
@@ -75,7 +74,7 @@ public final class EasterEggHunter {
                 boolean isSageTwoFound = easterEggLocal.stageTwoFound();
                 if (isSageTwoFound) {
                     SPH.setEasterEggState(context, EasterEggHunter.STAGE_3);
-                    utterance = EasterEggLocal.stageTwoAnswer() + XMLResultsHandler.SEP_SPACE + "[wand] " + XMLResultsHandler.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_3);
+                    utterance = EasterEggLocal.stageTwoAnswer() + Constants.SEP_SPACE + "[wand] " + Constants.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_3);
                 } else {
                     utterance = EasterEggLocal.stageTwoIncorrect(context, sl);
                     action = LocalRequest.ACTION_SPEAK_ONLY;
@@ -89,7 +88,7 @@ public final class EasterEggHunter {
                 boolean isSageThreeFound = easterEggLocal.stageThreeFound();
                 if (isSageThreeFound) {
                     SPH.setEasterEggState(context, EasterEggHunter.STAGE_4);
-                    utterance = EasterEggLocal.stageThreeAnswer() + XMLResultsHandler.SEP_SPACE + "[wand] " + XMLResultsHandler.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_4);
+                    utterance = EasterEggLocal.stageThreeAnswer() + Constants.SEP_SPACE + "[wand] " + Constants.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_4);
                 } else {
                     utterance = EasterEggLocal.stageThreeIncorrect(context, sl);
                 }
@@ -105,7 +104,7 @@ public final class EasterEggHunter {
                     MyLog.i(CLS_NAME, "hunt: STAGE_5");
                 }
                 SPH.setEasterEggState(context, EasterEggHunter.STAGE_6);
-                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, EasterEggLocal.stageFiveAnswer() + XMLResultsHandler.SEP_SPACE + "[wand] " + XMLResultsHandler.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_6), true);
+                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, EasterEggLocal.stageFiveAnswer() + Constants.SEP_SPACE + "[wand] " + Constants.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_6), true);
                 break;
             case EasterEggHunter.STAGE_6:
                 if (DEBUG) {
@@ -113,7 +112,7 @@ public final class EasterEggHunter {
                 }
                 if (easterEggLocal.stageSixFound()) {
                     SPH.setEasterEggState(context, EasterEggHunter.STAGE_7);
-                    utterance = EasterEggLocal.stageSixAnswer() + XMLResultsHandler.SEP_SPACE + "[wand] " + XMLResultsHandler.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_7);
+                    utterance = EasterEggLocal.stageSixAnswer() + Constants.SEP_SPACE + "[wand] " + Constants.SEP_SPACE + EasterEggLocal.getEasterEggStage(context, sl, EasterEggHunter.STAGE_7);
                 } else {
                     utterance = EasterEggLocal.stageSixIncorrect();
                 }

@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import com.facebook.FacebookException;
 import com.facebook.share.Sharer;
 import com.facebook.share.model.ShareLinkContent;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -20,6 +19,7 @@ import ai.saiy.android.nlu.local.PositiveNegative;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.ui.activity.ActivityFacebook;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -85,7 +85,7 @@ public class FacebookConfirm {
                             break;
                         }
                         localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext);
-                        localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.FacebookConfirmationMisheard(mContext, sl) + XMLResultsHandler.SEP_SPACE + utterance);
+                        localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.FacebookConfirmationMisheard(mContext, sl) + Constants.SEP_SPACE + utterance);
                         commandFacebookValues = this.bundle.getParcelable(LocalRequest.EXTRA_OBJECT);
                         actionBundle = new Bundle();
                         actionBundle.putInt(ActivityFacebook.EXTRA_REQUEST_TYPE, ActivityFacebook.TYPE_DIALOG);
@@ -109,7 +109,7 @@ public class FacebookConfirm {
                         actionBundle.putString(Intent.EXTRA_TEXT, commandFacebookValues.getText());
                         ai.saiy.android.intent.ExecuteIntent.saiyActivity(mContext, ActivityFacebook.class, actionBundle, true);
                         localRequest = new ai.saiy.android.service.helper.LocalRequest(mContext, this.bundle);
-                        localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.getMessageProofReadAcknowledge(mContext, sl) + XMLResultsHandler.SEP_SPACE + utterance);
+                        localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.getMessageProofReadAcknowledge(mContext, sl) + Constants.SEP_SPACE + utterance);
                         localRequest.execute();
                         break;
                     case NEGATIVE:
@@ -137,7 +137,7 @@ public class FacebookConfirm {
                                     ai.saiy.android.utils.SPH.setFacebookCommandVerbose(mContext);
                                     utterance = ai.saiy.android.personality.PersonalityResponse.getFacebookVerbose(mContext, sl);
                                 }
-                                localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.getFacebookPostError(mContext, sl) + XMLResultsHandler.SEP_SPACE + utterance);
+                                localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.getFacebookPostError(mContext, sl) + Constants.SEP_SPACE + utterance);
                                 final Bundle actionBundle = new Bundle();
                                 actionBundle.putInt(ActivityFacebook.EXTRA_REQUEST_TYPE, ActivityFacebook.TYPE_DIALOG);
                                 actionBundle.putString(Intent.EXTRA_TEXT, commandFacebookValues.getText());
@@ -166,7 +166,7 @@ public class FacebookConfirm {
                                     ai.saiy.android.utils.SPH.setFacebookCommandVerbose(mContext);
                                     utterance = ai.saiy.android.personality.PersonalityResponse.getFacebookVerbose(mContext, sl);
                                 }
-                                localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.getFacebookPostError(mContext, sl) + XMLResultsHandler.SEP_SPACE + utterance);
+                                localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, sl, vrLocale, ttsLocale, ai.saiy.android.personality.PersonalityResponse.getFacebookPostError(mContext, sl) + Constants.SEP_SPACE + utterance);
                                 final Bundle actionBundle = new Bundle();
                                 actionBundle.putInt(ActivityFacebook.EXTRA_REQUEST_TYPE, ActivityFacebook.TYPE_DIALOG);
                                 actionBundle.putString(Intent.EXTRA_TEXT, commandFacebookValues.getText());

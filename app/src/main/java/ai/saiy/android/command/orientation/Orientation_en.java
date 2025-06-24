@@ -4,14 +4,13 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class Orientation_en {
@@ -71,7 +70,7 @@ public class Orientation_en {
                     && (vdLower.contains(landscape) || vdLower.contains(port_rate) || vdLower.contains(portrait))) {
                 if (vdLower.contains(landscape)) {
                     if (vdLower.contains(reverse)) {
-                        commandOrientationValues.setDescription(reverse + XMLResultsHandler.SEP_SPACE + landscape);
+                        commandOrientationValues.setDescription(reverse + Constants.SEP_SPACE + landscape);
                         commandOrientationValues.setType(CommandOrientationValues.Type.REVERSE_LANDSCAPE);
                     } else {
                         commandOrientationValues.setDescription(landscape);
@@ -81,7 +80,7 @@ public class Orientation_en {
                 }
                 if (vdLower.contains(portrait) || vdLower.contains(port_rate)) {
                     if (vdLower.contains(reverse)) {
-                        commandOrientationValues.setDescription(reverse + XMLResultsHandler.SEP_SPACE + portrait);
+                        commandOrientationValues.setDescription(reverse + Constants.SEP_SPACE + portrait);
                         commandOrientationValues.setType(CommandOrientationValues.Type.REVERSE_PORTRAIT);
                     } else {
                         commandOrientationValues.setDescription(portrait);
@@ -104,16 +103,16 @@ public class Orientation_en {
                 commandOrientationValues.setDescription(portrait);
                 commandOrientationValues.setType(CommandOrientationValues.Type.PORTRAIT);
                 break;
-            } else if (vdLower.matches(reverse + XMLResultsHandler.SEP_SPACE + port_rate) || vdLower.matches(reverse + XMLResultsHandler.SEP_SPACE + portrait)) {
-                commandOrientationValues.setDescription(reverse + XMLResultsHandler.SEP_SPACE + portrait);
+            } else if (vdLower.matches(reverse + Constants.SEP_SPACE + port_rate) || vdLower.matches(reverse + Constants.SEP_SPACE + portrait)) {
+                commandOrientationValues.setDescription(reverse + Constants.SEP_SPACE + portrait);
                 commandOrientationValues.setType(CommandOrientationValues.Type.REVERSE_PORTRAIT);
                 break;
             } else if (vdLower.matches(landscape)) {
                 commandOrientationValues.setDescription(landscape);
                 commandOrientationValues.setType(CommandOrientationValues.Type.LANDSCAPE);
                 break;
-            } else if (vdLower.matches(reverse + XMLResultsHandler.SEP_SPACE + landscape)) {
-                commandOrientationValues.setDescription(reverse + XMLResultsHandler.SEP_SPACE + landscape);
+            } else if (vdLower.matches(reverse + Constants.SEP_SPACE + landscape)) {
+                commandOrientationValues.setDescription(reverse + Constants.SEP_SPACE + landscape);
                 commandOrientationValues.setType(CommandOrientationValues.Type.REVERSE_LANDSCAPE);
                 break;
             }
@@ -148,7 +147,7 @@ public class Orientation_en {
             final int size = voiceData.size();
             for (int i = 0; i < size; i++) {
                 String vdLower = voiceData.get(i).toLowerCase(locale).trim();
-                if (vdLower.matches(port_rate) || vdLower.matches(portrait) || vdLower.matches(landscape) || vdLower.matches(Orientation_en.reverse + XMLResultsHandler.SEP_SPACE + port_rate) || vdLower.matches(Orientation_en.reverse + portrait) || vdLower.matches(Orientation_en.reverse + XMLResultsHandler.SEP_SPACE + landscape)) {
+                if (vdLower.matches(port_rate) || vdLower.matches(portrait) || vdLower.matches(landscape) || vdLower.matches(Orientation_en.reverse + Constants.SEP_SPACE + port_rate) || vdLower.matches(Orientation_en.reverse + portrait) || vdLower.matches(Orientation_en.reverse + Constants.SEP_SPACE + landscape)) {
                     toReturn.add(new Pair<>(CC.COMMAND_ORIENTATION, confidence[i]));
                 } else if ((vdLower.contains(rotate) || vdLower.contains(rotation) || vdLower.contains(screen) || vdLower.contains(display) || vdLower.contains(orientation) || vdLower.contains(Orientation_en.reverse)) && (vdLower.contains(landscape) || vdLower.contains(port_rate) || vdLower.contains(portrait))) {
                     toReturn.add(new Pair<>(CC.COMMAND_ORIENTATION, confidence[i]));

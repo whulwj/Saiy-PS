@@ -5,13 +5,12 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -87,7 +86,7 @@ public class CommandStockQuote {
             outcome.setOutcome(Outcome.FAILURE);
             return returnOutcome(outcome);
         }
-        outcome.setUtterance(stockQuoteIEX.first + XMLResultsHandler.SEP_SPACE + context.getString(R.string.quote_response) + XMLResultsHandler.SEP_SPACE + stockQuoteIEX.second);
+        outcome.setUtterance(stockQuoteIEX.first + Constants.SEP_SPACE + context.getString(R.string.quote_response) + Constants.SEP_SPACE + stockQuoteIEX.second);
         outcome.setOutcome(Outcome.SUCCESS);
         return returnOutcome(outcome);
     }

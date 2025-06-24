@@ -3,8 +3,6 @@ package ai.saiy.android.command.application.launch;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.Locale;
@@ -56,8 +54,8 @@ public class Launch_en {
         final String the = sr.getString(R.string.the);
         final String application = sr.getString(R.string.application);
         final String app = sr.getString(R.string.app);
-        final String launchPrefix = launch + XMLResultsHandler.SEP_SPACE;
-        final String openPrefix = open + XMLResultsHandler.SEP_SPACE;
+        final String launchPrefix = launch + Constants.SEP_SPACE;
+        final String openPrefix = open + Constants.SEP_SPACE;
         String[] split = null;
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
@@ -67,7 +65,7 @@ public class Launch_en {
                 split = vdLower.split(openPrefix);
             }
             if (split != null && split.length > 1) {
-                String applicationName = split[1].trim().replaceFirst(the + XMLResultsHandler.SEP_SPACE + application, "").trim().replaceFirst(the + XMLResultsHandler.SEP_SPACE + app, "").trim();
+                String applicationName = split[1].trim().replaceFirst(the + Constants.SEP_SPACE + application, "").trim().replaceFirst(the + Constants.SEP_SPACE + app, "").trim();
                 if (applicationName.startsWith(application)) {
                     applicationName = applicationName.replaceFirst(application, "").trim();
                 } else if (applicationName.startsWith(app)) {

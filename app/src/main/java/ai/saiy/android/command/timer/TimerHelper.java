@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.provider.AlarmClock;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import java.util.ArrayList;
@@ -15,6 +13,7 @@ import java.util.Locale;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 
@@ -44,7 +43,7 @@ public final class TimerHelper {
 
     private static int dissectTime(CommandTimerValue commandTimerValue, String str) {
         int runningTotal = 0;
-        final String[] separated = str.trim().split(XMLResultsHandler.SEP_SPACE);
+        final String[] separated = str.trim().split(Constants.SEP_SPACE);
         for (int i = 0; i < separated.length; i++) {
             if (separated[i].contains(hour)) {
                 try {

@@ -17,7 +17,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +25,7 @@ import ai.saiy.android.R;
 import ai.saiy.android.broadcast.BRTaskerReceiver;
 import ai.saiy.android.cognitive.identity.provider.microsoft.Speaker;
 import ai.saiy.android.thirdparty.tasker.TaskerHelper;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsLocale;
 import ai.saiy.android.utils.UtilsString;
@@ -56,7 +56,7 @@ public class ActivityTaskerPluginSpeech extends AppCompatActivity implements Rad
     }
 
     private boolean isValid(String variableName) {
-        return variableName.startsWith("%") && variableName.length() > 3 && !variableName.contains(XMLResultsHandler.SEP_SPACE);
+        return variableName.startsWith("%") && variableName.length() > 3 && !variableName.contains(Constants.SEP_SPACE);
     }
 
     @Override
@@ -107,7 +107,7 @@ public class ActivityTaskerPluginSpeech extends AppCompatActivity implements Rad
             }
             bundle.putBoolean(BRTaskerReceiver.EXTRA_VAR_ONLY, true);
             bundle.putString(BRTaskerReceiver.EXTRA_BLURB, restraintBlurb(input, getString(R.string.tasker_prefix_send)));
-            final ArrayList<String> arrayList = Lists.newArrayList(Splitter.on(XMLResultsHandler.SEP_COMMA).trimResults().split(input));
+            final ArrayList<String> arrayList = Lists.newArrayList(Splitter.on(Constants.SEP_COMMA).trimResults().split(input));
             arrayList.removeAll(Collections.singleton(""));
             final int size = arrayList.size();
             for (int i = 0; i < size; i++) {

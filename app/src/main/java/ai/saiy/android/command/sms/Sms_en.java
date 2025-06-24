@@ -3,14 +3,13 @@ package ai.saiy.android.command.sms;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class Sms_en {
@@ -59,11 +58,11 @@ public class Sms_en {
             vdLower = s.toLowerCase(locale).trim();
             if ((vdLower.startsWith(read) && (vdLower.contains(text) || vdLower.contains(message))) || vdLower.contains(sms)) {
                 if (vdLower.contains(from)) {
-                    String[] separated = vdLower.split(from + XMLResultsHandler.SEP_SPACE);
+                    String[] separated = vdLower.split(from + Constants.SEP_SPACE);
                     if (separated.length > 1) {
                         String sender = separated[1].trim();
-                        if (sender.startsWith(my + XMLResultsHandler.SEP_SPACE)) {
-                            toReturn.add(sender.split(my + XMLResultsHandler.SEP_SPACE)[1].trim());
+                        if (sender.startsWith(my + Constants.SEP_SPACE)) {
+                            toReturn.add(sender.split(my + Constants.SEP_SPACE)[1].trim());
                         } else {
                             toReturn.add(sender);
                         }

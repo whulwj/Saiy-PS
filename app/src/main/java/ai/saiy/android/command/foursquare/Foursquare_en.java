@@ -3,14 +3,13 @@ package ai.saiy.android.command.foursquare;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class Foursquare_en {
@@ -64,11 +63,11 @@ public class Foursquare_en {
         for (String voiceDatum : voiceData) {
             vdLower = voiceDatum.toLowerCase(locale).trim();
             if (vdLower.startsWith(check_in) || vdLower.startsWith(check_into) || vdLower.startsWith(checkin_to) || vdLower.startsWith(check_me_in_to) || vdLower.startsWith(check_me_into)) {
-                String trimmed = vdLower.replaceFirst(check_in_to, "").trim().replaceFirst(check_in, "").trim().replaceFirst(check_into, "").trim().replaceFirst(checkin_to, "").trim().replaceFirst(check_me_in_to, "").trim().replaceFirst(check_me_into, "").trim().replaceFirst(on + XMLResultsHandler.SEP_SPACE + foursquare, "").trim().replaceFirst(on + XMLResultsHandler.SEP_SPACE + four_square, "").trim().replaceAll(foursquare, "").trim().replaceAll(four_square, "").trim();
+                String trimmed = vdLower.replaceFirst(check_in_to, "").trim().replaceFirst(check_in, "").trim().replaceFirst(check_into, "").trim().replaceFirst(checkin_to, "").trim().replaceFirst(check_me_in_to, "").trim().replaceFirst(check_me_into, "").trim().replaceFirst(on + Constants.SEP_SPACE + foursquare, "").trim().replaceFirst(on + Constants.SEP_SPACE + four_square, "").trim().replaceAll(foursquare, "").trim().replaceAll(four_square, "").trim();
                 if (trimmed.startsWith(at)) {
                     trimmed = trimmed.replaceFirst(at, "").trim();
                 }
-                trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + location, "").trim();
+                trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + location, "").trim();
                 if (trimmed.startsWith(location)) {
                     trimmed = trimmed.replaceFirst(location, "").trim();
                 }

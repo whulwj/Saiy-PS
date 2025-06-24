@@ -6,8 +6,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -22,6 +20,7 @@ import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Condition;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class CommandNote {
@@ -104,7 +103,7 @@ public class CommandNote {
                         final String applicationName;
                         if (voiceNoteProviders == null) {
                             final SaiyResources sr = new SaiyResources(context, supportedLanguage);
-                            applicationName = sr.getString(R.string.note) + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.voice);
+                            applicationName = sr.getString(R.string.note) + Constants.SEP_SPACE + sr.getString(R.string.voice);
                         } else {
                             applicationName = voiceNoteProviders.second;
                         }

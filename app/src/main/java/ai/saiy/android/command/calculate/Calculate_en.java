@@ -5,14 +5,13 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -52,7 +51,7 @@ public final class Calculate_en {
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }
-        final String calculation = calculate + XMLResultsHandler.SEP_SPACE;
+        final String calculation = calculate + Constants.SEP_SPACE;
         final String divided_by = sr.getString(R.string._DIVIDED_BY_);
         final String divided = sr.getString(R.string._DIVIDED_);
         final String divide_by = sr.getString(R.string._DIVIDE_BY_);
@@ -79,7 +78,7 @@ public final class Calculate_en {
         for (String voiceDatum : voiceData) {
             String vdLower = voiceDatum.toLowerCase(locale).trim();
             if (vdLower.startsWith(calculation)) {
-                toReturn.add(vdLower.replaceFirst(calculation, "").replaceAll(divided_by, " / ").replaceAll(divided, " / ").replaceAll(divide_by, " / ").replaceAll(divide, " / ").replaceAll(plus, " + ").replaceAll(minus, " - ").replaceAll(XMLResultsHandler.SEP_HYPHEN, " - ").replaceAll(times, " \\* ").replaceAll(time, " * ").replaceAll(add, " + ").replaceAll(multiplied_by, " * ").replaceAll(multiplied, " * ").replaceAll(subtracted, " - ").replaceAll(subtract, "- ").replaceAll(percent, "% ").replaceAll(to_the_power_of, " ^ ").replaceAll(to_the_power, " ^ ").replaceAll(squared, " ^ 2 ").replaceAll(cubed, " ^ 3 ").replaceAll(square_root, MathEval.SQUARE_ROOT).replaceAll(calculate, XMLResultsHandler.SEP_SPACE).replaceAll(the, "").replaceAll(of, "").replaceAll(equals, XMLResultsHandler.SEP_SPACE).replaceAll(equal, XMLResultsHandler.SEP_SPACE).trim().replaceAll(" +", XMLResultsHandler.SEP_SPACE));
+                toReturn.add(vdLower.replaceFirst(calculation, "").replaceAll(divided_by, " / ").replaceAll(divided, " / ").replaceAll(divide_by, " / ").replaceAll(divide, " / ").replaceAll(plus, " + ").replaceAll(minus, " - ").replaceAll(Constants.SEP_HYPHEN, " - ").replaceAll(times, " \\* ").replaceAll(time, " * ").replaceAll(add, " + ").replaceAll(multiplied_by, " * ").replaceAll(multiplied, " * ").replaceAll(subtracted, " - ").replaceAll(subtract, "- ").replaceAll(percent, "% ").replaceAll(to_the_power_of, " ^ ").replaceAll(to_the_power, " ^ ").replaceAll(squared, " ^ 2 ").replaceAll(cubed, " ^ 3 ").replaceAll(square_root, MathEval.SQUARE_ROOT).replaceAll(calculate, Constants.SEP_SPACE).replaceAll(the, "").replaceAll(of, "").replaceAll(equals, Constants.SEP_SPACE).replaceAll(equal, Constants.SEP_SPACE).trim().replaceAll(" +", Constants.SEP_SPACE));
             }
         }
         if (DEBUG) {

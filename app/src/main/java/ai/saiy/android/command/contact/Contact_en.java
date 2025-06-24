@@ -3,8 +3,6 @@ package ai.saiy.android.command.contact;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.ListIterator;
 import java.util.Locale;
@@ -12,6 +10,7 @@ import java.util.Locale;
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class Contact_en {
@@ -121,7 +120,7 @@ public class Contact_en {
         String vdLower;
         for (String voiceDatum : voiceData) {
             vdLower = voiceDatum.toLowerCase(locale).trim();
-            if ((vdLower.startsWith(call) && !vdLower.startsWith(call + XMLResultsHandler.SEP_SPACE + me + XMLResultsHandler.SEP_SPACE) && !vdLower.startsWith(call_back) && !vdLower.startsWith(callback) && !vdLower.matches(call_black) && !vdLower.matches(call_bak) && !vdLower.matches(call_bag)) || vdLower.startsWith(dial) || vdLower.startsWith(ring)) {
+            if ((vdLower.startsWith(call) && !vdLower.startsWith(call + Constants.SEP_SPACE + me + Constants.SEP_SPACE) && !vdLower.startsWith(call_back) && !vdLower.startsWith(callback) && !vdLower.matches(call_black) && !vdLower.matches(call_bak) && !vdLower.matches(call_bag)) || vdLower.startsWith(dial) || vdLower.startsWith(ring)) {
                 if (commandContactValues.getType() == CommandContactValues.Type.UNKNOWN) {
                     commandContactValues.setType(CommandContactValues.Type.CALL);
                 }
@@ -142,7 +141,7 @@ public class Contact_en {
                     voiceDataTrimmed.add(trimForHome(vdLower));
                 } else {
                     final String trimmedForCall = trimForCall(vdLower);
-                    final String trimmed = trimmedForCall.replaceAll("o", "0").replaceAll(XMLResultsHandler.SEP_HYPHEN, "").trim();
+                    final String trimmed = trimmedForCall.replaceAll("o", "0").replaceAll(Constants.SEP_HYPHEN, "").trim();
                     if (trimmed.matches("[0-9 ]+")) {
                         if (commandContactValues.getCallType() == CommandContactValues.CallType.UNKNOWN) {
                             commandContactValues.setCallType(CommandContactValues.CallType.NUMBER);
@@ -399,7 +398,7 @@ public class Contact_en {
             String vdLower;
             for (int i = 0; i < size; i++) {
                 vdLower = voiceData.get(i).toLowerCase(locale).trim();
-                if (!vdLower.startsWith(call_back) && !vdLower.startsWith(callback) && !vdLower.matches(call_black) && !vdLower.matches(call_bak) && !vdLower.matches(call_bag) && ((vdLower.startsWith(display) && vdLower.contains(contact)) || ((vdLower.startsWith(edit) && vdLower.contains(contact)) || ((vdLower.startsWith(navigate) && vdLower.contains(contact)) || ((vdLower.startsWith(call) && !vdLower.startsWith(call + XMLResultsHandler.SEP_SPACE + me + XMLResultsHandler.SEP_SPACE)) || vdLower.startsWith(ring) || vdLower.startsWith(dial) || ((vdLower.startsWith(text) && !vdLower.startsWith(text_to_speech)) || vdLower.startsWith(email) || vdLower.startsWith(message) || vdLower.startsWith(skype) || ((vdLower.startsWith(send) && (vdLower.contains(text) || vdLower.contains(sms) || vdLower.contains(message) || vdLower.contains(email))) || (vdLower.startsWith(compose) && (vdLower.contains(text) || vdLower.contains(sms) || vdLower.contains(message) || vdLower.contains(email)))))))))) {
+                if (!vdLower.startsWith(call_back) && !vdLower.startsWith(callback) && !vdLower.matches(call_black) && !vdLower.matches(call_bak) && !vdLower.matches(call_bag) && ((vdLower.startsWith(display) && vdLower.contains(contact)) || ((vdLower.startsWith(edit) && vdLower.contains(contact)) || ((vdLower.startsWith(navigate) && vdLower.contains(contact)) || ((vdLower.startsWith(call) && !vdLower.startsWith(call + Constants.SEP_SPACE + me + Constants.SEP_SPACE)) || vdLower.startsWith(ring) || vdLower.startsWith(dial) || ((vdLower.startsWith(text) && !vdLower.startsWith(text_to_speech)) || vdLower.startsWith(email) || vdLower.startsWith(message) || vdLower.startsWith(skype) || ((vdLower.startsWith(send) && (vdLower.contains(text) || vdLower.contains(sms) || vdLower.contains(message) || vdLower.contains(email))) || (vdLower.startsWith(compose) && (vdLower.contains(text) || vdLower.contains(sms) || vdLower.contains(message) || vdLower.contains(email)))))))))) {
                     toReturn.add(new Pair<>(CC.COMMAND_CONTACT, confidence[i]));
                 }
             }

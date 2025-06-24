@@ -8,7 +8,6 @@ import android.speech.SpeechRecognizer;
 import android.util.Pair;
 
 import com.google.firebase.analytics.FirebaseAnalytics;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -27,6 +26,7 @@ import ai.saiy.android.tts.attributes.Gender;
 import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.ui.activity.ActivityHome;
 import ai.saiy.android.ui.notification.NotificationHelper;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -176,7 +176,7 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_QUESTION_1: vrRetry: " + this.vrRetry);
                 }
-                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_1, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_6b) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_6) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_6), false);
+                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_1, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_6b) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_6) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_6), false);
                 break;
             case STAGE_ANSWER_1:
                 if (DEBUG) {
@@ -206,7 +206,7 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_QUESTION_2");
                 }
-                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_2, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_7f) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_7c) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_7c), false);
+                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_2, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_7f) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_7c) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_7c), false);
                 break;
             case STAGE_ANSWER_2:
                 if (DEBUG) {
@@ -237,7 +237,7 @@ public class Tutorial {
                     MyLog.i(CLS_NAME, "action: STAGE_QUESTION_3");
                 }
                 conditionRetry = this.bundle.getBoolean(LocalRequest.EXTRA_CONDITION_RETRY, false);
-                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_3, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_8d) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_8c) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_8c), conditionRetry);
+                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_3, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_8d) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_8c) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_8c), conditionRetry);
                 break;
             case STAGE_ANSWER_3:
                 if (DEBUG) {
@@ -298,7 +298,7 @@ public class Tutorial {
                 if (DEBUG) {
                     MyLog.i(CLS_NAME, "action: STAGE_QUESTION_4");
                 }
-                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_4, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11e) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11d) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_9c), false);
+                executeRequest(LocalRequest.ACTION_SPEAK_LISTEN, STAGE_ANSWER_4, this.vrRetry ? SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11e) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11d) : SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_9c), false);
                 break;
             case STAGE_ANSWER_4:
                 if (DEBUG) {
@@ -315,12 +315,12 @@ public class Tutorial {
                 } else if (this.vrRetry) {
                     String oldUserName = SPH.getUserName(context);
                     if (UtilsString.notNaked(oldUserName) && !oldUserName.matches(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.master))) {
-                        utterance = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_10e) + XMLResultsHandler.SEP_SPACE + String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_10a), oldUserName);
+                        utterance = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_10e) + Constants.SEP_SPACE + String.format(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_10a), oldUserName);
                         nextTutorialStage = STAGE_ANSWER_5;
                     } else {
                         conditionRetry = true;
                         nextTutorialStage = STAGE_ANSWER_4;
-                        utterance = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11f) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11d);
+                        utterance = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11f) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_11d);
                     }
                     nextAction = LocalRequest.ACTION_SPEAK_LISTEN;
                 } else {
@@ -470,7 +470,7 @@ public class Tutorial {
                 actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_SUPPORTED_APPS);
                 actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
                 ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
-                executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_DEVELOPMENT, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_16) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_17), false);
+                executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_DEVELOPMENT, SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_16) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_17), false);
                 Schedulers.computation().scheduleDirect(new Runnable() {
                     @Override
                     public void run() {
@@ -511,9 +511,9 @@ public class Tutorial {
                     actionBundle.putInt(ActivityHome.FRAGMENT_INDEX, ActivityHome.INDEX_FRAGMENT_CUSTOMISATION);
                     actionBundle.putInt(LocalRequest.EXTRA_CONDITION, Condition.CONDITION_TUTORIAL);
                     ExecuteIntent.saiyActivity(context, ActivityHome.class, actionBundle, true);
-                    str = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20b) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20a);
+                    str = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20b) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20a);
                 } else {
-                    str = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20a);
+                    str = SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.tutorial_20a);
                 }
                 executeRequest(LocalRequest.ACTION_SPEAK_ONLY, STAGE_RESET, str, false);
                 UtilsAnalytic.tutorialComplete(context, FirebaseAnalytics.getInstance(context), sErrorCount > 0);

@@ -7,7 +7,6 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 
@@ -56,12 +55,12 @@ public class CommandWeather {
         if (SPH.getWeatherProvider(context) == WeatherProvider.WEATHER_ONLINE) {
             authPair = new WeatherOnlineReference().getAPIKey(context);
             if (authPair.first) {
-                return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=" + authPair.second + "&q=" + location.getLatitude() + XMLResultsHandler.SEP_COMMA + location.getLongitude() + "&format=json&num_of_days=1";
+                return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=" + authPair.second + "&q=" + location.getLatitude() + Constants.SEP_COMMA + location.getLongitude() + "&format=json&num_of_days=1";
             }
             if (DEBUG) {
                 MyLog.w(CLS_NAME, "authPair error");
             }
-            return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=&q=" + location.getLatitude() + XMLResultsHandler.SEP_COMMA + location.getLongitude() + "&format=json&num_of_days=1";
+            return "https://api.worldweatheronline.com/premium/v1/weather.ashx?key=&q=" + location.getLatitude() + Constants.SEP_COMMA + location.getLongitude() + "&format=json&num_of_days=1";
         }
         authPair = new OpenWeatherMapReference().getAPIKey(context);
         if (authPair.first) {
@@ -160,9 +159,9 @@ public class CommandWeather {
                     temperature = weatherResponse.getTemperatureCelsius();
                 }
                 if (isIndoor) {
-                    outcome.setUtterance(context.getString(R.string.in) + XMLResultsHandler.SEP_SPACE + weatherResponse.getQuery() + ", " + context.getString(R.string.it_s) + XMLResultsHandler.SEP_SPACE + temperature + XMLResultsHandler.SEP_SPACE + context.getString(R.string.degrees) + XMLResultsHandler.SEP_SPACE + scaleString + ", " + context.getString(R.string.and) + XMLResultsHandler.SEP_SPACE + weatherResponse.getDescription());
+                    outcome.setUtterance(context.getString(R.string.in) + Constants.SEP_SPACE + weatherResponse.getQuery() + ", " + context.getString(R.string.it_s) + Constants.SEP_SPACE + temperature + Constants.SEP_SPACE + context.getString(R.string.degrees) + Constants.SEP_SPACE + scaleString + ", " + context.getString(R.string.and) + Constants.SEP_SPACE + weatherResponse.getDescription());
                 } else {
-                    outcome.setUtterance(context.getString(R.string.outside) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.it_s) + XMLResultsHandler.SEP_SPACE + temperature + XMLResultsHandler.SEP_SPACE + context.getString(R.string.degrees) + XMLResultsHandler.SEP_SPACE + scaleString + ", " + context.getString(R.string.and) + XMLResultsHandler.SEP_SPACE + weatherResponse.getDescription());
+                    outcome.setUtterance(context.getString(R.string.outside) + Constants.SEP_SPACE + context.getString(R.string.it_s) + Constants.SEP_SPACE + temperature + Constants.SEP_SPACE + context.getString(R.string.degrees) + Constants.SEP_SPACE + scaleString + ", " + context.getString(R.string.and) + Constants.SEP_SPACE + weatherResponse.getDescription());
                 }
                 outcome.setOutcome(Outcome.SUCCESS);
                 return returnOutcome(outcome);

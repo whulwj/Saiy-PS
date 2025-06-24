@@ -2,14 +2,13 @@ package ai.saiy.android.command.help;
 
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -40,7 +39,7 @@ public class Help_en {
 
     private static void initStrings(ai.saiy.android.localisation.SaiyResources sr) {
         help = sr.getString(R.string.help);
-        help_me = help + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.me);
+        help_me = help + Constants.SEP_SPACE + sr.getString(R.string.me);
         what_can_you_do = sr.getString(R.string.what_can_you_do);
     }
 

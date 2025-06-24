@@ -3,14 +3,13 @@ package ai.saiy.android.command.note;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 
@@ -55,7 +54,7 @@ public class Note_en {
         String vdLower;
         for (String vdDatum : voiceData) {
             vdLower = vdDatum.toLowerCase(locale).trim();
-            if (vdLower.endsWith(voice + XMLResultsHandler.SEP_SPACE + note)) {
+            if (vdLower.endsWith(voice + Constants.SEP_SPACE + note)) {
                 commandNoteValues.setType(CommandNoteValues.Type.VOICE_NOTE);
                 break;
             }

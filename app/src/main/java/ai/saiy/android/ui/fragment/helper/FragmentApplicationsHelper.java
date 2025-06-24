@@ -11,8 +11,6 @@ import androidx.core.view.GravityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +29,7 @@ import ai.saiy.android.ui.components.UIApplicationsAdapter;
 import ai.saiy.android.ui.containers.ContainerUI;
 import ai.saiy.android.ui.fragment.FragmentApplications;
 import ai.saiy.android.ui.fragment.FragmentHome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import io.reactivex.rxjava3.schedulers.Schedulers;
@@ -478,11 +477,11 @@ public class FragmentApplicationsHelper {
                 String utterance;
                 if (ai.saiy.android.thirdparty.tasker.TaskerHelper.isUnknownSourceInstallAllowed(FragmentApplicationsHelper.this.getApplicationContext())) {
                     SPH.setCheckReinstallationNeeded(FragmentApplicationsHelper.this.getApplicationContext(), true);
-                    utterance = sr.getString(R.string.content_tasker_reinstall_1) + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.content_tasker_reinstall_7);
+                    utterance = sr.getString(R.string.content_tasker_reinstall_1) + Constants.SEP_SPACE + sr.getString(R.string.content_tasker_reinstall_7);
                 } else {
                     FragmentApplicationsHelper.this.getParent().setAttemptingReinstallation(true);
                     SPH.setCheckUnknownSourcesSettingNeeded(FragmentApplicationsHelper.this.getApplicationContext(), true);
-                    utterance = sr.getString(R.string.content_tasker_reinstall_1) + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.content_tasker_reinstall_2);
+                    utterance = sr.getString(R.string.content_tasker_reinstall_1) + Constants.SEP_SPACE + sr.getString(R.string.content_tasker_reinstall_2);
                 }
                 ai.saiy.android.service.helper.LocalRequest localRequest = new ai.saiy.android.service.helper.LocalRequest(FragmentApplicationsHelper.this.getApplicationContext());
                 localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, supportedLanguage, vrLocale, SPH.getTTSLocale(FragmentApplicationsHelper.this.getApplicationContext()), utterance);

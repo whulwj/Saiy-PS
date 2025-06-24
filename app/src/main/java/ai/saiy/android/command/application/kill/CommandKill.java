@@ -6,8 +6,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -17,6 +15,7 @@ import ai.saiy.android.command.settings.SettingsIntent;
 import ai.saiy.android.intent.IntentConstants;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -140,7 +139,7 @@ public class CommandKill {
         }
         ai.saiy.android.intent.ExecuteIntent.goHome(context);
         if (UtilsApplication.killPackage(context, applicationPair.second)) {
-            outcome.setUtterance(context.getString(R.string.killed) + XMLResultsHandler.SEP_SPACE + applicationPair.first);
+            outcome.setUtterance(context.getString(R.string.killed) + Constants.SEP_SPACE + applicationPair.first);
             outcome.setOutcome(Outcome.SUCCESS);
             return returnOutcome(outcome);
         }

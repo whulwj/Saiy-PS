@@ -8,8 +8,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +17,7 @@ import java.util.TimeZone;
 
 import ai.saiy.android.R;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
 import ai.saiy.android.utils.UtilsLocale;
@@ -210,8 +209,8 @@ public class AgendaProcessHelper {
                         case Calendar.THURSDAY:
                         case Calendar.FRIDAY:
                         case Calendar.SATURDAY:
-                            yearString = (agendaProcess.getYear() == Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale()).get(Calendar.YEAR)) ? "" : XMLResultsHandler.SEP_SPACE + agendaProcess.getYear();
-                            agendaProcess.setUtterance("The " + UtilsDate.getDayOfMonth(context, agendaProcess.getDayOfMonth()) + " of " + UtilsDate.getMonth(context, agendaProcess.getMonth() - MONTH_OFFSET) + yearString + " is " + context.getString(R.string.not_a) + XMLResultsHandler.SEP_SPACE + UtilsDate.getWeekday(context, weekday));
+                            yearString = (agendaProcess.getYear() == Calendar.getInstance(TimeZone.getDefault(), UtilsLocale.getDefaultLocale()).get(Calendar.YEAR)) ? "" : Constants.SEP_SPACE + agendaProcess.getYear();
+                            agendaProcess.setUtterance("The " + UtilsDate.getDayOfMonth(context, agendaProcess.getDayOfMonth()) + " of " + UtilsDate.getMonth(context, agendaProcess.getMonth() - MONTH_OFFSET) + yearString + " is " + context.getString(R.string.not_a) + Constants.SEP_SPACE + UtilsDate.getWeekday(context, weekday));
                             break;
                         default:
                             return false;

@@ -13,12 +13,12 @@ import com.google.android.gms.ads.OnUserEarnedRewardListener;
 import com.google.android.gms.ads.rewarded.RewardItem;
 import com.google.android.gms.ads.rewarded.RewardedAd;
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import ai.saiy.android.R;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.user.UserFirebaseHelper;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.PrivacyRepository;
 import ai.saiy.android.utils.SPH;
@@ -107,7 +107,7 @@ public class ActivityDonate extends AppCompatActivity implements OnUserEarnedRew
         final ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(getApplicationContext(), SupportedLanguage.getSupportedLanguage(SPH.getVRLocale(getApplicationContext())));
         if (SPH.getCreditsVerbose(getApplicationContext()) < 2) {
             SPH.incrementCreditsVerbose(getApplicationContext());
-            format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24") + XMLResultsHandler.SEP_SPACE + sr.getString(R.string.donate_credit_verbose);
+            format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24") + Constants.SEP_SPACE + sr.getString(R.string.donate_credit_verbose);
         } else {
             format = String.format(sr.getString(R.string.donate_credit_addition), 5L, "24");
         }

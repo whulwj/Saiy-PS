@@ -20,8 +20,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.StringRes;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 
 import ai.saiy.android.R;
@@ -32,6 +30,7 @@ import ai.saiy.android.nlu.local.OnOff;
 import ai.saiy.android.permissions.PermissionHelper;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsString;
 import ai.saiy.android.utils.UtilsWireless;
@@ -76,10 +75,10 @@ public class CommandHardware {
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.ON && defaultAdapter.isEnabled()) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(bluetooth + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                        outcome.setUtterance(bluetooth + Constants.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.OFF && !defaultAdapter.isEnabled()) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(bluetooth + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                        outcome.setUtterance(bluetooth + Constants.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
                         @Nullable String errorMessage;
                         switch (hardwarePair.second) {
@@ -132,10 +131,10 @@ public class CommandHardware {
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.ON && wifiManager.isWifiEnabled()) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(wifi + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                        outcome.setUtterance(wifi + Constants.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.OFF && !wifiManager.isWifiEnabled()) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(wifi + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                        outcome.setUtterance(wifi + Constants.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
                         @StringRes int errorMessage;
                         switch (hardwarePair.second) {
@@ -181,17 +180,17 @@ public class CommandHardware {
                     }
                     break;
                 case DATA:
-                    final String theDataConnection = context.getString(R.string.the) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.data) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.connection);
+                    final String theDataConnection = context.getString(R.string.the) + Constants.SEP_SPACE + context.getString(R.string.data) + Constants.SEP_SPACE + context.getString(R.string.connection);
                     final MobileDataHelper mobileDataHelper = new MobileDataHelper();
                     if (!mobileDataHelper.hasTelephonyFeature(context)) {
                         outcome.setOutcome(Outcome.FAILURE);
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.ON && mobileDataHelper.isEnabled(context)) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(theDataConnection + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                        outcome.setUtterance(theDataConnection + Constants.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.OFF && !mobileDataHelper.isEnabled(context)) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(theDataConnection + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                        outcome.setUtterance(theDataConnection + Constants.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
                         boolean isFailed = false;
                         switch (hardwarePair.second) {
@@ -234,7 +233,7 @@ public class CommandHardware {
                     }
                     break;
                 case AEROPLANE:
-                    final String flightMode = context.getString(R.string.flight) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.mode);
+                    final String flightMode = context.getString(R.string.flight) + Constants.SEP_SPACE + context.getString(R.string.mode);
                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
                         outcome.setOutcome(Outcome.FAILURE);
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
@@ -247,10 +246,10 @@ public class CommandHardware {
                         }
                         if (isEnabled && hardwarePair.second == OnOff.Result.ON) {
                             outcome.setOutcome(Outcome.SUCCESS);
-                            outcome.setUtterance(flightMode + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                            outcome.setUtterance(flightMode + Constants.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
                         } else if (!isEnabled && hardwarePair.second == OnOff.Result.OFF) {
                             outcome.setOutcome(Outcome.SUCCESS);
-                            outcome.setUtterance(flightMode + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                            outcome.setUtterance(flightMode + Constants.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                         } else {
                             boolean enabled = false;
                             switch (hardwarePair.second) {
@@ -300,10 +299,10 @@ public class CommandHardware {
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
                     }else if (hardwarePair.second == OnOff.Result.ON && locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(gps + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                        outcome.setUtterance(gps + Constants.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.OFF && !locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(gps + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                        outcome.setUtterance(gps + Constants.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
                         locationSettings(context);
                         switch (hardwarePair.second) {
@@ -332,10 +331,10 @@ public class CommandHardware {
                         outcome.setUtterance(PersonalityResponse.getHardwareUnsupportedError(context, supportedLanguage));
                     }else if (hardwarePair.second == OnOff.Result.ON && nfcAdapter.isEnabled()) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(nfc + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                        outcome.setUtterance(nfc + Constants.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
                     } else if (hardwarePair.second == OnOff.Result.OFF && !nfcAdapter.isEnabled()) {
                         outcome.setOutcome(Outcome.SUCCESS);
-                        outcome.setUtterance(nfc + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                        outcome.setUtterance(nfc + Constants.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                     } else {
                         nfcSettings(context);
                         switch (hardwarePair.second) {
@@ -357,7 +356,7 @@ public class CommandHardware {
                     }
                     break;
                 case HOTSPOT:
-                    final String theHotspot = context.getString(R.string.the) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.hotspot);
+                    final String theHotspot = context.getString(R.string.the) + Constants.SEP_SPACE + context.getString(R.string.hotspot);
                     WifiManager wifiManager2 = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
                     if (wifiManager2 == null) {
                         outcome.setOutcome(Outcome.FAILURE);
@@ -367,10 +366,10 @@ public class CommandHardware {
                         final boolean isEnabled = wifiManagerHelper.isEnabled(wifiManager2);
                         if (isEnabled && hardwarePair.second == OnOff.Result.ON) {
                             outcome.setOutcome(Outcome.SUCCESS);
-                            outcome.setUtterance(theHotspot + XMLResultsHandler.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
+                            outcome.setUtterance(theHotspot + Constants.SEP_SPACE + PersonalityResponse.getConnectionEnabled(context, supportedLanguage));
                         } else if (!isEnabled && hardwarePair.second == OnOff.Result.OFF) {
                             outcome.setOutcome(Outcome.SUCCESS);
-                            outcome.setUtterance(theHotspot + XMLResultsHandler.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
+                            outcome.setUtterance(theHotspot + Constants.SEP_SPACE + PersonalityResponse.ConnectionDisabled(context, supportedLanguage));
                         } else {
                             boolean enabled;
                             switch (hardwarePair.second) {

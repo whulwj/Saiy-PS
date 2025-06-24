@@ -3,8 +3,6 @@ package ai.saiy.android.command.settings.application;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -52,7 +50,7 @@ public class ApplicationSettings_en {
         } else if (DEBUG) {
             MyLog.i(CLS_NAME, "strings initialised");
         }
-        final String applicationSettingsCommand = application_settings + XMLResultsHandler.SEP_SPACE;
+        final String applicationSettingsCommand = application_settings + Constants.SEP_SPACE;
         final int size = voiceData.size();
         String vdLower;
         for (int i = 0; i < size; i++) {
@@ -79,7 +77,7 @@ public class ApplicationSettings_en {
         final long then = System.nanoTime();
         ArrayList<Pair<CC, Float>> toReturn = new ArrayList<>();
         if (UtilsList.notNaked(voiceData) && UtilsList.notNaked(confidence) && voiceData.size() == confidence.length) {
-            final String applicationSettingsCommand = application_settings + XMLResultsHandler.SEP_SPACE;
+            final String applicationSettingsCommand = application_settings + Constants.SEP_SPACE;
             final Locale locale = sl.getLocale();
             final int size = voiceData.size();
             String vdLower;

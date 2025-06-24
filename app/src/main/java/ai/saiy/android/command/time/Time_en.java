@@ -3,14 +3,13 @@ package ai.saiy.android.command.time;
 import android.content.Context;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class Time_en {
@@ -62,8 +61,8 @@ public class Time_en {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "examining: " + vdLower);
             }
-            if (vdLower.contains(time + XMLResultsHandler.SEP_SPACE)) {
-                String[] separated = vdLower.split(time + XMLResultsHandler.SEP_SPACE);
+            if (vdLower.contains(time + Constants.SEP_SPACE)) {
+                String[] separated = vdLower.split(time + Constants.SEP_SPACE);
                 if (separated.length > 1) {
                     String second = separated[1].trim();
                     if (DEBUG) {
@@ -111,7 +110,7 @@ public class Time_en {
             String vdLower;
             for (int i = 0; i < size; i++) {
                 vdLower = voiceData.get(i).toLowerCase(locale).trim();
-                if (vdLower.startsWith(whats_the_time) || vdLower.startsWith(what_is_the_time) || vdLower.startsWith(what_time_is_it) || vdLower.endsWith(whats_the_time) || vdLower.endsWith(what_is_the_time) || vdLower.endsWith(what_time_is_it) || vdLower.endsWith(what_the_time_is) || vdLower.endsWith(what_time_it_is) || vdLower.contains(tell_me_the_time) || vdLower.matches(time) || vdLower.startsWith(time + XMLResultsHandler.SEP_SPACE + in)) {
+                if (vdLower.startsWith(whats_the_time) || vdLower.startsWith(what_is_the_time) || vdLower.startsWith(what_time_is_it) || vdLower.endsWith(whats_the_time) || vdLower.endsWith(what_is_the_time) || vdLower.endsWith(what_time_is_it) || vdLower.endsWith(what_the_time_is) || vdLower.endsWith(what_time_it_is) || vdLower.contains(tell_me_the_time) || vdLower.matches(time) || vdLower.startsWith(time + Constants.SEP_SPACE + in)) {
                     toReturn.add(new Pair<>(CC.COMMAND_TIME, confidence[i]));
                 }
             }

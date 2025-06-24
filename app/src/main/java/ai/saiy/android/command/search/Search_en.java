@@ -10,6 +10,7 @@ import ai.saiy.android.command.search.provider.NetflixHelper;
 import ai.saiy.android.command.search.provider.TwitterHelper;
 import ai.saiy.android.command.search.provider.YahooHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 import android.content.Context;
@@ -17,7 +18,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.regex.Pattern;
@@ -284,14 +284,14 @@ public class Search_en {
 
     private static String detectNetflixQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + netflix)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + netflix, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + netflix)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + netflix, "").trim();
         }
         if (trimmed.startsWith(netflix)) {
             trimmed = trimmed.replaceFirst(netflix, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.startsWith(film)) {
             trimmed = trimmed.replaceFirst(film, "").trim();
@@ -308,10 +308,10 @@ public class Search_en {
         if (trimmed.startsWith(genre)) {
             trimmed = trimmed.replaceFirst(genre, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + netflix) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + netflix, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + netflix) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + netflix, "").trim() : trimmed;
     }
 
     private static String detectGoogleQuery(String str, CommandSearchValues commandSearchValues) {
@@ -319,76 +319,76 @@ public class Search_en {
         if (trimmed.startsWith(ask_google)) {
             trimmed = trimmed.replaceFirst(ask_google, "").trim();
         }
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + google)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + google, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + google)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + google, "").trim();
         }
         if (trimmed.startsWith(google)) {
             trimmed = trimmed.replaceFirst(google, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(pictures + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(pictures + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.IMAGE);
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.VIDEO);
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.VIDEO);
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.VIDEO);
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setGoogleType(GoogleHelper.VIDEO);
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + google) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + google, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + google) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + google, "").trim() : trimmed;
     }
 
     private static void initStrings(ai.saiy.android.localisation.SaiyResources sr) {
@@ -489,9 +489,9 @@ public class Search_en {
         pPaid = Pattern.compile(".*\\b" + paid + "\\b.*");
         pGrossing = Pattern.compile(".*\\b" + grossing + "\\b.*");
         pTrending = Pattern.compile(".*\\b" + trending + "\\b.*");
-        pGooglePlay = Pattern.compile(".*\\b" + google + XMLResultsHandler.SEP_SPACE + play + "\\b.*");
-        pPlayStore = Pattern.compile(".*\\b" + play + XMLResultsHandler.SEP_SPACE + store + "\\b.*");
-        pAppStore = Pattern.compile(".*\\b" + app + XMLResultsHandler.SEP_SPACE + store + "\\b.*");
+        pGooglePlay = Pattern.compile(".*\\b" + google + Constants.SEP_SPACE + play + "\\b.*");
+        pPlayStore = Pattern.compile(".*\\b" + play + Constants.SEP_SPACE + store + "\\b.*");
+        pAppStore = Pattern.compile(".*\\b" + app + Constants.SEP_SPACE + store + "\\b.*");
         pPictures = Pattern.compile(".*\\b" + pictures + "\\b.*");
         pPicture = Pattern.compile(".*\\b" + picture + "\\b.*");
         pImage = Pattern.compile(".*\\b" + image + "\\b.*");
@@ -511,14 +511,14 @@ public class Search_en {
 
     private static String detectTwitterQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + twitter)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + twitter, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + twitter)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + twitter, "").trim();
         }
         if (trimmed.startsWith(twitter)) {
             trimmed = trimmed.replaceFirst(twitter, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.startsWith(hashtag)) {
             trimmed = trimmed.replaceFirst(hashtag, "").trim();
@@ -526,184 +526,184 @@ public class Search_en {
         if (trimmed.startsWith(hash_tag)) {
             trimmed = trimmed.replaceFirst(hash_tag, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + twitter) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + twitter, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + twitter) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + twitter, "").trim() : trimmed;
     }
 
     private static String detectYahooQuery(String str, CommandSearchValues commandSearchValues) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + yahoo)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + yahoo, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + yahoo)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + yahoo, "").trim();
         }
         if (trimmed.startsWith(yahoo)) {
             trimmed = trimmed.replaceFirst(yahoo, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(pictures + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(pictures + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.IMAGE);
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.VIDEO);
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.VIDEO);
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.VIDEO);
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setYahooType(YahooHelper.VIDEO);
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + yahoo) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + yahoo, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + yahoo) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + yahoo, "").trim() : trimmed;
     }
 
     private static String detectFacebookQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + facebook)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + facebook, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + facebook)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + facebook, "").trim();
         }
         if (trimmed.startsWith(facebook)) {
             trimmed = trimmed.replaceFirst(facebook, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + facebook) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + facebook, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + facebook) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + facebook, "").trim() : trimmed;
     }
 
     private static String detectBingQuery(String str, CommandSearchValues commandSearchValues) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + bing)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + bing, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + bing)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + bing, "").trim();
         }
         if (trimmed.startsWith(bing)) {
             trimmed = trimmed.replaceFirst(bing, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(pictures + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(pictures + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.IMAGE);
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.VIDEO);
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.VIDEO);
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.VIDEO);
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE, "").trim();
             commandSearchValues.setBingType(BingHelper.VIDEO);
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + bing) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + bing, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + bing) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + bing, "").trim() : trimmed;
     }
 
     private static String detectFourSquareQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + foursquare)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + foursquare, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + foursquare)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + foursquare, "").trim();
         }
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + four_square)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + four_square, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + four_square)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + four_square, "").trim();
         }
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + for_square)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + for_square, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + for_square)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + for_square, "").trim();
         }
         if (trimmed.startsWith(foursquare)) {
             trimmed = trimmed.replaceFirst(foursquare, "").trim();
@@ -714,123 +714,123 @@ public class Search_en {
         if (trimmed.startsWith(for_square)) {
             trimmed = trimmed.replaceFirst(for_square, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + four_square)) {
-            trimmed = ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + four_square, "").trim();
+        if (trimmed.endsWith(on + Constants.SEP_SPACE + four_square)) {
+            trimmed = ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + four_square, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + foursquare) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + foursquare, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + foursquare) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + foursquare, "").trim() : trimmed;
     }
 
     private static String detectAppQuery(String str, CommandSearchValues commandSearchValues) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(google + XMLResultsHandler.SEP_SPACE + play + XMLResultsHandler.SEP_SPACE + store + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(google + XMLResultsHandler.SEP_SPACE + play + XMLResultsHandler.SEP_SPACE + store + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(google + Constants.SEP_SPACE + play + Constants.SEP_SPACE + store + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(google + Constants.SEP_SPACE + play + Constants.SEP_SPACE + store + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(google + XMLResultsHandler.SEP_SPACE + play + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(google + XMLResultsHandler.SEP_SPACE + play + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(google + Constants.SEP_SPACE + play + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(google + Constants.SEP_SPACE + play + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(play + XMLResultsHandler.SEP_SPACE + store + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(play + XMLResultsHandler.SEP_SPACE + store + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(play + Constants.SEP_SPACE + store + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(play + Constants.SEP_SPACE + store + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(app + XMLResultsHandler.SEP_SPACE + store + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(app + XMLResultsHandler.SEP_SPACE + store + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(app + Constants.SEP_SPACE + store + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(app + Constants.SEP_SPACE + store + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(app + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(app + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(app + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(app + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(application + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(application + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(application + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(application + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(applications + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(applications + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(applications + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(applications + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(game + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(game + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(game + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(game + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.contains(editor) && trimmed.contains(choice)) {
             commandSearchValues.setAppSearchType(AppSearchHelper.EDITOR);
-            commandSearchValues.setQuery(editor + "'s " + choice + XMLResultsHandler.SEP_SPACE + applications);
+            commandSearchValues.setQuery(editor + "'s " + choice + Constants.SEP_SPACE + applications);
             return trimmed;
         }
         if (pFeatured.matcher(trimmed).matches()) {
             commandSearchValues.setAppSearchType(AppSearchHelper.FEATURED);
-            commandSearchValues.setQuery(featured + XMLResultsHandler.SEP_SPACE + applications);
+            commandSearchValues.setQuery(featured + Constants.SEP_SPACE + applications);
             return trimmed;
         }
         if (pTrending.matcher(trimmed).matches()) {
             commandSearchValues.setAppSearchType(AppSearchHelper.TRENDING);
-            commandSearchValues.setQuery(trending + XMLResultsHandler.SEP_SPACE + applications);
+            commandSearchValues.setQuery(trending + Constants.SEP_SPACE + applications);
             return trimmed;
         }
         if (pTop.matcher(trimmed).matches()) {
-            if (trimmed.matches(".*\\b" + word_new + XMLResultsHandler.SEP_SPACE + free + "\\b.*")) {
+            if (trimmed.matches(".*\\b" + word_new + Constants.SEP_SPACE + free + "\\b.*")) {
                 commandSearchValues.setAppSearchType(AppSearchHelper.NEW_FREE);
-                commandSearchValues.setQuery(top + XMLResultsHandler.SEP_SPACE + word_new + XMLResultsHandler.SEP_SPACE + free + XMLResultsHandler.SEP_SPACE + applications);
+                commandSearchValues.setQuery(top + Constants.SEP_SPACE + word_new + Constants.SEP_SPACE + free + Constants.SEP_SPACE + applications);
                 return trimmed;
             }
-            if (trimmed.matches(".*\\b" + word_new + XMLResultsHandler.SEP_SPACE + paid + "\\b.*")) {
+            if (trimmed.matches(".*\\b" + word_new + Constants.SEP_SPACE + paid + "\\b.*")) {
                 commandSearchValues.setAppSearchType(AppSearchHelper.NEW_PAID);
-                commandSearchValues.setQuery(top + XMLResultsHandler.SEP_SPACE + word_new + XMLResultsHandler.SEP_SPACE + paid + XMLResultsHandler.SEP_SPACE + applications);
+                commandSearchValues.setQuery(top + Constants.SEP_SPACE + word_new + Constants.SEP_SPACE + paid + Constants.SEP_SPACE + applications);
                 return trimmed;
             }
             if (pFree.matcher(trimmed).matches()) {
                 commandSearchValues.setAppSearchType(AppSearchHelper.FREE);
-                commandSearchValues.setQuery(top + XMLResultsHandler.SEP_SPACE + free + XMLResultsHandler.SEP_SPACE + applications);
+                commandSearchValues.setQuery(top + Constants.SEP_SPACE + free + Constants.SEP_SPACE + applications);
                 return trimmed;
             }
             if (pPaid.matcher(trimmed).matches()) {
                 commandSearchValues.setAppSearchType(AppSearchHelper.PAID);
-                commandSearchValues.setQuery(top + XMLResultsHandler.SEP_SPACE + paid + XMLResultsHandler.SEP_SPACE + applications);
+                commandSearchValues.setQuery(top + Constants.SEP_SPACE + paid + Constants.SEP_SPACE + applications);
                 return trimmed;
             }
             if (pGrossing.matcher(trimmed).matches()) {
                 commandSearchValues.setAppSearchType(AppSearchHelper.GROSSING);
-                commandSearchValues.setQuery(top + XMLResultsHandler.SEP_SPACE + grossing + XMLResultsHandler.SEP_SPACE + applications);
+                commandSearchValues.setQuery(top + Constants.SEP_SPACE + grossing + Constants.SEP_SPACE + applications);
                 return trimmed;
             }
         }
-        return trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE) ? trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim() : trimmed;
+        return trimmed.startsWith(word_for + Constants.SEP_SPACE) ? trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim() : trimmed;
     }
 
     private static String detectYoutubeQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + youtube)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + youtube, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + youtube)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + youtube, "").trim();
         }
         if (trimmed.startsWith(youtube)) {
             trimmed = trimmed.replaceFirst(youtube, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.startsWith(video)) {
             trimmed = trimmed.replaceFirst(video, "").trim();
@@ -838,105 +838,105 @@ public class Search_en {
         if (trimmed.startsWith(videos)) {
             trimmed = trimmed.replaceFirst(videos, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + youtube) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + youtube, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + youtube) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + youtube, "").trim() : trimmed;
     }
 
     private static String detectEbayQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + ebay)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + ebay, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + ebay)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + ebay, "").trim();
         }
         if (trimmed.startsWith(ebay)) {
             trimmed = trimmed.replaceFirst(ebay, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + ebay) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + ebay, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + ebay) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + ebay, "").trim() : trimmed;
     }
 
     private static String detectAmazonQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + amazon)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + amazon, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + amazon)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + amazon, "").trim();
         }
         if (trimmed.startsWith(amazon)) {
             trimmed = trimmed.replaceFirst(amazon, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + amazon) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + amazon, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + amazon) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + amazon, "").trim() : trimmed;
     }
 
     private static String detectYelpQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + yelp)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + yelp, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + yelp)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + yelp, "").trim();
         }
         if (trimmed.startsWith(yelp)) {
             trimmed = trimmed.replaceFirst(yelp, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + yelp) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + yelp, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + yelp) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + yelp, "").trim() : trimmed;
     }
 
     private static String detectWolframAlphaQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + wolfram_alpha)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + wolfram_alpha, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + wolfram_alpha)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + wolfram_alpha, "").trim();
         }
         if (trimmed.startsWith(wolfram_alpha)) {
             trimmed = trimmed.replaceFirst(wolfram_alpha, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + wolfram_alpha) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + wolfram_alpha, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + wolfram_alpha) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + wolfram_alpha, "").trim() : trimmed;
     }
 
     private static String detectImdbQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(on + XMLResultsHandler.SEP_SPACE + imdb)) {
-            trimmed = trimmed.replaceFirst(on + XMLResultsHandler.SEP_SPACE + imdb, "").trim();
+        if (trimmed.startsWith(on + Constants.SEP_SPACE + imdb)) {
+            trimmed = trimmed.replaceFirst(on + Constants.SEP_SPACE + imdb, "").trim();
         }
         if (trimmed.startsWith(imdb)) {
             trimmed = trimmed.replaceFirst(imdb, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.startsWith(film)) {
             trimmed = trimmed.replaceFirst(film, "").trim();
@@ -953,39 +953,39 @@ public class Search_en {
         if (trimmed.startsWith(genre)) {
             trimmed = trimmed.replaceFirst(genre, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.endsWith(on + XMLResultsHandler.SEP_SPACE + imdb) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + XMLResultsHandler.SEP_SPACE + imdb, "").trim() : trimmed;
+        return trimmed.endsWith(on + Constants.SEP_SPACE + imdb) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, on + Constants.SEP_SPACE + imdb, "").trim() : trimmed;
     }
 
     private static String detectFilmQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(film + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(film + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(film + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(film + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(movie + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(movie + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(movie + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(movie + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE) ? trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim() : trimmed;
+        return trimmed.startsWith(word_for + Constants.SEP_SPACE) ? trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim() : trimmed;
     }
 
     private static String detectVideoQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(video + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(video + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(videos + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(videos + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.startsWith(video)) {
             trimmed = trimmed.replaceFirst(video, "").trim();
@@ -993,111 +993,111 @@ public class Search_en {
         if (trimmed.startsWith(videos)) {
             trimmed = trimmed.replaceFirst(videos, "").trim();
         }
-        return trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE) ? trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim() : trimmed;
+        return trimmed.startsWith(word_for + Constants.SEP_SPACE) ? trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim() : trimmed;
     }
 
     private static String detectImageQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + a + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + a + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + an + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + an + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + some + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + some + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(pictures + Constants.SEP_SPACE + of + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(images + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(images + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(images + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(images + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(image + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(image + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(image + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(image + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(picture + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(picture + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(picture + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(picture + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.startsWith(pictures + XMLResultsHandler.SEP_SPACE) ? trimmed.replaceFirst(pictures + XMLResultsHandler.SEP_SPACE, "").trim() : trimmed;
+        return trimmed.startsWith(pictures + Constants.SEP_SPACE) ? trimmed.replaceFirst(pictures + Constants.SEP_SPACE, "").trim() : trimmed;
     }
 
     private static String detectSkyQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + sky + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + sky + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + sky + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + sky + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + sky + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + sky + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + sky + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + sky + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + sky + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + sky + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + sky + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + sky + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(sky + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(sky + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(sky + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(sky + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + universe + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + universe + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + universe + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + universe + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + universe + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + universe + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + universe + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + universe + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(universe + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(universe + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(universe + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(universe + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + stars + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + stars + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + stars + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + stars + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + stars + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + stars + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + stars + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + stars + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(stars + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(stars + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(stars + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(stars + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(planet + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(planet + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(planet + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(planet + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.endsWith(constellation)) {
             trimmed = trimmed.replaceAll(constellation, "");
         }
-        if (trimmed.startsWith(constellation + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(constellation + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(constellation + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(constellation + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(star + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(star + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(star + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(star + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.endsWith(galaxy)) {
             trimmed = trimmed.replaceAll(galaxy, "");
         }
-        if (trimmed.startsWith(galaxy + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(galaxy + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(galaxy + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(galaxy + Constants.SEP_SPACE, "").trim();
         }
         if (trimmed.endsWith(nebular)) {
             trimmed = trimmed.replaceAll(nebular, "");
         }
-        if (trimmed.startsWith(nebular + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(nebular + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(nebular + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(nebular + Constants.SEP_SPACE, "").trim();
         }
         if (!trimmed.matches(moon)) {
             trimmed = trimmed.replaceFirst("\\b" + moon + "\\b", "").trim();
@@ -1105,53 +1105,53 @@ public class Search_en {
         if (!trimmed.matches(sun)) {
             trimmed = trimmed.replaceFirst("\\b" + sun + "\\b", "").trim();
         }
-        if (trimmed.endsWith(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + sky)) {
-            trimmed = ai.saiy.android.utils.UtilsString.replaceLast(trimmed, in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + sky, "").trim();
+        if (trimmed.endsWith(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + sky)) {
+            trimmed = ai.saiy.android.utils.UtilsString.replaceLast(trimmed, in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + sky, "").trim();
         }
-        if (trimmed.endsWith(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + stars)) {
-            trimmed = ai.saiy.android.utils.UtilsString.replaceLast(trimmed, in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + stars, "").trim();
+        if (trimmed.endsWith(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + stars)) {
+            trimmed = ai.saiy.android.utils.UtilsString.replaceLast(trimmed, in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + stars, "").trim();
         }
-        return trimmed.endsWith(in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + universe) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, in + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + universe, "").trim() : trimmed;
+        return trimmed.endsWith(in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + universe) ? ai.saiy.android.utils.UtilsString.replaceLast(trimmed, in + Constants.SEP_SPACE + the + Constants.SEP_SPACE + universe, "").trim() : trimmed;
     }
 
     private static String detectEarthQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + planet + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + planet + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + planet + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + planet + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + earth + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + earth + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + earth + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + earth + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(earth + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(earth + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(earth + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(earth + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(word_for + Constants.SEP_SPACE + the + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE) ? trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim() : trimmed;
+        return trimmed.startsWith(word_for + Constants.SEP_SPACE) ? trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim() : trimmed;
     }
 
     private static String detectWebQuery(String str) {
         String trimmed = str.replaceFirst(search, "").trim();
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + web + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + web + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + web + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + web + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + internet + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + internet + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + internet + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + internet + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(the + XMLResultsHandler.SEP_SPACE + net + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(the + XMLResultsHandler.SEP_SPACE + net + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(the + Constants.SEP_SPACE + net + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(the + Constants.SEP_SPACE + net + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(internet + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(internet + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(internet + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(internet + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(web + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(web + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(web + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(web + Constants.SEP_SPACE, "").trim();
         }
-        if (trimmed.startsWith(net + XMLResultsHandler.SEP_SPACE)) {
-            trimmed = trimmed.replaceFirst(net + XMLResultsHandler.SEP_SPACE, "").trim();
+        if (trimmed.startsWith(net + Constants.SEP_SPACE)) {
+            trimmed = trimmed.replaceFirst(net + Constants.SEP_SPACE, "").trim();
         }
-        return trimmed.startsWith(word_for + XMLResultsHandler.SEP_SPACE) ? trimmed.replaceFirst(word_for + XMLResultsHandler.SEP_SPACE, "").trim() : trimmed;
+        return trimmed.startsWith(word_for + Constants.SEP_SPACE) ? trimmed.replaceFirst(word_for + Constants.SEP_SPACE, "").trim() : trimmed;
     }
 
     public @NonNull ArrayList<Pair<CC, Float>> detectCallable() {

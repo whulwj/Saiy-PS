@@ -27,7 +27,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputLayout;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +51,7 @@ import ai.saiy.android.ui.components.UIEditCustomisationAdapter;
 import ai.saiy.android.ui.containers.ContainerCustomisation;
 import ai.saiy.android.ui.fragment.FragmentEditCustomisation;
 import ai.saiy.android.ui.fragment.FragmentHome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsLocale;
@@ -1006,7 +1006,7 @@ public class FragmentEditCustomisationHelper {
                         materialDialog.show();
 
                         final TextInputLayout textInputLayout = materialDialog.getWindow().findViewById(android.R.id.inputArea);
-                        textInputLayout.setHint(getString(R.string.title_enter_nickname_for) + XMLResultsHandler.SEP_SPACE + contactName);
+                        textInputLayout.setHint(getString(R.string.title_enter_nickname_for) + Constants.SEP_SPACE + contactName);
                         final EditText editText = textInputLayout.findViewById(android.R.id.input);
                         editText.setInputType(InputType.TYPE_CLASS_TEXT);
                         editText.setHint(nicknameHints[new Random().nextInt(nicknameHints.length)]);

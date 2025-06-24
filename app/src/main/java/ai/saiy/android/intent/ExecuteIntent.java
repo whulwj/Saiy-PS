@@ -37,8 +37,6 @@ import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 
@@ -928,7 +926,7 @@ public class ExecuteIntent {
         webIntent.setPackage(Installed.PACKAGE_GOOGLE_EARTH);
         webIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         try {
-            webIntent.setData(Uri.parse("https://earth.google.com/web/search/" + commandSearchValues.getQuery().replaceAll(XMLResultsHandler.SEP_SPACE, "+")));
+            webIntent.setData(Uri.parse("https://earth.google.com/web/search/" + commandSearchValues.getQuery().replaceAll(Constants.SEP_SPACE, "+")));
             context.startActivity(webIntent);
             return true;
         } catch (ActivityNotFoundException e) {

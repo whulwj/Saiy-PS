@@ -11,7 +11,6 @@ import android.util.Pair;
 import androidx.annotation.NonNull;
 
 import com.google.gson.JsonSyntaxException;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import org.json.JSONObject;
 
@@ -95,7 +94,7 @@ public class FoursquareHelper {
     public Pair<Boolean, VenuesResponse> searchVenues(@NonNull LocalLocation location, String token) {
         final long then = System.nanoTime();
         try {
-            this.httpURLConnection = (HttpURLConnection) new URL("https://api.foursquare.com/v2/venues/search?ll=" + (location.getLatitude() + XMLResultsHandler.SEP_COMMA + location.getLongitude()) + "&oauth_token=" + token + "&v=" + time(System.currentTimeMillis())).openConnection();
+            this.httpURLConnection = (HttpURLConnection) new URL("https://api.foursquare.com/v2/venues/search?ll=" + (location.getLatitude() + Constants.SEP_COMMA + location.getLongitude()) + "&oauth_token=" + token + "&v=" + time(System.currentTimeMillis())).openConnection();
             httpURLConnection.setRequestMethod(Constants.HTTP_GET);
             httpURLConnection.setDoInput(true);
             httpURLConnection.setRequestProperty(CONTENT_TYPE, JSON_HEADER_VALUE_ACCEPT);

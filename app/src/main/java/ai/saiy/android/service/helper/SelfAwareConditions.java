@@ -51,7 +51,6 @@ import androidx.annotation.Nullable;
 import com.google.auth.oauth2.AccessToken;
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 import com.google.common.util.concurrent.RateLimiter;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 import com.nuance.speechkit.DetectionType;
 
 import java.util.ArrayList;
@@ -122,6 +121,7 @@ import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.tts.helper.TTSDefaults;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.BluetoothConstants;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -2733,10 +2733,10 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
         ai.saiy.android.localisation.SaiyResources sr = new ai.saiy.android.localisation.SaiyResources(mContext, getSupportedLanguage(false));
         if (SPH.isCheckUnknownSourcesSettingNeeded(mContext)) {
             SPH.setCheckUnknownSourcesSettingNeeded(mContext, false);
-            str = sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_5) + XMLResultsHandler.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_6);
+            str = sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + Constants.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_5) + Constants.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_6);
             SettingsIntent.settingsIntent(mContext, SettingsIntent.Type.SECURITY);
         } else {
-            str = sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + XMLResultsHandler.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_5);
+            str = sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_4) + Constants.SEP_SPACE + sr.getString(ai.saiy.android.R.string.content_tasker_reinstall_5);
         }
         LocalRequest localRequest = new LocalRequest(mContext);
         localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_ONLY, getSupportedLanguage(false), getVRLocale(), getTTSLocale(), str);

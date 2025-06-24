@@ -22,8 +22,6 @@ import android.content.res.Resources;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -90,7 +88,7 @@ public class UtilsString {
         final Pattern question_mark = Pattern.compile("\\?");
         final Pattern exclamation_mark = Pattern.compile("!");
         final Pattern period = Pattern.compile("\\.");
-        final Pattern space = Pattern.compile(XMLResultsHandler.SEP_SPACE);
+        final Pattern space = Pattern.compile(Constants.SEP_SPACE);
         final int length = separated.length - 2;
         for (int i = 0; i < length; i++) {
             if ((question_mark.matcher(separated[i]).matches() || exclamation_mark.matcher(separated[i]).matches() || period.matcher(separated[i]).matches()) && space.matcher(separated[i + 1]).matches()) {

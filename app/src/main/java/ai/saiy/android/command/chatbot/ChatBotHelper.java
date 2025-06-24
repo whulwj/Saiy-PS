@@ -6,8 +6,6 @@ import android.net.ParseException;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -87,8 +85,8 @@ public class ChatBotHelper {
                 .toLowerCase(locale).replaceAll("hearthat", "hear that")
                 .toLowerCase(locale).replaceAll("aiml", "artificial intelligence markup language")
                 .toLowerCase(locale).replaceAll("gladyou're", "glad you're")
-                .toLowerCase(locale).replaceAll("<br>", XMLResultsHandler.SEP_SPACE)
-                .toLowerCase(locale).replaceAll("</br>", XMLResultsHandler.SEP_SPACE);
+                .toLowerCase(locale).replaceAll("<br>", Constants.SEP_SPACE)
+                .toLowerCase(locale).replaceAll("</br>", Constants.SEP_SPACE);
         if (replaced.toLowerCase(locale).startsWith("bye") || replaced.toLowerCase(locale).startsWith("goodbye") || replaced.toLowerCase(locale).startsWith("good bye")) {
             replaced = goodbye(context);
         }

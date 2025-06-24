@@ -7,8 +7,6 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
@@ -17,6 +15,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ai.saiy.android.R;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public class AlarmHelper {
@@ -460,7 +459,7 @@ public class AlarmHelper {
         if (DEBUG) {
             MyLog.d(CLS_NAME, "dissectTime hour: " + hoursString);
         }
-        separated = hoursString.split(XMLResultsHandler.SEP_SPACE);
+        separated = hoursString.split(Constants.SEP_SPACE);
         if (separated.length <= 0) {
             if (DEBUG) {
                 MyLog.d(CLS_NAME, "dissectTime number = 0 ");
@@ -521,7 +520,7 @@ public class AlarmHelper {
     }
 
     private static Pair<Integer, Integer> dissectHourAndMinute(String str) {
-        final String[] separated = str.trim().split(XMLResultsHandler.SEP_SPACE);
+        final String[] separated = str.trim().split(Constants.SEP_SPACE);
         final int length = separated.length;
         int hour = -1;
         int minute = -1;
@@ -585,7 +584,7 @@ public class AlarmHelper {
 
     private static boolean hasHourOrMinute(String str) {
         if (str.contains(hour) || str.contains(minute)) {
-            final String[] separated = str.trim().split(XMLResultsHandler.SEP_SPACE);
+            final String[] separated = str.trim().split(Constants.SEP_SPACE);
             final int length = separated.length;
             for (int i = 1; i < length; i++) {
                 if (separated[i].contains(hour)) {
@@ -657,7 +656,7 @@ public class AlarmHelper {
     }
 
     private static int dissectHour(String str) {
-        final String[] separated = str.trim().split(XMLResultsHandler.SEP_SPACE);
+        final String[] separated = str.trim().split(Constants.SEP_SPACE);
         String separatedString;
         for (int i = 1, length = separated.length; i < length; i++) {
             if (separated[i].contains(hour)) {
@@ -1285,7 +1284,7 @@ public class AlarmHelper {
     }
 
     private static int dissectMinute(String str) {
-        final String[] separated = str.trim().split(XMLResultsHandler.SEP_SPACE);
+        final String[] separated = str.trim().split(Constants.SEP_SPACE);
         String separatedString;
         for (int i = 1, length = separated.length; i < length; i++) {
             if (separated[i].contains(minute)) {

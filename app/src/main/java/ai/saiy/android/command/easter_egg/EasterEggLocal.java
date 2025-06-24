@@ -4,14 +4,13 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Install;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsString;
@@ -55,7 +54,7 @@ public final class EasterEggLocal {
     }
 
     public static void shareIntent(Context context) {
-        ai.saiy.android.intent.ExecuteIntent.shareIntent(context, context.getString(R.string.easter_egg_share) + XMLResultsHandler.SEP_SPACE + Install.getSaiyInstallLink(context));
+        ai.saiy.android.intent.ExecuteIntent.shareIntent(context, context.getString(R.string.easter_egg_share) + Constants.SEP_SPACE + Install.getSaiyInstallLink(context));
     }
 
     static String stageTwoIncorrect(Context context, SupportedLanguage supportedLanguage) {

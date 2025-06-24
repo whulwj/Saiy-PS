@@ -5,8 +5,6 @@ import android.text.format.DateUtils;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -20,6 +18,7 @@ import ai.saiy.android.command.calendar.Event;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.personality.PersonalityResponse;
 import ai.saiy.android.processing.Outcome;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsList;
 import ai.saiy.android.utils.UtilsLocale;
@@ -77,7 +76,7 @@ public class CommandNavigation {
                                     String location = event.getLocation();
                                     if (UtilsString.notNaked(location)) {
                                         if (UtilsNavigation.navigateToAddress(context, location)) {
-                                            outcome.setUtterance(context.getString(R.string.navigating) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.to) + XMLResultsHandler.SEP_SPACE + location);
+                                            outcome.setUtterance(context.getString(R.string.navigating) + Constants.SEP_SPACE + context.getString(R.string.to) + Constants.SEP_SPACE + location);
                                             outcome.setOutcome(Outcome.SUCCESS);
                                         } else {
                                             outcome.setOutcome(Outcome.FAILURE);
@@ -87,7 +86,7 @@ public class CommandNavigation {
                                 }
                                 if (outcome.getUtterance() == null) {
                                     outcome.setOutcome(Outcome.FAILURE);
-                                    outcome.setUtterance(PersonalityResponse.getCalendarEventsError(context, supportedLanguage) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.with_a_location_listed));
+                                    outcome.setUtterance(PersonalityResponse.getCalendarEventsError(context, supportedLanguage) + Constants.SEP_SPACE + context.getString(R.string.with_a_location_listed));
                                 }
                             }
                         }
@@ -98,7 +97,7 @@ public class CommandNavigation {
                         outcome.setOutcome(Outcome.FAILURE);
                         outcome.setUtterance(context.getString(R.string.error_navigation_app_failed));
                     } else {
-                        outcome.setUtterance(context.getString(R.string.navigating) + XMLResultsHandler.SEP_SPACE + context.getString(R.string.to) + XMLResultsHandler.SEP_SPACE + commandNavigationValues.getAddress());
+                        outcome.setUtterance(context.getString(R.string.navigating) + Constants.SEP_SPACE + context.getString(R.string.to) + Constants.SEP_SPACE + commandNavigationValues.getAddress());
                         outcome.setOutcome(Outcome.SUCCESS);
                     }
                     break;

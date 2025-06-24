@@ -44,7 +44,6 @@ import android.webkit.URLUtil;
 import androidx.annotation.Nullable;
 
 import com.google.common.collect.Lists;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -118,7 +117,7 @@ public class UtilsBundle {
             }
             return Bundle.EMPTY;
         }
-        final ArrayList<String> arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).trimResults().split(str));
+        final ArrayList<String> arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(Constants.SEP_COMMA).trimResults().split(str));
         arrayList.removeAll(Collections.singleton(null));
         arrayList.removeAll(Collections.singleton(""));
         if (!UtilsList.notNaked(arrayList)) {
@@ -272,7 +271,7 @@ public class UtilsBundle {
             }
             return false;
         }
-        final ArrayList<String> arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).trimResults().split(str));
+        final ArrayList<String> arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(Constants.SEP_COMMA).trimResults().split(str));
         arrayList.removeAll(Collections.singleton(null));
         arrayList.removeAll(Collections.singleton(""));
         if (!UtilsList.notNaked(arrayList)) {

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.text.format.DateUtils;
 import android.util.Pair;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -14,6 +12,7 @@ import java.util.TimeZone;
 
 import ai.saiy.android.R;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.UtilsDate;
 import ai.saiy.android.utils.UtilsLocale;
@@ -44,14 +43,14 @@ public class TimeHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "MIN 1");
             }
-            minute += XMLResultsHandler.SEP_SPACE + context.getString(R.string.MINUTE_PAST);
+            minute += Constants.SEP_SPACE + context.getString(R.string.MINUTE_PAST);
             format = "mh";
         }
         if (minuteInt == 5 || minuteInt == 10 || minuteInt == 20 || minuteInt == 25) {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "MIN 5/10/15/20");
             }
-            minute += XMLResultsHandler.SEP_SPACE + context.getString(R.string.PAST);
+            minute += Constants.SEP_SPACE + context.getString(R.string.PAST);
             format = "mh";
         }
         if (minuteInt == 15) {
@@ -72,7 +71,7 @@ public class TimeHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "MIN 2-29");
             }
-            minute += XMLResultsHandler.SEP_SPACE + context.getString(R.string.MINUTES_PAST);
+            minute += Constants.SEP_SPACE + context.getString(R.string.MINUTES_PAST);
             format = "mh";
         }
         if (minuteInt > 30 && minuteInt < 50 && minuteInt != 35 && minuteInt != 40 && minuteInt != 45) {
@@ -189,20 +188,20 @@ public class TimeHelper {
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "MIN 00");
             }
-            minute = XMLResultsHandler.SEP_SPACE + context.getString(R.string.O__CLOCK);
-            hour = context.getString(R.string.EXACTLY) + XMLResultsHandler.SEP_SPACE + hour;
+            minute = Constants.SEP_SPACE + context.getString(R.string.O__CLOCK);
+            hour = context.getString(R.string.EXACTLY) + Constants.SEP_SPACE + hour;
             format = "hm";
         }
         if (format.matches("mh")) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "mh: " + minute + XMLResultsHandler.SEP_SPACE + hour);
+                MyLog.i(CLS_NAME, "mh: " + minute + Constants.SEP_SPACE + hour);
             }
-            return context.getString(R.string.it_s) + XMLResultsHandler.SEP_SPACE + minute + XMLResultsHandler.SEP_SPACE + hour;
+            return context.getString(R.string.it_s) + Constants.SEP_SPACE + minute + Constants.SEP_SPACE + hour;
         } else if (format.matches("hm")) {
             if (DEBUG) {
-                MyLog.i(CLS_NAME, "hm: " + hour + XMLResultsHandler.SEP_SPACE + minute);
+                MyLog.i(CLS_NAME, "hm: " + hour + Constants.SEP_SPACE + minute);
             }
-            return context.getString(R.string.it_s) + XMLResultsHandler.SEP_SPACE + hour + XMLResultsHandler.SEP_SPACE + minute;
+            return context.getString(R.string.it_s) + Constants.SEP_SPACE + hour + Constants.SEP_SPACE + minute;
         }
         return "";
     }
@@ -230,7 +229,7 @@ public class TimeHelper {
         final int minute = calendar.get(Calendar.MINUTE);
         final String minuteString = (minute == 0) ? "" : minute < 10 ? "O " + minute : String.valueOf(minute);
         final String string = (calendar.get(Calendar.AM_PM) == Calendar.AM)? context.getString(R.string.time_am) :  context.getString(R.string.time_pm);
-        return new Pair<>(UtilsDate.getWeekday(context, calendar.get(Calendar.DAY_OF_WEEK)), hour + XMLResultsHandler.SEP_SPACE + minuteString + XMLResultsHandler.SEP_SPACE + string);
+        return new Pair<>(UtilsDate.getWeekday(context, calendar.get(Calendar.DAY_OF_WEEK)), hour + Constants.SEP_SPACE + minuteString + Constants.SEP_SPACE + string);
     }
 
     public String getTime(Context context) {
@@ -259,7 +258,7 @@ public class TimeHelper {
         minute = minuteFormat.format(calendar.getTime());
         minuteInt = Integer.parseInt(minute);
         hourInt = Integer.parseInt(hour);
-        return formatTime(context).replaceFirst(context.getString(R.string.it_s) + XMLResultsHandler.SEP_SPACE, "");
+        return formatTime(context).replaceFirst(context.getString(R.string.it_s) + Constants.SEP_SPACE, "");
     }
 
     public String getDate(Context context, SupportedLanguage supportedLanguage, long millis) {
@@ -278,6 +277,6 @@ public class TimeHelper {
         lastMonthCalendar.setTimeInMillis(millis);
         lastMonthCalendar.add(Calendar.DAY_OF_MONTH, -1);
         return (lastMonthCalendar.get(Calendar.YEAR) == calendar.get(Calendar.YEAR) && lastMonthCalendar.get(Calendar.MONTH) == calendar.get(Calendar.MONTH) && lastMonthCalendar.get(Calendar.DAY_OF_MONTH) == calendar.get(Calendar.DAY_OF_MONTH))
-                ? yesterday : on + XMLResultsHandler.SEP_SPACE + UtilsDate.getWeekday(context, calendar.get(Calendar.DAY_OF_WEEK)) + XMLResultsHandler.SEP_SPACE + the + XMLResultsHandler.SEP_SPACE + UtilsDate.getDayOfMonth(context, calendar.get(Calendar.DAY_OF_MONTH)) + XMLResultsHandler.SEP_SPACE + of + XMLResultsHandler.SEP_SPACE + UtilsDate.getMonth(context, calendar.get(Calendar.MONTH));
+                ? yesterday : on + Constants.SEP_SPACE + UtilsDate.getWeekday(context, calendar.get(Calendar.DAY_OF_WEEK)) + Constants.SEP_SPACE + the + Constants.SEP_SPACE + UtilsDate.getDayOfMonth(context, calendar.get(Calendar.DAY_OF_MONTH)) + Constants.SEP_SPACE + of + Constants.SEP_SPACE + UtilsDate.getMonth(context, calendar.get(Calendar.MONTH));
     }
 }

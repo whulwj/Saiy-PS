@@ -4,14 +4,13 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import ai.saiy.android.R;
 import ai.saiy.android.applications.Installed;
 import ai.saiy.android.localisation.SaiyResourcesHelper;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.processing.Outcome;
 import ai.saiy.android.service.helper.LocalRequest;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public final class CommandTaxi {
@@ -41,7 +40,7 @@ public final class CommandTaxi {
         if (ai.saiy.android.intent.ExecuteIntent.orderTaxi(context)) {
             outcome.setUtterance(SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.okay));
         } else {
-            outcome.setUtterance(ai.saiy.android.personality.PersonalityResponse.getNoAppError(context, supportedLanguage) + XMLResultsHandler.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.suggest_install_uber));
+            outcome.setUtterance(ai.saiy.android.personality.PersonalityResponse.getNoAppError(context, supportedLanguage) + Constants.SEP_SPACE + SaiyResourcesHelper.getStringResource(context, supportedLanguage, R.string.suggest_install_uber));
             ai.saiy.android.intent.ExecuteIntent.playStoreSearch(context, Installed.PACKAGE_UBER);
         }
         return returnOutcome(outcome);

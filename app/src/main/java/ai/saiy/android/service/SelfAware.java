@@ -47,7 +47,6 @@ import androidx.core.app.ServiceCompat;
 
 import com.google.cloud.dialogflow.v2beta1.DetectIntentResponse;
 import com.google.gson.GsonBuilder;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.io.File;
 import java.util.concurrent.TimeUnit;
@@ -112,6 +111,7 @@ import ai.saiy.android.tts.helper.PendingTTS;
 import ai.saiy.android.tts.helper.SpeechPriority;
 import ai.saiy.android.ui.notification.NotificationHelper;
 import ai.saiy.android.utils.BluetoothConstants;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.Global;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
@@ -2550,7 +2550,7 @@ public class SelfAware extends Service {
                                         }
                                     }, 5000L, TimeUnit.MILLISECONDS);
                                     LocalRequest localRequest = new LocalRequest(SelfAware.this.getApplicationContext());
-                                    localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), getString(R.string.incoming_call_from) + XMLResultsHandler.SEP_SPACE + userName + ", " + getString(R.string.would_you_like_to_answer_it));
+                                    localRequest.prepareDefault(LocalRequest.ACTION_SPEAK_LISTEN, conditions.getSupportedLanguage(false), conditions.getVRLocale(false), conditions.getTTSLocale(false), getString(R.string.incoming_call_from) + Constants.SEP_SPACE + userName + ", " + getString(R.string.would_you_like_to_answer_it));
                                     localRequest.setCondition(Condition.CONDITION_ANNOUNCE_CALLER);
                                     localRequest.setSpeechPriority(SpeechPriority.PRIORITY_MAX);
                                     localRequest.execute();

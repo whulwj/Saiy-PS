@@ -4,14 +4,13 @@ import android.util.Pair;
 
 import androidx.annotation.NonNull;
 
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
-
 import java.util.ArrayList;
 import java.util.Locale;
 
 import ai.saiy.android.R;
 import ai.saiy.android.command.helper.CC;
 import ai.saiy.android.localisation.SupportedLanguage;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 
 public final class Coin_en {
@@ -62,7 +61,7 @@ public final class Coin_en {
                 String vdLower = voiceData.get(i).toLowerCase(locale).trim();
                 if ((vdLower.startsWith(toss) || vdLower.startsWith(flip)) && vdLower.contains(coin)) {
                     toReturn.add(new Pair<>(CC.COMMAND_COIN, confidence[i]));
-                } else if (vdLower.matches(heads + XMLResultsHandler.SEP_SPACE + or + XMLResultsHandler.SEP_SPACE + tails)) {
+                } else if (vdLower.matches(heads + Constants.SEP_SPACE + or + Constants.SEP_SPACE + tails)) {
                     toReturn.add(new Pair<>(CC.COMMAND_COIN, confidence[i]));
                 }
             }

@@ -12,7 +12,6 @@ import android.util.Pair;
 import androidx.annotation.Nullable;
 
 import com.google.common.collect.Lists;
-import com.nuance.dragon.toolkit.recognition.dictation.parser.XMLResultsHandler;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +25,7 @@ import ai.saiy.android.applications.Installed;
 import ai.saiy.android.localisation.SupportedLanguage;
 import ai.saiy.android.service.helper.LocalRequest;
 import ai.saiy.android.tts.helper.SpeechPriority;
+import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;
@@ -178,7 +178,7 @@ public class NLService extends NotificationListenerService {
             }
             if (blockedApplications != null) {
                 if (UtilsString.notNaked(blockedApplications.getText())) {
-                    arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(XMLResultsHandler.SEP_COMMA).trimResults().split(blockedApplications.getText()));
+                    arrayList = Lists.newArrayList(com.google.common.base.Splitter.on(Constants.SEP_COMMA).trimResults().split(blockedApplications.getText()));
                     arrayList.removeAll(Collections.singleton(null));
                     arrayList.removeAll(Collections.singleton(""));
                 } else {
