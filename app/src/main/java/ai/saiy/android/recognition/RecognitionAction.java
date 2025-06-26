@@ -98,7 +98,6 @@ public class RecognitionAction {
      * is started in parallel to prevent a bottle-neck. This could produce some undesired side-effects
      * though.
      */
-    @SuppressWarnings("unchecked")
     private void resolve() {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "resolve");

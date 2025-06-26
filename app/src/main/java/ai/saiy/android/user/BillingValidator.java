@@ -16,7 +16,6 @@ import com.google.android.gms.common.GoogleApiAvailability;
 
 import java.util.List;
 
-import ai.saiy.android.utils.Constants;
 import ai.saiy.android.utils.MyLog;
 import ai.saiy.android.utils.SPH;
 import ai.saiy.android.utils.UtilsList;

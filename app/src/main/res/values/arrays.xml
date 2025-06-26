@@ -572,10 +572,6 @@
         <item>@string/menu_default</item>
         <item>@string/menu_legacy</item>
     </array>
-    <array name="array_announce_notifications">
-        <item>@string/menu_enabled</item>
-        <item>@string/menu_device_locked</item>
-    </array>
     <array name="array_audio_already">
         <item>The sound profile is already set to %1$s.</item>
         <item>The audio profile is already set to %1$s.</item>

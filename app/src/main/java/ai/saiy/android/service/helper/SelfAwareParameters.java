@@ -86,7 +86,6 @@ public class SelfAwareParameters extends HashMap<String, String> {
      *
      * @return true if network synthesis is required. False otherwise.
      */
-    @SuppressWarnings("deprecation")
     public boolean isNetworkAllowed() {
 
         final String networkAllowed = get(TextToSpeech.Engine.KEY_FEATURE_NETWORK_SYNTHESIS);
@@ -165,7 +164,6 @@ public class SelfAwareParameters extends HashMap<String, String> {
      * @param conditions    the {@link SelfAwareConditions}
      * @param bundle        of instructions
      */
-    @SuppressWarnings("deprecation")
     public void setParams(final boolean isSpeakListen, @NonNull final SelfAwareConditions conditions, Bundle bundle) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "setParams: isSpeakListen: " + isSpeakListen);

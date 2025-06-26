@@ -1742,7 +1742,6 @@ public class SelfAware extends Service {
      */
     private final OnInitListener onInitListener = new OnInitListener() {
 
-        @SuppressWarnings("deprecation")
         @Override
         public void onInit(final int status) {
             if (DEBUG) {

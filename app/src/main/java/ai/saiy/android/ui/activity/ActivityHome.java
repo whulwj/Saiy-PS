@@ -481,8 +481,8 @@ public class ActivityHome extends AppCompatActivity implements NavigationView.On
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             permissions[4] = Manifest.permission.ACTIVITY_RECOGNITION;
         }
-        if (isAcceptableToRequestNotificationPermission) {
-            permissions[permissionsCount - 1] = android.Manifest.permission.POST_NOTIFICATIONS;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && isAcceptableToRequestNotificationPermission) {
+            permissions[permissionsCount - 1] = Manifest.permission.POST_NOTIFICATIONS;
         }
 
         mChatPermissionRequest.launch(permissions);

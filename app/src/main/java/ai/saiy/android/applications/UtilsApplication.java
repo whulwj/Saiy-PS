@@ -391,7 +391,6 @@ public class UtilsApplication {
      * @param ctx the application context
      * @return the package name or null
      */
-    @SuppressWarnings("deprecation")
     private static String getForegroundPackageDeprecated(@NonNull final Context ctx) {
         if (DEBUG) {
             MyLog.i(CLS_NAME, "getForegroundPackageDeprecated");

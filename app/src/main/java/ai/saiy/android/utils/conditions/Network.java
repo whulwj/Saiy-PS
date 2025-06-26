@@ -297,7 +297,6 @@ public final class Network {
      * @param ctx the application Context
      * @return true if the device has the capability
      */
-    @SuppressWarnings("deprecation")
     public static boolean isFourGCapable(final Context ctx) {
 
         final ConnectivityManager cm = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);

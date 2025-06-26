@@ -374,7 +374,7 @@ public class AssistantIntentService extends IntentService {
         }
 
         if (!actionBundle.containsKey(LocalRequest.EXTRA_SUPPORTED_LANGUAGE)) {
-            @SuppressWarnings("ConstantConditions") final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(
+            final SupportedLanguage sl = SupportedLanguage.getSupportedLanguage(
                     UtilsLocale.stringToLocale(actionBundle.getString(LocalRequest.EXTRA_RECOGNITION_LANGUAGE)));
             actionBundle.putSerializable(LocalRequest.EXTRA_SUPPORTED_LANGUAGE, sl);
             actionBundle.putString(LocalRequest.EXTRA_UTTERANCE, PersonalityHelper.getIntro(getApplicationContext(), sl));

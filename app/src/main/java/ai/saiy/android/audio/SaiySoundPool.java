@@ -66,7 +66,6 @@ public class SaiySoundPool implements SoundPool.OnLoadCompleteListener {
                     .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
                     .build()).build();
         } else {
-            //noinspection deprecation
             sp = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
         }
 

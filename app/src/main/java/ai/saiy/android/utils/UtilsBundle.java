@@ -431,7 +431,6 @@ public class UtilsBundle {
 
             if (bundle != null) {
                 final Set<String> keys = bundle.keySet();
-                //noinspection Convert2streamapi
                 for (final String key : keys) {
                     MyLog.v(CLS_NAME, "examineBundle: " + key + " ~ " + bundle.get(key));
                 }
