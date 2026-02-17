@@ -4,7 +4,7 @@ plugins {
 
 android {
     namespace 'ai.saiy.android.lib'
-    compileSdk rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion

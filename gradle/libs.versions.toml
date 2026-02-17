@@ -1,24 +1,28 @@
 [versions]
-gradlePlugin = "8.7.3"
+agp = "8.13.2"
+protobufGradlePlugin = "0.9.6"
+junit = "4.13.2"
+
 googleAuthLibraryOauth2Http = "1.24.1" #Don't update it unless you update the google-http-client-gson first
 billing = "6.2.1" #Don't update it unless you update the minSDK first
-commonsIo = "2.19.0"
-commonsCodec = "1.18.0"
-commonsLang3 = "3.17.0"
-commonsFileUpload = "2.0.0-M3"
-commonsText = "1.13.1"
-commonsValidator = "1.9.0"
+commonsIo = "2.21.0"
+commonsCodec = "1.21.0"
+commonsLang3 = "3.20.0"
+commonsFileUpload = "2.0.0-M4"
+commonsText = "1.15.0"
+commonsValidator = "1.10.1"
 googleCloudTranslate = "2.44.0"  #Don't update it unless you update the Gson first
 grpcAuth = "1.65.1"  #Don't update it unless you update the Gson first
 grpcJava = "1.65.1" #Don't update it unless you update the Gson first
-protobufJava = "4.31.1"
+protobufJava = "4.33.5"
 javaxAnnotationApi = "1.3.2"
 licensesdialog = "2.2.0"
-javaWebsocket = "1.5.7"
+javaWebsocket = "1.6.0"
 googleHttpClientGson = "1.44.2" #Don't update it unless you update the Gson first
 gson = "2.10.1" #Gson 2.11.0 requires API level 21 or newer on Android
-guava = "33.3.1-android"
-googleServicesVersion = "4.4.1"
+guava = "33.5.0-android"
+
+googleServicesVersion = "4.4.4"
 playServicesBase = "18.3.0" #Don't update it unless you update the minSDK first
 playServicesBasement = "18.3.0" #Don't update it unless you update the minSDK first
 playServicesAuth = "20.7.0" #https://stackoverflow.com/questions/78103881/firebase-auth-failed-resolution-of-lcom-google-android-gms-auth-api-credential
@@ -26,8 +30,6 @@ playServicesLocation = "21.2.0"
 playServicesAdsIdentifier = "18.0.1"
 playServicesAds = "22.6.0"
 playServicesTasks = "18.1.0" #Don't update it unless you update the minSDK first
-protobufGradlePlugin = "0.9.4"
-junit = "4.13.2"
 
 material = "1.12.0" #https://github.com/material-components/material-components-android/releases May 3, 2024
 appcompat = "1.6.1"
@@ -48,17 +50,17 @@ print = "1.1.0-beta01"
 recyclerview = "1.3.2"
 transition = "1.5.1"
 work_runtime = "2.9.1" #Don't update it unless you update the minSDK first
-hilt_version = '2.52'
+hilt_version = '2.58'  #Don't update it unless you update the AGP first
 
 multidex = "2.0.1"
-desugar_jdk_libs_version = "2.1.3"
-rxjava3_version = "3.1.9"
+desugar_jdk_libs_version = "2.1.5"
+rxjava3_version = "3.1.12"
 rx_android_version = "3.0.2"
 rxlint_version = "1.7.8"
 simpleXml = "2.7.1"
 libraries-bom = "26.40.0" #Don't update it unless you update the Gson first
 cloud-dialogflow = "4.50.0" #Don't update it unless you update the Gson first
-proto-google-common = "2.58.0"
+proto-google-common = "2.65.1"
 firebase-bom = "32.8.1"
 firebase-analytics = "21.6.2"
 firebase-appcheck = "17.1.2"
@@ -74,7 +76,7 @@ volley = "1.2.1"
 
 java-aes-crypto = "1.1.0"
 twitter4j = "4.1.2"
-facebook-sdk ="18.0.3"
+facebook-sdk ="18.1.3"
 
 playServicesWearable = "18.1.0"
 wear = "1.3.0"
@@ -169,8 +171,8 @@ play-services-wearable = { group = "com.google.android.gms", name = "play-servic
 wear = { group = "androidx.wear", name = "wear", version.ref = "wear" }
 
 [plugins]
-androidApplication = { id = "com.android.application", version.ref = "gradlePlugin" }
-androidLibrary = { id = "com.android.library", version.ref = "gradlePlugin" }
+androidApplication = { id = "com.android.application", version.ref = "agp" }
+androidLibrary = { id = "com.android.library", version.ref = "agp" }
 protobuf-gradle-plugin = { id = "com.google.protobuf", version.ref = "protobufGradlePlugin" }
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt_version" }
 googleServices = { id = "com.google.gms.google-services", version.ref = "googleServicesVersion" }

@@ -27,7 +27,6 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.multidex.MultiDex;
 import androidx.multidex.MultiDexApplication;
 
 import com.google.android.material.color.ColorContrast;
@@ -66,12 +65,6 @@ public class Global extends MultiDexApplication implements Application.ActivityL
     private static volatile Bundle alexDirectiveBundle;
 
     private int mStartedCounter = 0;
-
-    @Override
-    protected void attachBaseContext(Context base) {
-        super.attachBaseContext(base);
-        MultiDex.install(this);
-    }
 
     @Override
     public void onCreate() {

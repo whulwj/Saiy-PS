@@ -23,7 +23,7 @@ plugins {
 
 android {
     namespace 'ai.saiy.android'
-    compileSdk rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         applicationId "assistant.saiy.android"
@@ -35,7 +35,7 @@ android {
             abiFilters 'armeabi-v7a', 'arm64-v8a', 'x86', 'x86_64'
         }
         resourceConfigurations = ["en", "zh-rCN"]
-        // Required when setting minSdkVersion to 20 or lower
+        // Required for desugar_jdk_libs when setting minSdkVersion to 20 or lower
         multiDexEnabled true
         vectorDrawables.useSupportLibrary = true
     }
@@ -64,21 +64,31 @@ android {
         buildConfig = true
     }
     packagingOptions {
-		exclude "**/*.kotlin_builtins"
-        exclude "**/*.kotlin_module"
-        exclude "**/DebugProbesKt.bin"
-        exclude "/META-INF/androidx/**"
-        exclude "/META-INF/DEPENDENCIES"
-        exclude "/META-INF/license/**"
-		exclude "/META-INF/native/**"
-        exclude "/META-INF/native-image/**"
-        exclude "/META-INF/NOTICE.md"
-        exclude "/META-INF/INDEX.LIST"
-		exclude "com/**"
-        exclude "org/**"
-		exclude "**/*.java"
-        exclude "**/*.proto"
-		exclude "androidsupportmultidexversion.txt"
+        jniLibs {
+            excludes += ['/META-INF/androidx/**',
+                         '/META-INF/license/**',
+                         '/META-INF/native/**',
+                         '/META-INF/native-image/**',
+                         'com/**',
+                         'org/**']
+        }
+        resources {
+            excludes += ['**/*.kotlin_builtins',
+                         '**/*.kotlin_module',
+                         '**/DebugProbesKt.bin',
+                         '/META-INF/androidx/**',
+                         '/META-INF/DEPENDENCIES',
+                         '/META-INF/license/**',
+                         '/META-INF/native/**',
+                         '/META-INF/native-image/**',
+                         '/META-INF/NOTICE.md',
+                         '/META-INF/INDEX.LIST',
+                         'com/**',
+                         'org/**',
+                         '**/*.java',
+                         '**/*.proto',
+                         'androidsupportmultidexversion.txt']
+        }
     }
 }
 
@@ -98,7 +108,7 @@ dependencies {
     }
 
     implementation fileTree(include: ['*.aar', '*.jar', '*.so'], dir: 'libs')
-    implementation libs.multidex
+    implementation libs.multidex // Required for desugar_jdk_libs
     coreLibraryDesugaring libs.desugar.jdk.libs
 	implementation libs.rxjava3
     implementation libs.rx.android
@@ -275,7 +285,7 @@ dependencies {
 // https://github.com/grpc/grpc-java
 protobuf {
     protoc {
-        artifact = 'com.google.protobuf:protoc:4.28.3'
+        artifact = 'com.google.protobuf:protoc:4.33.5'
     }
     plugins {
         grpc {

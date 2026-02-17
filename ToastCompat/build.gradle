@@ -4,13 +4,11 @@ plugins {
 
 android {
     namespace 'me.drakeet.support.toast'
-    compileSdk rootProject.ext.compileSdkVersion
+    compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 5
-        versionName "1.1.0"
     }
 
     buildTypes {
