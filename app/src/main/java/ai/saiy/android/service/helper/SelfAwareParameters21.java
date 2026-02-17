@@ -56,29 +56,24 @@ class SelfAwareParameters21 {
         }
     }
 
-    protected String putBoolean(@NonNull final String key, final boolean value) {
+    protected void putBoolean(@NonNull final String key, final boolean value) {
         params.putBoolean(key, value);
-        return null;
     }
 
-    protected String putDouble(@NonNull final String key, final double value) {
+    protected void putDouble(@NonNull final String key, final double value) {
         params.putDouble(key, value);
-        return null;
     }
 
-    protected String putFloat(@NonNull final String key, final float value) {
+    protected void putFloat(@NonNull final String key, final float value) {
         params.putFloat(key, value);
-        return null;
     }
 
-    protected String putInt(@NonNull final String key, final int value) {
+    protected void putInt(@NonNull final String key, final int value) {
         params.putInt(key, value);
-        return null;
     }
 
-    protected String putString(@NonNull final String key, @NonNull final String value) {
+    protected void putString(@NonNull final String key, @NonNull final String value) {
         params.putString(key, value);
-        return null;
     }
 
     protected String remove(@NonNull final Object key) {

@@ -1041,6 +1041,28 @@
     <string name="menu_latest_bugs">Latest Bugs</string>
     <string name="menu_squash_them">Squash them!</string>
     <string name="action_bugs">Bugs</string>
+    <string name="bug_title">Bugs bugs bugs!</string>
+    <string name="bug_content">Saiy has been completely rebuilt from its previous incarnation as utter! So I\'m afraid it\'s going to be a little buggy to begin with…
+        The good news is that I\'ve open sourced the code, so I hope to have the expertise of many developers to help solve any issues quickly.
+        If you\'d like to get involved, head over to the Development Section!Tap for the Development Section.</string>
+    <string name="ad_title">Ads are still showing!</string>
+    <string name="ad_content">If you\'ve donated to remove ads and they are still appearing across the application, firstly, thank you for your donation!
+        Secondly, apologies… Sometimes Google doesn\'t send back the correct result when the app attempts to verify your purchase.
+        If this problem persists for more than 24 hours, please do email me on billing@saiy.ai with your purchase confirmation number.
+        Killing the application and opening it again, can sometimes fix the issue.</string>
+    <string name="utter_title">Can I import my utter! commands?</string>
+    <string name="utter_content">I\'m afraid not… Due to the vast differences in the complexity of the two apps and how custom commands function,
+        it wasn\'t possible to migrate between the two, without opening the door to many errors. Forgive me…</string>
+    <string name="bug_title_recognition_time">Recognition times out too quickly!</string>
+    <string name="bug_content_recognition_time">I know!! Google removed the option to stipulate a longer \'pause for breath\' timeout a while ago and it desperately needs to be reinstated.
+        Until then, take a deep breath before you compose anything lengthy…</string>
+    <string name="bug_title_consider_silence">I don\'t get a chance to speak!</string>
+    <string name="bug_content_consider_silence">I know!!! As well as the above, Google also removed the \'consider silence\' timeout, so until they reinstate that,
+        think of the recognition beep as a starting pistol… and be quick out of the blocks.</string>
+    <string name="bug_title_alexa">Alexa issues!</string>
+    <string name="bug_content_alexa">Lagging: I\'m trying to resolve why the Alexa Service doesn\'t perform well with pre-recorded audio. To work around this, just say the command \'Ask Alexa\' and then ask your question when Saiy prompts you.
+        Alternatively, use the Alexa Action Button on the permanent notification, which can be enabled in the Settings.
+        CereProc: There is an issue with CereProc Voices Engines attempting to play the audio response from Alexa. To work around this, simply make sure you have an alternative Voice Engine installed, such as Google TTS, with an English voice pack - and Saiy will use that behind the scenes.</string>
     <string name="bug_title_offline_recognition" translatable="true">"离线识别失败"</string>
     <string name="bug_content_offline_recognition" translatable="true">You\'ll need to make sure you have correctly downloaded and installed
     the offline recognition files from the Android Voice Search Settings.\n\nIt is often necessary to reboot
@@ -1075,6 +1097,26 @@
         (available via Google\'s text to speech engine), a delay can occur due to the speed of your network
         connection. If your mobile connectivity is a little hit and miss, disabling this feature unless you are
         connected to WiFi, could certainly help…\n\nTap for Settings. Tap and hold for Superuser Settings</string>
+
+    <string name="bug_title_recognition_result">The recognition results are rubbish!?</string>
+    <string name="bug_content_recognition_result">This is often reported by users after an update to the Google Now/Assistant Application.
+        Uninstall the update in your Android Applications Settings, reboot, then install the updates from the Play Store
+        If you are a new user, it is very often reported that the recognition improves dramatically after a small amount of usage.</string>
+    <string name="bug_title_large_memory">Saiy uses a lot of memory!</string>
+    <string name="bug_content_large_memory">The application works as a Service and Android allocates a higher amount of memory for this type of implementation, usually around 20mb. In addition, the application binds to both the Google Recognition Service and a Voice Engine. The Android Running Applications screen will show you the combined total of the three.
+        Please do remember that memory is not proportional to battery usage! In fact, it can be quite the opposite. Retaining objects in the memory prevents the same objects from being reloaded, over and over again, which, guess what - will drain your battery!
+        There is of course a happy medium and by default, the application releases its bindings to the voice and recognition services after 15 minutes of inactivity. Should you feel the need, you can lower (or increase) this timescale in the Superuser Settings. Just to reiterate, if Android needs to reclaim the memory, it will do so, and the application is designed to work harmoniously with such situations. If you leave the application dormant for 24 hours, you will note it will not even appear in the battery consumption screen at all. It's something I've worked hard on, as a necessity for the application to function in this unique way…
+        To flush the memory the application is using at any time, you can say the command 'restart'.
+        Tap for the Superuser Settings</string>
+    <string name="bug_title_high_battery">Saiy kills my battery!</string>
+    <string name="bug_content_high_battery">If you are using the hotword detection, you should expect high battery usage, as it is permanently recording short audio bursts. Considering switching this off when it\'s no longer needed, or you step too far away from a charger…
+        When you are initially setting the application up with your customisations, you may notice a high level of drain whilst you configure and test your commands.
+        Recording audio, using the network for recognition and a voice engine to announce them, are all resource intensive functions. Once you have set the application up as you wish, it will use minimal resource whilst lying \'dormant\' in the background.
+        If the Saiy Accessibility Service is enabled, to announce your notifications or interact with the Google Assistant, this can also cause a small, but continuous drain.
+        Tap for the Android Accessibility Settings.</string>
+    <string name="bug_title_hotword_work">The hotword doesn\'t work?</string>
+    <string name="bug_content_hotword_work">This is an experimental feature and it\'s a little hit and miss to say the least. The phonetic detection needs a great deal of improvement and you may indeed find repeating the hotword five or six times does actually trigger it…
+        As the implementation is open source, I\'ll be asking the developers to me help improve it.</string>
 
     <string name="device_not_supported">Your device does not support this feature</string>
     <string name="error_assistant_settings">Apps &gt; Default Apps &gt; Assist &amp; voice input</string>

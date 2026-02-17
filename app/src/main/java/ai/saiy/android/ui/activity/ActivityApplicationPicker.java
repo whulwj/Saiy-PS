@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ProgressBar;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import ai.saiy.android.R;
@@ -119,7 +120,7 @@ public class ActivityApplicationPicker extends AppCompatActivity implements User
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onNewIntent: ignoring");

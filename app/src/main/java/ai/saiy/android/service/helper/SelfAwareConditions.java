@@ -2275,6 +2275,7 @@ public class SelfAwareConditions extends SelfAwareHelper implements IConditionLi
             intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, getCallback().getParcel()
                     .getVRLanguageGoogle().getLocaleString());
         } else {
+
             final String languageId = ai.saiy.android.utils.UtilsLocale.convertToIETF(getVRLocale());
             if (DEBUG) {
                 MyLog.i(CLS_NAME, "getNativeIntent: setting locale: " + languageId);

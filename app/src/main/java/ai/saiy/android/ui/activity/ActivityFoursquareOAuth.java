@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Pair;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.concurrent.TimeUnit;
@@ -125,7 +126,7 @@ public class ActivityFoursquareOAuth extends AppCompatActivity implements Foursq
     }
 
     @Override
-    protected void onNewIntent(Intent intent) {
+    protected void onNewIntent(@NonNull Intent intent) {
         super.onNewIntent(intent);
         if (DEBUG) {
             MyLog.i(CLS_NAME, "onNewIntent");
